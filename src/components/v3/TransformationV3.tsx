@@ -30,13 +30,12 @@ export default function TransformationV3() {
 
         <div className="isolate overflow-hidden rounded-2xl bg-gray-950 p-2 outline outline-emerald-500/20">
           <div className="relative rounded-xl bg-white/5 p-2 overflow-hidden">
-            {/* Grid pattern */}
+            {/* Dot pattern */}
             <div
-              className="pointer-events-none absolute inset-0 opacity-20"
+              className="pointer-events-none absolute inset-0 opacity-30"
               style={{
-                backgroundImage:
-                  "linear-gradient(to right, rgba(52,211,153,0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(52,211,153,0.1) 1px, transparent 1px)",
-                backgroundSize: "32px 32px",
+                backgroundImage: "radial-gradient(rgba(255,255,255,0.15) 1px, transparent 1px)",
+                backgroundSize: "16px 16px",
               }}
             />
             <div className="relative flex flex-col gap-1">

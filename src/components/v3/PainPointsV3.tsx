@@ -47,37 +47,13 @@ export default function PainPointsV3() {
             >
               <div className="relative rounded-xl bg-white/5 p-6">
                 {/* Dot pattern background */}
-                {i % 3 === 0 && (
-                  <div
-                    className="pointer-events-none absolute inset-0 rounded-xl opacity-30"
-                    style={{
-                      backgroundImage: "radial-gradient(rgba(255,255,255,0.15) 1px, transparent 1px)",
-                      backgroundSize: "16px 16px",
-                    }}
-                  />
-                )}
-                {/* Grid pattern background */}
-                {i % 3 === 1 && (
-                  <div
-                    className="pointer-events-none absolute inset-0 rounded-xl opacity-20"
-                    style={{
-                      backgroundImage:
-                        "linear-gradient(to right, rgba(255,255,255,0.08) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.08) 1px, transparent 1px)",
-                      backgroundSize: "24px 24px",
-                    }}
-                  />
-                )}
-                {/* Diagonal pattern background */}
-                {i % 3 === 2 && (
-                  <div
-                    className="pointer-events-none absolute inset-0 rounded-xl opacity-20"
-                    style={{
-                      backgroundImage:
-                        "repeating-linear-gradient(315deg, rgba(255,255,255,0.08) 0, rgba(255,255,255,0.08) 1px, transparent 0, transparent 50%)",
-                      backgroundSize: "12px 12px",
-                    }}
-                  />
-                )}
+                <div
+                  className="pointer-events-none absolute inset-0 rounded-xl opacity-30"
+                  style={{
+                    backgroundImage: "radial-gradient(rgba(255,255,255,0.15) 1px, transparent 1px)",
+                    backgroundSize: "16px 16px",
+                  }}
+                />
                 <div className="relative flex items-start gap-4">
                   <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-pink-500/10">
                     <X size={16} className="text-pink-400" />

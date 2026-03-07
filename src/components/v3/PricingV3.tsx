@@ -34,13 +34,12 @@ export default function PricingV3() {
         <div className="max-w-lg mx-auto">
           <div className="isolate overflow-hidden rounded-2xl bg-gray-950 p-2 outline outline-sky-500/30">
             <div className="relative rounded-xl bg-white/5 p-8 overflow-hidden">
-              {/* Grid pattern */}
+              {/* Dot pattern */}
               <div
-                className="pointer-events-none absolute inset-0 opacity-20"
+                className="pointer-events-none absolute inset-0 opacity-30"
                 style={{
-                  backgroundImage:
-                    "linear-gradient(to right, rgba(56,189,248,0.08) 1px, transparent 1px), linear-gradient(to bottom, rgba(56,189,248,0.08) 1px, transparent 1px)",
-                  backgroundSize: "32px 32px",
+                  backgroundImage: "radial-gradient(rgba(255,255,255,0.15) 1px, transparent 1px)",
+                  backgroundSize: "16px 16px",
                 }}
               />
 

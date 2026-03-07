@@ -73,13 +73,12 @@ export default function HeroV3() {
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.8, delay: 0.3 }}
               >
-                {/* Grid pattern background */}
+                {/* Dot pattern background */}
                 <div
                   className="pointer-events-none absolute inset-0 opacity-30"
                   style={{
-                    backgroundImage:
-                      "linear-gradient(to right, rgba(56,189,248,0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(56,189,248,0.06) 1px, transparent 1px)",
-                    backgroundSize: "24px 24px",
+                    backgroundImage: "radial-gradient(rgba(255,255,255,0.15) 1px, transparent 1px)",
+                    backgroundSize: "16px 16px",
                   }}
                 />
 
@@ -111,24 +110,24 @@ export default function HeroV3() {
                         <span className="text-gray-400">&quot;Cree mon app de fitness&quot;</span>
                       </div>
                       <div className="text-gray-600">
-                        <span className="text-emerald-400">&#10003;</span> Generating project structure...
+                        <span className="text-emerald-400">&#10003;</span> Generation de la structure...
                       </div>
                       <div className="text-gray-600">
-                        <span className="text-emerald-400">&#10003;</span> Setting up Expo + React Native...
+                        <span className="text-emerald-400">&#10003;</span> Installation d&apos;Expo + React Native...
                       </div>
                       <div className="text-gray-600">
-                        <span className="text-emerald-400">&#10003;</span> Adding Supabase auth...
+                        <span className="text-emerald-400">&#10003;</span> Ajout de l&apos;auth Supabase...
                       </div>
                       <div className="text-gray-600">
-                        <span className="text-emerald-400">&#10003;</span> Configuring RevenueCat...
+                        <span className="text-emerald-400">&#10003;</span> Configuration de RevenueCat...
                       </div>
                       <div className="text-gray-600">
                         <span className="text-amber-400">&#9679;</span>{" "}
-                        <span className="text-white">Building UI components...</span>
+                        <span className="text-white">Construction des composants UI...</span>
                       </div>
                       <div className="mt-4 pt-3 border-t border-white/5">
                         <div className="flex items-center justify-between">
-                          <span className="text-gray-600">Progress</span>
+                          <span className="text-gray-600">Progression</span>
                           <span className="text-sky-400">78%</span>
                         </div>
                         <div className="mt-2 h-1 rounded-full bg-white/10 overflow-hidden">

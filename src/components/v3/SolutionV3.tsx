@@ -61,16 +61,12 @@ export default function SolutionV3() {
                   viewport={{ once: true }}
                   transition={{ duration: 0.4, delay: i * 0.1 }}
                 >
-                  {/* Subtle pattern per card */}
+                  {/* Dot pattern */}
                   <div
-                    className="pointer-events-none absolute inset-0 opacity-20"
+                    className="pointer-events-none absolute inset-0 opacity-30"
                     style={{
-                      backgroundImage: i === 0
-                        ? "radial-gradient(rgba(255,255,255,0.12) 1px, transparent 1px)"
-                        : i === 1
-                        ? "linear-gradient(to right, rgba(255,255,255,0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.06) 1px, transparent 1px)"
-                        : "repeating-linear-gradient(315deg, rgba(255,255,255,0.06) 0, rgba(255,255,255,0.06) 1px, transparent 0, transparent 50%)",
-                      backgroundSize: i === 0 ? "16px 16px" : i === 1 ? "20px 20px" : "10px 10px",
+                      backgroundImage: "radial-gradient(rgba(255,255,255,0.15) 1px, transparent 1px)",
+                      backgroundSize: "16px 16px",
                     }}
                   />
                   <div className="relative">

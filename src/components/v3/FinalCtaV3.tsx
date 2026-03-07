@@ -10,13 +10,12 @@ export default function FinalCtaV3() {
           <div className="relative rounded-xl overflow-hidden">
             {/* Gradient background */}
             <div className="absolute inset-0 bg-gradient-to-br from-sky-500/10 via-transparent to-violet-500/10" />
-            {/* Grid pattern */}
+            {/* Dot pattern */}
             <div
               className="pointer-events-none absolute inset-0 opacity-30"
               style={{
-                backgroundImage:
-                  "linear-gradient(to right, rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.05) 1px, transparent 1px)",
-                backgroundSize: "40px 40px",
+                backgroundImage: "radial-gradient(rgba(255,255,255,0.15) 1px, transparent 1px)",
+                backgroundSize: "16px 16px",
               }}
             />
 
