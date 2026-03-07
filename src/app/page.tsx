@@ -1,47 +1,71 @@
-import Hero from "@/components/Hero";
-import SocialProofBar from "@/components/SocialProofBar";
-import PainPoints from "@/components/PainPoints";
-import Solution from "@/components/Solution";
-import ForWho from "@/components/ForWho";
-import Program from "@/components/Program";
-import TechStack from "@/components/TechStack";
-import Transformation from "@/components/Transformation";
-import Testimonials from "@/components/Testimonials";
-import Instructor from "@/components/Instructor";
-import Bonuses from "@/components/Bonuses";
-import Pricing from "@/components/Pricing";
-import RoiJustification from "@/components/RoiJustification";
-import Guarantee from "@/components/Guarantee";
-import Faq from "@/components/Faq";
-import FinalCta from "@/components/FinalCta";
-import Footer from "@/components/Footer";
+import HeroV4 from "@/components/v4/HeroV4";
+import PainPointsV4 from "@/components/v4/PainPointsV4";
+import AgitationV4 from "@/components/v4/AgitationV4";
+import SolutionV4 from "@/components/v4/SolutionV4";
+import TransformationV4 from "@/components/v4/TransformationV4";
+import InstructorV4 from "@/components/v4/InstructorV4";
+import ProofRevenueV4 from "@/components/v4/ProofRevenueV4";
+import ProgramV4 from "@/components/v4/ProgramV4";
+import ProofContentV4 from "@/components/v4/ProofContentV4";
+import ProofInfluencerV4 from "@/components/v4/ProofInfluencerV4";
+import TestimonialsV4 from "@/components/v4/TestimonialsV4";
+import BonusesV4 from "@/components/v4/BonusesV4";
+import PricingV4 from "@/components/v4/PricingV4";
+import GuaranteeV4 from "@/components/v4/GuaranteeV4";
+import FaqV4 from "@/components/v4/FaqV4";
+import FinalCtaV4 from "@/components/v4/FinalCtaV4";
+import FooterV4 from "@/components/v4/FooterV4";
+import StickyCtaV4 from "@/components/v4/StickyCtaV4";
 
 export default function Home() {
   return (
-    <div className="relative" style={{ background: "#050508", minHeight: "100vh" }}>
-      <div className="dot-pattern" />
-      <div className="grid-pattern" />
+    <div className="min-h-screen bg-gray-950 text-white antialiased">
+      <div
+        className="grid grid-cols-[1fr_minmax(0,80rem)_1fr]"
+        style={{ "--gutter": "2.5rem" } as React.CSSProperties}
+      >
+        {/* Left gutter */}
+        <div
+          className="border-r border-white/10 bg-fixed"
+          style={{
+            backgroundImage:
+              "repeating-linear-gradient(315deg, rgba(255,255,255,0.06) 0, rgba(255,255,255,0.06) 1px, transparent 0, transparent 50%)",
+            backgroundSize: "10px 10px",
+          }}
+        />
 
-      <main>
-        <Hero />
-        <SocialProofBar />
-        <PainPoints />
-        <Solution />
-        <ForWho />
-        <Program />
-        <TechStack />
-        <Transformation />
-        <Testimonials id="testimonials-1" />
-        <Instructor />
-        <Bonuses />
-        <Pricing />
-        <RoiJustification />
-        <Guarantee />
-        <Testimonials id="testimonials-2" />
-        <Faq />
-        <FinalCta />
-      </main>
-      <Footer />
+        <div className="min-w-0">
+          <HeroV4 />
+          <PainPointsV4 />
+          <AgitationV4 />
+          <SolutionV4 />
+          <TransformationV4 />
+          <InstructorV4 />
+          <ProofRevenueV4 />
+          <ProgramV4 />
+          <ProofContentV4 />
+          <ProofInfluencerV4 />
+          <TestimonialsV4 />
+          <BonusesV4 />
+          <PricingV4 />
+          <GuaranteeV4 />
+          <FaqV4 />
+          <FinalCtaV4 />
+          <FooterV4 />
+        </div>
+
+        {/* Right gutter */}
+        <div
+          className="border-l border-white/10 bg-fixed"
+          style={{
+            backgroundImage:
+              "repeating-linear-gradient(315deg, rgba(255,255,255,0.06) 0, rgba(255,255,255,0.06) 1px, transparent 0, transparent 50%)",
+            backgroundSize: "10px 10px",
+          }}
+        />
+      </div>
+
+      <StickyCtaV4 />
     </div>
   );
 }
