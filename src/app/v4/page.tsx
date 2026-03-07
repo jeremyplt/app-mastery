@@ -1,11 +1,12 @@
 import HeroV4 from "@/components/v4/HeroV4";
-import CredibilityBarV4 from "@/components/v4/CredibilityBarV4";
 import PainPointsV4 from "@/components/v4/PainPointsV4";
 import AgitationV4 from "@/components/v4/AgitationV4";
 import SolutionV4 from "@/components/v4/SolutionV4";
 import TransformationV4 from "@/components/v4/TransformationV4";
 import InstructorV4 from "@/components/v4/InstructorV4";
+import ProofRevenueV4 from "@/components/v4/ProofRevenueV4";
 import ProgramV4 from "@/components/v4/ProgramV4";
+import ProofContentV4 from "@/components/v4/ProofContentV4";
 import TestimonialsV4 from "@/components/v4/TestimonialsV4";
 import BonusesV4 from "@/components/v4/BonusesV4";
 import PricingV4 from "@/components/v4/PricingV4";
@@ -35,13 +36,14 @@ export default function HomeV4() {
         {/* Center content — no nav links, zero distractions */}
         <div className="min-w-0">
           <HeroV4 />
-          <CredibilityBarV4 />
           <PainPointsV4 />
           <AgitationV4 />
           <SolutionV4 />
           <TransformationV4 />
           <InstructorV4 />
+          <ProofRevenueV4 />
           <ProgramV4 />
+          <ProofContentV4 />
           <TestimonialsV4 />
           <BonusesV4 />
           <PricingV4 />
