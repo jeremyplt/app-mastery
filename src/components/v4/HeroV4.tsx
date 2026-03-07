@@ -88,15 +88,34 @@ export default function HeroV4() {
                 </motion.div>
 
                 {/* Micro social proof */}
-                <motion.p
-                  className="mt-6 text-xs text-gray-600"
+                <motion.div
+                  className="mt-6 flex items-center gap-3"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.6, delay: 0.5 }}
                 >
-                  {/* PLACEHOLDER: remplacer avec vrais chiffres */}
-                  Déjà [X] élèves ont lancé leur app
-                </motion.p>
+                  <div className="flex -space-x-2">
+                    {[
+                      "bg-sky-500",
+                      "bg-violet-500",
+                      "bg-emerald-500",
+                      "bg-amber-500",
+                    ].map((bg, i) => (
+                      <div
+                        key={i}
+                        className={`w-8 h-8 rounded-full ${bg} border-2 border-gray-950 flex items-center justify-center text-[10px] font-bold text-white`}
+                      >
+                        {/* PLACEHOLDER: remplacer par de vraies photos */}
+                      </div>
+                    ))}
+                    <div className="w-8 h-8 rounded-full bg-gray-800 border-2 border-gray-950 flex items-center justify-center text-sm font-semibold text-white">
+                      +
+                    </div>
+                  </div>
+                  <span className="text-sm text-gray-500">
+                    Ils ont déjà lancé leur app
+                  </span>
+                </motion.div>
               </div>
 
               {/* Right: terminal/code visual — shows the "before/after" */}
