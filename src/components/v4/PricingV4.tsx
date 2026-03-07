@@ -6,17 +6,17 @@ import { Check } from "lucide-react";
 // Price anchoring against alternatives (Hormozi)
 const alternatives = [
   { name: "Bootcamp dev mobile", price: "5 000 - 15 000$", time: "3-6 mois" },
-  { name: "Freelance pour creer ton app", price: "10 000 - 50 000$", time: "3-6 mois" },
-  { name: "Diplome universitaire", price: "20 000$+", time: "2-4 ans" },
+  { name: "Freelance pour créer ton app", price: "10 000 - 50 000$", time: "3-6 mois" },
+  { name: "Diplôme universitaire", price: "20 000$+", time: "2-4 ans" },
   { name: "Apprendre seul (tutos)", price: '"Gratuit"', time: "1-3 ans (et probablement jamais)" },
 ];
 
 const included = [
-  "14 modules, 90+ lecons pas-a-pas",
-  "Templates & code source pret a l'emploi",
+  "10 modules, 90+ leçons pas-à-pas",
   "Masterclass Claude Code (valeur 497$)",
-  "Communaute privee a vie (valeur 600$/an)",
-  "Mises a jour a vie",
+  "2 lives Q&A par mois avec le formateur",
+  "Communauté privée à vie (valeur 600$/an)",
+  "Mises à jour à vie",
   "Case study d'une app rentable",
   "Support du formateur",
   "Garantie 30 jours",
@@ -35,10 +35,10 @@ export default function PricingV4() {
 
         <div className="mb-12 max-w-2xl">
           <h2 className="text-[2.5rem]/10 font-medium tracking-tighter text-balance text-white">
-            Un investissement, pas une depense
+            Un investissement, pas une dépense
           </h2>
           <p className="mt-4 text-base/7 text-gray-400">
-            Compare avec les alternatives pour atteindre le meme resultat.
+            Compare avec les alternatives pour atteindre le même résultat.
           </p>
         </div>
 
@@ -87,13 +87,13 @@ export default function PricingV4() {
 
               <div className="relative text-center">
                 <span className="inline-flex items-center rounded-full bg-sky-500/10 px-3 py-1 text-xs font-semibold text-sky-400 outline outline-sky-500/20 mb-6">
-                  Acces a vie
+                  Accès à vie
                 </span>
 
                 {/* Value stack recap */}
-                <p className="text-sm text-gray-500 mb-2">
-                  Valeur totale:{" "}
-                  <span className="line-through text-gray-600">2 588$+</span>
+                <p className="text-base text-gray-400 mb-2">
+                  Valeur totale :{" "}
+                  <span className="line-through text-gray-500 text-lg font-medium">2 588$+</span>
                 </p>
 
                 {/* Price — precise number (consumer psychology) */}
@@ -104,7 +104,7 @@ export default function PricingV4() {
                   <span className="text-xl text-gray-500 ml-1">$</span>
                 </div>
                 <p className="text-sm text-gray-500 mb-8">
-                  Paiement unique &mdash; acces a vie
+                  Paiement unique | accès à vie
                 </p>
 
                 {/* What's included */}
@@ -128,13 +128,7 @@ export default function PricingV4() {
                 </a>
 
                 <p className="text-xs text-gray-600 mt-4">
-                  Garantie satisfait ou rembourse 30 jours &mdash; zero risque
-                </p>
-
-                {/* Hormozi anchoring question */}
-                <p className="text-xs text-gray-500 mt-6 italic">
-                  Si la formation te permettait juste de publier ton app sur les
-                  stores, est-ce que ca vaudrait 997$ ?
+                  Garantie satisfait ou remboursé 30 jours &mdash; zéro risque
                 </p>
               </div>
             </div>

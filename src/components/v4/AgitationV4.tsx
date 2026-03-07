@@ -33,14 +33,20 @@ export default function AgitationV4() {
             transition={{ duration: 0.5, delay: 0.15 }}
           >
             <p className="text-base/7 text-gray-400">
-              Dans 6 mois, tu seras exactement au meme endroit. Toujours en
+              Dans 6 mois, tu seras exactement au même endroit. Toujours en
               train de regarder des tutos. Toujours sans app. Toujours sans
-              revenus supplementaires.
+              revenus supplémentaires.
             </p>
             <p className="text-base/7 text-gray-400">
-              Pendant ce temps, d&apos;autres personnes — pas plus intelligentes
-              que toi — auront lance leur app, recu leurs premiers paiements, et
-              commence a construire quelque chose qui leur appartient.
+              Ou pire : tu auras une app terminée qui prend la poussière sur
+              l&apos;App Store avec 3 téléchargements par mois. Parce que
+              personne ne t&apos;a montré comment la faire connaître.
+            </p>
+            <p className="text-base/7 text-gray-400">
+              Pendant ce temps, d&apos;autres personnes, pas plus intelligentes
+              que toi, auront lancé leur app, trouvé les bons influenceurs,
+              créé du contenu viral, et commencé à générer des revenus
+              récurrents.
             </p>
           </motion.div>
 
@@ -67,8 +73,8 @@ export default function AgitationV4() {
                   Chaque mois sans agir = un mois de revenus en moins
                 </p>
                 <p className="text-sm text-gray-500">
-                  Une app avec seulement 200 abonnes a 4,99$/mois = pres de
-                  12 000$/an de revenus recurrents. Combien de mois as-tu deja
+                  Une app avec seulement 100 abonnés à 9,99€/mois = près de
+                  12 000€/an de revenus récurrents. Combien de mois as-tu déjà
                   perdu ?
                 </p>
               </div>
@@ -83,8 +89,9 @@ export default function AgitationV4() {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.4 }}
           >
-            La bonne nouvelle ? Il existe maintenant une methode pour lancer ton
-            app en 28 jours — sans ecrire de code toi-meme.
+            La bonne nouvelle ? Il existe maintenant une méthode pour créer,
+            lancer et marketer ton app en 28 jours, même si tu ne sais pas
+            coder ni faire du marketing.
           </motion.p>
         </div>
       </div>

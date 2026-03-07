@@ -32,13 +32,13 @@ export default function FinalCtaV4() {
                   Dans 28 jours, tu pourrais avoir ton app sur les stores
                 </h2>
                 <p className="text-base/7 text-gray-400 mb-4 max-w-lg mx-auto">
-                  Ou tu peux continuer a regarder des tutos et repousser ton
+                  Ou tu peux continuer à regarder des tutos et repousser ton
                   projet. Le choix t&apos;appartient.
                 </p>
 
                 {/* Recap value */}
                 <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mb-8 text-sm text-gray-500">
-                  <span>90+ lecons</span>
+                  <span>90+ leçons</span>
                   <span className="text-white/20">|</span>
                   <span>1 591$+ de bonus inclus</span>
                   <span className="text-white/20">|</span>
@@ -54,15 +54,15 @@ export default function FinalCtaV4() {
                 </a>
 
                 <p className="text-xs text-gray-600 mt-4">
-                  Garantie 30 jours satisfait ou rembourse &mdash; zero risque
+                  Garantie 30 jours satisfait ou remboursé &mdash; zéro risque
                 </p>
 
                 {/* P.S. — Cattoni: le P.S. rappelle le benefice principal */}
                 <div className="mt-10 pt-8 border-t border-white/5 max-w-md mx-auto">
                   <p className="text-xs text-gray-500 italic">
                     P.S. &mdash; Rappelle-toi : une app avec seulement 200
-                    abonnes a 4,99$/mois = pres de 12 000$/an. La formation se
-                    rembourse des ton premier mois de revenus. Et si ca ne
+                    abonnés à 4,99$/mois = près de 12 000$/an. La formation se
+                    rembourse dès ton premier mois de revenus. Et si ça ne
                     marche pas, tu as la garantie 30 jours.
                   </p>
                 </div>

@@ -11,19 +11,23 @@ const painPoints = [
   },
   {
     emoji: "02",
-    text: "Tu as une idee d'app mais tu ne sais pas par ou commencer — quel langage, quel outil, quel framework.",
+    text: "Tu as une idée d'app mais tu ne sais pas par où commencer. Quel langage, quel outil, quel framework.",
   },
   {
     emoji: "03",
-    text: "Tu vois des indie hackers lancer des apps rentables et tu te demandes comment ils font.",
+    text: "Tu as déjà une app (ou presque) mais personne ne la télécharge. Tu ne sais pas comment la faire connaître sans budget pub.",
   },
   {
     emoji: "04",
-    text: "Tu as peur d'investir du temps dans un projet que personne ne telechargera.",
+    text: "Le marketing te paraît flou : influenceurs, contenu organique, ASO... tu ne sais pas quoi faire ni dans quel ordre.",
   },
   {
     emoji: "05",
-    text: "Tu te dis que c'est trop technique, trop long, trop complique — alors tu repousses.",
+    text: "Tu vois des indie hackers lancer des apps rentables et tu te demandes comment ils font.",
+  },
+  {
+    emoji: "06",
+    text: "Tu as peur d'investir du temps dans un projet que personne ne téléchargera.",
   },
 ];
 
@@ -34,7 +38,7 @@ export default function PainPointsV4() {
         {/* Section label */}
         <div className="mb-8 flex items-center gap-4">
           <span className="font-mono text-sm font-semibold tracking-widest uppercase text-pink-400">
-            Le Probleme
+            Le Problème
           </span>
           <div className="h-px flex-1 bg-white/10" />
         </div>
@@ -42,7 +46,7 @@ export default function PainPointsV4() {
         <div className="mb-12 max-w-2xl">
           {/* Empathetic heading — "Peut-etre que..." (Stan Leloup) */}
           <h2 className="text-[2.5rem]/10 font-medium tracking-tighter text-balance text-white">
-            Peut-etre que tu te reconnais...
+            Peut-être que tu te reconnais...
           </h2>
           <p className="mt-4 text-base/7 text-gray-400">
             Si tu lis cette page, c&apos;est probablement parce que tu vis l&apos;une
@@ -83,13 +87,13 @@ export default function PainPointsV4() {
 
         {/* Rhetorical question — trial close (Brunson) */}
         <motion.p
-          className="mt-8 text-center text-base text-gray-500 italic"
+          className="mt-8 text-center text-xl font-semibold text-white italic"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.3 }}
         >
-          Ca te parle ? Alors lis la suite — ca va changer.
+          Ça te parle ? Alors lis la suite. Ça va changer.
         </motion.p>
       </div>
 

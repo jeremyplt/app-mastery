@@ -10,16 +10,16 @@ const beforeAfter = [
     after: "Tu as une app live sur les stores avec de vrais utilisateurs",
   },
   {
-    before: "Tu ne sais pas comment generer des revenus avec le code",
-    after: "Tes abonnements generent des revenus recurrents chaque mois",
+    before: "Tu ne sais pas comment faire le marketing de ton app",
+    after: "Tes abonnements génèrent des revenus récurrents chaque mois",
   },
   {
-    before: "Tu te sens bloque par la complexite technique",
-    after: "L'IA code pour toi et tu livres des fonctionnalites en quelques heures",
+    before: "Tu te sens bloqué par la complexité technique",
+    after: "L'IA code pour toi et tu livres des fonctionnalités en quelques heures",
   },
   {
     before: "Tu repousses ton projet depuis des mois",
-    after: "Tu as lance quelque chose de concret dont tu es fier",
+    after: "Tu as lancé quelque chose de concret dont tu es fier",
   },
 ];
 
@@ -39,9 +39,9 @@ export default function TransformationV4() {
             Imagine dans 28 jours...
           </h2>
           <p className="mt-4 text-base/7 text-gray-400">
-            Tu ouvres ton telephone et tu vois ton app — ton app — sur l&apos;App
-            Store. Avec de vrais utilisateurs. Et tes premiers revenus qui
-            tombent.
+            Tu ouvres ton téléphone et tu vois ton app sur l&apos;App Store et
+            le Google Play Store. Avec de vrais utilisateurs. Et tes premiers
+            revenus qui tombent.
           </p>
         </div>
 
@@ -66,7 +66,7 @@ export default function TransformationV4() {
               </div>
               <div className="rounded-lg bg-gray-950 px-5 py-3">
                 <span className="text-xs font-semibold text-emerald-400 uppercase tracking-wider">
-                  Apres App Mastery
+                  Après App Mastery
                 </span>
               </div>
             </div>
@@ -100,12 +100,13 @@ export default function TransformationV4() {
 
         {/* Trial close */}
         <motion.p
-          className="mt-8 text-center text-sm text-gray-500 italic"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
+          className="mt-10 text-center text-2xl sm:text-3xl font-medium tracking-tight text-white"
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
+          transition={{ delay: 0.3 }}
         >
-          Ca te donne envie ? Alors decouvre comment y arriver concretement.
+          Ça te donne envie ? Voici comment y arriver :
         </motion.p>
       </div>
 

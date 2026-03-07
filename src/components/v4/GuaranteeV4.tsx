@@ -42,19 +42,19 @@ export default function GuaranteeV4() {
 
                 {/* Named guarantee (memorable — Hormozi) */}
                 <h3 className="text-2xl font-medium tracking-tight text-white mb-4">
-                  La Garantie &ldquo;Zero Risque&rdquo; 30 Jours
+                  La Garantie &ldquo;Zéro Risque&rdquo; 30 Jours
                 </h3>
 
                 <div className="space-y-4 text-sm/6 text-gray-400 max-w-md mx-auto">
                   <p>
-                    Rejoins le programme, suis les lecons, commence a construire
-                    ton app. Si apres 30 jours tu estimes que la formation ne
-                    t&apos;apporte pas ce qui etait promis, je te rembourse
-                    integralement. Pas de questions, pas de conditions
-                    cachees.
+                    Rejoins le programme, suis les leçons, commence à construire
+                    ton app. Si après 30 jours tu estimes que la formation ne
+                    t&apos;apporte pas ce qui était promis, je te rembourse
+                    intégralement. Pas de questions, pas de conditions
+                    cachées.
                   </p>
                   <p className="text-white font-medium">
-                    Tout le risque est de mon cote. Pas du tien.
+                    Tout le risque est de mon côté. Pas du tien.
                   </p>
                   {/* PLACEHOLDER: tu peux ajouter une garantie conditionnelle plus forte ici */}
                   {/* Ex: "Si tu suis les 7 modules coeur et que tu n'as pas une app publiee

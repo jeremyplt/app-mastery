@@ -144,7 +144,7 @@ export default function ProofRevenueV4() {
                 viewport={{ once: true }}
                 transition={{ delay: 0.4 }}
               >
-                De 0 a 140K$/an de revenus recurrents avec une seule app
+                De 0 à 140K$/an de revenus récurrents avec une seule app
               </motion.p>
             </div>
           </div>
@@ -174,7 +174,7 @@ export default function ProofRevenueV4() {
                   Reviews App Store
                 </span>
                 <span className="text-xs font-semibold text-white">
-                  — 4.9/5, 5 009 ratings
+                  , 4.9/5, 5 009 ratings
                 </span>
               </div>
 
@@ -200,7 +200,7 @@ export default function ProofRevenueV4() {
         >
           C&apos;est{" "}
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-sky-400">
-            cette methode exacte
+            cette méthode exacte
           </span>{" "}
           que tu vas apprendre dans la formation.
         </motion.p>

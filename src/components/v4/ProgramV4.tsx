@@ -7,7 +7,7 @@ import { ChevronDown } from "lucide-react";
 interface Module {
   number: number;
   title: string;
-  badge: "COEUR" | "BONUS" | null;
+  badge: "ESSENTIEL" | "BONUS" | null;
   lessons: number;
   // Benefit-focused description (not just content list)
   benefit: string;
@@ -16,115 +16,87 @@ interface Module {
 const modules: Module[] = [
   {
     number: 1,
-    title: "Commence Ici",
-    badge: null,
-    lessons: 1,
-    benefit: "Tu sais exactement par ou commencer et tu as une vision claire du chemin a suivre.",
+    title: "Trouver & Valider une Idée",
+    badge: "ESSENTIEL",
+    lessons: 6,
+    benefit:
+      "Tu as une idée validée, un modèle de monétisation choisi, et ton compte développeur créé. Prêt à construire.",
   },
   {
     number: 2,
-    title: "Introduction",
-    badge: null,
-    lessons: 3,
-    benefit: "Tu comprends la strategie globale pour creer une app rentable en 28 jours.",
+    title: "Branding & Tech Stack",
+    badge: "ESSENTIEL",
+    lessons: 6,
+    benefit:
+      "Ton identité visuelle est créée, tes outils sont configurés, et ton projet est initialisé, sans confusion technique.",
   },
   {
     number: 3,
-    title: "Trouver & Valider une Idee",
-    badge: "COEUR",
-    lessons: 6,
+    title: "Développement de l'App",
+    badge: "ESSENTIEL",
+    lessons: 16,
     benefit:
-      "Tu as une idee validee, un modele de monetisation choisi, et ton compte developpeur cree — pret a construire.",
+      "Ton app est construite de A à Z : auth, base de données, abonnements, notifications push. Tout fonctionne.",
   },
   {
     number: 4,
-    title: "Branding & Tech Stack",
-    badge: "COEUR",
-    lessons: 6,
+    title: "Analytics & Publication",
+    badge: "ESSENTIEL",
+    lessons: 13,
     benefit:
-      "Ton identite visuelle est creee, tes outils sont configures, et ton projet est initialise — sans confusion technique.",
+      "Ton app est publiée sur l'App Store ET Google Play avec le tracking et l'ASO configurés pour être découverte.",
   },
   {
     number: 5,
-    title: "Developpement de l'App",
-    badge: "COEUR",
-    lessons: 16,
+    title: "Marketing",
+    badge: "ESSENTIEL",
+    lessons: 14,
     benefit:
-      "Ton app est construite de A a Z : auth, base de donnees, abonnements, notifications push — tout fonctionne.",
+      "Tu as une stratégie d'acquisition pour attirer tes premiers utilisateurs et générer tes premiers revenus.",
   },
   {
     number: 6,
-    title: "Analytics & Publication",
-    badge: "COEUR",
-    lessons: 13,
-    benefit:
-      "Ton app est publiee sur l'App Store ET Google Play avec le tracking et l'ASO configures pour etre decouverte.",
-  },
-  {
-    number: 7,
-    title: "Marketing",
-    badge: "COEUR",
-    lessons: 3,
-    benefit:
-      "Tu as une strategie d'acquisition pour attirer tes premiers utilisateurs et generer tes premiers revenus.",
-  },
-  {
-    number: 8,
     title: "Masterclass Claude Code",
     badge: "BONUS",
     lessons: 13,
     benefit:
-      "Tu maitrises le meilleur agent IA du marche pour coder 10x plus vite sur tous tes futurs projets.",
+      "Tu maîtrises le meilleur agent IA du marché pour coder 10x plus vite sur tous tes futurs projets.",
   },
   {
-    number: 9,
+    number: 7,
     title: "Intelligence Artificielle",
     badge: "BONUS",
     lessons: 7,
     benefit:
-      "Tu sais utiliser les meilleurs outils IA (Perplexity, Claude, ChatGPT) pour accelerer chaque etape.",
+      "Tu sais utiliser les meilleurs outils IA (Perplexity, Claude, ChatGPT) pour accélérer chaque étape.",
   },
   {
-    number: 10,
-    title: "Git/GitHub",
+    number: 8,
+    title: "Masterclass Git/GitHub",
     badge: "BONUS",
     lessons: 13,
     benefit:
-      "Tu geres ton code comme un pro — versioning, branches, collaboration — sans jamais perdre de travail.",
+      "Tu gères ton code comme un pro, versioning, branches, collaboration, sans jamais perdre de travail.",
   },
   {
-    number: 11,
-    title: "Learn in Public",
-    badge: "BONUS",
-    lessons: 2,
-    benefit: "Tu apprends a partager ton parcours pour construire une audience autour de ton app.",
-  },
-  {
-    number: 12,
+    number: 9,
     title: "Case Study: Shinobi Japanese",
     badge: "BONUS",
     lessons: 6,
     benefit:
-      "Tu vois l'evolution d'une vraie app rentable en toute transparence — les decisions, les erreurs, les resultats.",
+      "Tu vois l'évolution d'une vraie app rentable en toute transparence. Les décisions, les erreurs, les résultats.",
   },
   {
-    number: 13,
-    title: "Tech News",
-    badge: "BONUS",
-    lessons: 10,
-    benefit: "Tu restes a jour sur les dernieres evolutions tech qui impactent le developpement d'apps.",
-  },
-  {
-    number: 14,
+    number: 10,
     title: "Ressources",
     badge: "BONUS",
     lessons: 1,
-    benefit: "Tu accedes a des ressources exclusives curees pour les createurs d'apps.",
+    benefit: "Tu accèdes à des ressources exclusives curées pour les créateurs d'apps.",
   },
 ];
 
 const coeurModules = modules.filter(
-  (m) => m.badge === "COEUR" || m.badge === null,
+  (m) => m.badge === "ESSENTIEL",
 );
 const bonusModules = modules.filter((m) => m.badge === "BONUS");
 
@@ -146,7 +118,7 @@ function ModuleRow({ module }: { module: Module }) {
           </span>
         </div>
         <span className="text-xs text-gray-600 shrink-0 hidden sm:block font-mono">
-          {module.lessons} lecon{module.lessons > 1 ? "s" : ""}
+          {module.lessons} leçon{module.lessons > 1 ? "s" : ""}
         </span>
         <motion.div
           animate={{ rotate: isOpen ? 180 : 0 }}
@@ -168,7 +140,7 @@ function ModuleRow({ module }: { module: Module }) {
           >
             <div className="px-4 pb-3 pl-14">
               {/* Benefit description — not content list */}
-              <p className="text-emerald-400/80 text-xs/5">
+              <p className="text-emerald-400/80 text-sm/6">
                 &#10003; {module.benefit}
               </p>
             </div>
@@ -195,18 +167,18 @@ export default function ProgramV4() {
             Tout ce dont tu as besoin, rien de superflu
           </h2>
           <p className="mt-4 text-base/7 text-gray-400">
-            14 modules, 90+ lecons — chaque etape te rapproche de ton app
-            publiee et monetisee.
+            10 modules, 90+ leçons. Chaque étape te rapproche de ton app
+            publiée et monétisée.
           </p>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-2">
-          {/* Coeur */}
+          {/* Essentiel */}
           <div className="isolate overflow-hidden rounded-2xl bg-gray-950 p-2 outline outline-white/10">
             <div className="rounded-xl bg-white/5 p-3">
               <div className="flex items-center gap-2 mb-3 px-2">
                 <span className="inline-flex items-center rounded-full bg-amber-500/10 px-2.5 py-0.5 text-xs font-semibold text-amber-400 outline outline-amber-500/20">
-                  Coeur
+                  Essentiel
                 </span>
                 <span className="text-xs text-gray-600">
                   Le parcours principal
@@ -233,10 +205,10 @@ export default function ProgramV4() {
               />
               <div className="relative">
                 <div className="flex items-center gap-2 mb-3 px-2">
-                  <span className="inline-flex items-center rounded-full bg-white/5 px-2.5 py-0.5 text-xs font-semibold text-gray-400 outline outline-white/10">
+                  <span className="inline-flex items-center rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-xs font-semibold text-emerald-400 outline outline-emerald-500/20">
                     Bonus
                   </span>
-                  <span className="text-xs text-gray-600">
+                  <span className="text-xs text-emerald-400/60">
                     Inclus gratuitement
                   </span>
                 </div>

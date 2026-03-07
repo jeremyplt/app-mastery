@@ -8,54 +8,58 @@ import { ChevronDown, Mail } from "lucide-react";
 // Each question maps to a specific objection
 const faqData = [
   {
-    q: "Je ne sais pas coder du tout — c'est vraiment pour moi ?",
+    q: "Je ne sais pas coder du tout, c'est vraiment pour moi ?",
     // Objection: competence
-    a: "Oui, c'est le principe meme de la formation. Tu utilises l'IA (Claude Code) pour generer le code a ta place. Tu guides, l'IA execute. Des debutants complets ont lance leur app en suivant la methode.",
+    a: "Oui, c'est le principe même de la formation. Tu utilises l'IA (Claude Code) pour générer le code à ta place. Tu guides, l'IA exécute. Des débutants complets ont lancé leur app en suivant la méthode.",
   },
   {
     q: "Combien de temps dois-je y consacrer par semaine ?",
     // Objection: temps
-    a: "Le programme est concu pour 28 jours a raison de 1-2 heures par jour. Mais tu as un acces a vie — tu peux aller a ton rythme. Certains eleves finissent en 2 semaines, d'autres en 2 mois.",
+    a: "Le programme est conçu pour 28 jours à raison de 1-2 heures par jour. Mais tu as un accès à vie. Tu peux aller à ton rythme. Certains élèves finissent en 2 semaines, d'autres en 2 mois.",
   },
   {
     q: "Pourquoi payer 997$ alors qu'il y a des tutos gratuits partout ?",
     // Objection: prix — differentiate structured path vs scattered tutos
-    a: "Les tutos gratuits t'apprennent des bouts de connaissances eparpilles. Ici, tu as un systeme complet, de l'idee au premier revenu — avec du support, une communaute, et des templates prets a l'emploi. C'est la difference entre errer dans une foret et suivre un sentier balisee.",
+    a: "Les tutos gratuits t'apprennent des bouts de connaissances éparpillés. Ici, tu as un système complet, de l'idée au premier revenu, avec du support, une communauté, et des templates prêts à l'emploi. C'est la différence entre errer dans une forêt et suivre un sentier balisé.",
   },
   {
     q: "Et si mon app ne genere aucun revenu ?",
     // Objection: risque — renvoie vers la garantie
-    a: "D'abord, la formation couvre la monetisation de A a Z (abonnements, marketing, ASO). Ensuite, tu as la garantie 30 jours : si tu n'es pas satisfait, tu es rembourse integralement. Le risque est de mon cote, pas du tien.",
+    a: "D'abord, la formation couvre la monétisation de A à Z (abonnements, marketing, ASO). Ensuite, tu as la garantie 30 jours : si tu n'es pas satisfait, tu es remboursé intégralement. Le risque est de mon côté, pas du tien.",
   },
   {
-    q: "Est-ce que ca marche pour iOS ET Android ?",
+    q: "Est-ce que c'est vraiment possible en 28 jours ?",
+    a: "Oui, c'est possible. Mais ce n'est pas une garantie. Ton app peut être prête en 28 jours, mais tu vas devoir passer par les vérifications de l'App Store et du Google Play Store et répondre à certains critères pour que ton app soit publiée. Ce processus peut prendre un certain temps qui ne dépend ni de moi ni du contenu de la formation.",
+  },
+  {
+    q: "Est-ce que ça marche pour iOS ET Android ?",
     // Objection: technique
-    a: "Oui ! On utilise React Native avec Expo, ce qui te permet de creer une seule app pour les deux plateformes. Tu publies sur l'App Store ET le Play Store avec le meme code.",
+    a: "Oui ! J'utilise React Native avec Expo, ce qui te permet de créer une seule app pour les deux plateformes. Tu publies sur l'App Store ET le Play Store avec le même code.",
   },
   {
-    q: "Est-ce que ca marche encore en 2026 ?",
+    q: "Est-ce que ça marche encore en 2026 ?",
     // Objection: pertinence
-    a: "Plus que jamais. Le marche des apps mobiles continue de croitre et l'IA rend le developpement accessible a tous. Les outils enseignes (React Native, Expo, Claude Code) sont a la pointe et la formation est mise a jour regulierement.",
+    a: "Plus que jamais. Le marché des apps mobiles continue de croître et l'IA rend le développement accessible à tous. Les outils enseignés (React Native, Expo, Claude Code) sont à la pointe et la formation est mise à jour régulièrement.",
   },
   {
     q: "Faut-il un Mac ?",
     // Objection: materiel
-    a: "Fortement recommande pour publier sur iOS (App Store). Pour Android uniquement, un PC suffit. La grande majorite des eleves utilisent un Mac.",
+    a: "Fortement recommandé pour publier sur iOS (App Store). Pour Android uniquement, un PC suffit. La grande majorité des élèves utilisent un Mac.",
   },
   {
-    q: "Et si je suis bloque pendant la formation ?",
+    q: "Et si je suis bloqué pendant la formation ?",
     // Objection: support
-    a: "Tu as acces a la communaute privee ou tu peux poser tes questions 24/7. Le formateur et les autres eleves sont la pour t'aider. Tu n'es jamais seul.",
+    a: "Tu as accès à la communauté privée où tu peux poser tes questions 24/7. Le formateur et les autres élèves sont là pour t'aider. Tu n'es jamais seul.",
   },
   {
     q: "C'est quoi le vibecoding exactement ?",
     // Objection: comprehension
-    a: "C'est une nouvelle approche ou l'IA ecrit le code pour toi. Tu donnes des instructions en francais a un agent IA (Claude Code), et il genere le code de ton app. C'est comme avoir un developpeur senior qui travaille pour toi 24/7.",
+    a: "C'est une nouvelle approche où l'IA écrit le code pour toi. Tu donnes des instructions en français à un agent IA (Claude Code), et il génère le code de ton app. C'est comme avoir un développeur senior qui travaille pour toi 24/7.",
   },
   {
-    q: "L'acces est vraiment a vie ?",
+    q: "L'accès est vraiment à vie ?",
     // Objection: valeur long terme
-    a: "Oui. Tu paies une fois et tu accedes a la formation, aux mises a jour, aux nouveaux modules et a la communaute — pour toujours. Pas d'abonnement cache.",
+    a: "Oui. Tu paies une fois et tu accèdes à la formation, aux mises à jour, aux nouveaux modules et à la communauté. Pour toujours. Pas d'abonnement caché.",
   },
 ];
 
@@ -87,7 +91,7 @@ export default function FaqV4() {
               Encore des questions ?
             </h2>
             <p className="mt-4 text-base/7 text-gray-400">
-              Si ta question n&apos;est pas ici, ecris-moi. Je reponds
+              Si ta question n&apos;est pas ici, écris-moi. Je réponds
               personnellement en moins de 24h.
             </p>
 
@@ -108,12 +112,12 @@ export default function FaqV4() {
                       <Mail size={16} className="text-amber-400" />
                     </div>
                     <span className="text-sm font-semibold text-white">
-                      Ecris-moi directement
+                      Écris-moi directement
                     </span>
                   </div>
                   <p className="text-xs/5 text-gray-500 mb-4">
                     {/* PLACEHOLDER: mettre ton email ou lien de contact */}
-                    Je reponds personnellement a chaque message.
+                    Je réponds personnellement à chaque message.
                   </p>
                   <a
                     href="#"

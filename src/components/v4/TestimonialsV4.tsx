@@ -8,49 +8,49 @@ const testimonials = [
   {
     name: "Thomas R.",
     role: "Entrepreneur",
-    before: "N'avait jamais code",
-    after: "App lancee en 3 semaines",
-    text: "J'ai lance mon app en 3 semaines alors que je n'avais jamais code. Le vibecoding change vraiment la donne. J'aurais jamais cru que c'etait possible.",
+    before: "N'avait jamais codé",
+    after: "App lancée en 3 semaines",
+    text: "J'ai lancé mon app en 3 semaines alors que je n'avais jamais codé. Le vibecoding change vraiment la donne. J'aurais jamais cru que c'était possible.",
     initials: "TR",
   },
   {
     name: "Sophie M.",
     role: "Freelance designer",
     before: "Perdue dans les tutos",
-    after: "App publiee sur les 2 stores",
-    text: "La formation est ultra structuree. Chaque etape est claire, pas besoin de chercher ailleurs. J'ai publie mon app sur l'App Store ET le Play Store.",
+    after: "App publiée sur les 2 stores",
+    text: "La formation est ultra structurée. Chaque étape est claire, pas besoin de chercher ailleurs. J'ai publié mon app sur l'App Store ET le Play Store.",
     initials: "SM",
   },
   {
     name: "Karim B.",
-    role: "Etudiant",
-    before: "Zero revenus en ligne",
-    after: "Revenus recurrents d'abonnements",
-    text: "Mon app genere deja des revenus d'abonnements. Le module marketing est une pepite. Je ne pensais pas que c'etait possible en tant qu'etudiant.",
+    role: "Étudiant",
+    before: "Zéro revenus en ligne",
+    after: "Revenus récurrents d'abonnements",
+    text: "Mon app génère déjà des revenus d'abonnements. Le module marketing est une pépite. Je ne pensais pas que c'était possible en tant qu'étudiant.",
     initials: "KB",
   },
   {
     name: "Julie D.",
-    role: "Creatrice de contenu",
-    before: "Audience sans monetisation",
+    role: "Créatrice de contenu",
+    before: "Audience sans monétisation",
     after: "Audience convertie en utilisateurs",
-    text: "Grace a la formation, j'ai enfin pu transformer mon audience en utilisateurs d'app. Le ROI est enorme.",
+    text: "Grâce à la formation, j'ai enfin pu transformer mon audience en utilisateurs d'app. Le ROI est énorme.",
     initials: "JD",
   },
   {
     name: "Marc L.",
-    role: "Developpeur web",
+    role: "Développeur web",
     before: "Connaissait le web, pas le mobile",
     after: "App fonctionnelle en 2 semaines",
-    text: "Je connaissais le web mais pas le mobile. En 2 semaines j'avais une app fonctionnelle sur les stores. La methode est redoutablement efficace.",
+    text: "Je connaissais le web mais pas le mobile. En 2 semaines j'avais une app fonctionnelle sur les stores. La méthode est redoutablement efficace.",
     initials: "ML",
   },
   {
     name: "Amina K.",
-    role: "Etudiante",
-    before: "Debutante complete",
-    after: "Maitrise Claude Code",
-    text: "Le module Claude Code vaut le prix de la formation a lui seul. C'est un game changer pour coder avec l'IA. Je l'utilise maintenant pour tous mes projets.",
+    role: "Étudiante",
+    before: "Débutante complète",
+    after: "Maîtrise Claude Code",
+    text: "Le module Claude Code vaut le prix de la formation à lui seul. C'est un game changer pour coder avec l'IA. Je l'utilise maintenant pour tous mes projets.",
     initials: "AK",
   },
 ];
@@ -70,18 +70,18 @@ export default function TestimonialsV4() {
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="mb-8 flex items-center gap-4">
           <span className="font-mono text-sm font-semibold tracking-widest uppercase text-fuchsia-400">
-            Resultats
+            Résultats
           </span>
           <div className="h-px flex-1 bg-white/10" />
         </div>
 
         <div className="mb-12 max-w-2xl">
           <h2 className="text-[2.5rem]/10 font-medium tracking-tighter text-balance text-white">
-            Ils sont passes de zero a une app publiee
+            Ils sont passés de zéro à une app publiée
           </h2>
           <p className="mt-4 text-base/7 text-gray-400">
-            Des personnes comme toi qui ont suivi la methode et obtenu des
-            resultats concrets.
+            Des personnes comme toi qui ont suivi la méthode et obtenu des
+            résultats concrets.
           </p>
         </div>
 

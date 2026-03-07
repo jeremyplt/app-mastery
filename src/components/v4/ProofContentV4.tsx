@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 import { useRef, useState, useEffect, useCallback } from "react";
 
 // Hand-drawn curved arrow from Logan's photo to the content screenshots
@@ -149,11 +150,13 @@ function VideoCard({
   stat,
   statLabel,
   delay,
+  link,
 }: {
   src: string;
   stat: string;
   statLabel: string;
   delay: number;
+  link: string;
 }) {
   const previewRef = useRef<HTMLVideoElement>(null);
   const [showModal, setShowModal] = useState(false);
@@ -215,9 +218,19 @@ function VideoCard({
           </div>
         </button>
 
-        <div className="mt-3 flex items-center justify-center gap-1.5">
-          <span className="text-2xl font-bold text-white">{stat}</span>
-          <span className="text-sm text-gray-500">{statLabel}</span>
+        <div className="mt-3 flex items-center justify-between px-1">
+          <div className="flex items-center gap-1.5">
+            <span className="text-2xl font-bold text-white">{stat}</span>
+            <span className="text-sm text-gray-500">{statLabel}</span>
+          </div>
+          <a
+            href={link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs text-sky-400/70 hover:text-sky-400 transition-colors"
+          >
+            Voir &rarr;
+          </a>
         </div>
       </motion.div>
 
@@ -241,9 +254,9 @@ export default function ProofContentV4() {
 
         <div className="mb-12 max-w-2xl">
           <h2 className="text-[2.5rem]/10 font-medium tracking-tighter text-balance text-white">
-            On t&apos;apprend aussi a{" "}
+            On t&apos;apprend aussi à{" "}
             <span className="relative inline-block">
-              faire exploser ta visibilite
+              faire exploser ta visibilité
               <SketchUnderline className="absolute top-full left-0 w-full text-sky-400 -mt-1" />
             </span>
           </h2>
@@ -272,11 +285,7 @@ export default function ProofContentV4() {
                 >
                   {/* Logan's photo */}
                   <div className="w-20 h-20 rounded-full overflow-hidden outline-2 outline-offset-2 outline outline-sky-500/30 shadow-xl shadow-sky-500/10">
-                    {/* PLACEHOLDER: replace with Logan's real photo */}
-                    {/* <Image src="/logan.jpg" alt="Logan" width={80} height={80} className="w-full h-full object-cover" /> */}
-                    <div className="w-full h-full bg-gradient-to-br from-sky-500 to-violet-600 flex items-center justify-center text-white font-bold text-lg">
-                      L
-                    </div>
+                      <Image src="/proof/logan-v2.png" alt="Logan" width={80} height={80} className="w-full h-full object-cover" />
                   </div>
 
                   {/* Hand-drawn arrows going left and right from Logan to the content */}
@@ -294,7 +303,7 @@ export default function ProofContentV4() {
                   {/* PLACEHOLDER: mettre le vrai nom de Logan */}
                   <p className="text-sm font-semibold text-white">Logan</p>
                   <p className="text-xs text-gray-500">
-                    Expert marketing & contenu organique
+                    Cofondateur de Shinobi Japanese, expert marketing & contenu organique
                   </p>
                 </motion.div>
 
@@ -306,8 +315,8 @@ export default function ProofContentV4() {
                   viewport={{ once: true }}
                   transition={{ delay: 0.3 }}
                 >
-                  &ldquo;Ses contenus ont genere plus de 2M+ de vues en
-                  organique&rdquo;
+                  Le génie derrière le marketing de Shinobi Japanese et de
+                  dizaines d&apos;e-commerces
                 </motion.p>
               </div>
 
@@ -317,18 +326,21 @@ export default function ProofContentV4() {
                   src="/proof/content-2.5M.mp4"
                   stat="2.5M"
                   statLabel="vues"
+                  link="https://www.instagram.com/reel/DQVvpZuCe-p/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
                   delay={0.2}
                 />
                 <VideoCard
                   src="/proof/content-2.1M.mp4"
                   stat="2.1M"
                   statLabel="vues"
+                  link="https://www.instagram.com/reel/DMVhjJ2J-aV/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
                   delay={0.3}
                 />
                 <VideoCard
                   src="/proof/content-1.9M.mp4"
                   stat="1.9M"
                   statLabel="vues"
+                  link="https://www.instagram.com/reel/DP-Vu4jkuFU/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=="
                   delay={0.4}
                 />
               </div>
@@ -345,9 +357,9 @@ export default function ProofContentV4() {
                   Logan intervient directement dans la formation pour
                   t&apos;apprendre ses{" "}
                   <span className="text-white font-medium">
-                    strategies de contenu viral
+                    stratégies de contenu viral
                   </span>{" "}
-                  — les memes qui ont genere ces resultats.
+                  , les mêmes qui ont généré ces résultats.
                 </p>
               </motion.div>
             </div>

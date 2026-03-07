@@ -42,8 +42,8 @@ export default function HeroV4() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.15 }}
                 >
-                  La methode pas-a-pas pour concevoir, developper et monetiser
-                  une app iOS & Android — meme si tu n&apos;as jamais ecrit une
+                  La méthode pas-à-pas pour concevoir, développer et monétiser
+                  une app iOS & Android, même si tu n&apos;as jamais écrit une
                   ligne de code.
                 </motion.p>
 
@@ -55,9 +55,9 @@ export default function HeroV4() {
                   transition={{ duration: 0.6, delay: 0.25 }}
                 >
                   {[
-                    "L'IA ecrit le code — tu diriges la vision",
-                    "De l'idee a la publication sur les stores",
-                    "Abonnements, monetisation, marketing inclus",
+                    "L'IA écrit le code. Tu diriges la vision",
+                    "De l'idée à la publication sur les stores",
+                    "Abonnements, monétisation, marketing inclus",
                   ].map((item, i) => (
                     <li key={i} className="flex items-center gap-2">
                       <span className="text-emerald-400 text-xs">&#10003;</span>
@@ -95,7 +95,7 @@ export default function HeroV4() {
                   transition={{ duration: 0.6, delay: 0.5 }}
                 >
                   {/* PLACEHOLDER: remplacer avec vrais chiffres */}
-                  Deja [X] eleves ont lance leur app
+                  Déjà [X] élèves ont lancé leur app
                 </motion.p>
               </div>
 
@@ -138,20 +138,20 @@ export default function HeroV4() {
                         <span className="text-gray-600">$</span>{" "}
                         <span className="text-sky-400">claude</span>{" "}
                         <span className="text-gray-400">
-                          &quot;Cree mon app de fitness&quot;
+                          &quot;Crée mon app de fitness&quot;
                         </span>
                       </div>
                       <div className="text-gray-600">
                         <span className="text-emerald-400">&#10003;</span>{" "}
-                        Structure du projet generee
+                        Structure du projet générée
                       </div>
                       <div className="text-gray-600">
                         <span className="text-emerald-400">&#10003;</span>{" "}
-                        Authentification configuree
+                        Authentification configurée
                       </div>
                       <div className="text-gray-600">
                         <span className="text-emerald-400">&#10003;</span>{" "}
-                        Abonnements RevenueCat integres
+                        Abonnements RevenueCat intégrés
                       </div>
                       <div className="text-gray-600">
                         <span className="text-emerald-400">&#10003;</span>{" "}
@@ -187,9 +187,9 @@ export default function HeroV4() {
             >
               {[
                 { value: "28", label: "Jours pour lancer" },
-                { value: "90+", label: "Lecons pas-a-pas" },
+                { value: "90+", label: "Leçons pas-à-pas" },
                 { value: "4.9/5", label: "Note moyenne" },
-                { value: "A Vie", label: "Acces & mises a jour" },
+                { value: "À Vie", label: "Accès & mises à jour" },
               ].map((stat, i) => (
                 <div key={i}>
                   <div className="text-2xl font-semibold tracking-tight text-white">

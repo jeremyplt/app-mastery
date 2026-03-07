@@ -11,36 +11,43 @@ const bonuses = [
     value: "497$",
     // Benefit description, not feature description
     benefit:
-      "13 lecons pour maitriser le meilleur agent IA du marche. Tu codes 10x plus vite — sur ce projet et tous les suivants.",
+      "13 leçons pour maîtriser le meilleur agent IA du marché. Tu codes 10x plus vite, sur ce projet et tous les suivants.",
     objection: "Je ne sais pas utiliser l'IA pour coder",
   },
   {
-    title: "Templates & Starter Kits",
+    title: "Masterclass Git & GitHub",
     value: "297$",
     benefit:
-      "Code source pret a l'emploi avec auth, abonnements et onboarding deja configures. Tu gagnes des jours de travail.",
+      "Tu maîtrises Git et GitHub de zéro. Versioning, branches, collaboration. Tu gères ton code comme un pro sans jamais perdre de travail.",
     objection: "C'est trop technique pour moi",
   },
   {
-    title: "Communaute Privee a Vie",
-    value: "600$/an",
+    title: "Lives Q&A 2x par mois",
+    value: "Inestimable",
     benefit:
-      "Acces permanent au groupe d'entraide. Pose tes questions, partage tes resultats, connecte-toi avec d'autres createurs.",
-    objection: "Et si je me retrouve bloque seul ?",
+      "Je fais des lives deux fois par mois pour répondre à tes questions, te guider et t'aider à avancer. Tu ne seras jamais bloqué seul.",
+    objection: "Et si je me retrouve bloqué ?",
   },
   {
-    title: "Mises a Jour a Vie",
+    title: "Communauté Privée à Vie",
+    value: "600$/an",
+    benefit:
+      "Rejoins une vraie communauté de créateurs d'apps. Entraide, partage de résultats, feedback entre membres. Vous avancez ensemble, pas chacun dans son coin.",
+    objection: "Et si je me retrouve seul ?",
+  },
+  {
+    title: "Mises à Jour à Vie",
     value: "Inclus",
     benefit:
-      "La formation evolue avec les technologies. Tous les nouveaux modules, nouvelles lecons, nouvelles ressources — a vie.",
-    objection: "Ca sera encore valable dans 1 an ?",
+      "La formation évolue avec les technologies. Tous les nouveaux modules, nouvelles leçons, nouvelles ressources. À vie.",
+    objection: "Ça sera encore valable dans 1 an ?",
   },
   {
     title: "Case Study Shinobi Japanese",
     value: "197$",
     benefit:
-      "L'evolution d'une vraie app rentable, en toute transparence. Tu vois les decisions, les erreurs, et les resultats reels.",
-    objection: "Ca marche vraiment dans la vraie vie ?",
+      "L'évolution d'une vraie app rentable, en toute transparence. Tu vois les décisions, les erreurs, et les résultats réels.",
+    objection: "Ça marche vraiment dans la vraie vie ?",
   },
 ];
 
@@ -62,12 +69,12 @@ export default function BonusesV4() {
           <h2 className="text-[2.5rem]/10 font-medium tracking-tighter text-balance text-white">
             Et ce n&apos;est pas tout...
           </h2>
-          <p className="mt-4 text-base/7 text-gray-400">
-            En plus de la formation complete, tu recois{" "}
-            <span className="text-white font-semibold">
+          <p className="mt-4 text-xl text-gray-400">
+            En plus de la formation complète, tu reçois{" "}
+            <span className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-green-300">
               {totalValue} de bonus
             </span>{" "}
-            — inclus sans supplement.
+            , inclus sans supplément.
           </p>
         </div>
 
@@ -118,10 +125,10 @@ export default function BonusesV4() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
         >
-          <p className="text-sm text-gray-500">
-            Valeur totale des bonus:{" "}
-            <span className="text-white font-semibold">{totalValue}</span> —
-            inclus dans ton acces.
+          <p className="text-xl text-gray-400">
+            Valeur totale des bonus :{" "}
+            <span className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-green-300">{totalValue}</span>,
+            inclus dans ton accès.
           </p>
         </motion.div>
       </div>

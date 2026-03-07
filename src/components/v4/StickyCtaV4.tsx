@@ -33,7 +33,7 @@ export default function StickyCtaV4() {
               href="#pricing"
               className="block w-full rounded-full bg-sky-500 py-3 text-center text-sm font-semibold text-white hover:bg-sky-400 transition-colors shadow-lg shadow-sky-500/25"
             >
-              Rejoindre le programme — 997$
+              Rejoindre le programme, 997 $
             </a>
           </div>
         </motion.div>

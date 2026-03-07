@@ -29,13 +29,14 @@ export default function InstructorV4() {
 
             <div className="relative grid lg:grid-cols-[1fr_2fr] gap-0">
               {/* Avatar */}
-              <div className="flex items-start justify-center p-8 lg:p-12">
-                <div className="w-32 h-32 lg:w-40 lg:h-40 rounded-2xl overflow-hidden shadow-2xl shadow-sky-500/20 outline outline-white/10">
+              <div className="flex items-center justify-center p-8 lg:p-12">
+                <div className="w-40 h-40 lg:w-56 lg:h-56 rounded-2xl overflow-hidden shadow-2xl shadow-sky-500/20 outline outline-white/10">
                   <Image
                     src="/jeremy.jpg"
                     alt="Jeremy Pitault"
-                    width={160}
-                    height={160}
+                    width={600}
+                    height={600}
+                    quality={95}
                     className="w-full h-full object-cover scale-[1.8] translate-y-[23%]"
                   />
                 </div>
@@ -49,37 +50,40 @@ export default function InstructorV4() {
 
                 {/* Story — conversational tone (Marketing Mania style) */}
                 <div className="space-y-4 text-sm/6 text-gray-400 max-w-lg">
-                  {/* PLACEHOLDER: remplacer avec ton histoire personnelle */}
                   <p>
-                    Il y a quelques annees, j&apos;etais exactement ou tu es
-                    peut-etre aujourd&apos;hui. Des idees d&apos;apps plein la
-                    tete, mais aucune sur les stores.
+                    Il y a quelques années, j&apos;étais exactement où tu es
+                    peut-être aujourd&apos;hui. Des idées d&apos;apps plein la
+                    tête, mais aucune sur les stores.
                   </p>
                   <p>
-                    J&apos;ai passe des mois a suivre des tutos, a m&apos;eparpiller
-                    entre les technos, a douter. Puis j&apos;ai decouvert une
-                    methode qui a tout change : le vibecoding avec l&apos;IA.
-                  </p>
-                  <p>
-                    Resultat ? J&apos;ai cree{" "}
+                    J&apos;ai passé des mois à suivre des tutos, à
+                    m&apos;éparpiller entre les technos, à douter. Puis
+                    j&apos;ai pris mon courage à deux mains et je me suis
+                    lancé. J&apos;ai travaillé plus de 12h par jour pendant
+                    plus de 2 ans sur mon app{" "}
                     <span className="text-white font-medium">
                       Shinobi Japanese
                     </span>
-                    , une app qui genere{" "}
+                    , qui génère maintenant{" "}
                     <span className="text-sky-400 font-semibold">
-                      {/* PLACEHOLDER: mettre le vrai chiffre */}
-                      [X]$/an de revenus recurrents
+                      140 000$/an de revenus récurrents
                     </span>
-                    . Et j&apos;ai cree App Mastery pour que tu puisses faire
-                    pareil — sans les erreurs que j&apos;ai faites.
+                    . Assez pour en vivre sans trop ouvrir mon ordinateur.
+                  </p>
+                  <p>
+                    J&apos;ai fait toutes les erreurs possibles. Mais
+                    j&apos;ai surtout découvert une stratégie et un workflow
+                    qui permettent de créer une app rentable à coup sûr.
+                    C&apos;est exactement ce que je veux te partager dans
+                    cette formation.
                   </p>
                 </div>
 
                 {/* Credentials — social proof of authority */}
                 <div className="flex flex-wrap gap-2 mt-6">
                   {[
-                    "Createur de Shinobi Japanese",
-                    "Expert React Native & Claude Code",
+                    "Créateur de Shinobi Japanese",
+                    "YouTubeur apps mobiles",
                     /* PLACEHOLDER: ajouter d'autres credentials */
                   ].map((h, i) => (
                     <span
