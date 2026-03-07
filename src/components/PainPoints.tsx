@@ -47,42 +47,46 @@ export default function PainPoints() {
   return (
     <section className="section">
       <div className="max-w-3xl mx-auto">
-        <motion.h2
-          className="text-3xl md:text-4xl font-bold text-center mb-12 text-[var(--fg)]"
+        <motion.div
+          className="glass p-8 md:p-12"
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.5 }}
         >
-          Tu veux creer une app{" "}
-          <span className="text-[var(--fg)]">mais...</span>
-        </motion.h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-10 text-[var(--fg)]">
+            Tu veux creer une app{" "}
+            <span className="text-[var(--color-danger)]">mais...</span>
+          </h2>
 
-        <div className="space-y-0">
-          {painPoints.map((point, i) => (
-            <motion.div
-              key={point.title}
-              className="flex items-start gap-4 py-5 border-b border-[var(--border)]"
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.4, delay: i * 0.06 }}
-            >
-              <point.icon
-                className="text-[var(--color-danger)] shrink-0 mt-0.5"
-                size={22}
-              />
-              <div>
-                <h3 className="text-base font-semibold mb-1 text-[var(--fg)]">
-                  {point.title}
-                </h3>
-                <p className="text-[var(--muted-fg)] text-sm">
-                  {point.description}
-                </p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {painPoints.map((point, i) => (
+              <motion.div
+                key={point.title}
+                className="flex items-start gap-4 rounded-xl bg-[rgba(239,68,68,0.04)] px-5 py-4"
+                initial={{ opacity: 0, x: i % 2 === 0 ? -10 : 10 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.4, delay: i * 0.06 }}
+              >
+                <div className="w-9 h-9 rounded-lg bg-[rgba(239,68,68,0.1)] flex items-center justify-center shrink-0 mt-0.5">
+                  <point.icon
+                    className="text-[var(--color-danger)]"
+                    size={18}
+                  />
+                </div>
+                <div>
+                  <h3 className="text-sm font-semibold text-[var(--fg)]">
+                    {point.title}
+                  </h3>
+                  <p className="text-[var(--muted-fg)] text-xs mt-1 leading-relaxed">
+                    {point.description}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
 
         <motion.p
           className="text-[var(--color-blue)] text-lg text-center mt-10 font-medium"

@@ -12,7 +12,7 @@ export default function Footer() {
     <footer className="py-8 px-6 border-t border-[var(--border)] bg-[var(--bg)]">
       <div className="max-w-[1200px] mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
         {/* Logo */}
-        <div className="text-sm font-semibold tracking-tight text-[var(--fg)]">App Secrets</div>
+        <div className="text-sm font-semibold tracking-tight text-[var(--fg)]">App Mastery</div>
 
         {/* Links */}
         <nav className="flex flex-wrap items-center justify-center gap-6">
@@ -29,7 +29,7 @@ export default function Footer() {
 
         {/* Copyright */}
         <p className="text-sm text-[var(--muted-fg)]">
-          2026 App Secrets. Tous droits reserves.
+          2026 App Mastery. Tous droits reserves.
         </p>
       </div>
     </footer>

@@ -1,5 +1,3 @@
-import Navbar from "@/components/Navbar";
-import UrgencyBar from "@/components/UrgencyBar";
 import Hero from "@/components/Hero";
 import SocialProofBar from "@/components/SocialProofBar";
 import PainPoints from "@/components/PainPoints";
@@ -20,11 +18,10 @@ import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
-    <div className="relative">
+    <div className="relative" style={{ background: "#050508", minHeight: "100vh" }}>
+      <div className="dot-pattern" />
       <div className="grid-pattern" />
 
-      <UrgencyBar />
-      <Navbar />
       <main>
         <Hero />
         <SocialProofBar />

@@ -4,7 +4,7 @@ import { useRef, useEffect, useState } from "react";
 import { motion, useInView } from "framer-motion";
 
 const stats = [
-  { value: 500, suffix: "+", label: "eleves" },
+  { value: 28, suffix: "", label: "jours" },
   { value: 14, suffix: "", label: "modules" },
   { value: 90, suffix: "+", label: "lecons" },
   { value: 4.9, suffix: "/5", label: "satisfaction", decimals: 1 },
@@ -58,9 +58,9 @@ export default function SocialProofBar() {
   return (
     <section
       ref={ref}
-      className="relative z-1 w-full border-y border-[var(--border)] py-8 md:py-10"
+      className="relative w-full py-8 md:py-10"
     >
-      <div className="mx-auto max-w-[1200px] px-6 grid grid-cols-2 md:grid-cols-4">
+      <div className="mx-auto max-w-[1200px] px-6 grid grid-cols-2 md:grid-cols-4 gap-4">
         {stats.map((stat, i) => (
           <motion.div
             key={stat.label}
@@ -68,9 +68,7 @@ export default function SocialProofBar() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4, delay: i * 0.08 }}
-            className={`flex flex-col items-center text-center gap-1 py-2 ${
-              i < stats.length - 1 ? "md:border-r md:border-[var(--border)]" : ""
-            }`}
+            className="glass flex flex-col items-center text-center gap-1 py-6 px-4"
           >
             <span className="text-2xl font-bold text-[var(--fg)]">
               <AnimatedNumber

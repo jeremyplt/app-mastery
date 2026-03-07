@@ -43,23 +43,26 @@ export default function Transformation() {
         </motion.h2>
 
         <motion.div
-          className="flex flex-col"
+          className="glass p-4 md:p-6"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
         >
-          {achievements.map((text, i) => (
-            <motion.div key={i} variants={itemVariants}>
-              <div className="flex items-center gap-4 py-6">
-                <span className="text-[var(--fg)] font-bold text-xl shrink-0">
-                  {i + 1}.
+          <div className="flex flex-col gap-2">
+            {achievements.map((text, i) => (
+              <motion.div
+                key={i}
+                variants={itemVariants}
+                className="flex items-center gap-4 rounded-xl bg-[rgba(34,197,94,0.04)] px-5 py-4"
+              >
+                <span className="text-[var(--color-success)] font-bold text-lg shrink-0 font-mono">
+                  {String(i + 1).padStart(2, "0")}
                 </span>
-                <p className="text-base md:text-lg font-medium">{text}</p>
-              </div>
-              {i < achievements.length - 1 && <div className="divider" />}
-            </motion.div>
-          ))}
+                <p className="text-sm md:text-base font-medium">{text}</p>
+              </motion.div>
+            ))}
+          </div>
         </motion.div>
       </div>
     </section>

@@ -36,7 +36,7 @@ export default function Solution() {
           transition={{ duration: 0.5 }}
         >
           <h2 className="text-3xl md:text-4xl font-bold mb-3">
-            Decouvre App Secrets
+            Decouvre App Mastery
           </h2>
           <p className="text-[var(--muted-fg)] text-lg max-w-2xl mx-auto">
             La formation complete pour creer une app mobile rentable de A a Z
@@ -46,7 +46,7 @@ export default function Solution() {
 
         {/* Video placeholder */}
         <motion.div
-          className="card aspect-video max-w-3xl mx-auto mb-14 flex flex-col items-center justify-center cursor-pointer"
+          className="glass aspect-video max-w-3xl mx-auto mb-14 flex flex-col items-center justify-center cursor-pointer"
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
@@ -65,7 +65,7 @@ export default function Solution() {
           {pillars.map((pillar, i) => (
             <motion.div
               key={pillar.title}
-              className="card p-6 text-center"
+              className="glass p-6 text-center"
               initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-50px" }}

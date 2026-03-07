@@ -28,7 +28,7 @@ export default function FinalCta() {
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.5, delay: 0.1 }}
         >
-          Rejoins les 500+ eleves qui ont deja lance leur app mobile
+          Lance ton app mobile des aujourd&apos;hui avec la methode vibecoding
         </motion.p>
 
         {/* Recap */}

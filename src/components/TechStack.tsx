@@ -43,7 +43,7 @@ export default function TechStack() {
           {tools.map((tool, i) => (
             <motion.div
               key={tool.name}
-              className="card p-5 flex items-start gap-4"
+              className="glass p-5 flex items-start gap-4"
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-50px" }}

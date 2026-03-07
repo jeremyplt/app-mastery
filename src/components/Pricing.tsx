@@ -19,7 +19,7 @@ export default function Pricing() {
     <section id="prix" className="section glow">
       <div className="max-w-lg mx-auto">
         <motion.div
-          className="card-highlight p-8 md:p-12 text-center"
+          className="glass-strong p-8 md:p-12 text-center"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
@@ -57,7 +57,7 @@ export default function Pricing() {
 
           {/* CTA */}
           <button className="btn-primary w-full mt-10 text-lg py-4">
-            Rejoindre App Secrets Maintenant
+            Rejoindre App Mastery Maintenant
           </button>
 
           {/* Trust line */}
@@ -78,7 +78,7 @@ export default function Pricing() {
               ))}
             </div>
             <span className="text-[var(--muted-fg)] text-sm">
-              500+ eleves
+              Garantie 30 jours
             </span>
           </div>
         </motion.div>

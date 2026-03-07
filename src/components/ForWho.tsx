@@ -24,7 +24,7 @@ export default function ForWho() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {/* For you */}
           <motion.div
-            className="card p-8"
+            className="glass p-8"
             initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
@@ -50,7 +50,7 @@ export default function ForWho() {
 
           {/* Not for you */}
           <motion.div
-            className="card p-8"
+            className="glass p-8"
             initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}

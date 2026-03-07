@@ -97,7 +97,7 @@ export default function Bonuses() {
           {bonuses.map((bonus) => (
             <motion.div
               key={bonus.title}
-              className="card p-6 flex items-start gap-4"
+              className="glass p-6 flex items-start gap-4"
               variants={itemVariants}
             >
               <div className="shrink-0 w-10 h-10 rounded-lg bg-[var(--muted)] flex items-center justify-center">
@@ -124,7 +124,7 @@ export default function Bonuses() {
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
-          <div className="card-highlight p-8 text-center">
+          <div className="glass-strong p-8 text-center">
             <p className="text-2xl md:text-4xl font-bold text-[var(--fg)]">
               Valeur totale : 2,835$+
             </p>

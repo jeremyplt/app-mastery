@@ -123,50 +123,49 @@ const modules: Module[] = [
   },
 ];
 
-function ModuleAccordion({ module }: { module: Module }) {
+const coeurModules = modules.filter(
+  (m) => m.badge === "COEUR" || m.badge === null
+);
+const bonusModules = modules.filter((m) => m.badge === "BONUS");
+
+function ModuleRow({ module }: { module: Module }) {
   const [isOpen, setIsOpen] = useState(false);
+  const isCoeur = module.badge === "COEUR" || module.badge === null;
 
   return (
     <motion.div
-      className="border-b border-[var(--border)]"
       initial={{ opacity: 0, y: 10 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 0.4 }}
     >
       <button
-        className="w-full py-5 flex items-center gap-4 text-left cursor-pointer"
+        className={`w-full flex items-center gap-4 text-left cursor-pointer rounded-xl px-5 py-4 transition-colors ${
+          isCoeur
+            ? "bg-[rgba(251,191,36,0.04)] hover:bg-[rgba(251,191,36,0.08)]"
+            : "bg-[rgba(255,255,255,0.02)] hover:bg-[rgba(255,255,255,0.05)]"
+        }`}
         onClick={() => setIsOpen(!isOpen)}
         aria-expanded={isOpen}
       >
-        {/* Module number */}
-        <span className="text-[var(--fg)] text-lg font-bold w-8 shrink-0 font-mono">
+        <span className="text-[var(--color-blue)] text-lg font-bold w-8 shrink-0 font-mono">
           {String(module.number).padStart(2, "0")}
         </span>
 
-        {/* Title + badge */}
         <div className="flex-1 flex flex-wrap items-center gap-2">
-          <h3 className="text-base font-semibold">{module.title}</h3>
-          {module.badge === "COEUR" && (
-            <span className="badge badge-blue">Coeur</span>
-          )}
-          {module.badge === "BONUS" && (
-            <span className="badge">Bonus</span>
-          )}
+          <h3 className="text-sm font-semibold">{module.title}</h3>
         </div>
 
-        {/* Lesson count */}
-        <span className="text-[var(--muted-fg)] text-sm shrink-0 hidden sm:block">
+        <span className="text-[var(--muted-fg)] text-xs shrink-0 hidden sm:block">
           {module.lessons} lecon{module.lessons > 1 ? "s" : ""}
         </span>
 
-        {/* Chevron */}
         <motion.div
           animate={{ rotate: isOpen ? 180 : 0 }}
           transition={{ duration: 0.25 }}
           className="shrink-0"
         >
-          <ChevronDown size={18} className="text-[var(--muted-fg)]" />
+          <ChevronDown size={16} className="text-[var(--muted-fg)]" />
         </motion.div>
       </button>
 
@@ -179,8 +178,8 @@ function ModuleAccordion({ module }: { module: Module }) {
             transition={{ duration: 0.25 }}
             className="overflow-hidden"
           >
-            <div className="pb-5 pl-12">
-              <p className="text-[var(--muted-fg)] text-sm">
+            <div className="px-5 pb-3 pt-1 pl-17">
+              <p className="text-[var(--muted-fg)] text-xs leading-relaxed">
                 {module.description}
               </p>
             </div>
@@ -210,11 +209,47 @@ export default function Program() {
           </p>
         </motion.div>
 
-        <div>
-          {modules.map((module) => (
-            <ModuleAccordion key={module.number} module={module} />
-          ))}
-        </div>
+        {/* Coeur modules */}
+        <motion.div
+          className="glass p-4 md:p-6 mb-6"
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.5 }}
+        >
+          <div className="flex items-center gap-2 mb-4 px-2">
+            <span className="badge badge-blue text-xs">Coeur</span>
+            <span className="text-[var(--muted-fg)] text-xs">
+              Le parcours principal
+            </span>
+          </div>
+          <div className="flex flex-col gap-2">
+            {coeurModules.map((module) => (
+              <ModuleRow key={module.number} module={module} />
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Bonus modules */}
+        <motion.div
+          className="glass p-4 md:p-6"
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.5 }}
+        >
+          <div className="flex items-center gap-2 mb-4 px-2">
+            <span className="badge text-xs">Bonus</span>
+            <span className="text-[var(--muted-fg)] text-xs">
+              Modules complementaires
+            </span>
+          </div>
+          <div className="flex flex-col gap-2">
+            {bonusModules.map((module) => (
+              <ModuleRow key={module.number} module={module} />
+            ))}
+          </div>
+        </motion.div>
       </div>
     </section>
   );

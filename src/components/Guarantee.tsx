@@ -8,7 +8,7 @@ export default function Guarantee() {
     <section className="section">
       <div className="max-w-3xl mx-auto">
         <motion.div
-          className="card border-l-4 border-l-[var(--color-success)] rounded-xl p-8 md:p-12 text-center"
+          className="glass border-l-4 border-l-[var(--color-success)] p-8 md:p-12 text-center"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}

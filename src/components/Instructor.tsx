@@ -24,7 +24,7 @@ export default function Instructor() {
         </motion.h2>
 
         <motion.div
-          className="card p-8 md:p-10"
+          className="glass p-8 md:p-10"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
@@ -46,7 +46,7 @@ export default function Instructor() {
               <p className="text-[var(--muted-fg)] text-base leading-relaxed mt-4">
                 Passione par le developpement mobile et l&apos;IA, j&apos;ai cree
                 plusieurs applications rentables publiees sur les stores. Avec
-                App Secrets, je partage la methode exacte que j&apos;utilise pour
+                App Mastery, je partage la methode exacte que j&apos;utilise pour
                 transformer une idee en app monetisee en moins de 28 jours grace
                 au vibecoding.
               </p>

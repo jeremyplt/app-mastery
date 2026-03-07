@@ -29,7 +29,7 @@ const alternatives = [
     highlighted: false,
   },
   {
-    title: "App Secrets",
+    title: "App Mastery",
     line1: "997$",
     line2: "28 jours",
     line3: "De A a Z avec l'IA",
@@ -82,7 +82,7 @@ export default function RoiJustification() {
               <motion.div
                 key={alt.title}
                 variants={cardVariants}
-                className={alt.highlighted ? "card-highlight p-6 md:p-8" : "card p-6 md:p-8"}
+                className={alt.highlighted ? "glass-strong p-6 md:p-8" : "glass p-6 md:p-8"}
               >
                 <div className="flex items-center gap-3 mb-4">
                   <div
@@ -119,7 +119,7 @@ export default function RoiJustification() {
 
         {/* ROI Calculation Box */}
         <motion.div
-          className="card-highlight p-8 md:p-10 max-w-3xl mx-auto text-center mt-8"
+          className="glass-strong p-8 md:p-10 max-w-3xl mx-auto text-center mt-8"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}

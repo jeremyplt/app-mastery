@@ -70,7 +70,7 @@ export default function Faq() {
         </motion.h2>
 
         <motion.div
-          className="flex flex-col"
+          className="glass p-4 md:p-6"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-60px" }}
@@ -79,51 +79,53 @@ export default function Faq() {
             visible: { transition: { staggerChildren: 0.05 } },
           }}
         >
-          {faqData.map((item, index) => {
-            const isOpen = openItems.includes(index);
-            return (
-              <motion.div
-                key={index}
-                className="border-b border-[var(--border)]"
-                variants={{
-                  hidden: { opacity: 0, y: 15 },
-                  visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
-                }}
-              >
-                <button
-                  onClick={() => toggle(index)}
-                  className="w-full flex items-center justify-between py-5 text-left cursor-pointer"
+          <div className="flex flex-col gap-2">
+            {faqData.map((item, index) => {
+              const isOpen = openItems.includes(index);
+              return (
+                <motion.div
+                  key={index}
+                  className="rounded-xl bg-[rgba(251,191,36,0.04)]"
+                  variants={{
+                    hidden: { opacity: 0, y: 15 },
+                    visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
+                  }}
                 >
-                  <span className="text-base md:text-lg font-semibold pr-4">
-                    {item.q}
-                  </span>
-                  <motion.span
-                    animate={{ rotate: isOpen ? 180 : 0 }}
-                    transition={{ duration: 0.25 }}
-                    className="flex-shrink-0"
+                  <button
+                    onClick={() => toggle(index)}
+                    className="w-full flex items-center justify-between px-5 py-4 text-left cursor-pointer"
                   >
-                    <ChevronDown size={20} className="text-[var(--muted-fg)]" />
-                  </motion.span>
-                </button>
-
-                <AnimatePresence initial={false}>
-                  {isOpen && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.25, ease: "easeInOut" }}
-                      className="overflow-hidden"
+                    <span className="text-sm md:text-base font-semibold pr-4">
+                      {item.q}
+                    </span>
+                    <motion.span
+                      animate={{ rotate: isOpen ? 180 : 0 }}
+                      transition={{ duration: 0.25 }}
+                      className="flex-shrink-0"
                     >
-                      <p className="pb-5 text-[var(--muted-fg)] text-base leading-relaxed">
-                        {item.a}
-                      </p>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.div>
-            );
-          })}
+                      <ChevronDown size={16} className="text-[var(--muted-fg)]" />
+                    </motion.span>
+                  </button>
+
+                  <AnimatePresence initial={false}>
+                    {isOpen && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.25, ease: "easeInOut" }}
+                        className="overflow-hidden"
+                      >
+                        <p className="px-5 pb-4 text-[var(--muted-fg)] text-sm leading-relaxed">
+                          {item.a}
+                        </p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
+              );
+            })}
+          </div>
         </motion.div>
       </div>
     </section>

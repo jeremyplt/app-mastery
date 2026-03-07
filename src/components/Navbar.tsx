@@ -36,7 +36,7 @@ export default function Navbar() {
       <div className="mx-auto max-w-[1200px] px-6 flex items-center justify-between h-14">
         {/* Logo */}
         <a href="#" className="text-lg font-bold text-[var(--fg)]">
-          App Secrets
+          App Mastery
         </a>
 
         {/* Desktop links */}

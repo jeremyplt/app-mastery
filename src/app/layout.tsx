@@ -13,11 +13,11 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "App Secrets - Cree, Lance et Monetise ton App Mobile en 28 Jours",
+  title: "App Mastery - Cree, Lance et Monetise ton App Mobile en 28 Jours",
   description:
     "La formation complete pour creer une application mobile rentable de A a Z avec l'IA et le vibecoding. 14 modules, 90+ lecons. Meme sans experience en programmation.",
   openGraph: {
-    title: "App Secrets - Cree ton App Mobile en 28 Jours",
+    title: "App Mastery - Cree ton App Mobile en 28 Jours",
     description:
       "Transforme ton idee en application rentable sur l'App Store et Google Play grace a l'IA.",
     type: "website",

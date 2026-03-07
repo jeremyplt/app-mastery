@@ -95,7 +95,7 @@ export default function Testimonials({ id }: TestimonialsProps) {
           {testimonials.map((t) => (
             <motion.div
               key={t.name}
-              className="card p-6 flex flex-col gap-4"
+              className="glass p-6 flex flex-col gap-4"
               variants={itemVariants}
             >
               <div className="flex items-center gap-3">
