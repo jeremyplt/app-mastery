@@ -1,26 +1,223 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-background: var(--bg);
+  --color-foreground: var(--fg);
+  --color-muted: var(--muted);
+  --color-muted-fg: var(--muted-fg);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-fg: var(--accent-fg);
+  --color-success: #22c55e;
+  --color-danger: #ef4444;
+  --color-warning: #eab308;
+  --color-blue: #38BDF8;
+
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: "JetBrains Mono", "SF Mono", "Fira Code", monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Dark mode (default) */
+:root {
+  --bg: #0B1120;
+  --fg: #E2E8F0;
+  --muted: #1E293B;
+  --muted-fg: #94A3B8;
+  --border: #1E293B;
+  --accent: #38BDF8;
+  --accent-fg: #0B1120;
+  --card: #0F172A;
+  --card-fg: #E2E8F0;
+}
+
+/* Light mode */
+:root.light {
+  --bg: #F8FAFC;
+  --fg: #0F172A;
+  --muted: #F1F5F9;
+  --muted-fg: #64748B;
+  --border: #E2E8F0;
+  --accent: #0EA5E9;
+  --accent-fg: #FFFFFF;
+  --card: #FFFFFF;
+  --card-fg: #0F172A;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+}
+
+::selection {
+  background: rgba(56, 189, 248, 0.2);
+  color: var(--fg);
+}
+
+/* ==============================
+   BACKGROUND EFFECTS
+   ============================== */
+
+.grid-pattern {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, rgba(56, 189, 248, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(56, 189, 248, 0.03) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse at 50% 0%, black 30%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 0%, black 30%, transparent 70%);
+}
+
+/* Subtle glow behind key sections */
+.glow {
+  position: relative;
+}
+
+.glow::before {
+  content: "";
+  position: absolute;
+  inset: -20% -10%;
+  z-index: -1;
+  background: radial-gradient(ellipse at center, rgba(56, 189, 248, 0.08), transparent 70%);
+  pointer-events: none;
+}
+
+.glow-lg::before {
+  background: radial-gradient(ellipse at center, rgba(56, 189, 248, 0.12), transparent 60%);
+}
+
+/* ==============================
+   CARD
+   ============================== */
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 0 0 0 transparent, 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.card-highlight {
+  background: var(--card);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 12px;
+  box-shadow: 0 0 24px rgba(56, 189, 248, 0.06), 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* ==============================
+   BUTTONS (pill shaped, colored primary)
+   ============================== */
+
+.btn-primary {
+  background: var(--accent);
+  color: var(--accent-fg);
+  border-radius: 9999px;
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 150ms ease;
+  cursor: pointer;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.25);
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+  box-shadow: 0 0 24px rgba(56, 189, 248, 0.35);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--fg);
+  border: 1px solid var(--border);
+  border-radius: 9999px;
+  padding: 12px 24px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 150ms ease;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-secondary:hover {
+  border-color: rgba(56, 189, 248, 0.3);
+  background: rgba(56, 189, 248, 0.05);
+}
+
+/* ==============================
+   DIVIDER
+   ============================== */
+
+.divider {
+  height: 1px;
+  background: var(--border);
+}
+
+/* ==============================
+   BADGE (pill shaped)
+   ============================== */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  border-radius: 9999px;
+  border: 1px solid var(--border);
+  background: var(--muted);
+  color: var(--muted-fg);
+}
+
+.badge-blue {
+  border-color: rgba(56, 189, 248, 0.3);
+  background: rgba(56, 189, 248, 0.1);
+  color: #38BDF8;
+}
+
+.badge-success {
+  border-color: rgba(34, 197, 94, 0.3);
+  background: rgba(34, 197, 94, 0.1);
+  color: #22c55e;
+}
+
+/* ==============================
+   SECTION SPACING
+   ============================== */
+
+.section {
+  padding: 80px 24px;
+  position: relative;
+  z-index: 1;
+}
+
+@media (min-width: 768px) {
+  .section {
+    padding: 120px 24px;
+  }
+}
+
+/* ==============================
+   ANIMATIONS
+   ============================== */
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { animation: none !important; transition: none !important; }
 }

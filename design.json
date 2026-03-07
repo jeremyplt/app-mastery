@@ -1,0 +1,249 @@
+{
+  "name": "App Secrets - Liquid Glass Design System",
+  "version": "1.0",
+  "description": "Design system inspire du Liquid Glass d'Apple (iOS 26) avec glassmorphism dark mode pour une landing page high-ticket premium",
+
+  "colors": {
+    "background": {
+      "primary": "#0A0A0F",
+      "secondary": "#0D0D14",
+      "tertiary": "#12121A",
+      "surface": "rgba(255, 255, 255, 0.03)"
+    },
+    "glass": {
+      "light": "rgba(255, 255, 255, 0.06)",
+      "medium": "rgba(255, 255, 255, 0.10)",
+      "strong": "rgba(255, 255, 255, 0.15)",
+      "border": "rgba(255, 255, 255, 0.08)",
+      "borderHover": "rgba(255, 255, 255, 0.15)",
+      "borderActive": "rgba(255, 255, 255, 0.20)"
+    },
+    "accent": {
+      "primary": "#6C5CE7",
+      "primaryLight": "#A29BFE",
+      "secondary": "#00D2FF",
+      "secondaryLight": "#74E8FF",
+      "success": "#00E676",
+      "warning": "#FFD600",
+      "error": "#FF5252"
+    },
+    "gradient": {
+      "hero": "radial-gradient(ellipse at 20% 50%, rgba(108, 92, 231, 0.15) 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, rgba(0, 210, 255, 0.10) 0%, transparent 50%), radial-gradient(ellipse at 50% 80%, rgba(108, 92, 231, 0.08) 0%, transparent 40%)",
+      "ctaPrimary": "linear-gradient(135deg, #6C5CE7 0%, #A29BFE 50%, #00D2FF 100%)",
+      "ctaHover": "linear-gradient(135deg, #7B6CF0 0%, #B0ABFE 50%, #1AD8FF 100%)",
+      "cardShimmer": "linear-gradient(135deg, rgba(108, 92, 231, 0.08) 0%, rgba(0, 210, 255, 0.05) 100%)",
+      "textGradient": "linear-gradient(135deg, #FFFFFF 0%, #A29BFE 50%, #00D2FF 100%)",
+      "sectionDivider": "linear-gradient(90deg, transparent 0%, rgba(108, 92, 231, 0.3) 50%, transparent 100%)",
+      "orbPurple": "radial-gradient(circle, rgba(108, 92, 231, 0.25) 0%, transparent 70%)",
+      "orbBlue": "radial-gradient(circle, rgba(0, 210, 255, 0.20) 0%, transparent 70%)",
+      "orbPink": "radial-gradient(circle, rgba(255, 82, 82, 0.12) 0%, transparent 70%)"
+    },
+    "text": {
+      "primary": "rgba(255, 255, 255, 0.95)",
+      "secondary": "rgba(255, 255, 255, 0.70)",
+      "tertiary": "rgba(255, 255, 255, 0.45)",
+      "accent": "#A29BFE",
+      "highlight": "#00D2FF"
+    }
+  },
+
+  "typography": {
+    "fontFamily": {
+      "heading": "'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif",
+      "body": "'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif",
+      "mono": "'SF Mono', 'JetBrains Mono', 'Fira Code', monospace",
+      "webFallback": "'Inter', -apple-system, BlinkMacSystemFont, sans-serif"
+    },
+    "scale": {
+      "heroTitle": { "size": "72px", "lineHeight": "1.05", "weight": "700", "letterSpacing": "-0.03em", "mobilSize": "40px" },
+      "heroSubtitle": { "size": "24px", "lineHeight": "1.5", "weight": "400", "letterSpacing": "-0.01em", "mobileSize": "18px" },
+      "sectionTitle": { "size": "48px", "lineHeight": "1.15", "weight": "700", "letterSpacing": "-0.02em", "mobileSize": "32px" },
+      "sectionSubtitle": { "size": "20px", "lineHeight": "1.6", "weight": "400", "letterSpacing": "0", "mobileSize": "17px" },
+      "cardTitle": { "size": "24px", "lineHeight": "1.3", "weight": "600", "letterSpacing": "-0.01em" },
+      "bodyLarge": { "size": "18px", "lineHeight": "1.7", "weight": "400" },
+      "bodyRegular": { "size": "16px", "lineHeight": "1.7", "weight": "400" },
+      "bodySmall": { "size": "14px", "lineHeight": "1.6", "weight": "400" },
+      "label": { "size": "12px", "lineHeight": "1.4", "weight": "600", "letterSpacing": "0.08em", "textTransform": "uppercase" },
+      "price": { "size": "56px", "lineHeight": "1.1", "weight": "700", "letterSpacing": "-0.02em" },
+      "priceCrossed": { "size": "24px", "lineHeight": "1.3", "weight": "400", "textDecoration": "line-through" }
+    }
+  },
+
+  "glassmorphism": {
+    "card": {
+      "background": "rgba(255, 255, 255, 0.04)",
+      "backdropFilter": "blur(20px)",
+      "border": "1px solid rgba(255, 255, 255, 0.08)",
+      "borderRadius": "24px",
+      "boxShadow": "0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05)"
+    },
+    "cardHover": {
+      "background": "rgba(255, 255, 255, 0.07)",
+      "border": "1px solid rgba(255, 255, 255, 0.12)",
+      "boxShadow": "0 12px 48px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08)",
+      "transform": "translateY(-2px)"
+    },
+    "panel": {
+      "background": "rgba(255, 255, 255, 0.03)",
+      "backdropFilter": "blur(40px)",
+      "border": "1px solid rgba(255, 255, 255, 0.06)",
+      "borderRadius": "32px",
+      "boxShadow": "0 16px 64px rgba(0, 0, 0, 0.3)"
+    },
+    "nav": {
+      "background": "rgba(10, 10, 15, 0.80)",
+      "backdropFilter": "blur(20px) saturate(180%)",
+      "border": "none",
+      "borderBottom": "1px solid rgba(255, 255, 255, 0.06)"
+    },
+    "badge": {
+      "background": "rgba(108, 92, 231, 0.15)",
+      "backdropFilter": "blur(10px)",
+      "border": "1px solid rgba(108, 92, 231, 0.25)",
+      "borderRadius": "100px",
+      "padding": "6px 16px"
+    },
+    "pricingCard": {
+      "background": "rgba(255, 255, 255, 0.05)",
+      "backdropFilter": "blur(24px)",
+      "border": "1px solid rgba(255, 255, 255, 0.10)",
+      "borderRadius": "28px",
+      "boxShadow": "0 8px 32px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.06)"
+    },
+    "pricingCardFeatured": {
+      "background": "rgba(108, 92, 231, 0.08)",
+      "backdropFilter": "blur(24px)",
+      "border": "1px solid rgba(108, 92, 231, 0.30)",
+      "borderRadius": "28px",
+      "boxShadow": "0 8px 48px rgba(108, 92, 231, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.08)"
+    }
+  },
+
+  "spacing": {
+    "sectionPaddingY": "120px",
+    "sectionPaddingYMobile": "80px",
+    "containerMaxWidth": "1200px",
+    "containerPadding": "24px",
+    "cardPadding": "32px",
+    "cardPaddingMobile": "24px",
+    "gap": {
+      "xs": "8px",
+      "sm": "12px",
+      "md": "16px",
+      "lg": "24px",
+      "xl": "32px",
+      "2xl": "48px",
+      "3xl": "64px"
+    }
+  },
+
+  "animation": {
+    "transitions": {
+      "fast": "150ms cubic-bezier(0.4, 0, 0.2, 1)",
+      "normal": "300ms cubic-bezier(0.4, 0, 0.2, 1)",
+      "slow": "500ms cubic-bezier(0.4, 0, 0.2, 1)",
+      "spring": "600ms cubic-bezier(0.34, 1.56, 0.64, 1)"
+    },
+    "scrollReveal": {
+      "fadeUp": { "from": { "opacity": 0, "transform": "translateY(30px)" }, "to": { "opacity": 1, "transform": "translateY(0)" }, "duration": "700ms", "staggerDelay": "100ms" },
+      "fadeIn": { "from": { "opacity": 0 }, "to": { "opacity": 1 }, "duration": "500ms" },
+      "scaleIn": { "from": { "opacity": 0, "transform": "scale(0.95)" }, "to": { "opacity": 1, "transform": "scale(1)" }, "duration": "600ms" }
+    },
+    "ambientOrbs": {
+      "description": "Floating gradient orbs en arriere-plan qui bougent lentement pour donner vie au background dark",
+      "animation": "float 20s ease-in-out infinite alternate",
+      "blur": "100px",
+      "size": "400px-600px"
+    },
+    "liquidGlass": {
+      "description": "Effet subtil de refraction sur les cartes au hover, inspire du Liquid Glass iOS 26",
+      "hoverShift": "background-position shift de 10px sur le gradient interne",
+      "specularHighlight": "inset 0 1px 0 rgba(255,255,255,0.1) au hover"
+    }
+  },
+
+  "components": {
+    "ctaButton": {
+      "primary": {
+        "background": "linear-gradient(135deg, #6C5CE7 0%, #A29BFE 50%, #00D2FF 100%)",
+        "color": "#FFFFFF",
+        "borderRadius": "16px",
+        "padding": "18px 40px",
+        "fontSize": "18px",
+        "fontWeight": "600",
+        "boxShadow": "0 4px 24px rgba(108, 92, 231, 0.40)",
+        "hoverBoxShadow": "0 8px 40px rgba(108, 92, 231, 0.55)",
+        "hoverTransform": "translateY(-2px) scale(1.02)"
+      },
+      "secondary": {
+        "background": "rgba(255, 255, 255, 0.06)",
+        "color": "rgba(255, 255, 255, 0.90)",
+        "border": "1px solid rgba(255, 255, 255, 0.12)",
+        "borderRadius": "16px",
+        "padding": "18px 40px",
+        "backdropFilter": "blur(10px)"
+      }
+    },
+    "testimonialCard": {
+      "background": "rgba(255, 255, 255, 0.04)",
+      "backdropFilter": "blur(16px)",
+      "border": "1px solid rgba(255, 255, 255, 0.06)",
+      "borderRadius": "20px",
+      "padding": "28px",
+      "avatarSize": "48px",
+      "starColor": "#FFD600"
+    },
+    "moduleAccordion": {
+      "background": "rgba(255, 255, 255, 0.03)",
+      "border": "1px solid rgba(255, 255, 255, 0.06)",
+      "borderRadius": "16px",
+      "expandedBackground": "rgba(255, 255, 255, 0.05)",
+      "iconColor": "#A29BFE"
+    },
+    "countdownTimer": {
+      "background": "rgba(255, 82, 82, 0.08)",
+      "border": "1px solid rgba(255, 82, 82, 0.20)",
+      "borderRadius": "16px",
+      "digitBackground": "rgba(255, 255, 255, 0.06)",
+      "digitColor": "#FFFFFF",
+      "labelColor": "rgba(255, 255, 255, 0.50)"
+    },
+    "featureBento": {
+      "description": "Bento grid layout inspire de Copilot pour presenter les features/modules",
+      "gridCols": "3",
+      "gridColsMobile": "1",
+      "gap": "16px",
+      "itemBorderRadius": "24px"
+    },
+    "phoneFrame": {
+      "description": "Mockup iPhone pour montrer l'app en contexte",
+      "borderRadius": "48px",
+      "border": "4px solid rgba(255, 255, 255, 0.10)",
+      "boxShadow": "0 24px 80px rgba(0, 0, 0, 0.5), 0 0 120px rgba(108, 92, 231, 0.15)",
+      "screenBorderRadius": "44px"
+    },
+    "socialProofBar": {
+      "background": "rgba(255, 255, 255, 0.03)",
+      "borderTop": "1px solid rgba(255, 255, 255, 0.06)",
+      "borderBottom": "1px solid rgba(255, 255, 255, 0.06)",
+      "padding": "20px 0",
+      "statNumberSize": "32px",
+      "statNumberWeight": "700",
+      "statLabelSize": "14px"
+    }
+  },
+
+  "breakpoints": {
+    "mobile": "480px",
+    "tablet": "768px",
+    "desktop": "1024px",
+    "wide": "1280px"
+  },
+
+  "icons": {
+    "style": "Lucide React ou Phosphor Icons",
+    "strokeWidth": "1.5px",
+    "defaultSize": "24px",
+    "accentColor": "#A29BFE"
+  }
+}
