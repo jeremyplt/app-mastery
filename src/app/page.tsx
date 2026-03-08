@@ -1,4 +1,5 @@
 import HeroV4 from "@/components/v4/HeroV4";
+import TimelineV4 from "@/components/v4/TimelineV4";
 import PainPointsV4 from "@/components/v4/PainPointsV4";
 import AgitationV4 from "@/components/v4/AgitationV4";
 import SolutionV4 from "@/components/v4/SolutionV4";
@@ -36,6 +37,7 @@ export default function Home() {
 
         <div className="min-w-0">
           <HeroV4 />
+          <TimelineV4 />
           <PainPointsV4 />
           <AgitationV4 />
           <SolutionV4 />

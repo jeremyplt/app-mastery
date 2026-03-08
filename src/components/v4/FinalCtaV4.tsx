@@ -50,20 +50,20 @@ export default function FinalCtaV4() {
                   href="#pricing"
                   className="inline-flex items-center justify-center rounded-full bg-sky-500 px-8 py-3.5 text-sm font-semibold text-white hover:bg-sky-400 transition-colors shadow-lg shadow-sky-500/25"
                 >
-                  Lancer mon app maintenant
+                  Accéder maintenant
                 </a>
 
-                <p className="text-xs text-gray-600 mt-4">
-                  Garantie 30 jours satisfait ou remboursé &mdash; zéro risque
+                <p className="text-xs text-sky-400 mt-4 font-medium">
+                  Tu reçois tes identifiants dans 2 minutes
                 </p>
 
-                {/* P.S. — Cattoni: le P.S. rappelle le benefice principal */}
+                {/* P.S. */}
                 <div className="mt-10 pt-8 border-t border-white/5 max-w-md mx-auto">
-                  <p className="text-xs text-gray-500 italic">
-                    P.S. &mdash; Rappelle-toi : une app avec seulement 200
-                    abonnés à 4,99$/mois = près de 12 000$/an. La formation se
-                    rembourse dès ton premier mois de revenus. Et si ça ne
-                    marche pas, tu as la garantie 30 jours.
+                  <p className="text-sm text-gray-400">
+                    P.S. Rappelle-toi : une app avec seulement 100
+                    abonnés à 9,99€/mois = près de 12 000€/an de revenus
+                    récurrents. La formation se rembourse dès ton premier mois.
+                    Et si ça ne marche pas, tu as la garantie 30 jours.
                   </p>
                 </div>
               </motion.div>

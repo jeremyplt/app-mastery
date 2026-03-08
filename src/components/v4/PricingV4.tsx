@@ -124,11 +124,14 @@ export default function PricingV4() {
                   href="#"
                   className="block w-full rounded-full bg-sky-500 py-3.5 text-sm font-semibold text-white hover:bg-sky-400 transition-colors shadow-lg shadow-sky-500/25"
                 >
-                  Lancer mon app maintenant
+                  Accéder maintenant
                 </a>
 
-                <p className="text-xs text-gray-600 mt-4">
-                  Garantie satisfait ou remboursé 30 jours &mdash; zéro risque
+                <p className="text-xs text-sky-400 mt-4 font-medium">
+                  Tu reçois tes identifiants dans 2 minutes
+                </p>
+                <p className="text-xs text-gray-600 mt-2">
+                  Garantie satisfait ou remboursé 30 jours, zéro risque
                 </p>
               </div>
             </div>

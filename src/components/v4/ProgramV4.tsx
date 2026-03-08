@@ -20,7 +20,7 @@ const modules: Module[] = [
     badge: "ESSENTIEL",
     lessons: 6,
     benefit:
-      "Tu as une idée validée, un modèle de monétisation choisi, et ton compte développeur créé. Prêt à construire.",
+      "Résultat : tu as TON idée validée avec un marché prouvé et un modèle de monétisation choisi. Tu sais exactement quoi construire.",
   },
   {
     number: 2,
@@ -28,7 +28,7 @@ const modules: Module[] = [
     badge: "ESSENTIEL",
     lessons: 6,
     benefit:
-      "Ton identité visuelle est créée, tes outils sont configurés, et ton projet est initialisé, sans confusion technique.",
+      "Résultat : ton identité visuelle est prête, tes outils configurés, ton projet initialisé. Tu es prêt à développer.",
   },
   {
     number: 3,
@@ -36,7 +36,7 @@ const modules: Module[] = [
     badge: "ESSENTIEL",
     lessons: 16,
     benefit:
-      "Ton app est construite de A à Z : auth, base de données, abonnements, notifications push. Tout fonctionne.",
+      "Résultat : ton app fonctionne sur simulateur. Auth, base de données, abonnements, notifications push, tout est en place.",
   },
   {
     number: 4,
@@ -44,7 +44,7 @@ const modules: Module[] = [
     badge: "ESSENTIEL",
     lessons: 13,
     benefit:
-      "Ton app est publiée sur l'App Store ET Google Play avec le tracking et l'ASO configurés pour être découverte.",
+      "Résultat : ton app est live sur l'App Store ET Google Play. Le tracking et l'ASO sont configurés pour être découvert.",
   },
   {
     number: 5,
@@ -52,7 +52,7 @@ const modules: Module[] = [
     badge: "ESSENTIEL",
     lessons: 14,
     benefit:
-      "Tu as une stratégie d'acquisition pour attirer tes premiers utilisateurs et générer tes premiers revenus.",
+      "Résultat : tu as tes premiers téléchargements et tes premiers revenus grâce au contenu organique et aux influenceurs.",
   },
   {
     number: 6,
@@ -234,7 +234,7 @@ export default function ProgramV4() {
             href="#pricing"
             className="inline-flex items-center justify-center rounded-full bg-sky-500 px-6 py-3 text-sm font-semibold text-white hover:bg-sky-400 transition-colors shadow-lg shadow-sky-500/25"
           >
-            Rejoindre le programme
+            Accéder maintenant
           </a>
         </motion.div>
       </div>

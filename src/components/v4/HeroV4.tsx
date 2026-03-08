@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 
 export default function HeroV4() {
   return (
-    <section className="relative py-24 lg:py-32">
+    <section className="relative pt-24 pb-10 lg:pt-32 lg:pb-12">
       <div className="relative before:absolute before:bottom-0 before:h-px before:w-[200vw] before:-left-[100vw] before:bg-white/10" />
 
       <div className="px-4 sm:px-6 lg:px-8">
@@ -28,23 +28,23 @@ export default function HeroV4() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6 }}
                 >
-                  Lance{" "}
+                  Génère tes{" "}
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-cyan-300 to-sky-500">
-                    ton app mobile rentable
+                    premiers revenus récurrents
                   </span>{" "}
-                  en 28 jours
+                  avec une app mobile en 28 jours
                 </motion.h1>
 
-                {/* Subheadline: pour qui + mecanisme unique */}
+                {/* Subheadline: mecanisme + sans effort */}
                 <motion.p
                   className="mt-6 text-lg/7 text-gray-300 max-w-lg"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.15 }}
                 >
-                  La méthode pas-à-pas pour concevoir, développer et monétiser
-                  une app iOS & Android, même si tu n&apos;as jamais écrit une
-                  ligne de code.
+                  Sans écrire une ligne de code toi-même, grâce au vibe coding
+                  IA. Même si tu n&apos;as jamais développé. Même si tu
+                  n&apos;as pas encore d&apos;idée.
                 </motion.p>
 
                 {/* Micro-bullets: 3 benefices cles (future pacing) */}
@@ -55,9 +55,9 @@ export default function HeroV4() {
                   transition={{ duration: 0.6, delay: 0.25 }}
                 >
                   {[
-                    "L'IA écrit le code. Tu diriges la vision",
-                    "De l'idée à la publication sur les stores",
-                    "Abonnements, monétisation, marketing inclus",
+                    "L'IA écrit le code. Tu diriges la vision.",
+                    "De l'idée à la publication sur les stores.",
+                    "Marketing, influenceurs et monétisation inclus.",
                   ].map((item, i) => (
                     <li key={i} className="flex items-center gap-2">
                       <span className="text-emerald-400 text-xs">&#10003;</span>
@@ -77,7 +77,7 @@ export default function HeroV4() {
                     href="#pricing"
                     className="inline-flex items-center justify-center rounded-full bg-sky-500 px-6 py-3 text-sm font-semibold text-white hover:bg-sky-400 transition-colors shadow-lg shadow-sky-500/25"
                   >
-                    Rejoindre le programme
+                    Accéder maintenant
                   </a>
                   <a
                     href="#program"
@@ -134,7 +134,7 @@ export default function HeroV4() {
                   }}
                 />
 
-                {/* Terminal mockup — shows vibecoding in action */}
+                {/* Revenue dashboard mockup */}
                 <div className="relative w-full max-w-sm">
                   <div className="rounded-xl bg-gray-950 outline outline-white/10 overflow-hidden">
                     <div className="flex items-center gap-2 px-4 py-3 border-b border-white/5">
@@ -144,51 +144,43 @@ export default function HeroV4() {
                         <div className="w-2.5 h-2.5 rounded-full bg-white/10" />
                       </div>
                       <span className="text-xs text-gray-600 font-mono ml-2">
-                        terminal
+                        RevenueCat Dashboard
                       </span>
                       <div className="flex-1" />
                       <span className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-semibold text-emerald-400 outline outline-emerald-500/20">
-                        iOS + Android
+                        Live
                       </span>
                     </div>
 
-                    <div className="p-4 font-mono text-xs/6 space-y-3">
+                    <div className="p-6 space-y-5">
                       <div>
-                        <span className="text-gray-600">$</span>{" "}
-                        <span className="text-sky-400">claude</span>{" "}
-                        <span className="text-gray-400">
-                          &quot;Crée mon app de fitness&quot;
-                        </span>
+                        <p className="text-xs text-gray-600 mb-1">Revenus récurrents annuels (ARR)</p>
+                        <p className="text-3xl font-semibold tracking-tight text-emerald-400">140 000 $</p>
                       </div>
-                      <div className="text-gray-600">
-                        <span className="text-emerald-400">&#10003;</span>{" "}
-                        Structure du projet générée
+
+                      {/* Simple bar chart */}
+                      <div className="flex items-end gap-1.5 h-20">
+                        {[15, 25, 30, 38, 45, 55, 62, 70, 78, 88, 95, 100].map((h, i) => (
+                          <div
+                            key={i}
+                            className="flex-1 rounded-sm bg-gradient-to-t from-sky-500/60 to-emerald-400/60"
+                            style={{ height: `${h}%` }}
+                          />
+                        ))}
                       </div>
-                      <div className="text-gray-600">
-                        <span className="text-emerald-400">&#10003;</span>{" "}
-                        Authentification configurée
-                      </div>
-                      <div className="text-gray-600">
-                        <span className="text-emerald-400">&#10003;</span>{" "}
-                        Abonnements RevenueCat intégrés
-                      </div>
-                      <div className="text-gray-600">
-                        <span className="text-emerald-400">&#10003;</span>{" "}
-                        Interface utilisateur construite
-                      </div>
-                      <div className="text-gray-600">
-                        <span className="text-amber-400">&#9679;</span>{" "}
-                        <span className="text-white">
-                          Publication sur les stores...
-                        </span>
-                      </div>
-                      <div className="mt-4 pt-3 border-t border-white/5">
-                        <div className="flex items-center justify-between">
-                          <span className="text-gray-600">Progression</span>
-                          <span className="text-sky-400">92%</span>
+
+                      <div className="grid grid-cols-3 gap-3 pt-3 border-t border-white/5">
+                        <div>
+                          <p className="text-xs text-gray-600">Abonnés actifs</p>
+                          <p className="text-sm font-semibold text-white">1 247</p>
                         </div>
-                        <div className="mt-2 h-1 rounded-full bg-white/10 overflow-hidden">
-                          <div className="h-full w-[92%] rounded-full bg-gradient-to-r from-sky-500 to-cyan-400" />
+                        <div>
+                          <p className="text-xs text-gray-600">MRR</p>
+                          <p className="text-sm font-semibold text-white">11 667 $</p>
+                        </div>
+                        <div>
+                          <p className="text-xs text-gray-600">Note App Store</p>
+                          <p className="text-sm font-semibold text-white">4.9/5</p>
                         </div>
                       </div>
                     </div>
@@ -205,9 +197,9 @@ export default function HeroV4() {
               transition={{ duration: 0.6, delay: 0.5 }}
             >
               {[
+                { value: "140K$/an", label: "Générés avec une seule app" },
                 { value: "28", label: "Jours pour lancer" },
-                { value: "90+", label: "Leçons pas-à-pas" },
-                { value: "4.9/5", label: "Note moyenne" },
+                { value: "4.9/5", label: "Note App Store (5 009 avis)" },
                 { value: "À Vie", label: "Accès & mises à jour" },
               ].map((stat, i) => (
                 <div key={i}>
