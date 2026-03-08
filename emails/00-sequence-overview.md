@@ -21,9 +21,30 @@ Framework : Soap Opera Sequence (Russell Brunson)
 | E6 | J+8 | Le vrai coût de l'inaction | Urgence + calcul du coût d'opportunité |
 | E7 | J+10 | Dernière chance | Scarcité, deadline, CTA final |
 
+## Configuration Brevo (Automation)
+
+**Déclencheur** : Un contact est ajouté à la liste #3 (Plan d'Action)
+
+| Étape | Action | Délai après |
+|-------|--------|-------------|
+| E1 | Bienvenue + Plan d'Action | - |
+| Délai | | 1 jour |
+| E2 | Mon histoire | - |
+| Délai | | 1 jour |
+| E3 | L'erreur fatale | - |
+| Délai | | 2 jours |
+| E4 | La preuve par les chiffres | - |
+| Délai | | 2 jours |
+| E5 | Objections détruites | - |
+| Délai | | 2 jours |
+| E6 | Le coût de l'inaction | - |
+| Délai | | 2 jours |
+| E7 | Dernière chance | Fin |
+
 ## Notes
 
 - Objet des emails : court, curieux, personnel (pas de majuscules partout, pas de spam)
 - Preheader : toujours rempli, complément de l'objet
 - Désabonnement : lien en bas de chaque email
 - Format : texte simple, pas de templates HTML lourds. Comme un vrai email perso.
+- On ne collecte pas le prénom, donc tous les emails commencent par "Salut," sans variable.

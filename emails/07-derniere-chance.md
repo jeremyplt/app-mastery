@@ -6,7 +6,7 @@
 
 ---
 
-Salut {{prenom}},
+Salut,
 
 C'est le dernier email de cette série. Après celui-ci, je ne te parlerai plus d'App Mastery.
 

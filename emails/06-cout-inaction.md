@@ -6,7 +6,7 @@
 
 ---
 
-Salut {{prenom}},
+Salut,
 
 Fais ce calcul avec moi.
 

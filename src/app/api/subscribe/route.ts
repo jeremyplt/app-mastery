@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
-    const { email } = await req.json();
+    const { email, listId } = await req.json();
 
     if (!email || !email.includes("@")) {
       return NextResponse.json(
@@ -29,8 +29,9 @@ export async function POST(req: NextRequest) {
       updateEnabled: true,
     };
 
-    if (BREVO_LIST_ID) {
-      body.listIds = [BREVO_LIST_ID];
+    const targetListId = listId ? parseInt(listId) : BREVO_LIST_ID;
+    if (targetListId) {
+      body.listIds = [targetListId];
     }
 
     const res = await fetch("https://api.brevo.com/v3/contacts", {

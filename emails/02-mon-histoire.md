@@ -6,7 +6,7 @@
 
 ---
 
-Salut {{prenom}},
+Salut,
 
 Hier je t'ai promis de te raconter le moment où tout a basculé. Le voici.
 

@@ -6,7 +6,7 @@
 
 ---
 
-Salut {{prenom}},
+Salut,
 
 Merci d'avoir demandé le Plan d'Action.
 

@@ -6,7 +6,7 @@
 
 ---
 
-Salut {{prenom}},
+Salut,
 
 Hier je t'ai parlé de l'erreur que presque tout le monde fait. La voici.
 

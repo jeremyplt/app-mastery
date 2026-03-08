@@ -6,7 +6,7 @@
 
 ---
 
-Salut {{prenom}},
+Salut,
 
 Je reçois ce message tout le temps : "Ça a l'air génial, mais je ne sais pas coder."
 
