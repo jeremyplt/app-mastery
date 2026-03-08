@@ -10,6 +10,7 @@ import ProofRevenueV4 from "@/components/v4/ProofRevenueV4";
 import ProgramV4 from "@/components/v4/ProgramV4";
 import ProofContentV4 from "@/components/v4/ProofContentV4";
 import ProofInfluencerV4 from "@/components/v4/ProofInfluencerV4";
+import ProofViralV4 from "@/components/v4/ProofViralV4";
 import TestimonialsV4 from "@/components/v4/TestimonialsV4";
 import BonusesV4 from "@/components/v4/BonusesV4";
 import PricingV4 from "@/components/v4/PricingV4";
@@ -51,6 +52,7 @@ export default function HomeV4() {
           <TransformationV4 />
           <ProofContentV4 />
           <ProofInfluencerV4 />
+          <ProofViralV4 />
           <WhoIsThisForV4 />
           <TestimonialsV4 />
           <WhyDifferentV4 />
