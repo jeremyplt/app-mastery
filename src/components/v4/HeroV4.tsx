@@ -1,10 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 export default function HeroV4() {
   return (
-    <section className="relative pt-24 pb-10 lg:pt-32 lg:pb-12">
+    <section className="relative pt-6 pb-10 sm:pt-16 lg:pt-32 lg:pb-12">
       <div className="relative before:absolute before:bottom-0 before:h-px before:w-[200vw] before:-left-[100vw] before:bg-white/10" />
 
       <div className="px-4 sm:px-6 lg:px-8">
@@ -22,7 +23,7 @@ export default function HeroV4() {
 
             <div className="grid lg:grid-cols-[3fr_2fr] gap-0">
               {/* Left: all text content */}
-              <div className="relative px-6 py-16 sm:px-12 sm:py-20 lg:py-24">
+              <div className="relative px-5 py-8 sm:px-12 sm:py-20 lg:py-24">
                 <motion.h1
                   className="text-4xl/tight sm:text-5xl/tight lg:text-[3.5rem]/tight font-medium tracking-tighter text-balance text-white"
                   initial={{ opacity: 0, y: 20 }}
@@ -91,16 +92,22 @@ export default function HeroV4() {
                 >
                   <div className="flex -space-x-2">
                     {[
-                      "bg-sky-500",
-                      "bg-violet-500",
-                      "bg-emerald-500",
-                      "bg-amber-500",
-                    ].map((bg, i) => (
+                      "/avatars/avatar-1.jpg",
+                      "/avatars/avatar-2.jpg",
+                      "/avatars/avatar-3.jpg",
+                      "/avatars/avatar-4.jpg",
+                    ].map((src, i) => (
                       <div
                         key={i}
-                        className={`w-8 h-8 rounded-full ${bg} border-2 border-gray-950 flex items-center justify-center text-[10px] font-bold text-white`}
+                        className="w-8 h-8 rounded-full border-2 border-gray-950 overflow-hidden"
                       >
-                        {/* PLACEHOLDER: remplacer par de vraies photos */}
+                        <Image
+                          src={src}
+                          alt=""
+                          width={32}
+                          height={32}
+                          className="w-full h-full object-cover"
+                        />
                       </div>
                     ))}
                     <div className="w-8 h-8 rounded-full bg-gray-800 border-2 border-gray-950 flex items-center justify-center text-sm font-semibold text-white">

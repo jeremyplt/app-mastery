@@ -104,8 +104,8 @@ export default function WhyDifferentV4() {
         </div>
 
         <div className="mb-12 max-w-2xl">
-          <h2 className="text-[2.5rem]/10 font-medium tracking-tighter text-balance text-white">
-            Ce n&apos;est pas un autre cours en ligne
+          <h2 className="text-2xl sm:text-[2.5rem]/10 font-medium tracking-tighter text-balance text-white">
+            Ce n&apos;est pas juste une autre formation
           </h2>
         </div>
 

@@ -6,46 +6,25 @@ import { motion } from "framer-motion";
 // Each testimonial should show: who they are, where they started, what they achieved
 const testimonials = [
   {
-    name: "Thomas R.",
-    role: "Entrepreneur",
-    before: "N'avait jamais codé",
+    name: "Zachary E.",
+    role: "Trader",
+    before: "Zéro expérience en dev",
     after: "App lancée en 3 semaines",
-    text: "J'ai lancé mon app de suivi fitness en 3 semaines. Après 2 mois, j'avais déjà 47 abonnés payants.",
+    text: "J'ai lancé mon app en 3 semaines alors que je n'avais jamais codé de ma vie. Le vibe coding avec Claude Code change complètement la donne.",
   },
   {
-    name: "Sophie M.",
-    role: "Freelance designer",
-    before: "Perdue dans les tutos",
+    name: "Maxence F.",
+    role: "Coach",
+    before: "Perdu dans les tutos",
     after: "App publiée sur les 2 stores",
-    text: "La formation est ultra structurée. Mon app de recettes est sur les deux stores depuis 1 mois et les téléchargements augmentent chaque semaine.",
+    text: "La formation est ultra structurée. Mon app est sur les deux stores et les téléchargements augmentent chaque semaine. Le module marketing a tout changé.",
   },
   {
-    name: "Karim B.",
+    name: "Mael C.",
     role: "Étudiant",
     before: "Zéro revenus en ligne",
-    after: "380€/mois d'abonnements",
-    text: "Mon app de vocabulaire génère déjà 380€/mois d'abonnements après seulement 6 semaines. Le module marketing a tout changé.",
-  },
-  {
-    name: "Julie D.",
-    role: "Créatrice de contenu",
-    before: "Audience sans monétisation",
-    after: "200+ téléchargements en 1 semaine",
-    text: "J'ai converti mon audience Instagram en 200+ téléchargements la première semaine grâce aux stratégies de contenu de Logan.",
-  },
-  {
-    name: "Marc L.",
-    role: "Développeur web",
-    before: "Connaissait le web, pas le mobile",
-    after: "App fonctionnelle en 2 semaines",
-    text: "Je connaissais le web mais pas le mobile. En 2 semaines mon app était fonctionnelle. Le vibe coding avec Claude Code, c'est un game changer.",
-  },
-  {
-    name: "Amina K.",
-    role: "Étudiante",
-    before: "Débutante complète",
-    after: "App codée entièrement avec l'IA",
-    text: "Le module Claude Code vaut à lui seul le prix de la formation. J'ai appris à coder mon app entière sans écrire une ligne moi-même.",
+    after: "Premiers abonnés payants",
+    text: "En tant qu'étudiant je pensais pas pouvoir créer une app. Aujourd'hui j'ai mes premiers abonnés payants et des revenus récurrents. La méthode fonctionne vraiment.",
   },
 ];
 
@@ -61,7 +40,7 @@ export default function TestimonialsV4() {
         </div>
 
         <div className="mb-12 max-w-2xl">
-          <h2 className="text-[2.5rem]/10 font-medium tracking-tighter text-balance text-white">
+          <h2 className="text-2xl sm:text-[2.5rem]/10 font-medium tracking-tighter text-balance text-white">
             Ils sont passés de zéro à une app publiée
           </h2>
           <p className="mt-4 text-base/7 text-white font-medium">

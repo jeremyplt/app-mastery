@@ -35,7 +35,7 @@ export default function TransformationV4() {
         </div>
 
         <div className="mb-12 max-w-2xl">
-          <h2 className="text-[2.5rem]/10 font-medium tracking-tighter text-balance text-white">
+          <h2 className="text-2xl sm:text-[2.5rem]/10 font-medium tracking-tighter text-balance text-white">
             Imagine dans 28 jours...
           </h2>
           <p className="mt-4 text-base/7 text-gray-400">

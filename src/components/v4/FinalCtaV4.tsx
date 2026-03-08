@@ -28,7 +28,7 @@ export default function FinalCtaV4() {
                 transition={{ duration: 0.5 }}
               >
                 {/* Recap the transformation promise */}
-                <h2 className="text-3xl sm:text-[2.5rem]/10 font-medium tracking-tighter text-balance text-white mb-6">
+                <h2 className="text-2xl sm:text-3xl lg:text-[2.5rem]/10 font-medium tracking-tighter text-balance text-white mb-6">
                   Dans 28 jours, tu pourrais avoir ton app sur les stores
                 </h2>
                 <p className="text-base/7 text-gray-400 mb-4 max-w-lg mx-auto">
@@ -37,11 +37,11 @@ export default function FinalCtaV4() {
                 </p>
 
                 {/* Recap value */}
-                <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mb-8 text-sm font-medium text-gray-300">
+                <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-x-6 gap-y-2 mb-8 text-sm font-medium text-gray-300">
                   <span>90+ leçons</span>
-                  <span className="text-white/20">|</span>
+                  <span className="text-white/20 hidden sm:inline">|</span>
                   <span>1 591$+ de bonus inclus</span>
-                  <span className="text-white/20">|</span>
+                  <span className="text-white/20 hidden sm:inline">|</span>
                   <span>Garantie 30 jours</span>
                 </div>
 

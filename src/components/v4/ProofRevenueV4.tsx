@@ -82,8 +82,9 @@ export default function ProofRevenueV4() {
         </div>
 
         <div className="mb-12 max-w-2xl">
-          <h2 className="text-[2.5rem]/10 font-medium tracking-tighter text-balance text-white">
-            Pas des promesses.{" "}
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-medium tracking-tighter text-white">
+            Pas des promesses.
+            <br />
             <span className="relative inline-block">
               Des resultats.
               <SketchUnderline className="absolute -bottom-2 left-0 w-full text-emerald-400" />
@@ -129,7 +130,15 @@ export default function ProofRevenueV4() {
                     alt="Shinobi Japanese ARR - de 0 a 140K$ en revenus recurrents annuels"
                     width={2400}
                     height={1400}
-                    className="w-full h-auto"
+                    className="w-full h-auto hidden sm:block"
+                    quality={90}
+                  />
+                  <Image
+                    src="/proof/revenue-mobile.jpg"
+                    alt="Shinobi Japanese ARR - $142,266 de revenus recurrents annuels"
+                    width={950}
+                    height={1050}
+                    className="w-full h-auto sm:hidden"
                     quality={90}
                   />
                 </div>
@@ -173,8 +182,11 @@ export default function ProofRevenueV4() {
                 <span className="text-xs font-semibold text-emerald-400 uppercase tracking-wider">
                   Reviews App Store
                 </span>
+                <span className="text-xs font-semibold text-white/40">
+                  /
+                </span>
                 <span className="text-xs font-semibold text-white">
-                  , 4.9/5, 5 009 ratings
+                  4.9/5, 5 009 ratings
                 </span>
               </div>
 
@@ -183,7 +195,15 @@ export default function ProofRevenueV4() {
                 alt="5,009 ratings - 4.9 out of 5 on the App Store with reviews from users worldwide"
                 width={2160}
                 height={1080}
-                className="w-full h-auto rounded-lg"
+                className="w-full h-auto rounded-lg hidden sm:block"
+                quality={90}
+              />
+              <Image
+                src="/proof/reviews-mobile.jpg"
+                alt="5,009 ratings - 4.9 out of 5 on the App Store with reviews from users worldwide"
+                width={750}
+                height={1400}
+                className="w-full h-auto rounded-lg sm:hidden"
                 quality={90}
               />
             </div>

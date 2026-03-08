@@ -54,7 +54,7 @@ export default function HomeV4() {
           <ProofInfluencerV4 />
           <ProofViralV4 />
           <WhoIsThisForV4 />
-          <TestimonialsV4 />
+          {/* <TestimonialsV4 /> */}
           <WhyDifferentV4 />
           <ProgramV4 />
           <BonusesV4 />

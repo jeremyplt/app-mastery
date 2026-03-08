@@ -66,7 +66,7 @@ export default function BonusesV4() {
         </div>
 
         <div className="mb-12 max-w-2xl">
-          <h2 className="text-[2.5rem]/10 font-medium tracking-tighter text-balance text-white">
+          <h2 className="text-2xl sm:text-[2.5rem]/10 font-medium tracking-tighter text-balance text-white">
             Et ce n&apos;est pas tout...
           </h2>
           <p className="mt-4 text-xl text-gray-400">
@@ -102,7 +102,7 @@ export default function BonusesV4() {
                     <Gift size={18} className="text-amber-400" />
                   </div>
                   <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-1">
+                    <div className="mb-1">
                       <h3 className="text-base font-semibold text-white">
                         {bonus.title}
                       </h3>

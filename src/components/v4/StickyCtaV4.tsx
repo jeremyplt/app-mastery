@@ -33,7 +33,7 @@ export default function StickyCtaV4() {
               href="#pricing"
               className="block w-full rounded-full bg-sky-500 py-3 text-center text-sm font-semibold text-white hover:bg-sky-400 transition-colors shadow-lg shadow-sky-500/25"
             >
-              Lancer mon app maintenant, 997 $
+              Lancer mon app maintenant
             </a>
           </div>
         </motion.div>

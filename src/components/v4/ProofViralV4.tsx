@@ -86,7 +86,7 @@ export default function ProofViralV4() {
 
         <div className="mb-12 max-w-2xl">
           <motion.h2
-            className="text-[2.5rem]/10 font-medium tracking-tighter text-balance text-white"
+            className="text-2xl sm:text-[2.5rem]/10 font-medium tracking-tighter text-balance text-white"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}

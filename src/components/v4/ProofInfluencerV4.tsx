@@ -34,7 +34,7 @@ export default function ProofInfluencerV4() {
         </div>
 
         <div className="mb-12 max-w-2xl">
-          <h2 className="text-[2.5rem]/10 font-medium tracking-tighter text-balance text-white">
+          <h2 className="text-2xl sm:text-[2.5rem]/10 font-medium tracking-tighter text-balance text-white">
             On t&apos;apprend a{" "}
             <span className="relative inline-block">
               trouver, negocier et closer
@@ -78,7 +78,15 @@ export default function ProofInfluencerV4() {
                 alt="Conversation DM avec un influenceur acceptant une collaboration"
                 width={1500}
                 height={800}
-                className="w-full h-auto rounded-lg"
+                className="w-full h-auto rounded-lg hidden sm:block"
+                quality={90}
+              />
+              <Image
+                src="/proof/influencer-dm-mobile.png"
+                alt="Conversation DM avec un influenceur acceptant une collaboration"
+                width={750}
+                height={1400}
+                className="w-full h-auto rounded-lg sm:hidden"
                 quality={90}
               />
 

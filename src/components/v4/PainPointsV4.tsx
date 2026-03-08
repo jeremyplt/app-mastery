@@ -45,7 +45,7 @@ export default function PainPointsV4() {
 
         <div className="mb-12 max-w-2xl">
           {/* Empathetic heading — "Peut-etre que..." (Stan Leloup) */}
-          <h2 className="text-[2.5rem]/10 font-medium tracking-tighter text-balance text-white">
+          <h2 className="text-2xl sm:text-[2.5rem]/10 font-medium tracking-tighter text-balance text-white">
             Peut-être que tu te reconnais...
           </h2>
           <p className="mt-4 text-base/7 text-gray-400">

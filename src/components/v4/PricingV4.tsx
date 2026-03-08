@@ -59,7 +59,7 @@ export default function PricingV4() {
         </div>
 
         <div className="mb-12 max-w-2xl">
-          <h2 className="text-[2.5rem]/10 font-medium tracking-tighter text-balance text-white">
+          <h2 className="text-2xl sm:text-[2.5rem]/10 font-medium tracking-tighter text-balance text-white">
             Un investissement, pas une dépense
           </h2>
           <p className="mt-4 text-base/7 text-white/70 font-medium">
@@ -194,7 +194,7 @@ export default function PricingV4() {
 
           {/* ── Option 2: Complet (HIGHLIGHTED) ── */}
           <motion.div
-            className="isolate overflow-hidden rounded-2xl bg-gray-950 p-2 outline outline-sky-500/50 shadow-lg shadow-sky-500/10 lg:scale-105 relative z-10 flex flex-col"
+            className="isolate overflow-hidden rounded-2xl bg-gray-950 p-2 outline outline-sky-500/50 shadow-lg shadow-sky-500/10 scale-100 lg:scale-105 relative z-10 flex flex-col"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}

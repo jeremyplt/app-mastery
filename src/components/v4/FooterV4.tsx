@@ -1,6 +1,6 @@
 export default function FooterV4() {
   return (
-    <footer className="py-10 px-4 sm:px-6 lg:px-8">
+    <footer className="py-10 pb-24 lg:pb-10 px-4 sm:px-6 lg:px-8">
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="text-xs text-gray-600">
           &copy; {new Date().getFullYear()} App Mastery. Tous droits réservés.

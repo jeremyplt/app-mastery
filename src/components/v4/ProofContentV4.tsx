@@ -253,7 +253,7 @@ export default function ProofContentV4() {
         </div>
 
         <div className="mb-12 max-w-2xl">
-          <h2 className="text-[2.5rem]/10 font-medium tracking-tighter text-balance text-white">
+          <h2 className="text-2xl sm:text-[2.5rem]/10 font-medium tracking-tighter text-balance text-white">
             On t&apos;apprend aussi à{" "}
             <span className="relative inline-block">
               faire exploser ta visibilité
@@ -289,8 +289,8 @@ export default function ProofContentV4() {
                   </div>
 
                   {/* Hand-drawn arrows going left and right from Logan to the content */}
-                  <SketchCurvedArrow className="absolute -right-28 top-2 w-28 h-20 text-sky-400 hidden sm:block" />
-                  <SketchCurvedArrowLeft className="absolute -left-28 top-2 w-28 h-20 text-sky-400 hidden sm:block" />
+                  <SketchCurvedArrow className="absolute -right-20 sm:-right-28 top-2 w-20 sm:w-28 h-16 sm:h-20 text-sky-400" />
+                  <SketchCurvedArrowLeft className="absolute -left-20 sm:-left-28 top-2 w-20 sm:w-28 h-16 sm:h-20 text-sky-400" />
                 </motion.div>
 
                 <motion.div
@@ -321,7 +321,7 @@ export default function ProofContentV4() {
               </div>
 
               {/* Video previews grid */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
                 <VideoCard
                   src="/proof/content-2.5M.mp4"
                   stat="2.5M"

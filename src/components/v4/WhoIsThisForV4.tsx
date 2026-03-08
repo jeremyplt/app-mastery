@@ -33,7 +33,7 @@ export default function WhoIsThisForV4() {
         </div>
 
         <div className="mb-12 max-w-2xl">
-          <h2 className="text-[2.5rem]/10 font-medium tracking-tighter text-balance text-white">
+          <h2 className="text-2xl sm:text-[2.5rem]/10 font-medium tracking-tighter text-balance text-white">
             C&apos;est pour toi si...
           </h2>
         </div>

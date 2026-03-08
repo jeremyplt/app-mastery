@@ -87,7 +87,7 @@ export default function FaqV4() {
         <div className="grid lg:grid-cols-[1fr_2fr] gap-8 lg:gap-12">
           {/* Left: title + contact */}
           <div className="lg:sticky lg:top-8 lg:self-start">
-            <h2 className="text-[2.5rem]/10 font-medium tracking-tighter text-balance text-white">
+            <h2 className="text-2xl sm:text-[2.5rem]/10 font-medium tracking-tighter text-balance text-white">
               Encore des questions ?
             </h2>
             <p className="mt-4 text-base/7 text-gray-400">
