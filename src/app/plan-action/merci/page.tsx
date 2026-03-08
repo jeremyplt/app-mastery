@@ -12,13 +12,13 @@ export default function MerciPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <span className="font-mono text-sm font-semibold tracking-widest uppercase text-emerald-400">
+          <span className="font-mono text-sm font-semibold tracking-widest uppercase text-amber-400">
             C&apos;est prêt
           </span>
 
           <h1 className="mt-4 text-3xl sm:text-4xl font-medium tracking-tighter text-white">
             Ton Plan d&apos;Action est prêt.{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-cyan-300 to-sky-500">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-orange-300 to-amber-500">
               Regarde-le maintenant.
             </span>
           </h1>
@@ -29,13 +29,13 @@ export default function MerciPage() {
           </p>
 
           {/* Video player */}
-          <div className="mt-10 isolate overflow-hidden rounded-2xl bg-gray-950 p-2 outline outline-white/10">
+          <div className="mt-10 isolate overflow-hidden rounded-2xl bg-gray-950 p-2 outline outline-amber-500/20">
             <div className="relative rounded-xl bg-white/5 overflow-hidden aspect-video flex items-center justify-center">
               {/* Placeholder - replace with actual video embed */}
               <div className="text-center p-8">
-                <div className="w-20 h-20 rounded-full bg-sky-500/20 flex items-center justify-center mx-auto mb-4">
+                <div className="w-20 h-20 rounded-full bg-amber-500/20 flex items-center justify-center mx-auto mb-4">
                   <svg
-                    className="w-8 h-8 text-sky-400 ml-1"
+                    className="w-8 h-8 text-amber-400 ml-1"
                     fill="currentColor"
                     viewBox="0 0 24 24"
                   >
@@ -76,8 +76,8 @@ export default function MerciPage() {
               monétiser ton app en 28 jours.
             </p>
             <a
-              href="/v4#pricing"
-              className="mt-6 inline-flex items-center justify-center rounded-full bg-sky-500 px-8 py-3.5 text-sm font-semibold text-white hover:bg-sky-400 transition-colors shadow-lg shadow-sky-500/25"
+              href="/formation#pricing"
+              className="mt-6 inline-flex items-center justify-center rounded-full bg-amber-500 px-8 py-3.5 text-sm font-semibold text-white hover:bg-amber-400 transition-colors shadow-lg shadow-amber-500/25"
             >
               Découvrir App Mastery
             </a>
