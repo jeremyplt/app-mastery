@@ -31,7 +31,7 @@ export default function HeroVideoV4() {
   return (
     <section className="relative py-8">
       <div className="px-4 sm:px-6 lg:px-8">
-        <div className="max-w-3xl mx-auto">
+        <div className="max-w-4xl mx-auto">
           <motion.div
             className="isolate overflow-hidden rounded-2xl bg-gray-950 p-2 outline outline-white/10"
             initial={{ opacity: 0, y: 20 }}
@@ -77,7 +77,7 @@ export default function HeroVideoV4() {
           </motion.div>
 
           <motion.p
-            className="mt-4 text-center text-base font-medium text-gray-300"
+            className="mt-4 text-center text-lg font-medium italic text-gray-300"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
