@@ -128,8 +128,8 @@ export default function WhyDifferentV4() {
             />
 
             {/* Desktop table */}
-            <div className="relative hidden md:block overflow-x-auto">
-              <table className="w-full">
+            <div className="relative hidden md:block">
+              <table className="w-full table-fixed">
                 <thead>
                   <tr>
                     <th className="text-left px-5 py-4 text-base font-semibold text-gray-400">

@@ -86,14 +86,15 @@ export default function GuaranteeV4() {
                   </div>
 
                   <h4 className="text-xl font-semibold text-white mb-4">
-                    App Publiée ou Remboursé + Coaching
+                    Résultat Concret ou Remboursé + Coaching
                   </h4>
 
                   <p className="text-base/7 text-gray-300">
-                    Si tu suis les 5 premiers modules et que ton app n&apos;est
-                    pas publiée sur au moins un store, je te rembourse
-                    intégralement ET je t&apos;offre 1h de coaching gratuit pour
-                    t&apos;aider à la publier.
+                    Si tu suis les modules 1 à 5, que tu appliques tout, et
+                    que tu n&apos;as pas une app fonctionnelle prête à soumettre
+                    sur les stores, je te rembourse intégralement ET je
+                    t&apos;offre 1h de coaching gratuit pour t&apos;aider à y
+                    arriver.
                   </p>
                 </div>
               </div>

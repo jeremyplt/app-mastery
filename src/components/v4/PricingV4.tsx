@@ -41,9 +41,10 @@ const completFeatures = [
 
 const vipFeatures = [
   "Tout de l'offre Complet",
-  "2 sessions de coaching 1-on-1 avec Jeremy (60 min chacune)",
-  "Audit personnalisé de ton app",
-  "Accès prioritaire aux futures formations",
+  "Accompagnement 1-on-1 avec Jeremy pendant 3 mois via WhatsApp",
+  "Validation personnalisée de ton idée d'app",
+  "Audit complet de ton app (UX, code, monétisation)",
+  "Accès direct et illimité pour poser tes questions",
 ];
 
 export default function PricingV4() {
@@ -213,7 +214,7 @@ export default function PricingV4() {
               <div className="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 h-48 w-48 rounded-full bg-sky-500/20 blur-3xl" />
 
               <div className="relative text-center flex flex-col flex-1">
-                <span className="inline-flex items-center rounded-full bg-sky-500/10 px-3 py-1 text-xs font-bold tracking-wider uppercase text-sky-400 outline outline-sky-500/30 mb-6">
+                <span className="inline-flex self-center items-center rounded-full bg-sky-500/10 px-3 py-1 text-xs font-bold tracking-wider uppercase text-sky-400 outline outline-sky-500/30 mb-6">
                   Meilleure valeur
                 </span>
 
@@ -224,18 +225,35 @@ export default function PricingV4() {
                   <span className="line-through text-white/40 text-lg font-semibold">2 588$+</span>
                 </p>
 
+                <p className="text-sm font-bold tracking-widest uppercase text-amber-400 mb-2">
+                  Offre de lancement
+                </p>
                 <div className="mb-1">
                   <span className="text-5xl sm:text-6xl font-medium tracking-tighter text-white">
                     997
                   </span>
                   <span className="text-xl text-white/60 ml-1">$</span>
+                  <span className="text-lg text-white/40 line-through font-medium ml-2">
+                    1 497$
+                  </span>
                 </div>
                 <p className="text-base text-sky-400 font-semibold mb-1">
                   ou 3x 347$
                 </p>
-                <p className="text-sm text-white/60 font-medium mb-8">
+                <p className="text-sm text-white/60 font-medium mb-3">
                   Paiement unique | accès à vie
                 </p>
+                <div className="flex justify-center mb-8">
+                  <div className="inline-flex items-center gap-2 rounded-full bg-red-500/10 border border-red-500/30 px-3 py-1.5">
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500" />
+                    </span>
+                    <span className="text-xs font-bold text-red-400">
+                      Places limitées
+                    </span>
+                  </div>
+                </div>
 
                 {/* Included features */}
                 <div className="space-y-3 text-left mb-8">
@@ -328,20 +346,6 @@ export default function PricingV4() {
           </motion.div>
         </div>
 
-        {/* Urgency banner */}
-        <motion.div
-          className="mt-8 max-w-6xl mx-auto"
-          initial={{ opacity: 0, y: 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.3 }}
-        >
-          <div className="rounded-xl border border-amber-500/30 bg-amber-500/5 px-6 py-4 text-center">
-            <p className="text-sm sm:text-base font-semibold text-amber-400">
-              Prix de lancement. Le prix augmentera à chaque nouveau module ajouté à la formation.
-            </p>
-          </div>
-        </motion.div>
       </div>
 
       <div className="relative mt-20 before:absolute before:top-0 before:h-px before:w-[200vw] before:-left-[100vw] before:bg-white/10" />
