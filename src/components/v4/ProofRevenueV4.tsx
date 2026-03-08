@@ -90,6 +90,9 @@ export default function ProofRevenueV4() {
               <SketchUnderline className="absolute -bottom-2 left-0 w-full text-emerald-400" />
             </span>
           </h2>
+          <p className="mt-4 text-base/7 text-white/70 font-medium">
+            140K$/an de revenus récurrents. Plus de 10 000 avis avec une note moyenne de 4.85/5 sur les stores.
+          </p>
         </div>
 
         {/* Revenue screenshot */}
@@ -201,6 +204,57 @@ export default function ProofRevenueV4() {
               <Image
                 src="/proof/reviews-mobile.jpg"
                 alt="5,009 ratings - 4.9 out of 5 on the App Store with reviews from users worldwide"
+                width={750}
+                height={1400}
+                className="w-full h-auto rounded-lg sm:hidden"
+                quality={90}
+              />
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Google Play reviews */}
+        <motion.div
+          className="isolate overflow-hidden rounded-2xl bg-gray-950 p-2 outline outline-emerald-500/20"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.15 }}
+        >
+          <div className="relative rounded-xl bg-white/5 p-6 overflow-hidden">
+            <div
+              className="pointer-events-none absolute inset-0 opacity-20"
+              style={{
+                backgroundImage:
+                  "radial-gradient(rgba(255,255,255,0.15) 1px, transparent 1px)",
+                backgroundSize: "16px 16px",
+              }}
+            />
+
+            <div className="relative">
+              <div className="flex items-center gap-2 mb-4">
+                <span className="text-xs font-semibold text-emerald-400 uppercase tracking-wider">
+                  Reviews Google Play
+                </span>
+                <span className="text-xs font-semibold text-white/40">
+                  /
+                </span>
+                <span className="text-xs font-semibold text-white">
+                  4.8/5, 4 624 ratings
+                </span>
+              </div>
+
+              <Image
+                src="/proof/google-play-reviews-v2.png"
+                alt="4,624 ratings - 4.8 out of 5 on Google Play Store"
+                width={1800}
+                height={900}
+                className="w-full h-auto rounded-lg hidden sm:block"
+                quality={90}
+              />
+              <Image
+                src="/proof/google-play-reviews-mobile-v2.png"
+                alt="4,624 ratings - 4.8 out of 5 on Google Play Store"
                 width={750}
                 height={1400}
                 className="w-full h-auto rounded-lg sm:hidden"
