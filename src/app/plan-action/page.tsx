@@ -154,6 +154,41 @@ export default function PlanActionPage() {
                         </p>
                       </motion.form>
 
+                      {/* Mobile video preview */}
+                      <motion.div
+                        className="mt-8 lg:hidden rounded-xl overflow-hidden"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: 0.45 }}
+                      >
+                        <div className="relative aspect-video bg-gray-900">
+                          <Image
+                            src="/proof/video-preview.jpg"
+                            alt="Aperçu du Plan d'Action"
+                            fill
+                            className="object-cover"
+                            quality={90}
+                          />
+                          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/40">
+                            <div className="w-14 h-14 rounded-full bg-amber-500/90 flex items-center justify-center shadow-lg shadow-amber-500/30">
+                              <svg
+                                className="w-6 h-6 text-white"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth={2}
+                                viewBox="0 0 24 24"
+                              >
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                              </svg>
+                            </div>
+                            <p className="mt-2 text-sm font-medium text-white">
+                              Entre ton email pour débloquer la vidéo
+                            </p>
+                          </div>
+                        </div>
+                      </motion.div>
+
                       <motion.div
                         className="mt-6 flex items-center gap-3"
                         initial={{ opacity: 0 }}
@@ -197,7 +232,46 @@ export default function PlanActionPage() {
                       animate={{ opacity: 1 }}
                       transition={{ duration: 0.8, delay: 0.3 }}
                     >
-                      <div className="relative w-full">
+                      <div className="relative w-full pt-16">
+                        {/* Handwriting annotation */}
+                        <div className="absolute -top-12 right-24 z-10">
+                          <span
+                            className="text-amber-500 text-4xl -rotate-3 whitespace-nowrap block"
+                            style={{ fontFamily: "var(--font-caveat)" }}
+                          >
+                            15 minutes de pure valeur
+                          </span>
+                          {/* Hand-drawn arc arrow */}
+                          <svg
+                            viewBox="0 0 100 80"
+                            fill="none"
+                            className="w-24 h-20 text-amber-500 mt-1"
+                            xmlns="http://www.w3.org/2000/svg"
+                          >
+                            <path
+                              d="M 88 3 C 68 7, 38 16, 26 33 C 17 46, 20 57, 32 67"
+                              stroke="currentColor"
+                              strokeWidth="2.5"
+                              strokeLinecap="round"
+                              fill="none"
+                            />
+                            <path
+                              d="M 23 67 L 33 71"
+                              stroke="currentColor"
+                              strokeWidth="2.5"
+                              strokeLinecap="round"
+                              fill="none"
+                            />
+                            <path
+                              d="M 32 58 L 33 71"
+                              stroke="currentColor"
+                              strokeWidth="2.5"
+                              strokeLinecap="round"
+                              fill="none"
+                            />
+                          </svg>
+                        </div>
+
                         <div className="rounded-xl overflow-hidden">
                           <div className="relative aspect-video bg-gray-900">
                             <Image
@@ -207,23 +281,26 @@ export default function PlanActionPage() {
                               className="object-cover"
                               quality={90}
                             />
-                            {/* Play button overlay */}
-                            <div className="absolute inset-0 flex items-center justify-center">
+                            {/* Lock overlay */}
+                            <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/40">
                               <div className="w-16 h-16 rounded-full bg-amber-500/90 flex items-center justify-center shadow-lg shadow-amber-500/30">
                                 <svg
-                                  className="w-7 h-7 text-white ml-1"
-                                  fill="currentColor"
+                                  className="w-7 h-7 text-white"
+                                  fill="none"
+                                  stroke="currentColor"
+                                  strokeWidth={2}
                                   viewBox="0 0 24 24"
                                 >
-                                  <path d="M8 5v14l11-7z" />
+                                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
                                 </svg>
                               </div>
+                              <p className="mt-3 text-sm font-medium text-white">
+                                Entre ton email pour débloquer la vidéo
+                              </p>
                             </div>
                           </div>
                         </div>
-                        <p className="mt-3 text-center text-xs text-gray-500">
-                          10 min de vidéo gratuite
-                        </p>
                       </div>
                     </motion.div>
                   </div>
