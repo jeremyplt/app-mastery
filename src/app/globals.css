@@ -17,6 +17,11 @@
   --font-mono: "JetBrains Mono", "SF Mono", "Fira Code", monospace;
 }
 
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
 /* Dark mode (default) */
 :root {
   --bg: #050508;

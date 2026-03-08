@@ -1,4 +1,5 @@
 import HeroV4 from "@/components/v4/HeroV4";
+import HeroVideoV4 from "@/components/v4/HeroVideoV4";
 import TimelineV4 from "@/components/v4/TimelineV4";
 import PainPointsV4 from "@/components/v4/PainPointsV4";
 import AgitationV4 from "@/components/v4/AgitationV4";
@@ -9,6 +10,7 @@ import ProofRevenueV4 from "@/components/v4/ProofRevenueV4";
 import ProgramV4 from "@/components/v4/ProgramV4";
 import ProofContentV4 from "@/components/v4/ProofContentV4";
 import ProofInfluencerV4 from "@/components/v4/ProofInfluencerV4";
+import ProofViralV4 from "@/components/v4/ProofViralV4";
 import TestimonialsV4 from "@/components/v4/TestimonialsV4";
 import BonusesV4 from "@/components/v4/BonusesV4";
 import PricingV4 from "@/components/v4/PricingV4";
@@ -37,6 +39,7 @@ export default function Home() {
 
         <div className="min-w-0">
           <HeroV4 />
+          <HeroVideoV4 />
           <TimelineV4 />
           <PainPointsV4 />
           <AgitationV4 />
@@ -47,6 +50,7 @@ export default function Home() {
           <ProgramV4 />
           <ProofContentV4 />
           <ProofInfluencerV4 />
+          <ProofViralV4 />
           <TestimonialsV4 />
           <BonusesV4 />
           <PricingV4 />

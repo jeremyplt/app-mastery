@@ -66,6 +66,37 @@ export default function PricingV4() {
           </div>
         </motion.div>
 
+        {/* Arrows converging from alternatives to pricing card */}
+        <div className="hidden lg:block my-10">
+          <svg width="100%" height="100" viewBox="0 0 1000 100" preserveAspectRatio="xMidYMid meet" fill="none">
+            {/* Far left */}
+            <path d="M100 0 C 200 20, 380 80, 500 95" stroke="url(#arrowGradL)" strokeWidth="2" strokeLinecap="round" fill="none" />
+            <polygon points="500,95 488,85 492,90" fill="#0ea5e9" />
+            {/* Inner left */}
+            <path d="M330 0 C 380 20, 440 65, 500 95" stroke="url(#arrowGradL)" strokeWidth="2" strokeLinecap="round" fill="none" />
+            <polygon points="500,95 490,83 494,89" fill="#0ea5e9" />
+            {/* Inner right */}
+            <path d="M670 0 C 620 20, 560 65, 500 95" stroke="url(#arrowGradR)" strokeWidth="2" strokeLinecap="round" fill="none" />
+            <polygon points="500,95 510,83 506,89" fill="#0ea5e9" />
+            {/* Far right */}
+            <path d="M900 0 C 800 20, 620 80, 500 95" stroke="url(#arrowGradR)" strokeWidth="2" strokeLinecap="round" fill="none" />
+            <polygon points="500,95 512,85 508,90" fill="#0ea5e9" />
+            {/* Center glow dot */}
+            <circle cx="500" cy="95" r="4" fill="#0ea5e9" />
+            <circle cx="500" cy="95" r="8" fill="#0ea5e9" opacity="0.2" />
+            <defs>
+              <linearGradient id="arrowGradL" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#0ea5e9" stopOpacity="0.15" />
+                <stop offset="100%" stopColor="#0ea5e9" stopOpacity="0.9" />
+              </linearGradient>
+              <linearGradient id="arrowGradR" x1="100%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stopColor="#0ea5e9" stopOpacity="0.15" />
+                <stop offset="100%" stopColor="#0ea5e9" stopOpacity="0.9" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+
         {/* Main pricing card */}
         <div className="max-w-lg mx-auto">
           <motion.div
