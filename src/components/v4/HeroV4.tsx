@@ -29,11 +29,11 @@ export default function HeroV4() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6 }}
                 >
-                  Génère tes{" "}
+                  De Zéro à une{" "}
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-cyan-300 to-sky-500">
-                    premiers revenus récurrents
+                    App Rentable
                   </span>{" "}
-                  avec une app mobile en 28 jours
+                  sur les Stores en 28 Jours
                 </motion.h1>
 
                 <motion.p
@@ -42,9 +42,7 @@ export default function HeroV4() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.15 }}
                 >
-                  Sans écrire une ligne de code toi-même, grâce au vibe coding
-                  IA. Même si tu n&apos;as jamais développé. Même si tu
-                  n&apos;as pas encore d&apos;idée.
+                  La méthode exacte qui m&apos;a permis de passer de 0 à 140 000$/an de revenus récurrents avec une seule app. Sans écrire une ligne de code, grâce au vibe coding IA.
                 </motion.p>
 
                 <motion.ul
@@ -75,7 +73,7 @@ export default function HeroV4() {
                     href="#pricing"
                     className="inline-flex items-center justify-center rounded-full bg-sky-500 px-6 py-3 text-sm font-semibold text-white hover:bg-sky-400 transition-colors shadow-lg shadow-sky-500/25"
                   >
-                    Accéder maintenant
+                    Lancer mon app maintenant
                   </a>
                   <a
                     href="#program"
@@ -109,10 +107,19 @@ export default function HeroV4() {
                       +
                     </div>
                   </div>
-                  <span className="text-sm text-gray-500">
+                  <span className="text-sm font-medium text-gray-300">
                     Ils ont déjà lancé leur app
                   </span>
                 </motion.div>
+
+                <motion.p
+                  className="mt-6 text-sky-400/80 italic text-base font-medium"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.6, delay: 0.65 }}
+                >
+                  Et le plus fou ? Ce n&apos;est même pas la partie la plus impressionnante de la méthode...
+                </motion.p>
               </div>
 
               {/* Right: phone mockup */}

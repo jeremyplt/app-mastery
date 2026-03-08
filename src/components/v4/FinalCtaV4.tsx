@@ -37,7 +37,7 @@ export default function FinalCtaV4() {
                 </p>
 
                 {/* Recap value */}
-                <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mb-8 text-sm text-gray-500">
+                <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mb-8 text-sm font-medium text-gray-300">
                   <span>90+ leçons</span>
                   <span className="text-white/20">|</span>
                   <span>1 591$+ de bonus inclus</span>
@@ -45,25 +45,29 @@ export default function FinalCtaV4() {
                   <span>Garantie 30 jours</span>
                 </div>
 
+                {/* Urgency text */}
+                <p className="text-base font-semibold text-amber-400 mb-6">
+                  Prix de lancement. Le prix augmentera à chaque nouveau module ajouté.
+                </p>
+
                 {/* Final CTA */}
                 <a
                   href="#pricing"
                   className="inline-flex items-center justify-center rounded-full bg-sky-500 px-8 py-3.5 text-sm font-semibold text-white hover:bg-sky-400 transition-colors shadow-lg shadow-sky-500/25"
                 >
-                  Accéder maintenant
+                  Lancer mon app maintenant
                 </a>
 
-                <p className="text-xs text-sky-400 mt-4 font-medium">
+                <p className="text-sm text-sky-400 mt-4 font-semibold">
                   Tu reçois tes identifiants dans 2 minutes
                 </p>
 
                 {/* P.S. */}
                 <div className="mt-10 pt-8 border-t border-white/5 max-w-md mx-auto">
-                  <p className="text-sm text-gray-400">
-                    P.S. Rappelle-toi : une app avec seulement 100
-                    abonnés à 9,99€/mois = près de 12 000€/an de revenus
-                    récurrents. La formation se rembourse dès ton premier mois.
-                    Et si ça ne marche pas, tu as la garantie 30 jours.
+                  <p className="text-sm font-medium text-gray-300">
+                    P.S. 100 abonnés x 9,99$/mois = 12 000$/an de revenus récurrents.
+                    C&apos;est 12x le prix de la formation. Chaque mois. Automatiquement.
+                    Et si tu n&apos;es pas convaincu, tu as 30 jours pour te faire rembourser intégralement. Zéro risque.
                   </p>
                 </div>
               </motion.div>

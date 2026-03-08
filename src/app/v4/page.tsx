@@ -1,4 +1,5 @@
 import HeroV4 from "@/components/v4/HeroV4";
+import HeroVideoV4 from "@/components/v4/HeroVideoV4";
 import TimelineV4 from "@/components/v4/TimelineV4";
 import PainPointsV4 from "@/components/v4/PainPointsV4";
 import AgitationV4 from "@/components/v4/AgitationV4";
@@ -17,6 +18,8 @@ import FaqV4 from "@/components/v4/FaqV4";
 import FinalCtaV4 from "@/components/v4/FinalCtaV4";
 import FooterV4 from "@/components/v4/FooterV4";
 import StickyCtaV4 from "@/components/v4/StickyCtaV4";
+import WhoIsThisForV4 from "@/components/v4/WhoIsThisForV4";
+import WhyDifferentV4 from "@/components/v4/WhyDifferentV4";
 
 export default function HomeV4() {
   return (
@@ -38,17 +41,20 @@ export default function HomeV4() {
         {/* Center content — no nav links, zero distractions */}
         <div className="min-w-0">
           <HeroV4 />
-          <TimelineV4 />
+          <HeroVideoV4 />
           <PainPointsV4 />
           <AgitationV4 />
-          <SolutionV4 />
-          <TransformationV4 />
           <InstructorV4 />
+          <SolutionV4 />
+          <TimelineV4 />
           <ProofRevenueV4 />
-          <ProgramV4 />
+          <TransformationV4 />
           <ProofContentV4 />
           <ProofInfluencerV4 />
+          <WhoIsThisForV4 />
           <TestimonialsV4 />
+          <WhyDifferentV4 />
+          <ProgramV4 />
           <BonusesV4 />
           <PricingV4 />
           <GuaranteeV4 />

@@ -93,7 +93,7 @@ export default function PainPointsV4() {
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.3 }}
         >
-          Ça te parle ? Alors lis la suite. Ça va changer.
+          Ça te parle ? Tu n&apos;es pas seul. Et surtout, ce n&apos;est pas de ta faute...
         </motion.p>
       </div>
 

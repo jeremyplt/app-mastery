@@ -48,34 +48,67 @@ export default function InstructorV4() {
                   Jeremy Pitault
                 </h3>
 
-                {/* Story — conversational tone (Marketing Mania style) */}
-                <div className="space-y-4 text-sm/6 text-gray-400 max-w-lg">
+                {/* Story — Epiphany Bridge with emotional depth */}
+                <div className="space-y-4 text-base/7 text-gray-300 max-w-lg">
+                  {/* Backstory + Despair */}
                   <p>
                     Il y a quelques années, j&apos;étais exactement où tu es
                     peut-être aujourd&apos;hui. Des idées d&apos;apps plein la
                     tête, mais aucune sur les stores.
                   </p>
                   <p>
-                    J&apos;ai passé des mois à suivre des tutos, à
-                    m&apos;éparpiller entre les technos, à douter. Puis
-                    j&apos;ai pris mon courage à deux mains et je me suis
-                    lancé. J&apos;ai travaillé plus de 12h par jour pendant
-                    plus de 2 ans sur mon app{" "}
+                    J&apos;ai fini par me lancer. Et honnêtement, ça a été
+                    brutal. Des nuits à coder jusqu&apos;à 3h du matin. Mon app
+                    qui crashe en production le jour du lancement. Des
+                    utilisateurs qui laissent des avis 1 étoile. J&apos;ai
+                    travaillé plus de 12h par jour pendant plus de 2 ans sur{" "}
                     <span className="text-white font-medium">
                       Shinobi Japanese
                     </span>
-                    , qui génère maintenant{" "}
+                    .
+                  </p>
+                  <p>
+                    Il y a eu des moments où j&apos;ai sérieusement voulu tout
+                    arrêter. La pression financière, le doute constant, la
+                    solitude du développeur solo. Je me demandais si
+                    j&apos;avais fait le bon choix.
+                  </p>
+
+                  {/* Epiphany Moment */}
+                  <p className="text-white font-medium">
+                    Et puis un jour, tout a changé.
+                  </p>
+                  <p>
+                    J&apos;ai découvert les outils d&apos;IA, et en
+                    particulier{" "}
+                    <span className="text-sky-400 font-semibold">
+                      Claude Code
+                    </span>
+                    . Ce qui me prenait une semaine de développement pouvait se
+                    faire en quelques heures. Le &quot;vibe coding&quot; a
+                    littéralement multiplié ma productivité par 10. J&apos;ai
+                    réalisé que le jeu avait complètement changé. N&apos;importe
+                    qui pouvait maintenant créer une app de qualité
+                    professionnelle, sans être un développeur senior.
+                  </p>
+
+                  {/* Post-epiphany results timeline */}
+                  <p>
+                    En combinant cette approche avec ma stratégie de marketing
+                    organique, les résultats ont explosé. Mon app est passée de
+                    quelques centaines de dollars par mois à{" "}
                     <span className="text-sky-400 font-semibold">
                       140 000$/an de revenus récurrents
                     </span>
-                    . Assez pour en vivre sans trop ouvrir mon ordinateur.
+                    . Assez pour en vivre confortablement, sans patron, sans
+                    horaires, depuis n&apos;importe où dans le monde.
                   </p>
-                  <p>
-                    J&apos;ai fait toutes les erreurs possibles. Mais
-                    j&apos;ai surtout découvert une stratégie et un workflow
-                    qui permettent de créer une app rentable à coup sûr.
-                    C&apos;est exactement ce que je veux te partager dans
-                    cette formation.
+
+                  {/* Open loop toward the method */}
+                  <p className="text-white font-medium">
+                    Et maintenant, j&apos;ai condensé tout ce que j&apos;ai
+                    appris en une méthode structurée. Voici comment elle
+                    fonctionne...
                   </p>
                 </div>
 
@@ -83,8 +116,8 @@ export default function InstructorV4() {
                 <div className="flex flex-wrap gap-2 mt-6">
                   {[
                     "Créateur de Shinobi Japanese",
+                    "140K$/an de revenus récurrents",
                     "YouTubeur apps mobiles",
-                    /* PLACEHOLDER: ajouter d'autres credentials */
                   ].map((h, i) => (
                     <span
                       key={i}

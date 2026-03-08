@@ -113,9 +113,20 @@ export default function SolutionV4() {
             href="#pricing"
             className="inline-flex items-center justify-center rounded-full bg-sky-500 px-6 py-3 text-sm font-semibold text-white hover:bg-sky-400 transition-colors shadow-lg shadow-sky-500/25"
           >
-            Accéder maintenant
+            Lancer mon app maintenant
           </a>
         </motion.div>
+
+        {/* Open loop — transition to proof */}
+        <motion.p
+          className="mt-8 text-center text-lg font-semibold text-white"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+        >
+          Mais ne me crois pas sur parole. Voici les résultats concrets...
+        </motion.p>
       </div>
 
       <div className="relative mt-20 before:absolute before:top-0 before:h-px before:w-[200vw] before:-left-[100vw] before:bg-white/10" />

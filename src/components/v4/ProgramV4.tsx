@@ -234,7 +234,7 @@ export default function ProgramV4() {
             href="#pricing"
             className="inline-flex items-center justify-center rounded-full bg-sky-500 px-6 py-3 text-sm font-semibold text-white hover:bg-sky-400 transition-colors shadow-lg shadow-sky-500/25"
           >
-            Accéder maintenant
+            Lancer mon app maintenant
           </a>
         </motion.div>
       </div>

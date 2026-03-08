@@ -13,7 +13,6 @@ export default function AgitationV4() {
           <div className="h-px flex-1 bg-white/10" />
         </div>
 
-        {/* Amplification — Kahneman: loss aversion > desire for gain */}
         <div className="max-w-2xl mx-auto text-center">
           <motion.h2
             className="text-[2.5rem]/10 font-medium tracking-tighter text-balance text-white"
@@ -32,21 +31,25 @@ export default function AgitationV4() {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.15 }}
           >
-            <p className="text-base/7 text-gray-400">
-              Dans 6 mois, tu seras exactement au même endroit. Toujours en
-              train de regarder des tutos. Toujours sans app. Toujours sans
-              revenus supplémentaires.
+            <p className="text-base/7 text-gray-300">
+              Tu te réveilles demain. Rien n&apos;a changé. Toujours le même
+              scroll sur YouTube. Toujours la même liste d&apos;idées qui ne
+              verra jamais le jour.
             </p>
-            <p className="text-base/7 text-gray-400">
-              Ou pire : tu auras une app terminée qui prend la poussière sur
-              l&apos;App Store avec 3 téléchargements par mois. Parce que
-              personne ne t&apos;a montré comment la faire connaître.
+            <p className="text-base/7 text-gray-300">
+              Tu te dis &quot;je m&apos;y mets ce week-end&quot;. Le week-end
+              passe. Tu regardes un autre tuto. Tu changes de framework. Tu
+              recommences à zéro. Encore.
             </p>
-            <p className="text-base/7 text-gray-400">
-              Pendant ce temps, d&apos;autres personnes, pas plus intelligentes
-              que toi, auront lancé leur app, trouvé les bons influenceurs,
-              créé du contenu viral, et commencé à générer des revenus
-              récurrents.
+            <p className="text-base/7 text-gray-300">
+              Dans 6 mois, tu seras exactement au même endroit. Dans 1 an
+              aussi.
+            </p>
+            <p className="text-lg font-medium text-white">
+              Pendant ce temps, d&apos;autres auront lancé leur app, trouvé
+              leurs premiers utilisateurs, et commencé à générer des revenus
+              récurrents. Pas parce qu&apos;ils sont plus intelligents que toi.
+              Parce qu&apos;ils ont arrêté d&apos;attendre.
             </p>
           </motion.div>
 
@@ -67,32 +70,41 @@ export default function AgitationV4() {
                   backgroundSize: "16px 16px",
                 }}
               />
-              <div className="relative">
-                <p className="text-xl font-medium tracking-tight text-white mb-3">
-                  {/* PLACEHOLDER: adapter avec tes propres calculs */}
-                  Chaque mois sans agir = un mois de revenus en moins
+              <div className="relative space-y-4">
+                <p className="text-lg font-medium tracking-tight text-white">
+                  100 abonnés x 9,99€/mois ={" "}
+                  <span className="text-red-400 font-bold">
+                    12 000€/an de revenus récurrents
+                  </span>
                 </p>
-                <p className="text-sm text-gray-500">
-                  Une app avec seulement 100 abonnés à 9,99€/mois = près de
-                  12 000€/an de revenus récurrents. Combien de mois as-tu déjà
-                  perdu ?
+                <div className="h-px bg-white/10" />
+                <p className="text-2xl font-bold tracking-tight text-white">
+                  Chaque jour qui passe sans agir ={" "}
+                  <span className="text-red-400">33€ de revenus perdus</span>
+                </p>
+                <p className="text-base text-gray-300">
+                  Ça fait combien de jours que tu &quot;réfléchis&quot; ?
+                  Multiplie par 33. C&apos;est ce que ça t&apos;a déjà coûté.
                 </p>
               </div>
             </div>
           </motion.div>
 
-          {/* Transition toward solution */}
-          <motion.p
-            className="mt-8 text-base font-medium text-gray-300"
+          {/* Open loop toward solution */}
+          <motion.div
+            className="mt-10 space-y-3"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.4 }}
           >
-            La bonne nouvelle ? Il existe maintenant une méthode pour créer,
-            lancer et marketer ton app en 28 jours, même si tu ne sais pas
-            coder ni faire du marketing.
-          </motion.p>
+            <p className="text-lg font-medium text-white">
+              Mais il y a une bonne nouvelle.
+            </p>
+            <p className="text-base text-gray-300">
+              Quelqu&apos;un a déjà fait toutes les erreurs pour toi...
+            </p>
+          </motion.div>
         </div>
       </div>
 

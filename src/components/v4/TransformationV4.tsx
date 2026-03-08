@@ -106,7 +106,7 @@ export default function TransformationV4() {
           viewport={{ once: true }}
           transition={{ delay: 0.3 }}
         >
-          Ça te donne envie ? Voici comment y arriver :
+          Ça te donne envie ? Voici les preuves que c&apos;est possible...
         </motion.p>
       </div>
 

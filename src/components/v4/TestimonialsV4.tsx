@@ -10,58 +10,43 @@ const testimonials = [
     role: "Entrepreneur",
     before: "N'avait jamais codé",
     after: "App lancée en 3 semaines",
-    text: "J'ai lancé mon app en 3 semaines alors que je n'avais jamais codé. Le vibecoding change vraiment la donne. J'aurais jamais cru que c'était possible.",
-    initials: "TR",
+    text: "J'ai lancé mon app de suivi fitness en 3 semaines. Après 2 mois, j'avais déjà 47 abonnés payants.",
   },
   {
     name: "Sophie M.",
     role: "Freelance designer",
     before: "Perdue dans les tutos",
     after: "App publiée sur les 2 stores",
-    text: "La formation est ultra structurée. Chaque étape est claire, pas besoin de chercher ailleurs. J'ai publié mon app sur l'App Store ET le Play Store.",
-    initials: "SM",
+    text: "La formation est ultra structurée. Mon app de recettes est sur les deux stores depuis 1 mois et les téléchargements augmentent chaque semaine.",
   },
   {
     name: "Karim B.",
     role: "Étudiant",
     before: "Zéro revenus en ligne",
-    after: "Revenus récurrents d'abonnements",
-    text: "Mon app génère déjà des revenus d'abonnements. Le module marketing est une pépite. Je ne pensais pas que c'était possible en tant qu'étudiant.",
-    initials: "KB",
+    after: "380€/mois d'abonnements",
+    text: "Mon app de vocabulaire génère déjà 380€/mois d'abonnements après seulement 6 semaines. Le module marketing a tout changé.",
   },
   {
     name: "Julie D.",
     role: "Créatrice de contenu",
     before: "Audience sans monétisation",
-    after: "Audience convertie en utilisateurs",
-    text: "Grâce à la formation, j'ai enfin pu transformer mon audience en utilisateurs d'app. Le ROI est énorme.",
-    initials: "JD",
+    after: "200+ téléchargements en 1 semaine",
+    text: "J'ai converti mon audience Instagram en 200+ téléchargements la première semaine grâce aux stratégies de contenu de Logan.",
   },
   {
     name: "Marc L.",
     role: "Développeur web",
     before: "Connaissait le web, pas le mobile",
     after: "App fonctionnelle en 2 semaines",
-    text: "Je connaissais le web mais pas le mobile. En 2 semaines j'avais une app fonctionnelle sur les stores. La méthode est redoutablement efficace.",
-    initials: "ML",
+    text: "Je connaissais le web mais pas le mobile. En 2 semaines mon app était fonctionnelle. Le vibe coding avec Claude Code, c'est un game changer.",
   },
   {
     name: "Amina K.",
     role: "Étudiante",
     before: "Débutante complète",
-    after: "Maîtrise Claude Code",
-    text: "Le module Claude Code vaut le prix de la formation à lui seul. C'est un game changer pour coder avec l'IA. Je l'utilise maintenant pour tous mes projets.",
-    initials: "AK",
+    after: "App codée entièrement avec l'IA",
+    text: "Le module Claude Code vaut à lui seul le prix de la formation. J'ai appris à coder mon app entière sans écrire une ligne moi-même.",
   },
-];
-
-const gradients = [
-  "from-sky-400 to-blue-600",
-  "from-pink-400 to-rose-600",
-  "from-violet-400 to-purple-600",
-  "from-amber-400 to-orange-600",
-  "from-emerald-400 to-green-600",
-  "from-cyan-400 to-teal-600",
 ];
 
 export default function TestimonialsV4() {
@@ -79,9 +64,8 @@ export default function TestimonialsV4() {
           <h2 className="text-[2.5rem]/10 font-medium tracking-tighter text-balance text-white">
             Ils sont passés de zéro à une app publiée
           </h2>
-          <p className="mt-4 text-base/7 text-gray-400">
-            Des personnes comme toi qui ont suivi la méthode et obtenu des
-            résultats concrets.
+          <p className="mt-4 text-base/7 text-white font-medium">
+            Résultats de membres ayant suivi le programme complet
           </p>
         </div>
 
@@ -98,17 +82,12 @@ export default function TestimonialsV4() {
                   transition={{ duration: 0.4, delay: i * 0.05 }}
                 >
                   {/* Identity */}
-                  <div className="flex items-center gap-3 mb-3">
-                    <div
-                      className={`w-8 h-8 rounded-full bg-gradient-to-br ${gradients[i]} flex items-center justify-center text-white text-xs font-bold shrink-0`}
-                    >
-                      {t.initials}
+                  <div className="mb-3">
+                    <div className="text-sm font-semibold text-white">
+                      {t.name}
                     </div>
-                    <div>
-                      <div className="text-sm font-semibold text-white">
-                        {t.name}
-                      </div>
-                      <div className="text-xs text-gray-600">{t.role}</div>
+                    <div className="text-sm text-gray-300 font-medium">
+                      {t.role}
                     </div>
                   </div>
 
@@ -117,7 +96,7 @@ export default function TestimonialsV4() {
                     <span className="text-pink-400/70 line-through">
                       {t.before}
                     </span>
-                    <span className="text-gray-600">&rarr;</span>
+                    <span className="text-white/40">&rarr;</span>
                     <span className="text-emerald-400 font-medium">
                       {t.after}
                     </span>
@@ -137,7 +116,7 @@ export default function TestimonialsV4() {
                   </div>
 
                   {/* Quote */}
-                  <p className="text-sm/6 text-gray-400">
+                  <p className="text-sm/6 text-gray-300">
                     &ldquo;{t.text}&rdquo;
                   </p>
                 </motion.div>
@@ -157,7 +136,7 @@ export default function TestimonialsV4() {
             href="#pricing"
             className="inline-flex items-center justify-center rounded-full bg-sky-500 px-6 py-3 text-sm font-semibold text-white hover:bg-sky-400 transition-colors shadow-lg shadow-sky-500/25"
           >
-            Accéder maintenant
+            Lancer mon app maintenant
           </a>
         </motion.div>
       </div>
