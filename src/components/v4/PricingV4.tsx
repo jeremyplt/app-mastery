@@ -349,12 +349,12 @@ export default function PricingV4() {
 
                 <div className="mb-1">
                   <span className="text-4xl sm:text-5xl font-medium tracking-tighter text-white">
-                    1 997
+                    2 999
                   </span>
                   <span className="text-xl text-white/60 ml-1">$</span>
                 </div>
                 <p className="text-base text-amber-400 font-semibold mb-1">
-                  ou 3x 697$
+                  ou 3x 1 099$
                 </p>
                 <p className="text-sm text-white/60 font-medium mb-8">
                   Paiement unique | accès à vie
