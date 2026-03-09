@@ -51,23 +51,28 @@ const vipFeatures = [
 export default function PricingV4() {
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
 
-  async function handleCheckout(plan: string) {
+  function handleCheckout(plan: string) {
     setLoadingPlan(plan);
-    try {
-      const res = await fetch("/api/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan }),
+    // Let the browser paint the spinner before starting the fetch
+    requestAnimationFrame(() => {
+      requestAnimationFrame(async () => {
+        try {
+          const res = await fetch("/api/checkout", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ plan }),
+          });
+          const data = await res.json();
+          if (data.url) {
+            window.location.href = data.url;
+          } else {
+            setLoadingPlan(null);
+          }
+        } catch {
+          setLoadingPlan(null);
+        }
       });
-      const data = await res.json();
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        setLoadingPlan(null);
-      }
-    } catch {
-      setLoadingPlan(null);
-    }
+    });
   }
 
   return (
