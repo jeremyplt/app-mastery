@@ -37,12 +37,18 @@ export async function POST(req: NextRequest) {
     const { priceId } = PLANS[plan];
     const isRecurring = plan.endsWith("-3x");
 
+    const isEssentiel = plan === "essentiel";
+    const successUrl = isEssentiel
+      ? `${req.nextUrl.origin}/membres?achat=ok`
+      : `${req.nextUrl.origin}/formation/merci?session_id={CHECKOUT_SESSION_ID}`;
+
     const session = await stripe.checkout.sessions.create({
       mode: isRecurring ? "subscription" : "payment",
       line_items: [{ price: priceId, quantity: 1 }],
-      success_url: `${req.nextUrl.origin}/formation/merci?session_id={CHECKOUT_SESSION_ID}`,
+      success_url: successUrl,
       cancel_url: `${req.nextUrl.origin}/formation#pricing`,
       allow_promotion_codes: true,
+      metadata: { plan },
     });
 
     return NextResponse.json({ url: session.url });

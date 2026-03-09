@@ -31,20 +31,25 @@ export async function POST(req: NextRequest) {
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
     const email = session.customer_email || session.customer_details?.email;
+    const plan = session.metadata?.plan;
 
-    if (email) {
+    if (!email) {
+      console.error("No email found in checkout session:", session.id);
+      return NextResponse.json({ received: true });
+    }
+
+    console.log(`Checkout completed: ${email}, plan: ${plan}`);
+
+    // Only send Skool invite for Complet and VIP plans
+    if (plan !== "essentiel") {
       try {
         const skoolRes = await fetch(
           `${SKOOL_WEBHOOK_URL}?email=${encodeURIComponent(email)}`
         );
-        console.log(
-          `Skool invite sent for ${email}: ${skoolRes.status}`
-        );
+        console.log(`Skool invite sent for ${email}: ${skoolRes.status}`);
       } catch (err) {
         console.error("Skool invite failed:", err);
       }
-    } else {
-      console.error("No email found in checkout session:", session.id);
     }
   }
 
