@@ -1,43 +1,39 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2026-02-25.clover",
-});
+function getStripe() {
+  return new Stripe(process.env.STRIPE_SECRET_KEY!, {
+    apiVersion: "2026-02-25.clover",
+  });
+}
 
-const PLANS: Record<
-  string,
-  { priceId: string; paymentPriceId?: string }
-> = {
-  essentiel: {
-    priceId: process.env.STRIPE_PRICE_ESSENTIEL!,
-  },
-  complet: {
-    priceId: process.env.STRIPE_PRICE_COMPLET!,
-  },
-  "complet-3x": {
-    priceId: process.env.STRIPE_PRICE_COMPLET_3X!,
-  },
-  vip: {
-    priceId: process.env.STRIPE_PRICE_VIP!,
-  },
-  "vip-3x": {
-    priceId: process.env.STRIPE_PRICE_VIP_3X!,
-  },
-};
+function getPriceId(plan: string): string | null {
+  const map: Record<string, string | undefined> = {
+    essentiel: process.env.STRIPE_PRICE_ESSENTIEL,
+    complet: process.env.STRIPE_PRICE_COMPLET,
+    "complet-3x": process.env.STRIPE_PRICE_COMPLET_3X,
+    vip: process.env.STRIPE_PRICE_VIP,
+    "vip-3x": process.env.STRIPE_PRICE_VIP_3X,
+  };
+  return map[plan] || null;
+}
 
 export async function POST(req: NextRequest) {
   try {
     const { plan } = await req.json();
+    const priceId = getPriceId(plan);
 
-    if (!plan || !PLANS[plan]) {
-      return NextResponse.json({ error: "Plan invalide" }, { status: 400 });
+    if (!plan || !priceId) {
+      return NextResponse.json(
+        { error: `Plan invalide: ${plan}` },
+        { status: 400 }
+      );
     }
 
-    const { priceId } = PLANS[plan];
+    const stripe = getStripe();
     const isRecurring = plan.endsWith("-3x");
-
     const isEssentiel = plan === "essentiel";
+
     const successUrl = isEssentiel
       ? `${req.nextUrl.origin}/membres?achat=ok`
       : `${req.nextUrl.origin}/formation/merci?session_id={CHECKOUT_SESSION_ID}`;
@@ -55,7 +51,7 @@ export async function POST(req: NextRequest) {
   } catch (err) {
     console.error("Checkout error:", err);
     return NextResponse.json(
-      { error: "Une erreur est survenue" },
+      { error: String(err) },
       { status: 500 }
     );
   }
