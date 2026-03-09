@@ -7,12 +7,20 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 const SKOOL_WEBHOOK_URL = process.env.SKOOL_WEBHOOK_URL!;
 
-async function addBrevoContactWithTag(email: string, tag: string) {
+// Brevo list IDs per plan
+const BREVO_LIST_IDS: Record<string, number> = {
+  essentiel: 6,
+  complet: 7,
+  vip: 8,
+};
+
+async function addBrevoContactToList(email: string, tag: string) {
   const BREVO_API_KEY = process.env.BREVO_API_KEY;
   if (!BREVO_API_KEY) return;
 
+  const listId = BREVO_LIST_IDS[tag];
+
   try {
-    // Create or update contact with tag
     await fetch("https://api.brevo.com/v3/contacts", {
       method: "POST",
       headers: {
@@ -22,28 +30,14 @@ async function addBrevoContactWithTag(email: string, tag: string) {
       body: JSON.stringify({
         email,
         updateEnabled: true,
+        listIds: listId ? [listId] : [],
         attributes: {
-          PLAN: tag,
+          APP_MASTERY_PLAN: tag,
         },
       }),
     });
 
-    // Also add tag via the events endpoint for automation triggers
-    await fetch("https://api.brevo.com/v3/contacts", {
-      method: "PUT",
-      headers: {
-        "api-key": BREVO_API_KEY,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email,
-        attributes: {
-          PLAN: tag,
-        },
-      }),
-    });
-
-    console.log(`Brevo contact updated: ${email}, tag: ${tag}`);
+    console.log(`Brevo contact added: ${email}, list: ${listId}, tag: ${tag}`);
   } catch (err) {
     console.error("Brevo contact update failed:", err);
   }
@@ -80,15 +74,14 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ received: true });
     }
 
-    // Determine the tag based on plan
     let tag = "essentiel";
     if (plan === "complet" || plan === "complet-3x") tag = "complet";
     if (plan === "vip" || plan === "vip-3x") tag = "vip";
 
     console.log(`Checkout completed: ${email}, plan: ${plan}, tag: ${tag}`);
 
-    // Add contact to Brevo with tag (triggers automation)
-    await addBrevoContactWithTag(email, tag);
+    // Add contact to Brevo list (triggers automation)
+    await addBrevoContactToList(email, tag);
 
     // Send Skool invite for Complet and VIP plans
     if (tag !== "essentiel") {
