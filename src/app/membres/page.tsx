@@ -53,14 +53,14 @@ function LoginForm() {
               Espace Membres
             </span>
             <h1 className="mt-4 text-2xl sm:text-3xl font-medium tracking-tighter text-white">
-              Accede a tes cours
+              Accède à tes cours
             </h1>
           </div>
 
           {urlError === "expired" && (
             <div className="mb-6 rounded-xl bg-red-500/10 border border-red-500/20 p-4 text-center">
               <p className="text-sm text-red-400">
-                Ce lien a expire. Demande un nouveau lien ci-dessous.
+                Ce lien a expiré. Demande un nouveau lien ci-dessous.
               </p>
             </div>
           )}
@@ -72,19 +72,19 @@ function LoginForm() {
                   <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
                 </svg>
               </div>
-              <h2 className="text-lg font-semibold text-white">Verifie ta boite mail</h2>
+              <h2 className="text-lg font-semibold text-white">Vérifie ta boîte mail</h2>
               <p className="mt-2 text-sm text-gray-400">
-                Un lien de connexion a ete envoye a <strong className="text-white">{email}</strong>. Clique dessus pour acceder a tes cours.
+                Un lien de connexion a été envoyé à <strong className="text-white">{email}</strong>. Clique dessus pour accéder à tes cours.
               </p>
               <p className="mt-4 text-xs text-gray-500">
-                Pense a verifier tes spams.
+                Pense à vérifier tes spams.
               </p>
             </div>
           ) : (
             <div className="rounded-2xl bg-white/5 border border-white/10 p-8">
               <form onSubmit={handleSubmit}>
                 <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Email utilise lors de l&apos;achat
+                  Email utilisé lors de l&apos;achat
                 </label>
                 <input
                   type="email"

@@ -31,15 +31,15 @@ export default function FormationMerciPage() {
               </span>
 
               <h1 className="mt-4 text-3xl sm:text-4xl font-medium tracking-tighter text-white">
-                Ton acces est{" "}
+                Ton accès est{" "}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-cyan-300 to-sky-500">
-                  confirme.
+                  confirmé.
                 </span>
               </h1>
 
               <p className="mt-4 text-base text-gray-400">
                 Tu vas recevoir un email avec tes identifiants de connexion dans
-                les prochaines minutes. Verifie tes spams si tu ne le vois pas.
+                les prochaines minutes. Vérifie tes spams si tu ne le vois pas.
               </p>
 
               <motion.div

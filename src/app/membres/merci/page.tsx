@@ -38,11 +38,11 @@ export default function MembresMerciPage() {
               </h1>
 
               <p className="mt-4 text-base text-gray-300">
-                Ton acces a App Mastery Essentiel est confirme. Tu vas recevoir un email de confirmation dans les prochaines minutes.
+                Ton accès à App Mastery Essentiel est confirmé. Tu vas recevoir un email de confirmation dans les prochaines minutes.
               </p>
 
               <p className="mt-2 text-base text-gray-300">
-                Pour acceder a tes cours, connecte-toi avec l&apos;email que tu as utilise lors de ton achat.
+                Pour accéder à tes cours, connecte-toi avec l&apos;email que tu as utilisé lors de ton achat.
               </p>
 
               <motion.div
@@ -68,7 +68,7 @@ export default function MembresMerciPage() {
                       d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9"
                     />
                   </svg>
-                  Acceder a mes cours
+                  Accéder à mes cours
                 </a>
               </motion.div>
             </motion.div>
