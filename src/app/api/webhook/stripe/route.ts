@@ -1,11 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2026-02-25.clover",
-});
+function getStripe() {
+  return new Stripe(process.env.STRIPE_SECRET_KEY!, {
+    apiVersion: "2026-02-25.clover",
+  });
+}
 
-const SKOOL_WEBHOOK_URL = process.env.SKOOL_WEBHOOK_URL!;
+function getSkoolWebhookUrl() {
+  return process.env.SKOOL_WEBHOOK_URL!;
+}
 
 // Brevo list IDs per plan
 const BREVO_LIST_IDS: Record<string, number> = {
@@ -54,6 +58,7 @@ export async function POST(req: NextRequest) {
   let event: Stripe.Event;
 
   try {
+    const stripe = getStripe();
     event = stripe.webhooks.constructEvent(
       body,
       signature,
@@ -87,7 +92,7 @@ export async function POST(req: NextRequest) {
     if (tag !== "essentiel") {
       try {
         const skoolRes = await fetch(
-          `${SKOOL_WEBHOOK_URL}?email=${encodeURIComponent(email)}`
+          `${getSkoolWebhookUrl()}?email=${encodeURIComponent(email)}`
         );
         console.log(`Skool invite sent for ${email}: ${skoolRes.status}`);
       } catch (err) {
