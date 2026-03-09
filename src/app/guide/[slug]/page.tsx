@@ -84,7 +84,8 @@ export default function GuidePage() {
                 <div className="relative rounded-xl bg-white/5 overflow-hidden">
                   <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-amber-500/5 via-transparent to-orange-500/5" />
 
-                  <div className="relative px-5 py-8 sm:px-12 sm:py-16 lg:py-20 max-w-2xl">
+                  <div className="grid lg:grid-cols-2 gap-0">
+                  <div className="relative px-5 py-8 sm:px-12 sm:py-16 lg:py-20">
                     <motion.h1
                       className="text-3xl/tight sm:text-4xl/tight lg:text-[3rem]/tight font-medium tracking-tighter text-balance text-white"
                       initial={{ opacity: 0, y: 20 }}
@@ -154,6 +155,38 @@ export default function GuidePage() {
                         moment.
                       </p>
                     </motion.form>
+                  </div>
+
+                  {/* Right side - Locked document preview (desktop only) */}
+                  <div className="hidden lg:flex items-center justify-center p-6">
+                    <motion.div
+                      className="relative w-full max-w-[380px] aspect-[3/4] rounded-lg overflow-hidden shadow-2xl shadow-black/40"
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.6, delay: 0.3 }}
+                    >
+                      {/* Real document page */}
+                      <img
+                        src="/proof/guide-preview.jpg"
+                        alt=""
+                        className="absolute inset-0 w-full h-full object-cover object-top select-none"
+                        style={{ filter: "blur(2px)" }}
+                        draggable={false}
+                      />
+
+                      {/* Lock overlay */}
+                      <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-950/50 backdrop-blur-[1px]">
+                        <div className="w-14 h-14 rounded-full bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
+                          <svg className="w-7 h-7 text-amber-400" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                          </svg>
+                        </div>
+                        <p className="mt-3 text-sm font-medium text-white/80">
+                          Entre ton email pour débloquer
+                        </p>
+                      </div>
+                    </motion.div>
+                  </div>
                   </div>
                 </div>
               </div>

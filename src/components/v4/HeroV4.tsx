@@ -5,7 +5,7 @@ import Image from "next/image";
 
 export default function HeroV4() {
   return (
-    <section className="relative pt-6 pb-10 sm:pt-16 lg:pt-32 lg:pb-12">
+    <section className="relative pt-6 pb-10 sm:pt-16 lg:pt-20 lg:pb-12">
       <div className="relative before:absolute before:bottom-0 before:h-px before:w-[200vw] before:-left-[100vw] before:bg-white/10" />
 
       <div className="px-4 sm:px-6 lg:px-8">
