@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Check, X } from "lucide-react";
 
@@ -47,19 +48,28 @@ const vipFeatures = [
   "Accès direct et illimité pour poser tes questions",
 ];
 
-async function handleCheckout(plan: string) {
-  const res = await fetch("/api/checkout", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ plan }),
-  });
-  const data = await res.json();
-  if (data.url) {
-    window.location.href = data.url;
-  }
-}
-
 export default function PricingV4() {
+  const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
+
+  async function handleCheckout(plan: string) {
+    setLoadingPlan(plan);
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ plan }),
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        setLoadingPlan(null);
+      }
+    } catch {
+      setLoadingPlan(null);
+    }
+  }
+
   return (
     <section id="pricing" className="relative py-20">
       <div className="px-4 sm:px-6 lg:px-8">
@@ -195,9 +205,15 @@ export default function PricingV4() {
                 <div className="mt-auto">
                   <button
                     onClick={() => handleCheckout("essentiel")}
-                    className="block w-full rounded-full border-2 border-white/20 py-3 text-sm font-semibold text-white text-center hover:border-white/40 transition-colors cursor-pointer"
+                    disabled={loadingPlan !== null}
+                    className="block w-full rounded-full border-2 border-white/20 py-3 text-sm font-semibold text-white text-center hover:border-white/40 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    Choisir Essentiel
+                    {loadingPlan === "essentiel" ? (
+                      <span className="inline-flex items-center gap-2">
+                        <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        Chargement...
+                      </span>
+                    ) : "Choisir Essentiel"}
                   </button>
                 </div>
               </div>
@@ -282,9 +298,15 @@ export default function PricingV4() {
                 <div className="mt-auto">
                   <button
                     onClick={() => handleCheckout("complet")}
-                    className="block w-full rounded-full bg-sky-500 py-4 text-base font-bold text-white hover:bg-sky-400 transition-colors shadow-lg shadow-sky-500/25 cursor-pointer"
+                    disabled={loadingPlan !== null}
+                    className="block w-full rounded-full bg-sky-500 py-4 text-base font-bold text-white hover:bg-sky-400 transition-colors shadow-lg shadow-sky-500/25 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    Lancer mon app maintenant
+                    {loadingPlan === "complet" ? (
+                      <span className="inline-flex items-center gap-2">
+                        <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        Chargement...
+                      </span>
+                    ) : "Lancer mon app maintenant"}
                   </button>
 
                   <p className="text-sm text-sky-400 mt-4 font-semibold">
@@ -348,9 +370,15 @@ export default function PricingV4() {
                 <div className="mt-auto">
                   <button
                     onClick={() => handleCheckout("vip")}
-                    className="block w-full rounded-full bg-amber-500 py-3.5 text-sm font-bold text-white text-center hover:bg-amber-400 transition-colors shadow-lg shadow-amber-500/25 cursor-pointer"
+                    disabled={loadingPlan !== null}
+                    className="block w-full rounded-full bg-amber-500 py-3.5 text-sm font-bold text-white text-center hover:bg-amber-400 transition-colors shadow-lg shadow-amber-500/25 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    Devenir VIP
+                    {loadingPlan === "vip" ? (
+                      <span className="inline-flex items-center gap-2">
+                        <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        Chargement...
+                      </span>
+                    ) : "Devenir VIP"}
                   </button>
                 </div>
               </div>
