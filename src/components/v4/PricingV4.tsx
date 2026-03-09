@@ -210,7 +210,7 @@ export default function PricingV4() {
                   >
                     {loadingPlan === "essentiel" ? (
                       <span className="inline-flex items-center gap-2">
-                        <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
                         Chargement...
                       </span>
                     ) : "Choisir Essentiel"}
@@ -303,7 +303,7 @@ export default function PricingV4() {
                   >
                     {loadingPlan === "complet" ? (
                       <span className="inline-flex items-center gap-2">
-                        <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
                         Chargement...
                       </span>
                     ) : "Lancer mon app maintenant"}
@@ -375,7 +375,7 @@ export default function PricingV4() {
                   >
                     {loadingPlan === "vip" ? (
                       <span className="inline-flex items-center gap-2">
-                        <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
                         Chargement...
                       </span>
                     ) : "Devenir VIP"}
