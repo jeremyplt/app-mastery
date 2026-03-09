@@ -47,6 +47,18 @@ const vipFeatures = [
   "Accès direct et illimité pour poser tes questions",
 ];
 
+async function handleCheckout(plan: string) {
+  const res = await fetch("/api/checkout", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ plan }),
+  });
+  const data = await res.json();
+  if (data.url) {
+    window.location.href = data.url;
+  }
+}
+
 export default function PricingV4() {
   return (
     <section id="pricing" className="relative py-20">
@@ -181,12 +193,12 @@ export default function PricingV4() {
                 </div>
 
                 <div className="mt-auto">
-                  <a
-                    href="#"
-                    className="block w-full rounded-full border-2 border-white/20 py-3 text-sm font-semibold text-white text-center hover:border-white/40 transition-colors"
+                  <button
+                    onClick={() => handleCheckout("essentiel")}
+                    className="block w-full rounded-full border-2 border-white/20 py-3 text-sm font-semibold text-white text-center hover:border-white/40 transition-colors cursor-pointer"
                   >
                     Choisir Essentiel
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>
@@ -268,12 +280,12 @@ export default function PricingV4() {
                 </div>
 
                 <div className="mt-auto">
-                  <a
-                    href="#"
-                    className="block w-full rounded-full bg-sky-500 py-4 text-base font-bold text-white hover:bg-sky-400 transition-colors shadow-lg shadow-sky-500/25"
+                  <button
+                    onClick={() => handleCheckout("complet")}
+                    className="block w-full rounded-full bg-sky-500 py-4 text-base font-bold text-white hover:bg-sky-400 transition-colors shadow-lg shadow-sky-500/25 cursor-pointer"
                   >
                     Lancer mon app maintenant
-                  </a>
+                  </button>
 
                   <p className="text-sm text-sky-400 mt-4 font-semibold">
                     Tu reçois tes identifiants dans 2 minutes
@@ -334,12 +346,12 @@ export default function PricingV4() {
                 </div>
 
                 <div className="mt-auto">
-                  <a
-                    href="#"
-                    className="block w-full rounded-full bg-amber-500 py-3.5 text-sm font-bold text-white text-center hover:bg-amber-400 transition-colors shadow-lg shadow-amber-500/25"
+                  <button
+                    onClick={() => handleCheckout("vip")}
+                    className="block w-full rounded-full bg-amber-500 py-3.5 text-sm font-bold text-white text-center hover:bg-amber-400 transition-colors shadow-lg shadow-amber-500/25 cursor-pointer"
                   >
                     Devenir VIP
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>
