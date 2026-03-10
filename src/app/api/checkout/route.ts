@@ -45,6 +45,12 @@ export async function POST(req: NextRequest) {
       cancel_url: `${req.nextUrl.origin}/formation#pricing`,
       allow_promotion_codes: true,
       metadata: { plan },
+      ...(isRecurring && {
+        subscription_data: {
+          metadata: { plan },
+          cancel_at: Math.floor(Date.now() / 1000) + 85 * 24 * 60 * 60,
+        },
+      }),
     });
 
     return NextResponse.json({ url: session.url });
