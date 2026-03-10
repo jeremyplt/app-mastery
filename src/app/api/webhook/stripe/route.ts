@@ -86,17 +86,36 @@ export async function POST(req: NextRequest) {
 
     console.log(`Checkout completed: ${email}, plan: ${plan}, tag: ${tag}`);
 
-    // Auto-cancel 3x subscriptions after 3 payments (85 days)
+    // Auto-cancel 3x subscriptions after 3 payments using a subscription schedule
     if (plan?.endsWith("-3x") && session.subscription) {
       try {
         const stripe = getStripe();
-        const cancelAt = Math.floor(Date.now() / 1000) + 85 * 24 * 60 * 60;
-        await stripe.subscriptions.update(session.subscription as string, {
-          cancel_at: cancelAt,
+        const subscriptionId = session.subscription as string;
+
+        // Convert the subscription into a schedule
+        const schedule = await stripe.subscriptionSchedules.create({
+          from_subscription: subscriptionId,
         });
-        console.log(`Subscription ${session.subscription} set to cancel at ${new Date(cancelAt * 1000).toISOString()}`);
+
+        // Update the schedule: set end_behavior to cancel and fix phase to 3 months
+        const phase = schedule.phases[0];
+        await stripe.subscriptionSchedules.update(schedule.id, {
+          end_behavior: "cancel",
+          phases: [
+            {
+              items: phase.items.map((item) => ({
+                price: typeof item.price === "string" ? item.price : item.price.id,
+                quantity: item.quantity ?? 1,
+              })),
+              start_date: phase.start_date,
+              end_date: phase.start_date + 3 * 30 * 24 * 60 * 60,
+            },
+          ],
+        });
+
+        console.log(`Subscription schedule ${schedule.id} created for ${subscriptionId} (3 payments then cancel)`);
       } catch (err) {
-        console.error("Failed to set subscription cancel_at:", err);
+        console.error("Failed to create subscription schedule:", err);
       }
     }
 
