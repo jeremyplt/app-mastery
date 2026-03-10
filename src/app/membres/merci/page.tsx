@@ -1,6 +1,68 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
+
+interface OrderInfo {
+  email: string | null;
+  plan: string;
+  planKey: string;
+  amount: number | null;
+  currency: string;
+}
+
+function OrderSummary() {
+  const searchParams = useSearchParams();
+  const sessionId = searchParams.get("session_id");
+  const [order, setOrder] = useState<OrderInfo | null>(null);
+
+  useEffect(() => {
+    if (!sessionId) return;
+    fetch(`/api/checkout/session?session_id=${sessionId}`)
+      .then((r) => r.json())
+      .then(setOrder)
+      .catch(() => {});
+  }, [sessionId]);
+
+  if (!order) return null;
+
+  return (
+    <motion.div
+      className="mt-8 rounded-2xl border border-white/10 bg-white/5 p-6 text-left"
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.2 }}
+    >
+      <h2 className="text-lg font-semibold text-white mb-4">
+        Résumé de ta commande
+      </h2>
+      <div className="space-y-3">
+        <div className="flex justify-between">
+          <span className="text-gray-400">Plan</span>
+          <span className="font-semibold text-sky-400">
+            App Mastery {order.plan}
+          </span>
+        </div>
+        {order.email && (
+          <div className="flex justify-between">
+            <span className="text-gray-400">Email</span>
+            <span className="text-white">{order.email}</span>
+          </div>
+        )}
+        {order.amount !== null && (
+          <div className="flex justify-between">
+            <span className="text-gray-400">Montant</span>
+            <span className="text-white">
+              {order.amount.toLocaleString("fr-FR")}
+              {order.currency === "EUR" ? "€" : ` ${order.currency}`}
+            </span>
+          </div>
+        )}
+      </div>
+    </motion.div>
+  );
+}
 
 export default function MembresMerciPage() {
   return (
@@ -38,12 +100,18 @@ export default function MembresMerciPage() {
               </h1>
 
               <p className="mt-4 text-base text-gray-300">
-                Ton accès à App Mastery Essentiel est confirmé. Tu vas recevoir un email de confirmation dans les prochaines minutes.
+                Ton accès à App Mastery est confirmé. Tu vas recevoir un email
+                de confirmation dans les prochaines minutes.
               </p>
 
               <p className="mt-2 text-base text-gray-300">
-                Pour accéder à tes cours, connecte-toi avec l&apos;email que tu as utilisé lors de ton achat.
+                Pour accéder à tes cours, connecte-toi avec l&apos;email que tu
+                as utilisé lors de ton achat.
               </p>
+
+              <Suspense fallback={null}>
+                <OrderSummary />
+              </Suspense>
 
               <motion.div
                 className="mt-10 flex flex-col sm:flex-row gap-4 justify-center"

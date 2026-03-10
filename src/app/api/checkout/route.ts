@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
     const isEssentiel = plan === "essentiel";
 
     const successUrl = isEssentiel
-      ? `${req.nextUrl.origin}/membres/merci`
+      ? `${req.nextUrl.origin}/membres/merci?session_id={CHECKOUT_SESSION_ID}`
       : `${req.nextUrl.origin}/formation/merci?session_id={CHECKOUT_SESSION_ID}`;
 
     const session = await stripe.checkout.sessions.create({
