@@ -33,6 +33,7 @@ export const guides: Record<string, Guide> = {
       "Télécharge la Piscine d'Epitech et commence à coder.",
     downloadLabel: "Télécharger le .zip",
     downloadUrl: "/downloads/piscine-epitech-q3w8f5.zip",
+    brevoListId: 12,
   },
   "prompt-50-saas": {
     slug: "prompt-50-saas",
@@ -52,6 +53,7 @@ export const guides: Record<string, Guide> = {
       "Télécharge les prompts et les 50 idées de SaaS.",
     downloadLabel: "Télécharger le PDF",
     downloadUrl: "/downloads/prompt-50-saas-h6j9t2.pdf",
+    brevoListId: 13,
   },
   "workflow-make": {
     slug: "workflow-make",
@@ -72,6 +74,7 @@ export const guides: Record<string, Guide> = {
     downloadLabel: "Accéder au Workflow",
     downloadUrl: "https://eu1.make.com/public/shared-scenario/adL8j2sR80t/japanese-learning-shorts-generator",
     isExternalLink: true,
+    brevoListId: 14,
   },
   monetisation: {
     slug: "monetisation",
@@ -91,6 +94,7 @@ export const guides: Record<string, Guide> = {
       "Télécharge le guide de monétisation et choisis le bon modèle pour ton app.",
     downloadLabel: "Télécharger le Guide",
     downloadUrl: "/downloads/monetisation-x7k2m9.pdf",
+    brevoListId: 15,
   },
   openclaw: {
     slug: "openclaw",
@@ -110,6 +114,7 @@ export const guides: Record<string, Guide> = {
       "Télécharge le guide et installe OpenClaw en quelques minutes.",
     downloadLabel: "Télécharger le Guide",
     downloadUrl: "/downloads/openclaw-guide-p4v1n8.pdf",
+    brevoListId: 16,
   },
 };
 
