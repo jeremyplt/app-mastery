@@ -1,4 +1,5 @@
 OBJET : 20 personnes nous ont déjà rejoints
+PREVIEW : Pendant que tu hésites, ils ont déjà commencé.
 ENVOI : J+3
 
 ---

@@ -1,4 +1,5 @@
 OBJET : Dernier jour. Dernier email.
+PREVIEW : Ce soir à minuit, c'est fini.
 ENVOI : J+6 (dernier jour, matin)
 
 ---

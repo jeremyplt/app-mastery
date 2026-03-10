@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #000; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+    .logo {
+      width: 256px;
+      height: 256px;
+      background: linear-gradient(135deg, #0a0a0a 0%, #111111 100%);
+      border-radius: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(56, 189, 248, 0.15);
+    }
+    .dot-grid {
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(rgba(255,255,255,0.1) 1px, transparent 1px);
+      background-size: 14px 14px;
+    }
+    .glow {
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.1), transparent 70%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .logo-inner {
+      position: relative;
+      text-align: center;
+    }
+    .logo-text {
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
+      font-size: 72px;
+      font-weight: 800;
+      letter-spacing: -4px;
+      background: linear-gradient(135deg, #38bdf8, #22d3ee);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1;
+    }
+    .logo-sub {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.5);
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="logo">
+    <div class="dot-grid"></div>
+    <div class="glow"></div>
+    <div class="logo-inner">
+      <div class="logo-text">AM</div>
+      <div class="logo-sub">App Mastery</div>
+    </div>
+  </div>
+</body>
+</html>

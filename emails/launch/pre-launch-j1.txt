@@ -1,4 +1,5 @@
 OBJET : Demain 9h. Sois prêt.
+PREVIEW : Les places sont limitées.
 ENVOI : J-1 (la veille du lancement)
 
 ---
