@@ -111,7 +111,7 @@ export async function POST(req: NextRequest) {
     if (tag !== "essentiel") {
       try {
         const skoolRes = await fetch(
-          `${getSkoolWebhookUrl()}?email=${encodeURIComponent(email)}`,
+          `${getSkoolWebhookUrl()}?email=${email}`,
           { method: "POST" }
         );
         console.log(`Skool invite sent for ${email}: ${skoolRes.status}`);
