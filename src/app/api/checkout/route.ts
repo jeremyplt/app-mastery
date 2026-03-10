@@ -49,6 +49,11 @@ export async function POST(req: NextRequest) {
         subscription_data: {
           metadata: { plan },
         },
+        custom_text: {
+          submit: {
+            message: "Paiement en 3 mensualités. Votre abonnement s'arrête automatiquement après le 3e paiement. Aucune action requise de votre part.",
+          },
+        },
       }),
     });
 
