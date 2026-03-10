@@ -48,7 +48,6 @@ export async function POST(req: NextRequest) {
       ...(isRecurring && {
         subscription_data: {
           metadata: { plan },
-          cancel_at: Math.floor(Date.now() / 1000) + 85 * 24 * 60 * 60,
         },
       }),
     });

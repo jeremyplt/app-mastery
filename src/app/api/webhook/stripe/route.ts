@@ -86,6 +86,20 @@ export async function POST(req: NextRequest) {
 
     console.log(`Checkout completed: ${email}, plan: ${plan}, tag: ${tag}`);
 
+    // Auto-cancel 3x subscriptions after 3 payments (85 days)
+    if (plan?.endsWith("-3x") && session.subscription) {
+      try {
+        const stripe = getStripe();
+        const cancelAt = Math.floor(Date.now() / 1000) + 85 * 24 * 60 * 60;
+        await stripe.subscriptions.update(session.subscription as string, {
+          cancel_at: cancelAt,
+        });
+        console.log(`Subscription ${session.subscription} set to cancel at ${new Date(cancelAt * 1000).toISOString()}`);
+      } catch (err) {
+        console.error("Failed to set subscription cancel_at:", err);
+      }
+    }
+
     // Add contact to Brevo list (triggers automation)
     try {
       await addBrevoContactToList(email, tag);

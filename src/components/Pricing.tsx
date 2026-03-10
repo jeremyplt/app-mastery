@@ -323,10 +323,6 @@ export default function Pricing() {
                       </span>
                     ) : "ou payer en 3x 347€"}
                   </button>
-
-                  <p className="text-base text-sky-400 mt-3 font-semibold">
-                    Tu reçois tes identifiants dans 2 minutes
-                  </p>
                 </div>
               </div>
             </div>
@@ -350,8 +346,8 @@ export default function Pricing() {
                 }}
               />
 
-              <div className="relative flex flex-col flex-1">
-                <span className="inline-flex items-center rounded-full bg-amber-500/10 px-3 py-1 text-xs font-bold tracking-wider uppercase text-amber-400 outline outline-amber-500/30 mb-6 self-start">
+              <div className="relative text-center flex flex-col flex-1">
+                <span className="inline-flex self-center items-center rounded-full bg-amber-500/10 px-3 py-1 text-xs font-bold tracking-wider uppercase text-amber-400 outline outline-amber-500/30 mb-6">
                   Exclusif
                 </span>
 
@@ -366,7 +362,7 @@ export default function Pricing() {
                 <p className="text-base text-amber-400 font-semibold mb-1">
                   ou 3x 1 099€
                 </p>
-                <div className="flex items-center gap-2 rounded-full bg-red-500/10 border border-red-500/30 px-3 py-1.5 mb-8 self-start">
+                <div className="flex items-center gap-2 rounded-full bg-red-500/10 border border-red-500/30 px-3 py-1.5 mb-8 self-center">
                   <span className="relative flex h-2 w-2">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500" />
