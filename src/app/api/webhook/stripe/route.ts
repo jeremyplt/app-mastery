@@ -86,26 +86,13 @@ export async function POST(req: NextRequest) {
 
     console.log(`Checkout completed: ${email}, plan: ${plan}, tag: ${tag}`);
 
-    // Track purchase in PostHog
-    if (process.env.POSTHOG_API_KEY) {
-      const ph = new PostHog(process.env.POSTHOG_API_KEY, {
-        host: "https://us.i.posthog.com",
-      });
-      ph.capture({
-        distinctId: email,
-        event: "purchase_completed",
-        properties: {
-          plan: tag,
-          stripe_plan: plan,
-          amount: session.amount_total ? session.amount_total / 100 : undefined,
-          currency: session.currency,
-        },
-      });
-      await ph.shutdown();
-    }
-
     // Add contact to Brevo list (triggers automation)
-    await addBrevoContactToList(email, tag);
+    try {
+      await addBrevoContactToList(email, tag);
+      console.log(`Brevo done for ${email}`);
+    } catch (err) {
+      console.error("Brevo failed:", err);
+    }
 
     // Send Skool invite for Complet and VIP plans
     if (tag !== "essentiel") {
@@ -117,6 +104,28 @@ export async function POST(req: NextRequest) {
         console.log(`Skool invite sent for ${email}: ${skoolRes.status}`);
       } catch (err) {
         console.error("Skool invite failed:", err);
+      }
+    }
+
+    // Track purchase in PostHog (non-blocking)
+    if (process.env.POSTHOG_API_KEY) {
+      try {
+        const ph = new PostHog(process.env.POSTHOG_API_KEY, {
+          host: "https://us.i.posthog.com",
+        });
+        ph.capture({
+          distinctId: email,
+          event: "purchase_completed",
+          properties: {
+            plan: tag,
+            stripe_plan: plan,
+            amount: session.amount_total ? session.amount_total / 100 : undefined,
+            currency: session.currency,
+          },
+        });
+        await ph.shutdown();
+      } catch (err) {
+        console.error("PostHog failed:", err);
       }
     }
   }
