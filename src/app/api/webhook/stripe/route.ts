@@ -110,9 +110,11 @@ export async function POST(req: NextRequest) {
     // Send Skool invite for Complet and VIP plans
     if (tag !== "essentiel") {
       try {
-        const skoolRes = await fetch(
-          `${getSkoolWebhookUrl()}?email=${encodeURIComponent(email)}`
-        );
+        const skoolRes = await fetch(getSkoolWebhookUrl(), {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email }),
+        });
         console.log(`Skool invite sent for ${email}: ${skoolRes.status}`);
       } catch (err) {
         console.error("Skool invite failed:", err);

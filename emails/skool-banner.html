@@ -4,10 +4,10 @@
   <meta charset="UTF-8" />
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #000; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+    body { background: #000; margin: 0; }
     .banner {
-      width: 1084px;
-      height: 576px;
+      width: 100vw;
+      height: 56.25vw;
       background: linear-gradient(135deg, #0a0a0a 0%, #111111 50%, #0a0a0a 100%);
       position: relative;
       overflow: hidden;
@@ -19,7 +19,7 @@
       position: absolute;
       inset: 0;
       background-image: radial-gradient(rgba(255,255,255,0.12) 1px, transparent 1px);
-      background-size: 18px 18px;
+      background-size: 1.66vw 1.66vw;
     }
     .glow-1 {
       position: absolute;
@@ -40,11 +40,11 @@
     .content {
       position: relative;
       text-align: center;
-      max-width: 900px;
+      max-width: 83vw;
     }
     .label {
       font-family: 'SF Mono', 'Fira Code', monospace;
-      font-size: 16px;
+      font-size: 3vw;
       font-weight: 700;
       letter-spacing: 6px;
       text-transform: uppercase;
@@ -53,7 +53,7 @@
     }
     h1 {
       font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
-      font-size: 68px;
+      font-size: 6.3vw;
       font-weight: 700;
       letter-spacing: -3px;
       color: #fff;
@@ -66,7 +66,7 @@
     }
     .sub {
       font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
-      font-size: 24px;
+      font-size: 2.2vw;
       color: rgba(255,255,255,0.5);
       margin-top: 20px;
       letter-spacing: -0.3px;
@@ -95,12 +95,12 @@
     }
     .tag {
       font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', sans-serif;
-      font-size: 15px;
+      font-size: 1.6vw;
       font-weight: 600;
       color: #38bdf8;
       background: rgba(56, 189, 248, 0.08);
       border: 1px solid rgba(56, 189, 248, 0.15);
-      padding: 8px 18px;
+      padding: 0.6vw 1.6vw;
       border-radius: 50px;
     }
   </style>
