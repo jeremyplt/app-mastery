@@ -1,0 +1,13 @@
+OBJET : Ton guide OpenClaw est prêt
+
+---
+
+Salut,
+
+Ton guide OpenClaw est prêt.
+
+Télécharge-le ici : https://jeremypitault.com/downloads/openclaw-guide-p4v1n8.pdf
+
+Toutes les commandes de la vidéo, le prompt pour donner du contexte à OpenClaw, et les CRON Jobs qui tournent même quand tu dors.
+
+Jeremy

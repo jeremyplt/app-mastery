@@ -7,165 +7,125 @@ import { ChevronDown } from "lucide-react";
 interface Module {
   number: number;
   title: string;
-  badge: "COEUR" | "BONUS" | null;
+  badge: "ESSENTIEL" | "BONUS" | null;
   lessons: number;
-  description: string;
+  // Benefit-focused description (not just content list)
+  benefit: string;
 }
 
 const modules: Module[] = [
   {
     number: 1,
-    title: "Commence Ici",
-    badge: null,
-    lessons: 1,
-    description: "Presentation de la communaute et du parcours",
+    title: "Trouver & Valider une Idée",
+    badge: "ESSENTIEL",
+    lessons: 6,
+    benefit:
+      "Résultat : tu as TON idée validée avec un marché prouvé et un modèle de monétisation choisi. Tu sais exactement quoi construire.",
   },
   {
     number: 2,
-    title: "Introduction",
-    badge: null,
-    lessons: 3,
-    description:
-      "Strategie complete pour creer une app rentable en 28 jours",
+    title: "Branding & Outils",
+    badge: "ESSENTIEL",
+    lessons: 6,
+    benefit:
+      "Résultat : ton identité visuelle est prête, tes outils configurés, ton projet initialisé. Tu es prêt à développer.",
   },
   {
     number: 3,
-    title: "Trouver & Valider une Idee",
-    badge: "COEUR",
-    lessons: 6,
-    description:
-      "Idee rentable, etude de marche, monetisation, nom viral, comptes dev",
+    title: "Développement de l'App",
+    badge: "ESSENTIEL",
+    lessons: 16,
+    benefit:
+      "Résultat : ton app fonctionne sur simulateur. Auth, base de données, abonnements, notifications push, tout est en place.",
   },
   {
     number: 4,
-    title: "Branding & Tech Stack",
-    badge: "COEUR",
-    lessons: 6,
-    description:
-      "Design system, logo, outils IA, onboarding, setup des outils",
+    title: "Analytics & Publication",
+    badge: "ESSENTIEL",
+    lessons: 13,
+    benefit:
+      "Résultat : ton app est live sur l'App Store ET Google Play. Le suivi et le référencement sont configurés pour être découvert.",
   },
   {
     number: 5,
-    title: "Developpement de l'App",
-    badge: "COEUR",
-    lessons: 16,
-    description:
-      "PRD, Supabase, Expo, auth, abonnements, RevenueCat, push notifications",
+    title: "Marketing",
+    badge: "ESSENTIEL",
+    lessons: 14,
+    benefit:
+      "Résultat : tu as tes premiers téléchargements et tes premiers revenus grâce au contenu organique et aux influenceurs.",
   },
   {
     number: 6,
-    title: "Analytics & Publication",
-    badge: "COEUR",
-    lessons: 13,
-    description:
-      "Tracking, ASO, TestFlight, publication stores, Meta/TikTok Ads",
-  },
-  {
-    number: 7,
-    title: "Marketing",
-    badge: "COEUR",
-    lessons: 3,
-    description:
-      "Promotions, 4 formats viraux (2M+ vues), publicite",
-  },
-  {
-    number: 8,
     title: "Masterclass Claude Code",
     badge: "BONUS",
     lessons: 13,
-    description:
-      "Guide complet du meilleur agent IA: CLAUDE.md, hooks, MCPs, multi-agents",
+    benefit:
+      "Tu maîtrises le meilleur agent IA du marché pour coder 10x plus vite sur tous tes futurs projets.",
   },
   {
-    number: 9,
+    number: 7,
     title: "Intelligence Artificielle",
     badge: "BONUS",
     lessons: 7,
-    description:
-      "Perplexity, Claude, ChatGPT, OpenRouter, comparatifs",
+    benefit:
+      "Tu sais utiliser les meilleurs outils IA (Perplexity, Claude, ChatGPT) pour accélérer chaque étape.",
   },
   {
-    number: 10,
-    title: "Git/GitHub",
+    number: 8,
+    title: "Masterclass Git/GitHub",
     badge: "BONUS",
     lessons: 13,
-    description:
-      "De l'init au pull request, versioning complet",
+    benefit:
+      "Tu gères ton code comme un pro, sauvegarde, organisation, collaboration, sans jamais perdre de travail.",
   },
   {
-    number: 11,
-    title: "Learn in Public",
-    badge: "BONUS",
-    lessons: 2,
-    description: "Tips et decouvertes partages sans filtre",
-  },
-  {
-    number: 12,
+    number: 9,
     title: "Case Study: Shinobi Japanese",
     badge: "BONUS",
     lessons: 6,
-    description:
-      "Evolution d'une vraie app en toute transparence",
+    benefit:
+      "Tu vois l'évolution d'une vraie app rentable en toute transparence. Les décisions, les erreurs, les résultats.",
   },
   {
-    number: 13,
-    title: "Tech News",
-    badge: "BONUS",
-    lessons: 10,
-    description: "L'actualite tech pour les createurs d'apps",
-  },
-  {
-    number: 14,
+    number: 10,
     title: "Ressources",
     badge: "BONUS",
     lessons: 1,
-    description: "Ressources privees de la communaute",
+    benefit: "Tu accèdes à des ressources exclusives curées pour les créateurs d'apps.",
   },
 ];
 
 const coeurModules = modules.filter(
-  (m) => m.badge === "COEUR" || m.badge === null
+  (m) => m.badge === "ESSENTIEL",
 );
 const bonusModules = modules.filter((m) => m.badge === "BONUS");
 
 function ModuleRow({ module }: { module: Module }) {
   const [isOpen, setIsOpen] = useState(false);
-  const isCoeur = module.badge === "COEUR" || module.badge === null;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.4 }}
-    >
+    <div className="rounded-lg bg-gray-950 transition-colors">
       <button
-        className={`w-full flex items-center gap-4 text-left cursor-pointer rounded-xl px-5 py-4 transition-colors ${
-          isCoeur
-            ? "bg-[rgba(251,191,36,0.04)] hover:bg-[rgba(251,191,36,0.08)]"
-            : "bg-[rgba(255,255,255,0.02)] hover:bg-[rgba(255,255,255,0.05)]"
-        }`}
+        className="w-full flex items-center gap-4 text-left cursor-pointer px-4 py-3 hover:bg-white/5 rounded-lg transition-colors"
         onClick={() => setIsOpen(!isOpen)}
-        aria-expanded={isOpen}
       >
-        <span className="text-[var(--color-blue)] text-lg font-bold w-8 shrink-0 font-mono">
+        <span className="font-mono text-sm font-semibold text-white/25 w-6 shrink-0">
           {String(module.number).padStart(2, "0")}
         </span>
-
-        <div className="flex-1 flex flex-wrap items-center gap-2">
-          <h3 className="text-sm font-semibold">{module.title}</h3>
+        <div className="flex-1">
+          <span className="text-base font-semibold text-white">
+            {module.title}
+          </span>
         </div>
-
-        <span className="text-[var(--muted-fg)] text-xs shrink-0 hidden sm:block">
-          {module.lessons} lecon{module.lessons > 1 ? "s" : ""}
+        <span className="text-sm text-gray-600 shrink-0 hidden sm:block font-mono">
+          {module.lessons} leçon{module.lessons > 1 ? "s" : ""}
         </span>
-
         <motion.div
           animate={{ rotate: isOpen ? 180 : 0 }}
-          transition={{ duration: 0.25 }}
+          transition={{ duration: 0.2 }}
           className="shrink-0"
         >
-          <ChevronDown size={16} className="text-[var(--muted-fg)]" />
+          <ChevronDown size={14} className="text-gray-600" />
         </motion.div>
       </button>
 
@@ -175,82 +135,112 @@ function ModuleRow({ module }: { module: Module }) {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.25 }}
+            transition={{ duration: 0.2 }}
             className="overflow-hidden"
           >
-            <div className="px-5 pb-3 pt-1 pl-17">
-              <p className="text-[var(--muted-fg)] text-xs leading-relaxed">
-                {module.description}
+            <div className="px-4 pb-3 pl-14">
+              {/* Benefit description — not content list */}
+              <p className="text-emerald-400/90 text-lg/7">
+                &#10003; {module.benefit}
               </p>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.div>
+    </div>
   );
 }
 
 export default function Program() {
   return (
-    <section className="section">
-      <div className="max-w-3xl mx-auto">
-        <motion.div
-          className="text-center mb-12"
-          initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.5 }}
-        >
-          <h2 className="text-3xl md:text-4xl font-bold mb-3">
-            Le Programme Complet
+    <section id="program" className="relative py-20">
+      <div className="px-4 sm:px-6 lg:px-8">
+        <div className="mb-8 flex items-center gap-4">
+          <span className="font-mono text-base font-semibold tracking-widest uppercase text-amber-400">
+            Programme
+          </span>
+          <div className="h-px flex-1 bg-white/10" />
+        </div>
+
+        <div className="mb-12 max-w-2xl">
+          <h2 className="text-2xl sm:text-[2.5rem]/10 font-medium tracking-tighter text-balance text-white">
+            Tout ce dont tu as besoin, rien de superflu
           </h2>
-          <p className="text-[var(--muted-fg)] text-lg">
-            14 modules, 90+ lecons
+          <p className="mt-4 text-xl/8 text-gray-300">
+            10 modules, 90+ leçons. Chaque étape te rapproche de ton app
+            publiée et monétisée.
           </p>
-        </motion.div>
+        </div>
 
-        {/* Coeur modules */}
+        <div className="grid lg:grid-cols-2 gap-2">
+          {/* Essentiel */}
+          <div className="isolate overflow-hidden rounded-2xl bg-gray-950 p-2 outline outline-white/10">
+            <div className="rounded-xl bg-white/5 p-3">
+              <div className="flex items-center gap-2 mb-3 px-2">
+                <span className="inline-flex items-center rounded-full bg-amber-500/10 px-2.5 py-0.5 text-sm font-semibold text-amber-400 outline outline-amber-500/20">
+                  Essentiel
+                </span>
+                <span className="text-sm text-gray-600">
+                  Le parcours principal
+                </span>
+              </div>
+              <div className="flex flex-col gap-0.5">
+                {coeurModules.map((module) => (
+                  <ModuleRow key={module.number} module={module} />
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Bonus */}
+          <div className="isolate overflow-hidden rounded-2xl bg-gray-950 p-2 outline outline-white/10">
+            <div className="relative rounded-xl bg-white/5 p-3 overflow-hidden">
+              <div
+                className="pointer-events-none absolute inset-0 opacity-30"
+                style={{
+                  backgroundImage:
+                    "radial-gradient(rgba(255,255,255,0.15) 1px, transparent 1px)",
+                  backgroundSize: "16px 16px",
+                }}
+              />
+              <div className="relative">
+                <div className="flex items-center gap-2 mb-3 px-2">
+                  <span className="inline-flex items-center rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-sm font-semibold text-emerald-400 outline outline-emerald-500/20">
+                    Bonus
+                  </span>
+                  <span className="text-sm text-emerald-400/60">
+                    Inclus gratuitement
+                  </span>
+                </div>
+                <div className="flex flex-col gap-0.5">
+                  {bonusModules.map((module) => (
+                    <ModuleRow key={module.number} module={module} />
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* CTA after curriculum */}
         <motion.div
-          className="glass p-4 md:p-6 mb-6"
-          initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
+          className="mt-10 text-center"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          <div className="flex items-center gap-2 mb-4 px-2">
-            <span className="badge badge-blue text-xs">Coeur</span>
-            <span className="text-[var(--muted-fg)] text-xs">
-              Le parcours principal
-            </span>
-          </div>
-          <div className="flex flex-col gap-2">
-            {coeurModules.map((module) => (
-              <ModuleRow key={module.number} module={module} />
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Bonus modules */}
-        <motion.div
-          className="glass p-4 md:p-6"
-          initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.5 }}
-        >
-          <div className="flex items-center gap-2 mb-4 px-2">
-            <span className="badge text-xs">Bonus</span>
-            <span className="text-[var(--muted-fg)] text-xs">
-              Modules complementaires
-            </span>
-          </div>
-          <div className="flex flex-col gap-2">
-            {bonusModules.map((module) => (
-              <ModuleRow key={module.number} module={module} />
-            ))}
-          </div>
+          <a
+            href="#pricing"
+            className="inline-flex items-center justify-center rounded-full bg-sky-500 px-8 py-4 text-lg font-bold text-white hover:bg-sky-400 transition-colors shadow-lg shadow-sky-500/25"
+            data-ph-capture-attribute-section="program"
+          >
+            Lancer mon app maintenant
+          </a>
         </motion.div>
       </div>
+
+      <div className="relative mt-20 before:absolute before:top-0 before:h-px before:w-[200vw] before:-left-[100vw] before:bg-white/10" />
     </section>
   );
 }

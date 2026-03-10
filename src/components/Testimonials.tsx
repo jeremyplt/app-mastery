@@ -1,129 +1,127 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Star } from "lucide-react";
 
-interface TestimonialsProps {
-  id?: string;
-}
-
+// Structured testimonials with before/after transformation (most persuasive format)
+// Each testimonial should show: who they are, where they started, what they achieved
 const testimonials = [
   {
-    name: "Thomas M.",
-    initials: "TM",
-    context: "Debutant total",
-    quote:
-      "En 3 semaines j'avais mon app sur l'App Store. Le vibecoding avec Claude Code, c'est de la magie.",
+    name: "Zachary E.",
+    role: "Trader",
+    before: "Zéro expérience en dev",
+    after: "App lancée en 3 semaines",
+    text: "J'ai lancé mon app en 3 semaines alors que je n'avais jamais codé de ma vie. Le vibe coding avec Claude Code change complètement la donne.",
   },
   {
-    name: "Sarah L.",
-    initials: "SL",
-    context: "Designeuse reconvertie",
-    quote:
-      "Jamais je n'aurais cru pouvoir coder une app. La formation m'a guide pas a pas.",
+    name: "Maxence F.",
+    role: "Coach",
+    before: "Perdu dans les tutos",
+    after: "App publiée sur les 2 stores",
+    text: "La formation est ultra structurée. Mon app est sur les deux stores et les téléchargements augmentent chaque semaine. Le module marketing a tout changé.",
   },
   {
-    name: "Marc D.",
-    initials: "MD",
-    context: "Entrepreneur",
-    quote:
-      "Mon app genere 800$/mois d'abonnements apres seulement 2 mois. ROI incroyable.",
-  },
-  {
-    name: "Julie P.",
-    initials: "JP",
-    context: "Etudiante",
-    quote:
-      "La masterclass Claude Code vaut le prix a elle seule. J'ai appris plus qu'en 6 mois de fac.",
-  },
-  {
-    name: "Kevin R.",
-    initials: "KR",
-    context: "Dev junior",
-    quote:
-      "Le module marketing m'a ouvert les yeux. Coder c'est 20% du succes, le marketing c'est 80%.",
-  },
-  {
-    name: "Amina B.",
-    initials: "AB",
-    context: "Freelance",
-    quote:
-      "La communaute est incroyable. Le support et les retours m'ont fait gagner des semaines.",
+    name: "Mael C.",
+    role: "Étudiant",
+    before: "Zéro revenus en ligne",
+    after: "Premiers abonnés payants",
+    text: "En tant qu'étudiant je pensais pas pouvoir créer une app. Aujourd'hui j'ai mes premiers abonnés payants et des revenus récurrents. La méthode fonctionne vraiment.",
   },
 ];
 
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.08,
-    },
-  },
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, ease: "easeOut" as const },
-  },
-};
-
-export default function Testimonials({ id }: TestimonialsProps) {
+export default function Testimonials() {
   return (
-    <section id={id} className="section">
-      <div className="max-w-[1200px] mx-auto">
-        <motion.h2
-          className="text-3xl md:text-5xl font-bold text-center mb-12 tracking-tight"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.5 }}
-        >
-          Ce Qu&apos;en Disent{" "}
-          <span className="text-[var(--fg)]">Nos Eleves</span>
-        </motion.h2>
+    <section className="relative py-20">
+      <div className="px-4 sm:px-6 lg:px-8">
+        <div className="mb-8 flex items-center gap-4">
+          <span className="font-mono text-base font-semibold tracking-widest uppercase text-fuchsia-400">
+            Résultats
+          </span>
+          <div className="h-px flex-1 bg-white/10" />
+        </div>
 
+        <div className="mb-12 max-w-2xl">
+          <h2 className="text-2xl sm:text-[2.5rem]/10 font-medium tracking-tighter text-balance text-white">
+            Ils sont passés de zéro à une app publiée
+          </h2>
+          <p className="mt-4 text-xl/8 text-white font-medium">
+            Résultats de membres ayant suivi le programme complet
+          </p>
+        </div>
+
+        <div className="isolate overflow-hidden rounded-2xl bg-gray-950 p-2 outline outline-white/10">
+          <div className="rounded-xl bg-white/5 p-2">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-2">
+              {testimonials.map((t, i) => (
+                <motion.div
+                  key={i}
+                  className="relative overflow-hidden rounded-xl bg-gray-950 p-5"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: i * 0.05 }}
+                >
+                  {/* Identity */}
+                  <div className="mb-3">
+                    <div className="text-sm font-semibold text-white">
+                      {t.name}
+                    </div>
+                    <div className="text-sm text-gray-300 font-medium">
+                      {t.role}
+                    </div>
+                  </div>
+
+                  {/* Before/After mini transformation */}
+                  <div className="flex items-center gap-2 mb-3 text-sm">
+                    <span className="text-pink-400/70 line-through">
+                      {t.before}
+                    </span>
+                    <span className="text-white/40">&rarr;</span>
+                    <span className="text-emerald-400 font-medium">
+                      {t.after}
+                    </span>
+                  </div>
+
+                  {/* Stars */}
+                  <div className="flex text-amber-400 gap-0.5 mb-3">
+                    {[...Array(5)].map((_, j) => (
+                      <svg
+                        key={j}
+                        className="w-3.5 h-3.5 fill-current"
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                    ))}
+                  </div>
+
+                  {/* Quote */}
+                  <p className="text-lg/8 text-gray-200">
+                    &ldquo;{t.text}&rdquo;
+                  </p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* CTA after social proof */}
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
+          className="mt-10 text-center"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
         >
-          {testimonials.map((t) => (
-            <motion.div
-              key={t.name}
-              className="glass p-6 flex flex-col gap-4"
-              variants={itemVariants}
-            >
-              <div className="flex items-center gap-3">
-                <div className="shrink-0 w-10 h-10 rounded-full bg-[var(--muted)] flex items-center justify-center text-[var(--fg)] font-bold text-sm">
-                  {t.initials}
-                </div>
-                <div>
-                  <p className="font-bold text-sm">{t.name}</p>
-                  <p className="text-xs text-[var(--muted-fg)]">{t.context}</p>
-                </div>
-              </div>
-
-              <div className="flex gap-0.5">
-                {[...Array(5)].map((_, i) => (
-                  <Star
-                    key={i}
-                    className="w-4 h-4 fill-[var(--color-warning)] text-[var(--color-warning)]"
-                  />
-                ))}
-              </div>
-
-              <p className="text-sm text-[var(--muted-fg)] italic leading-relaxed">
-                &ldquo;{t.quote}&rdquo;
-              </p>
-            </motion.div>
-          ))}
+          <a
+            href="#pricing"
+            className="inline-flex items-center justify-center rounded-full bg-sky-500 px-8 py-4 text-lg font-bold text-white hover:bg-sky-400 transition-colors shadow-lg shadow-sky-500/25"
+            data-ph-capture-attribute-section="testimonials"
+          >
+            Lancer mon app maintenant
+          </a>
         </motion.div>
       </div>
+
+      <div className="relative mt-20 before:absolute before:top-0 before:h-px before:w-[200vw] before:-left-[100vw] before:bg-white/10" />
     </section>
   );
 }

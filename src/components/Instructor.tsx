@@ -1,91 +1,139 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Youtube, Twitter } from "lucide-react";
+import Image from "next/image";
 
-const stats = [
-  { value: "X", label: "apps publiees" },
-  { value: "X", label: "eleves formes" },
-  { value: "Xk+", label: "abonnes" },
-];
-
+// Epiphany Bridge story (Brunson):
+// backstory > desires > old methods that failed > the discovery > the plan > results
 export default function Instructor() {
   return (
-    <section className="section">
-      <div className="max-w-3xl mx-auto">
-        <motion.h2
-          className="text-3xl md:text-5xl font-bold text-center mb-12 tracking-tight"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.5 }}
-        >
-          Ton <span className="text-[var(--fg)]">Formateur</span>
-        </motion.h2>
+    <section className="relative py-20">
+      <div className="px-4 sm:px-6 lg:px-8">
+        <div className="mb-8 flex items-center gap-4">
+          <span className="font-mono text-base font-semibold tracking-widest uppercase text-sky-400">
+            Qui Suis-Je
+          </span>
+          <div className="h-px flex-1 bg-white/10" />
+        </div>
 
-        <motion.div
-          className="glass p-8 md:p-10"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.5 }}
-        >
-          <div className="flex flex-col md:flex-row items-center gap-8">
-            {/* Avatar */}
-            <div className="shrink-0 w-28 h-28 rounded-full bg-[var(--muted)] border border-[var(--border)] flex items-center justify-center">
-              <span className="text-4xl font-bold text-[var(--fg)]">J</span>
-            </div>
+        <div className="isolate overflow-hidden rounded-2xl bg-gray-950 p-2 outline outline-white/10">
+          <div className="relative rounded-xl bg-white/5 overflow-hidden">
+            <div
+              className="pointer-events-none absolute inset-0 opacity-30"
+              style={{
+                backgroundImage:
+                  "radial-gradient(rgba(255,255,255,0.1) 1px, transparent 1px)",
+                backgroundSize: "24px 24px",
+              }}
+            />
 
-            {/* Info */}
-            <div className="flex-1 text-center md:text-left">
-              <h3 className="text-2xl font-bold">Jeremy</h3>
-              <p className="text-[var(--color-blue)] text-base mt-1">
-                Createur d&apos;apps &amp; formateur
-              </p>
-
-              <p className="text-[var(--muted-fg)] text-base leading-relaxed mt-4">
-                Passione par le developpement mobile et l&apos;IA, j&apos;ai cree
-                plusieurs applications rentables publiees sur les stores. Avec
-                App Mastery, je partage la methode exacte que j&apos;utilise pour
-                transformer une idee en app monetisee en moins de 28 jours grace
-                au vibecoding.
-              </p>
-
-              {/* Stats */}
-              <div className="flex flex-wrap justify-center md:justify-start gap-6 mt-6">
-                {stats.map((stat) => (
-                  <div key={stat.label} className="text-center md:text-left">
-                    <p className="text-2xl font-bold text-[var(--fg)]">
-                      {stat.value}
-                    </p>
-                    <p className="text-xs text-[var(--muted-fg)] uppercase tracking-wider mt-1">
-                      {stat.label}
-                    </p>
-                  </div>
-                ))}
+            <div className="relative grid lg:grid-cols-[1fr_2fr] gap-0">
+              {/* Avatar */}
+              <div className="flex items-center justify-center p-8 lg:p-12">
+                <div className="w-40 h-40 lg:w-56 lg:h-56 rounded-2xl overflow-hidden shadow-2xl shadow-sky-500/20 outline outline-white/10">
+                  <Image
+                    src="/jeremy.jpg"
+                    alt="Jeremy Pitault"
+                    width={600}
+                    height={600}
+                    quality={95}
+                    className="w-full h-full object-cover scale-[1.8] translate-y-[23%]"
+                  />
+                </div>
               </div>
 
-              {/* Social links */}
-              <div className="flex justify-center md:justify-start gap-3 mt-6">
-                <a
-                  href="#"
-                  className="w-10 h-10 rounded-full border border-[var(--border)] flex items-center justify-center text-[var(--muted-fg)] hover:text-[var(--fg)] hover:border-[#333] transition-colors duration-200"
-                  aria-label="YouTube"
-                >
-                  <Youtube className="w-5 h-5" />
-                </a>
-                <a
-                  href="#"
-                  className="w-10 h-10 rounded-full border border-[var(--border)] flex items-center justify-center text-[var(--muted-fg)] hover:text-[var(--fg)] hover:border-[#333] transition-colors duration-200"
-                  aria-label="Twitter / X"
-                >
-                  <Twitter className="w-5 h-5" />
-                </a>
+              {/* Epiphany Bridge Story */}
+              <div className="p-8 lg:p-12 lg:border-l lg:border-white/10">
+                <h3 className="text-2xl font-medium tracking-tight text-white mb-4">
+                  Jeremy Pitault
+                </h3>
+
+                {/* Story — Epiphany Bridge with emotional depth */}
+                <div className="space-y-4 text-lg/8 text-gray-300 max-w-lg">
+                  {/* Backstory + Despair */}
+                  <p>
+                    Il y a quelques années, j&apos;étais exactement où tu es
+                    peut-être aujourd&apos;hui. Des idées d&apos;apps plein la
+                    tête, mais aucune sur l&apos;App Store ou Google Play.
+                  </p>
+                  <p>
+                    J&apos;ai fini par me lancer. Et honnêtement, ça a été
+                    brutal. Des nuits à coder jusqu&apos;à 3h du matin. Mon app
+                    qui crashe en production le jour du lancement. Des
+                    utilisateurs qui laissent des avis 1 étoile. J&apos;ai
+                    travaillé plus de 12h par jour pendant plus de 2 ans sur{" "}
+                    <span className="text-white font-medium">
+                      Shinobi Japanese
+                    </span>
+                    .
+                  </p>
+                  <p>
+                    Il y a eu des moments où j&apos;ai sérieusement voulu tout
+                    arrêter. La pression financière, le doute constant, la
+                    solitude du développeur solo. Je me demandais si
+                    j&apos;avais fait le bon choix.
+                  </p>
+
+                  {/* Epiphany Moment */}
+                  <p className="text-white font-medium">
+                    Et puis un jour, tout a changé.
+                  </p>
+                  <p>
+                    J&apos;ai découvert les outils d&apos;IA, et en
+                    particulier{" "}
+                    <span className="text-sky-400 font-semibold">
+                      Claude Code
+                    </span>
+                    . Ce qui me prenait une semaine de développement pouvait se
+                    faire en quelques heures. Le &quot;vibe coding&quot; a
+                    littéralement multiplié ma productivité par 10. J&apos;ai
+                    réalisé que le jeu avait complètement changé. N&apos;importe
+                    qui pouvait maintenant créer une app de qualité
+                    professionnelle, sans être un développeur senior.
+                  </p>
+
+                  {/* Post-epiphany results timeline */}
+                  <p>
+                    En combinant cette approche avec ma stratégie de marketing
+                    organique, les résultats ont explosé. Mon app est passée de
+                    quelques centaines de dollars par mois à{" "}
+                    <span className="text-sky-400 font-semibold">
+                      140 000€/an de revenus récurrents
+                    </span>
+                    . Assez pour en vivre confortablement, sans patron, sans
+                    horaires, depuis n&apos;importe où dans le monde.
+                  </p>
+
+                  {/* Open loop toward the method */}
+                  <p className="text-white font-medium">
+                    Et maintenant, j&apos;ai condensé tout ce que j&apos;ai
+                    appris en une méthode structurée. Voici comment elle
+                    fonctionne...
+                  </p>
+                </div>
+
+                {/* Credentials — social proof of authority */}
+                <div className="flex flex-wrap gap-2 mt-6">
+                  {[
+                    "Créateur de Shinobi Japanese",
+                    "140K€/an de revenus récurrents",
+                    "YouTubeur apps mobiles",
+                  ].map((h, i) => (
+                    <span
+                      key={i}
+                      className="inline-flex items-center rounded-full bg-sky-500/10 px-3 py-1 text-sm font-semibold text-sky-400 outline outline-sky-500/20"
+                    >
+                      {h}
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
-        </motion.div>
+        </div>
       </div>
+
+      <div className="relative mt-20 before:absolute before:top-0 before:h-px before:w-[200vw] before:-left-[100vw] before:bg-white/10" />
     </section>
   );
 }

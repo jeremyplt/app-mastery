@@ -1,0 +1,14 @@
+OBJET : Ton Plan d'Action est prêt
+PIÈCE JOINTE : Aucune — c'est un lien vidéo, remplace {{LIEN_VIDEO}} par le lien YouTube/Vimeo
+
+---
+
+Salut,
+
+Ton Plan d'Action est prêt.
+
+Dans cette vidéo, je te montre comment je suis passé de 0 à 140K$/an avec une seule app mobile. Étape par étape, sans rien cacher.
+
+Regarde-la ici : {{LIEN_VIDEO}}
+
+Jeremy

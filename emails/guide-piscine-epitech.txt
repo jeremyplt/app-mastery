@@ -1,0 +1,15 @@
+OBJET : Ta Piscine Epitech est prête
+
+---
+
+Salut,
+
+Ta Piscine Epitech est prête.
+
+Télécharge-la ici : https://jeremypitault.com/downloads/piscine-epitech-q3w8f5.zip
+
+Tous les exercices de la 1ère année, langage C + environnement UNIX.
+
+Bon courage.
+
+Jeremy

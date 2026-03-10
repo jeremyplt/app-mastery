@@ -1,0 +1,14 @@
+OBJET : Tu as bien reçu ?
+CONDITION D'ENVOI : 24-48h après le 1er email, si le contact n'a pas ouvert/cliqué
+
+---
+
+Salut,
+
+Je t'ai envoyé un email hier avec le contenu que tu avais demandé.
+
+Je voulais juste m'assurer que tu l'as bien reçu. Parfois ça tombe dans les spams.
+
+Si tu as la moindre question ou si je peux t'aider avec quoi que ce soit, réponds directement à cet email.
+
+Jeremy

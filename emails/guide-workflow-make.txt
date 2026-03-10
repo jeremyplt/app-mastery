@@ -1,0 +1,14 @@
+OBJET : Ton workflow Make est prêt
+PIÈCE JOINTE : Aucune — c'est un lien externe
+
+---
+
+Salut,
+
+Ton workflow de création de contenu est prêt.
+
+Clique ici pour y accéder : https://eu1.make.com/public/shared-scenario/adL8j2sR80t/japanese-learning-shorts-generator
+
+Il génère un script, crée les images, ajoute la voix off, fait le montage et les sous-titres. Tout automatiquement.
+
+Jeremy

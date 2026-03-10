@@ -1,26 +1,27 @@
-import HeroV4 from "@/components/v4/HeroV4";
-import HeroVideoV4 from "@/components/v4/HeroVideoV4";
-import TimelineV4 from "@/components/v4/TimelineV4";
-import PainPointsV4 from "@/components/v4/PainPointsV4";
-import AgitationV4 from "@/components/v4/AgitationV4";
-import SolutionV4 from "@/components/v4/SolutionV4";
-import TransformationV4 from "@/components/v4/TransformationV4";
-import InstructorV4 from "@/components/v4/InstructorV4";
-import ProofRevenueV4 from "@/components/v4/ProofRevenueV4";
-import ProgramV4 from "@/components/v4/ProgramV4";
-import ProofContentV4 from "@/components/v4/ProofContentV4";
-import ProofInfluencerV4 from "@/components/v4/ProofInfluencerV4";
-import ProofViralV4 from "@/components/v4/ProofViralV4";
-import TestimonialsV4 from "@/components/v4/TestimonialsV4";
-import BonusesV4 from "@/components/v4/BonusesV4";
-import PricingV4 from "@/components/v4/PricingV4";
-import GuaranteeV4 from "@/components/v4/GuaranteeV4";
-import FaqV4 from "@/components/v4/FaqV4";
-import FinalCtaV4 from "@/components/v4/FinalCtaV4";
-import FooterV4 from "@/components/v4/FooterV4";
-import StickyCtaV4 from "@/components/v4/StickyCtaV4";
-import WhoIsThisForV4 from "@/components/v4/WhoIsThisForV4";
-import WhyDifferentV4 from "@/components/v4/WhyDifferentV4";
+import Hero from "@/components/Hero";
+import HeroVideo from "@/components/HeroVideo";
+import Timeline from "@/components/Timeline";
+import PainPoints from "@/components/PainPoints";
+import Agitation from "@/components/Agitation";
+import Solution from "@/components/Solution";
+import Transformation from "@/components/Transformation";
+import Instructor from "@/components/Instructor";
+import ProofRevenue from "@/components/ProofRevenue";
+import Program from "@/components/Program";
+import ProofContent from "@/components/ProofContent";
+import ProofInfluencer from "@/components/ProofInfluencer";
+import ProofViral from "@/components/ProofViral";
+import Testimonials from "@/components/Testimonials";
+import Bonuses from "@/components/Bonuses";
+import Urgency from "@/components/Urgency";
+import Pricing from "@/components/Pricing";
+import Guarantee from "@/components/Guarantee";
+import Faq from "@/components/Faq";
+import FinalCta from "@/components/FinalCta";
+import Footer from "@/components/Footer";
+import StickyCta from "@/components/StickyCta";
+import WhoIsThisFor from "@/components/WhoIsThisFor";
+import WhyDifferent from "@/components/WhyDifferent";
 
 export default function HomeV4() {
   return (
@@ -41,28 +42,29 @@ export default function HomeV4() {
 
         {/* Center content — no nav links, zero distractions */}
         <div className="min-w-0">
-          <HeroV4 />
-          <HeroVideoV4 />
-          <PainPointsV4 />
-          <AgitationV4 />
-          <InstructorV4 />
-          <SolutionV4 />
-          <TimelineV4 />
-          <ProofRevenueV4 />
-          <TransformationV4 />
-          <ProofContentV4 />
-          <ProofInfluencerV4 />
-          <ProofViralV4 />
-          <WhoIsThisForV4 />
-          {/* <TestimonialsV4 /> */}
-          <WhyDifferentV4 />
-          <ProgramV4 />
-          <BonusesV4 />
-          <PricingV4 />
-          <GuaranteeV4 />
-          <FaqV4 />
-          <FinalCtaV4 />
-          <FooterV4 />
+          <Hero />
+          <HeroVideo />
+          <PainPoints />
+          <Agitation />
+          <Instructor />
+          <Solution />
+          <Timeline />
+          <ProofRevenue />
+          <Transformation />
+          <ProofContent />
+          <ProofInfluencer />
+          <ProofViral />
+          <WhoIsThisFor />
+          {/* <Testimonials /> */}
+          <WhyDifferent />
+          <Program />
+          <Bonuses />
+          <Urgency />
+          <Pricing />
+          <Guarantee />
+          <Faq />
+          <FinalCta />
+          <Footer />
         </div>
 
         {/* Right gutter */}
@@ -77,7 +79,7 @@ export default function HomeV4() {
       </div>
 
       {/* Sticky mobile CTA */}
-      <StickyCtaV4 />
+      <StickyCta />
     </div>
   );
 }

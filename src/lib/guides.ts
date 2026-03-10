@@ -32,7 +32,7 @@ export const guides: Record<string, Guide> = {
     merciDescription:
       "Télécharge la Piscine d'Epitech et commence à coder.",
     downloadLabel: "Télécharger le .zip",
-    downloadUrl: "/downloads/piscine-epitech.zip",
+    downloadUrl: "/downloads/piscine-epitech-q3w8f5.zip",
   },
   "prompt-50-saas": {
     slug: "prompt-50-saas",
@@ -51,7 +51,7 @@ export const guides: Record<string, Guide> = {
     merciDescription:
       "Télécharge les prompts et les 50 idées de SaaS.",
     downloadLabel: "Télécharger le PDF",
-    downloadUrl: "/downloads/prompt-50-saas.pdf",
+    downloadUrl: "/downloads/prompt-50-saas-h6j9t2.pdf",
   },
   "workflow-make": {
     slug: "workflow-make",
@@ -90,7 +90,7 @@ export const guides: Record<string, Guide> = {
     merciDescription:
       "Télécharge le guide de monétisation et choisis le bon modèle pour ton app.",
     downloadLabel: "Télécharger le Guide",
-    downloadUrl: "/downloads/monetisation.pdf",
+    downloadUrl: "/downloads/monetisation-x7k2m9.pdf",
   },
   openclaw: {
     slug: "openclaw",
@@ -109,7 +109,7 @@ export const guides: Record<string, Guide> = {
     merciDescription:
       "Télécharge le guide et installe OpenClaw en quelques minutes.",
     downloadLabel: "Télécharger le Guide",
-    downloadUrl: "/downloads/openclaw-guide.pdf",
+    downloadUrl: "/downloads/openclaw-guide-p4v1n8.pdf",
   },
 };
 

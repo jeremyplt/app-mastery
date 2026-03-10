@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { PostHog } from "posthog-node";
 import Stripe from "stripe";
 
 function getStripe() {
@@ -84,6 +85,24 @@ export async function POST(req: NextRequest) {
     if (plan === "vip" || plan === "vip-3x") tag = "vip";
 
     console.log(`Checkout completed: ${email}, plan: ${plan}, tag: ${tag}`);
+
+    // Track purchase in PostHog
+    if (process.env.POSTHOG_API_KEY) {
+      const ph = new PostHog(process.env.POSTHOG_API_KEY, {
+        host: "https://us.i.posthog.com",
+      });
+      ph.capture({
+        distinctId: email,
+        event: "purchase_completed",
+        properties: {
+          plan: tag,
+          stripe_plan: plan,
+          amount: session.amount_total ? session.amount_total / 100 : undefined,
+          currency: session.currency,
+        },
+      });
+      await ph.shutdown();
+    }
 
     // Add contact to Brevo list (triggers automation)
     await addBrevoContactToList(email, tag);
