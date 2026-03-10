@@ -3,6 +3,7 @@ import HeroVideo from "@/components/HeroVideo";
 import Timeline from "@/components/Timeline";
 import PainPoints from "@/components/PainPoints";
 import Agitation from "@/components/Agitation";
+import Opportunity from "@/components/Opportunity";
 import Solution from "@/components/Solution";
 import Transformation from "@/components/Transformation";
 import Instructor from "@/components/Instructor";
@@ -45,6 +46,7 @@ export default function FormationPage() {
           <HeroVideo />
           <PainPoints />
           <Agitation />
+          <Opportunity />
           <Instructor />
           <Solution />
           <Timeline />
