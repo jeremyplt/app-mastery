@@ -277,18 +277,9 @@ export default function Pricing() {
                     1 497€
                   </span>
                 </div>
-                <button
-                  onClick={() => handleCheckout("complet-3x")}
-                  disabled={loadingPlan !== null}
-                  className="text-base text-sky-400 font-semibold mb-3 hover:text-sky-300 underline underline-offset-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {loadingPlan === "complet-3x" ? (
-                    <span className="inline-flex items-center gap-2">
-                      <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
-                      Chargement...
-                    </span>
-                  ) : "ou 3x 347€"}
-                </button>
+                <p className="text-base text-sky-400 font-semibold mb-3">
+                  ou 3x 347€
+                </p>
                 <p className="text-sm text-amber-400/90 font-semibold mb-8">
                   Ce prix ne sera plus jamais aussi bas. Une fois l&apos;offre de lancement terminée, le tarif remonte définitivement.
                 </p>
@@ -320,7 +311,20 @@ export default function Pricing() {
                     ) : "Lancer mon app maintenant"}
                   </button>
 
-                  <p className="text-base text-sky-400 mt-4 font-semibold">
+                  <button
+                    onClick={() => handleCheckout("complet-3x")}
+                    disabled={loadingPlan !== null}
+                    className="text-base text-sky-400 mt-4 font-semibold hover:text-sky-300 underline underline-offset-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {loadingPlan === "complet-3x" ? (
+                      <span className="inline-flex items-center gap-2">
+                        <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
+                        Chargement...
+                      </span>
+                    ) : "ou payer en 3x 347€"}
+                  </button>
+
+                  <p className="text-base text-sky-400 mt-3 font-semibold">
                     Tu reçois tes identifiants dans 2 minutes
                   </p>
                 </div>
@@ -359,18 +363,9 @@ export default function Pricing() {
                   </span>
                   <span className="text-xl text-white/60 ml-1">€</span>
                 </div>
-                <button
-                  onClick={() => handleCheckout("vip-3x")}
-                  disabled={loadingPlan !== null}
-                  className="text-base text-amber-400 font-semibold mb-1 hover:text-amber-300 underline underline-offset-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {loadingPlan === "vip-3x" ? (
-                    <span className="inline-flex items-center gap-2">
-                      <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
-                      Chargement...
-                    </span>
-                  ) : "ou 3x 1 099€"}
-                </button>
+                <p className="text-base text-amber-400 font-semibold mb-1">
+                  ou 3x 1 099€
+                </p>
                 <div className="flex items-center gap-2 rounded-full bg-red-500/10 border border-red-500/30 px-3 py-1.5 mb-8 self-start">
                   <span className="relative flex h-2 w-2">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />
@@ -406,6 +401,19 @@ export default function Pricing() {
                         Chargement...
                       </span>
                     ) : "Devenir VIP"}
+                  </button>
+
+                  <button
+                    onClick={() => handleCheckout("vip-3x")}
+                    disabled={loadingPlan !== null}
+                    className="text-base text-amber-400 mt-4 font-semibold hover:text-amber-300 underline underline-offset-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {loadingPlan === "vip-3x" ? (
+                      <span className="inline-flex items-center gap-2">
+                        <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
+                        Chargement...
+                      </span>
+                    ) : "ou payer en 3x 1 099€"}
                   </button>
                 </div>
               </div>
