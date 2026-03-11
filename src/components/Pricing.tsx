@@ -355,12 +355,12 @@ export default function Pricing() {
 
                 <div className="mb-1">
                   <span className="text-4xl sm:text-5xl font-medium tracking-tighter text-white">
-                    2 999
+                    2 997
                   </span>
                   <span className="text-xl text-white/60 ml-1">€</span>
                 </div>
                 <p className="text-base text-amber-400 font-semibold mb-1">
-                  ou 3x 1 099€
+                  ou 3x 1 097€
                 </p>
                 <div className="flex items-center gap-2 rounded-full bg-red-500/10 border border-red-500/30 px-3 py-1.5 mb-8 self-center">
                   <span className="relative flex h-2 w-2">
@@ -409,7 +409,7 @@ export default function Pricing() {
                         <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
                         Chargement...
                       </span>
-                    ) : "ou payer en 3x 1 099€"}
+                    ) : "ou payer en 3x 1 097€"}
                   </button>
                 </div>
               </div>
