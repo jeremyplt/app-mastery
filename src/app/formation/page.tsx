@@ -20,6 +20,7 @@ import Faq from "@/components/Faq";
 import FinalCta from "@/components/FinalCta";
 import Footer from "@/components/Footer";
 import StickyCta from "@/components/StickyCta";
+import StickyTopBar from "@/components/StickyTopBar";
 import WhoIsThisFor from "@/components/WhoIsThisFor";
 import WhyDifferent from "@/components/WhyDifferent";
 
@@ -78,6 +79,9 @@ export default function FormationPage() {
           }}
         />
       </div>
+
+      {/* Sticky top countdown bar */}
+      <StickyTopBar />
 
       {/* Sticky mobile CTA */}
       <StickyCta />
