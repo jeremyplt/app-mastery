@@ -26,6 +26,7 @@ async function addBrevoContactToList(email: string, tag: string) {
   const listId = BREVO_LIST_IDS[tag];
 
   try {
+    // Step 1: Create or update contact (without listIds)
     await fetch("https://api.brevo.com/v3/contacts", {
       method: "POST",
       headers: {
@@ -35,12 +36,27 @@ async function addBrevoContactToList(email: string, tag: string) {
       body: JSON.stringify({
         email,
         updateEnabled: true,
-        listIds: listId ? [listId] : [],
         attributes: {
           APP_MASTERY_PLAN: tag,
         },
       }),
     });
+
+    // Step 2: Add to list separately so the "Ajouté à une liste"
+    // automation trigger fires in Brevo
+    if (listId) {
+      await fetch(
+        `https://api.brevo.com/v3/contacts/lists/${listId}/contacts/add`,
+        {
+          method: "POST",
+          headers: {
+            "api-key": BREVO_API_KEY,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ emails: [email] }),
+        },
+      );
+    }
 
     console.log(`Brevo contact added: ${email}, list: ${listId}, tag: ${tag}`);
   } catch (err) {

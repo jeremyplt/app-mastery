@@ -24,37 +24,50 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const body: Record<string, unknown> = {
-      email,
-      updateEnabled: true,
-    };
-
-    const targetListId = listId ? parseInt(listId) : BREVO_LIST_ID;
-    if (targetListId) {
-      body.listIds = [targetListId];
-    }
-
-    const res = await fetch("https://api.brevo.com/v3/contacts", {
+    // Step 1: Create or update the contact
+    const createRes = await fetch("https://api.brevo.com/v3/contacts", {
       method: "POST",
       headers: {
         "api-key": BREVO_API_KEY,
         "Content-Type": "application/json",
         Accept: "application/json",
       },
-      body: JSON.stringify(body),
+      body: JSON.stringify({ email, updateEnabled: true }),
     });
 
-    if (!res.ok) {
-      const data = await res.json();
+    if (!createRes.ok) {
+      const data = await createRes.json();
       // "duplicate_parameter" means contact already exists - that's fine
-      if (data.code === "duplicate_parameter") {
-        return NextResponse.json({ success: true });
+      if (data.code !== "duplicate_parameter") {
+        console.error("Brevo create contact error:", data);
+        return NextResponse.json(
+          { error: "Une erreur est survenue" },
+          { status: 500 },
+        );
       }
-      console.error("Brevo API error:", data);
-      return NextResponse.json(
-        { error: "Une erreur est survenue" },
-        { status: 500 }
+    }
+
+    // Step 2: Add contact to list separately so the "Ajouté à une liste"
+    // automation trigger fires in Brevo
+    const targetListId = listId ? parseInt(listId) : BREVO_LIST_ID;
+    if (targetListId) {
+      const listRes = await fetch(
+        `https://api.brevo.com/v3/contacts/lists/${targetListId}/contacts/add`,
+        {
+          method: "POST",
+          headers: {
+            "api-key": BREVO_API_KEY,
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({ emails: [email] }),
+        },
       );
+
+      if (!listRes.ok) {
+        const data = await listRes.json();
+        console.error("Brevo add to list error:", data);
+      }
     }
 
     return NextResponse.json({ success: true });
