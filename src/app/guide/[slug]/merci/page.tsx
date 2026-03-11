@@ -69,27 +69,6 @@ export default function GuidemerciPage() {
                 Pense à vérifier tes spams si tu ne le vois pas.
               </p>
 
-              {/* CTA to App Mastery */}
-              <motion.div
-                className="mt-12 pt-10 border-t border-white/10"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 }}
-              >
-                <p className="text-lg text-white font-medium">
-                  Tu veux aller plus loin ?
-                </p>
-                <p className="mt-2 text-base text-gray-400 max-w-md mx-auto">
-                  Découvre App Mastery, la formation complète pour créer, lancer
-                  et monétiser ton app en 28 jours avec l&apos;IA.
-                </p>
-                <a
-                  href="/formation"
-                  className="mt-6 inline-flex items-center justify-center rounded-full bg-white/5 border border-white/10 px-8 py-3.5 text-sm font-semibold text-white hover:bg-white/10 transition-colors"
-                >
-                  Découvrir App Mastery
-                </a>
-              </motion.div>
             </motion.div>
           </div>
         </div>

@@ -42,27 +42,6 @@ export default function MerciPage() {
             Pense à vérifier tes spams si tu ne le vois pas.
           </p>
 
-          {/* CTA to main offer */}
-          <motion.div
-            className="mt-12 pt-10 border-t border-white/10"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-          >
-            <p className="text-lg text-white font-medium">
-              Tu veux passer à l&apos;action ?
-            </p>
-            <p className="mt-2 text-base text-gray-400 max-w-md mx-auto">
-              Découvre App Mastery, la formation complète pour créer, lancer et
-              monétiser ton app en 28 jours.
-            </p>
-            <a
-              href="/formation"
-              className="mt-6 inline-flex items-center justify-center rounded-full bg-amber-500 px-8 py-3.5 text-sm font-semibold text-white hover:bg-amber-400 transition-colors shadow-lg shadow-amber-500/25"
-            >
-              Découvrir App Mastery
-            </a>
-          </motion.div>
         </motion.div>
       </div>
     </div>
