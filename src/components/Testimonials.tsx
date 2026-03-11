@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { useIsExpired } from "./CountdownTimer";
 
 // Structured testimonials with before/after transformation (most persuasive format)
 // Each testimonial should show: who they are, where they started, what they achieved
@@ -29,6 +30,8 @@ const testimonials = [
 ];
 
 export default function Testimonials() {
+  const expired = useIsExpired();
+
   return (
     <section className="relative py-20">
       <div className="px-4 sm:px-6 lg:px-8">
@@ -111,13 +114,19 @@ export default function Testimonials() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
         >
-          <a
-            href="#pricing"
-            className="inline-flex items-center justify-center rounded-full bg-sky-500 px-8 py-4 text-lg font-bold text-white hover:bg-sky-400 transition-colors shadow-lg shadow-sky-500/25"
-            data-ph-capture-attribute-section="testimonials"
-          >
-            Lancer mon app maintenant
-          </a>
+          {expired ? (
+            <span className="inline-flex items-center justify-center rounded-full bg-white/10 px-8 py-4 text-lg font-bold text-white/30 cursor-not-allowed">
+              Inscription fermée
+            </span>
+          ) : (
+            <a
+              href="#pricing"
+              className="inline-flex items-center justify-center rounded-full bg-sky-500 px-8 py-4 text-lg font-bold text-white hover:bg-sky-400 transition-colors shadow-lg shadow-sky-500/25"
+              data-ph-capture-attribute-section="testimonials"
+            >
+              Lancer mon app maintenant
+            </a>
+          )}
         </motion.div>
       </div>
 

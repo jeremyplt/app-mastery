@@ -2,8 +2,11 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { useIsExpired } from "./CountdownTimer";
 
 export default function Hero() {
+  const expired = useIsExpired();
+
   return (
     <section className="relative pt-6 pb-10 sm:pt-16 lg:pt-20 lg:pb-12">
       <div className="relative before:absolute before:bottom-0 before:h-px before:w-[200vw] before:-left-[100vw] before:bg-white/10" />
@@ -70,13 +73,19 @@ export default function Hero() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.35 }}
                 >
-                  <a
-                    href="#pricing"
-                    className="inline-flex items-center justify-center rounded-full bg-sky-500 px-8 py-4 text-lg font-bold text-white hover:bg-sky-400 transition-colors shadow-lg shadow-sky-500/25"
-                    data-ph-capture-attribute-section="hero"
-                  >
-                    Lancer mon app maintenant
-                  </a>
+                  {expired ? (
+                    <span className="inline-flex items-center justify-center rounded-full bg-white/10 px-8 py-4 text-lg font-bold text-white/30 cursor-not-allowed">
+                      Inscription fermée
+                    </span>
+                  ) : (
+                    <a
+                      href="#pricing"
+                      className="inline-flex items-center justify-center rounded-full bg-sky-500 px-8 py-4 text-lg font-bold text-white hover:bg-sky-400 transition-colors shadow-lg shadow-sky-500/25"
+                      data-ph-capture-attribute-section="hero"
+                    >
+                      Lancer mon app maintenant
+                    </a>
+                  )}
                   <a
                     href="#program"
                     className="inline-flex items-center justify-center rounded-full px-5 py-3 text-base font-semibold text-gray-300 outline outline-white/15 hover:outline-white/25 transition-colors"

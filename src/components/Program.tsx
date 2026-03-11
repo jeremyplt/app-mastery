@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown } from "lucide-react";
+import { useIsExpired } from "./CountdownTimer";
 
 interface Module {
   number: number;
@@ -152,6 +153,8 @@ function ModuleRow({ module }: { module: Module }) {
 }
 
 export default function Program() {
+  const expired = useIsExpired();
+
   return (
     <section id="program" className="relative py-20">
       <div className="px-4 sm:px-6 lg:px-8">
@@ -230,13 +233,19 @@ export default function Program() {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          <a
-            href="#pricing"
-            className="inline-flex items-center justify-center rounded-full bg-sky-500 px-8 py-4 text-lg font-bold text-white hover:bg-sky-400 transition-colors shadow-lg shadow-sky-500/25"
-            data-ph-capture-attribute-section="program"
-          >
-            Lancer mon app maintenant
-          </a>
+          {expired ? (
+            <span className="inline-flex items-center justify-center rounded-full bg-white/10 px-8 py-4 text-lg font-bold text-white/30 cursor-not-allowed">
+              Inscription fermée
+            </span>
+          ) : (
+            <a
+              href="#pricing"
+              className="inline-flex items-center justify-center rounded-full bg-sky-500 px-8 py-4 text-lg font-bold text-white hover:bg-sky-400 transition-colors shadow-lg shadow-sky-500/25"
+              data-ph-capture-attribute-section="program"
+            >
+              Lancer mon app maintenant
+            </a>
+          )}
         </motion.div>
       </div>
 

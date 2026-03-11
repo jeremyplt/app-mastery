@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Lightbulb, Code, Rocket } from "lucide-react";
+import { useIsExpired } from "./CountdownTimer";
 
 // Present the METHOD before the product (Cattoni)
 // "Le prospect doit croire en la solution avant d'acheter le produit"
@@ -37,6 +38,8 @@ const phases = [
 ];
 
 export default function Solution() {
+  const expired = useIsExpired();
+
   return (
     <section className="relative py-20">
       <div className="px-4 sm:px-6 lg:px-8">
@@ -109,13 +112,19 @@ export default function Solution() {
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.3 }}
         >
-          <a
-            href="#pricing"
-            className="inline-flex items-center justify-center rounded-full bg-sky-500 px-8 py-4 text-lg font-bold text-white hover:bg-sky-400 transition-colors shadow-lg shadow-sky-500/25"
-            data-ph-capture-attribute-section="solution"
-          >
-            Lancer mon app maintenant
-          </a>
+          {expired ? (
+            <span className="inline-flex items-center justify-center rounded-full bg-white/10 px-8 py-4 text-lg font-bold text-white/30 cursor-not-allowed">
+              Inscription fermée
+            </span>
+          ) : (
+            <a
+              href="#pricing"
+              className="inline-flex items-center justify-center rounded-full bg-sky-500 px-8 py-4 text-lg font-bold text-white hover:bg-sky-400 transition-colors shadow-lg shadow-sky-500/25"
+              data-ph-capture-attribute-section="solution"
+            >
+              Lancer mon app maintenant
+            </a>
+          )}
         </motion.div>
 
         {/* Open loop — transition to proof */}

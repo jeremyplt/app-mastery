@@ -1,10 +1,15 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { CountdownTimerLarge } from "./CountdownTimer";
+import { CountdownTimerLarge, useIsExpired } from "./CountdownTimer";
+import ClosedBanner from "./ClosedBanner";
 
 // Final CTA: recap promise + P.S. + urgency (Cattoni: CTA must ALWAYS be the last visible thing)
 export default function FinalCta() {
+  const expired = useIsExpired();
+
+  if (expired) return <ClosedBanner />;
+
   return (
     <section className="relative py-24">
       <div className="px-4 sm:px-6 lg:px-8">

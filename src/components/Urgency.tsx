@@ -1,9 +1,14 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { CountdownTimerLarge } from "./CountdownTimer";
+import { CountdownTimerLarge, useIsExpired } from "./CountdownTimer";
+import ClosedBanner from "./ClosedBanner";
 
 export default function Urgency() {
+  const expired = useIsExpired();
+
+  if (expired) return <ClosedBanner />;
+
   return (
     <section className="relative py-20">
       <div className="px-4 sm:px-6 lg:px-8">

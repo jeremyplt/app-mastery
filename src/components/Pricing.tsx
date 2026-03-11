@@ -4,6 +4,7 @@ import { useState } from "react";
 import { usePostHog } from "posthog-js/react";
 import { motion } from "framer-motion";
 import { Check, X } from "lucide-react";
+import { useIsExpired } from "./CountdownTimer";
 
 // Price anchoring against alternatives (Hormozi)
 const alternatives = [
@@ -55,6 +56,7 @@ const vipFeatures = [
 export default function Pricing() {
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
   const posthog = usePostHog();
+  const expired = useIsExpired();
 
   function handleCheckout(plan: string) {
     posthog?.capture("checkout_started", { plan }, { send_instantly: true });
@@ -216,11 +218,11 @@ export default function Pricing() {
                 <div className="mt-auto">
                   <button
                     onClick={() => handleCheckout("essentiel")}
-                    disabled={loadingPlan !== null}
+                    disabled={expired || loadingPlan !== null}
                     data-ph-capture-attribute-section="pricing-essentiel"
-                    className="block w-full rounded-full border-2 border-white/20 py-3 text-base font-semibold text-white text-center hover:border-white/40 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                    className={`block w-full rounded-full border-2 py-3 text-base font-semibold text-center transition-colors disabled:cursor-not-allowed ${expired ? "border-white/10 text-white/30 cursor-not-allowed" : "border-white/20 text-white hover:border-white/40 cursor-pointer disabled:opacity-50"}`}
                   >
-                    {loadingPlan === "essentiel" ? (
+                    {expired ? "Inscription fermée" : loadingPlan === "essentiel" ? (
                       <span className="inline-flex items-center gap-2">
                         <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
                         Chargement...
@@ -299,11 +301,11 @@ export default function Pricing() {
                 <div className="mt-auto">
                   <button
                     onClick={() => handleCheckout("complet")}
-                    disabled={loadingPlan !== null}
+                    disabled={expired || loadingPlan !== null}
                     data-ph-capture-attribute-section="pricing-complet"
-                    className="block w-full rounded-full bg-sky-500 py-4 text-base font-bold text-white hover:bg-sky-400 transition-colors shadow-lg shadow-sky-500/25 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                    className={`block w-full rounded-full py-4 text-base font-bold text-white transition-colors disabled:cursor-not-allowed ${expired ? "bg-white/10 cursor-not-allowed text-white/30" : "bg-sky-500 hover:bg-sky-400 shadow-lg shadow-sky-500/25 cursor-pointer disabled:opacity-50"}`}
                   >
-                    {loadingPlan === "complet" ? (
+                    {expired ? "Inscription fermée" : loadingPlan === "complet" ? (
                       <span className="inline-flex items-center gap-2">
                         <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
                         Chargement...
@@ -311,18 +313,20 @@ export default function Pricing() {
                     ) : "Lancer mon app maintenant"}
                   </button>
 
-                  <button
-                    onClick={() => handleCheckout("complet-3x")}
-                    disabled={loadingPlan !== null}
-                    className="text-base text-sky-400 mt-4 font-semibold hover:text-sky-300 underline underline-offset-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {loadingPlan === "complet-3x" ? (
-                      <span className="inline-flex items-center gap-2">
-                        <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
-                        Chargement...
-                      </span>
-                    ) : "ou payer en 3x 347€"}
-                  </button>
+                  {!expired && (
+                    <button
+                      onClick={() => handleCheckout("complet-3x")}
+                      disabled={loadingPlan !== null}
+                      className="text-base text-sky-400 mt-4 font-semibold hover:text-sky-300 underline underline-offset-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {loadingPlan === "complet-3x" ? (
+                        <span className="inline-flex items-center gap-2">
+                          <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
+                          Chargement...
+                        </span>
+                      ) : "ou payer en 3x 347€"}
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
@@ -387,11 +391,11 @@ export default function Pricing() {
                 <div className="mt-auto">
                   <button
                     onClick={() => handleCheckout("vip")}
-                    disabled={loadingPlan !== null}
+                    disabled={expired || loadingPlan !== null}
                     data-ph-capture-attribute-section="pricing-vip"
-                    className="block w-full rounded-full bg-amber-500 py-3.5 text-base font-bold text-white text-center hover:bg-amber-400 transition-colors shadow-lg shadow-amber-500/25 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                    className={`block w-full rounded-full py-3.5 text-base font-bold text-white text-center transition-colors disabled:cursor-not-allowed ${expired ? "bg-white/10 cursor-not-allowed text-white/30" : "bg-amber-500 hover:bg-amber-400 shadow-lg shadow-amber-500/25 cursor-pointer disabled:opacity-50"}`}
                   >
-                    {loadingPlan === "vip" ? (
+                    {expired ? "Inscription fermée" : loadingPlan === "vip" ? (
                       <span className="inline-flex items-center gap-2">
                         <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
                         Chargement...
@@ -399,18 +403,20 @@ export default function Pricing() {
                     ) : "Devenir VIP"}
                   </button>
 
-                  <button
-                    onClick={() => handleCheckout("vip-3x")}
-                    disabled={loadingPlan !== null}
-                    className="text-base text-amber-400 mt-4 font-semibold hover:text-amber-300 underline underline-offset-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {loadingPlan === "vip-3x" ? (
-                      <span className="inline-flex items-center gap-2">
-                        <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
-                        Chargement...
-                      </span>
-                    ) : "ou payer en 3x 1 097€"}
-                  </button>
+                  {!expired && (
+                    <button
+                      onClick={() => handleCheckout("vip-3x")}
+                      disabled={loadingPlan !== null}
+                      className="text-base text-amber-400 mt-4 font-semibold hover:text-amber-300 underline underline-offset-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {loadingPlan === "vip-3x" ? (
+                        <span className="inline-flex items-center gap-2">
+                          <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
+                          Chargement...
+                        </span>
+                      ) : "ou payer en 3x 1 097€"}
+                    </button>
+                  )}
                 </div>
               </div>
             </div>

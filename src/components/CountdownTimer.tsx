@@ -5,7 +5,20 @@ import { useState, useEffect } from "react";
 // ============================================================
 // CONFIGURATION : Change cette date pour la fermeture des portes
 // ============================================================
-export const LAUNCH_DEADLINE = new Date("2026-03-17T23:59:59+01:00"); // 17 mars 2026, 23h59 heure de Paris
+export const LAUNCH_DEADLINE = new Date("2026-03-24T23:59:59+01:00"); // 24 mars 2026, 23h59 heure de Paris
+
+export function useIsExpired() {
+  const [expired, setExpired] = useState(false);
+
+  useEffect(() => {
+    const check = () => setExpired(Date.now() >= LAUNCH_DEADLINE.getTime());
+    check();
+    const interval = setInterval(check, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return expired;
+}
 
 interface TimeLeft {
   days: number;

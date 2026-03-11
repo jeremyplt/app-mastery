@@ -2,10 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CountdownTimerCompact } from "./CountdownTimer";
+import { CountdownTimerCompact, useIsExpired } from "./CountdownTimer";
 
 export default function StickyCta() {
   const [isVisible, setIsVisible] = useState(false);
+  const expired = useIsExpired();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -15,6 +16,8 @@ export default function StickyCta() {
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  if (expired) return null;
 
   return (
     <AnimatePresence>
