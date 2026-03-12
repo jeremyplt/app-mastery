@@ -31,10 +31,6 @@ function verifyWebhookSignature(
   );
 }
 
-function delay(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
 async function addBrevoContactToList(email: string, tag: string) {
   const BREVO_API_KEY = process.env.BREVO_API_KEY;
   if (!BREVO_API_KEY) return;
@@ -42,8 +38,9 @@ async function addBrevoContactToList(email: string, tag: string) {
   const listId = BREVO_LIST_IDS[tag];
 
   try {
-    // Step 1: Create or update contact
-    const createRes = await fetch("https://api.brevo.com/v3/contacts", {
+    // Create contact WITH listIds in a single call so Brevo sees it as
+    // a new contact added to the list (triggers "Ajouté à une liste" automation)
+    const res = await fetch("https://api.brevo.com/v3/contacts", {
       method: "POST",
       headers: {
         "api-key": BREVO_API_KEY,
@@ -52,20 +49,20 @@ async function addBrevoContactToList(email: string, tag: string) {
       body: JSON.stringify({
         email,
         updateEnabled: true,
+        listIds: listId ? [listId] : [],
         attributes: {
           APP_MASTERY_PLAN: tag,
         },
       }),
     });
 
-    const createBody = await createRes.text();
-    console.log(`Brevo create contact ${email}: ${createRes.status} ${createBody}`);
+    const body = await res.text();
+    console.log(`Brevo create+list ${email}: ${res.status} ${body}`);
 
-    // Wait for Brevo to fully process the contact before adding to list
-    await delay(2000);
-
-    // Step 2: Add to list separately so the automation trigger fires
-    if (listId) {
+    // If the contact already existed (updateEnabled), the listIds might not
+    // trigger the automation. In that case, also do a separate list add.
+    if (res.status === 204 && listId) {
+      console.log(`Brevo contact ${email} already existed, doing separate list add`);
       const listRes = await fetch(
         `https://api.brevo.com/v3/contacts/lists/${listId}/contacts/add`,
         {
@@ -77,9 +74,8 @@ async function addBrevoContactToList(email: string, tag: string) {
           body: JSON.stringify({ emails: [email] }),
         }
       );
-
       const listBody = await listRes.text();
-      console.log(`Brevo add to list ${listId} for ${email}: ${listRes.status} ${listBody}`);
+      console.log(`Brevo separate list add ${email}: ${listRes.status} ${listBody}`);
     }
 
     console.log(`Brevo done: ${email}, list: ${listId}, tag: ${tag}`);
