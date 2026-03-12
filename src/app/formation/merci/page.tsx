@@ -50,7 +50,7 @@ function OrderSummary() {
             <span className="text-white">{order.email}</span>
           </div>
         )}
-        {order.amount !== null && (
+        {order.amount != null && (
           <div className="flex justify-between">
             <span className="text-gray-400">Montant</span>
             <span className="text-white">

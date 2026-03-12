@@ -50,7 +50,7 @@ export async function GET(req: NextRequest) {
       email: attrs.user_email,
       plan: PLAN_LABELS[planKey] || planKey,
       planKey,
-      amount: attrs.total ? Number(attrs.total) / 100 : null,
+      amount: attrs.total != null ? Number(attrs.total) / 100 : attrs.total_formatted ? parseFloat(attrs.total_formatted.replace(/[^0-9.,]/g, "").replace(",", ".")) : null,
       currency: attrs.currency?.toUpperCase() || "EUR",
     });
   } catch {
