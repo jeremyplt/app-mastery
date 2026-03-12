@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PostHog } from "posthog-node";
 import Stripe from "stripe";
+import { addBrevoContact } from "@/lib/brevo";
 
 function getStripe() {
   return new Stripe(process.env.STRIPE_SECRET_KEY!, {
@@ -10,66 +11,6 @@ function getStripe() {
 
 function getSkoolWebhookUrl() {
   return process.env.SKOOL_WEBHOOK_URL!;
-}
-
-// Brevo list IDs per plan
-const BREVO_LIST_IDS: Record<string, number> = {
-  essentiel: 6,
-  complet: 7,
-  vip: 8,
-};
-
-async function addBrevoContactToList(email: string, tag: string) {
-  const BREVO_API_KEY = process.env.BREVO_API_KEY;
-  if (!BREVO_API_KEY) return;
-
-  const listId = BREVO_LIST_IDS[tag];
-
-  try {
-    // Create contact WITH listIds in a single call so Brevo sees it as
-    // a new contact added to the list (triggers "Ajouté à une liste" automation)
-    const res = await fetch("https://api.brevo.com/v3/contacts", {
-      method: "POST",
-      headers: {
-        "api-key": BREVO_API_KEY,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email,
-        updateEnabled: true,
-        listIds: listId ? [listId] : [],
-        attributes: {
-          APP_MASTERY_PLAN: tag,
-        },
-      }),
-    });
-
-    const body = await res.text();
-    console.log(`Brevo create+list ${email}: ${res.status} ${body}`);
-
-    // If the contact already existed (updateEnabled), the listIds might not
-    // trigger the automation. In that case, also do a separate list add.
-    if (res.status === 204 && listId) {
-      console.log(`Brevo contact ${email} already existed, doing separate list add`);
-      const listRes = await fetch(
-        `https://api.brevo.com/v3/contacts/lists/${listId}/contacts/add`,
-        {
-          method: "POST",
-          headers: {
-            "api-key": BREVO_API_KEY,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ emails: [email] }),
-        },
-      );
-      const listBody = await listRes.text();
-      console.log(`Brevo separate list add ${email}: ${listRes.status} ${listBody}`);
-    }
-
-    console.log(`Brevo done: ${email}, list: ${listId}, tag: ${tag}`);
-  } catch (err) {
-    console.error("Brevo contact update failed:", err);
-  }
 }
 
 export async function POST(req: NextRequest) {
@@ -116,12 +57,10 @@ export async function POST(req: NextRequest) {
         const stripe = getStripe();
         const subscriptionId = session.subscription as string;
 
-        // Convert the subscription into a schedule
         const schedule = await stripe.subscriptionSchedules.create({
           from_subscription: subscriptionId,
         });
 
-        // Update the schedule: set end_behavior to cancel and fix phase to 3 months
         const phase = schedule.phases[0];
         await stripe.subscriptionSchedules.update(schedule.id, {
           end_behavior: "cancel",
@@ -143,9 +82,13 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Add contact to Brevo list (triggers automation)
+    // Add contact to Brevo + fire event to trigger automation
     try {
-      await addBrevoContactToList(email, tag);
+      await addBrevoContact(email, tag, "purchase_completed", {
+        amount: session.amount_total ? session.amount_total / 100 : undefined,
+        currency: (session.currency || "eur").toUpperCase(),
+        provider: "stripe",
+      });
       console.log(`Brevo done for ${email}`);
     } catch (err) {
       console.error("Brevo failed:", err);
@@ -164,7 +107,7 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Track purchase in PostHog (non-blocking)
+    // Track purchase in PostHog
     if (process.env.POSTHOG_API_KEY) {
       try {
         const ph = new PostHog(process.env.POSTHOG_API_KEY, {
