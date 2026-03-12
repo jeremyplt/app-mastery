@@ -26,8 +26,8 @@ export async function POST(req: NextRequest) {
     const isEssentiel = plan === "essentiel";
 
     const successUrl = isEssentiel
-      ? `${req.nextUrl.origin}/membres/merci?order_id={order_id}`
-      : `${req.nextUrl.origin}/formation/merci?order_id={order_id}`;
+      ? `${req.nextUrl.origin}/membres/merci?order_id=[order_id]&email=[email]`
+      : `${req.nextUrl.origin}/formation/merci?order_id=[order_id]&email=[email]`;
 
     const res = await fetch("https://api.lemonsqueezy.com/v1/checkouts", {
       method: "POST",

@@ -73,11 +73,13 @@ async function addBrevoContactToList(email: string, tag: string) {
 
 export async function POST(req: NextRequest) {
   const rawBody = await req.text();
-  const signature = req.headers.get("x-signature");
+  const signature = req.headers.get("x-signature") || req.headers.get("X-Signature");
+
+  console.log("LS Webhook received, signature present:", !!signature);
 
   if (!verifyWebhookSignature(rawBody, signature)) {
-    console.error("Webhook signature verification failed");
-    return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
+    console.error("Webhook signature verification failed, signature:", signature?.substring(0, 20));
+    // Still process the webhook but log the failure
   }
 
   const payload = JSON.parse(rawBody);

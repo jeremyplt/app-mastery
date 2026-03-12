@@ -8,6 +8,15 @@ const PLAN_LABELS: Record<string, string> = {
   "vip-3x": "VIP (3x)",
 };
 
+// Map variant IDs to plan keys
+const VARIANT_TO_PLAN: Record<string, string> = {
+  [process.env.LS_VARIANT_ESSENTIEL || ""]: "essentiel",
+  [process.env.LS_VARIANT_COMPLET || ""]: "complet",
+  [process.env.LS_VARIANT_COMPLET_3X || ""]: "complet-3x",
+  [process.env.LS_VARIANT_VIP || ""]: "vip",
+  [process.env.LS_VARIANT_VIP_3X || ""]: "vip-3x",
+};
+
 export async function GET(req: NextRequest) {
   const orderId = req.nextUrl.searchParams.get("order_id");
 
@@ -30,6 +39,7 @@ export async function GET(req: NextRequest) {
     );
 
     if (!res.ok) {
+      console.error("LS order fetch failed:", res.status);
       return NextResponse.json(
         { error: "Commande introuvable" },
         { status: 404 }
@@ -39,21 +49,18 @@ export async function GET(req: NextRequest) {
     const data = await res.json();
     const attrs = data.data.attributes;
 
-    const plan =
-      attrs.first_order_item?.variant_name?.toLowerCase() || "essentiel";
-    const planKey =
-      Object.keys(PLAN_LABELS).find(
-        (k) => k === plan || PLAN_LABELS[k]?.toLowerCase() === plan
-      ) || "essentiel";
+    const variantId = String(attrs.first_order_item?.variant_id || "");
+    const planKey = VARIANT_TO_PLAN[variantId] || "essentiel";
 
     return NextResponse.json({
       email: attrs.user_email,
       plan: PLAN_LABELS[planKey] || planKey,
       planKey,
-      amount: attrs.total != null ? Number(attrs.total) / 100 : attrs.total_formatted ? parseFloat(attrs.total_formatted.replace(/[^0-9.,]/g, "").replace(",", ".")) : null,
+      amount: attrs.total != null ? attrs.total / 100 : null,
       currency: attrs.currency?.toUpperCase() || "EUR",
     });
-  } catch {
+  } catch (err) {
+    console.error("LS order fetch error:", err);
     return NextResponse.json(
       { error: "Commande introuvable" },
       { status: 404 }
