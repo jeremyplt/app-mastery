@@ -1,11 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import Stripe from "stripe";
-
-function getStripe() {
-  return new Stripe(process.env.STRIPE_SECRET_KEY!, {
-    apiVersion: "2026-02-25.clover",
-  });
-}
 
 const PLAN_LABELS: Record<string, string> = {
   essentiel: "Essentiel",
@@ -16,35 +9,53 @@ const PLAN_LABELS: Record<string, string> = {
 };
 
 export async function GET(req: NextRequest) {
-  const sessionId = req.nextUrl.searchParams.get("session_id");
+  const orderId = req.nextUrl.searchParams.get("order_id");
 
-  if (!sessionId) {
+  if (!orderId) {
     return NextResponse.json(
-      { error: "session_id manquant" },
+      { error: "order_id manquant" },
       { status: 400 }
     );
   }
 
   try {
-    const stripe = getStripe();
-    const session = await stripe.checkout.sessions.retrieve(sessionId);
+    const res = await fetch(
+      `https://api.lemonsqueezy.com/v1/orders/${orderId}`,
+      {
+        headers: {
+          Accept: "application/vnd.api+json",
+          Authorization: `Bearer ${process.env.LS_API_KEY}`,
+        },
+      }
+    );
 
-    const plan = session.metadata?.plan || "essentiel";
-    const email =
-      session.customer_email || session.customer_details?.email || null;
-    const amount = session.amount_total ? session.amount_total / 100 : null;
-    const currency = session.currency?.toUpperCase() || "EUR";
+    if (!res.ok) {
+      return NextResponse.json(
+        { error: "Commande introuvable" },
+        { status: 404 }
+      );
+    }
+
+    const data = await res.json();
+    const attrs = data.data.attributes;
+
+    const plan =
+      attrs.first_order_item?.variant_name?.toLowerCase() || "essentiel";
+    const planKey =
+      Object.keys(PLAN_LABELS).find(
+        (k) => k === plan || PLAN_LABELS[k]?.toLowerCase() === plan
+      ) || "essentiel";
 
     return NextResponse.json({
-      email,
-      plan: PLAN_LABELS[plan] || plan,
-      planKey: plan,
-      amount,
-      currency,
+      email: attrs.user_email,
+      plan: PLAN_LABELS[planKey] || planKey,
+      planKey,
+      amount: attrs.total ? Number(attrs.total) / 100 : null,
+      currency: attrs.currency?.toUpperCase() || "EUR",
     });
   } catch {
     return NextResponse.json(
-      { error: "Session introuvable" },
+      { error: "Commande introuvable" },
       { status: 404 }
     );
   }

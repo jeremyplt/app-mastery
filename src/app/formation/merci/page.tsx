@@ -14,16 +14,16 @@ interface OrderInfo {
 
 function OrderSummary() {
   const searchParams = useSearchParams();
-  const sessionId = searchParams.get("session_id");
+  const orderId = searchParams.get("order_id");
   const [order, setOrder] = useState<OrderInfo | null>(null);
 
   useEffect(() => {
-    if (!sessionId) return;
-    fetch(`/api/checkout/session?session_id=${sessionId}`)
+    if (!orderId) return;
+    fetch(`/api/checkout/session?order_id=${orderId}`)
       .then((r) => r.json())
       .then(setOrder)
       .catch(() => {});
-  }, [sessionId]);
+  }, [orderId]);
 
   if (!order) return null;
 

@@ -1,19 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import Stripe from "stripe";
 
-function getStripe() {
-  return new Stripe(process.env.STRIPE_SECRET_KEY!, {
-    apiVersion: "2026-02-25.clover",
-  });
-}
-
-function getPriceId(plan: string): string | null {
+function getVariantId(plan: string): string | null {
   const map: Record<string, string | undefined> = {
-    essentiel: process.env.STRIPE_PRICE_ESSENTIEL,
-    complet: process.env.STRIPE_PRICE_COMPLET,
-    "complet-3x": process.env.STRIPE_PRICE_COMPLET_3X,
-    vip: process.env.STRIPE_PRICE_VIP,
-    "vip-3x": process.env.STRIPE_PRICE_VIP_3X,
+    essentiel: process.env.LS_VARIANT_ESSENTIEL,
+    complet: process.env.LS_VARIANT_COMPLET,
+    "complet-3x": process.env.LS_VARIANT_COMPLET_3X,
+    vip: process.env.LS_VARIANT_VIP,
+    "vip-3x": process.env.LS_VARIANT_VIP_3X,
   };
   return map[plan] || null;
 }
@@ -21,43 +14,70 @@ function getPriceId(plan: string): string | null {
 export async function POST(req: NextRequest) {
   try {
     const { plan } = await req.json();
-    const priceId = getPriceId(plan);
+    const variantId = getVariantId(plan);
 
-    if (!plan || !priceId) {
+    if (!plan || !variantId) {
       return NextResponse.json(
         { error: `Plan invalide: ${plan}` },
         { status: 400 }
       );
     }
 
-    const stripe = getStripe();
-    const isRecurring = plan.endsWith("-3x");
     const isEssentiel = plan === "essentiel";
 
     const successUrl = isEssentiel
-      ? `${req.nextUrl.origin}/membres/merci?session_id={CHECKOUT_SESSION_ID}`
-      : `${req.nextUrl.origin}/formation/merci?session_id={CHECKOUT_SESSION_ID}`;
+      ? `${req.nextUrl.origin}/membres/merci?order_id={order_id}`
+      : `${req.nextUrl.origin}/formation/merci?order_id={order_id}`;
 
-    const session = await stripe.checkout.sessions.create({
-      mode: isRecurring ? "subscription" : "payment",
-      line_items: [{ price: priceId, quantity: 1 }],
-      success_url: successUrl,
-      cancel_url: `${req.nextUrl.origin}/formation#pricing`,
-      allow_promotion_codes: true,
-      metadata: { plan },
-      ...(isRecurring && {
-        subscription_data: {
-          metadata: { plan },
-        },
-        custom_text: {
-          submit: {
-            message: "Paiement en 3 mensualités. Votre abonnement s'arrête automatiquement après le 3e paiement. Aucune action requise de votre part.",
+    const res = await fetch("https://api.lemonsqueezy.com/v1/checkouts", {
+      method: "POST",
+      headers: {
+        Accept: "application/vnd.api+json",
+        "Content-Type": "application/vnd.api+json",
+        Authorization: `Bearer ${process.env.LS_API_KEY}`,
+      },
+      body: JSON.stringify({
+        data: {
+          type: "checkouts",
+          attributes: {
+            checkout_data: {
+              custom: {
+                plan,
+              },
+            },
+            product_options: {
+              redirect_url: successUrl,
+            },
+          },
+          relationships: {
+            store: {
+              data: {
+                type: "stores",
+                id: process.env.LS_STORE_ID,
+              },
+            },
+            variant: {
+              data: {
+                type: "variants",
+                id: variantId,
+              },
+            },
           },
         },
       }),
     });
 
-    return NextResponse.json({ url: session.url });
+    const data = await res.json();
+
+    if (!res.ok) {
+      console.error("Lemon Squeezy checkout error:", JSON.stringify(data));
+      return NextResponse.json(
+        { error: "Erreur lors de la création du checkout" },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json({ url: data.data.attributes.url });
   } catch (err) {
     console.error("Checkout error:", err);
     return NextResponse.json(

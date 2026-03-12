@@ -1,14 +1,9 @@
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
-import Stripe from "stripe";
 
 const SECRET = new TextEncoder().encode(
   process.env.JWT_SECRET || "default-secret-change-me"
 );
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2026-02-25.clover",
-});
 
 export async function createMagicLinkToken(email: string): Promise<string> {
   return new SignJWT({ email })
@@ -45,20 +40,22 @@ export async function getSessionEmail(): Promise<string | null> {
 
 export async function hasEssentielAccess(email: string): Promise<boolean> {
   try {
-    const sessions = await stripe.checkout.sessions.list({
-      customer_details: { email },
-      status: "complete",
-      limit: 100,
-    } as Stripe.Checkout.SessionListParams);
-
-    for (const session of sessions.data) {
-      if (session.payment_status === "paid") {
-        return true;
+    const res = await fetch(
+      `https://api.lemonsqueezy.com/v1/orders?filter[user_email]=${encodeURIComponent(email)}`,
+      {
+        headers: {
+          Accept: "application/vnd.api+json",
+          Authorization: `Bearer ${process.env.LS_API_KEY}`,
+        },
       }
-    }
-    return false;
+    );
+
+    if (!res.ok) return false;
+
+    const data = await res.json();
+    return data.data && data.data.length > 0;
   } catch (err) {
-    console.error("Stripe verification error:", err);
+    console.error("Lemon Squeezy verification error:", err);
     return false;
   }
 }
