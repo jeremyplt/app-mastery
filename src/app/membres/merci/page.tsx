@@ -15,15 +15,21 @@ interface OrderInfo {
 function OrderSummary() {
   const searchParams = useSearchParams();
   const orderId = searchParams.get("order_id");
+  const sessionId = searchParams.get("session_id");
   const [order, setOrder] = useState<OrderInfo | null>(null);
 
   useEffect(() => {
-    if (!orderId) return;
-    fetch(`/api/checkout/session?order_id=${orderId}`)
+    const param = orderId
+      ? `order_id=${orderId}`
+      : sessionId
+        ? `session_id=${sessionId}`
+        : null;
+    if (!param) return;
+    fetch(`/api/checkout/session?${param}`)
       .then((r) => r.json())
       .then(setOrder)
       .catch(() => {});
-  }, [orderId]);
+  }, [orderId, sessionId]);
 
   if (!order) return null;
 
