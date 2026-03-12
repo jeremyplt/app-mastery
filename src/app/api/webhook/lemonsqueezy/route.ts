@@ -31,6 +31,10 @@ function verifyWebhookSignature(
   );
 }
 
+function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 async function addBrevoContactToList(email: string, tag: string) {
   const BREVO_API_KEY = process.env.BREVO_API_KEY;
   if (!BREVO_API_KEY) return;
@@ -39,7 +43,7 @@ async function addBrevoContactToList(email: string, tag: string) {
 
   try {
     // Step 1: Create or update contact
-    await fetch("https://api.brevo.com/v3/contacts", {
+    const createRes = await fetch("https://api.brevo.com/v3/contacts", {
       method: "POST",
       headers: {
         "api-key": BREVO_API_KEY,
@@ -54,9 +58,15 @@ async function addBrevoContactToList(email: string, tag: string) {
       }),
     });
 
+    const createBody = await createRes.text();
+    console.log(`Brevo create contact ${email}: ${createRes.status} ${createBody}`);
+
+    // Wait for Brevo to fully process the contact before adding to list
+    await delay(2000);
+
     // Step 2: Add to list separately so the automation trigger fires
     if (listId) {
-      await fetch(
+      const listRes = await fetch(
         `https://api.brevo.com/v3/contacts/lists/${listId}/contacts/add`,
         {
           method: "POST",
@@ -67,11 +77,12 @@ async function addBrevoContactToList(email: string, tag: string) {
           body: JSON.stringify({ emails: [email] }),
         }
       );
+
+      const listBody = await listRes.text();
+      console.log(`Brevo add to list ${listId} for ${email}: ${listRes.status} ${listBody}`);
     }
 
-    console.log(
-      `Brevo contact added: ${email}, list: ${listId}, tag: ${tag}`
-    );
+    console.log(`Brevo done: ${email}, list: ${listId}, tag: ${tag}`);
   } catch (err) {
     console.error("Brevo contact update failed:", err);
   }
