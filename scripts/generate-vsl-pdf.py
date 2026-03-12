@@ -8,7 +8,7 @@ class VSLPDF(FPDF):
             self.cell(0, 12, "Script VSL - App Mastery", align="C", new_x="LMARGIN", new_y="NEXT")
             self.set_font("Helvetica", "", 11)
             self.set_text_color(100, 100, 100)
-            self.cell(0, 8, "Video de Presentation (3 minutes)", align="C", new_x="LMARGIN", new_y="NEXT")
+            self.cell(0, 8, "Vidéo de Présentation (3 minutes)", align="C", new_x="LMARGIN", new_y="NEXT")
             self.set_text_color(0, 0, 0)
             self.ln(5)
 
@@ -53,12 +53,12 @@ pdf.add_page()
 
 # ---- HOOK ----
 pdf.section_title("HOOK (0:00 - 0:15)")
-pdf.stage_direction("[Face camera, regard direct, energie haute]")
+pdf.stage_direction("[Face caméra, regard direct, énergie haute]")
 
 pdf.french_text(
     "\"Et si je te disais que tu peux avoir ta propre app sur l'App Store "
-    "et le Google Play Store dans 28 jours, sans ecrire une seule ligne de code toi-meme ?\n\n"
-    "Tu penserais surement que c'est impossible. C'est exactement ce que je pensais aussi.\""
+    "et le Google Play Store dans 28 jours, sans écrire une seule ligne de code toi-même ?\n\n"
+    "Tu penserais sûrement que c'est impossible. C'est exactement ce que je pensais aussi.\""
 )
 pdf.english_text(
     "\"What if I told you that you could have your own app on the App Store "
@@ -73,14 +73,14 @@ pdf.section_title("STORY - Le Backstory (0:15 - 0:50)")
 pdf.stage_direction("[Ton plus calme, authentique, storytelling]")
 
 pdf.french_text(
-    "\"Il y a quelques annees, j'etais comme toi. J'avais des idees d'apps plein la tete. "
-    "Mais zero app sur les stores.\n\n"
-    "J'ai passe des mois a regarder des tutos YouTube. A m'eparpiller entre les langages, "
+    "\"Il y a quelques années, j'étais comme toi. J'avais des idées d'apps plein la tête. "
+    "Mais zéro app sur les stores.\n\n"
+    "J'ai passé des mois à regarder des tutos YouTube. À m'éparpiller entre les langages, "
     "les frameworks, les outils. Sans jamais finir quoi que ce soit.\n\n"
-    "Puis un jour, j'ai decide d'arreter de repousser. J'ai travaille plus de 12 heures par jour "
+    "Puis un jour, j'ai décidé d'arrêter de repousser. J'ai travaillé plus de 12 heures par jour "
     "pendant 2 ans sur mon app, Shinobi Japanese.\n\n"
-    "J'ai fait toutes les erreurs possibles. Des nuits blanches a debugger. Des crashs en production. "
-    "Des semaines entieres a coder des fonctionnalites que personne n'utilisait.\""
+    "J'ai fait toutes les erreurs possibles. Des nuits blanches à debugger. Des crashs en production. "
+    "Des semaines entières à coder des fonctionnalités que personne n'utilisait.\""
 )
 pdf.english_text(
     "\"A few years ago, I was just like you. I had tons of app ideas in my head. "
@@ -95,19 +95,19 @@ pdf.english_text(
 
 pdf.separator()
 
-# ---- EPIPHANIE ----
-pdf.section_title("L'EPIPHANIE (0:50 - 1:15)")
-pdf.stage_direction("[Changement d'energie, plus intense]")
+# ---- ÉPIPHANIE ----
+pdf.section_title("L'ÉPIPHANIE (0:50 - 1:15)")
+pdf.stage_direction("[Changement d'énergie, plus intense]")
 
 pdf.french_text(
-    "\"Et puis tout a change.\n\n"
-    "L'intelligence artificielle est arrivee. Et j'ai decouvert un workflow precis, "
+    "\"Et puis tout a changé.\n\n"
+    "L'intelligence artificielle est arrivée. Et j'ai découvert un workflow précis, "
     "le vibe coding, qui m'a permis de faire en quelques heures ce qui me prenait des semaines.\n\n"
-    "L'IA ecrit le code. Moi, je dirige la vision.\n\n"
-    "Resultat ? Mon app genere aujourd'hui plus de 140 000 dollars par an de revenus recurrents. "
+    "L'IA écrit le code. Moi, je dirige la vision.\n\n"
+    "Résultat ? Mon app génère aujourd'hui plus de 140 000 dollars par an de revenus récurrents. "
     "Avec une seule app.\"\n\n"
-    "[Montrer brievement le screenshot RevenueCat a l'ecran]\n\n"
-    "\"Et la bonne nouvelle, c'est que cette methode n'a plus rien a voir avec ce que j'ai vecu "
+    "[Montrer brièvement le screenshot RevenueCat à l'écran]\n\n"
+    "\"Et la bonne nouvelle, c'est que cette méthode n'a plus rien à voir avec ce que j'ai vécu "
     "pendant 2 ans. Aujourd'hui, c'est 10 fois plus rapide.\""
 )
 pdf.english_text(
@@ -126,19 +126,19 @@ pdf.separator()
 
 # ---- SOLUTION ----
 pdf.section_title("LA SOLUTION (1:15 - 1:45)")
-pdf.stage_direction("[Confiant, structure]")
+pdf.stage_direction("[Confiant, structuré]")
 
 pdf.french_text(
-    "\"C'est pour ca que j'ai cree App Mastery.\n\n"
+    "\"C'est pour ça que j'ai créé App Mastery.\n\n"
     "Une formation en 3 phases simples :\n\n"
-    "Phase 1 : Tu trouves et tu valides une idee d'app qui a un vrai marche. "
+    "Phase 1 : Tu trouves et tu valides une idée d'app qui a un vrai marché. "
     "Avant de construire quoi que ce soit.\n\n"
-    "Phase 2 : Tu developpes ton app avec l'IA. Pas besoin de savoir coder. "
+    "Phase 2 : Tu développes ton app avec l'IA. Pas besoin de savoir coder. "
     "Je te montre exactement comment faire.\n\n"
     "Phase 3 : Tu publies sur les stores, et surtout, je t'apprends tout le marketing. "
-    "Contenu organique, strategie influenceurs, monetisation. "
-    "Parce qu'une app sans visibilite ne fait pas d'argent.\n\n"
-    "En 28 jours, tu passes de l'idee a une app publiee et monetisee.\""
+    "Contenu organique, stratégie influenceurs, monétisation. "
+    "Parce qu'une app sans visibilité ne fait pas d'argent.\n\n"
+    "En 28 jours, tu passes de l'idée à une app publiée et monétisée.\""
 )
 pdf.english_text(
     "\"That's why I created App Mastery.\n\n"
@@ -157,18 +157,18 @@ pdf.separator()
 
 # ---- PROOF ----
 pdf.section_title("PROOF (1:45 - 2:10)")
-pdf.stage_direction("[Montrer les preuves a l'ecran pendant qu'on parle]")
+pdf.stage_direction("[Montrer les preuves à l'écran pendant qu'on parle]")
 
 pdf.french_text(
-    "\"Et je ne suis pas le seul a avoir ces resultats.\"\n\n"
+    "\"Et je ne suis pas le seul à avoir ces résultats.\"\n\n"
     "[Montrer les reviews App Store + Google Play]\n\n"
     "\"Shinobi Japanese, c'est plus de 10 000 avis sur l'App Store et le Google Play Store, "
     "avec une note moyenne de 4.85 sur 5.\"\n\n"
-    "[Montrer les videos virales de Logan]\n\n"
-    "\"Logan, mon cofondateur, a genere des millions de vues avec du contenu organique. "
-    "Et il intervient directement dans la formation pour t'apprendre ses strategies.\"\n\n"
+    "[Montrer les vidéos virales de Logan]\n\n"
+    "\"Logan, mon cofondateur, a généré des millions de vues avec du contenu organique. "
+    "Et il intervient directement dans la formation pour t'apprendre ses stratégies.\"\n\n"
     "[Montrer le screenshot DM influenceur]\n\n"
-    "\"On te montre meme comment contacter et closer des influenceurs, sans budget pub.\""
+    "\"On te montre même comment contacter et closer des influenceurs, sans budget pub.\""
 )
 pdf.english_text(
     "\"And I'm not the only one with these results.\"\n\n"
@@ -186,15 +186,15 @@ pdf.separator()
 
 # ---- OFFRE ----
 pdf.section_title("L'OFFRE + URGENCE (2:10 - 2:40)")
-pdf.stage_direction("[Energie montante, conviction]")
+pdf.stage_direction("[Énergie montante, conviction]")
 
 pdf.french_text(
-    "\"App Mastery, c'est 10 modules, plus de 90 lecons pas a pas. "
-    "Plus des bonus qui valent plus de 1 500 dollars a eux seuls. "
+    "\"App Mastery, c'est 10 modules, plus de 90 leçons pas à pas. "
+    "Plus des bonus qui valent plus de 1 500 dollars à eux seuls. "
     "Masterclass Claude Code, masterclass Git, lives Q&A deux fois par mois avec moi, "
-    "et une communaute privee a vie.\n\n"
-    "Et si tu n'es pas satisfait, tu as 30 jours pour te faire rembourser. Zero risque.\n\n"
-    "Le detail de l'offre et le prix sont juste en dessous de cette video.\""
+    "et une communauté privée à vie.\n\n"
+    "Et si tu n'es pas satisfait, tu as 30 jours pour te faire rembourser. Zéro risque.\n\n"
+    "Le détail de l'offre et le prix sont juste en dessous de cette vidéo.\""
 )
 pdf.english_text(
     "\"App Mastery is 10 modules, over 90 step-by-step lessons. "
@@ -209,14 +209,14 @@ pdf.separator()
 
 # ---- CTA ----
 pdf.section_title("CTA FINAL (2:40 - 3:00)")
-pdf.stage_direction("[Regard camera, direct, sincere]")
+pdf.stage_direction("[Regard caméra, direct, sincère]")
 
 pdf.french_text(
-    "\"Reflechis une seconde. Une app avec seulement 100 abonnes a 10 euros par mois, "
-    "ca fait pres de 12 000 euros par an de revenus recurrents. Et ca, c'est avec UNE seule app.\n\n"
-    "Tu peux continuer a regarder des tutos pendant des mois. "
+    "\"Réfléchis une seconde. Une app avec seulement 100 abonnés à 10 euros par mois, "
+    "ça fait près de 12 000 euros par an de revenus récurrents. Et ça, c'est avec UNE seule app.\n\n"
+    "Tu peux continuer à regarder des tutos pendant des mois. "
     "Ou tu peux lancer ton app dans les 28 prochains jours.\n\n"
-    "Clique sur le bouton en dessous pour decouvrir l'offre complete. A tout de suite.\""
+    "Clique sur le bouton en dessous pour découvrir l'offre complète. À tout de suite.\""
 )
 pdf.english_text(
     "\"Think about it for a second. An app with just 100 subscribers at 10 euros per month "
@@ -232,21 +232,21 @@ pdf.separator()
 pdf.section_title("NOTES DE PRODUCTION")
 
 pdf.french_text(
-    "- Duree totale : 2 min 50 - 3 min 00\n"
-    "- Cadrage : Face camera, buste, arriere-plan neutre ou bureau clean\n"
-    "- Eclairage : Bien eclaire, naturel, pas de filtre\n"
-    "- Ton : Conversationnel, pas de teleprompter visible. Parler comme a un ami.\n"
-    "- Sous-titres : Obligatoires. 80%+ des gens regardent sans le son au debut.\n"
-    "- Musique : Legere en fond, montante vers la fin. Pas de musique pendant le hook."
+    "- Durée totale : 2 min 50 - 3 min 00\n"
+    "- Cadrage : Face caméra, buste, arrière-plan neutre ou bureau clean\n"
+    "- Éclairage : Bien éclairé, naturel, pas de filtre\n"
+    "- Ton : Conversationnel, pas de téléprompteur visible. Parler comme à un ami.\n"
+    "- Sous-titres : Obligatoires. 80%+ des gens regardent sans le son au début.\n"
+    "- Musique : Légère en fond, montante vers la fin. Pas de musique pendant le hook."
 )
 
 pdf.french_text(
-    "\nB-roll a inserer :\n"
-    "- Screenshot RevenueCat (140K$/an) a 1:05\n"
-    "- Reviews App Store + Google Play (10 000+ avis, 4.85/5) a 1:50\n"
-    "- Videos virales Logan (millions de vues) a 1:55\n"
-    "- Screenshot DM influenceur a 2:05\n"
-    "- Ecran de la formation / interface a 2:15"
+    "\nB-roll à insérer :\n"
+    "- Screenshot RevenueCat (140K$/an) à 1:05\n"
+    "- Reviews App Store + Google Play (10 000+ avis, 4.85/5) à 1:50\n"
+    "- Vidéos virales Logan (millions de vues) à 1:55\n"
+    "- Screenshot DM influenceur à 2:05\n"
+    "- Écran de la formation / interface à 2:15"
 )
 
 output_path = os.path.join(os.path.dirname(__file__), "vsl-script-bilingual.pdf")
