@@ -1,15 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// Map Brevo list IDs to transactional template IDs for the first email
-const LIST_TO_TEMPLATE: Record<number, number> = {
-  12: 16, // Piscine Epitech
-  13: 17, // Prompt 50 SaaS
-  14: 19, // Workflow Make
-  15: 11, // Monétisation
-  16: 14, // OpenClaw
+// Map Brevo list IDs to transactional template IDs and tags
+const LIST_CONFIG: Record<number, { templateId: number; tag: string }> = {
+  12: { templateId: 16, tag: "piscine-epitech" },
+  13: { templateId: 17, tag: "prompt-50-saas" },
+  14: { templateId: 19, tag: "workflow-make" },
+  15: { templateId: 11, tag: "monetisation" },
+  16: { templateId: 14, tag: "openclaw" },
 };
 
-async function sendTransactionalEmail(apiKey: string, email: string, templateId: number) {
+async function sendTransactionalEmail(apiKey: string, email: string, templateId: number, tag: string) {
   const res = await fetch("https://api.brevo.com/v3/smtp/email", {
     method: "POST",
     headers: {
@@ -20,6 +20,7 @@ async function sendTransactionalEmail(apiKey: string, email: string, templateId:
     body: JSON.stringify({
       templateId,
       to: [{ email }],
+      tags: [tag],
     }),
   });
 
@@ -95,8 +96,9 @@ export async function POST(req: NextRequest) {
     }
 
     // Step 2: Send first email instantly via transactional API
-    if (targetListId && LIST_TO_TEMPLATE[targetListId]) {
-      await sendTransactionalEmail(BREVO_API_KEY, email, LIST_TO_TEMPLATE[targetListId]);
+    const config = targetListId ? LIST_CONFIG[targetListId] : undefined;
+    if (config) {
+      await sendTransactionalEmail(BREVO_API_KEY, email, config.templateId, config.tag);
     }
 
     return NextResponse.json({ success: true });
