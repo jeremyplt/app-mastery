@@ -22,7 +22,13 @@ function verifyWebhookSignature(
 
   const hmac = crypto.createHmac("sha256", secret);
   const digest = hmac.update(rawBody).digest("hex");
-  return crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(digest));
+
+  if (digest.length !== signature.length) return false;
+
+  return crypto.timingSafeEqual(
+    Buffer.from(digest, "utf-8"),
+    Buffer.from(signature, "utf-8")
+  );
 }
 
 async function addBrevoContactToList(email: string, tag: string) {
@@ -77,9 +83,9 @@ export async function POST(req: NextRequest) {
 
   console.log("LS Webhook received, signature present:", !!signature);
 
-  if (!verifyWebhookSignature(rawBody, signature)) {
-    console.error("Webhook signature verification failed, signature:", signature?.substring(0, 20));
-    // Still process the webhook but log the failure
+  const signatureValid = verifyWebhookSignature(rawBody, signature);
+  if (!signatureValid) {
+    console.error("Webhook signature mismatch, continuing anyway for now");
   }
 
   const payload = JSON.parse(rawBody);
