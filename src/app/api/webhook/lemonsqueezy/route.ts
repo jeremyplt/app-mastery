@@ -79,10 +79,25 @@ async function addBrevoContactToList(email: string, tag: string) {
 
 export async function POST(req: NextRequest) {
   const rawBody = await req.text();
-  const signature = req.headers.get("x-signature") || req.headers.get("X-Signature");
+  const signature = req.headers.get("x-signature");
 
-  if (!verifyWebhookSignature(rawBody, signature)) {
-    console.error("Webhook signature verification failed");
+  const secret = process.env.LS_WEBHOOK_SECRET;
+  if (!secret || !signature) {
+    console.error("Webhook missing secret or signature", { secret: !!secret, signature: !!signature });
+    return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
+  }
+
+  const hmac = crypto.createHmac("sha256", secret);
+  const digest = Buffer.from(hmac.update(rawBody).digest("hex"), "utf8");
+  const signatureBuffer = Buffer.from(signature, "utf8");
+
+  if (digest.length !== signatureBuffer.length || !crypto.timingSafeEqual(digest, signatureBuffer)) {
+    console.error("Webhook signature mismatch", {
+      digestStart: digest.toString("utf8").substring(0, 20),
+      signatureStart: signature.substring(0, 20),
+      digestLen: digest.length,
+      sigLen: signatureBuffer.length,
+    });
     return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
   }
 
