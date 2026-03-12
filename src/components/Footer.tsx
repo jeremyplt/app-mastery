@@ -5,12 +5,18 @@ export default function Footer() {
         <div className="text-xs text-gray-600">
           &copy; {new Date().getFullYear()} App Mastery. Tous droits réservés.
         </div>
-        <div className="flex gap-6 text-xs text-gray-600">
+        <div className="flex flex-wrap gap-6 text-xs text-gray-600">
           <a href="/mentions-legales" className="hover:text-gray-400 transition-colors">
             Mentions légales
           </a>
           <a href="/cgv" className="hover:text-gray-400 transition-colors">
             CGV
+          </a>
+          <a href="/politique-confidentialite" className="hover:text-gray-400 transition-colors">
+            Confidentialité
+          </a>
+          <a href="/politique-remboursement" className="hover:text-gray-400 transition-colors">
+            Remboursement
           </a>
           <a href="/contact" className="hover:text-gray-400 transition-colors">
             Contact

@@ -70,7 +70,7 @@ export default function CGVPage() {
             Les prix sont indiqués en euros (€), toutes taxes comprises (TVA non
             applicable, article 293 B du CGI).
           </p>
-          <p>Le paiement s&apos;effectue par carte bancaire via Stripe.</p>
+          <p>Le paiement s&apos;effectue par carte bancaire via Lemon Squeezy.</p>
           <p>
             Pour les offres en 3 mensualités, le Client autorise le prélèvement
             automatique de 3 paiements mensuels consécutifs. L&apos;abonnement
