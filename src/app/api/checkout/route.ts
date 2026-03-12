@@ -88,6 +88,14 @@ async function createStripeCheckout(plan: string, origin: string): Promise<strin
     cancel_url: `${origin}/#pricing`,
     metadata: { plan },
     allow_promotion_codes: true,
+    ...(is3x && {
+      custom_text: {
+        submit: {
+          message:
+            "Les prélèvements s'arrêtent automatiquement après 3 mois, sans action nécessaire de votre part.",
+        },
+      },
+    }),
   });
 
   if (!session.url) throw new Error("Stripe n'a pas retourné d'URL");
