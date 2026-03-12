@@ -5,6 +5,13 @@ const BREVO_LIST_IDS: Record<string, number> = {
   vip: 8,
 };
 
+// Brevo transactional template IDs for welcome emails per plan
+const WELCOME_TEMPLATE_IDS: Record<string, number> = {
+  essentiel: 8,
+  complet: 9,
+  vip: 10,
+};
+
 function getApiKey() {
   return process.env.BREVO_API_KEY!;
 }
@@ -44,7 +51,32 @@ export async function addBrevoContact(email: string, tag: string, eventName: str
     console.error("Brevo contact creation failed:", err);
   }
 
-  // Step 2: Fire a custom event to trigger the automation
+  // Step 2: Send welcome email instantly via transactional API
+  const welcomeTemplateId = WELCOME_TEMPLATE_IDS[tag];
+  if (welcomeTemplateId) {
+    try {
+      const res = await fetch("https://api.brevo.com/v3/smtp/email", {
+        method: "POST",
+        headers: {
+          "api-key": apiKey,
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          templateId: welcomeTemplateId,
+          to: [{ email }],
+          tags: [`welcome-${tag}`],
+        }),
+      });
+
+      const body = await res.text();
+      console.log(`Brevo welcome email (template ${welcomeTemplateId}) to ${email}: ${res.status} ${body}`);
+    } catch (err) {
+      console.error("Brevo welcome email failed:", err);
+    }
+  }
+
+  // Step 3: Fire a custom event to trigger the automation
   // This is the reliable way to trigger automations via API
   try {
     const res = await fetch("https://api.brevo.com/v3/events", {
