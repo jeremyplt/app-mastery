@@ -85,7 +85,7 @@ async function createStripeCheckout(plan: string, origin: string): Promise<strin
     success_url: isEssentiel
       ? `${origin}/membres/merci?session_id={CHECKOUT_SESSION_ID}`
       : `${origin}/formation/merci?session_id={CHECKOUT_SESSION_ID}`,
-    cancel_url: `${origin}/#pricing`,
+    cancel_url: `${origin}/formation#pricing`,
     metadata: { plan },
     allow_promotion_codes: true,
     ...(is3x && {
