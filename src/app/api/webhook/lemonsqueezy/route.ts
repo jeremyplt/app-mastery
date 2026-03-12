@@ -81,11 +81,21 @@ export async function POST(req: NextRequest) {
   const rawBody = await req.text();
   const signature = req.headers.get("x-signature") || req.headers.get("X-Signature");
 
-  console.log("LS Webhook received, signature present:", !!signature);
+  // Debug: log signature details to find the mismatch
+  const secret = process.env.LS_WEBHOOK_SECRET;
+  const hmac = crypto.createHmac("sha256", secret || "");
+  const computedDigest = hmac.update(rawBody).digest("hex");
+  console.log("LS Webhook debug:", {
+    signatureReceived: signature?.substring(0, 30),
+    computedDigest: computedDigest.substring(0, 30),
+    secretPresent: !!secret,
+    secretLength: secret?.length,
+    match: signature === computedDigest,
+  });
 
-  const signatureValid = verifyWebhookSignature(rawBody, signature);
-  if (!signatureValid) {
-    console.error("Webhook signature mismatch, continuing anyway for now");
+  if (!verifyWebhookSignature(rawBody, signature)) {
+    console.error("Webhook signature verification failed");
+    return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
   }
 
   const payload = JSON.parse(rawBody);
