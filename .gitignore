@@ -41,3 +41,4 @@ yarn-error.log*
 next-env.d.ts
 public/videos/presentation-original.mp4
 public/videos/vsl.mov
+public/videos/vsl-original.mov
