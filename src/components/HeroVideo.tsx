@@ -46,7 +46,7 @@ export default function HeroVideo() {
               <video
                 ref={videoRef}
                 className="w-full h-full object-cover"
-                src="/videos/presentation.mp4"
+                src="/videos/vsl.mov"
                 muted
                 autoPlay
                 loop
