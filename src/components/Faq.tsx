@@ -20,12 +20,12 @@ const faqData = [
   {
     q: "Pourquoi payer 997€ alors qu'il y a des tutos gratuits partout ?",
     // Objection: prix — differentiate structured path vs scattered tutos
-    a: "Les tutos gratuits t'apprennent des bouts de connaissances éparpillés. Ici, tu as un système complet, de l'idée au premier revenu, avec du support, une communauté, et des templates prêts à l'emploi. C'est la différence entre errer dans une forêt et suivre un sentier balisé.",
+    a: "Les tutos gratuits sont génériques : ils t'apprennent à coder des bouts de fonctionnalités, mais aucun ne te donne une vraie stratégie pour générer des revenus. Personne ne t'explique comment rendre ton app virale, quels outils marketing utiliser, ni comment transformer des téléchargements en argent. App Mastery, c'est un système complet : de l'idée au premier revenu, avec les stratégies marketing, les outils concrets, du support, et une communauté pour ne jamais rester bloqué.",
   },
   {
     q: "Et si mon app ne génère aucun revenu ?",
     // Objection: risque — renvoie vers la garantie
-    a: "D'abord, la formation couvre les revenus de A à Z (abonnements, marketing, référencement d'app). Ensuite, tu as la garantie 30 jours : si tu n'es pas satisfait, tu es remboursé intégralement. Le risque est de mon côté, pas du tien.",
+    a: "D'abord, la formation couvre les revenus de A à Z (abonnements, marketing, référencement d'app). Ensuite, tu as une double garantie. Garantie 30 jours : si tu n'es pas satisfait, tu es remboursé intégralement, sans condition. Garantie 90 jours : si tu as suivi la formation à la lettre, appliqué toutes les recommandations, et que tu n'as toujours aucun revenu après 90 jours, je te coache personnellement jusqu'à tes premiers revenus. Le risque est entièrement de mon côté, pas du tien.",
   },
   {
     q: "Est-ce que c'est vraiment possible en 28 jours ?",
@@ -35,6 +35,11 @@ const faqData = [
     q: "Est-ce que ça marche pour iOS ET Android ?",
     // Objection: technique
     a: "Oui ! J'utilise React Native avec Expo, ce qui te permet de créer une seule app pour les deux plateformes. Tu publies sur l'App Store ET le Play Store avec le même code.",
+  },
+  {
+    q: "Si ton app génère déjà de l'argent, pourquoi faire une formation ?",
+    // Objection: légitimité
+    a: "J'ai déjà une chaîne YouTube où je partage mon expérience gratuitement. Mais je voulais aller beaucoup plus loin : un endroit où je peux livrer du contenu vraiment poussé, étape par étape, pour aider les gens à lancer leur propre app et à en vivre. Je suis convaincu qu'il y a un énorme marché à prendre. Tout le monde parle de SaaS, mais personne n'a encore montré concrètement comment créer une application mobile rentable. C'est exactement ce vide que je remplis avec App Mastery.",
   },
   {
     q: "Est-ce que ça marche encore en 2026 ?",

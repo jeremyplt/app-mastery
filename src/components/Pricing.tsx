@@ -53,6 +53,7 @@ const vipFeatures = [
   "Je te guide sur ta stratégie marketing (influenceurs, contenu, référencement)",
   "Audit complet de ton app (design, code, revenus)",
   "Accès direct et illimité pour poser tes questions",
+  "Analyse complète de ton app (si tu en as déjà une)",
   "Appel bilan + nouvelles directives au bout de 6 mois (je ne te laisse pas tomber à la fin des 3 mois)",
 ];
 
