@@ -9,6 +9,57 @@ const LIST_CONFIG: Record<number, { templateId: number; tag: string }> = {
   16: { templateId: 14, tag: "openclaw" },
 };
 
+async function sendPlanActionEmail(apiKey: string, email: string) {
+  const htmlContent = `
+<p>Salut,</p>
+
+<p>Merci d'avoir demandé le Plan d'Action.</p>
+
+<p>Voici ton accès : <a href="https://www.jeremypitault.com/plan-action/merci">Regarder le Plan d'Action</a></p>
+
+<p>Dedans, tu vas découvrir :</p>
+
+<ul>
+  <li>Comment j'ai trouvé et validé mon idée d'app (et l'erreur qui m'a fait perdre 3 mois)</li>
+  <li>Le workflow exact que j'utilise pour créer des apps avec l'IA, sans coder moi-même</li>
+  <li>La stratégie marketing qui a généré des millions de vues en organique</li>
+  <li>Les chiffres réels, mois par mois, de 0 à 140 000$/an</li>
+</ul>
+
+<p>Prends 10 minutes pour la regarder. C'est la version condensée de tout ce que j'ai appris en 3 ans.</p>
+
+<p>Mais il y a un truc que je n'ai pas mis dans la vidéo.</p>
+
+<p>C'est le moment précis où tout a basculé pour moi. Le jour où j'ai failli tout abandonner, et ce qui s'est passé juste après.</p>
+
+<p>Je t'en parle demain.</p>
+
+<p>À demain,<br>Jeremy</p>
+
+<p>P.S. Si tu as des questions après avoir regardé le Plan d'Action, réponds directement à cet email. Je lis tout.</p>
+`;
+
+  const res = await fetch("https://api.brevo.com/v3/smtp/email", {
+    method: "POST",
+    headers: {
+      "api-key": apiKey,
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({
+      sender: { name: "Jeremy Pitault", email: "jeremy@jeremypitault.com" },
+      to: [{ email }],
+      subject: "Ton Plan d'Action est prêt",
+      htmlContent,
+      tags: ["plan-action"],
+    }),
+  });
+
+  const body = await res.text();
+  console.log(`Brevo plan-action email to ${email}: ${res.status} ${body}`);
+  return res.ok;
+}
+
 async function sendTransactionalEmail(apiKey: string, email: string, templateId: number, tag: string) {
   const res = await fetch("https://api.brevo.com/v3/smtp/email", {
     method: "POST",
@@ -31,7 +82,7 @@ async function sendTransactionalEmail(apiKey: string, email: string, templateId:
 
 export async function POST(req: NextRequest) {
   try {
-    const { email, listId } = await req.json();
+    const { email, listId, source } = await req.json();
 
     if (!email || !email.includes("@")) {
       return NextResponse.json(
@@ -96,9 +147,13 @@ export async function POST(req: NextRequest) {
     }
 
     // Step 2: Send first email instantly via transactional API
-    const config = targetListId ? LIST_CONFIG[targetListId] : undefined;
-    if (config) {
-      await sendTransactionalEmail(BREVO_API_KEY, email, config.templateId, config.tag);
+    if (source === "plan-action") {
+      await sendPlanActionEmail(BREVO_API_KEY, email);
+    } else {
+      const config = targetListId ? LIST_CONFIG[targetListId] : undefined;
+      if (config) {
+        await sendTransactionalEmail(BREVO_API_KEY, email, config.templateId, config.tag);
+      }
     }
 
     return NextResponse.json({ success: true });
