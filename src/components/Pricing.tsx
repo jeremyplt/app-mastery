@@ -46,11 +46,14 @@ const completFeatures = [
 
 const vipFeatures = [
   "Tout de l'offre Complet",
-  "Accompagnement 1-on-1 avec Jeremy pendant 3 mois via WhatsApp",
+  "Accompagnement 1-on-1 avec Jeremy pendant 6 mois via WhatsApp",
+  "Appels one-on-one illimités selon tes besoins",
+  "Étude de marché complète et roadmap personnalisée sur 6 mois",
   "Je t'aide à trouver et valider ton idée d'app rentable",
   "Je te guide sur ta stratégie marketing (influenceurs, contenu, référencement)",
   "Audit complet de ton app (design, code, revenus)",
   "Accès direct et illimité pour poser tes questions",
+  "Appel bilan + nouvelles directives au bout de 6 mois (je ne te laisse pas tomber à la fin des 3 mois)",
 ];
 
 export default function Pricing() {
@@ -377,7 +380,7 @@ export default function Pricing() {
                 </div>
 
                 {/* Included features */}
-                <div className="space-y-3 mb-8">
+                <div className="space-y-3 text-left mb-8">
                   {vipFeatures.map((feature, i) => (
                     <div key={i} className="flex items-start gap-3">
                       <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-amber-500/10 mt-0.5">
