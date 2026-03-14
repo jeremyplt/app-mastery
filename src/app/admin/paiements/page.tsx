@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-type Provider = "stripe" | "lemonsqueezy" | "gumroad";
+type Provider = "stripe" | "lemonsqueezy" | "gumroad" | "paypal";
 
 const PROVIDERS: { id: Provider; label: string; description: string; color: string }[] = [
   {
@@ -22,6 +22,12 @@ const PROVIDERS: { id: Provider; label: string; description: string; color: stri
     label: "Gumroad",
     description: "Backup. Redirige vers les pages produit Gumroad.",
     color: "bg-pink-500",
+  },
+  {
+    id: "paypal",
+    label: "PayPal",
+    description: "Paiement via PayPal Business. Supporte les paiements uniques et en 3x.",
+    color: "bg-blue-500",
   },
 ];
 
@@ -183,6 +189,11 @@ export default function PaymentsAdmin() {
               <p className="text-pink-400 font-bold mb-1">Gumroad</p>
               <p className="text-white/50">GUMROAD_URL_ESSENTIEL, GUMROAD_URL_COMPLET, GUMROAD_URL_COMPLET_3X</p>
               <p className="text-white/50">GUMROAD_URL_VIP, GUMROAD_URL_VIP_3X</p>
+            </div>
+            <div>
+              <p className="text-blue-400 font-bold mb-1">PayPal</p>
+              <p className="text-white/50">PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET, PAYPAL_WEBHOOK_ID</p>
+              <p className="text-white/50">PAYPAL_MODE (sandbox ou live)</p>
             </div>
           </div>
         </div>

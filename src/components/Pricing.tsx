@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { usePostHog } from "posthog-js/react";
 import { motion } from "framer-motion";
 import { Check, X } from "lucide-react";
@@ -59,8 +59,19 @@ const vipFeatures = [
 
 export default function Pricing() {
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
+  const [provider, setProvider] = useState<string | null>(null);
   const posthog = usePostHog();
   const expired = useIsExpired();
+
+  // Fetch active payment provider for UX adaptation
+  useEffect(() => {
+    fetch("/api/admin/payment-provider")
+      .then((r) => r.json())
+      .then((d) => setProvider(d.active))
+      .catch(() => {});
+  }, []);
+
+  const isPayPal = provider === "paypal";
 
   function handleCheckout(plan: string) {
     posthog?.capture("checkout_started", { plan }, { send_instantly: true });
@@ -284,7 +295,7 @@ export default function Pricing() {
                   </span>
                 </div>
                 <p className="text-base text-sky-400 font-semibold mb-3">
-                  ou 3x 347€
+                  {isPayPal ? "Paiement en 4x disponible au checkout" : "ou 3x 347€"}
                 </p>
                 <p className="text-sm text-amber-400/90 font-semibold mb-8">
                   Ce prix ne sera plus jamais aussi bas. Une fois l&apos;offre de lancement terminée, le tarif remonte définitivement.
@@ -317,7 +328,7 @@ export default function Pricing() {
                     ) : "Lancer mon app maintenant"}
                   </button>
 
-                  {!expired && (
+                  {!expired && !isPayPal && (
                     <button
                       onClick={() => handleCheckout("complet-3x")}
                       disabled={loadingPlan !== null}
@@ -368,7 +379,7 @@ export default function Pricing() {
                   <span className="text-xl text-white/60 ml-1">€</span>
                 </div>
                 <p className="text-base text-amber-400 font-semibold mb-1">
-                  ou 3x 1 097€
+                  {isPayPal ? "Paiement en 4x disponible au checkout" : "ou 3x 1 097€"}
                 </p>
                 <div className="flex items-center gap-2 rounded-full bg-red-500/10 border border-red-500/30 px-3 py-1.5 mb-8 self-center">
                   <span className="relative flex h-2 w-2">
@@ -407,7 +418,7 @@ export default function Pricing() {
                     ) : "Devenir VIP"}
                   </button>
 
-                  {!expired && (
+                  {!expired && !isPayPal && (
                     <button
                       onClick={() => handleCheckout("vip-3x")}
                       disabled={loadingPlan !== null}

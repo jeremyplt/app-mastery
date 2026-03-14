@@ -1,8 +1,8 @@
 import { getAdminClient } from "./supabase";
 
-export type PaymentProvider = "stripe" | "lemonsqueezy" | "gumroad";
+export type PaymentProvider = "stripe" | "lemonsqueezy" | "gumroad" | "paypal";
 
-const VALID_PROVIDERS: PaymentProvider[] = ["stripe", "lemonsqueezy", "gumroad"];
+const VALID_PROVIDERS: PaymentProvider[] = ["stripe", "lemonsqueezy", "gumroad", "paypal"];
 
 export function isValidProvider(value: string): value is PaymentProvider {
   return VALID_PROVIDERS.includes(value as PaymentProvider);
@@ -41,4 +41,5 @@ export const PROVIDER_LABELS: Record<PaymentProvider, string> = {
   stripe: "Stripe",
   lemonsqueezy: "Lemon Squeezy",
   gumroad: "Gumroad",
+  paypal: "PayPal",
 };

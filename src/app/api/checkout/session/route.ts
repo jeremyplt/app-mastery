@@ -53,6 +53,55 @@ async function fetchLsOrder(orderId: string) {
   };
 }
 
+async function fetchPayPalOrder(orderId: string) {
+  const base =
+    process.env.PAYPAL_MODE === "live"
+      ? "https://api-m.paypal.com"
+      : "https://api-m.sandbox.paypal.com";
+
+  const auth = Buffer.from(
+    `${process.env.PAYPAL_CLIENT_ID}:${process.env.PAYPAL_CLIENT_SECRET}`
+  ).toString("base64");
+
+  const tokenRes = await fetch(`${base}/v1/oauth2/token`, {
+    method: "POST",
+    headers: {
+      Authorization: `Basic ${auth}`,
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: "grant_type=client_credentials",
+  });
+  const tokenData = await tokenRes.json();
+  if (!tokenRes.ok) return null;
+
+  const res = await fetch(`${base}/v2/checkout/orders/${orderId}`, {
+    headers: {
+      Authorization: `Bearer ${tokenData.access_token}`,
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!res.ok) return null;
+
+  const data = await res.json();
+  const purchaseUnit = data.purchase_units?.[0];
+  const planKey = purchaseUnit?.custom_id || "essentiel";
+  const email =
+    data.payer?.email_address ||
+    data.payment_source?.paypal?.email_address ||
+    null;
+
+  return {
+    email,
+    plan: PLAN_LABELS[planKey] || planKey,
+    planKey,
+    amount: purchaseUnit?.amount?.value
+      ? parseFloat(purchaseUnit.amount.value)
+      : null,
+    currency: purchaseUnit?.amount?.currency_code || "EUR",
+  };
+}
+
 async function fetchStripeSession(sessionId: string) {
   const Stripe = (await import("stripe")).default;
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
@@ -85,18 +134,21 @@ async function fetchStripeSession(sessionId: string) {
 export async function GET(req: NextRequest) {
   const orderId = req.nextUrl.searchParams.get("order_id");
   const sessionId = req.nextUrl.searchParams.get("session_id");
+  const paypalOrderId = req.nextUrl.searchParams.get("paypal_order_id");
 
-  if (!orderId && !sessionId) {
+  if (!orderId && !sessionId && !paypalOrderId) {
     return NextResponse.json(
-      { error: "order_id ou session_id manquant" },
+      { error: "order_id, session_id ou paypal_order_id manquant" },
       { status: 400 }
     );
   }
 
   try {
-    const result = orderId
-      ? await fetchLsOrder(orderId)
-      : await fetchStripeSession(sessionId!);
+    const result = paypalOrderId
+      ? await fetchPayPalOrder(paypalOrderId)
+      : orderId
+        ? await fetchLsOrder(orderId)
+        : await fetchStripeSession(sessionId!);
 
     if (!result) {
       return NextResponse.json(

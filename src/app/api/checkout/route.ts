@@ -121,12 +121,106 @@ function createGumroadCheckout(plan: string): string {
   return url;
 }
 
+// ─── PayPal ────────────────────────────────────────────────────
+
+function getPayPalBaseUrl(): string {
+  return process.env.PAYPAL_MODE === "live"
+    ? "https://api-m.paypal.com"
+    : "https://api-m.sandbox.paypal.com";
+}
+
+async function getPayPalAccessToken(): Promise<string> {
+  const base = getPayPalBaseUrl();
+  const auth = Buffer.from(
+    `${process.env.PAYPAL_CLIENT_ID}:${process.env.PAYPAL_CLIENT_SECRET}`
+  ).toString("base64");
+
+  const res = await fetch(`${base}/v1/oauth2/token`, {
+    method: "POST",
+    headers: {
+      Authorization: `Basic ${auth}`,
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: "grant_type=client_credentials",
+  });
+
+  const data = await res.json();
+  if (!res.ok) throw new Error("Impossible d'obtenir le token PayPal");
+  return data.access_token;
+}
+
+// PayPal prices: all plans are one-time payments
+// For 3x plans, PayPal offers "Pay in 4" automatically at checkout
+const PAYPAL_PRICES: Record<string, { amount: string; currency: string; label: string }> = {
+  essentiel: { amount: "497.00", currency: "EUR", label: "Essentiel" },
+  complet: { amount: "997.00", currency: "EUR", label: "Complet" },
+  "complet-3x": { amount: "997.00", currency: "EUR", label: "Complet" },
+  vip: { amount: "2997.00", currency: "EUR", label: "VIP" },
+  "vip-3x": { amount: "2997.00", currency: "EUR", label: "VIP" },
+};
+
+async function createPayPalCheckout(plan: string, origin: string): Promise<string> {
+  const price = PAYPAL_PRICES[plan];
+  if (!price) throw new Error(`Plan PayPal invalide: ${plan}`);
+
+  // Normalize plan key (3x plans become one-time at same price)
+  const basePlan = plan.replace("-3x", "");
+  const isEssentiel = basePlan === "essentiel";
+  const accessToken = await getPayPalAccessToken();
+  const base = getPayPalBaseUrl();
+
+  const successBase = isEssentiel
+    ? `${origin}/membres/merci`
+    : `${origin}/formation/merci`;
+  const cancelUrl = `${origin}/formation`;
+
+  const res = await fetch(`${base}/v2/checkout/orders`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      intent: "CAPTURE",
+      purchase_units: [
+        {
+          amount: { currency_code: price.currency, value: price.amount },
+          description: `App Mastery - ${price.label}`,
+          custom_id: basePlan,
+        },
+      ],
+      payment_source: {
+        paypal: {
+          experience_context: {
+            brand_name: "App Mastery",
+            locale: "fr-FR",
+            user_action: "PAY_NOW",
+            return_url: `${successBase}?paypal_order_id=pending`,
+            cancel_url: cancelUrl,
+          },
+        },
+      },
+    }),
+  });
+
+  const data = await res.json();
+  if (!res.ok) {
+    console.error("PayPal order error:", JSON.stringify(data));
+    throw new Error("Erreur PayPal");
+  }
+
+  const approveLink = data.links?.find((l: { rel: string }) => l.rel === "payer-action");
+  if (!approveLink) throw new Error("PayPal n'a pas retourné de lien de paiement");
+  return approveLink.href;
+}
+
 // ─── Router ─────────────────────────────────────────────────────
 
 const CHECKOUT_HANDLERS: Record<PaymentProvider, (plan: string, origin: string) => Promise<string> | string> = {
   lemonsqueezy: createLsCheckout,
   stripe: createStripeCheckout,
   gumroad: (plan: string) => createGumroadCheckout(plan),
+  paypal: createPayPalCheckout,
 };
 
 export async function POST(req: NextRequest) {
