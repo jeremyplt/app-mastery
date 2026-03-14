@@ -126,8 +126,6 @@ export async function POST(req: NextRequest) {
   const payload = JSON.parse(rawBody);
   const eventType = payload.event_type;
 
-  console.log("PayPal webhook event:", eventType, JSON.stringify(payload.resource));
-
   // Payment capture completed (PAYMENT.CAPTURE.COMPLETED)
   // Also handle CHECKOUT.ORDER.COMPLETED as fallback
   if (
