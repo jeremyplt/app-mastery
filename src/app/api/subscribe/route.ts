@@ -15,7 +15,7 @@ async function sendPlanActionEmail(apiKey: string, email: string) {
 
 <p>Merci d'avoir demandé le Plan d'Action.</p>
 
-<p>Voici ton accès : <a href="https://www.jeremypitault.com/plan-action/merci">Regarder le Plan d'Action</a></p>
+<p>Voici ton accès : <a href="https://www.jeremypitault.com/plan-action/video">Regarder le Plan d'Action</a></p>
 
 <p>Dedans, tu vas découvrir :</p>
 
