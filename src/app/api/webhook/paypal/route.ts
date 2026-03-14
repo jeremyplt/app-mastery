@@ -126,6 +126,8 @@ export async function POST(req: NextRequest) {
   const payload = JSON.parse(rawBody);
   const eventType = payload.event_type;
 
+  console.log("PayPal webhook event:", eventType, JSON.stringify(payload.resource));
+
   // Payment capture completed (PAYMENT.CAPTURE.COMPLETED)
   // Also handle CHECKOUT.ORDER.COMPLETED as fallback
   if (
@@ -140,13 +142,55 @@ export async function POST(req: NextRequest) {
     let currency = "EUR";
 
     if (eventType === "PAYMENT.CAPTURE.COMPLETED") {
-      // PAYMENT.CAPTURE.COMPLETED structure
-      email = resource?.payer?.email_address;
+      // PAYMENT.CAPTURE.COMPLETED: resource is the capture object
+      // Email is NOT in the capture, we need to fetch the order
       plan = resource?.custom_id || "essentiel";
       amount = resource?.amount?.value
         ? parseFloat(resource.amount.value)
         : undefined;
       currency = resource?.amount?.currency_code || "EUR";
+
+      // Extract order ID from the capture's supplementary_data or links
+      const orderLink = resource?.supplementary_data?.related_ids?.order_id
+        || resource?.links?.find((l: { rel: string }) => l.rel === "up")?.href?.split("/").pop();
+
+      if (orderLink) {
+        try {
+          const base = getPayPalBaseUrl();
+          const auth = Buffer.from(
+            `${process.env.PAYPAL_CLIENT_ID}:${process.env.PAYPAL_CLIENT_SECRET}`
+          ).toString("base64");
+          const tokenRes = await fetch(`${base}/v1/oauth2/token`, {
+            method: "POST",
+            headers: {
+              Authorization: `Basic ${auth}`,
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: "grant_type=client_credentials",
+          });
+          const tokenData = await tokenRes.json();
+
+          const orderRes = await fetch(`${base}/v2/checkout/orders/${orderLink}`, {
+            headers: {
+              Authorization: `Bearer ${tokenData.access_token}`,
+              "Content-Type": "application/json",
+            },
+          });
+          const orderData = await orderRes.json();
+          email =
+            orderData.payer?.email_address ||
+            orderData.payment_source?.paypal?.email_address;
+          plan = orderData.purchase_units?.[0]?.custom_id || plan;
+          console.log("PayPal order lookup:", orderLink, "email:", email, "plan:", plan);
+        } catch (err) {
+          console.error("PayPal order lookup failed:", err);
+        }
+      }
+
+      // Fallback: try direct fields on resource
+      if (!email) {
+        email = resource?.payer?.email_address;
+      }
     } else {
       // CHECKOUT.ORDER.COMPLETED structure
       const purchaseUnit = resource?.purchase_units?.[0];
