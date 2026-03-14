@@ -16,7 +16,12 @@ function OrderSummary() {
   const searchParams = useSearchParams();
   const orderId = searchParams.get("order_id");
   const sessionId = searchParams.get("session_id");
-  const paypalOrderId = searchParams.get("paypal_order_id") || searchParams.get("token");
+  const rawPaypalOrderId = searchParams.get("paypal_order_id");
+  // PayPal redirects with ?paypal_order_id=pending&token=REAL_ORDER_ID
+  const paypalOrderId =
+    rawPaypalOrderId && rawPaypalOrderId !== "pending"
+      ? rawPaypalOrderId
+      : searchParams.get("token");
   const [order, setOrder] = useState<OrderInfo | null>(null);
 
   useEffect(() => {
