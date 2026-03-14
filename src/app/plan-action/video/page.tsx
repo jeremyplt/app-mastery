@@ -30,31 +30,14 @@ export default function PlanActionVideoPage() {
           {/* Video player */}
           <div className="mt-8">
             <div className="isolate overflow-hidden rounded-2xl bg-gray-950 p-2 outline outline-white/10">
-              {PLAN_ACTION_VIDEO_ID === "PLACEHOLDER" ? (
-                <div className="relative rounded-xl bg-white/5 aspect-video flex flex-col items-center justify-center">
-                  <div className="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center mb-4">
-                    <svg
-                      className="w-7 h-7 text-white/40 ml-1"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M8 5v14l11-7z" />
-                    </svg>
-                  </div>
-                  <p className="text-lg font-semibold text-white/40">
-                    Vidéo bientôt disponible
-                  </p>
-                </div>
-              ) : (
-                <div className="relative rounded-xl overflow-hidden aspect-video">
-                  <iframe
-                    src={`https://iframe.mediadelivery.net/embed/613852/${PLAN_ACTION_VIDEO_ID}?autoplay=false&preload=true&responsive=true`}
-                    className="absolute inset-0 w-full h-full"
-                    allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
-                    allowFullScreen
-                  />
-                </div>
-              )}
+              <div className="relative rounded-xl overflow-hidden aspect-video">
+                <iframe
+                  src={`https://iframe.mediadelivery.net/embed/613852/${PLAN_ACTION_VIDEO_ID}?autoplay=false&preload=true&responsive=true`}
+                  className="absolute inset-0 w-full h-full"
+                  allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
             </div>
           </div>
 
