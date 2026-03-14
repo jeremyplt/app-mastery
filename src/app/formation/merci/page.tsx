@@ -23,6 +23,7 @@ function OrderSummary() {
       ? rawPaypalOrderId
       : searchParams.get("token");
   const [order, setOrder] = useState<OrderInfo | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function loadOrder() {
@@ -44,16 +45,49 @@ function OrderSummary() {
           : sessionId
             ? `session_id=${sessionId}`
             : null;
-      if (!param) return;
+      if (!param) {
+        setLoading(false);
+        return;
+      }
 
       try {
         const r = await fetch(`/api/checkout/session?${param}`);
         const data = await r.json();
         setOrder(data);
       } catch {}
+      setLoading(false);
     }
     loadOrder();
   }, [orderId, sessionId, paypalOrderId]);
+
+  if (loading) {
+    return (
+      <motion.div
+        className="mt-8 rounded-2xl border border-white/10 bg-white/5 p-6 text-left"
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
+      >
+        <h2 className="text-lg font-semibold text-white mb-4">
+          Résumé de ta commande
+        </h2>
+        <div className="space-y-3 animate-pulse">
+          <div className="flex justify-between">
+            <div className="h-5 w-16 rounded bg-white/10" />
+            <div className="h-5 w-32 rounded bg-white/10" />
+          </div>
+          <div className="flex justify-between">
+            <div className="h-5 w-16 rounded bg-white/10" />
+            <div className="h-5 w-48 rounded bg-white/10" />
+          </div>
+          <div className="flex justify-between">
+            <div className="h-5 w-20 rounded bg-white/10" />
+            <div className="h-5 w-20 rounded bg-white/10" />
+          </div>
+        </div>
+      </motion.div>
+    );
+  }
 
   if (!order) return null;
 
