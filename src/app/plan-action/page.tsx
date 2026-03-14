@@ -20,7 +20,7 @@ export default function PlanActionPage() {
       const res = await fetch("/api/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, source: "plan-action" }),
+        body: JSON.stringify({ email, listId: 17, source: "plan-action" }),
       });
 
       if (!res.ok) {
