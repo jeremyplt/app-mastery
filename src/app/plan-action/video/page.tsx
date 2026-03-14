@@ -70,7 +70,7 @@ export default function PlanActionVideoPage() {
               Prêt à passer à l&apos;action ?
             </p>
             <Link
-              href="/formation#pricing"
+              href="/formation"
               className="inline-flex items-center justify-center gap-2 rounded-full bg-amber-500 px-8 py-4 text-lg font-bold text-white hover:bg-amber-400 transition-colors shadow-lg shadow-amber-500/25"
             >
               Découvrir App Mastery
