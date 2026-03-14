@@ -163,11 +163,12 @@ export default function PlanActionPage() {
                       >
                         <div className="relative aspect-video bg-gray-900">
                           <Image
-                            src="/proof/video-preview.jpg"
+                            src="https://vz-0fb759fa-b02.b-cdn.net/a1fa42ba-337e-4cf1-b0b7-24fc7ab5be24/thumbnail.jpg"
                             alt="Aperçu du Plan d'Action"
                             fill
                             className="object-cover"
                             quality={90}
+                            unoptimized
                           />
                           <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/40">
                             <div className="w-14 h-14 rounded-full bg-amber-500/90 flex items-center justify-center shadow-lg shadow-amber-500/30">
@@ -239,7 +240,7 @@ export default function PlanActionPage() {
                             className="text-amber-500 text-4xl -rotate-3 whitespace-nowrap block"
                             style={{ fontFamily: "var(--font-caveat)" }}
                           >
-                            15 minutes de pure valeur
+                            1h de pure valeur
                           </span>
                           {/* Hand-drawn arc arrow */}
                           <svg

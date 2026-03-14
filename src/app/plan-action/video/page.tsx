@@ -3,8 +3,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 
-// TODO: Replace with real Bunny video ID once filmed
-const PLAN_ACTION_VIDEO_ID = "PLACEHOLDER";
+const PLAN_ACTION_VIDEO_ID = "a1fa42ba-337e-4cf1-b0b7-24fc7ab5be24";
 
 export default function PlanActionVideoPage() {
   return (
