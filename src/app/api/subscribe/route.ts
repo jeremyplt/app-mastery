@@ -47,7 +47,7 @@ async function sendPlanActionEmail(apiKey: string, email: string) {
       Accept: "application/json",
     },
     body: JSON.stringify({
-      sender: { name: "Jeremy Pitault", email: "jeremy@jeremypitault.com" },
+      sender: { name: "Jeremy Pitault", email: "contact@jeremypitault.com" },
       to: [{ email }],
       subject: "Ton Plan d'Action est prêt",
       htmlContent,
