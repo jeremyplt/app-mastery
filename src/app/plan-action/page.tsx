@@ -163,7 +163,7 @@ export default function PlanActionPage() {
                       >
                         <div className="relative aspect-video bg-gray-900">
                           <Image
-                            src="https://vz-0fb759fa-b02.b-cdn.net/a1fa42ba-337e-4cf1-b0b7-24fc7ab5be24/thumbnail.jpg"
+                            src="/proof/video-preview-v2.png"
                             alt="Aperçu du Plan d'Action"
                             fill
                             className="object-cover"
@@ -276,7 +276,7 @@ export default function PlanActionPage() {
                         <div className="rounded-xl overflow-hidden">
                           <div className="relative aspect-video bg-gray-900">
                             <Image
-                              src="/proof/video-preview.jpg"
+                              src="/proof/video-preview-v2.png"
                               alt="Aperçu du Plan d'Action"
                               fill
                               className="object-cover"

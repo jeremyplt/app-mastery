@@ -23,10 +23,10 @@ async function sendPlanActionEmail(apiKey: string, email: string) {
   <li>Comment j'ai trouvé et validé mon idée d'app (et l'erreur qui m'a fait perdre 3 mois)</li>
   <li>Le workflow exact que j'utilise pour créer des apps avec l'IA, sans coder moi-même</li>
   <li>La stratégie marketing qui a généré des millions de vues en organique</li>
-  <li>Les chiffres réels, mois par mois, de 0 à 140 000$/an</li>
+  <li>La stratégie de scaling pour atteindre 10k MRR</li>
 </ul>
 
-<p>Prends 10 minutes pour la regarder. C'est la version condensée de tout ce que j'ai appris en 3 ans.</p>
+<p>Prends quelques minutes pour la regarder. C'est la version condensée de tout ce que j'ai appris en 3 ans.</p>
 
 <p>Mais il y a un truc que je n'ai pas mis dans la vidéo.</p>
 

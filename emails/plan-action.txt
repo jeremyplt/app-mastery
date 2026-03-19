@@ -1,14 +1,32 @@
 OBJET : Ton Plan d'Action est prêt
-PIÈCE JOINTE : Aucune — c'est un lien vidéo, remplace {{LIEN_VIDEO}} par le lien YouTube/Vimeo
+PREVIEW : Dedans, tu vas découvrir comment je suis passé de 0 à 140 000$/an avec une seule app.
+ENVOI : Immédiat (dès que l'utilisateur entre son email sur /plan-action)
+SOURCE CODE : src/app/api/subscribe/route.ts (fonction sendPlanActionEmail)
 
 ---
 
 Salut,
 
-Ton Plan d'Action est prêt.
+Merci d'avoir demandé le Plan d'Action.
 
-Dans cette vidéo, je te montre comment je suis passé de 0 à 140K$/an avec une seule app mobile. Étape par étape, sans rien cacher.
+Voici ton accès : [Regarder le Plan d'Action](https://www.jeremypitault.com/plan-action/video)
 
-Regarde-la ici : {{LIEN_VIDEO}}
+Dedans, tu vas découvrir :
 
+- Comment j'ai trouvé et validé mon idée d'app (et l'erreur qui m'a fait perdre 3 mois)
+- Le workflow exact que j'utilise pour créer des apps avec l'IA, sans coder moi-même
+- La stratégie marketing qui a généré des millions de vues en organique
+- La stratégie de scaling pour atteindre 10k MRR
+
+Prends quelques minutes pour la regarder. C'est la version condensée de tout ce que j'ai appris en 3 ans.
+
+Mais il y a un truc que je n'ai pas mis dans la vidéo.
+
+C'est le moment précis où tout a basculé pour moi. Le jour où j'ai failli tout abandonner, et ce qui s'est passé juste après.
+
+Je t'en parle demain.
+
+À demain,
 Jeremy
+
+P.S. Si tu as des questions après avoir regardé le Plan d'Action, réponds directement à cet email. Je lis tout.
