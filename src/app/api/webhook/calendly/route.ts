@@ -4,15 +4,21 @@ export async function POST(req: NextRequest) {
   try {
     const payload = await req.json();
 
+    // Log le payload complet pour debug
+    console.log("Calendly webhook payload:", JSON.stringify(payload, null, 2));
+
     const event = payload.event;
 
     if (event !== "invitee.created" && event !== "invitee.canceled") {
+      console.log("Calendly webhook: ignored event type:", event);
       return NextResponse.json({ received: true });
     }
 
+    // Calendly v2 API: les données sont dans payload
     const email = payload.payload?.email;
     const name = payload.payload?.name;
-    const startTime = payload.payload?.calendar_event?.start_time;
+    const startTime = payload.payload?.scheduled_event?.start_time
+      || payload.payload?.calendar_event?.start_time;
 
     if (!email) {
       console.error("Calendly webhook: no email in payload");
