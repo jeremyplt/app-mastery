@@ -1,48 +1,37 @@
-# Email 7 - Dernière chance
+# Email 7 - Dernier email
 
 **Jour** : J+10
-**Objet** : Mon dernier email sur App Mastery
-**Preheader** : Après ça, je ne t'en reparle plus
+**Objet** : Mon dernier email.
+**Preview** : Après celui-ci, je ne t'écris plus.
 
 ---
 
-Salut,
+Salut {{FIRSTNAME}},
 
-C'est le dernier email de cette série. Après celui-ci, je ne te parlerai plus d'App Mastery.
+C'est le dernier email de cette série.
 
-Alors laisse-moi être direct.
+En 10 jours, je t'ai donné :
+- La méthode pour valider une idée d'app en 48h
+- La stratégie marketing qui a généré des millions de vues en organique
+- Le modèle de monétisation qui convertit le mieux
+- Les 5 raisons pour lesquelles une app ne décolle pas (et comment les corriger)
 
-Il y a 10 jours, tu as regardé le Plan d'Action. Tu as vu les chiffres. 140K$/an avec une seule app. 10 000+ avis. 4.85/5 de note moyenne. Tu as vu la méthode.
+Si tu as appliqué ne serait-ce qu'une seule de ces stratégies, tu es déjà en avance sur 90% des gens qui veulent créer une app.
 
-Maintenant, tu as deux options.
+Maintenant, je vais être direct.
 
-**Option 1 : Tu ne fais rien.**
+La différence entre les gens qui réussissent et ceux qui restent bloqués, ce n'est pas l'information. Tu as l'information. Tu l'as dans ces emails. Tu l'as dans le Plan d'Action.
 
-Tu continues à scroller des tutos sur YouTube. Tu changes de framework tous les mois. Tu commences des projets sans les finir. Dans 6 mois, tu es exactement au même endroit. Avec zéro app sur les stores et zéro revenu.
+La différence, c'est d'avoir quelqu'un qui regarde ton projet de l'extérieur. Qui identifie le truc que tu ne vois pas parce que tu as le nez dedans. Qui te dit : "Fais ça. Ne fais pas ça. Concentre-toi là-dessus."
 
-**Option 2 : Tu passes à l'action.**
+C'est ce que je fais pendant l'audit. 30 minutes. Toi et moi. On regarde ton projet, ton app, ou ton idée. Et je te dis exactement quoi faire ensuite.
 
-Tu rejoins App Mastery. En 28 jours, tu as une app validée, développée, publiée et monétisée. Tu as les stratégies marketing pour générer tes premiers téléchargements. Tu as une communauté et un accompagnement pour ne jamais être bloqué.
+C'est gratuit. Pas de vente cachée. Pas de piège. Je veux juste comprendre où tu en es et voir si je peux t'aider.
 
-Ce que tu obtiens :
-
-- 10 modules, 90+ leçons pas à pas
-- Le workflow complet de vibe coding avec l'IA
-- Les stratégies marketing de Logan (millions de vues en organique)
-- La méthode pour closer des influenceurs sans budget pub
-- Masterclass Claude Code + Masterclass Git
-- Lives Q&A deux fois par mois avec moi
-- Communauté privée à vie
-- Garantie 30 jours satisfait ou remboursé
-
-**Prix de lancement : 997$** (au lieu de 1 497$). Ce prix ne restera pas.
-
-[Lancer mon app maintenant]({{lien_page_vente}})
-
-Si tu as la moindre question, réponds à cet email. Je te réponds personnellement.
+[Réserve ton audit gratuit](https://calendly.com/jeremypltpro/30min)
 
 Quoi que tu décides, je te souhaite le meilleur.
 
 Jeremy
 
-P.S. Si tu n'es pas satisfait, tu as 30 jours pour te faire rembourser. Pas de questions, pas de conditions. Tu ne risques littéralement rien.
+P.S. Si tu as des questions, réponds à cet email. Je lis et je réponds personnellement.

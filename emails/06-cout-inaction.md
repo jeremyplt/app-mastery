@@ -1,37 +1,51 @@
-# Email 6 - Le vrai coût de l'inaction
+# Email 6 - Pourquoi ton app ne décolle pas
 
 **Jour** : J+8
-**Objet** : Ce que te coûte chaque jour d'attente
-**Preheader** : 33 euros/jour. Tous les jours.
+**Objet** : Ton app est sur l'App Store et... rien ne se passe.
+**Preview** : Voici les 5 raisons (et comment les corriger).
 
 ---
 
-Salut,
+Salut {{FIRSTNAME}},
 
-Fais ce calcul avec moi.
+Si tu as déjà une app sur les stores, ou si tu en as lancé une dans le passé, tu connais peut-être ce sentiment.
 
-Une app avec 100 abonnés à 10 euros/mois, ça génère environ 12 000 euros/an. Soit 33 euros par jour.
+Tu as bossé pendant des semaines. Tu as publié. Tu rafraîchis App Store Connect tous les jours. Et les chiffres ne bougent pas. 2 téléchargements. 5. Puis plus rien.
 
-Chaque jour où tu n'as pas d'app sur les stores, c'est 33 euros que tu ne gagnes pas. Chaque semaine, 230 euros. Chaque mois, 1 000 euros.
+C'est frustrant. Et c'est le moment où la plupart des gens abandonnent.
 
-En 3 mois d'hésitation, tu as déjà "perdu" 3 000 euros de revenus potentiels. C'est 3 fois le prix de la formation.
+Mais le problème, ce n'est presque jamais l'app elle-même. C'est ce qui se passe autour.
 
-Et ça, c'est avec seulement 100 abonnés. Shinobi Japanese en a beaucoup plus.
+Voici les 5 raisons les plus courantes :
 
-Je ne dis pas ça pour te mettre la pression. Je dis ça parce que quand j'ai commencé, j'ai perdu des mois à hésiter, à regarder des tutos, à changer d'avis. Si j'avais lancé 6 mois plus tôt, ça représente des dizaines de milliers de dollars en plus.
+**1. Ton ASO est inexistant.**
 
-Le marché des apps mobiles ne va pas ralentir. L'IA rend le développement accessible à tout le monde. Mais ça veut aussi dire que plus tu attends, plus il y aura de concurrence.
+ASO = App Store Optimization. C'est le SEO de l'App Store. Si ton titre, tes mots-clés et ta description ne sont pas optimisés, personne ne te trouve. La majorité des téléchargements viennent de la recherche dans l'App Store. Si tu n'apparais pas, tu n'existes pas.
 
-Les gens qui vont réussir, ce sont ceux qui agissent maintenant.
+**2. Tes screenshots ne vendent pas.**
 
-**App Mastery est en offre de lancement à 997$ (au lieu de 1 497$).** Ce prix va augmenter. Je ne sais pas exactement quand, mais ça arrivera bientôt.
+Les 3 premières screenshots décident si quelqu'un télécharge ou pas. Ce ne sont pas des captures d'écran de ton app. Ce sont des visuels marketing. Chaque screenshot doit montrer un bénéfice clair, pas une fonctionnalité.
 
-Si tu attends le "bon moment", il ne viendra jamais. Le bon moment, c'est quand tu as l'information et les outils pour agir. Et tu les as.
+**3. Tu n'as pas de stratégie d'acquisition.**
 
-[Rejoindre App Mastery maintenant]({{lien_page_vente}})
+Publier une app et attendre que les téléchargements tombent, ça ne marche pas. Tu as besoin d'au moins un canal d'acquisition actif : contenu organique, influenceurs, communautés, ASO, ou pub payante. Idéalement, plusieurs.
 
-Il me reste une dernière chose à te dire. Je t'envoie un dernier email dans 2 jours.
+**4. Ta rétention est mauvaise.**
+
+Tu obtiens des téléchargements, mais les gens désinstallent après 2 jours ? C'est un problème d'onboarding ou de valeur perçue. Si l'utilisateur ne comprend pas en 30 secondes ce que ton app lui apporte, il part. Et l'App Store le voit. Plus ta rétention est mauvaise, moins Apple te met en avant.
+
+**5. Tu n'as pas de boucle virale.**
+
+Les meilleures apps se propagent toutes seules. Un système de parrainage, un partage de résultats, un classement entre amis. Si ton app n'a aucun mécanisme qui pousse les utilisateurs à en parler, tu dépends à 100% de tes propres efforts marketing.
+
+Le bon côté : tous ces problèmes se corrigent. Et souvent, une seule correction peut tout débloquer.
+
+C'est exactement ce que je fais pendant l'audit gratuit. On regarde ton app ensemble, j'identifie le ou les blocages, et je te donne un plan d'action concret.
+
+[Réserve ton audit gratuit](https://calendly.com/jeremypltpro/30min)
+
+Demain, je t'envoie mon dernier email. Je serai direct.
 
 Jeremy
 
-P.S. Rappel : garantie 30 jours satisfait ou remboursé. Tu ne risques rien à essayer.
+P.S. Si tu n'as pas encore d'app mais que tu as un projet en tête, l'audit marche aussi. On peut valider ton idée et définir ta feuille de route ensemble.

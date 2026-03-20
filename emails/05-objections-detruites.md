@@ -1,59 +1,56 @@
-# Email 5 - Objections détruites
+# Email 5 - La monétisation (ce qui marche vraiment)
 
 **Jour** : J+6
-**Objet** : "Mais moi je sais pas coder..."
-**Preheader** : C'est justement pour ça que ça marche
+**Objet** : Le modèle de pricing qui convertit le mieux
+**Preview** : Fais pas cette erreur. Ça m'a coûté des milliers de dollars.
 
 ---
 
-Salut,
+Salut {{FIRSTNAME}},
 
-Je reçois ce message tout le temps : "Ça a l'air génial, mais je ne sais pas coder."
+Parlons argent.
 
-Parfait. C'est exactement pour ça que j'ai créé App Mastery.
+Tu as une idée d'app. Tu sais la valider. Tu connais la stratégie marketing. Mais combien tu vas facturer ? Et comment ?
 
-Laisse-moi détruire les 3 objections que tu as sûrement en tête.
+C'est là que la majorité des créateurs d'apps se plantent. Et ça leur coûte très cher.
 
----
+Voici ce que j'ai appris (à la dure) :
 
-**"Je ne sais pas coder."**
+**L'erreur fatale : rendre ton app gratuite.**
 
-Tu n'as pas besoin de savoir coder. Le vibe coding, c'est l'IA qui écrit le code. Toi, tu décris ce que tu veux en langage naturel. Et l'IA génère le code.
+"Je vais d'abord avoir des utilisateurs, et après je monétiserai." Non. Si ton app est gratuite sans stratégie de monétisation claire dès le départ, tu vas attirer des utilisateurs qui ne paieront jamais. Et tu vas te retrouver avec une app populaire qui ne génère rien.
 
-Par contre, il y a un piège. Si tu ne sais pas écrire les bons prompts et maîtriser les agents IA, tu vas te retrouver avec une app truffée de bugs, de failles de sécurité, et de code impossible à maintenir. Le genre d'app qui crash en production devant tes utilisateurs. Qui se fait rejeter par Apple. Ou pire, qui expose les données de tes clients.
+**Ce qui marche en 2026 :**
 
-C'est exactement pour ça qu'on te forme là-dessus dans App Mastery. Tu vas apprendre à piloter les agents IA comme un pro, à écrire des prompts qui produisent du code propre et sécurisé, et à éviter les erreurs que 99% des débutants en vibe coding font sans même le savoir.
+**1. Le freemium avec abonnement**
 
----
+C'est le modèle roi. Version gratuite limitée + abonnement pour débloquer les fonctionnalités premium. C'est ce qu'on fait avec Shinobi Japanese. Et c'est ce que font les apps les plus rentables de l'App Store.
 
-**"Je n'ai pas le temps."**
+Le secret : ta version gratuite doit être assez bonne pour que l'utilisateur accroche, mais assez limitée pour qu'il VEUILLE passer en premium. C'est un équilibre délicat.
 
-La formation est conçue pour que tu lances ton app en 28 jours. Pas à temps plein. En y consacrant quelques heures par jour.
+**2. Les bons paliers de prix**
 
-Ce qui prenait 2 ans quand j'ai commencé prend maintenant quelques semaines avec les bons outils. L'IA a tout accéléré.
+On a testé des dizaines de combinaisons. Voici ce qui convertit le mieux pour une app de niche :
+- Mensuel : entre 4,99 et 9,99 euros
+- Annuel : entre 29,99 et 49,99 euros (c'est celui qui génère le plus de revenus)
+- Lifetime : entre 79,99 et 149,99 euros (pour les early adopters)
 
----
+L'annuel doit représenter une réduction de 40 à 60% par rapport au mensuel. C'est le sweet spot.
 
-**"997$, c'est cher."**
+**3. Le paywall au bon moment**
 
-Cher par rapport à quoi ?
+Ne mets pas le paywall à l'ouverture de l'app. Laisse l'utilisateur découvrir, utiliser, et RESSENTIR la valeur. Ensuite, quand il essaie d'accéder à une fonctionnalité avancée, tu affiches le paywall.
 
-Un bootcamp en développement, c'est 5 000 à 15 000$. Pour apprendre à coder à la main. Sans le marketing, sans le business.
+Pour Shinobi Japanese, le paywall apparaît après 3 leçons gratuites. L'utilisateur a déjà vu que l'app marche. Il a déjà progressé. Le passage en premium devient naturel.
 
-Des tutos YouTube gratuits ? Tu peux y passer 6 mois et ne jamais finir ton app. Ton temps a un coût.
+**4. L'essai gratuit de 7 jours**
 
-App Mastery, c'est 10 modules, 90+ leçons, les stratégies marketing de Logan, l'accès à une communauté privée à vie, et des lives Q&A deux fois par mois.
+Propose un essai gratuit de 7 jours pour l'abonnement annuel. Les utilisateurs qui testent et qui voient la valeur convertissent à un taux bien plus élevé que ceux qui voient juste un prix.
 
-Avec 100 abonnés à 10 euros/mois, tu récupères ton investissement dès le premier mois. Tout le reste, c'est du profit.
+Tu veux qu'on définisse ensemble le modèle de monétisation parfait pour ton app ? En 30 minutes, je peux t'aider à choisir le bon pricing, le bon placement de paywall, et éviter les erreurs qui coûtent cher.
 
-Et si ça ne marche pas ? Tu as 30 jours pour te faire rembourser. Zéro risque.
+[Réserve ton audit gratuit](https://calendly.com/jeremypltpro/30min)
 
----
-
-Il reste un dernier truc dont on n'a pas parlé. Le coût réel de ne rien faire. C'est probablement plus élevé que tu ne le penses.
-
-Je t'en parle dans 2 jours.
+Dans 2 jours, je t'envoie un email un peu différent. On va parler de pourquoi certaines apps stagnent à 0 téléchargement pendant des mois. Et ce que tu peux y faire.
 
 Jeremy
-
-P.S. Tu as des questions spécifiques ? Réponds à cet email. Je réponds personnellement.

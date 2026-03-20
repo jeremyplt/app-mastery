@@ -5,7 +5,7 @@ SOURCE CODE : src/app/api/subscribe/route.ts (fonction sendPlanActionEmail)
 
 ---
 
-Salut,
+Salut {{FIRSTNAME}},
 
 Merci d'avoir demandé le Plan d'Action.
 
@@ -25,6 +25,10 @@ Mais il y a un truc que je n'ai pas mis dans la vidéo.
 C'est le moment précis où tout a basculé pour moi. Le jour où j'ai failli tout abandonner, et ce qui s'est passé juste après.
 
 Je t'en parle demain.
+
+En attendant, si tu as déjà une app ou un projet en tête et que tu veux un regard extérieur, je propose un audit gratuit de 30 minutes. Toi et moi, en appel. On analyse ton projet et je te donne un plan d'action personnalisé.
+
+[Réserve ton audit gratuit](https://calendly.com/jeremypltpro/30min)
 
 À demain,
 Jeremy

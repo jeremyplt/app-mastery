@@ -9,9 +9,10 @@ const LIST_CONFIG: Record<number, { templateId: number; tag: string }> = {
   16: { templateId: 14, tag: "openclaw" },
 };
 
-async function sendPlanActionEmail(apiKey: string, email: string) {
+async function sendPlanActionEmail(apiKey: string, email: string, firstName?: string) {
+  const greeting = firstName ? `Salut ${firstName},` : "Salut,";
   const htmlContent = `
-<p>Salut,</p>
+<p>${greeting}</p>
 
 <p>Merci d'avoir demandé le Plan d'Action.</p>
 
@@ -33,6 +34,10 @@ async function sendPlanActionEmail(apiKey: string, email: string) {
 <p>C'est le moment précis où tout a basculé pour moi. Le jour où j'ai failli tout abandonner, et ce qui s'est passé juste après.</p>
 
 <p>Je t'en parle demain.</p>
+
+<p>En attendant, si tu as déjà une app ou un projet en tête et que tu veux un regard extérieur, je propose un audit gratuit de 30 minutes. Toi et moi, en appel. On analyse ton projet et je te donne un plan d'action personnalisé.</p>
+
+<p><a href="https://calendly.com/jeremypltpro/30min">Réserve ton audit gratuit</a></p>
 
 <p>À demain,<br>Jeremy</p>
 
@@ -152,7 +157,7 @@ export async function POST(req: NextRequest) {
 
     // Step 2: Send first email instantly via transactional API
     if (source === "plan-action") {
-      await sendPlanActionEmail(BREVO_API_KEY, email);
+      await sendPlanActionEmail(BREVO_API_KEY, email, firstName);
     } else {
       const config = targetListId ? LIST_CONFIG[targetListId] : undefined;
       if (config) {

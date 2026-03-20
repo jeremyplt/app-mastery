@@ -1,50 +1,53 @@
-# Séquence Email - App Mastery
+# Séquence Email - Plan d'Action (Post Lead Magnet)
 
 ## Stratégie
 
-Séquence de 7 emails sur 10 jours, déclenchée après le visionnage du Plan d'Action (lead magnet vidéo).
+Séquence de 7 emails sur 10 jours, déclenchée après l'inscription au Plan d'Action.
 
-Framework : Soap Opera Sequence (Russell Brunson)
-- Chaque email se termine par un cliffhanger ou une transition vers le suivant
+Objectif : apporter un maximum de valeur et amener le prospect à réserver un appel audit gratuit (Calendly).
+
+Approche :
+- Chaque email donne une vraie astuce ou stratégie actionnable
+- On appuie sur les pain points (app qui ne génère pas de revenus, pas de téléchargements, pas de visibilité)
+- CTA unique : réserver un appel audit gratuit
 - Ton conversationnel, comme un message à un ami
-- Un seul CTA par email (sauf E1 qui délivre le lead magnet)
+- On collecte le prénom, donc on personnalise avec {{FIRSTNAME}}
 
 ## Calendrier d'envoi
 
-| Email | Jour | Sujet | Objectif |
-|-------|------|-------|----------|
-| E1 | J+0 | Bienvenue + Plan d'Action | Délivrer le lead magnet, ouvrir la boucle |
-| E2 | J+1 | Mon histoire (Epiphany Bridge) | Créer la connexion, montrer la transformation |
-| E3 | J+2 | L'erreur fatale | Agiter le problème, détruire les fausses croyances |
-| E4 | J+4 | La preuve par les chiffres | Social proof, revenus, reviews |
-| E5 | J+6 | Objections détruites | Répondre aux objections courantes |
-| E6 | J+8 | Le vrai coût de l'inaction | Urgence + calcul du coût d'opportunité |
-| E7 | J+10 | Dernière chance | Scarcité, deadline, CTA final |
+| Email | Jour | Sujet | Angle |
+|-------|------|-------|-------|
+| E1 | J+0 | Livraison du Plan d'Action | Délivrer la vidéo, ouvrir la boucle |
+| E2 | J+1 | Mon histoire | Connexion personnelle, crédibilité |
+| E3 | J+2 | L'erreur n°1 (validation) | Valeur pure : comment valider une idée en 48h |
+| E4 | J+4 | Le secret du marketing organique | Valeur pure : stratégie virale TikTok/Reels |
+| E5 | J+6 | La monétisation (ce qui marche vraiment) | Valeur pure : modèles de pricing qui convertissent |
+| E6 | J+8 | Pourquoi ton app ne décolle pas | Pain points + diagnostic |
+| E7 | J+10 | Dernier email | Direct, dernier CTA audit |
 
 ## Configuration Brevo (Automation)
 
-**Déclencheur** : Un contact est ajouté à la liste #3 (Plan d'Action)
+**Déclencheur** : Un contact est ajouté à la liste #17 (Plan d'Action)
 
 | Étape | Action | Délai après |
 |-------|--------|-------------|
-| E1 | Bienvenue + Plan d'Action | - |
+| E1 | Livraison Plan d'Action | Immédiat (via transactional API) |
 | Délai | | 1 jour |
 | E2 | Mon histoire | - |
 | Délai | | 1 jour |
-| E3 | L'erreur fatale | - |
+| E3 | L'erreur n°1 | - |
 | Délai | | 2 jours |
-| E4 | La preuve par les chiffres | - |
+| E4 | Marketing organique | - |
 | Délai | | 2 jours |
-| E5 | Objections détruites | - |
+| E5 | Monétisation | - |
 | Délai | | 2 jours |
-| E6 | Le coût de l'inaction | - |
+| E6 | Pourquoi ton app ne décolle pas | - |
 | Délai | | 2 jours |
-| E7 | Dernière chance | Fin |
+| E7 | Dernier email | Fin |
 
 ## Notes
 
-- Objet des emails : court, curieux, personnel (pas de majuscules partout, pas de spam)
-- Preheader : toujours rempli, complément de l'objet
-- Désabonnement : lien en bas de chaque email
+- Lien Calendly : https://calendly.com/jeremypltpro/30min
 - Format : texte simple, pas de templates HTML lourds. Comme un vrai email perso.
-- On ne collecte pas le prénom, donc tous les emails commencent par "Salut," sans variable.
+- On collecte le prénom via le formulaire /plan-action
+- Chaque email doit donner assez de valeur pour que le prospect se dise "si les emails gratuits sont aussi bons, qu'est-ce que ça donne en appel ?"

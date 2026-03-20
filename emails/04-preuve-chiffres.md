@@ -1,44 +1,50 @@
-# Email 4 - La preuve par les chiffres
+# Email 4 - Le secret du marketing organique
 
 **Jour** : J+4
-**Objet** : 140 000$/an avec une seule app
-**Preheader** : Les chiffres réels, sans filtre
+**Objet** : La stratégie qui a généré des millions de vues (gratuit)
+**Preview** : Tu peux la copier ce soir. Voici comment.
 
 ---
 
-Salut,
+Salut {{FIRSTNAME}},
 
-Tu veux des chiffres ? En voici.
+Aujourd'hui, je te révèle la stratégie marketing qui a fait exploser Shinobi Japanese. Zéro budget pub. 100% organique.
 
-**Shinobi Japanese, aujourd'hui :**
-- 140 000$/an de revenus récurrents (ARR)
-- 10 000+ avis sur l'App Store et le Google Play Store
-- Note moyenne de 4.85/5
-- Zéro budget publicitaire au lancement
+La plupart des gens qui créent une app pensent que le plus dur, c'est le développement. En réalité, le plus dur, c'est de se faire connaître.
 
-**La progression réelle :**
-- Mois 1-3 : développement + lancement. Quelques dizaines de téléchargements.
-- Mois 4-6 : premières vidéos virales. Premiers abonnés payants. Quelques centaines de dollars par mois.
-- Mois 6-12 : le marketing organique fait boule de neige. On lance nos premières pubs Meta Ads. On dépasse 3 000$/mois.
-- Mois 12-18 : les influenceurs et le contenu viral amènent des pics. On passe à 8 000$/mois.
-- Aujourd'hui : 140K$/an en ARR.
+Tu peux avoir la meilleure app du monde. Si personne ne sait qu'elle existe, elle va dormir sur l'App Store avec 3 téléchargements.
 
-Les 3 premiers mois sont les plus durs. C'est normal. La courbe est exponentielle, pas linéaire. Et c'est exactement pour ça que la plupart des gens abandonnent trop tôt.
+Voici exactement ce qu'on a fait :
 
-Mais le vrai game changer, ça n'a pas été le code.
+**1. Le format court vertical (TikTok, Reels, Shorts)**
 
-**Ça a été le marketing.**
+Logan, mon cofondateur, a créé des vidéos de 15 à 60 secondes. Pas des pubs. Du contenu natif. Des vidéos qui apportent de la valeur ou qui divertissent, et qui montrent l'app en action.
 
-Logan, mon cofondateur, a créé des vidéos courtes qui ont généré des millions de vues. En organique. Sans pub. Et dans App Mastery, il intervient directement pour t'apprendre ses stratégies.
+Le secret : la vidéo ne doit PAS ressembler à une pub. Les gens scrollent dès qu'ils sentent qu'on essaie de leur vendre quelque chose. Tu dois créer du contenu que les gens regardent même s'ils n'ont pas besoin de ton app.
 
-On t'apprend aussi comment contacter et closer des micro-influenceurs. Un seul bon influenceur peut générer des centaines de téléchargements en un jour.
+**2. La règle du hook en 1 seconde**
 
-Fais le calcul : 100 abonnés à 10 euros/mois, ça fait près de 12 000 euros/an de revenus récurrents. Avec une seule app.
+La première seconde de ta vidéo décide de tout. Si tu n'accroches pas immédiatement, c'est terminé. Nos hooks les plus performants :
+- Une question provocante ("Tu apprends le japonais ? Arrête tout de suite.")
+- Un résultat choquant ("J'ai appris 50 kanji en 1 heure.")
+- Un pattern interrupt visuel (un geste, un mouvement brusque)
 
-Tu te dis peut-être : "Ok, mais moi je ne sais pas coder. Et je n'ai pas 2 ans devant moi."
+**3. Le volume**
 
-Bonne nouvelle. Je t'explique dans 2 jours pourquoi ces deux objections n'ont plus aucun sens en 2026.
+On a posté 3 à 5 vidéos par semaine pendant 6 mois. La majorité ont fait entre 1 000 et 10 000 vues. Quelques-unes ont explosé à plusieurs millions. Tu ne peux pas prédire laquelle va devenir virale. Mais plus tu postes, plus tu as de chances.
+
+**4. Les micro-influenceurs**
+
+On a contacté des créateurs entre 10k et 100k abonnés dans la niche du japonais. Pas des stars. Des gens passionnés avec une audience engagée. On leur a proposé un accès gratuit à l'app en échange d'une vidéo honnête. Un seul bon influenceur peut générer des centaines de téléchargements en un jour.
+
+Le coût total de cette stratégie : 0 euros. Juste du temps et de la régularité.
+
+Tu veux savoir quelle stratégie marketing marcherait le mieux pour TON app ? C'est exactement ce qu'on peut définir ensemble en 30 minutes.
+
+[Réserve ton audit gratuit](https://calendly.com/jeremypltpro/30min)
+
+Dans 2 jours, je te parle monétisation. Quel modèle de pricing choisir, comment fixer tes prix, et les erreurs qui te font perdre de l'argent.
 
 Jeremy
 
-P.S. Si tu veux voir les screenshots de revenus et les reviews, tout est sur la page : [Voir les preuves]({{lien_page_vente}})
+P.S. Cette stratégie marche pour n'importe quelle niche, pas seulement les apps de langue. Le principe est le même : du contenu natif, du volume, et des hooks qui accrochent.

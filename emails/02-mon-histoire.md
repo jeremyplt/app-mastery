@@ -1,12 +1,12 @@
-# Email 2 - Mon histoire (Epiphany Bridge)
+# Email 2 - Mon histoire
 
 **Jour** : J+1
 **Objet** : Le jour où j'ai failli tout lâcher
-**Preheader** : 2h du matin, un crash en production, et une décision
+**Preview** : 2h du matin, un crash en production, et une décision.
 
 ---
 
-Salut,
+Salut {{FIRSTNAME}},
 
 Hier je t'ai promis de te raconter le moment où tout a basculé. Le voici.
 
@@ -22,18 +22,18 @@ Et puis quelque chose a changé.
 
 J'ai découvert le vibe coding. L'idée que l'IA peut écrire le code à ta place, et que toi, tu diriges la vision.
 
-J'ai testé avec Claude Code. Et en quelques heures, j'ai fait ce qui me prenait des semaines. Le code était plus propre. Les bugs, l'IA les trouvait et les corrigeait en secondes.
+J'ai testé. Et en quelques heures, j'ai fait ce qui me prenait des semaines. Le code était plus propre. Les bugs, l'IA les trouvait et les corrigeait en secondes.
 
 En 6 mois, mon app est passée de quelques dizaines d'utilisateurs à des milliers. Aujourd'hui, Shinobi Japanese génère plus de 140 000$/an de revenus récurrents. Plus de 10 000 avis sur les stores. Note moyenne de 4.85/5.
 
-Le truc, c'est que ce n'est pas parce que je suis un génie du code. C'est parce que j'ai trouvé la bonne méthode.
+Le truc, c'est que ce n'est pas parce que je suis un génie du code. C'est parce que j'ai trouvé la bonne méthode. Et surtout, parce que j'ai eu quelqu'un pour me guider quand j'étais bloqué.
 
-Et c'est exactement cette méthode que j'enseigne dans App Mastery.
+C'est exactement ce que je propose avec l'audit gratuit. 30 minutes en appel, toi et moi. On regarde ton projet (ou ton idée) et je te dis exactement par où commencer.
 
-Mais avant de t'en parler, il faut que je te dise un truc important. Il y a UNE erreur que 90% des gens font quand ils veulent créer une app. Et cette erreur les condamne à échouer avant même d'avoir commencé.
+[Réserve ton audit gratuit](https://calendly.com/jeremypltpro/30min)
 
-Je t'explique ça demain.
+Demain, je te partage l'erreur n°1 qui tue 90% des apps avant même leur lancement. Et surtout, comment l'éviter.
 
 Jeremy
 
-P.S. Si tu n'as pas encore regardé le Plan d'Action, fais-le avant de lire l'email de demain. Ça va te donner le contexte : [Regarder le Plan d'Action]({{lien_blueprint}})
+P.S. Si tu n'as pas encore regardé le Plan d'Action, fais-le avant de lire l'email de demain : [Regarder le Plan d'Action](https://www.jeremypitault.com/plan-action/video)
