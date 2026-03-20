@@ -111,7 +111,10 @@ export async function POST(req: NextRequest) {
 
     const targetListId = listId ? parseInt(listId) : BREVO_LIST_ID;
 
-    // Step 1: Create or update the contact with list
+    // Step 1: Create or update the contact (sans SMS pour éviter les erreurs de format)
+    const attributes: Record<string, string | boolean> = {};
+    if (firstName) attributes.FIRSTNAME = firstName;
+
     const createRes = await fetch("https://api.brevo.com/v3/contacts", {
       method: "POST",
       headers: {
@@ -123,35 +126,53 @@ export async function POST(req: NextRequest) {
         email,
         updateEnabled: true,
         listIds: targetListId ? [targetListId] : [],
-        attributes: {
-          ...(firstName && { FIRSTNAME: firstName }),
-          ...(phone && { SMS: phone }),
-        },
+        attributes,
       }),
     });
 
     if (!createRes.ok) {
       const data = await createRes.json();
-      if (data.code !== "duplicate_parameter") {
-        console.error("Brevo create contact error:", data);
-        return NextResponse.json(
-          { error: "Une erreur est survenue" },
-          { status: 500 },
-        );
-      }
-      // Contact exists, add to list separately
-      if (targetListId) {
-        await fetch(
-          `https://api.brevo.com/v3/contacts/lists/${targetListId}/contacts/add`,
-          {
-            method: "POST",
-            headers: {
-              "api-key": BREVO_API_KEY,
-              "Content-Type": "application/json",
+      console.error("Brevo create contact error:", JSON.stringify(data));
+      if (data.code === "duplicate_parameter") {
+        // Contact exists, add to list separately
+        if (targetListId) {
+          const listRes = await fetch(
+            `https://api.brevo.com/v3/contacts/lists/${targetListId}/contacts/add`,
+            {
+              method: "POST",
+              headers: {
+                "api-key": BREVO_API_KEY,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ emails: [email] }),
             },
-            body: JSON.stringify({ emails: [email] }),
-          },
-        );
+          );
+          if (!listRes.ok) {
+            const listData = await listRes.json();
+            console.error("Brevo add to list error:", JSON.stringify(listData));
+          }
+        }
+      }
+    } else {
+      console.log(`Brevo contact created: ${email} (list ${targetListId})`);
+    }
+
+    // Step 1b: Mettre à jour le SMS séparément (format peut être invalide)
+    if (phone) {
+      const smsRes = await fetch(`https://api.brevo.com/v3/contacts/${encodeURIComponent(email)}`, {
+        method: "PUT",
+        headers: {
+          "api-key": BREVO_API_KEY,
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          attributes: { SMS: phone },
+        }),
+      });
+      if (!smsRes.ok) {
+        const smsData = await smsRes.json();
+        console.error("Brevo SMS update error:", JSON.stringify(smsData));
       }
     }
 
