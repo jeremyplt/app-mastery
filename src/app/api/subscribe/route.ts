@@ -82,7 +82,7 @@ async function sendTransactionalEmail(apiKey: string, email: string, templateId:
 
 export async function POST(req: NextRequest) {
   try {
-    const { email, listId, source } = await req.json();
+    const { email, firstName, phone, listId, source } = await req.json();
 
     if (!email || !email.includes("@")) {
       return NextResponse.json(
@@ -118,6 +118,10 @@ export async function POST(req: NextRequest) {
         email,
         updateEnabled: true,
         listIds: targetListId ? [targetListId] : [],
+        attributes: {
+          ...(firstName && { FIRSTNAME: firstName }),
+          ...(phone && { SMS: phone }),
+        },
       }),
     });
 

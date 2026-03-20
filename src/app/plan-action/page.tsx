@@ -1,15 +1,82 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
+const COUNTRY_CODES = [
+  { code: "+33", flag: "🇫🇷", country: "FR" },
+  { code: "+32", flag: "🇧🇪", country: "BE" },
+  { code: "+41", flag: "🇨🇭", country: "CH" },
+  { code: "+1", flag: "🇨🇦", country: "CA" },
+  { code: "+352", flag: "🇱🇺", country: "LU" },
+  { code: "+377", flag: "🇲🇨", country: "MC" },
+  { code: "+1", flag: "🇺🇸", country: "US" },
+  { code: "+44", flag: "🇬🇧", country: "GB" },
+  { code: "+49", flag: "🇩🇪", country: "DE" },
+  { code: "+34", flag: "🇪🇸", country: "ES" },
+  { code: "+39", flag: "🇮🇹", country: "IT" },
+  { code: "+351", flag: "🇵🇹", country: "PT" },
+  { code: "+31", flag: "🇳🇱", country: "NL" },
+  { code: "+212", flag: "🇲🇦", country: "MA" },
+  { code: "+216", flag: "🇹🇳", country: "TN" },
+  { code: "+213", flag: "🇩🇿", country: "DZ" },
+  { code: "+225", flag: "🇨🇮", country: "CI" },
+  { code: "+221", flag: "🇸🇳", country: "SN" },
+  { code: "+237", flag: "🇨🇲", country: "CM" },
+  { code: "+261", flag: "🇲🇬", country: "MG" },
+];
+
+const TIMEZONE_TO_COUNTRY: Record<string, string> = {
+  "Europe/Paris": "FR",
+  "Europe/Brussels": "BE",
+  "Europe/Zurich": "CH",
+  "America/Toronto": "CA",
+  "America/Montreal": "CA",
+  "America/Vancouver": "CA",
+  "Europe/Luxembourg": "LU",
+  "Europe/Monaco": "MC",
+  "Europe/London": "GB",
+  "America/New_York": "US",
+  "America/Chicago": "US",
+  "America/Denver": "US",
+  "America/Los_Angeles": "US",
+  "Europe/Berlin": "DE",
+  "Europe/Madrid": "ES",
+  "Europe/Rome": "IT",
+  "Europe/Lisbon": "PT",
+  "Europe/Amsterdam": "NL",
+  "Africa/Casablanca": "MA",
+  "Africa/Tunis": "TN",
+  "Africa/Algiers": "DZ",
+  "Africa/Abidjan": "CI",
+  "Africa/Dakar": "SN",
+  "Africa/Douala": "CM",
+  "Indian/Antananarivo": "MG",
+};
+
+function detectCountry(): string {
+  if (typeof Intl === "undefined") return "FR";
+  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
+  if (TIMEZONE_TO_COUNTRY[tz]) return TIMEZONE_TO_COUNTRY[tz];
+  return "FR";
+}
+
 export default function PlanActionPage() {
+  const [firstName, setFirstName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [countryIndex, setCountryIndex] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
+
+  useEffect(() => {
+    const detected = detectCountry();
+    const idx = COUNTRY_CODES.findIndex((c) => c.country === detected);
+    if (idx !== -1) setCountryIndex(idx);
+  }, []);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -20,7 +87,19 @@ export default function PlanActionPage() {
       const res = await fetch("/api/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, listId: 17, source: "plan-action" }),
+        body: JSON.stringify({
+                  email,
+                  firstName,
+                  phone: (() => {
+                    let n = phone.replace(/[\s\-().]/g, "");
+                    if (n.startsWith("+")) return n;
+                    if (n.startsWith("00")) n = n.slice(2);
+                    if (n.startsWith("0")) n = n.slice(1);
+                    return `${COUNTRY_CODES[countryIndex].code}${n}`;
+                  })(),
+                  listId: 17,
+                  source: "plan-action",
+                }),
       });
 
       if (!res.ok) {
@@ -128,19 +207,48 @@ export default function PlanActionPage() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6, delay: 0.35 }}
                       >
-                        <div className="flex flex-col sm:flex-row gap-3 max-w-md">
+                        <div className="flex flex-col gap-3 max-w-md">
+                          <input
+                            type="text"
+                            required
+                            placeholder="Ton prénom"
+                            value={firstName}
+                            onChange={(e) => setFirstName(e.target.value)}
+                            className="w-full rounded-full bg-white/5 border border-white/10 px-5 py-3 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/50 transition-colors"
+                          />
                           <input
                             type="email"
                             required
                             placeholder="Ton adresse email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            className="flex-1 rounded-full bg-white/5 border border-white/10 px-5 py-3 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/50 transition-colors"
+                            className="w-full rounded-full bg-white/5 border border-white/10 px-5 py-3 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/50 transition-colors"
                           />
+                          <div className="flex gap-2">
+                            <select
+                              value={countryIndex}
+                              onChange={(e) => setCountryIndex(Number(e.target.value))}
+                              className="w-24 shrink-0 rounded-full bg-white/5 border border-white/10 px-3 py-3 text-sm text-white focus:outline-none focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/50 transition-colors appearance-none text-center"
+                            >
+                              {COUNTRY_CODES.map((c, i) => (
+                                <option key={`${c.country}-${i}`} value={i}>
+                                  {c.flag} {c.code}
+                                </option>
+                              ))}
+                            </select>
+                            <input
+                              type="tel"
+                              required
+                              placeholder="Ton numéro de téléphone"
+                              value={phone}
+                              onChange={(e) => setPhone(e.target.value)}
+                              className="flex-1 min-w-0 rounded-full bg-white/5 border border-white/10 px-5 py-3 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/50 transition-colors"
+                            />
+                          </div>
                           <button
                             type="submit"
                             disabled={loading}
-                            className="rounded-full bg-amber-500 px-6 py-3 text-sm font-semibold text-white hover:bg-amber-400 transition-colors shadow-lg shadow-amber-500/25 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+                            className="w-full rounded-full bg-amber-500 px-6 py-3 text-sm font-semibold text-white hover:bg-amber-400 transition-colors shadow-lg shadow-amber-500/25 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
                           >
                             {loading ? "..." : "Recevoir le Plan d'Action"}
                           </button>
