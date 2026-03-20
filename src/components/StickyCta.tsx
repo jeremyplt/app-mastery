@@ -17,8 +17,6 @@ export default function StickyCta() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  if (expired) return null;
-
   return (
     <AnimatePresence>
       {isVisible && (
@@ -30,21 +28,34 @@ export default function StickyCta() {
           transition={{ duration: 0.3, ease: "easeOut" }}
         >
           <div className="bg-gray-950/95 backdrop-blur-lg border-t border-white/10 px-4 py-3 safe-bottom">
-            <div className="flex items-center justify-center gap-2 mb-2">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500" />
-              </span>
-              <span className="text-sm font-semibold text-white/70">Fermeture dans</span>
-              <CountdownTimerCompact />
-            </div>
-            <a
-              href="#pricing"
-              className="block w-full rounded-full bg-sky-500 py-3 text-center text-base font-semibold text-white hover:bg-sky-400 transition-colors shadow-lg shadow-sky-500/25"
-              data-ph-capture-attribute-section="sticky-bar"
-            >
-              Rejoindre avant la fermeture
-            </a>
+            {!expired && (
+              <div className="flex items-center justify-center gap-2 mb-2">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500" />
+                </span>
+                <span className="text-sm font-semibold text-white/70">Fermeture dans</span>
+                <CountdownTimerCompact />
+              </div>
+            )}
+            {expired ? (
+              <a
+                href="https://calendly.com/jeremypltpro/30min"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block w-full rounded-full bg-amber-500 py-3 text-center text-base font-semibold text-white hover:bg-amber-400 transition-colors shadow-lg shadow-amber-500/25"
+              >
+                Réserve ton appel gratuit
+              </a>
+            ) : (
+              <a
+                href="#pricing"
+                className="block w-full rounded-full bg-sky-500 py-3 text-center text-base font-semibold text-white hover:bg-sky-400 transition-colors shadow-lg shadow-sky-500/25"
+                data-ph-capture-attribute-section="sticky-bar"
+              >
+                Rejoindre avant la fermeture
+              </a>
+            )}
           </div>
         </motion.div>
       )}

@@ -7,7 +7,7 @@ import ClosedBanner from "./ClosedBanner";
 export default function Urgency() {
   const expired = useIsExpired();
 
-  if (expired) return <ClosedBanner />;
+  if (expired) return null;
 
   return (
     <section className="relative py-20">
