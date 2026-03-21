@@ -74,6 +74,7 @@ async function sendTransactionalEmail(apiKey: string, email: string, templateId:
       Accept: "application/json",
     },
     body: JSON.stringify({
+      sender: { name: "Jeremy Pitault", email: "contact@jeremypitault.com" },
       templateId,
       to: [{ email }],
       tags: [tag],

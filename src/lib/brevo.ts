@@ -63,6 +63,7 @@ export async function addBrevoContact(email: string, tag: string, eventName: str
           Accept: "application/json",
         },
         body: JSON.stringify({
+          sender: { name: "Jeremy Pitault", email: "contact@jeremypitault.com" },
           templateId: welcomeTemplateId,
           to: [{ email }],
           tags: [`welcome-${tag}`],

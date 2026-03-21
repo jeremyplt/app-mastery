@@ -36,7 +36,7 @@ export async function POST(req: NextRequest) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        sender: { name: "App Mastery", email: "jeremy@jeremypitault.com" },
+        sender: { name: "Jeremy Pitault", email: "contact@jeremypitault.com" },
         to: [{ email }],
         subject: "Ton lien de connexion App Mastery",
         htmlContent: `
