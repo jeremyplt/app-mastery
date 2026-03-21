@@ -43,13 +43,22 @@ export default function MerciPage() {
           </p>
 
           {/* Audit call CTA */}
-          <div className="mt-10 pt-10 border-t border-white/10">
+          <div className="mt-10 pt-10 border-t border-white/10 flex flex-col items-center">
             <p className="text-xl font-semibold text-white mb-2">
               Tu as déjà une app ou un projet en tête ?
             </p>
-            <p className="text-gray-400 max-w-md mx-auto mb-6">
-              Réserve un appel gratuit de 30 minutes. On analyse ton projet ensemble et je te donne un plan d&apos;action personnalisé.
+            <p className="text-gray-400 max-w-md mx-auto mb-4">
+              Réserve un appel de 30 minutes avec moi. On analyse ton projet ensemble et je te donne un plan d&apos;action personnalisé.
             </p>
+            <div className="inline-flex items-center gap-2 rounded-full bg-red-500/10 border border-red-500/30 px-3 py-1.5 mb-6">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500" />
+              </span>
+              <span className="text-sm font-bold text-red-400">
+                9 places gratuites restantes
+              </span>
+            </div>
             <a
               href="https://calendly.com/jeremypltpro/30min"
               target="_blank"
@@ -59,7 +68,7 @@ export default function MerciPage() {
               <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
               </svg>
-              Réserve ton audit gratuit
+              Réserve ton appel gratuit
             </a>
           </div>
 
