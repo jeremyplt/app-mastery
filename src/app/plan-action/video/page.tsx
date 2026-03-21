@@ -19,7 +19,7 @@ export default function PlanActionVideoPage() {
           </span>
 
           <h1 className="mt-6 text-3xl sm:text-4xl font-medium tracking-tighter text-white">
-            Ton Plan d&apos;Action pour lancer ton app rentable
+            Ton Plan d&apos;Action pour lancer ton projet rentable
           </h1>
 
           <p className="mt-4 text-lg text-gray-300 max-w-xl mx-auto">
@@ -48,7 +48,7 @@ export default function PlanActionVideoPage() {
             transition={{ delay: 0.5, duration: 0.5 }}
           >
             <p className="text-xl font-semibold text-white mb-2">
-              Tu veux aller plus loin ?
+              Tu veux un plan d&apos;action personnalisé pour ton projet ?
             </p>
             <div className="inline-flex items-center gap-2 rounded-full bg-red-500/10 border border-red-500/30 px-3 py-1.5">
               <span className="relative flex h-2 w-2">
@@ -71,7 +71,7 @@ export default function PlanActionVideoPage() {
               Réserve ton appel gratuit
             </a>
             <p className="text-sm text-gray-400 max-w-md">
-              30 minutes pour analyser ton projet et définir un plan d&apos;action personnalisé.
+              Que tu aies déjà une app ou juste une idée, on définit ensemble tes prochaines étapes en 30 minutes.
             </p>
           </motion.div>
         </motion.div>

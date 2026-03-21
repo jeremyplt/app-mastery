@@ -45,10 +45,10 @@ export default function MerciPage() {
           {/* Audit call CTA */}
           <div className="mt-10 pt-10 border-t border-white/10 flex flex-col items-center">
             <p className="text-xl font-semibold text-white mb-2">
-              Tu as déjà une app ou un projet en tête ?
+              Tu veux un plan d&apos;action personnalisé pour ton projet ?
             </p>
             <p className="text-gray-400 max-w-md mx-auto mb-4">
-              Réserve un appel de 30 minutes avec moi. On analyse ton projet ensemble et je te donne un plan d&apos;action personnalisé.
+              Que tu aies déjà une app ou juste une idée, réserve 30 minutes avec moi. On définit ensemble les prochaines étapes concrètes pour avancer.
             </p>
             <div className="inline-flex items-center gap-2 rounded-full bg-red-500/10 border border-red-500/30 px-3 py-1.5 mb-6">
               <span className="relative flex h-2 w-2">

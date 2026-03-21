@@ -87,13 +87,24 @@ async function sendTransactionalEmail(apiKey: string, email: string, templateId:
 
 export async function POST(req: NextRequest) {
   try {
-    const { email, firstName, phone, listId, source } = await req.json();
+    const { email, firstName, phone, listId, source, utmSource, utmMedium, utmCampaign } = await req.json();
 
-    if (!email || !email.includes("@")) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    if (!email || !emailRegex.test(email)) {
       return NextResponse.json(
         { error: "Email invalide" },
         { status: 400 }
       );
+    }
+
+    if (phone) {
+      const phoneDigitsOnly = phone.replace(/\D/g, "");
+      if (phoneDigitsOnly.length < 6 || phoneDigitsOnly.length > 15) {
+        return NextResponse.json(
+          { error: "Numéro de téléphone invalide" },
+          { status: 400 }
+        );
+      }
     }
 
     const BREVO_API_KEY = process.env.BREVO_API_KEY;
@@ -114,6 +125,9 @@ export async function POST(req: NextRequest) {
     // Step 1: Create or update the contact (sans SMS pour éviter les erreurs de format)
     const attributes: Record<string, string | boolean> = {};
     if (firstName) attributes.FIRSTNAME = firstName;
+    if (utmSource) attributes.UTM_SOURCE = utmSource;
+    if (utmMedium) attributes.UTM_MEDIUM = utmMedium;
+    if (utmCampaign) attributes.UTM_CAMPAIGN = utmCampaign;
 
     const createRes = await fetch("https://api.brevo.com/v3/contacts", {
       method: "POST",
@@ -158,7 +172,9 @@ export async function POST(req: NextRequest) {
     }
 
     // Step 1b: Mettre à jour le SMS séparément (format peut être invalide)
-    if (phone) {
+    // Ignorer les numéros qui ne contiennent que le code pays (ex: "+33")
+    const phoneDigits = phone ? phone.replace(/\D/g, "") : "";
+    if (phone && phoneDigits.length >= 6) {
       const smsRes = await fetch(`https://api.brevo.com/v3/contacts/${encodeURIComponent(email)}`, {
         method: "PUT",
         headers: {

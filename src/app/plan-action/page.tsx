@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { motion } from "framer-motion";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 
 const COUNTRY_CODES = [
@@ -64,6 +64,14 @@ function detectCountry(): string {
 }
 
 export default function PlanActionPage() {
+  return (
+    <Suspense>
+      <PlanActionContent />
+    </Suspense>
+  );
+}
+
+function PlanActionContent() {
   const [firstName, setFirstName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -71,6 +79,7 @@ export default function PlanActionPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     const detected = detectCountry();
@@ -78,9 +87,43 @@ export default function PlanActionPage() {
     if (idx !== -1) setCountryIndex(idx);
   }, []);
 
+  function formatPhone(raw: string): string {
+    let n = raw.replace(/[\s\-().]/g, "");
+    if (!n) return "";
+    if (n.startsWith("+")) return n;
+    if (n.startsWith("00")) n = n.slice(2);
+    if (n.startsWith("0")) n = n.slice(1);
+    return n ? `${COUNTRY_CODES[countryIndex].code}${n}` : "";
+  }
+
+  function validateEmail(v: string): boolean {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
+  }
+
+  function validatePhone(raw: string): boolean {
+    const digits = raw.replace(/\D/g, "");
+    return digits.length >= 6 && digits.length <= 15;
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
+
+    if (!firstName.trim()) {
+      setError("Entre ton prénom");
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      setError("Entre une adresse email valide");
+      return;
+    }
+
+    if (!validatePhone(phone)) {
+      setError("Entre un numéro de téléphone valide");
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -88,17 +131,14 @@ export default function PlanActionPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-                  email,
-                  firstName,
-                  phone: (() => {
-                    let n = phone.replace(/[\s\-().]/g, "");
-                    if (n.startsWith("+")) return n;
-                    if (n.startsWith("00")) n = n.slice(2);
-                    if (n.startsWith("0")) n = n.slice(1);
-                    return `${COUNTRY_CODES[countryIndex].code}${n}`;
-                  })(),
+                  email: email.trim().toLowerCase(),
+                  firstName: firstName.trim(),
+                  phone: formatPhone(phone),
                   listId: 17,
                   source: "plan-action",
+                  utmSource: searchParams.get("utm_source") || undefined,
+                  utmMedium: searchParams.get("utm_medium") || undefined,
+                  utmCampaign: searchParams.get("utm_campaign") || undefined,
                 }),
       });
 
