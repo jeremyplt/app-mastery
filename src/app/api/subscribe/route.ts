@@ -174,6 +174,7 @@ export async function POST(req: NextRequest) {
 
     // Step 1b: Mettre à jour le SMS séparément (format peut être invalide)
     // Ignorer les numéros qui ne contiennent que le code pays (ex: "+33")
+    console.log(`Phone received for ${email}: "${phone || "(none)"}"`);
     const phoneDigits = phone ? phone.replace(/\D/g, "") : "";
     if (phone && phoneDigits.length >= 6) {
       const smsRes = await fetch(`https://api.brevo.com/v3/contacts/${encodeURIComponent(email)}`, {
