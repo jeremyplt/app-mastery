@@ -4,6 +4,8 @@ import { useState, useEffect, Suspense } from "react";
 import { motion } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
+import { isValidPhoneNumber, parsePhoneNumber } from "libphonenumber-js";
+import type { CountryCode } from "libphonenumber-js";
 
 const COUNTRY_CODES = [
   { code: "+33", flag: "🇫🇷", country: "FR" },
@@ -87,13 +89,15 @@ function PlanActionContent() {
     if (idx !== -1) setCountryIndex(idx);
   }, []);
 
+  const currentCountry = COUNTRY_CODES[countryIndex].country as CountryCode;
+
   function formatPhone(raw: string): string {
-    let n = raw.replace(/[\s\-().]/g, "");
-    if (!n) return "";
-    if (n.startsWith("+")) return n;
-    if (n.startsWith("00")) n = n.slice(2);
-    if (n.startsWith("0")) n = n.slice(1);
-    return n ? `${COUNTRY_CODES[countryIndex].code}${n}` : "";
+    try {
+      const parsed = parsePhoneNumber(raw, currentCountry);
+      return parsed ? parsed.format("E.164") : "";
+    } catch {
+      return "";
+    }
   }
 
   function validateEmail(v: string): boolean {
@@ -101,8 +105,11 @@ function PlanActionContent() {
   }
 
   function validatePhone(raw: string): boolean {
-    const digits = raw.replace(/\D/g, "");
-    return digits.length >= 6 && digits.length <= 15;
+    try {
+      return isValidPhoneNumber(raw, currentCountry);
+    } catch {
+      return false;
+    }
   }
 
   async function handleSubmit(e: React.FormEvent) {
