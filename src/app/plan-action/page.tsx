@@ -183,69 +183,42 @@ function PlanActionContent() {
         <div className="flex min-h-screen flex-col justify-center min-w-0">
           <section className="relative pt-6 pb-10 sm:pt-16 lg:pt-24 lg:pb-16">
             <div className="px-4 sm:px-6 lg:px-8">
-              {/* Section label */}
-              <motion.div
-                className="mb-8"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.4 }}
-              >
-                <span className="font-mono text-sm font-semibold tracking-widest uppercase text-amber-400">
-                  Gratuit
-                </span>
-              </motion.div>
-
               {/* Main card */}
               <div className="isolate overflow-hidden rounded-2xl bg-gray-950 p-2 outline outline-amber-500/20">
                 <div className="relative rounded-xl bg-white/5 overflow-hidden">
                   <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-amber-500/5 via-transparent to-orange-500/5" />
 
+                  {/* Top bar: label + prix */}
+                  <motion.div
+                    className="flex items-center gap-4 px-5 pt-5 sm:px-12 sm:pt-8"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.4 }}
+                  >
+                    <span className="font-mono text-base sm:text-lg font-semibold tracking-widest uppercase text-amber-400">
+                      Étude de cas offerte
+                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-gray-500 line-through text-lg font-medium">197€</span>
+                      <span className="rounded-full bg-green-500/15 border border-green-500/30 px-3 py-1 text-sm font-bold text-green-400">GRATUIT</span>
+                    </div>
+                  </motion.div>
+
                   <div className="grid lg:grid-cols-2 gap-0">
                     {/* Left: text content */}
-                    <div className="relative px-5 py-8 sm:px-12 sm:py-16 lg:py-20">
+                    <div className="relative px-5 py-2 sm:px-12 sm:py-4 lg:py-5">
+
                       <motion.h1
                         className="text-3xl/tight sm:text-4xl/tight lg:text-[3rem]/tight font-medium tracking-tighter text-balance text-white"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6 }}
                       >
-                        Le Plan d&apos;Action :{" "}
+                        La méthode à copier-coller qui m&apos;a permis de faire passer l&apos;app Shinobi{" "}
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-orange-300 to-amber-500">
-                          De 0 à 140K$/an
-                        </span>{" "}
-                        avec une seule app mobile
+                          de 0 à 140K$/an
+                        </span>
                       </motion.h1>
-
-                      <motion.p
-                        className="mt-6 text-lg/7 text-gray-300 max-w-lg"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 0.15 }}
-                      >
-                        Découvre la méthode exacte que j&apos;ai utilisée pour
-                        créer, lancer et monétiser mon app Shinobi Japanese. En
-                        vidéo, étape par étape.
-                      </motion.p>
-
-                      <motion.ul
-                        className="mt-6 space-y-2 text-sm text-gray-400"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 0.25 }}
-                      >
-                        {[
-                          "La méthode exacte pour créer et monétiser une app avec l'IA",
-                          "Les 3 erreurs qui font échouer 90% des apps avant le lancement",
-                          "La stratégie marketing qui a généré des millions de vues",
-                        ].map((item, i) => (
-                          <li key={i} className="flex items-center gap-2">
-                            <span className="text-amber-400 text-xs">
-                              &#10003;
-                            </span>
-                            {item}
-                          </li>
-                        ))}
-                      </motion.ul>
 
                       <motion.form
                         onSubmit={handleSubmit}
@@ -309,40 +282,21 @@ function PlanActionContent() {
                         </p>
                       </motion.form>
 
-                      {/* Mobile video preview */}
+                      {/* Mobile ARR chart */}
                       <motion.div
-                        className="mt-8 lg:hidden rounded-xl overflow-hidden"
+                        className="mt-8 lg:hidden rounded-xl overflow-hidden border border-white/10"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.6, delay: 0.45 }}
                       >
-                        <div className="relative aspect-video bg-gray-900">
-                          <Image
-                            src="/proof/video-preview-v2.png"
-                            alt="Aperçu du Plan d'Action"
-                            fill
-                            className="object-cover"
-                            quality={90}
-                            unoptimized
-                          />
-                          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/40">
-                            <div className="w-14 h-14 rounded-full bg-amber-500/90 flex items-center justify-center shadow-lg shadow-amber-500/30">
-                              <svg
-                                className="w-6 h-6 text-white"
-                                fill="none"
-                                stroke="currentColor"
-                                strokeWidth={2}
-                                viewBox="0 0 24 24"
-                              >
-                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                              </svg>
-                            </div>
-                            <p className="mt-2 text-sm font-medium text-white">
-                              Entre ton email pour débloquer la vidéo
-                            </p>
-                          </div>
-                        </div>
+                        <Image
+                          src="/proof/arr-chart.png"
+                          alt="Revenus Shinobi Japanese : de 0 à 140K$/an"
+                          width={1232}
+                          height={700}
+                          className="w-full h-auto"
+                          quality={90}
+                        />
                       </motion.div>
 
                       <motion.div
@@ -383,83 +337,48 @@ function PlanActionContent() {
 
                     {/* Right: video preview */}
                     <motion.div
-                      className="relative hidden lg:flex items-center justify-center p-6 overflow-hidden"
+                      className="relative hidden lg:flex items-center justify-center p-6"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ duration: 0.8, delay: 0.3 }}
                     >
-                      <div className="relative w-full pt-16">
-                        {/* Handwriting annotation */}
-                        <div className="absolute -top-12 right-24 z-10">
-                          <span
-                            className="text-amber-500 text-4xl -rotate-3 whitespace-nowrap block"
-                            style={{ fontFamily: "var(--font-caveat)" }}
-                          >
-                            1h de pure valeur
-                          </span>
-                          {/* Hand-drawn arc arrow */}
-                          <svg
-                            viewBox="0 0 100 80"
-                            fill="none"
-                            className="w-24 h-20 text-amber-500 mt-1"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M 88 3 C 68 7, 38 16, 26 33 C 17 46, 20 57, 32 67"
-                              stroke="currentColor"
-                              strokeWidth="2.5"
-                              strokeLinecap="round"
-                              fill="none"
-                            />
-                            <path
-                              d="M 23 67 L 33 71"
-                              stroke="currentColor"
-                              strokeWidth="2.5"
-                              strokeLinecap="round"
-                              fill="none"
-                            />
-                            <path
-                              d="M 32 58 L 33 71"
-                              stroke="currentColor"
-                              strokeWidth="2.5"
-                              strokeLinecap="round"
-                              fill="none"
-                            />
-                          </svg>
+                      <div className="relative w-full">
+                        <div className="rounded-xl overflow-hidden border border-white/10">
+                          <Image
+                            src="/proof/arr-chart.png"
+                            alt="Revenus Shinobi Japanese : de 0 à 140K$/an"
+                            width={1232}
+                            height={700}
+                            className="w-full h-auto"
+                            quality={90}
+                          />
                         </div>
 
-                        <div className="rounded-xl overflow-hidden">
-                          <div className="relative aspect-video bg-gray-900">
-                            <Image
-                              src="/proof/video-preview-v2.png"
-                              alt="Aperçu du Plan d'Action"
-                              fill
-                              className="object-cover"
-                              quality={90}
-                            />
-                            {/* Lock overlay */}
-                            <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/40">
-                              <div className="w-16 h-16 rounded-full bg-amber-500/90 flex items-center justify-center shadow-lg shadow-amber-500/30">
-                                <svg
-                                  className="w-7 h-7 text-white"
-                                  fill="none"
-                                  stroke="currentColor"
-                                  strokeWidth={2}
-                                  viewBox="0 0 24 24"
-                                >
-                                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                        {/* Bullet points sous la vidéo */}
+                        <ul className="mt-5 space-y-3 text-base text-white">
+                          {[
+                            "Pourquoi les apps mobiles sont la meilleure opportunité en 2026 (et pas les SaaS)",
+                            "Ma méthode pour trouver et valider une idée de niche rentable",
+                            "Comment créer une app complète avec l'IA, sans savoir coder",
+                            "Les secrets d'un onboarding et d'un paywall qui convertissent",
+                            "La stratégie de contenu viral qui a généré des millions de vues",
+                            "Comment utiliser les micro-influenceurs pour scaler sans budget",
+                            "Le plan d'action complet en 28 jours, de l'idée à la publication",
+                          ].map((item, i) => (
+                            <li key={i} className="flex items-start gap-3">
+                              <span className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center shrink-0 mt-0.5">
+                                <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" strokeWidth={4} viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                                 </svg>
-                              </div>
-                              <p className="mt-3 text-sm font-medium text-white">
-                                Entre ton email pour débloquer la vidéo
-                              </p>
-                            </div>
-                          </div>
-                        </div>
+                              </span>
+                              {item}
+                            </li>
+                          ))}
+                        </ul>
                       </div>
                     </motion.div>
                   </div>
+
                 </div>
               </div>
 
