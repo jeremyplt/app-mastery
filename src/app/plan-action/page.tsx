@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { isValidPhoneNumber, parsePhoneNumber } from "libphonenumber-js";
+import posthog from "posthog-js";
 import type { CountryCode } from "libphonenumber-js";
 
 const COUNTRY_CODES = [
@@ -153,6 +154,13 @@ function PlanActionContent() {
         const data = await res.json();
         throw new Error(data.error || "Une erreur est survenue");
       }
+
+      posthog.capture("plan_action_form_submitted", {
+        source: "plan-action",
+        utm_source: searchParams.get("utm_source") || undefined,
+        utm_medium: searchParams.get("utm_medium") || undefined,
+        utm_campaign: searchParams.get("utm_campaign") || undefined,
+      });
 
       router.push("/plan-action/merci");
     } catch (err) {

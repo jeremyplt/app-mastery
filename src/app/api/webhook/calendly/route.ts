@@ -49,6 +49,25 @@ export async function POST(req: NextRequest) {
 
     console.log(`Calendly ${isBooking ? "booking" : "cancellation"}: ${email} (${name})`);
 
+    // Send event to PostHog server-side
+    const POSTHOG_KEY = process.env.NEXT_PUBLIC_POSTHOG_KEY;
+    if (POSTHOG_KEY) {
+      await fetch("https://us.i.posthog.com/capture/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          api_key: POSTHOG_KEY,
+          event: isBooking ? "calendly_booked" : "calendly_canceled",
+          distinct_id: email,
+          properties: {
+            email,
+            name: name || undefined,
+            start_time: startTime || undefined,
+          },
+        }),
+      }).catch((err) => console.error("PostHog capture error:", err));
+    }
+
     const updateRes = await fetch("https://api.brevo.com/v3/contacts", {
       method: "POST",
       headers: {

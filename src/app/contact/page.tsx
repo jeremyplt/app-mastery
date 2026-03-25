@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Metadata } from "next";
+import posthog from "posthog-js";
 
 export default function ContactPage() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
@@ -21,6 +21,7 @@ export default function ContactPage() {
       });
 
       if (res.ok) {
+        posthog.capture("contact_form_submitted");
         setStatus("sent");
         setForm({ name: "", email: "", message: "" });
       } else {

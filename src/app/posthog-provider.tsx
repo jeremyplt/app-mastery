@@ -35,11 +35,39 @@ function PostHogPageView() {
   return null;
 }
 
+function PostHogOutboundTracker() {
+  const pathname = usePathname();
+  const ph = usePostHog();
+
+  useEffect(() => {
+    if (!ph) return;
+
+    function handleClick(e: MouseEvent) {
+      const anchor = (e.target as HTMLElement).closest("a[href]") as HTMLAnchorElement | null;
+      if (!anchor) return;
+
+      const href = anchor.href;
+
+      if (href.includes("calendly.com")) {
+        ph.capture("calendly_click", { source: pathname });
+      } else if (href.includes("wa.me")) {
+        ph.capture("whatsapp_click", { source: pathname });
+      }
+    }
+
+    document.addEventListener("click", handleClick);
+    return () => document.removeEventListener("click", handleClick);
+  }, [ph, pathname]);
+
+  return null;
+}
+
 export function PostHogProvider({ children }: { children: React.ReactNode }) {
   return (
     <PHProvider client={posthog}>
       <Suspense fallback={null}>
         <PostHogPageView />
+        <PostHogOutboundTracker />
       </Suspense>
       {children}
     </PHProvider>
