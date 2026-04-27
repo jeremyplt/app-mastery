@@ -61,7 +61,7 @@ const TIMEZONE_TO_COUNTRY: Record<string, string> = {
 
 const BUDGET_OPTIONS = [
   { value: "moins-1000", label: "Moins de 1000€" },
-  { value: "1000-3000", label: "Entre 1000€ et 3000€" },
+  { value: "1000-3000", label: "1000€ - 3000€" },
   { value: "3000-plus", label: "Plus de 3000€" },
 ];
 
@@ -250,8 +250,8 @@ function AppelContent() {
                   </motion.div>
 
                   <div className="grid lg:grid-cols-2 gap-0">
-                    {/* Left: text content */}
-                    <div className="relative px-5 py-2 sm:px-12 sm:py-4 lg:py-5">
+                    {/* Right (desktop): headline + form */}
+                    <div className="relative px-5 py-2 sm:px-12 sm:py-4 lg:py-5 lg:order-2">
                       <motion.h1
                         className="text-3xl/tight sm:text-4xl/tight lg:text-[3rem]/tight font-medium tracking-tighter text-balance text-white"
                         initial={{ opacity: 0, y: 20 }}
@@ -323,11 +323,11 @@ function AppelContent() {
                             <label className="block text-sm font-semibold text-white mb-2">
                               Quel budget peux-tu investir dans ta formation ou ton accompagnement ?
                             </label>
-                            <div className="flex flex-col gap-2">
+                            <div className="grid grid-cols-3 gap-2">
                               {BUDGET_OPTIONS.map((opt) => (
                                 <label
                                   key={opt.value}
-                                  className={`flex items-center gap-3 rounded-full border px-5 py-3 text-sm cursor-pointer transition-colors ${
+                                  className={`relative flex items-center justify-center rounded-xl border px-2 py-3 text-center text-xs sm:text-sm font-semibold cursor-pointer transition-colors ${
                                     budget === opt.value
                                       ? "bg-amber-500/15 border-amber-500/60 text-white"
                                       : "bg-white/5 border-white/10 text-gray-200 hover:border-white/20"
@@ -339,30 +339,39 @@ function AppelContent() {
                                     value={opt.value}
                                     checked={budget === opt.value}
                                     onChange={(e) => setBudget(e.target.value)}
-                                    className="accent-amber-500"
+                                    className="sr-only"
                                   />
-                                  <span className="font-medium">{opt.label}</span>
+                                  <span>{opt.label}</span>
                                 </label>
                               ))}
                             </div>
                           </div>
 
-                          <textarea
-                            required
-                            placeholder="Décris brièvement ton idée d'app ou ton projet"
-                            value={appIdea}
-                            onChange={(e) => setAppIdea(e.target.value)}
-                            rows={3}
-                            className="w-full rounded-2xl bg-white/5 border border-white/10 px-5 py-3 text-sm text-white placeholder:text-gray-400 focus:outline-none focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/50 transition-colors resize-none mt-2"
-                          />
-                          <textarea
-                            required
-                            placeholder="Pourquoi veux-tu te lancer maintenant ? Qu'est-ce qui te motive ?"
-                            value={motivation}
-                            onChange={(e) => setMotivation(e.target.value)}
-                            rows={3}
-                            className="w-full rounded-2xl bg-white/5 border border-white/10 px-5 py-3 text-sm text-white placeholder:text-gray-400 focus:outline-none focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/50 transition-colors resize-none"
-                          />
+                          <div className="mt-2">
+                            <label className="block text-sm font-semibold text-white mb-2">
+                              Décris brièvement ton idée d&apos;app ou ton projet
+                            </label>
+                            <textarea
+                              required
+                              value={appIdea}
+                              onChange={(e) => setAppIdea(e.target.value)}
+                              rows={3}
+                              className="w-full rounded-2xl bg-white/5 border border-white/10 px-5 py-3 text-sm text-white placeholder:text-gray-400 focus:outline-none focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/50 transition-colors resize-none"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="block text-sm font-semibold text-white mb-2">
+                              Pourquoi veux-tu te lancer maintenant ? Qu&apos;est-ce qui te motive ?
+                            </label>
+                            <textarea
+                              required
+                              value={motivation}
+                              onChange={(e) => setMotivation(e.target.value)}
+                              rows={3}
+                              className="w-full rounded-2xl bg-white/5 border border-white/10 px-5 py-3 text-sm text-white placeholder:text-gray-400 focus:outline-none focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/50 transition-colors resize-none"
+                            />
+                          </div>
 
                           <button
                             type="submit"
@@ -381,9 +390,9 @@ function AppelContent() {
                       </motion.form>
                     </div>
 
-                    {/* Right: qualification bullets */}
+                    {/* Left (desktop): qualification bullets */}
                     <motion.div
-                      className="relative flex items-start lg:items-center justify-center px-5 pb-8 lg:px-6 lg:py-6"
+                      className="relative flex items-start lg:items-center justify-center px-5 pb-8 lg:px-6 lg:py-6 lg:order-1"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ duration: 0.8, delay: 0.3 }}
@@ -405,11 +414,11 @@ function AppelContent() {
                               },
                               {
                                 title: "Il faut un budget pour avancer.",
-                                body: "La formation et l'accompagnement ont un prix. Si tu n'es pas prêt à investir sur toi et sur ton projet, ce n'est pas le bon moment pour qu'on se parle.",
+                                body: "La formation et l'accompagnement ont un prix. Pour que cet appel soit utile, l'idée c'est que tu sois déjà ouvert à investir sur toi et sur ton projet.",
                               },
                               {
                                 title: "Il faut être motivé et passer à l'action.",
-                                body: "Je n'ai pas le temps pour les curieux qui veulent juste discuter. Si tu es prêt à t'engager et à bosser sérieusement, on va bien s'entendre.",
+                                body: "Cet appel n'est utile que si tu as vraiment envie d'avancer sur ton projet. Si tu es prêt à t'engager et à bosser sérieusement, alors on va faire de belles choses ensemble.",
                               },
                             ].map((item, i) => (
                               <li key={i} className="flex items-start gap-3">
@@ -469,7 +478,7 @@ function AppelContent() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}
               >
-                Par Jeremy, créateur de Shinobi Japanese (140K$/an ARR)
+                Par Jeremy, créateur de Shinobi Japanese
               </motion.p>
             </div>
           </section>

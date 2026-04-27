@@ -29,7 +29,7 @@ async function sendAppelEmail(apiKey: string, email: string, firstName?: string)
   <li>Si non, je te donne quand même un plan d'action concret pour avancer seul</li>
 </ul>
 
-<p>Important : cet appel n'est pas un appel de coaching gratuit. C'est un échange pour voir si on peut travailler ensemble. Si tu n'es pas prêt à investir sur toi et sur ton projet, ce n'est pas le bon moment.</p>
+<p>L'idée de l'appel, c'est vraiment de voir ensemble si on peut travailler ensemble. Pour que ce soit utile pour toi, viens en étant ouvert à investir sur toi et sur ton projet, c'est ce qui fait toute la différence.</p>
 
 <p>À très vite,<br>Jeremy</p>
 

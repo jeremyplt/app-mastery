@@ -397,7 +397,7 @@ function PlanActionContent() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}
               >
-                Par Jeremy, créateur de Shinobi Japanese (140K$/an ARR)
+                Par Jeremy, créateur de Shinobi Japanese
               </motion.p>
             </div>
           </section>
