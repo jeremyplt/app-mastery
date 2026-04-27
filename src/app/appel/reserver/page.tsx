@@ -79,7 +79,7 @@ function ReserverContent() {
                 "Sois au calme, avec une bonne connexion. Pas en voiture, pas dans le métro.",
                 "Aie ton idée d'app en tête, ainsi qu'une vision claire de ce que tu veux accomplir.",
                 "Viens avec tes questions concrètes sur la formation ou l'accompagnement.",
-                "Si tu sais déjà que tu n'as pas de budget à investir, annule maintenant. Pas de jugement.",
+                "Garde en tête que la formation et l'accompagnement ont un coût. Si tu n'es pas en capacité d'investir aujourd'hui, l'appel risque de ne pas mener à grand-chose.",
               ].map((item, i) => (
                 <li key={i} className="flex items-start gap-3">
                   <span className="w-5 h-5 rounded-full bg-amber-500 flex items-center justify-center shrink-0 mt-0.5">
