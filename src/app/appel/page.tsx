@@ -250,29 +250,8 @@ function AppelContent() {
                   </motion.div>
 
                   <div className="grid lg:grid-cols-2 gap-0">
-                    {/* Right (desktop): headline + form */}
+                    {/* Right (desktop): form only */}
                     <div className="relative px-5 py-2 sm:px-12 sm:py-4 lg:py-5 lg:order-2">
-                      <motion.h1
-                        className="text-3xl/tight sm:text-4xl/tight lg:text-[3rem]/tight font-medium tracking-tighter text-balance text-white"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6 }}
-                      >
-                        Tu veux te former ou être accompagné pour développer ton app mobile{" "}
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-orange-300 to-amber-500">
-                          avec l&apos;IA ?
-                        </span>
-                      </motion.h1>
-
-                      <motion.p
-                        className="mt-5 text-lg sm:text-xl text-gray-200 font-medium leading-relaxed"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 0.15 }}
-                      >
-                        Réserve un appel de 30 minutes avec moi. On regarde ensemble si la formation ou l&apos;accompagnement peuvent vraiment t&apos;aider à lancer ton app et générer tes premiers revenus.
-                      </motion.p>
-
                       <motion.form
                         onSubmit={handleSubmit}
                         className="mt-8"
@@ -390,15 +369,36 @@ function AppelContent() {
                       </motion.form>
                     </div>
 
-                    {/* Left (desktop): qualification bullets */}
+                    {/* Left (desktop): headline + subtext + qualification bullets */}
                     <motion.div
-                      className="relative flex items-start lg:items-center justify-center px-5 pb-8 lg:px-6 lg:py-6 lg:order-1"
+                      className="relative flex items-start justify-center px-5 py-2 sm:px-12 sm:py-4 lg:px-12 lg:py-5 lg:order-1"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ duration: 0.8, delay: 0.3 }}
                     >
                       <div className="w-full">
-                        <div className="rounded-xl border border-amber-500/30 bg-amber-500/5 p-6">
+                        <motion.h1
+                          className="text-3xl/tight sm:text-4xl/tight lg:text-[3rem]/tight font-medium tracking-tighter text-balance text-white"
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.6 }}
+                        >
+                          Tu veux te former ou être accompagné pour développer ton app mobile{" "}
+                          <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-orange-300 to-amber-500">
+                            avec l&apos;IA ?
+                          </span>
+                        </motion.h1>
+
+                        <motion.p
+                          className="mt-5 text-lg sm:text-xl text-gray-200 font-medium leading-relaxed"
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.6, delay: 0.15 }}
+                        >
+                          Réserve un appel de 30 minutes avec moi. On regarde ensemble si la formation ou l&apos;accompagnement peuvent vraiment t&apos;aider à lancer ton app et générer tes premiers revenus.
+                        </motion.p>
+
+                        <div className="mt-8 rounded-xl border border-amber-500/30 bg-amber-500/5 p-6">
                           <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">
                             Avant de réserver, lis bien ça.
                           </h2>
