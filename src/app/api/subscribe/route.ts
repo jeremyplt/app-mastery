@@ -9,6 +9,54 @@ const LIST_CONFIG: Record<number, { templateId: number; tag: string }> = {
   16: { templateId: 14, tag: "openclaw" },
 };
 
+async function sendAppelEmail(apiKey: string, email: string, firstName?: string) {
+  const greeting = firstName ? `Salut ${firstName},` : "Salut,";
+  const htmlContent = `
+<p>${greeting}</p>
+
+<p>Merci d'avoir rempli le formulaire pour réserver un appel découverte.</p>
+
+<p>Si tu n'as pas encore choisi de créneau, voici le lien direct pour le faire maintenant :</p>
+
+<p><a href="https://www.jeremypitault.com/appel/reserver">Réserver mon appel</a></p>
+
+<p>Avant qu'on se parle, prends 2 minutes pour bien comprendre l'objectif de cet appel :</p>
+
+<ul>
+  <li>On fait le point sur ton projet d'app et ta situation actuelle</li>
+  <li>Je te dis honnêtement si la formation ou l'accompagnement peuvent t'aider</li>
+  <li>Si oui, on définit ensemble la solution la plus adaptée</li>
+  <li>Si non, je te donne quand même un plan d'action concret pour avancer seul</li>
+</ul>
+
+<p>Important : cet appel n'est pas un appel de coaching gratuit. C'est un échange pour voir si on peut travailler ensemble. Si tu n'es pas prêt à investir sur toi et sur ton projet, ce n'est pas le bon moment.</p>
+
+<p>À très vite,<br>Jeremy</p>
+
+<p>P.S. Si tu as des questions avant l'appel, réponds directement à cet email. Je lis tout.</p>
+`;
+
+  const res = await fetch("https://api.brevo.com/v3/smtp/email", {
+    method: "POST",
+    headers: {
+      "api-key": apiKey,
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({
+      sender: { name: "Jeremy Pitault", email: "contact@jeremypitault.com" },
+      to: [{ email }],
+      subject: "Ton appel découverte est presque réservé",
+      htmlContent,
+      tags: ["appel-decouverte"],
+    }),
+  });
+
+  const body = await res.text();
+  console.log(`Brevo appel email to ${email}: ${res.status} ${body}`);
+  return res.ok;
+}
+
 async function sendPlanActionEmail(apiKey: string, email: string, firstName?: string) {
   const greeting = firstName ? `Salut ${firstName},` : "Salut,";
   const htmlContent = `
@@ -88,7 +136,7 @@ async function sendTransactionalEmail(apiKey: string, email: string, templateId:
 
 export async function POST(req: NextRequest) {
   try {
-    const { email, firstName, phone, listId, source, utmSource, utmMedium, utmCampaign } = await req.json();
+    const { email, firstName, phone, listId, source, utmSource, utmMedium, utmCampaign, budget, appIdea, motivation } = await req.json();
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
     if (!email || !emailRegex.test(email)) {
@@ -129,6 +177,9 @@ export async function POST(req: NextRequest) {
     if (utmSource) attributes.UTM_SOURCE = utmSource;
     if (utmMedium) attributes.UTM_MEDIUM = utmMedium;
     if (utmCampaign) attributes.UTM_CAMPAIGN = utmCampaign;
+    if (budget) attributes.BUDGET = budget;
+    if (appIdea) attributes.APP_IDEA = appIdea;
+    if (motivation) attributes.MOTIVATION = motivation;
 
     const createRes = await fetch("https://api.brevo.com/v3/contacts", {
       method: "POST",
@@ -197,6 +248,8 @@ export async function POST(req: NextRequest) {
     // Step 2: Send first email instantly via transactional API
     if (source === "plan-action") {
       await sendPlanActionEmail(BREVO_API_KEY, email, firstName);
+    } else if (source === "appel") {
+      await sendAppelEmail(BREVO_API_KEY, email, firstName);
     } else {
       const config = targetListId ? LIST_CONFIG[targetListId] : undefined;
       if (config) {
