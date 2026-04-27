@@ -171,18 +171,14 @@ export async function POST(req: NextRequest) {
 
     const targetListId = listId ? parseInt(listId) : BREVO_LIST_ID;
 
-    // Step 1: Create or update the contact (sans SMS pour éviter les erreurs de format)
+    // Step 1: Create or update the contact with safe attributes only
+    // (custom attrs like BUDGET, APP_IDEA, MOTIVATION may not exist in Brevo
+    // and would make the entire create call fail. They're applied in step 1c below.)
     const attributes: Record<string, string | boolean> = {};
     if (firstName) attributes.FIRSTNAME = firstName;
     if (utmSource) attributes.UTM_SOURCE = utmSource;
     if (utmMedium) attributes.UTM_MEDIUM = utmMedium;
     if (utmCampaign) attributes.UTM_CAMPAIGN = utmCampaign;
-    if (budget) attributes.BUDGET = budget;
-    if (appIdea) attributes.APP_IDEA = appIdea;
-    if (motivation) attributes.MOTIVATION = motivation;
-    // PHONE is a custom text attribute, always saves (no format validation)
-    const phoneDigitsForCreate = phone ? phone.replace(/\D/g, "") : "";
-    if (phone && phoneDigitsForCreate.length >= 6) attributes.PHONE = phone;
 
     const createRes = await fetch("https://api.brevo.com/v3/contacts", {
       method: "POST",
@@ -245,6 +241,29 @@ export async function POST(req: NextRequest) {
       if (!smsRes.ok) {
         const smsData = await smsRes.json();
         console.error("Brevo SMS update error:", JSON.stringify(smsData));
+      }
+    }
+
+    // Step 1c: Best-effort update of custom attributes (BUDGET, APP_IDEA, MOTIVATION).
+    // If any attribute doesn't exist in Brevo, this call fails — but contact and SMS
+    // are already saved by previous steps, so the form submission is not affected.
+    const customAttributes: Record<string, string> = {};
+    if (budget) customAttributes.BUDGET = budget;
+    if (appIdea) customAttributes.APP_IDEA = appIdea;
+    if (motivation) customAttributes.MOTIVATION = motivation;
+    if (Object.keys(customAttributes).length > 0) {
+      const customRes = await fetch(`https://api.brevo.com/v3/contacts/${encodeURIComponent(email)}`, {
+        method: "PUT",
+        headers: {
+          "api-key": BREVO_API_KEY,
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({ attributes: customAttributes }),
+      });
+      if (!customRes.ok) {
+        const customData = await customRes.json();
+        console.error("Brevo custom attributes update error:", JSON.stringify(customData));
       }
     }
 
