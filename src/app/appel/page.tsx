@@ -233,25 +233,23 @@ function AppelContent() {
                   <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-amber-500/5 via-transparent to-orange-500/5" />
 
                   {/* Top bar: label */}
-                  <motion.div
-                    className="flex items-center gap-4 px-5 pt-5 sm:px-12 sm:pt-8"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.4 }}
-                  >
-                    <span className="font-mono text-base sm:text-lg font-semibold tracking-widest uppercase text-amber-400">
-                      Appel découverte
-                    </span>
-                    <div className="flex items-center gap-2">
-                      <span className="rounded-full bg-green-500/15 border border-green-500/30 px-3 py-1 text-sm font-bold text-green-400">
-                        OFFERT
-                      </span>
-                    </div>
-                  </motion.div>
-
-                  <div className="grid lg:grid-cols-2 gap-0">
+                  <div className="grid lg:grid-cols-2 gap-0 pt-5 sm:pt-8">
                     {/* Right (desktop): form only */}
                     <div className="relative px-5 py-2 sm:px-12 sm:py-4 lg:py-5 lg:order-2">
+                      <motion.div
+                        className="flex items-center gap-3 mb-5"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.4 }}
+                      >
+                        <span className="font-mono text-base sm:text-lg font-semibold tracking-widest uppercase text-amber-400">
+                          Appel découverte
+                        </span>
+                        <span className="rounded-full bg-green-500/15 border border-green-500/30 px-3 py-1 text-sm font-bold text-green-400">
+                          OFFERT
+                        </span>
+                      </motion.div>
+
                       <motion.form
                         onSubmit={handleSubmit}
                         className="mt-8"
@@ -359,6 +357,36 @@ function AppelContent() {
                           >
                             {loading ? "..." : "Continuer pour réserver mon appel"}
                           </button>
+
+                          <div className="mt-4 flex items-center gap-3">
+                            <div className="flex -space-x-2">
+                              {[
+                                "/avatars/avatar-1.jpg",
+                                "/avatars/avatar-2.jpg",
+                                "/avatars/avatar-3.jpg",
+                                "/avatars/avatar-4.jpg",
+                              ].map((src, i) => (
+                                <div
+                                  key={i}
+                                  className="w-8 h-8 rounded-full border-2 border-gray-950 overflow-hidden"
+                                >
+                                  <Image
+                                    src={src}
+                                    alt=""
+                                    width={32}
+                                    height={32}
+                                    className="w-full h-full object-cover"
+                                  />
+                                </div>
+                              ))}
+                              <div className="w-8 h-8 rounded-full bg-gray-800 border-2 border-gray-950 flex items-center justify-center text-sm font-semibold text-white">
+                                +
+                              </div>
+                            </div>
+                            <span className="text-sm font-medium text-gray-200">
+                              Ils ont déjà lancé leur app avec moi
+                            </span>
+                          </div>
                         </div>
                         {error && (
                           <p className="mt-3 text-sm font-semibold text-red-400">{error}</p>
@@ -436,35 +464,6 @@ function AppelContent() {
                           </ul>
                         </div>
 
-                        <div className="mt-5 flex items-center gap-3">
-                          <div className="flex -space-x-2">
-                            {[
-                              "/avatars/avatar-1.jpg",
-                              "/avatars/avatar-2.jpg",
-                              "/avatars/avatar-3.jpg",
-                              "/avatars/avatar-4.jpg",
-                            ].map((src, i) => (
-                              <div
-                                key={i}
-                                className="w-8 h-8 rounded-full border-2 border-gray-950 overflow-hidden"
-                              >
-                                <Image
-                                  src={src}
-                                  alt=""
-                                  width={32}
-                                  height={32}
-                                  className="w-full h-full object-cover"
-                                />
-                              </div>
-                            ))}
-                            <div className="w-8 h-8 rounded-full bg-gray-800 border-2 border-gray-950 flex items-center justify-center text-sm font-semibold text-white">
-                              +
-                            </div>
-                          </div>
-                          <span className="text-sm font-medium text-gray-200">
-                            Ils ont déjà lancé leur app avec moi
-                          </span>
-                        </div>
                       </div>
                     </motion.div>
                   </div>
