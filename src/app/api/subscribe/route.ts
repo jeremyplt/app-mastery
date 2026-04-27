@@ -180,6 +180,9 @@ export async function POST(req: NextRequest) {
     if (budget) attributes.BUDGET = budget;
     if (appIdea) attributes.APP_IDEA = appIdea;
     if (motivation) attributes.MOTIVATION = motivation;
+    // PHONE is a custom text attribute, always saves (no format validation)
+    const phoneDigitsForCreate = phone ? phone.replace(/\D/g, "") : "";
+    if (phone && phoneDigitsForCreate.length >= 6) attributes.PHONE = phone;
 
     const createRes = await fetch("https://api.brevo.com/v3/contacts", {
       method: "POST",
