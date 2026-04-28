@@ -224,7 +224,7 @@ function PlanActionContent() {
                       >
                         La méthode à copier-coller qui m&apos;a permis de faire passer l&apos;app Shinobi{" "}
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-orange-300 to-amber-500">
-                          de 0 à 140K$/an
+                          de 0 à 170K$/an
                         </span>
                       </motion.h1>
 
@@ -299,7 +299,7 @@ function PlanActionContent() {
                       >
                         <Image
                           src="/proof/arr-chart.png"
-                          alt="Revenus Shinobi Japanese : de 0 à 140K$/an"
+                          alt="Revenus Shinobi Japanese : de 0 à 170K$/an"
                           width={1232}
                           height={700}
                           className="w-full h-auto"
@@ -354,7 +354,7 @@ function PlanActionContent() {
                         <div className="rounded-xl overflow-hidden border border-white/10">
                           <Image
                             src="/proof/arr-chart.png"
-                            alt="Revenus Shinobi Japanese : de 0 à 140K$/an"
+                            alt="Revenus Shinobi Japanese : de 0 à 170K$/an"
                             width={1232}
                             height={700}
                             className="w-full h-auto"

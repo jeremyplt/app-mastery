@@ -91,7 +91,7 @@ export default function ProofRevenue() {
             </span>
           </h2>
           <p className="mt-4 text-xl/8 text-white/80 font-medium">
-            140K$/an de revenus récurrents. Plus de 10 000 avis avec une note moyenne de 4.85/5 sur l'App Store.
+            170K$/an de revenus récurrents. Plus de 10 000 avis avec une note moyenne de 4.85/5 sur l'App Store.
           </p>
         </div>
 
@@ -130,7 +130,7 @@ export default function ProofRevenue() {
                 <div className="rounded-lg overflow-hidden">
                   <Image
                     src="/proof/revenue.png"
-                    alt="Shinobi Japanese ARR - de 0 a 140K$ en revenus recurrents annuels"
+                    alt="Shinobi Japanese ARR - de 0 a 170K$ en revenus recurrents annuels"
                     width={2400}
                     height={1400}
                     className="w-full h-auto hidden sm:block"
@@ -156,7 +156,7 @@ export default function ProofRevenue() {
                 viewport={{ once: true }}
                 transition={{ delay: 0.4 }}
               >
-                De 0 à 140K$/an de revenus récurrents avec une seule app
+                De 0 à 170K$/an de revenus récurrents avec une seule app
               </motion.p>
             </div>
           </div>

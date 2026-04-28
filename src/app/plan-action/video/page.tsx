@@ -23,7 +23,7 @@ export default function PlanActionVideoPage() {
           </h1>
 
           <p className="mt-4 text-lg text-gray-300 max-w-xl mx-auto">
-            Regarde cette vidéo pour découvrir la méthode exacte que j&apos;ai utilisée pour passer de 0 à 140 000$/an avec une app mobile.
+            Regarde cette vidéo pour découvrir la méthode exacte que j&apos;ai utilisée pour passer de 0 à 170 000$/an avec une app mobile.
           </p>
 
           {/* Video player */}

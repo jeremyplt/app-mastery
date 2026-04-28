@@ -46,7 +46,7 @@ export default function Hero() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.15 }}
                 >
-                  La méthode exacte qui m&apos;a permis de passer de 0 à 140 000€/an de revenus récurrents avec une seule app. Sans écrire une ligne de code, grâce au vibe coding IA.
+                  La méthode exacte qui m&apos;a permis de passer de 0 à 170 000€/an de revenus récurrents avec une seule app. Sans écrire une ligne de code, grâce au vibe coding IA.
                 </motion.p>
 
                 <motion.ul

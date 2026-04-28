@@ -79,7 +79,7 @@ export default function HomePage() {
                 >
                   {[
                     "Créateur de Shinobi Japanese",
-                    "140K€/an de revenus récurrents",
+                    "170K€/an de revenus récurrents",
                     "YouTubeur",
                   ].map((label, i) => (
                     <span
@@ -168,7 +168,7 @@ export default function HomePage() {
                   <span className="text-white font-medium">
                     Shinobi Japanese
                   </span>
-                  , génère plus de 140 000€ par an en revenus récurrents.
+                  , génère plus de 170 000€ par an en revenus récurrents.
                   C&apos;est une app d&apos;apprentissage du japonais que
                   j&apos;ai construite de zéro, seul.
                 </motion.p>
@@ -243,7 +243,7 @@ export default function HomePage() {
                             Shinobi Japanese
                           </h3>
                           <span className="text-sm font-semibold text-emerald-400">
-                            140K€/an ARR
+                            170K€/an ARR
                           </span>
                         </div>
                       </div>
@@ -450,7 +450,7 @@ export default function HomePage() {
                   <div className="relative p-8 sm:p-12 flex flex-col sm:flex-row items-start sm:items-center gap-6">
                     <div className="flex-1">
                       <h3 className="text-xl font-medium text-white mb-2">
-                        Le Plan d&apos;Action : De 0 à 140K€/an avec une app
+                        Le Plan d&apos;Action : De 0 à 170K€/an avec une app
                         mobile
                       </h3>
                       <p className="text-base text-gray-300 max-w-lg">
