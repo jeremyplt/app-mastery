@@ -99,7 +99,7 @@ export default function Pricing() {
             </div>
             <div className="mt-8">
               <a
-                href="https://calendly.com/jeremypltpro/30min"
+                href="/appel"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 rounded-full bg-sky-500 px-10 py-4 text-lg font-bold text-white hover:bg-sky-400 transition-colors shadow-lg shadow-sky-500/25"
@@ -277,7 +277,7 @@ export default function Pricing() {
                 <div className="mt-auto">
                   {expired ? (
                     <a
-                      href="https://calendly.com/jeremypltpro/30min"
+                      href="/appel"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="block w-full rounded-full border-2 border-amber-500/30 py-3 text-base font-semibold text-center text-amber-400 hover:border-amber-500/50 transition-colors"
@@ -371,7 +371,7 @@ export default function Pricing() {
                 <div className="mt-auto">
                   {expired ? (
                     <a
-                      href="https://calendly.com/jeremypltpro/30min"
+                      href="/appel"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="block w-full rounded-full bg-amber-500 py-4 text-base font-bold text-center text-white hover:bg-amber-400 transition-colors shadow-lg shadow-amber-500/25"
@@ -474,7 +474,7 @@ export default function Pricing() {
                 <div className="mt-auto">
                   {expired ? (
                     <a
-                      href="https://calendly.com/jeremypltpro/30min"
+                      href="/appel"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="block w-full rounded-full bg-amber-500 py-3.5 text-base font-bold text-center text-white hover:bg-amber-400 transition-colors shadow-lg shadow-amber-500/25"

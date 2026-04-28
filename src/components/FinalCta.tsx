@@ -44,7 +44,7 @@ export default function FinalCta() {
                   </div>
 
                   <a
-                    href="https://calendly.com/jeremypltpro/30min"
+                    href="/appel"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center justify-center gap-2 rounded-full bg-amber-500 px-10 py-4 text-lg font-bold text-white hover:bg-amber-400 transition-colors shadow-lg shadow-amber-500/25"
