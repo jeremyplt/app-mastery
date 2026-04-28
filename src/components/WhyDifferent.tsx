@@ -5,15 +5,6 @@ import { Check, X, Minus } from "lucide-react";
 
 const criteria = [
   {
-    label: "Prix",
-    youtube: "\"Gratuit\" ou 12€",
-    bootcamp: "5 000 - 15 000€",
-    appMastery: "997€",
-    youtubeIcon: "neutral",
-    bootcampIcon: "no",
-    appMasteryIcon: "yes",
-  },
-  {
     label: "Durée pour résultat",
     youtube: "1-3 ans (jamais?)",
     bootcamp: "3-6 mois",

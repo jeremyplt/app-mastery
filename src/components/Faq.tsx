@@ -25,7 +25,7 @@ const faqCategories: FaqCategory[] = [
         a: "Le programme est conçu pour 28 jours à raison de 1-2 heures par jour. Mais tu as un accès à vie. Tu peux aller à ton rythme. Certains élèves finissent en 2 semaines, d'autres en 2 mois.",
       },
       {
-        q: "Pourquoi payer 997€ alors qu'il y a des tutos gratuits partout ?",
+        q: "Pourquoi suivre App Mastery alors qu'il y a des tutos gratuits partout ?",
         a: "Les tutos gratuits sont génériques : ils t'apprennent à coder des bouts de fonctionnalités, mais aucun ne te donne une vraie stratégie pour générer des revenus. Personne ne t'explique comment rendre ton app virale, quels outils marketing utiliser, ni comment transformer des téléchargements en argent. App Mastery, c'est un système complet : de l'idée au premier revenu, avec les stratégies marketing, les outils concrets, du support, et une communauté pour ne jamais rester bloqué.",
       },
       {

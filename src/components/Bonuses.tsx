@@ -3,19 +3,16 @@
 import { motion } from "framer-motion";
 import { Gift } from "lucide-react";
 
-// Value Stack (Brunson Stack Slide)
-// Each bonus = named with benefit in title + individual value + solves a specific objection
+// Each bonus solves a specific objection
 const bonuses = [
   {
     title: "Masterclass Marketing : Acquisition + Monétisation",
-    value: "997€",
     benefit:
       "Tu apprends à attirer des utilisateurs et à monétiser ton app. Stratégies marketing, publicité, référencement d'app, modèles de revenus. Sans ça, ton app reste invisible.",
     objection: "Je ne sais pas comment trouver des utilisateurs",
   },
   {
     title: "Masterclass Claude Code",
-    value: "497€",
     // Benefit description, not feature description
     benefit:
       "13 leçons pour maîtriser le meilleur agent IA du marché. Tu codes 10x plus vite, sur ce projet et tous les suivants.",
@@ -23,35 +20,30 @@ const bonuses = [
   },
   {
     title: "Masterclass Git & GitHub",
-    value: "297€",
     benefit:
       "Tu maîtrises Git et GitHub de zéro. Sauvegarde, organisation, collaboration. Tu gères ton code comme un pro sans jamais perdre de travail.",
     objection: "C'est trop technique pour moi",
   },
   {
     title: "Lives Q&A 2x par mois",
-    value: "Inestimable",
     benefit:
       "Je fais des lives deux fois par mois pour répondre à tes questions, te guider et t'aider à avancer. Tu ne seras jamais bloqué seul.",
     objection: "Et si je me retrouve bloqué ?",
   },
   {
     title: "Communauté Privée à Vie",
-    value: "600€/an",
     benefit:
       "Rejoins une vraie communauté de créateurs d'apps. Entraide, partage de résultats, feedback entre membres. Vous avancez ensemble, pas chacun dans son coin.",
     objection: "Et si je me retrouve seul ?",
   },
   {
     title: "Mises à Jour à Vie",
-    value: "Inclus",
     benefit:
       "La formation évolue avec les technologies. Tous les nouveaux modules, nouvelles leçons, nouvelles ressources. À vie.",
     objection: "Ça sera encore valable dans 1 an ?",
   },
   {
     title: "Case Study Shinobi Japanese",
-    value: "197€",
     benefit:
       "L'évolution d'une vraie app rentable, en toute transparence. Tu vois les décisions, les erreurs, et les résultats réels.",
     objection: "Ça marche vraiment dans la vraie vie ?",
@@ -59,8 +51,6 @@ const bonuses = [
 ];
 
 export default function Bonuses() {
-  // Calculate total value for stack slide
-  const totalValue = "2 588€+";
 
   return (
     <section className="relative py-20">
@@ -79,9 +69,9 @@ export default function Bonuses() {
           <p className="mt-4 text-xl text-gray-300">
             En plus de la formation complète, tu reçois{" "}
             <span className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-green-300">
-              {totalValue} de bonus
+              7 bonus exclusifs
             </span>{" "}
-            , inclus sans supplément.
+            inclus sans supplément.
           </p>
         </div>
 
@@ -109,14 +99,9 @@ export default function Bonuses() {
                     <Gift size={18} className="text-amber-400" />
                   </div>
                   <div className="flex-1">
-                    <div className="mb-1">
-                      <h3 className="text-base font-semibold text-white">
-                        {bonus.title}
-                      </h3>
-                      <span className="text-sm font-semibold text-emerald-400">
-                        Valeur: {bonus.value}
-                      </span>
-                    </div>
+                    <h3 className="text-base font-semibold text-white mb-1">
+                      {bonus.title}
+                    </h3>
                     <p className="text-lg/7 text-gray-300">{bonus.benefit}</p>
                   </div>
                 </div>
@@ -125,19 +110,6 @@ export default function Bonuses() {
           ))}
         </div>
 
-        {/* Value stack total */}
-        <motion.div
-          className="mt-6 text-center"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-        >
-          <p className="text-xl text-gray-300">
-            Valeur totale des bonus :{" "}
-            <span className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-green-300">{totalValue}</span>,
-            inclus dans ton accès.
-          </p>
-        </motion.div>
       </div>
 
       <div className="relative mt-20 before:absolute before:top-0 before:h-px before:w-[200vw] before:-left-[100vw] before:bg-white/10" />
