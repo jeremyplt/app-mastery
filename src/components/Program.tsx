@@ -235,7 +235,7 @@ export default function Program() {
         >
           {expired ? (
             <a
-              href="/appel"
+              href="https://calendly.com/jeremypltpro/30min"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 rounded-full bg-sky-500 px-8 py-4 text-lg font-bold text-white hover:bg-sky-400 transition-colors shadow-lg shadow-sky-500/25"

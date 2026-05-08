@@ -23,7 +23,7 @@ export default function PlanActionVideoPage() {
           </h1>
 
           <p className="mt-4 text-lg text-gray-300 max-w-xl mx-auto">
-            Regarde cette vidéo pour découvrir la méthode exacte que j&apos;ai utilisée pour passer de 0 à 170 000$/an avec une app mobile.
+            Regarde cette vidéo pour découvrir la méthode exacte que j&apos;ai utilisée pour passer de 0 à 140 000$/an avec une app mobile.
           </p>
 
           {/* Video player */}
@@ -60,7 +60,7 @@ export default function PlanActionVideoPage() {
               </span>
             </div>
             <a
-              href="/appel"
+              href="https://calendly.com/jeremypltpro/30min"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 rounded-full bg-amber-500 px-8 py-4 text-lg font-bold text-white hover:bg-amber-400 transition-colors shadow-lg shadow-amber-500/25"

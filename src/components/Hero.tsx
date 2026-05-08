@@ -46,7 +46,7 @@ export default function Hero() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.15 }}
                 >
-                  La méthode exacte qui m&apos;a permis de passer de 0 à 170 000€/an de revenus récurrents avec une seule app. Sans écrire une ligne de code, grâce au vibe coding IA.
+                  La méthode exacte qui m&apos;a permis de passer de 0 à 140 000€/an de revenus récurrents avec une seule app. Sans écrire une ligne de code, grâce au vibe coding IA.
                 </motion.p>
 
                 <motion.ul
@@ -75,7 +75,7 @@ export default function Hero() {
                 >
                   {expired ? (
                     <a
-                      href="/appel"
+                      href="https://calendly.com/jeremypltpro/30min"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="inline-flex items-center justify-center gap-2 rounded-full bg-sky-500 px-8 py-4 text-lg font-bold text-white hover:bg-sky-400 transition-colors shadow-lg shadow-sky-500/25"

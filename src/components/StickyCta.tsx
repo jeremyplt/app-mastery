@@ -40,7 +40,7 @@ export default function StickyCta() {
             )}
             {expired ? (
               <a
-                href="/appel"
+                href="https://calendly.com/jeremypltpro/30min"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="block w-full rounded-full bg-amber-500 py-3 text-center text-base font-semibold text-white hover:bg-amber-400 transition-colors shadow-lg shadow-amber-500/25"

@@ -7,64 +7,8 @@ import Image from "next/image";
 import { isValidPhoneNumber, parsePhoneNumber } from "libphonenumber-js";
 import posthog from "posthog-js";
 import type { CountryCode } from "libphonenumber-js";
-
-const COUNTRY_CODES = [
-  { code: "+33", flag: "🇫🇷", country: "FR" },
-  { code: "+32", flag: "🇧🇪", country: "BE" },
-  { code: "+41", flag: "🇨🇭", country: "CH" },
-  { code: "+1", flag: "🇨🇦", country: "CA" },
-  { code: "+352", flag: "🇱🇺", country: "LU" },
-  { code: "+377", flag: "🇲🇨", country: "MC" },
-  { code: "+1", flag: "🇺🇸", country: "US" },
-  { code: "+44", flag: "🇬🇧", country: "GB" },
-  { code: "+49", flag: "🇩🇪", country: "DE" },
-  { code: "+34", flag: "🇪🇸", country: "ES" },
-  { code: "+39", flag: "🇮🇹", country: "IT" },
-  { code: "+351", flag: "🇵🇹", country: "PT" },
-  { code: "+31", flag: "🇳🇱", country: "NL" },
-  { code: "+212", flag: "🇲🇦", country: "MA" },
-  { code: "+216", flag: "🇹🇳", country: "TN" },
-  { code: "+213", flag: "🇩🇿", country: "DZ" },
-  { code: "+225", flag: "🇨🇮", country: "CI" },
-  { code: "+221", flag: "🇸🇳", country: "SN" },
-  { code: "+237", flag: "🇨🇲", country: "CM" },
-  { code: "+261", flag: "🇲🇬", country: "MG" },
-];
-
-const TIMEZONE_TO_COUNTRY: Record<string, string> = {
-  "Europe/Paris": "FR",
-  "Europe/Brussels": "BE",
-  "Europe/Zurich": "CH",
-  "America/Toronto": "CA",
-  "America/Montreal": "CA",
-  "America/Vancouver": "CA",
-  "Europe/Luxembourg": "LU",
-  "Europe/Monaco": "MC",
-  "Europe/London": "GB",
-  "America/New_York": "US",
-  "America/Chicago": "US",
-  "America/Denver": "US",
-  "America/Los_Angeles": "US",
-  "Europe/Berlin": "DE",
-  "Europe/Madrid": "ES",
-  "Europe/Rome": "IT",
-  "Europe/Lisbon": "PT",
-  "Europe/Amsterdam": "NL",
-  "Africa/Casablanca": "MA",
-  "Africa/Tunis": "TN",
-  "Africa/Algiers": "DZ",
-  "Africa/Abidjan": "CI",
-  "Africa/Dakar": "SN",
-  "Africa/Douala": "CM",
-  "Indian/Antananarivo": "MG",
-};
-
-function detectCountry(): string {
-  if (typeof Intl === "undefined") return "FR";
-  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
-  if (TIMEZONE_TO_COUNTRY[tz]) return TIMEZONE_TO_COUNTRY[tz];
-  return "FR";
-}
+import { COUNTRY_CODES, detectCountry } from "@/lib/phone-countries";
+import { looksLikeFakePattern } from "@/lib/phone-validation";
 
 export default function PlanActionPage() {
   return (
@@ -90,7 +34,7 @@ function PlanActionContent() {
     if (idx !== -1) setCountryIndex(idx);
   }, []);
 
-  const currentCountry = COUNTRY_CODES[countryIndex].country as CountryCode;
+  const currentCountry: CountryCode = COUNTRY_CODES[countryIndex].country;
 
   function formatPhone(raw: string): string {
     try {
@@ -131,6 +75,20 @@ function PlanActionContent() {
       setError("Entre un numéro de téléphone valide");
       return;
     }
+
+    try {
+      const parsedFinal = parsePhoneNumber(phone, currentCountry);
+      if (parsedFinal) {
+        if (parsedFinal.country === "FR" && !/^[67]/.test(parsedFinal.nationalNumber)) {
+          setError("Pour la France, utilise un numéro mobile (06 ou 07).");
+          return;
+        }
+        if (looksLikeFakePattern(parsedFinal.nationalNumber)) {
+          setError("Ce numéro n'est pas valide. Merci de rentrer un vrai numéro.");
+          return;
+        }
+      }
+    } catch {}
 
     setLoading(true);
 
@@ -224,7 +182,7 @@ function PlanActionContent() {
                       >
                         La méthode à copier-coller qui m&apos;a permis de faire passer l&apos;app Shinobi{" "}
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-orange-300 to-amber-500">
-                          de 0 à 170K$/an
+                          de 0 à 140K$/an
                         </span>
                       </motion.h1>
 
@@ -299,7 +257,7 @@ function PlanActionContent() {
                       >
                         <Image
                           src="/proof/arr-chart.png"
-                          alt="Revenus Shinobi Japanese : de 0 à 170K$/an"
+                          alt="Revenus Shinobi Japanese : de 0 à 140K$/an"
                           width={1232}
                           height={700}
                           className="w-full h-auto"
@@ -354,7 +312,7 @@ function PlanActionContent() {
                         <div className="rounded-xl overflow-hidden border border-white/10">
                           <Image
                             src="/proof/arr-chart.png"
-                            alt="Revenus Shinobi Japanese : de 0 à 170K$/an"
+                            alt="Revenus Shinobi Japanese : de 0 à 140K$/an"
                             width={1232}
                             height={700}
                             className="w-full h-auto"
