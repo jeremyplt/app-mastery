@@ -98,7 +98,7 @@ export default function Instructor() {
                     organique, les résultats ont explosé. Mon app est passée de
                     quelques centaines de dollars par mois à{" "}
                     <span className="text-sky-400 font-semibold">
-                      170 000€/an de revenus récurrents
+                      140 000€/an de revenus récurrents
                     </span>
                     . Assez pour en vivre confortablement, sans patron, sans
                     horaires, depuis n&apos;importe où dans le monde.
@@ -116,7 +116,7 @@ export default function Instructor() {
                 <div className="flex flex-wrap gap-2 mt-6">
                   {[
                     "Créateur de Shinobi Japanese",
-                    "170K€/an de revenus récurrents",
+                    "140K€/an de revenus récurrents",
                     "YouTubeur apps mobiles",
                   ].map((h, i) => (
                     <span
