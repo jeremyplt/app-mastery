@@ -69,30 +69,6 @@ function ReserverContent() {
             </p>
           </div>
 
-          {/* Reminder card */}
-          <div className="mt-8 rounded-xl border border-amber-500/30 bg-amber-500/5 p-5 sm:p-6">
-            <h2 className="text-lg sm:text-xl font-bold text-white mb-3">
-              Pour que l&apos;appel soit utile, prépare-toi un minimum :
-            </h2>
-            <ul className="space-y-3 text-base text-white">
-              {[
-                "Sois au calme, avec une bonne connexion. Pas en voiture, pas dans le métro.",
-                "Aie ton idée d'app en tête, ainsi qu'une vision claire de ce que tu veux accomplir.",
-                "Viens avec tes questions concrètes sur la formation ou l'accompagnement.",
-                "Garde en tête que la formation et l'accompagnement ont un coût. Si tu n'es pas en capacité d'investir aujourd'hui, l'appel risque de ne pas mener à grand-chose.",
-              ].map((item, i) => (
-                <li key={i} className="flex items-start gap-3">
-                  <span className="w-5 h-5 rounded-full bg-amber-500 flex items-center justify-center shrink-0 mt-0.5">
-                    <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" strokeWidth={4} viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                    </svg>
-                  </span>
-                  <span className="text-gray-100 font-medium">{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-
           {/* Calendly embed */}
           <div className="mt-8 rounded-xl overflow-hidden border border-white/10 bg-white">
             <iframe
