@@ -7,6 +7,82 @@ import {
   type CandidatureAnswers,
 } from "@/lib/candidature";
 
+const BREVO_LIST_ID = 20;
+
+// Ajoute / met à jour le contact dans la liste Brevo #20 (best-effort).
+async function addToBrevoList(
+  email: string,
+  firstName: string,
+  phone: string,
+  utm: { source?: string; medium?: string; campaign?: string },
+) {
+  const apiKey = process.env.BREVO_API_KEY;
+  if (!apiKey) {
+    console.error("BREVO_API_KEY manquante, contact non ajouté");
+    return;
+  }
+
+  const attributes: Record<string, string> = {};
+  if (firstName) attributes.FIRSTNAME = firstName;
+  if (utm.source) attributes.UTM_SOURCE = utm.source;
+  if (utm.medium) attributes.UTM_MEDIUM = utm.medium;
+  if (utm.campaign) attributes.UTM_CAMPAIGN = utm.campaign;
+
+  const createRes = await fetch("https://api.brevo.com/v3/contacts", {
+    method: "POST",
+    headers: {
+      "api-key": apiKey,
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({
+      email,
+      updateEnabled: true,
+      listIds: [BREVO_LIST_ID],
+      attributes,
+    }),
+  });
+
+  if (!createRes.ok) {
+    const data = await createRes.json();
+    // Contact déjà existant : on l'ajoute à la liste séparément.
+    if (data.code === "duplicate_parameter") {
+      const listRes = await fetch(
+        `https://api.brevo.com/v3/contacts/lists/${BREVO_LIST_ID}/contacts/add`,
+        {
+          method: "POST",
+          headers: { "api-key": apiKey, "Content-Type": "application/json" },
+          body: JSON.stringify({ emails: [email] }),
+        },
+      );
+      if (!listRes.ok) {
+        console.error("Brevo add to list error:", JSON.stringify(await listRes.json()));
+      }
+    } else {
+      console.error("Brevo create contact error:", JSON.stringify(data));
+    }
+  }
+
+  // SMS séparément (peut échouer si format refusé côté Brevo, sans bloquer).
+  if (phone) {
+    const smsRes = await fetch(
+      `https://api.brevo.com/v3/contacts/${encodeURIComponent(email)}`,
+      {
+        method: "PUT",
+        headers: {
+          "api-key": apiKey,
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({ attributes: { SMS: phone } }),
+      },
+    );
+    if (!smsRes.ok) {
+      console.error("Brevo SMS update error:", JSON.stringify(await smsRes.json()));
+    }
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -67,6 +143,17 @@ export async function POST(req: NextRequest) {
       if (error) console.error("Insert candidature échoué:", error.message);
     } catch (err) {
       console.error("Supabase indisponible pour candidature:", err);
+    }
+
+    // Ajout à la liste Brevo #20 (best-effort, ne bloque pas la redirection).
+    try {
+      await addToBrevoList(email, firstName, phone, {
+        source: body.utmSource,
+        medium: body.utmMedium,
+        campaign: body.utmCampaign,
+      });
+    } catch (err) {
+      console.error("Brevo indisponible pour candidature:", err);
     }
 
     const redirectUrl = qualified
