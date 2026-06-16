@@ -1,6 +1,6 @@
 import { getSessionEmail } from "@/lib/auth";
 
-const ADMIN_EMAIL = "jeremypltpro@gmail.com";
+export const ADMIN_EMAIL = "jeremypltpro@gmail.com";
 
 export async function isAdmin(): Promise<boolean> {
   const email = await getSessionEmail();

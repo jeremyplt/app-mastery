@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createMagicLinkToken, hasEssentielAccess } from "@/lib/auth";
+import { ADMIN_EMAIL } from "@/lib/admin";
 
 export async function POST(req: NextRequest) {
   try {
@@ -9,7 +10,9 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Email invalide" }, { status: 400 });
     }
 
-    const hasAccess = await hasEssentielAccess(email);
+    // L'admin n'a pas d'achat LemonSqueezy : on le laisse toujours recevoir un lien.
+    const isAdminEmail = email.trim().toLowerCase() === ADMIN_EMAIL;
+    const hasAccess = isAdminEmail || (await hasEssentielAccess(email));
     if (!hasAccess) {
       return NextResponse.json(
         { error: "Aucun achat trouvé pour cet email. Vérifie que tu utilises le même email que lors de ton achat." },
