@@ -204,220 +204,55 @@ export default function HomePage() {
             <div className="relative mt-20 before:absolute before:top-0 before:h-px before:w-[200vw] before:-left-[100vw] before:bg-white/10" />
           </section>
 
-          {/* ── Projets ── */}
+          {/* ── Réserver un appel ── */}
           <section className="relative py-20">
             <div className="px-4 sm:px-6 lg:px-8">
-              <div className="mb-8 flex items-center gap-4">
-                <span className="font-mono text-base font-semibold tracking-widest uppercase text-sky-400">
-                  Projets
-                </span>
-                <div className="h-px flex-1 bg-white/10" />
-              </div>
-
-              <div className="grid gap-6 lg:grid-cols-2">
-                {/* Shinobi Japanese */}
-                <motion.div
-                  className="isolate overflow-hidden rounded-2xl bg-gray-950 p-2 outline outline-white/10 hover:outline-sky-500/30 transition-colors"
-                  {...fadeUp}
-                  transition={{ duration: 0.6 }}
-                  viewport={{ once: true }}
-                  whileInView="animate"
-                  initial="initial"
-                >
-                  <div className="relative rounded-xl bg-white/5 p-8 overflow-hidden h-full">
-                    <div
-                      className="pointer-events-none absolute inset-0 opacity-30"
-                      style={{
-                        backgroundImage:
-                          "radial-gradient(rgba(255,255,255,0.1) 1px, transparent 1px)",
-                        backgroundSize: "24px 24px",
-                      }}
-                    />
-                    <div className="relative">
-                      <div className="flex items-center gap-3 mb-4">
-                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-rose-500 to-orange-500 flex items-center justify-center text-xl">
-                          🇯🇵
-                        </div>
-                        <div>
-                          <h3 className="text-xl font-medium text-white">
-                            Shinobi Japanese
-                          </h3>
-                          <span className="text-sm font-semibold text-emerald-400">
-                            140K€/an ARR
-                          </span>
-                        </div>
-                      </div>
-                      <p className="text-base text-gray-300 mb-6">
-                        Mon app d&apos;apprentissage du japonais. Disponible sur
-                        iOS et Android, avec des milliers d&apos;utilisateurs
-                        actifs dans le monde entier.
-                      </p>
-                      <div className="flex flex-wrap gap-2">
-                        {["iOS", "Android", "IA", "Abonnements"].map(
-                          (tag, i) => (
-                            <span
-                              key={i}
-                              className="rounded-full bg-white/5 px-3 py-1 text-xs font-medium text-gray-400 outline outline-white/10"
-                            >
-                              {tag}
-                            </span>
-                          )
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-
-                {/* App Mastery */}
-                <motion.div
-                  className="isolate overflow-hidden rounded-2xl bg-gray-950 p-2 outline outline-white/10 hover:outline-amber-500/30 transition-colors"
-                  {...fadeUp}
-                  transition={{ duration: 0.6, delay: 0.15 }}
-                  viewport={{ once: true }}
-                  whileInView="animate"
-                  initial="initial"
-                >
-                  <div className="relative rounded-xl bg-white/5 p-8 overflow-hidden h-full">
-                    <div
-                      className="pointer-events-none absolute inset-0 opacity-30"
-                      style={{
-                        backgroundImage:
-                          "radial-gradient(rgba(255,255,255,0.1) 1px, transparent 1px)",
-                        backgroundSize: "24px 24px",
-                      }}
-                    />
-                    <div className="relative">
-                      <div className="flex items-center gap-3 mb-4">
-                        <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center text-xl">
-                          🚀
-                        </div>
-                        <div>
-                          <h3 className="text-xl font-medium text-white">
-                            App Mastery
-                          </h3>
-                          <span className="text-sm font-semibold text-amber-400">
-                            Formation en ligne
-                          </span>
-                        </div>
-                      </div>
-                      <p className="text-base text-gray-300 mb-6">
-                        La formation complète pour créer, lancer et monétiser
-                        une app mobile avec l&apos;IA. De zéro à une app
-                        rentable en 28 jours.
-                      </p>
-                      <div className="flex flex-wrap gap-2 mb-6">
-                        {[
-                          "90+ leçons",
-                          "Vibe Coding",
-                          "Marketing",
-                          "Monétisation",
-                        ].map((tag, i) => (
-                          <span
-                            key={i}
-                            className="rounded-full bg-white/5 px-3 py-1 text-xs font-medium text-gray-400 outline outline-white/10"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                      <Link
-                        href="/formation"
-                        className="inline-flex items-center gap-2 text-sm font-semibold text-amber-400 hover:text-amber-300 transition-colors"
-                      >
-                        Découvrir la formation
-                        <svg
-                          className="w-4 h-4"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth={2}
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
-                          />
-                        </svg>
-                      </Link>
-                    </div>
-                  </div>
-                </motion.div>
-              </div>
-            </div>
-
-            <div className="relative mt-20 before:absolute before:top-0 before:h-px before:w-[200vw] before:-left-[100vw] before:bg-white/10" />
-          </section>
-
-          {/* ── YouTube ── */}
-          <section className="relative py-20">
-            <div className="px-4 sm:px-6 lg:px-8">
-              <div className="mb-8 flex items-center gap-4">
-                <span className="font-mono text-base font-semibold tracking-widest uppercase text-red-400">
-                  YouTube
-                </span>
-                <div className="h-px flex-1 bg-white/10" />
-              </div>
-
               <motion.div
-                className="isolate overflow-hidden rounded-2xl bg-gray-950 p-2 outline outline-white/10"
+                className="isolate overflow-hidden rounded-3xl bg-gray-950 p-2 outline outline-amber-500/30"
                 {...fadeUp}
                 transition={{ duration: 0.6 }}
                 viewport={{ once: true }}
                 whileInView="animate"
                 initial="initial"
               >
-                <div className="relative rounded-xl bg-white/5 overflow-hidden">
-                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-red-500/5 via-transparent to-orange-500/5" />
+                <div className="relative rounded-2xl bg-white/5 overflow-hidden">
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-amber-500/10 via-transparent to-orange-500/10" />
 
-                  <div className="relative p-8 sm:p-12">
-                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
-                      <div className="w-16 h-16 rounded-2xl bg-red-500/10 flex items-center justify-center flex-shrink-0 outline outline-red-500/20">
-                        <svg
-                          className="w-8 h-8 text-red-400"
-                          fill="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
-                        </svg>
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="text-2xl font-medium text-white mb-2">
-                          @jeremyptlt
-                        </h3>
-                        <p className="text-base text-gray-300 max-w-lg">
-                          Je partage mon parcours de créateur d&apos;apps.
-                          Développement mobile, monétisation, marketing, IA.
-                          Des vidéos concrètes, pas de blabla.
-                        </p>
-                      </div>
-                      <a
-                        href="https://www.youtube.com/@jeremyptlt"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="rounded-full bg-red-500 px-6 py-3 text-sm font-semibold text-white hover:bg-red-400 transition-colors shadow-lg shadow-red-500/25 whitespace-nowrap flex-shrink-0"
+                  <div className="relative px-6 py-14 sm:px-12 sm:py-20 text-center">
+                    <h2 className="mx-auto max-w-3xl text-3xl sm:text-5xl/tight font-bold tracking-tight text-white text-balance">
+                      Réserve un appel de 30 minutes pour parler de ton projet
+                    </h2>
+
+                    <p className="mx-auto mt-6 max-w-2xl text-lg sm:text-xl text-gray-200 font-medium">
+                      On fait le point sur ton app, on voit si on peut
+                      travailler ensemble, et comment je peux t&apos;aider à en
+                      générer des revenus mensuels grâce à ton app mobile.
+                    </p>
+
+                    <Link
+                      href="/candidature"
+                      className="mt-10 inline-flex items-center justify-center gap-3 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 px-10 py-5 text-xl font-bold text-gray-950 transition-transform hover:scale-[1.03] active:scale-100 shadow-2xl shadow-amber-500/30"
+                    >
+                      <svg
+                        className="w-6 h-6"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth={2.2}
+                        viewBox="0 0 24 24"
                       >
-                        S&apos;abonner
-                      </a>
-                    </div>
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"
+                        />
+                      </svg>
+                      Réserver mon appel
+                    </Link>
 
-                    {/* Topics */}
-                    <div className="mt-8 flex flex-wrap gap-3">
-                      {[
-                        "Développement d'apps",
-                        "Vibe Coding avec l'IA",
-                        "Monétisation",
-                        "Marketing mobile",
-                        "Indie hacking",
-                        "Coulisses de Shinobi Japanese",
-                      ].map((topic, i) => (
-                        <span
-                          key={i}
-                          className="rounded-full bg-red-500/10 px-4 py-1.5 text-sm font-medium text-red-300 outline outline-red-500/15"
-                        >
-                          {topic}
-                        </span>
-                      ))}
-                    </div>
+                    <p className="mt-5 text-base font-medium text-gray-300">
+                      30 minutes, sans engagement. On parle de toi et de ton
+                      projet.
+                    </p>
                   </div>
                 </div>
               </motion.div>
