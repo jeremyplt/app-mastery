@@ -40,6 +40,12 @@ const nextConfig: NextConfig = {
   skipTrailingSlashRedirect: true,
   async redirects() {
     return [
+      // Homepage -> formulaire de qualification (temporaire, 307)
+      {
+        source: "/",
+        destination: "/candidature",
+        permanent: false,
+      },
       // Anciennes URLs systeme.io -> nouvelles URLs
       {
         source: "/piscine-epitech",

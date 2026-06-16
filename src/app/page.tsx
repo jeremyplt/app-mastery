@@ -79,7 +79,6 @@ export default function HomePage() {
                 >
                   {[
                     "Créateur de Shinobi Japanese",
-                    "140K€/an de revenus récurrents",
                     "YouTubeur",
                   ].map((label, i) => (
                     <span
@@ -112,21 +111,6 @@ export default function HomePage() {
                     </svg>
                     YouTube
                   </a>
-                  <a
-                    href="https://x.com/jeremyptlt"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-full bg-white/5 px-5 py-2.5 text-sm font-semibold text-gray-300 outline outline-white/10 hover:bg-white/10 transition-colors"
-                  >
-                    <svg
-                      className="w-4 h-4"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                    </svg>
-                    X / Twitter
-                  </a>
                 </motion.div>
               </div>
             </div>
@@ -153,9 +137,10 @@ export default function HomePage() {
                   initial="initial"
                 >
                   Salut, moi c&apos;est Jeremy. Je suis développeur
-                  d&apos;applications mobiles et créateur de contenu. Je vis de
-                  mes apps depuis plusieurs années, et je partage tout ce que
-                  j&apos;apprends en chemin.
+                  d&apos;applications mobiles et créateur de contenu. Je génère
+                  des centaines de milliers d&apos;euros chaque année avec mes
+                  apps mobiles, et je partage tout ce que j&apos;apprends en
+                  chemin.
                 </motion.p>
                 <motion.p
                   {...fadeUp}
@@ -168,9 +153,9 @@ export default function HomePage() {
                   <span className="text-white font-medium">
                     Shinobi Japanese
                   </span>
-                  , génère plus de 140 000€ par an en revenus récurrents.
-                  C&apos;est une app d&apos;apprentissage du japonais que
-                  j&apos;ai construite de zéro, seul.
+                  , est une app d&apos;apprentissage du japonais que j&apos;ai
+                  construite de zéro, seul, et qui vit aujourd&apos;hui de ses
+                  revenus récurrents.
                 </motion.p>
                 <motion.p
                   {...fadeUp}
@@ -285,8 +270,8 @@ export default function HomePage() {
                   <div className="relative p-8 sm:p-12 flex flex-col sm:flex-row items-start sm:items-center gap-6">
                     <div className="flex-1">
                       <h3 className="text-xl font-medium text-white mb-2">
-                        Le Plan d&apos;Action : De 0 à 140K€/an avec une app
-                        mobile
+                        Le Plan d&apos;Action : créer et monétiser une app
+                        mobile rentable
                       </h3>
                       <p className="text-base text-gray-300 max-w-lg">
                         Une vidéo gratuite de 15 minutes où je détaille la
@@ -321,14 +306,6 @@ export default function HomePage() {
                   className="hover:text-gray-300 transition-colors"
                 >
                   YouTube
-                </a>
-                <a
-                  href="https://x.com/jeremyptlt"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:text-gray-300 transition-colors"
-                >
-                  X / Twitter
                 </a>
                 <Link
                   href="/formation"
