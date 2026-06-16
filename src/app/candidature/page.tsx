@@ -1,9 +1,13 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useSearchParams } from "next/navigation";
 import posthog from "posthog-js";
+import { isValidPhoneNumber, parsePhoneNumber } from "libphonenumber-js";
+import type { CountryCode } from "libphonenumber-js";
+import { COUNTRY_CODES, detectCountry } from "@/lib/phone-countries";
+import { looksLikeFakePattern } from "@/lib/phone-validation";
 import { QUESTIONS, isValidAnswer } from "@/lib/candidature";
 
 export default function CandidaturePage() {
@@ -27,8 +31,35 @@ function CandidatureContent() {
   const [answers, setAnswers] = useState<Answers>({});
   const [firstName, setFirstName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [countryIndex, setCountryIndex] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    const detected = detectCountry();
+    const idx = COUNTRY_CODES.findIndex((c) => c.country === detected);
+    if (idx !== -1) setCountryIndex(idx);
+  }, []);
+
+  const currentCountry: CountryCode = COUNTRY_CODES[countryIndex].country;
+
+  function formatPhone(raw: string): string {
+    try {
+      const parsed = parsePhoneNumber(raw, currentCountry);
+      return parsed ? parsed.format("E.164") : "";
+    } catch {
+      return "";
+    }
+  }
+
+  function validatePhone(raw: string): boolean {
+    try {
+      return isValidPhoneNumber(raw, currentCountry);
+    } catch {
+      return false;
+    }
+  }
 
   // step 1..6 maps to QUESTIONS[0..5]
   const question = step >= 1 && step <= LAST_QUESTION_INDEX ? QUESTIONS[step - 1] : null;
@@ -69,6 +100,23 @@ function CandidatureContent() {
       setError("Entre une adresse email valide");
       return;
     }
+    if (!validatePhone(phone)) {
+      setError("Entre un numéro de téléphone valide");
+      return;
+    }
+    try {
+      const parsedFinal = parsePhoneNumber(phone, currentCountry);
+      if (parsedFinal) {
+        if (parsedFinal.country === "FR" && !/^[67]/.test(parsedFinal.nationalNumber)) {
+          setError("Pour la France, utilise un numéro mobile (06 ou 07).");
+          return;
+        }
+        if (looksLikeFakePattern(parsedFinal.nationalNumber)) {
+          setError("Ce numéro n'est pas valide. Merci de rentrer un vrai numéro.");
+          return;
+        }
+      }
+    } catch {}
 
     setLoading(true);
     try {
@@ -78,6 +126,7 @@ function CandidatureContent() {
         body: JSON.stringify({
           firstName: firstName.trim(),
           email: email.trim().toLowerCase(),
+          phone: formatPhone(phone),
           q1: answers.q1,
           q2: answers.q2,
           q3: answers.q3,
@@ -243,7 +292,7 @@ function CandidatureContent() {
                   Où je t&apos;envoie la suite ?
                 </h2>
                 <p className="mt-4 text-lg text-gray-200 font-medium">
-                  Ton prénom et ton email, pour préparer l&apos;appel et te recontacter.
+                  Ton prénom, ton email et ton téléphone, pour préparer l&apos;appel et te recontacter.
                 </p>
 
                 <div className="mt-8 space-y-4">
@@ -261,6 +310,26 @@ function CandidatureContent() {
                     placeholder="Ton email"
                     className="w-full rounded-xl border-2 border-white/15 bg-white/5 px-5 py-4 text-lg font-medium text-white placeholder:text-gray-400 focus:border-amber-400 focus:outline-none"
                   />
+                  <div className="flex gap-3">
+                    <select
+                      value={countryIndex}
+                      onChange={(e) => setCountryIndex(Number(e.target.value))}
+                      className="w-28 shrink-0 appearance-none rounded-xl border-2 border-white/15 bg-white/5 px-3 py-4 text-center text-lg font-medium text-white focus:border-amber-400 focus:outline-none"
+                    >
+                      {COUNTRY_CODES.map((c, i) => (
+                        <option key={`${c.country}-${i}`} value={i}>
+                          {c.flag} {c.code}
+                        </option>
+                      ))}
+                    </select>
+                    <input
+                      type="tel"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      placeholder="Ton numéro de téléphone"
+                      className="min-w-0 flex-1 rounded-xl border-2 border-white/15 bg-white/5 px-5 py-4 text-lg font-medium text-white placeholder:text-gray-400 focus:border-amber-400 focus:outline-none"
+                    />
+                  </div>
                 </div>
 
                 {error && (

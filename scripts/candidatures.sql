@@ -8,6 +8,7 @@ create table if not exists public.candidatures (
 
   first_name   text not null,
   email        text not null,
+  phone        text,
 
   q1_stage     text not null,   -- idee | dev | publiee-peu | publiee-users
   q2_goal      text not null,   -- business | passion | fun

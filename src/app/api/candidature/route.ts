@@ -13,12 +13,16 @@ export async function POST(req: NextRequest) {
 
     const firstName = (body.firstName || "").toString().trim();
     const email = (body.email || "").toString().trim().toLowerCase();
+    const phone = (body.phone || "").toString().trim();
 
     if (!firstName) {
       return NextResponse.json({ error: "Entre ton prénom" }, { status: 400 });
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
       return NextResponse.json({ error: "Entre une adresse email valide" }, { status: 400 });
+    }
+    if (!/^\+[1-9]\d{6,14}$/.test(phone)) {
+      return NextResponse.json({ error: "Entre un numéro de téléphone valide" }, { status: 400 });
     }
 
     const answers: CandidatureAnswers = {
@@ -47,6 +51,7 @@ export async function POST(req: NextRequest) {
       const { error } = await supabase.from("candidatures").insert({
         first_name: firstName,
         email,
+        phone,
         q1_stage: answers.q1,
         q2_goal: answers.q2,
         q3_revenue: answers.q3,

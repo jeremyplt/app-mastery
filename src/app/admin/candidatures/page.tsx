@@ -8,6 +8,7 @@ type Candidature = {
   created_at: string;
   first_name: string;
   email: string;
+  phone: string | null;
   q1_stage: string;
   q2_goal: string;
   q3_revenue: string;
@@ -158,6 +159,7 @@ export default function CandidaturesAdmin() {
                       <span className="font-medium text-gray-400">{c.email}</span>
                     </p>
                     <p className="mt-0.5 text-sm font-medium text-gray-400">
+                      {c.phone ? `${c.phone} · ` : ""}
                       {formatDate(c.created_at)}
                       {c.utm_source ? ` · ${c.utm_source}` : ""}
                     </p>
