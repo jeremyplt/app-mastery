@@ -26,6 +26,20 @@ function ReserverContent() {
     });
   }, [firstName, email]);
 
+  // Capture le booking réel (Calendly poste un message à la prise de RDV).
+  useEffect(() => {
+    function onMessage(e: MessageEvent) {
+      if (
+        e.origin === "https://calendly.com" &&
+        e.data?.event === "calendly.event_scheduled"
+      ) {
+        posthog.capture("appel_booked", { email: email || undefined });
+      }
+    }
+    window.addEventListener("message", onMessage);
+    return () => window.removeEventListener("message", onMessage);
+  }, [email]);
+
   const calendlyUrl = (() => {
     const params = new URLSearchParams({ hide_gdpr_banner: "1" });
     if (firstName) params.set("name", firstName);

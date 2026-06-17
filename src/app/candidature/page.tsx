@@ -42,6 +42,21 @@ function CandidatureContent() {
     if (idx !== -1) setCountryIndex(idx);
   }, []);
 
+  // Tracking du funnel : un event par étape vue (pour mesurer les drop-offs).
+  useEffect(() => {
+    const stepName =
+      step === 0
+        ? "intro"
+        : step <= LAST_QUESTION_INDEX
+          ? QUESTIONS[step - 1].id
+          : "contact";
+    posthog.capture("candidature_step_viewed", {
+      step,
+      step_name: stepName,
+      utm_source: searchParams.get("utm_source") || undefined,
+    });
+  }, [step, searchParams]);
+
   const currentCountry: CountryCode = COUNTRY_CODES[countryIndex].country;
 
   function formatPhone(raw: string): string {
