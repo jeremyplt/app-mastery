@@ -196,10 +196,7 @@ function CandidatureContent() {
                 transition={{ duration: 0.35 }}
                 className="text-center"
               >
-                <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-1.5 text-sm font-bold text-amber-300">
-                  Candidature à un appel stratégique
-                </div>
-                <h1 className="mt-6 text-3xl sm:text-5xl font-bold tracking-tight text-balance">
+                <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-balance">
                   Quelques questions rapides pour que notre appel soit vraiment utile.
                 </h1>
                 <p className="mt-5 text-lg sm:text-xl text-gray-200 font-medium max-w-xl mx-auto">
