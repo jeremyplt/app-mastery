@@ -200,10 +200,10 @@ function CandidatureContent() {
                   Candidature à un appel stratégique
                 </div>
                 <h1 className="mt-6 text-3xl sm:text-5xl font-bold tracking-tight text-balance">
-                  4 questions rapides pour que notre appel soit vraiment utile.
+                  Quelques questions rapides pour que notre appel soit vraiment utile.
                 </h1>
                 <p className="mt-5 text-lg sm:text-xl text-gray-200 font-medium max-w-xl mx-auto">
-                  Ça prend moins d&apos;une minute. C&apos;est ce qui me permet de personnaliser l&apos;appel à ton projet et à ta situation, au lieu de te débiter un discours générique.
+                  Ça prend moins d&apos;une minute. C&apos;est ce qui me permet de personnaliser l&apos;appel à ton projet et à ta situation.
                 </p>
                 <button
                   onClick={goNext}
@@ -212,9 +212,6 @@ function CandidatureContent() {
                   C&apos;est parti
                   <span aria-hidden>→</span>
                 </button>
-                <p className="mt-4 text-sm font-medium text-gray-400">
-                  Appuie sur Entrée pour commencer
-                </p>
               </motion.div>
             )}
 
