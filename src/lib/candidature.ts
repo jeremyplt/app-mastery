@@ -9,6 +9,9 @@ export type Question = {
   type: "choice" | "text";
   options?: Choice[];
   placeholder?: string;
+  // Si vrai, l'option "autre" ouvre un champ libre ; la réponse stockée
+  // devient "autre: <texte>".
+  allowOther?: boolean;
 };
 
 export const QUESTIONS: Question[] = [
@@ -48,11 +51,15 @@ export const QUESTIONS: Question[] = [
     id: "q4",
     title: "Tu es actuellement...",
     type: "choice",
+    allowOther: true,
     options: [
       { value: "salarie", label: "Salarié" },
       { value: "freelance", label: "Freelance, indépendant" },
+      { value: "entrepreneur", label: "Entrepreneur" },
       { value: "etudiant", label: "Étudiant" },
+      { value: "chomage", label: "Au chômage, sans emploi" },
       { value: "entre-deux", label: "Entre deux" },
+      { value: "autre", label: "Autre" },
     ],
   },
   {
@@ -128,5 +135,9 @@ export function qualify(a: CandidatureAnswers): Qualification {
 
 export function isValidAnswer(q: Question, value: string): boolean {
   if (q.type === "text") return value.trim().length >= 5;
-  return Boolean(q.options?.some((o) => o.value === value));
+  // "autre: <texte>" : valide si un texte libre suit le préfixe.
+  if (q.allowOther && /^autre:\s*\S/.test(value)) return true;
+  // "autre" seul (sans texte) n'est pas une réponse valide.
+  const opts = q.options?.filter((o) => !(q.allowOther && o.value === "autre"));
+  return Boolean(opts?.some((o) => o.value === value));
 }

@@ -96,8 +96,13 @@ function CandidatureContent() {
   }
 
   function handleChoice(id: string, value: string) {
-    setAnswer(id, value);
     setError("");
+    // "Autre" ouvre un champ libre : pas d'auto-avance.
+    if (value === "autre") {
+      setAnswer(id, "autre");
+      return;
+    }
+    setAnswer(id, value);
     // auto-avance après un court délai pour laisser voir la sélection
     setTimeout(() => setStep((s) => Math.min(s + 1, CONTACT_INDEX)), 220);
   }
@@ -231,7 +236,11 @@ function CandidatureContent() {
                 {question.type === "choice" && question.options && (
                   <div className="mt-8 space-y-3">
                     {question.options.map((opt) => {
-                      const selected = answers[question.id] === opt.value;
+                      const current = answers[question.id] || "";
+                      const selected =
+                        opt.value === "autre"
+                          ? current === "autre" || current.startsWith("autre:")
+                          : current === opt.value;
                       return (
                         <button
                           key={opt.value}
@@ -246,6 +255,39 @@ function CandidatureContent() {
                         </button>
                       );
                     })}
+
+                    {/* Champ libre quand "Autre" est sélectionné */}
+                    {question.allowOther &&
+                      (answers[question.id] === "autre" ||
+                        (answers[question.id] || "").startsWith("autre:")) && (
+                        <div className="pt-1">
+                          <input
+                            type="text"
+                            autoFocus
+                            value={(answers[question.id] || "").replace(/^autre:\s?/, "")}
+                            onChange={(e) =>
+                              setAnswer(
+                                question.id,
+                                e.target.value ? `autre: ${e.target.value}` : "autre",
+                              )
+                            }
+                            placeholder="Précise..."
+                            className="w-full rounded-xl border-2 border-white/15 bg-white/5 px-5 py-4 text-lg font-medium text-white placeholder:text-gray-400 focus:border-amber-400 focus:outline-none"
+                          />
+                          <button
+                            onClick={() => {
+                              if (!isValidAnswer(question, answers[question.id] || "")) {
+                                setError("Précise en quelques mots.");
+                                return;
+                              }
+                              goNext();
+                            }}
+                            className="mt-4 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 px-7 py-3.5 text-lg font-bold text-gray-950 transition-transform hover:scale-[1.03] active:scale-100"
+                          >
+                            Continuer <span aria-hidden>→</span>
+                          </button>
+                        </div>
+                      )}
                   </div>
                 )}
 
@@ -300,7 +342,7 @@ function CandidatureContent() {
                   Dernière étape
                 </p>
                 <h2 className="mt-3 text-2xl sm:text-4xl font-bold tracking-tight text-balance">
-                  Où je t&apos;envoie la suite ?
+                  Où est-ce que je t&apos;envoie la suite ?
                 </h2>
                 <p className="mt-4 text-lg text-gray-200 font-medium">
                   Ton prénom, ton email et ton téléphone, pour préparer l&apos;appel et te recontacter.
