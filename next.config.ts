@@ -43,7 +43,7 @@ const nextConfig: NextConfig = {
       // Homepage -> formulaire de qualification (temporaire, 307)
       {
         source: "/",
-        destination: "/candidature",
+        destination: "/appel",
         permanent: false,
       },
       // Anciennes URLs systeme.io -> nouvelles URLs

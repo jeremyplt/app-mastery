@@ -1,47 +1,62 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
-import { motion } from "framer-motion";
-import { useRouter, useSearchParams } from "next/navigation";
-import Image from "next/image";
-import { isValidPhoneNumber, parsePhoneNumber } from "libphonenumber-js";
+import { Suspense, useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { useSearchParams } from "next/navigation";
 import posthog from "posthog-js";
+import { isValidPhoneNumber, parsePhoneNumber } from "libphonenumber-js";
 import type { CountryCode } from "libphonenumber-js";
 import { COUNTRY_CODES, detectCountry } from "@/lib/phone-countries";
 import { looksLikeFakePattern } from "@/lib/phone-validation";
+import { QUESTIONS, isValidAnswer } from "@/lib/candidature";
 
-const BUDGET_OPTIONS = [
-  { value: "moins-1000", label: "Moins de 1000€" },
-  { value: "1000-3000", label: "1000€ - 3000€" },
-  { value: "3000-plus", label: "Plus de 3000€" },
-];
-
-export default function AppelPage() {
+export default function CandidaturePage() {
   return (
     <Suspense>
-      <AppelContent />
+      <CandidatureContent />
     </Suspense>
   );
 }
 
-function AppelContent() {
+type Answers = Record<string, string>;
+
+// Étapes : 1 intro + 6 questions + 1 contact = index 0..7
+const LAST_QUESTION_INDEX = QUESTIONS.length; // 6
+const CONTACT_INDEX = QUESTIONS.length + 1; // 7
+const TOTAL_STEPS = QUESTIONS.length + 2; // intro + 6 + contact
+
+function CandidatureContent() {
+  const searchParams = useSearchParams();
+  const [step, setStep] = useState(0);
+  const [answers, setAnswers] = useState<Answers>({});
   const [firstName, setFirstName] = useState("");
+  const [hp, setHp] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [budget, setBudget] = useState("");
-  const [appIdea, setAppIdea] = useState("");
-  const [motivation, setMotivation] = useState("");
   const [countryIndex, setCountryIndex] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const router = useRouter();
-  const searchParams = useSearchParams();
 
   useEffect(() => {
     const detected = detectCountry();
     const idx = COUNTRY_CODES.findIndex((c) => c.country === detected);
     if (idx !== -1) setCountryIndex(idx);
   }, []);
+
+  // Tracking du funnel : un event par étape vue (pour mesurer les drop-offs).
+  useEffect(() => {
+    const stepName =
+      step === 0
+        ? "intro"
+        : step <= LAST_QUESTION_INDEX
+          ? QUESTIONS[step - 1].id
+          : "contact";
+    posthog.capture("candidature_step_viewed", {
+      step,
+      step_name: stepName,
+      utm_source: searchParams.get("utm_source") || undefined,
+    });
+  }, [step, searchParams]);
 
   const currentCountry: CountryCode = COUNTRY_CODES[countryIndex].country;
 
@@ -54,10 +69,6 @@ function AppelContent() {
     }
   }
 
-  function validateEmail(v: string): boolean {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
-  }
-
   function validatePhone(raw: string): boolean {
     try {
       return isValidPhoneNumber(raw, currentCountry);
@@ -66,25 +77,49 @@ function AppelContent() {
     }
   }
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setError("");
+  // step 1..6 maps to QUESTIONS[0..5]
+  const question = step >= 1 && step <= LAST_QUESTION_INDEX ? QUESTIONS[step - 1] : null;
+  const progress = Math.round((step / (TOTAL_STEPS - 1)) * 100);
 
+  function setAnswer(id: string, value: string) {
+    setAnswers((prev) => ({ ...prev, [id]: value }));
+  }
+
+  function goNext() {
+    setError("");
+    setStep((s) => Math.min(s + 1, CONTACT_INDEX));
+  }
+
+  function goBack() {
+    setError("");
+    setStep((s) => Math.max(s - 1, 0));
+  }
+
+  function handleChoice(id: string, value: string) {
+    setAnswer(id, value);
+    setError("");
+    // auto-avance après un court délai pour laisser voir la sélection
+    setTimeout(() => setStep((s) => Math.min(s + 1, CONTACT_INDEX)), 220);
+  }
+
+  function validateEmail(v: string): boolean {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
+  }
+
+  async function handleSubmit() {
+    setError("");
     if (!firstName.trim()) {
       setError("Entre ton prénom");
       return;
     }
-
-    if (!validateEmail(email)) {
+    if (!validateEmail(email.trim())) {
       setError("Entre une adresse email valide");
       return;
     }
-
     if (!validatePhone(phone)) {
       setError("Entre un numéro de téléphone valide");
       return;
     }
-
     try {
       const parsedFinal = parsePhoneNumber(phone, currentCountry);
       if (parsedFinal) {
@@ -99,357 +134,254 @@ function AppelContent() {
       }
     } catch {}
 
-    if (!budget) {
-      setError("Indique ton budget disponible");
-      return;
-    }
-
-    if (!appIdea.trim() || appIdea.trim().length < 10) {
-      setError("Décris brièvement ton projet d'app (au moins 10 caractères)");
-      return;
-    }
-
-    if (!motivation.trim() || motivation.trim().length < 10) {
-      setError("Explique en quelques mots pourquoi tu veux te lancer maintenant");
-      return;
-    }
-
     setLoading(true);
-
     try {
-      const formattedPhone = formatPhone(phone);
-      const trimmedFirstName = firstName.trim();
-      const trimmedEmail = email.trim().toLowerCase();
-
-      const res = await fetch("/api/subscribe", {
+      const res = await fetch("/api/candidature", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          email: trimmedEmail,
-          firstName: trimmedFirstName,
-          phone: formattedPhone,
-          listId: 20,
-          source: "appel",
-          budget,
-          appIdea: appIdea.trim(),
-          motivation: motivation.trim(),
+          website: hp,
+          firstName: firstName.trim(),
+          email: email.trim().toLowerCase(),
+          phone: formatPhone(phone),
+          q1: answers.q1,
+          q2: answers.q2,
+          q3: answers.q3,
+          q4: answers.q4,
+          q5: (answers.q5 || "").trim(),
+          q6: answers.q6,
           utmSource: searchParams.get("utm_source") || undefined,
           utmMedium: searchParams.get("utm_medium") || undefined,
           utmCampaign: searchParams.get("utm_campaign") || undefined,
         }),
       });
 
-      if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || "Une erreur est survenue");
-      }
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Une erreur est survenue");
 
-      posthog.capture("appel_form_submitted", {
-        source: "appel",
-        budget,
+      posthog.capture("candidature_submitted", {
+        qualified: data.qualified,
         utm_source: searchParams.get("utm_source") || undefined,
-        utm_medium: searchParams.get("utm_medium") || undefined,
-        utm_campaign: searchParams.get("utm_campaign") || undefined,
       });
 
-      const params = new URLSearchParams({
-        firstName: trimmedFirstName,
-        email: trimmedEmail,
-      });
-      router.push(`/appel/reserver?${params.toString()}`);
+      window.location.href = data.redirectUrl;
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Une erreur est survenue"
-      );
+      setError(err instanceof Error ? err.message : "Une erreur est survenue");
       setLoading(false);
     }
   }
 
   return (
     <div className="min-h-screen bg-gray-950 text-white antialiased">
-      <div
-        className="grid min-h-screen grid-cols-[1fr_minmax(0,80rem)_1fr]"
-        style={{ "--gutter": "2.5rem" } as React.CSSProperties}
-      >
-        {/* Left gutter */}
-        <div
-          className="border-r border-white/10 bg-fixed"
-          style={{
-            backgroundImage:
-              "repeating-linear-gradient(315deg, rgba(255,255,255,0.06) 0, rgba(255,255,255,0.06) 1px, transparent 0, transparent 50%)",
-            backgroundSize: "10px 10px",
-          }}
+      {/* Barre de progression */}
+      <div className="fixed top-0 left-0 right-0 h-1.5 bg-white/10 z-50">
+        <motion.div
+          className="h-full bg-gradient-to-r from-amber-400 to-orange-500"
+          initial={false}
+          animate={{ width: `${progress}%` }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
         />
+      </div>
 
-        {/* Center content */}
-        <div className="flex min-h-screen flex-col justify-center min-w-0">
-          <section className="relative pt-6 pb-10 sm:pt-16 lg:pt-24 lg:pb-16">
-            <div className="px-4 sm:px-6 lg:px-8">
-              {/* Main card */}
-              <div className="isolate overflow-hidden rounded-2xl bg-gray-950 p-2 outline outline-amber-500/20">
-                <div className="relative rounded-xl bg-white/5 overflow-hidden">
-                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-amber-500/5 via-transparent to-orange-500/5" />
+      <div className="flex min-h-screen flex-col items-center justify-center px-5 py-16 sm:py-20">
+        <div className="w-full max-w-2xl">
+          <AnimatePresence mode="wait">
+            {/* INTRO */}
+            {step === 0 && (
+              <motion.div
+                key="intro"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.35 }}
+                className="text-center"
+              >
+                <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-1.5 text-sm font-bold text-amber-300">
+                  Candidature à un appel stratégique
+                </div>
+                <h1 className="mt-6 text-3xl sm:text-5xl font-bold tracking-tight text-balance">
+                  4 questions rapides pour que notre appel soit vraiment utile.
+                </h1>
+                <p className="mt-5 text-lg sm:text-xl text-gray-200 font-medium max-w-xl mx-auto">
+                  Ça prend moins d&apos;une minute. C&apos;est ce qui me permet de personnaliser l&apos;appel à ton projet et à ta situation, au lieu de te débiter un discours générique.
+                </p>
+                <button
+                  onClick={goNext}
+                  className="mt-9 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 px-8 py-4 text-lg font-bold text-gray-950 transition-transform hover:scale-[1.03] active:scale-100"
+                >
+                  C&apos;est parti
+                  <span aria-hidden>→</span>
+                </button>
+                <p className="mt-4 text-sm font-medium text-gray-400">
+                  Appuie sur Entrée pour commencer
+                </p>
+              </motion.div>
+            )}
 
-                  {/* Top bar: label */}
-                  <div className="grid lg:grid-cols-2 gap-0 pt-5 sm:pt-8">
-                    {/* Right (desktop): form only */}
-                    <div className="relative px-5 py-2 sm:px-12 sm:py-4 lg:py-5 lg:order-2">
-                      <motion.div
-                        className="flex items-center gap-3 mb-5"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.4 }}
-                      >
-                        <span className="font-mono text-base sm:text-lg font-semibold tracking-widest uppercase text-amber-400">
-                          Appel découverte
-                        </span>
-                        <span className="rounded-full bg-green-500/15 border border-green-500/30 px-3 py-1 text-sm font-bold text-green-400">
-                          OFFERT
-                        </span>
-                      </motion.div>
+            {/* QUESTIONS */}
+            {question && (
+              <motion.div
+                key={question.id}
+                initial={{ opacity: 0, x: 40 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -40 }}
+                transition={{ duration: 0.3 }}
+              >
+                <p className="text-sm font-bold uppercase tracking-wide text-amber-400">
+                  Question {step} / {QUESTIONS.length}
+                </p>
+                <h2 className="mt-3 text-2xl sm:text-4xl font-bold tracking-tight text-balance">
+                  {question.title}
+                </h2>
 
-                      <motion.form
-                        onSubmit={handleSubmit}
-                        className="mt-8"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 0.35 }}
-                      >
-                        <div className="flex flex-col gap-3 max-w-md">
-                          <input
-                            type="text"
-                            required
-                            placeholder="Ton prénom"
-                            value={firstName}
-                            onChange={(e) => setFirstName(e.target.value)}
-                            className="w-full rounded-full bg-white/5 border border-white/10 px-5 py-3 text-sm text-white placeholder:text-gray-400 focus:outline-none focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/50 transition-colors"
-                          />
-                          <input
-                            type="email"
-                            required
-                            placeholder="Ton adresse email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="w-full rounded-full bg-white/5 border border-white/10 px-5 py-3 text-sm text-white placeholder:text-gray-400 focus:outline-none focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/50 transition-colors"
-                          />
-                          <div className="flex gap-2">
-                            <select
-                              value={countryIndex}
-                              onChange={(e) => setCountryIndex(Number(e.target.value))}
-                              className="w-24 shrink-0 rounded-full bg-white/5 border border-white/10 px-3 py-3 text-sm text-white focus:outline-none focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/50 transition-colors appearance-none text-center"
-                            >
-                              {COUNTRY_CODES.map((c, i) => (
-                                <option key={`${c.country}-${i}`} value={i}>
-                                  {c.flag} {c.code}
-                                </option>
-                              ))}
-                            </select>
-                            <input
-                              type="tel"
-                              required
-                              placeholder="Ton numéro de téléphone"
-                              value={phone}
-                              onChange={(e) => setPhone(e.target.value)}
-                              className="flex-1 min-w-0 rounded-full bg-white/5 border border-white/10 px-5 py-3 text-sm text-white placeholder:text-gray-400 focus:outline-none focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/50 transition-colors"
-                            />
-                          </div>
+                {question.type === "choice" && question.options && (
+                  <div className="mt-8 space-y-3">
+                    {question.options.map((opt) => {
+                      const selected = answers[question.id] === opt.value;
+                      return (
+                        <button
+                          key={opt.value}
+                          onClick={() => handleChoice(question.id, opt.value)}
+                          className={`w-full text-left rounded-xl border-2 px-5 py-4 text-lg font-semibold transition-all ${
+                            selected
+                              ? "border-amber-400 bg-amber-400/15 text-white"
+                              : "border-white/15 bg-white/5 text-gray-100 hover:border-amber-400/60 hover:bg-white/10"
+                          }`}
+                        >
+                          {opt.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
 
-                          <div className="mt-2">
-                            <label className="block text-sm font-semibold text-white mb-2">
-                              Quel budget peux-tu investir dans ta formation ou ton accompagnement ?
-                            </label>
-                            <div className="grid grid-cols-3 gap-2">
-                              {BUDGET_OPTIONS.map((opt) => (
-                                <label
-                                  key={opt.value}
-                                  className={`relative flex items-center justify-center rounded-xl border px-2 py-3 text-center text-xs sm:text-sm font-semibold cursor-pointer transition-colors ${
-                                    budget === opt.value
-                                      ? "bg-amber-500/15 border-amber-500/60 text-white"
-                                      : "bg-white/5 border-white/10 text-gray-200 hover:border-white/20"
-                                  }`}
-                                >
-                                  <input
-                                    type="radio"
-                                    name="budget"
-                                    value={opt.value}
-                                    checked={budget === opt.value}
-                                    onChange={(e) => setBudget(e.target.value)}
-                                    className="sr-only"
-                                  />
-                                  <span>{opt.label}</span>
-                                </label>
-                              ))}
-                            </div>
-                          </div>
-
-                          <div className="mt-2">
-                            <label className="block text-sm font-semibold text-white mb-2">
-                              Décris brièvement ton idée d&apos;app ou ton projet
-                            </label>
-                            <textarea
-                              required
-                              value={appIdea}
-                              onChange={(e) => setAppIdea(e.target.value)}
-                              rows={3}
-                              className="w-full rounded-2xl bg-white/5 border border-white/10 px-5 py-3 text-sm text-white placeholder:text-gray-400 focus:outline-none focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/50 transition-colors resize-none"
-                            />
-                          </div>
-
-                          <div>
-                            <label className="block text-sm font-semibold text-white mb-2">
-                              Pourquoi veux-tu te lancer maintenant ? Qu&apos;est-ce qui te motive ?
-                            </label>
-                            <textarea
-                              required
-                              value={motivation}
-                              onChange={(e) => setMotivation(e.target.value)}
-                              rows={3}
-                              className="w-full rounded-2xl bg-white/5 border border-white/10 px-5 py-3 text-sm text-white placeholder:text-gray-400 focus:outline-none focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/50 transition-colors resize-none"
-                            />
-                          </div>
-
-                          <button
-                            type="submit"
-                            disabled={loading}
-                            className="w-full rounded-full bg-amber-500 px-6 py-3 text-base font-bold text-white hover:bg-amber-400 transition-colors shadow-lg shadow-amber-500/25 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap mt-2"
-                          >
-                            {loading ? "..." : "Continuer pour réserver mon appel"}
-                          </button>
-
-                          <div className="mt-4 flex items-center gap-3">
-                            <div className="flex -space-x-2">
-                              {[
-                                "/avatars/avatar-1.jpg",
-                                "/avatars/avatar-2.jpg",
-                                "/avatars/avatar-3.jpg",
-                                "/avatars/avatar-4.jpg",
-                              ].map((src, i) => (
-                                <div
-                                  key={i}
-                                  className="w-8 h-8 rounded-full border-2 border-gray-950 overflow-hidden"
-                                >
-                                  <Image
-                                    src={src}
-                                    alt=""
-                                    width={32}
-                                    height={32}
-                                    className="w-full h-full object-cover"
-                                  />
-                                </div>
-                              ))}
-                              <div className="w-8 h-8 rounded-full bg-gray-800 border-2 border-gray-950 flex items-center justify-center text-sm font-semibold text-white">
-                                +
-                              </div>
-                            </div>
-                            <span className="text-sm font-medium text-gray-200">
-                              Ils ont déjà lancé leur app avec moi
-                            </span>
-                          </div>
-                        </div>
-                        {error && (
-                          <p className="mt-3 text-sm font-semibold text-red-400">{error}</p>
-                        )}
-                        <p className="mt-4 text-sm text-gray-300 font-medium">
-                          Tes informations restent confidentielles. Aucun spam.
-                        </p>
-                      </motion.form>
-                    </div>
-
-                    {/* Left (desktop): headline + subtext + qualification bullets */}
-                    <motion.div
-                      className="relative flex items-start justify-center px-5 py-2 sm:px-12 sm:py-4 lg:px-12 lg:py-5 lg:order-1"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ duration: 0.8, delay: 0.3 }}
+                {question.type === "text" && (
+                  <div className="mt-8">
+                    <textarea
+                      autoFocus
+                      rows={4}
+                      value={answers[question.id] || ""}
+                      onChange={(e) => setAnswer(question.id, e.target.value)}
+                      placeholder={question.placeholder}
+                      className="w-full rounded-xl border-2 border-white/15 bg-white/5 px-5 py-4 text-lg font-medium text-white placeholder:text-gray-400 focus:border-amber-400 focus:outline-none"
+                    />
+                    <button
+                      onClick={() => {
+                        if (!isValidAnswer(question, answers[question.id] || "")) {
+                          setError("Écris quelques mots, ça m'aide vraiment.");
+                          return;
+                        }
+                        goNext();
+                      }}
+                      className="mt-5 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 px-7 py-3.5 text-lg font-bold text-gray-950 transition-transform hover:scale-[1.03] active:scale-100"
                     >
-                      <div className="w-full">
-                        <motion.h1
-                          className="text-3xl/tight sm:text-4xl/tight lg:text-[3rem]/tight font-medium tracking-tighter text-balance text-white"
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.6 }}
-                        >
-                          Tu veux te former ou être accompagné pour développer ton app mobile{" "}
-                          <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-orange-300 to-amber-500">
-                            avec l&apos;IA ?
-                          </span>
-                        </motion.h1>
+                      Continuer <span aria-hidden>→</span>
+                    </button>
+                  </div>
+                )}
 
-                        <motion.p
-                          className="mt-5 text-lg sm:text-xl text-gray-200 font-medium leading-relaxed"
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.6, delay: 0.15 }}
-                        >
-                          Réserve un appel de 30 minutes avec moi. On regarde ensemble si la formation ou l&apos;accompagnement peuvent vraiment t&apos;aider à lancer ton app et générer tes premiers revenus.
-                        </motion.p>
+                {error && (
+                  <p className="mt-5 text-base font-bold text-red-400">{error}</p>
+                )}
 
-                        <div className="mt-8 rounded-xl border border-amber-500/30 bg-amber-500/5 p-6">
-                          <h2 className="text-xl sm:text-2xl font-bold text-white mb-2">
-                            Avant de réserver, lis bien ça.
-                          </h2>
-                          <p className="text-base text-gray-200 font-medium mb-5">
-                            Cet appel n&apos;est pas pour tout le monde. Pour qu&apos;il soit utile pour toi (et pour moi), il y a 3 conditions :
-                          </p>
+                <button
+                  onClick={goBack}
+                  className="mt-8 text-sm font-bold text-gray-400 hover:text-white"
+                >
+                  ← Retour
+                </button>
+              </motion.div>
+            )}
 
-                          <ul className="space-y-4 text-base text-white">
-                            {[
-                              {
-                                title: "Pas besoin de savoir coder.",
-                                body: "L'IA fait le travail technique. Si tu sais utiliser un ordinateur, tu peux créer une app. C'est ce que je te montre.",
-                              },
-                              {
-                                title: "Il faut un budget pour avancer.",
-                                body: "La formation et l'accompagnement ont un prix. Pour que cet appel soit utile, l'idée c'est que tu sois déjà ouvert à investir sur toi et sur ton projet.",
-                              },
-                              {
-                                title: "Il faut être motivé et passer à l'action.",
-                                body: "Cet appel n'est utile que si tu as vraiment envie d'avancer sur ton projet. Si tu es prêt à t'engager et à bosser sérieusement, alors on va faire de belles choses ensemble.",
-                              },
-                            ].map((item, i) => (
-                              <li key={i} className="flex items-start gap-3">
-                                <span className="w-6 h-6 rounded-full bg-amber-500 flex items-center justify-center shrink-0 mt-0.5">
-                                  <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" strokeWidth={4} viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                                  </svg>
-                                </span>
-                                <div>
-                                  <p className="font-bold text-white">{item.title}</p>
-                                  <p className="text-gray-200 mt-1">{item.body}</p>
-                                </div>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
+            {/* CONTACT */}
+            {step === CONTACT_INDEX && (
+              <motion.div
+                key="contact"
+                initial={{ opacity: 0, x: 40 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -40 }}
+                transition={{ duration: 0.3 }}
+              >
+                <p className="text-sm font-bold uppercase tracking-wide text-amber-400">
+                  Dernière étape
+                </p>
+                <h2 className="mt-3 text-2xl sm:text-4xl font-bold tracking-tight text-balance">
+                  Où je t&apos;envoie la suite ?
+                </h2>
+                <p className="mt-4 text-lg text-gray-200 font-medium">
+                  Ton prénom, ton email et ton téléphone, pour préparer l&apos;appel et te recontacter.
+                </p>
 
-                      </div>
-                    </motion.div>
+                <div className="mt-8 space-y-4">
+                  {/* Honeypot anti-spam : caché aux humains, rempli par les bots. */}
+                  <input
+                    type="text"
+                    name="website"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    value={hp}
+                    onChange={(e) => setHp(e.target.value)}
+                    aria-hidden="true"
+                    className="absolute left-[-9999px] h-0 w-0 opacity-0"
+                  />
+                  <input
+                    type="text"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    placeholder="Ton prénom"
+                    className="w-full rounded-xl border-2 border-white/15 bg-white/5 px-5 py-4 text-lg font-medium text-white placeholder:text-gray-400 focus:border-amber-400 focus:outline-none"
+                  />
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Ton email"
+                    className="w-full rounded-xl border-2 border-white/15 bg-white/5 px-5 py-4 text-lg font-medium text-white placeholder:text-gray-400 focus:border-amber-400 focus:outline-none"
+                  />
+                  <div className="flex gap-3">
+                    <select
+                      value={countryIndex}
+                      onChange={(e) => setCountryIndex(Number(e.target.value))}
+                      className="w-28 shrink-0 appearance-none rounded-xl border-2 border-white/15 bg-white/5 px-3 py-4 text-center text-lg font-medium text-white focus:border-amber-400 focus:outline-none"
+                    >
+                      {COUNTRY_CODES.map((c, i) => (
+                        <option key={`${c.country}-${i}`} value={i}>
+                          {c.flag} {c.code}
+                        </option>
+                      ))}
+                    </select>
+                    <input
+                      type="tel"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      placeholder="Ton numéro de téléphone"
+                      className="min-w-0 flex-1 rounded-xl border-2 border-white/15 bg-white/5 px-5 py-4 text-lg font-medium text-white placeholder:text-gray-400 focus:border-amber-400 focus:outline-none"
+                    />
                   </div>
                 </div>
-              </div>
 
-              {/* Bottom credit */}
-              <motion.p
-                className="mt-8 text-center text-sm text-gray-300"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.5 }}
-              >
-                Par Jeremy, créateur de Shinobi Japanese
-              </motion.p>
-            </div>
-          </section>
+                {error && (
+                  <p className="mt-5 text-base font-bold text-red-400">{error}</p>
+                )}
+
+                <button
+                  onClick={handleSubmit}
+                  disabled={loading}
+                  className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 px-8 py-4 text-lg font-bold text-gray-950 transition-transform hover:scale-[1.02] active:scale-100 disabled:opacity-60"
+                >
+                  {loading ? "Un instant..." : "Valider ma candidature"}
+                </button>
+
+                <button
+                  onClick={goBack}
+                  className="mt-8 text-sm font-bold text-gray-400 hover:text-white"
+                >
+                  ← Retour
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
-
-        {/* Right gutter */}
-        <div
-          className="border-l border-white/10 bg-fixed"
-          style={{
-            backgroundImage:
-              "repeating-linear-gradient(315deg, rgba(255,255,255,0.06) 0, rgba(255,255,255,0.06) 1px, transparent 0, transparent 50%)",
-            backgroundSize: "10px 10px",
-          }}
-        />
       </div>
     </div>
   );

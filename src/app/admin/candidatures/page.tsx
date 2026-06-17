@@ -110,7 +110,7 @@ export default function CandidaturesAdmin() {
       <div className="mx-auto max-w-5xl px-5 py-10">
         <h1 className="text-3xl font-bold tracking-tight">Candidatures</h1>
         <p className="mt-2 text-gray-300 font-medium">
-          Formulaire de qualification /candidature.
+          Formulaire de qualification /appel.
         </p>
 
         {/* Filtres */}

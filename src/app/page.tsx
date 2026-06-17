@@ -215,7 +215,7 @@ export default function HomePage() {
                     </p>
 
                     <Link
-                      href="/candidature"
+                      href="/appel"
                       className="mt-10 inline-flex items-center justify-center gap-3 rounded-full bg-gradient-to-r from-amber-400 to-orange-500 px-10 py-5 text-xl font-bold text-gray-950 transition-transform hover:scale-[1.03] active:scale-100 shadow-2xl shadow-amber-500/30"
                     >
                       <svg
