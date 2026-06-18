@@ -186,7 +186,7 @@ async function sendProspectEmail(firstName: string, email: string, qualified: bo
       <p>${greeting}</p>
       <p>Merci pour ta candidature.</p>
       <p>Vu là où tu en es, le mieux est de commencer par poser des bases solides avant un appel. Voici par où démarrer, gratuitement :</p>
-      <p><a href="https://www.jeremypitault.com/plan-action">Le plan d'action gratuit</a></p>
+      <p><a href="https://www.jeremypitault.com/plan-action/video">Le plan d'action gratuit</a></p>
       <p>Avance avec ça, et on se reparle quand ton projet aura pris de l'ampleur.</p>
       <p>À bientôt,<br>Jeremy</p>`;
 

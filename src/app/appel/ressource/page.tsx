@@ -6,7 +6,7 @@ const RESOURCES = [
   {
     title: "Le plan d'action gratuit",
     description: "Les étapes concrètes pour passer de l'idée à une première app, sans coder.",
-    href: "/plan-action",
+    href: "/plan-action/video",
     cta: "Voir le plan",
   },
   {
