@@ -45,6 +45,7 @@ export const QUESTIONS: Question[] = [
       { value: "500-2000", label: "500€ - 2000€" },
       { value: "2000-5000", label: "2000€ - 5000€" },
       { value: "5000-plus", label: "5000€ et +" },
+      { value: "peu-importe", label: "Gagner de l'argent n'est pas ma priorité" },
     ],
   },
   {
@@ -91,7 +92,8 @@ export type CandidatureAnswers = {
 };
 
 const REVENUE_SCORE: Record<string, number> = {
-  "moins-500": 0,
+  "peu-importe": 0,
+  "moins-500": 8,
   "500-2000": 15,
   "2000-5000": 25,
   "5000-plus": 30,
@@ -113,19 +115,22 @@ const STAGE_SCORE: Record<string, number> = {
 
 export type Qualification = { score: number; qualified: boolean };
 
-// Filtres durs (red flags du doc de setting) :
-//  - objectif passion / fun  -> pas pour nous (on vend de la monétisation)
-//  - revenu visé < 500€       -> pas assez sérieux
-//  - moins de 2h / semaine    -> pas assez de temps
+// Filtres durs :
+//  - "l'argent n'est pas ma priorité" (Q3) -> on vend de la monétisation
+//  - moins de 2h / semaine (Q6)             -> pas assez de temps
+// Q2 (objectif) et Q4 (situation) sont contextuels, ils ne filtrent pas :
+// un projet perso/passion qui vise quand même un revenu reste qualifié.
 export function qualify(a: CandidatureAnswers): Qualification {
-  const goalOk = a.q2 === "business";
-  const revenueOk = a.q3 !== "moins-500";
+  const wantsMoney = a.q3 !== "peu-importe";
   const hoursOk = a.q6 !== "moins-2h";
 
-  const qualified = goalOk && revenueOk && hoursOk;
+  const qualified = wantsMoney && hoursOk;
+
+  // L'objectif "business" reste un signal positif pour trier les leads.
+  const businessGoal = a.q2 === "business";
 
   const score =
-    (goalOk ? 30 : 0) +
+    (businessGoal ? 20 : 0) +
     (REVENUE_SCORE[a.q3] ?? 0) +
     (HOURS_SCORE[a.q6] ?? 0) +
     (STAGE_SCORE[a.q1] ?? 0);
