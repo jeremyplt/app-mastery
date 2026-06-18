@@ -16,6 +16,7 @@ create table if not exists public.candidatures (
   q4_status    text not null,   -- salarie | freelance | etudiant | entre-deux
   q5_attentes  text not null,   -- champ libre
   q6_hours     text not null,   -- moins-2h | 2-5h | 5-10h | 10h-plus
+  budget_ready text,            -- oui | non | null (rattrapage budget)
 
   score        int  not null default 0,
   qualified    boolean not null default false,

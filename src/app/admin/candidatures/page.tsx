@@ -15,6 +15,7 @@ type Candidature = {
   q4_status: string;
   q5_attentes: string;
   q6_hours: string;
+  budget_ready: string | null;
   score: number;
   qualified: boolean;
   utm_source: string | null;
@@ -203,6 +204,18 @@ export default function CandidaturesAdmin() {
                         </div>
                       );
                     })}
+                    {c.budget_ready && (
+                      <div>
+                        <p className="text-sm font-bold text-amber-400">
+                          Rattrapage budget
+                        </p>
+                        <p className="mt-0.5 text-base font-medium text-gray-100">
+                          {c.budget_ready === "oui"
+                            ? "Oui, prêt à investir"
+                            : "Non, pas pour le moment"}
+                        </p>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>

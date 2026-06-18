@@ -241,7 +241,16 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    const { score, qualified } = qualify(answers);
+    const budgetReady =
+      body.budgetReady === "oui" ? "oui" : body.budgetReady === "non" ? "non" : null;
+
+    const { score, qualified, rescue } = qualify(answers, budgetReady);
+
+    // Rattrapage : on demande d'abord le budget avant de décider.
+    // Pas de stockage / email tant que la réponse budget n'est pas donnée.
+    if (rescue) {
+      return NextResponse.json({ rescue: true });
+    }
 
     // Stockage Supabase (best-effort : on ne bloque pas la redirection si la DB échoue).
     try {
@@ -256,6 +265,7 @@ export async function POST(req: NextRequest) {
         q4_status: answers.q4,
         q5_attentes: answers.q5,
         q6_hours: answers.q6,
+        budget_ready: budgetReady,
         score,
         qualified,
         utm_source: body.utmSource || null,

@@ -113,18 +113,31 @@ const STAGE_SCORE: Record<string, number> = {
   "publiee-users": 10,
 };
 
-export type Qualification = { score: number; qualified: boolean };
+export type BudgetReady = "oui" | "non" | null;
+
+// rescue = true : disqualifié uniquement sur la motivation argent, mais on
+// peut le rattraper en lui demandant s'il a un budget à allouer.
+export type Qualification = { score: number; qualified: boolean; rescue: boolean };
 
 // Filtres durs :
-//  - "l'argent n'est pas ma priorité" (Q3) -> on vend de la monétisation
-//  - moins de 2h / semaine (Q6)             -> pas assez de temps
+//  - "l'argent n'est pas ma priorité" (Q3) -> rattrapable via le budget
+//  - moins de 2h / semaine (Q6)             -> pas assez de temps (non rattrapable)
 // Q2 (objectif) et Q4 (situation) sont contextuels, ils ne filtrent pas :
 // un projet perso/passion qui vise quand même un revenu reste qualifié.
-export function qualify(a: CandidatureAnswers): Qualification {
+export function qualify(a: CandidatureAnswers, budgetReady: BudgetReady = null): Qualification {
   const wantsMoney = a.q3 !== "peu-importe";
   const hoursOk = a.q6 !== "moins-2h";
 
-  const qualified = wantsMoney && hoursOk;
+  let qualified = wantsMoney && hoursOk;
+  let rescue = false;
+
+  // Disqualifié seulement à cause de la motivation argent, mais assez de temps :
+  // on tente un rattrapage sur le budget.
+  if (!qualified && hoursOk && !wantsMoney) {
+    if (budgetReady === "oui") qualified = true;
+    else if (budgetReady === "non") qualified = false;
+    else rescue = true; // pas encore répondu
+  }
 
   // L'objectif "business" reste un signal positif pour trier les leads.
   const businessGoal = a.q2 === "business";
@@ -133,9 +146,10 @@ export function qualify(a: CandidatureAnswers): Qualification {
     (businessGoal ? 20 : 0) +
     (REVENUE_SCORE[a.q3] ?? 0) +
     (HOURS_SCORE[a.q6] ?? 0) +
-    (STAGE_SCORE[a.q1] ?? 0);
+    (STAGE_SCORE[a.q1] ?? 0) +
+    (budgetReady === "oui" ? 15 : 0);
 
-  return { score, qualified };
+  return { score, qualified, rescue };
 }
 
 export function isValidAnswer(q: Question, value: string): boolean {

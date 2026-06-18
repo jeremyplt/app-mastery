@@ -36,6 +36,7 @@ function CandidatureContent() {
   const [countryIndex, setCountryIndex] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [rescue, setRescue] = useState(false);
 
   useEffect(() => {
     const detected = detectCountry();
@@ -139,6 +140,11 @@ function CandidatureContent() {
       }
     } catch {}
 
+    submit();
+  }
+
+  async function submit(budgetReady?: "oui" | "non") {
+    setError("");
     setLoading(true);
     try {
       const res = await fetch("/api/candidature", {
@@ -155,6 +161,7 @@ function CandidatureContent() {
           q4: answers.q4,
           q5: (answers.q5 || "").trim(),
           q6: answers.q6,
+          budgetReady,
           utmSource: searchParams.get("utm_source") || undefined,
           utmMedium: searchParams.get("utm_medium") || undefined,
           utmCampaign: searchParams.get("utm_campaign") || undefined,
@@ -164,8 +171,17 @@ function CandidatureContent() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Une erreur est survenue");
 
+      // Rattrapage : on demande le budget avant de décider.
+      if (data.rescue) {
+        posthog.capture("candidature_rescue_shown");
+        setRescue(true);
+        setLoading(false);
+        return;
+      }
+
       posthog.capture("candidature_submitted", {
         qualified: data.qualified,
+        budget_ready: budgetReady,
         utm_source: searchParams.get("utm_source") || undefined,
       });
 
@@ -356,7 +372,7 @@ function CandidatureContent() {
             )}
 
             {/* CONTACT */}
-            {step === CONTACT_INDEX && (
+            {step === CONTACT_INDEX && !rescue && (
               <motion.div
                 key="contact"
                 initial={{ opacity: 0, x: 40 }}
@@ -440,6 +456,48 @@ function CandidatureContent() {
                 >
                   ← Retour
                 </button>
+              </motion.div>
+            )}
+
+            {/* RATTRAPAGE BUDGET */}
+            {rescue && (
+              <motion.div
+                key="rescue"
+                initial={{ opacity: 0, x: 40 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -40 }}
+                transition={{ duration: 0.3 }}
+              >
+                <h2 className="text-2xl sm:text-4xl font-bold tracking-tight text-balance">
+                  Une dernière chose.
+                </h2>
+                <p className="mt-4 text-lg sm:text-xl text-gray-200 font-medium">
+                  Est-ce que tu as un budget que tu peux allouer pour avancer sur ton projet et ta progression ?
+                </p>
+
+                <div className="mt-8 space-y-3">
+                  <button
+                    onClick={() => submit("oui")}
+                    disabled={loading}
+                    className="w-full rounded-xl border-2 border-white/15 bg-white/5 px-5 py-4 text-left text-lg font-semibold text-gray-100 transition-all hover:border-amber-400/60 hover:bg-white/10 disabled:opacity-60"
+                  >
+                    Oui, je peux investir pour avancer
+                  </button>
+                  <button
+                    onClick={() => submit("non")}
+                    disabled={loading}
+                    className="w-full rounded-xl border-2 border-white/15 bg-white/5 px-5 py-4 text-left text-lg font-semibold text-gray-100 transition-all hover:border-amber-400/60 hover:bg-white/10 disabled:opacity-60"
+                  >
+                    Non, pas pour le moment
+                  </button>
+                </div>
+
+                {loading && (
+                  <p className="mt-5 text-base font-medium text-gray-400">Un instant...</p>
+                )}
+                {error && (
+                  <p className="mt-5 text-base font-bold text-red-400">{error}</p>
+                )}
               </motion.div>
             )}
           </AnimatePresence>
