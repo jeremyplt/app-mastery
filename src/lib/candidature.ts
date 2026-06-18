@@ -58,7 +58,7 @@ export const QUESTIONS: Question[] = [
       { value: "entrepreneur", label: "Entrepreneur" },
       { value: "etudiant", label: "Étudiant" },
       { value: "chomage", label: "Au chômage, sans emploi" },
-      { value: "entre-deux", label: "Entre deux" },
+      { value: "retraite", label: "Retraité" },
       { value: "autre", label: "Autre" },
     ],
   },
