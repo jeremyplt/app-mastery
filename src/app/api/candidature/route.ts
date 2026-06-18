@@ -301,9 +301,16 @@ export async function POST(req: NextRequest) {
       console.error("Envoi emails candidature échoué:", err);
     }
 
-    const redirectUrl = qualified
-      ? `/appel/reserver?firstName=${encodeURIComponent(firstName)}&email=${encodeURIComponent(email)}`
-      : `/appel/ressource`;
+    let redirectUrl: string;
+    if (qualified) {
+      const params = new URLSearchParams({ firstName, email });
+      if (body.utmSource) params.set("utm_source", body.utmSource);
+      if (body.utmMedium) params.set("utm_medium", body.utmMedium);
+      if (body.utmCampaign) params.set("utm_campaign", body.utmCampaign);
+      redirectUrl = `/appel/reserver?${params.toString()}`;
+    } else {
+      redirectUrl = `/appel/ressource`;
+    }
 
     return NextResponse.json({ qualified, redirectUrl });
   } catch (err) {

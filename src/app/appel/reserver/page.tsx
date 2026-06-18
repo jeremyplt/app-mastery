@@ -44,6 +44,13 @@ function ReserverContent() {
     const params = new URLSearchParams({ hide_gdpr_banner: "1" });
     if (firstName) params.set("name", firstName);
     if (email) params.set("email", email);
+    // UTM nativement supportés par Calendly : attribution jusqu'à la résa.
+    const utmSource = searchParams.get("utm_source");
+    const utmMedium = searchParams.get("utm_medium");
+    const utmCampaign = searchParams.get("utm_campaign");
+    if (utmSource) params.set("utm_source", utmSource);
+    if (utmMedium) params.set("utm_medium", utmMedium);
+    if (utmCampaign) params.set("utm_campaign", utmCampaign);
     return `${CALENDLY_BASE}?${params.toString()}`;
   })();
 

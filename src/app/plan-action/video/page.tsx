@@ -60,9 +60,7 @@ export default function PlanActionVideoPage() {
               </span>
             </div>
             <a
-              href="https://calendly.com/jeremypltpro/30min"
-              target="_blank"
-              rel="noopener noreferrer"
+              href="/appel?utm_source=plan-action-video&utm_medium=cta&utm_campaign=plan-action"
               className="inline-flex items-center justify-center gap-2 rounded-full bg-amber-500 px-8 py-4 text-lg font-bold text-white hover:bg-amber-400 transition-colors shadow-lg shadow-amber-500/25"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
