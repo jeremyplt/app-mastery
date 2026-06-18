@@ -9,8 +9,11 @@ import {
 
 const BREVO_LIST_ID = 20;
 
-// Ajoute / met à jour le contact dans la liste Brevo #20 (best-effort).
-async function addToBrevoList(
+// Crée / met à jour le contact SANS l'ajouter à une liste (best-effort).
+// On ajoute à la liste 20 seulement à la fin, une fois tous les attributs
+// posés, pour que l'automatisation Brevo (déclenchée à l'ajout à la liste)
+// voie déjà CANDIDATURE = qualifie/non-qualifie.
+async function upsertBrevoContact(
   email: string,
   firstName: string,
   phone: string,
@@ -18,7 +21,7 @@ async function addToBrevoList(
 ) {
   const apiKey = process.env.BREVO_API_KEY;
   if (!apiKey) {
-    console.error("BREVO_API_KEY manquante, contact non ajouté");
+    console.error("BREVO_API_KEY manquante, contact non créé");
     return;
   }
 
@@ -28,6 +31,7 @@ async function addToBrevoList(
   if (utm.medium) attributes.UTM_MEDIUM = utm.medium;
   if (utm.campaign) attributes.UTM_CAMPAIGN = utm.campaign;
 
+  // updateEnabled:true => crée si absent, met à jour si existant (pas d'erreur duplicate).
   const createRes = await fetch("https://api.brevo.com/v3/contacts", {
     method: "POST",
     headers: {
@@ -35,32 +39,10 @@ async function addToBrevoList(
       "Content-Type": "application/json",
       Accept: "application/json",
     },
-    body: JSON.stringify({
-      email,
-      updateEnabled: true,
-      listIds: [BREVO_LIST_ID],
-      attributes,
-    }),
+    body: JSON.stringify({ email, updateEnabled: true, attributes }),
   });
-
   if (!createRes.ok) {
-    const data = await createRes.json();
-    // Contact déjà existant : on l'ajoute à la liste séparément.
-    if (data.code === "duplicate_parameter") {
-      const listRes = await fetch(
-        `https://api.brevo.com/v3/contacts/lists/${BREVO_LIST_ID}/contacts/add`,
-        {
-          method: "POST",
-          headers: { "api-key": apiKey, "Content-Type": "application/json" },
-          body: JSON.stringify({ emails: [email] }),
-        },
-      );
-      if (!listRes.ok) {
-        console.error("Brevo add to list error:", JSON.stringify(await listRes.json()));
-      }
-    } else {
-      console.error("Brevo create contact error:", JSON.stringify(data));
-    }
+    console.error("Brevo upsert contact error:", JSON.stringify(await createRes.json()));
   }
 
   // SMS séparément (peut échouer si format refusé côté Brevo, sans bloquer).
@@ -80,6 +62,24 @@ async function addToBrevoList(
     if (!smsRes.ok) {
       console.error("Brevo SMS update error:", JSON.stringify(await smsRes.json()));
     }
+  }
+}
+
+// Ajoute le contact à la liste 20 (dernier appel => déclenche l'automatisation
+// avec tous les attributs déjà posés).
+async function addToAppelList(email: string) {
+  const apiKey = process.env.BREVO_API_KEY;
+  if (!apiKey) return;
+  const res = await fetch(
+    `https://api.brevo.com/v3/contacts/lists/${BREVO_LIST_ID}/contacts/add`,
+    {
+      method: "POST",
+      headers: { "api-key": apiKey, "Content-Type": "application/json" },
+      body: JSON.stringify({ emails: [email] }),
+    },
+  );
+  if (!res.ok) {
+    console.error("Brevo add to list 20 error:", JSON.stringify(await res.json()));
   }
 }
 
@@ -278,13 +278,16 @@ export async function POST(req: NextRequest) {
     }
 
     // Brevo + emails (best-effort, ne bloquent jamais la redirection).
+    // Ordre important : on pose les attributs (dont CANDIDATURE) AVANT
+    // d'ajouter à la liste 20, qui déclenche l'automatisation de relance.
     try {
-      await addToBrevoList(email, firstName, phone, {
+      await upsertBrevoContact(email, firstName, phone, {
         source: body.utmSource,
         medium: body.utmMedium,
         campaign: body.utmCampaign,
       });
       await tagBrevoQualification(email, qualified, score);
+      await addToAppelList(email);
     } catch (err) {
       console.error("Brevo indisponible pour candidature:", err);
     }
