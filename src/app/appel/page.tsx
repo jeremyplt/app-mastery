@@ -260,20 +260,46 @@ function CandidatureContent() {
                     {question.allowOther &&
                       (answers[question.id] === "autre" ||
                         (answers[question.id] || "").startsWith("autre:")) && (
-                        <div className="pt-1">
-                          <input
-                            type="text"
-                            autoFocus
-                            value={(answers[question.id] || "").replace(/^autre:\s?/, "")}
-                            onChange={(e) =>
-                              setAnswer(
-                                question.id,
-                                e.target.value ? `autre: ${e.target.value}` : "autre",
-                              )
-                            }
-                            placeholder="Précise..."
-                            className="w-full rounded-xl border-2 border-white/15 bg-white/5 px-5 py-4 text-lg font-medium text-white placeholder:text-gray-400 focus:border-amber-400 focus:outline-none"
-                          />
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: "auto" }}
+                          className="overflow-hidden"
+                        >
+                          <div className="mt-2">
+                            <label
+                              htmlFor="autre-input"
+                              className="block text-base font-bold text-amber-300"
+                            >
+                              Dis-moi en quelques mots
+                            </label>
+                            <div className="mt-2 flex items-center gap-3 border-b-2 border-amber-400/60 focus-within:border-amber-400">
+                              <svg className="h-5 w-5 shrink-0 text-amber-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z" />
+                              </svg>
+                              <input
+                                id="autre-input"
+                                type="text"
+                                autoFocus
+                                value={(answers[question.id] || "").replace(/^autre:\s?/, "")}
+                                onChange={(e) =>
+                                  setAnswer(
+                                    question.id,
+                                    e.target.value ? `autre: ${e.target.value}` : "autre",
+                                  )
+                                }
+                                onKeyDown={(e) => {
+                                  if (
+                                    e.key === "Enter" &&
+                                    isValidAnswer(question, answers[question.id] || "")
+                                  ) {
+                                    goNext();
+                                  }
+                                }}
+                                placeholder="Ex : freelance à mi-temps, en reconversion..."
+                                className="w-full bg-transparent py-3 text-lg font-medium text-white placeholder:text-gray-500 focus:outline-none"
+                              />
+                            </div>
+                          </div>
                           <button
                             onClick={() => {
                               if (!isValidAnswer(question, answers[question.id] || "")) {
@@ -282,11 +308,11 @@ function CandidatureContent() {
                               }
                               goNext();
                             }}
-                            className="mt-4 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 px-7 py-3.5 text-lg font-bold text-gray-950 transition-transform hover:scale-[1.03] active:scale-100"
+                            className="mt-5 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 px-7 py-3.5 text-lg font-bold text-gray-950 transition-transform hover:scale-[1.03] active:scale-100"
                           >
                             Continuer <span aria-hidden>→</span>
                           </button>
-                        </div>
+                        </motion.div>
                       )}
                   </div>
                 )}
