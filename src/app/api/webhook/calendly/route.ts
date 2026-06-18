@@ -89,6 +89,25 @@ export async function POST(req: NextRequest) {
       console.log(`Brevo contact updated: ${email} (${isBooking ? "CALL_BOOKED" : "CALL_CANCELED"})`);
     }
 
+    // Réservation : on sort le contact de la liste de relance pour ne plus
+    // lui envoyer la séquence "qualifié non booké".
+    const relanceListId = Number(process.env.BREVO_RELANCE_LIST_ID);
+    if (isBooking && relanceListId) {
+      const removeRes = await fetch(
+        `https://api.brevo.com/v3/contacts/lists/${relanceListId}/contacts/remove`,
+        {
+          method: "POST",
+          headers: { "api-key": BREVO_API_KEY, "Content-Type": "application/json" },
+          body: JSON.stringify({ emails: [email] }),
+        },
+      );
+      if (!removeRes.ok) {
+        console.error("Brevo remove from relance list error:", await removeRes.text());
+      } else {
+        console.log(`Brevo: ${email} retiré de la liste de relance (booké)`);
+      }
+    }
+
     return NextResponse.json({ received: true });
   } catch (err) {
     console.error("Calendly webhook error:", err);

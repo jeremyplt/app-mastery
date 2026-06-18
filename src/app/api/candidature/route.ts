@@ -83,6 +83,24 @@ async function addToBrevoList(
   }
 }
 
+// Ajoute le contact à une liste donnée (best-effort). Sert à alimenter
+// la séquence de relance des qualifiés non encore bookés.
+async function addToBrevoListById(email: string, listId: number) {
+  const apiKey = process.env.BREVO_API_KEY;
+  if (!apiKey) return;
+  const res = await fetch(
+    `https://api.brevo.com/v3/contacts/lists/${listId}/contacts/add`,
+    {
+      method: "POST",
+      headers: { "api-key": apiKey, "Content-Type": "application/json" },
+      body: JSON.stringify({ emails: [email] }),
+    },
+  );
+  if (!res.ok) {
+    console.error("Brevo add to relance list error:", JSON.stringify(await res.json()));
+  }
+}
+
 // Segmentation : marque le contact qualifié / non qualifié (best-effort).
 // Nécessite des attributs Brevo CANDIDATURE (texte) et CANDIDATURE_SCORE (nombre).
 // Si absents côté Brevo, l'appel échoue sans bloquer le reste.
@@ -285,6 +303,13 @@ export async function POST(req: NextRequest) {
         campaign: body.utmCampaign,
       });
       await tagBrevoQualification(email, qualified, score);
+
+      // Qualifié -> liste de relance "qualifiés non bookés" (séquence email).
+      // Le webhook Calendly les retire de cette liste dès qu'ils réservent.
+      const relanceListId = Number(process.env.BREVO_RELANCE_LIST_ID);
+      if (qualified && relanceListId) {
+        await addToBrevoListById(email, relanceListId);
+      }
     } catch (err) {
       console.error("Brevo indisponible pour candidature:", err);
     }
