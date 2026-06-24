@@ -6,6 +6,7 @@ import {
   isValidAnswer,
   type CandidatureAnswers,
 } from "@/lib/candidature";
+import { isOutOfRegion } from "@/lib/geo-filter";
 
 const BREVO_LIST_QUALIFIE = 20; // Appel (qualifiés)
 const BREVO_LIST_NON_QUALIFIE = 21; // Appel (non qualifiés)
@@ -146,6 +147,7 @@ async function sendAdminNotif(
   answers: CandidatureAnswers,
   score: number,
   qualified: boolean,
+  outOfRegion = false,
 ) {
   const rows = (Object.keys(answers) as (keyof CandidatureAnswers)[])
     .map((id) => {
@@ -158,11 +160,12 @@ async function sendAdminNotif(
   await sendEmail({
     to: [{ email: "contact@jeremypitault.com" }],
     replyTo: { name: firstName, email },
-    subject: `[Candidature ${qualified ? "QUALIFIÉ ✅" : "non qualifié"}] ${firstName} (${score} pts)`,
+    subject: `[Candidature ${qualified ? "QUALIFIÉ ✅" : outOfRegion ? "hors zone 🌍" : "non qualifié"}] ${firstName} (${score} pts)`,
     tags: ["candidature-admin"],
     htmlContent: `
       <div style="font-family:sans-serif;max-width:600px;margin:0 auto;padding:24px">
         <h2 style="font-size:18px">Nouvelle candidature ${qualified ? "qualifiée" : "non qualifiée"}</h2>
+        ${outOfRegion ? `<p style="margin:0 0 8px;padding:8px 12px;background:#fff3cd;border-radius:6px"><strong>⚠️ Filtrée hors zone</strong> (indicatif / IP hors cible). Score réel : ${score} pts.</p>` : ""}
         <p style="margin:0 0 4px"><strong>Prénom :</strong> ${firstName}</p>
         <p style="margin:0 0 4px"><strong>Email :</strong> ${email}</p>
         <p style="margin:0 0 4px"><strong>Téléphone :</strong> ${phone}</p>
@@ -245,7 +248,17 @@ export async function POST(req: NextRequest) {
     const budgetReady =
       body.budgetReady === "oui" ? "oui" : body.budgetReady === "non" ? "non" : null;
 
-    const { score, qualified, rescue } = qualify(answers, budgetReady);
+    const base = qualify(answers, budgetReady);
+    const { score } = base;
+
+    // Filtre géographique (hors cible) : Afrique subsaharienne -> non qualifié,
+    // silencieusement. On ne propose pas le rattrapage budget et on route vers
+    // la ressource gratuite, sans jamais mentionner la raison au prospect.
+    const ipCountry = req.headers.get("x-vercel-ip-country");
+    const outOfRegion = isOutOfRegion(phone, ipCountry);
+
+    const qualified = outOfRegion ? false : base.qualified;
+    const rescue = outOfRegion ? false : base.rescue;
 
     // Rattrapage : on demande d'abord le budget avant de décider.
     // Pas de stockage / email tant que la réponse budget n'est pas donnée.
@@ -296,7 +309,7 @@ export async function POST(req: NextRequest) {
 
     try {
       await Promise.all([
-        sendAdminNotif(firstName, email, phone, answers, score, qualified),
+        sendAdminNotif(firstName, email, phone, answers, score, qualified, outOfRegion),
         sendProspectEmail(firstName, email, qualified),
       ]);
     } catch (err) {
