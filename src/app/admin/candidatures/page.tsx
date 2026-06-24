@@ -55,6 +55,14 @@ export default function CandidaturesAdmin() {
   const [error, setError] = useState<string | null>(null);
   const [filter, setFilter] = useState<"all" | "qualified" | "unqualified">("all");
   const [open, setOpen] = useState<string | null>(null);
+  const [copied, setCopied] = useState<string | null>(null);
+
+  function copy(text: string, key: string) {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(key);
+      setTimeout(() => setCopied((c) => (c === key ? null : c)), 1500);
+    });
+  }
 
   useEffect(() => {
     fetch("/api/admin/check")
@@ -156,11 +164,57 @@ export default function CandidaturesAdmin() {
                 >
                   <div className="min-w-0">
                     <p className="truncate text-lg font-bold text-white">
-                      {c.first_name}{" "}
-                      <span className="font-medium text-gray-400">{c.email}</span>
+                      {c.first_name}
                     </p>
-                    <p className="mt-0.5 text-sm font-medium text-gray-400">
-                      {c.phone ? `${c.phone} · ` : ""}
+                    <div className="mt-1 flex flex-wrap items-center gap-2">
+                      <span
+                        role="button"
+                        tabIndex={0}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          copy(c.email, `${c.id}-email`);
+                        }}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            copy(c.email, `${c.id}-email`);
+                          }
+                        }}
+                        className="inline-flex items-center gap-1.5 rounded-md bg-white/10 px-2.5 py-1 text-sm font-semibold text-gray-100 transition-colors hover:bg-white/20"
+                        title="Copier l'email"
+                      >
+                        <span className="truncate">{c.email}</span>
+                        <span className="text-xs text-amber-300">
+                          {copied === `${c.id}-email` ? "Copié ✓" : "Copier"}
+                        </span>
+                      </span>
+                      {c.phone && (
+                        <span
+                          role="button"
+                          tabIndex={0}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            copy(c.phone!, `${c.id}-phone`);
+                          }}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter" || e.key === " ") {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              copy(c.phone!, `${c.id}-phone`);
+                            }
+                          }}
+                          className="inline-flex items-center gap-1.5 rounded-md bg-white/10 px-2.5 py-1 text-sm font-semibold text-gray-100 transition-colors hover:bg-white/20"
+                          title="Copier le numéro"
+                        >
+                          <span>{c.phone}</span>
+                          <span className="text-xs text-amber-300">
+                            {copied === `${c.id}-phone` ? "Copié ✓" : "Copier"}
+                          </span>
+                        </span>
+                      )}
+                    </div>
+                    <p className="mt-1 text-sm font-medium text-gray-400">
                       {formatDate(c.created_at)}
                       {c.utm_source ? ` · ${c.utm_source}` : ""}
                     </p>
