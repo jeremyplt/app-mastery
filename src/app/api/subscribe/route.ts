@@ -58,6 +58,51 @@ async function sendAppelEmail(apiKey: string, email: string, firstName?: string)
   return res.ok;
 }
 
+async function sendVslEmail(apiKey: string, email: string, firstName?: string) {
+  const greeting = firstName ? `Salut ${firstName},` : "Salut,";
+  const htmlContent = `
+<p>${greeting}</p>
+
+<p>Merci de t'être inscrit à la conférence privée.</p>
+
+<p>Voici ton accès direct : <a href="https://www.jeremypitault.com/conference/live">Accéder à la conférence</a></p>
+
+<p>Dedans, tu vas découvrir :</p>
+
+<ul>
+  <li>Pourquoi 93% des applications ne sont jamais rentables (et comment éviter ce piège)</li>
+  <li>Les 3 piliers indispensables pour générer jusqu'à 10 000€ par mois avec une seule app</li>
+  <li>La méthode exacte pour créer ton app avec l'IA en moins d'une semaine, sans coder</li>
+</ul>
+
+<p>Regarde-la en entier. À la fin, tu sauras exactement quoi faire pour lancer ton app rentable.</p>
+
+<p>À très vite,<br>Jeremy</p>
+
+<p>P.S. Si tu as des questions, réponds directement à cet email. Je lis tout.</p>
+`;
+
+  const res = await fetch("https://api.brevo.com/v3/smtp/email", {
+    method: "POST",
+    headers: {
+      "api-key": apiKey,
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({
+      sender: { name: "Jeremy Pitault", email: "contact@jeremypitault.com" },
+      to: [{ email }],
+      subject: "Ton accès à la conférence privée",
+      htmlContent,
+      tags: ["vsl-conference"],
+    }),
+  });
+
+  const body = await res.text();
+  console.log(`Brevo vsl email to ${email}: ${res.status} ${body}`);
+  return res.ok;
+}
+
 async function sendPlanActionEmail(apiKey: string, email: string, firstName?: string) {
   const greeting = firstName ? `Salut ${firstName},` : "Salut,";
   const htmlContent = `
@@ -270,7 +315,9 @@ export async function POST(req: NextRequest) {
     }
 
     // Step 2: Send first email instantly via transactional API
-    if (source === "plan-action") {
+    if (source === "vsl") {
+      await sendVslEmail(BREVO_API_KEY, email, firstName);
+    } else if (source === "plan-action") {
       await sendPlanActionEmail(BREVO_API_KEY, email, firstName);
     } else if (source === "appel") {
       await sendAppelEmail(BREVO_API_KEY, email, firstName);
