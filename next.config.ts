@@ -1,6 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  experimental: {
+    // Inline le CSS dans le <head> : supprime la requête CSS séparée
+    // et donc le flash de page sans styles sur connexions lentes.
+    inlineCss: true,
+  },
   async rewrites() {
     return [
       {

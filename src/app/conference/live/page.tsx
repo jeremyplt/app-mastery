@@ -95,12 +95,12 @@ function VslPlayer() {
         {/* Overlay initial : la vidéo tourne en muet, clic = relancer avec le son */}
         {!soundOn && (
           <div className="absolute inset-0 z-10 flex items-center justify-center">
-            <div className="mx-4 flex flex-col items-center gap-4 rounded-2xl bg-red-600/85 px-10 py-8 text-center shadow-2xl shadow-red-950/50 backdrop-blur-sm">
-              <p className="text-xl sm:text-2xl font-black tracking-tight text-white">
+            <div className="mx-4 flex flex-col items-center gap-2 sm:gap-4 rounded-xl sm:rounded-2xl bg-red-600/85 px-5 py-4 sm:px-10 sm:py-8 text-center shadow-2xl shadow-red-950/50 backdrop-blur-sm">
+              <p className="text-base sm:text-2xl font-black tracking-tight text-white">
                 La vidéo a déjà commencé
               </p>
               <svg
-                className="h-12 w-12 text-white"
+                className="h-7 w-7 sm:h-12 sm:w-12 text-white"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth={1.8}
@@ -112,7 +112,7 @@ function VslPlayer() {
                   d="M17.25 9.75L19.5 12m0 0l2.25 2.25M19.5 12l2.25-2.25M19.5 12l-2.25 2.25m-10.5-6l4.72-4.72a.75.75 0 011.28.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.7-.51-1.94-1.36a9.02 9.02 0 010-4.78c.25-.85 1.06-1.36 1.94-1.36h2.24z"
                 />
               </svg>
-              <p className="text-lg sm:text-xl font-bold text-white">Clique pour écouter</p>
+              <p className="text-sm sm:text-xl font-bold text-white">Clique pour écouter</p>
             </div>
           </div>
         )}
