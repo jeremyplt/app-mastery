@@ -1,11 +1,12 @@
 "use client";
 
-import { Suspense, useEffect, useRef, useState } from "react";
+import { Suspense, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { useSearchParams } from "next/navigation";
 
-const VSL_VIDEO_ID = "1ab63722-1ef3-4c0d-b585-19514fab0f61";
-const VSL_LIBRARY_ID = "613852";
+// Flux direct Bunny Stream (lecture native, aucun contrôle affiché)
+const VSL_MP4_URL =
+  "https://vz-0fb759fa-b02.b-cdn.net/1ab63722-1ef3-4c0d-b585-19514fab0f61/play_720p.mp4";
 
 // Courbe de progression non linéaire : avance vite au début, ralentit vers la fin.
 // progress = log(1 + k·x) / log(1 + k), avec x = temps réel / durée totale.
@@ -17,99 +18,162 @@ function curvedProgress(ratio: number): number {
 }
 
 function VslPlayer() {
-  const iframeRef = useRef<HTMLIFrameElement>(null);
-  const [playing, setPlaying] = useState(false);
-  const [started, setStarted] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  // La vidéo démarre automatiquement en muet. Le premier clic relance du début avec le son.
+  const [soundOn, setSoundOn] = useState(false);
+  const [playing, setPlaying] = useState(true);
   const [progress, setProgress] = useState(0);
 
-  function sendCommand(method: string, value?: string) {
-    iframeRef.current?.contentWindow?.postMessage(
-      JSON.stringify({ context: "player.js", version: "0.0.11", method, value }),
-      "*"
-    );
-  }
+  function handleClick() {
+    const v = videoRef.current;
+    if (!v) return;
 
-  useEffect(() => {
-    function onMessage(e: MessageEvent) {
-      if (!e.origin.includes("mediadelivery.net")) return;
-      let data: { context?: string; event?: string; value?: { seconds?: number; duration?: number } };
-      try {
-        data = typeof e.data === "string" ? JSON.parse(e.data) : e.data;
-      } catch {
-        return;
-      }
-      if (data?.context !== "player.js") return;
-
-      if (data.event === "ready") {
-        // S'abonner aux events du player Bunny (protocole player.js)
-        ["timeupdate", "play", "pause", "ended"].forEach((evt) =>
-          sendCommand("addEventListener", evt)
-        );
-      } else if (data.event === "timeupdate") {
-        const seconds = data.value?.seconds ?? 0;
-        const duration = data.value?.duration ?? 0;
-        if (duration > 0) setProgress(curvedProgress(seconds / duration));
-      } else if (data.event === "play") {
-        setPlaying(true);
-        setStarted(true);
-      } else if (data.event === "pause") {
-        setPlaying(false);
-      } else if (data.event === "ended") {
-        setPlaying(false);
-        setProgress(1);
-      }
+    if (!soundOn) {
+      // Relance du début avec le son
+      v.muted = false;
+      v.currentTime = 0;
+      v.play();
+      setSoundOn(true);
+      return;
     }
 
-    window.addEventListener("message", onMessage);
-    return () => window.removeEventListener("message", onMessage);
-  }, []);
-
-  function togglePlay() {
-    if (playing) {
-      sendCommand("pause");
+    if (v.paused) {
+      v.play();
     } else {
-      sendCommand("play");
+      v.pause();
+    }
+  }
+
+  function toggleFullscreen(e: React.MouseEvent) {
+    e.stopPropagation();
+    const container = containerRef.current;
+    const video = videoRef.current as
+      | (HTMLVideoElement & { webkitEnterFullscreen?: () => void })
+      | null;
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+    } else if (container?.requestFullscreen) {
+      container.requestFullscreen();
+    } else if (video?.webkitEnterFullscreen) {
+      // Fallback iOS Safari
+      video.webkitEnterFullscreen();
     }
   }
 
   return (
     <div className="isolate overflow-hidden rounded-2xl bg-gray-950 p-2 outline outline-red-500/20">
-      <div className="relative rounded-xl overflow-hidden aspect-video">
-        <iframe
-          ref={iframeRef}
-          src={`https://iframe.mediadelivery.net/embed/${VSL_LIBRARY_ID}/${VSL_VIDEO_ID}?autoplay=false&preload=true&responsive=true`}
+      <div
+        ref={containerRef}
+        className="relative rounded-xl overflow-hidden aspect-video cursor-pointer select-none bg-black"
+        onClick={handleClick}
+        onContextMenu={(e) => e.preventDefault()}
+        role="button"
+        aria-label={!soundOn ? "Activer le son" : playing ? "Mettre en pause" : "Reprendre la lecture"}
+      >
+        <video
+          ref={videoRef}
+          src={VSL_MP4_URL}
           className="absolute inset-0 w-full h-full"
-          allow="accelerometer; gyroscope; autoplay; encrypted-media"
+          autoPlay
+          muted
+          playsInline
+          preload="auto"
+          disablePictureInPicture
+          onTimeUpdate={(e) => {
+            const v = e.currentTarget;
+            if (v.duration > 0) setProgress(curvedProgress(v.currentTime / v.duration));
+          }}
+          onPlay={() => setPlaying(true)}
+          onPause={() => setPlaying(false)}
+          onEnded={() => {
+            setPlaying(false);
+            setProgress(1);
+          }}
         />
-        {/* Overlay : bloque les contrôles natifs, seul le clic play/pause est possible */}
-        <div
-          className="absolute inset-0 z-10 cursor-pointer select-none"
-          onClick={togglePlay}
-          role="button"
-          aria-label={playing ? "Mettre en pause" : "Lire la vidéo"}
-        >
-          {!playing && (
-            <div className="absolute inset-0 flex items-center justify-center bg-black/30">
-              <span className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-r from-red-600 to-red-500 shadow-lg shadow-red-600/40 transition-transform hover:scale-105">
-                <svg className="ml-1 h-9 w-9 text-white" fill="currentColor" viewBox="0 0 24 24">
+
+        {/* Overlay initial : la vidéo tourne en muet, clic = relancer avec le son */}
+        {!soundOn && (
+          <div className="absolute inset-0 z-10 flex items-center justify-center">
+            <div className="mx-4 flex flex-col items-center gap-4 rounded-2xl bg-red-600/85 px-10 py-8 text-center shadow-2xl shadow-red-950/50 backdrop-blur-sm">
+              <p className="text-xl sm:text-2xl font-black tracking-tight text-white">
+                La vidéo a déjà commencé
+              </p>
+              <svg
+                className="h-12 w-12 text-white"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={1.8}
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M17.25 9.75L19.5 12m0 0l2.25 2.25M19.5 12l2.25-2.25M19.5 12l-2.25 2.25m-10.5-6l4.72-4.72a.75.75 0 011.28.53v15.88a.75.75 0 01-1.28.53l-4.72-4.72H4.51c-.88 0-1.7-.51-1.94-1.36a9.02 9.02 0 010-4.78c.25-.85 1.06-1.36 1.94-1.36h2.24z"
+                />
+              </svg>
+              <p className="text-lg sm:text-xl font-bold text-white">Clique pour écouter</p>
+            </div>
+          </div>
+        )}
+
+        {/* Overlay pause */}
+        {soundOn && !playing && (
+          <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/30">
+            <span className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-r from-red-600 to-red-500 shadow-lg shadow-red-600/40 transition-transform hover:scale-105">
+              <svg className="ml-1 h-9 w-9 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M8 5.14v13.72c0 .8.87 1.3 1.56.88l10.54-6.86a1.05 1.05 0 000-1.76L9.56 4.26A1.04 1.04 0 008 5.14z" />
+              </svg>
+            </span>
+          </div>
+        )}
+
+        {/* Contrôles minimaux : play/pause + plein écran */}
+        {soundOn && (
+          <div className="absolute inset-x-0 bottom-1.5 z-20 flex items-center justify-between px-4 pb-2">
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleClick();
+              }}
+              aria-label={playing ? "Mettre en pause" : "Lire"}
+              className="text-white/90 hover:text-white transition-colors drop-shadow-lg"
+            >
+              {playing ? (
+                <svg className="h-7 w-7" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M7 5.5A1.5 1.5 0 018.5 4h1A1.5 1.5 0 0111 5.5v13A1.5 1.5 0 019.5 20h-1A1.5 1.5 0 017 18.5v-13zm6 0A1.5 1.5 0 0114.5 4h1A1.5 1.5 0 0117 5.5v13a1.5 1.5 0 01-1.5 1.5h-1a1.5 1.5 0 01-1.5-1.5v-13z" />
+                </svg>
+              ) : (
+                <svg className="h-7 w-7" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M8 5.14v13.72c0 .8.87 1.3 1.56.88l10.54-6.86a1.05 1.05 0 000-1.76L9.56 4.26A1.04 1.04 0 008 5.14z" />
                 </svg>
-              </span>
-              {started && (
-                <span className="absolute bottom-4 text-sm font-semibold text-white/90">
-                  Clique pour reprendre
-                </span>
               )}
-            </div>
-          )}
+            </button>
+            <button
+              type="button"
+              onClick={toggleFullscreen}
+              aria-label="Plein écran"
+              className="text-white/90 hover:text-white transition-colors drop-shadow-lg"
+            >
+              <svg className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M3.75 9V5.25A1.5 1.5 0 015.25 3.75H9m6 0h3.75a1.5 1.5 0 011.5 1.5V9m0 6v3.75a1.5 1.5 0 01-1.5 1.5H15m-6 0H5.25a1.5 1.5 0 01-1.5-1.5V15"
+                />
+              </svg>
+            </button>
+          </div>
+        )}
+
+        {/* Barre de progression custom, directement sur la vidéo */}
+        <div className="absolute inset-x-0 bottom-0 z-20 h-1.5 bg-white/20 pointer-events-none">
+          <div
+            className="h-full bg-gradient-to-r from-red-600 to-red-500 transition-[width] duration-500 ease-linear"
+            style={{ width: `${progress * 100}%` }}
+          />
         </div>
-      </div>
-      {/* Barre de progression custom */}
-      <div className="mt-2 h-2 rounded-full bg-white/10 overflow-hidden">
-        <div
-          className="h-full rounded-full bg-gradient-to-r from-red-600 to-red-500 transition-[width] duration-500 ease-linear"
-          style={{ width: `${progress * 100}%` }}
-        />
       </div>
     </div>
   );
@@ -144,7 +208,7 @@ function ConferenceLiveContent() {
         {/* Center content */}
         <div className="flex min-h-screen flex-col justify-center min-w-0">
           <section className="relative py-10 sm:py-16">
-            <div className="mx-auto w-full max-w-4xl px-4 sm:px-6 lg:px-8">
+            <div className="mx-auto w-full max-w-5xl px-4 sm:px-6 lg:px-8">
               <motion.div
                 className="text-center"
                 initial={{ opacity: 0, y: 20 }}
