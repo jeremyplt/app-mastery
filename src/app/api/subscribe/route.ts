@@ -130,7 +130,7 @@ async function sendPlanActionEmail(apiKey: string, email: string, firstName?: st
 
 <p>Je t'en parle demain.</p>
 
-<p>En attendant, si tu as déjà une app ou un projet en tête et que tu veux un regard extérieur, je propose un appel découverte. On fait le point sur ton projet ensemble, et tu repars avec les prochaines étapes claires. Réponds à quelques questions et choisis ton créneau :</p>
+<p>En attendant, si tu as déjà une app ou un projet en tête, je propose un appel découverte. On fait le point sur ton projet et on voit si on peut travailler ensemble. Réponds à quelques questions et choisis ton créneau :</p>
 
 <p><a href="https://www.jeremypitault.com/appel?utm_source=email&utm_medium=email&utm_campaign=plan-action">Réserver mon appel découverte</a></p>
 
