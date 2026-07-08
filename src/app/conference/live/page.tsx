@@ -22,7 +22,7 @@ const POSITION_KEY = "vsl_position";
 
 // Courbe de progression non linéaire : avance vite au début, ralentit vers la fin.
 // progress = log(1 + k·x) / log(1 + k), avec x = temps réel / durée totale.
-const PROGRESS_CURVE_K = 300;
+const PROGRESS_CURVE_K = 150;
 
 function curvedProgress(ratio: number): number {
   const clamped = Math.min(Math.max(ratio, 0), 1);
@@ -35,12 +35,27 @@ function VslPlayer({ onCtaUnlock }: { onCtaUnlock: () => void }) {
   // La vidéo démarre automatiquement en muet. Le premier clic relance du début avec le son.
   const [soundOn, setSoundOn] = useState(false);
   const [playing, setPlaying] = useState(true);
-  const [progress, setProgress] = useState(0);
+  const progressBarRef = useRef<HTMLDivElement>(null);
   const [ended, setEnded] = useState(false);
   // Écran de choix affiché quand le prospect revient avec une position sauvegardée
   const [resumePrompt, setResumePrompt] = useState(false);
   const restoredRef = useRef(false);
   const lastSaveRef = useRef(0);
+
+  // Barre de progression animée en continu (60fps) pour un rendu parfaitement fluide
+  useEffect(() => {
+    let raf: number;
+    const tick = () => {
+      const v = videoRef.current;
+      const bar = progressBarRef.current;
+      if (v && bar && v.duration > 0) {
+        bar.style.width = `${curvedProgress(v.currentTime / v.duration) * 100}%`;
+      }
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, []);
 
   useEffect(() => {
     const v = videoRef.current;
@@ -174,7 +189,6 @@ function VslPlayer({ onCtaUnlock }: { onCtaUnlock: () => void }) {
           }}
           onTimeUpdate={(e) => {
             const v = e.currentTarget;
-            if (v.duration > 0) setProgress(curvedProgress(v.currentTime / v.duration));
             if (!v.muted && v.currentTime >= CTA_REVEAL_SECONDS) onCtaUnlock();
             // Sauvegarde de la position (throttle ~3s), uniquement si le son est activé :
             // l'autoplay muet ne compte pas comme un vrai visionnage commencé
@@ -191,7 +205,6 @@ function VslPlayer({ onCtaUnlock }: { onCtaUnlock: () => void }) {
           onEnded={() => {
             setPlaying(false);
             setEnded(true);
-            setProgress(1);
             // Visionnage terminé : le prochain passage repart du début
             localStorage.removeItem(POSITION_KEY);
             lastSaveRef.current = 0;
@@ -334,8 +347,9 @@ function VslPlayer({ onCtaUnlock }: { onCtaUnlock: () => void }) {
         {/* Barre de progression custom, directement sur la vidéo */}
         <div className="absolute inset-x-0 bottom-0 z-20 h-1.5 bg-white/20 pointer-events-none">
           <div
-            className="h-full bg-gradient-to-r from-red-600 to-red-500 transition-[width] duration-500 ease-linear"
-            style={{ width: `${progress * 100}%` }}
+            ref={progressBarRef}
+            className="h-full bg-gradient-to-r from-red-600 to-red-500"
+            style={{ width: "0%" }}
           />
         </div>
       </div>
