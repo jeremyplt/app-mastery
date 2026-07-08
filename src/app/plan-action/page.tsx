@@ -2,6 +2,7 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { motion } from "framer-motion";
+import AdDisclaimer from "@/components/AdDisclaimer";
 import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { isValidPhoneNumber, parsePhoneNumber } from "libphonenumber-js";
@@ -378,6 +379,7 @@ function PlanActionContent() {
           }}
         />
       </div>
+      <AdDisclaimer />
     </div>
   );
 }

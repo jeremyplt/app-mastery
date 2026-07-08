@@ -2,6 +2,7 @@
 
 import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import AdDisclaimer from "@/components/AdDisclaimer";
 import { useSearchParams } from "next/navigation";
 import posthog from "posthog-js";
 import type Hls from "hls.js";
@@ -518,6 +519,7 @@ function ConferenceLiveContent() {
           }}
         />
       </div>
+      <AdDisclaimer />
     </div>
   );
 }

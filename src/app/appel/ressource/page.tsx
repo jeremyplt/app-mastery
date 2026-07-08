@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import AdDisclaimer from "@/components/AdDisclaimer";
 
 const RESOURCES = [
   {
@@ -60,6 +61,7 @@ export default function RessourcePage() {
           </p>
         </motion.div>
       </div>
+      <AdDisclaimer />
     </div>
   );
 }

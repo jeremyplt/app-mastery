@@ -2,6 +2,7 @@
 
 import { Suspense, useEffect } from "react";
 import { motion } from "framer-motion";
+import AdDisclaimer from "@/components/AdDisclaimer";
 import { useSearchParams } from "next/navigation";
 import posthog from "posthog-js";
 import { generateEventId, metaTrackingFields, trackMeta } from "@/lib/meta-pixel";
@@ -136,6 +137,7 @@ function ReserverContent() {
           </p>
         </motion.div>
       </div>
+      <AdDisclaimer />
     </div>
   );
 }

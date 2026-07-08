@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import AdDisclaimer from "@/components/AdDisclaimer";
 
 const PLAN_ACTION_VIDEO_ID = "a1fa42ba-337e-4cf1-b0b7-24fc7ab5be24";
 
@@ -74,6 +75,7 @@ export default function PlanActionVideoPage() {
           </motion.div>
         </motion.div>
       </div>
+      <AdDisclaimer />
     </div>
   );
 }

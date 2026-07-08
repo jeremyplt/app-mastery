@@ -2,6 +2,7 @@
 
 import { Suspense, useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import AdDisclaimer from "@/components/AdDisclaimer";
 import { useSearchParams } from "next/navigation";
 import posthog from "posthog-js";
 import { isValidPhoneNumber, parsePhoneNumber } from "libphonenumber-js";
@@ -520,6 +521,7 @@ function CandidatureContent() {
           </AnimatePresence>
         </div>
       </div>
+      <AdDisclaimer />
     </div>
   );
 }

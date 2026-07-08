@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import AdDisclaimer from "@/components/AdDisclaimer";
 
 export default function MerciPage() {
   return (
@@ -93,6 +94,7 @@ export default function MerciPage() {
 
         </motion.div>
       </div>
+      <AdDisclaimer />
     </div>
   );
 }
