@@ -9,6 +9,7 @@ import { isValidPhoneNumber, parsePhoneNumber } from "libphonenumber-js";
 import type { CountryCode } from "libphonenumber-js";
 import { COUNTRY_CODES, detectCountry } from "@/lib/phone-countries";
 import { looksLikeFakePattern } from "@/lib/phone-validation";
+import posthog from "posthog-js";
 import { generateEventId, metaTrackingFields, trackMeta } from "@/lib/meta-pixel";
 
 export default function GuidePage() {
@@ -115,6 +116,13 @@ export default function GuidePage() {
       }
 
       trackMeta("Lead", { content_name: slug }, metaEventId);
+
+      posthog.capture("guide_optin_submitted", {
+        guide: slug,
+        utm_source: searchParams.get("utm_source") || undefined,
+        utm_medium: searchParams.get("utm_medium") || undefined,
+        utm_campaign: searchParams.get("utm_campaign") || undefined,
+      });
 
       router.push(`/guide/${slug}/merci`);
     } catch (err) {

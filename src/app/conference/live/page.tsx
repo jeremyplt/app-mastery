@@ -30,6 +30,10 @@ function curvedProgress(ratio: number): number {
   return Math.log1p(PROGRESS_CURVE_K * clamped) / Math.log1p(PROGRESS_CURVE_K);
 }
 
+// Paliers de visionnage envoyés à PostHog (secondes). 1110 = 18min30, le
+// moment où le CTA se débloque.
+const WATCH_MILESTONES = [60, 300, 600, 1110];
+
 function VslPlayer({ onCtaUnlock }: { onCtaUnlock: () => void }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -42,6 +46,7 @@ function VslPlayer({ onCtaUnlock }: { onCtaUnlock: () => void }) {
   const [resumePrompt, setResumePrompt] = useState(false);
   const restoredRef = useRef(false);
   const lastSaveRef = useRef(0);
+  const milestonesFiredRef = useRef<Set<number>>(new Set());
 
   // Barre de progression animée en continu (60fps) pour un rendu parfaitement fluide
   useEffect(() => {
@@ -108,6 +113,7 @@ function VslPlayer({ onCtaUnlock }: { onCtaUnlock: () => void }) {
       v.currentTime = 0;
       v.play();
       setSoundOn(true);
+      posthog.capture("vsl_watch_started", { resumed: false });
       return;
     }
 
@@ -126,6 +132,7 @@ function VslPlayer({ onCtaUnlock }: { onCtaUnlock: () => void }) {
     v.play();
     setSoundOn(true);
     setResumePrompt(false);
+    posthog.capture("vsl_watch_started", { resumed: true, from_seconds: Math.round(v.currentTime) });
   }
 
   function restartFromBeginning(e: React.MouseEvent) {
@@ -135,10 +142,13 @@ function VslPlayer({ onCtaUnlock }: { onCtaUnlock: () => void }) {
     v.muted = false;
     v.currentTime = 0;
     lastSaveRef.current = 0;
+    // Recommence de zéro : les paliers peuvent être réémis pour ce visionnage.
+    milestonesFiredRef.current.clear();
     localStorage.setItem(POSITION_KEY, "0");
     v.play();
     setSoundOn(true);
     setResumePrompt(false);
+    posthog.capture("vsl_watch_started", { resumed: false, restarted: true });
   }
 
   function toggleFullscreen(e: React.MouseEvent) {
@@ -180,9 +190,14 @@ function VslPlayer({ onCtaUnlock }: { onCtaUnlock: () => void }) {
             const v = e.currentTarget;
             const saved = parseFloat(localStorage.getItem(POSITION_KEY) || "0");
             if (saved > 1 && saved < v.duration - 5) {
-              // Le prospect revient : on se place où il en était et on lui laisse le choix
+              // Le prospect revient : on se place où il en était et on lui laisse le choix.
+              // Les paliers déjà dépassés ne sont pas réémis (déjà comptés à la 1ère session).
+              WATCH_MILESTONES.forEach((m) => {
+                if (saved >= m) milestonesFiredRef.current.add(m);
+              });
               v.currentTime = saved;
               setResumePrompt(true);
+              posthog.capture("vsl_resume_prompt_shown", { from_seconds: Math.round(saved) });
             } else {
               // Première visite : autoplay en muet
               v.play().catch(() => {});
@@ -191,6 +206,19 @@ function VslPlayer({ onCtaUnlock }: { onCtaUnlock: () => void }) {
           onTimeUpdate={(e) => {
             const v = e.currentTarget;
             if (!v.muted && v.currentTime >= CTA_REVEAL_SECONDS) onCtaUnlock();
+            // Paliers de visionnage (son activé uniquement : l'autoplay muet
+            // ne compte pas comme un vrai visionnage)
+            if (!v.muted) {
+              for (const m of WATCH_MILESTONES) {
+                if (v.currentTime >= m && !milestonesFiredRef.current.has(m)) {
+                  milestonesFiredRef.current.add(m);
+                  posthog.capture("vsl_video_progress", {
+                    seconds: m,
+                    percent: v.duration > 0 ? Math.round((m / v.duration) * 100) : undefined,
+                  });
+                }
+              }
+            }
             // Sauvegarde de la position (throttle ~3s), uniquement si le son est activé :
             // l'autoplay muet ne compte pas comme un vrai visionnage commencé
             if (!v.muted && Math.abs(v.currentTime - lastSaveRef.current) > 3) {
@@ -203,9 +231,10 @@ function VslPlayer({ onCtaUnlock }: { onCtaUnlock: () => void }) {
             setEnded(false);
           }}
           onPause={() => setPlaying(false)}
-          onEnded={() => {
+          onEnded={(e) => {
             setPlaying(false);
             setEnded(true);
+            if (!e.currentTarget.muted) posthog.capture("vsl_video_completed");
             // Visionnage terminé : le prochain passage repart du début
             localStorage.removeItem(POSITION_KEY);
             lastSaveRef.current = 0;

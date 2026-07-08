@@ -3,9 +3,34 @@
 import Script from "next/script";
 import { Suspense, useEffect, useRef } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
+import posthog from "posthog-js";
 import { persistFbclid } from "@/lib/meta-pixel";
 
 const PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID;
+
+// Mesure la part de visiteurs dont le pixel Meta est bloqué (adblocker,
+// Firefox strict...). PostHog passe par le proxy /ingest donc survit là où
+// le pixel meurt : l'événement quantifie ce que la CAPI serveur rattrape.
+// Détection : le vrai fbevents.js définit fbq.callMethod ; le stub du
+// snippet ne l'a pas. 6s après le montage, stub seul = script bloqué.
+function MetaPixelBlockedCheck() {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      try {
+        if (sessionStorage.getItem("meta_pixel_checked")) return;
+        sessionStorage.setItem("meta_pixel_checked", "1");
+        const fbq = window.fbq as unknown as { callMethod?: unknown } | undefined;
+        const blocked = !fbq || typeof fbq.callMethod !== "function";
+        if (blocked) posthog.capture("meta_pixel_blocked");
+      } catch {
+        // sessionStorage indisponible (navigation privée stricte) : on ignore.
+      }
+    }, 6000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  return null;
+}
 
 // PageView manuel aux navigations SPA (App Router : le snippet de base ne se
 // recharge pas entre les pages). Le PageView du chargement initial est envoyé
@@ -55,6 +80,7 @@ fbq('track','PageView');
       <Suspense fallback={null}>
         <MetaPixelPageView />
       </Suspense>
+      <MetaPixelBlockedCheck />
     </>
   );
 }

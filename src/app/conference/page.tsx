@@ -62,22 +62,29 @@ function ConferenceContent() {
     }
   }
 
+  // Erreur de validation : message affiché + événement PostHog pour mesurer
+  // la friction du formulaire (quel champ bloque les prospects).
+  function failValidation(reason: string, message: string) {
+    posthog.capture("vsl_optin_error", { reason });
+    setError(message);
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
 
     if (!firstName.trim()) {
-      setError("Entre ton prénom");
+      failValidation("first_name", "Entre ton prénom");
       return;
     }
 
     if (!validateEmail(email)) {
-      setError("Entre une adresse email valide");
+      failValidation("email", "Entre une adresse email valide");
       return;
     }
 
     if (!validatePhone(phone)) {
-      setError("Entre un numéro de téléphone valide");
+      failValidation("phone", "Entre un numéro de téléphone valide");
       return;
     }
 
@@ -85,11 +92,11 @@ function ConferenceContent() {
       const parsedFinal = parsePhoneNumber(phone, currentCountry);
       if (parsedFinal) {
         if (parsedFinal.country === "FR" && !/^[67]/.test(parsedFinal.nationalNumber)) {
-          setError("Pour la France, utilise un numéro mobile (06 ou 07).");
+          failValidation("phone_fr_mobile", "Pour la France, utilise un numéro mobile (06 ou 07).");
           return;
         }
         if (looksLikeFakePattern(parsedFinal.nationalNumber)) {
-          setError("Ce numéro n'est pas valide. Merci de rentrer un vrai numéro.");
+          failValidation("phone_fake", "Ce numéro n'est pas valide. Merci de rentrer un vrai numéro.");
           return;
         }
       }
@@ -134,6 +141,7 @@ function ConferenceContent() {
       const query = searchParams.toString();
       router.push(`/conference/live${query ? `?${query}` : ""}`);
     } catch (err) {
+      posthog.capture("vsl_optin_error", { reason: "server" });
       setError(err instanceof Error ? err.message : "Une erreur est survenue");
       setLoading(false);
     }
