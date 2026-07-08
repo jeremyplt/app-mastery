@@ -22,7 +22,7 @@ const POSITION_KEY = "vsl_position";
 
 // Courbe de progression non linéaire : avance vite au début, ralentit vers la fin.
 // progress = log(1 + k·x) / log(1 + k), avec x = temps réel / durée totale.
-const PROGRESS_CURVE_K = 20;
+const PROGRESS_CURVE_K = 300;
 
 function curvedProgress(ratio: number): number {
   const clamped = Math.min(Math.max(ratio, 0), 1);
