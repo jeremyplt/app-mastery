@@ -71,7 +71,14 @@ function ReserverContent() {
   }, [email, firstName, searchParams]);
 
   const calendlyUrl = (() => {
-    const params = new URLSearchParams({ hide_gdpr_banner: "1" });
+    // embed_domain + embed_type sont REQUIS pour que Calendly envoie les
+    // postMessages (calendly.event_scheduled) à la page parente. Sans eux,
+    // aucun événement de booking ne remonte (ni Meta Schedule ni PostHog).
+    const params = new URLSearchParams({
+      hide_gdpr_banner: "1",
+      embed_domain: "www.jeremypitault.com",
+      embed_type: "Inline",
+    });
     if (firstName) params.set("name", firstName);
     if (email) params.set("email", email);
     // UTM nativement supportés par Calendly : attribution jusqu'à la résa.
