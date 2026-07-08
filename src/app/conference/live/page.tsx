@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { useSearchParams } from "next/navigation";
 import posthog from "posthog-js";
 import type Hls from "hls.js";
+import { trackMetaCustom } from "@/lib/meta-pixel";
 
 // Flux direct Bunny Stream (lecture native, aucun contrôle affiché).
 // HLS en priorité (synchro audio/vidéo fiable + qualité adaptative), MP4 en secours.
@@ -454,6 +455,10 @@ function ConferenceLiveContent() {
                 <div className="mt-7">
                   <a
                     href={appelHref}
+                    onClick={() => {
+                      trackMetaCustom("VSLCTAClick", { content_name: "vsl-conference" });
+                      posthog.capture("vsl_cta_clicked");
+                    }}
                     className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-red-600 to-red-500 px-10 py-4 text-lg font-bold text-white hover:from-red-500 hover:to-red-400 transition-all shadow-lg shadow-red-600/30 whitespace-nowrap"
                   >
                     Candidater à l&apos;incubateur

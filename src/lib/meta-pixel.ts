@@ -53,6 +53,16 @@ export function trackMeta(
   window.fbq("track", eventName, params || {}, eventId ? { eventID: eventId } : undefined);
 }
 
+// Track un événement personnalisé (hors liste standard Meta). Sert aux
+// audiences et conversions personnalisées, pas à l'optimisation directe.
+export function trackMetaCustom(
+  eventName: string,
+  params?: Record<string, string | number>,
+): void {
+  if (typeof window === "undefined" || !window.fbq) return;
+  window.fbq("trackCustom", eventName, params || {});
+}
+
 // Champs Meta à joindre aux POST vers nos API routes pour l'envoi CAPI serveur.
 export function metaTrackingFields(eventId: string): {
   metaEventId: string;
