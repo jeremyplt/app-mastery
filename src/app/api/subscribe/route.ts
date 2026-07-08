@@ -130,9 +130,9 @@ async function sendPlanActionEmail(apiKey: string, email: string, firstName?: st
 
 <p>Je t'en parle demain.</p>
 
-<p>En attendant, si tu as déjà une app ou un projet en tête et que tu veux un regard extérieur, je propose un audit gratuit de 30 minutes. Toi et moi, en appel. On analyse ton projet et je te donne un plan d'action personnalisé.</p>
+<p>En attendant, si tu as déjà une app ou un projet en tête et que tu veux un regard extérieur, je propose un appel découverte. On fait le point sur ton projet ensemble, et tu repars avec les prochaines étapes claires. Réponds à quelques questions et choisis ton créneau :</p>
 
-<p><a href="https://calendly.com/jeremypltpro/30min">Réserve ton audit gratuit</a></p>
+<p><a href="https://www.jeremypitault.com/appel?utm_source=email&utm_medium=email&utm_campaign=plan-action">Réserver mon appel découverte</a></p>
 
 <p>À demain,<br>Jeremy</p>
 

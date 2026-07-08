@@ -35,12 +35,10 @@ export default function StickyTopBar() {
                     Tu veux un plan d&apos;action personnalisé ?
                   </span>
                   <a
-                    href="https://calendly.com/jeremypltpro/30min"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    href="/appel?utm_source=landing&utm_medium=cta&utm_campaign=sticky-top-bar"
                     className="ml-2 rounded-full bg-amber-500 px-4 py-1.5 text-sm font-semibold text-white hover:bg-amber-400 transition-colors shadow-lg shadow-amber-500/25"
                   >
-                    Appel gratuit
+                    Appel découverte
                   </a>
                 </>
               ) : (
