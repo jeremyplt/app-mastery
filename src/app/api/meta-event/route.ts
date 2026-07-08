@@ -13,7 +13,7 @@ const ALLOWED_EVENTS = new Set(["Schedule"]);
 
 export async function POST(req: NextRequest) {
   try {
-    const { eventName, eventId, email, firstName, fbp, fbc, eventSourceUrl } = await req.json();
+    const { eventName, eventId, email, firstName, utmSource, fbp, fbc, eventSourceUrl } = await req.json();
 
     if (!ALLOWED_EVENTS.has(eventName) || !eventId) {
       return NextResponse.json({ error: "Événement invalide" }, { status: 400 });
@@ -32,6 +32,10 @@ export async function POST(req: NextRequest) {
         fbc,
         clientIp,
         userAgent,
+      },
+      customData: {
+        content_name: "appel-decouverte",
+        ...(utmSource ? { content_category: String(utmSource) } : {}),
       },
     });
 

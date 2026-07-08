@@ -39,9 +39,16 @@ function ReserverContent() {
         // Meta : Schedule côté Pixel + relay CAPI serveur (même event_id,
         // Meta déduplique). Le webhook Calendly ne peut pas partager cet
         // event_id, donc tout part d'ici. Best-effort.
+        // content_category = utm_source pour segmenter les bookings par
+        // origine (vsl-conference, landing, email...) dans Events Manager.
+        const utmSource = searchParams.get("utm_source") || "direct";
         const metaEventId = generateEventId();
         const meta = metaTrackingFields(metaEventId);
-        trackMeta("Schedule", { content_name: "appel-decouverte" }, metaEventId);
+        trackMeta(
+          "Schedule",
+          { content_name: "appel-decouverte", content_category: utmSource },
+          metaEventId,
+        );
         fetch("/api/meta-event", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -50,6 +57,7 @@ function ReserverContent() {
             eventId: metaEventId,
             email: email || undefined,
             firstName: firstName || undefined,
+            utmSource,
             fbp: meta.fbp,
             fbc: meta.fbc,
             eventSourceUrl: meta.eventSourceUrl,
@@ -59,7 +67,7 @@ function ReserverContent() {
     }
     window.addEventListener("message", onMessage);
     return () => window.removeEventListener("message", onMessage);
-  }, [email, firstName]);
+  }, [email, firstName, searchParams]);
 
   const calendlyUrl = (() => {
     const params = new URLSearchParams({ hide_gdpr_banner: "1" });
