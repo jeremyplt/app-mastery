@@ -175,9 +175,10 @@ function VslPlayer({ onCtaUnlock }: { onCtaUnlock: () => void }) {
           onTimeUpdate={(e) => {
             const v = e.currentTarget;
             if (v.duration > 0) setProgress(curvedProgress(v.currentTime / v.duration));
-            if (v.currentTime >= CTA_REVEAL_SECONDS) onCtaUnlock();
-            // Sauvegarde de la position (throttle ~3s)
-            if (Math.abs(v.currentTime - lastSaveRef.current) > 3) {
+            if (!v.muted && v.currentTime >= CTA_REVEAL_SECONDS) onCtaUnlock();
+            // Sauvegarde de la position (throttle ~3s), uniquement si le son est activé :
+            // l'autoplay muet ne compte pas comme un vrai visionnage commencé
+            if (!v.muted && Math.abs(v.currentTime - lastSaveRef.current) > 3) {
               lastSaveRef.current = v.currentTime;
               localStorage.setItem(POSITION_KEY, String(v.currentTime));
             }
