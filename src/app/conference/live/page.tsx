@@ -1,8 +1,9 @@
 "use client";
 
-import { Suspense, useEffect, useRef, useState } from "react";
+import { Suspense, useCallback, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { useSearchParams } from "next/navigation";
+import posthog from "posthog-js";
 import type Hls from "hls.js";
 
 // Flux direct Bunny Stream (lecture native, aucun contrôle affiché).
@@ -11,6 +12,11 @@ const VSL_HLS_URL =
   "https://vz-0fb759fa-b02.b-cdn.net/1ab63722-1ef3-4c0d-b585-19514fab0f61/playlist.m3u8";
 const VSL_MP4_URL =
   "https://vz-0fb759fa-b02.b-cdn.net/1ab63722-1ef3-4c0d-b585-19514fab0f61/play_720p.mp4";
+
+// Le CTA de candidature n'apparaît qu'une fois ce temps de visionnage atteint
+// (moment où le CTA est annoncé dans la vidéo).
+const CTA_REVEAL_SECONDS = 18 * 60 + 30; // 18min30
+const CTA_UNLOCKED_KEY = "vsl_cta_unlocked";
 
 // Courbe de progression non linéaire : avance vite au début, ralentit vers la fin.
 // progress = log(1 + k·x) / log(1 + k), avec x = temps réel / durée totale.
@@ -21,7 +27,7 @@ function curvedProgress(ratio: number): number {
   return Math.log1p(PROGRESS_CURVE_K * clamped) / Math.log1p(PROGRESS_CURVE_K);
 }
 
-function VslPlayer() {
+function VslPlayer({ onCtaUnlock }: { onCtaUnlock: () => void }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   // La vidéo démarre automatiquement en muet. Le premier clic relance du début avec le son.
@@ -115,6 +121,7 @@ function VslPlayer() {
           onTimeUpdate={(e) => {
             const v = e.currentTarget;
             if (v.duration > 0) setProgress(curvedProgress(v.currentTime / v.duration));
+            if (v.currentTime >= CTA_REVEAL_SECONDS) onCtaUnlock();
           }}
           onPlay={() => setPlaying(true)}
           onPause={() => setPlaying(false)}
@@ -224,6 +231,24 @@ function ConferenceLiveContent() {
   const utm = searchParams.toString();
   const appelHref = `/appel?utm_source=vsl-conference&utm_medium=cta&utm_campaign=vsl${utm ? `&${utm}` : ""}`;
 
+  // CTA masqué tant que le prospect n'a pas vu 18min30 de vidéo.
+  // Persisté en localStorage pour ne pas re-verrouiller au rechargement.
+  const [ctaVisible, setCtaVisible] = useState(false);
+
+  useEffect(() => {
+    if (localStorage.getItem(CTA_UNLOCKED_KEY) === "1") setCtaVisible(true);
+  }, []);
+
+  const unlockCta = useCallback(() => {
+    setCtaVisible((visible) => {
+      if (!visible) {
+        localStorage.setItem(CTA_UNLOCKED_KEY, "1");
+        posthog.capture("vsl_cta_unlocked");
+      }
+      return true;
+    });
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-950 text-white antialiased">
       <div className="grid min-h-screen grid-cols-[1fr_minmax(0,80rem)_1fr]">
@@ -272,15 +297,16 @@ function ConferenceLiveContent() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.15 }}
               >
-                <VslPlayer />
+                <VslPlayer onCtaUnlock={unlockCta} />
               </motion.div>
 
-              {/* CTA : Candidater à l'incubateur */}
+              {/* CTA : Candidater à l'incubateur (débloqué à 18min30 de visionnage) */}
+              {ctaVisible && (
               <motion.div
                 className="mt-12 text-center"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.4, duration: 0.5 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
               >
                 <p className="text-2xl sm:text-3xl font-black tracking-tight text-white text-balance">
                   Prêt à lancer ton app avec notre accompagnement ?
@@ -304,6 +330,7 @@ function ConferenceLiveContent() {
                   peut t&apos;accompagner.
                 </p>
               </motion.div>
+              )}
             </div>
           </section>
         </div>
