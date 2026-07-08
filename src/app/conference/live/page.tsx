@@ -1,10 +1,14 @@
 "use client";
 
-import { Suspense, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { useSearchParams } from "next/navigation";
+import type Hls from "hls.js";
 
-// Flux direct Bunny Stream (lecture native, aucun contrôle affiché)
+// Flux direct Bunny Stream (lecture native, aucun contrôle affiché).
+// HLS en priorité (synchro audio/vidéo fiable + qualité adaptative), MP4 en secours.
+const VSL_HLS_URL =
+  "https://vz-0fb759fa-b02.b-cdn.net/1ab63722-1ef3-4c0d-b585-19514fab0f61/playlist.m3u8";
 const VSL_MP4_URL =
   "https://vz-0fb759fa-b02.b-cdn.net/1ab63722-1ef3-4c0d-b585-19514fab0f61/play_720p.mp4";
 
@@ -24,6 +28,35 @@ function VslPlayer() {
   const [soundOn, setSoundOn] = useState(false);
   const [playing, setPlaying] = useState(true);
   const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+
+    let hls: Hls | null = null;
+    let cancelled = false;
+
+    if (v.canPlayType("application/vnd.apple.mpegurl")) {
+      // Safari : HLS natif
+      v.src = VSL_HLS_URL;
+    } else {
+      import("hls.js").then(({ default: HlsLib }) => {
+        if (cancelled) return;
+        if (HlsLib.isSupported()) {
+          hls = new HlsLib();
+          hls.loadSource(VSL_HLS_URL);
+          hls.attachMedia(v);
+        } else {
+          v.src = VSL_MP4_URL;
+        }
+      });
+    }
+
+    return () => {
+      cancelled = true;
+      hls?.destroy();
+    };
+  }, []);
 
   function handleClick() {
     const v = videoRef.current;
@@ -73,7 +106,6 @@ function VslPlayer() {
       >
         <video
           ref={videoRef}
-          src={VSL_MP4_URL}
           className="absolute inset-0 w-full h-full"
           autoPlay
           muted
