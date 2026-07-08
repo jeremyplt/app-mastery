@@ -11,6 +11,7 @@ import type { CountryCode } from "libphonenumber-js";
 import { COUNTRY_CODES, detectCountry } from "@/lib/phone-countries";
 import { looksLikeFakePattern } from "@/lib/phone-validation";
 import { generateEventId, metaTrackingFields, trackMeta } from "@/lib/meta-pixel";
+import { saveOptinContact } from "@/lib/optin-contact";
 
 // Liste Brevo dédiée aux leads de la conférence (VSL).
 // TODO : remplacer par l'ID réel de la nouvelle liste Brevo VSL.
@@ -131,6 +132,13 @@ function ConferenceContent() {
       }
 
       trackMeta("Lead", { content_name: "vsl" }, metaEventId);
+
+      // Mémorise le contact pour sauter l'étape contact de la candidature /appel.
+      saveOptinContact({
+        firstName: firstName.trim(),
+        email: email.trim().toLowerCase(),
+        phone: formatPhone(phone),
+      });
 
       posthog.capture("vsl_optin_submitted", {
         source: "vsl",

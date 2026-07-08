@@ -11,6 +11,7 @@ import { COUNTRY_CODES, detectCountry } from "@/lib/phone-countries";
 import { looksLikeFakePattern } from "@/lib/phone-validation";
 import posthog from "posthog-js";
 import { generateEventId, metaTrackingFields, trackMeta } from "@/lib/meta-pixel";
+import { saveOptinContact } from "@/lib/optin-contact";
 
 export default function GuidePage() {
   const params = useParams();
@@ -116,6 +117,13 @@ export default function GuidePage() {
       }
 
       trackMeta("Lead", { content_name: slug }, metaEventId);
+
+      // Mémorise le contact pour sauter l'étape contact de la candidature /appel.
+      saveOptinContact({
+        firstName: firstName.trim(),
+        email: email.trim().toLowerCase(),
+        phone: formatPhone(phone),
+      });
 
       posthog.capture("guide_optin_submitted", {
         guide: slug,

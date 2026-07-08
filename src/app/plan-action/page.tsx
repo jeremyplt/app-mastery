@@ -11,6 +11,7 @@ import type { CountryCode } from "libphonenumber-js";
 import { COUNTRY_CODES, detectCountry } from "@/lib/phone-countries";
 import { looksLikeFakePattern } from "@/lib/phone-validation";
 import { generateEventId, metaTrackingFields, trackMeta } from "@/lib/meta-pixel";
+import { saveOptinContact } from "@/lib/optin-contact";
 
 export default function PlanActionPage() {
   return (
@@ -120,6 +121,13 @@ function PlanActionContent() {
       }
 
       trackMeta("Lead", { content_name: "plan-action" }, metaEventId);
+
+      // Mémorise le contact pour sauter l'étape contact de la candidature /appel.
+      saveOptinContact({
+        firstName: firstName.trim(),
+        email: email.trim().toLowerCase(),
+        phone: formatPhone(phone),
+      });
 
       posthog.capture("plan_action_form_submitted", {
         source: "plan-action",

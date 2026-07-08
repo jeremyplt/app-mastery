@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import AdDisclaimer from "@/components/AdDisclaimer";
 import { useSearchParams } from "next/navigation";
@@ -11,6 +11,7 @@ import { COUNTRY_CODES, detectCountry } from "@/lib/phone-countries";
 import { looksLikeFakePattern } from "@/lib/phone-validation";
 import { QUESTIONS, isValidAnswer } from "@/lib/candidature";
 import { generateEventId, metaTrackingFields, trackMeta } from "@/lib/meta-pixel";
+import { loadOptinContact } from "@/lib/optin-contact";
 
 export default function CandidaturePage() {
   return (
@@ -39,11 +40,26 @@ function CandidatureContent() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [rescue, setRescue] = useState(false);
+  // Contact déjà capturé à l'optin (VSL, plan d'action, guide) : on saute
+  // l'étape contact et on soumet directement après la dernière question.
+  // Repasse à false si la validation échoue, pour afficher le formulaire.
+  const [skipContactStep, setSkipContactStep] = useState(false);
+  const autoSubmitAttemptedRef = useRef(false);
 
   useEffect(() => {
     const detected = detectCountry();
     const idx = COUNTRY_CODES.findIndex((c) => c.country === detected);
     if (idx !== -1) setCountryIndex(idx);
+  }, []);
+
+  useEffect(() => {
+    const contact = loadOptinContact();
+    if (contact) {
+      setFirstName(contact.firstName);
+      setEmail(contact.email);
+      setPhone(contact.phone);
+      setSkipContactStep(true);
+    }
   }, []);
 
   // Tracking du funnel : un event par étape vue (pour mesurer les drop-offs).
@@ -84,6 +100,24 @@ function CandidatureContent() {
   const question = step >= 1 && step <= LAST_QUESTION_INDEX ? QUESTIONS[step - 1] : null;
   const progress = Math.round((step / (TOTAL_STEPS - 1)) * 100);
 
+  // Soumission automatique à l'arrivée sur l'étape contact quand le contact
+  // vient de l'optin : le prospect ne re-saisit rien. Une seule tentative,
+  // ensuite le formulaire s'affiche en cas d'échec (skipContactStep repasse
+  // à false dans failValidation / le catch de submit).
+  useEffect(() => {
+    if (
+      step === CONTACT_INDEX &&
+      skipContactStep &&
+      !rescue &&
+      !autoSubmitAttemptedRef.current
+    ) {
+      autoSubmitAttemptedRef.current = true;
+      posthog.capture("candidature_contact_skipped");
+      handleSubmit();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [step, skipContactStep, rescue]);
+
   function setAnswer(id: string, value: string) {
     setAnswers((prev) => ({ ...prev, [id]: value }));
   }
@@ -116,8 +150,10 @@ function CandidatureContent() {
 
   // Erreur de validation : message affiché + événement PostHog pour mesurer
   // la friction du formulaire de contact (quel champ bloque les prospects).
+  // Affiche aussi le formulaire contact si on était en soumission automatique.
   function failValidation(reason: string, message: string) {
     posthog.capture("candidature_error", { reason });
+    setSkipContactStep(false);
     setError(message);
   }
 
@@ -205,6 +241,8 @@ function CandidatureContent() {
       window.location.href = data.redirectUrl;
     } catch (err) {
       posthog.capture("candidature_error", { reason: "server" });
+      // Échec en soumission automatique : on montre le formulaire pour correction.
+      setSkipContactStep(false);
       setError(err instanceof Error ? err.message : "Une erreur est survenue");
       setLoading(false);
     }
@@ -389,8 +427,31 @@ function CandidatureContent() {
               </motion.div>
             )}
 
+            {/* CONTACT auto-soumis : le prospect vient d'un optin, on a déjà
+                ses coordonnées. Simple écran d'attente pendant l'envoi. */}
+            {step === CONTACT_INDEX && !rescue && skipContactStep && (
+              <motion.div
+                key="contact-auto"
+                initial={{ opacity: 0, x: 40 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -40 }}
+                transition={{ duration: 0.3 }}
+                className="text-center"
+              >
+                <h2 className="text-2xl sm:text-4xl font-bold tracking-tight text-balance">
+                  Envoi de ta candidature...
+                </h2>
+                <p className="mt-4 text-lg text-gray-200 font-medium">
+                  Un instant{firstName ? ` ${firstName}` : ""}, on prépare la suite.
+                </p>
+                <div className="mt-8 flex justify-center">
+                  <div className="h-10 w-10 animate-spin rounded-full border-4 border-amber-400 border-t-transparent" />
+                </div>
+              </motion.div>
+            )}
+
             {/* CONTACT */}
-            {step === CONTACT_INDEX && !rescue && (
+            {step === CONTACT_INDEX && !rescue && !skipContactStep && (
               <motion.div
                 key="contact"
                 initial={{ opacity: 0, x: 40 }}
