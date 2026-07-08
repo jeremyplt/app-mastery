@@ -20,6 +20,7 @@ export const QUESTIONS: Question[] = [
     title: "Où en es-tu avec ton app ?",
     type: "choice",
     options: [
+      { value: "pas-idee", label: "Pas encore d'idée, je veux saisir l'opportunité" },
       { value: "idee", label: "Juste une idée" },
       { value: "dev", label: "En développement" },
       { value: "publiee-peu", label: "Publiée, peu d'utilisateurs" },
@@ -107,6 +108,7 @@ const HOURS_SCORE: Record<string, number> = {
 };
 
 const STAGE_SCORE: Record<string, number> = {
+  "pas-idee": 0,
   idee: 0,
   dev: 5,
   "publiee-peu": 8,
