@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { validatePhone } from "@/lib/phone-validation";
+import { sendMetaEvent, getClientInfo } from "@/lib/meta-capi";
 
 // Map Brevo list IDs to transactional template IDs and tags
 const LIST_CONFIG: Record<number, { templateId: number; tag: string }> = {
@@ -182,7 +183,7 @@ async function sendTransactionalEmail(apiKey: string, email: string, templateId:
 
 export async function POST(req: NextRequest) {
   try {
-    const { email, firstName, phone, listId, source, utmSource, utmMedium, utmCampaign, budget, appIdea, motivation } = await req.json();
+    const { email, firstName, phone, listId, source, utmSource, utmMedium, utmCampaign, budget, appIdea, motivation, metaEventId, fbp, fbc, eventSourceUrl } = await req.json();
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
     if (!email || !emailRegex.test(email)) {
@@ -312,6 +313,27 @@ export async function POST(req: NextRequest) {
         const customData = await customRes.json();
         console.error("Brevo custom attributes update error:", JSON.stringify(customData));
       }
+    }
+
+    // Meta CAPI : événement Lead serveur, dédupliqué avec le Pixel navigateur
+    // via metaEventId. Best-effort, ne bloque jamais l'inscription.
+    if (metaEventId) {
+      const { clientIp, userAgent } = getClientInfo(req);
+      await sendMetaEvent({
+        eventName: "Lead",
+        eventId: metaEventId,
+        eventSourceUrl: eventSourceUrl || "https://www.jeremypitault.com/",
+        userData: {
+          email,
+          phone: validatedPhone,
+          firstName,
+          fbp,
+          fbc,
+          clientIp,
+          userAgent,
+        },
+        customData: source ? { content_name: source } : undefined,
+      });
     }
 
     // Step 2: Send first email instantly via transactional API

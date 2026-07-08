@@ -9,6 +9,7 @@ import type { CountryCode } from "libphonenumber-js";
 import { COUNTRY_CODES, detectCountry } from "@/lib/phone-countries";
 import { looksLikeFakePattern } from "@/lib/phone-validation";
 import { QUESTIONS, isValidAnswer } from "@/lib/candidature";
+import { generateEventId, metaTrackingFields, trackMeta } from "@/lib/meta-pixel";
 
 export default function CandidaturePage() {
   return (
@@ -147,6 +148,10 @@ function CandidatureContent() {
     setError("");
     setLoading(true);
     try {
+      // Même event_id côté Pixel (navigateur) et CAPI (serveur) : Meta déduplique.
+      // Le serveur n'envoie rien en cas de rescue, donc pas de double comptage.
+      const metaEventId = generateEventId();
+
       const res = await fetch("/api/candidature", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -165,6 +170,7 @@ function CandidatureContent() {
           utmSource: searchParams.get("utm_source") || undefined,
           utmMedium: searchParams.get("utm_medium") || undefined,
           utmCampaign: searchParams.get("utm_campaign") || undefined,
+          ...metaTrackingFields(metaEventId),
         }),
       });
 
@@ -178,6 +184,9 @@ function CandidatureContent() {
         setLoading(false);
         return;
       }
+
+      trackMeta("Lead", { content_name: "candidature" }, metaEventId);
+      trackMeta("SubmitApplication", { content_name: "candidature" }, `${metaEventId}-sa`);
 
       posthog.capture("candidature_submitted", {
         qualified: data.qualified,

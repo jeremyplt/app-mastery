@@ -9,6 +9,7 @@ import { isValidPhoneNumber, parsePhoneNumber } from "libphonenumber-js";
 import type { CountryCode } from "libphonenumber-js";
 import { COUNTRY_CODES, detectCountry } from "@/lib/phone-countries";
 import { looksLikeFakePattern } from "@/lib/phone-validation";
+import { generateEventId, metaTrackingFields, trackMeta } from "@/lib/meta-pixel";
 
 export default function GuidePage() {
   const params = useParams();
@@ -89,6 +90,9 @@ export default function GuidePage() {
     setLoading(true);
 
     try {
+      // Même event_id côté Pixel (navigateur) et CAPI (serveur) : Meta déduplique.
+      const metaEventId = generateEventId();
+
       const res = await fetch("/api/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -101,6 +105,7 @@ export default function GuidePage() {
           utmSource: searchParams.get("utm_source") || undefined,
           utmMedium: searchParams.get("utm_medium") || undefined,
           utmCampaign: searchParams.get("utm_campaign") || undefined,
+          ...metaTrackingFields(metaEventId),
         }),
       });
 
@@ -108,6 +113,8 @@ export default function GuidePage() {
         const data = await res.json();
         throw new Error(data.error || "Une erreur est survenue");
       }
+
+      trackMeta("Lead", { content_name: slug }, metaEventId);
 
       router.push(`/guide/${slug}/merci`);
     } catch (err) {

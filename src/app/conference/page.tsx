@@ -9,6 +9,7 @@ import posthog from "posthog-js";
 import type { CountryCode } from "libphonenumber-js";
 import { COUNTRY_CODES, detectCountry } from "@/lib/phone-countries";
 import { looksLikeFakePattern } from "@/lib/phone-validation";
+import { generateEventId, metaTrackingFields, trackMeta } from "@/lib/meta-pixel";
 
 // Liste Brevo dédiée aux leads de la conférence (VSL).
 // TODO : remplacer par l'ID réel de la nouvelle liste Brevo VSL.
@@ -97,6 +98,9 @@ function ConferenceContent() {
     setLoading(true);
 
     try {
+      // Même event_id côté Pixel (navigateur) et CAPI (serveur) : Meta déduplique.
+      const metaEventId = generateEventId();
+
       const res = await fetch("/api/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -109,6 +113,7 @@ function ConferenceContent() {
           utmSource: searchParams.get("utm_source") || undefined,
           utmMedium: searchParams.get("utm_medium") || undefined,
           utmCampaign: searchParams.get("utm_campaign") || undefined,
+          ...metaTrackingFields(metaEventId),
         }),
       });
 
@@ -116,6 +121,8 @@ function ConferenceContent() {
         const data = await res.json();
         throw new Error(data.error || "Une erreur est survenue");
       }
+
+      trackMeta("Lead", { content_name: "vsl" }, metaEventId);
 
       posthog.capture("vsl_optin_submitted", {
         source: "vsl",

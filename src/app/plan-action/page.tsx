@@ -9,6 +9,7 @@ import posthog from "posthog-js";
 import type { CountryCode } from "libphonenumber-js";
 import { COUNTRY_CODES, detectCountry } from "@/lib/phone-countries";
 import { looksLikeFakePattern } from "@/lib/phone-validation";
+import { generateEventId, metaTrackingFields, trackMeta } from "@/lib/meta-pixel";
 
 export default function PlanActionPage() {
   return (
@@ -93,6 +94,9 @@ function PlanActionContent() {
     setLoading(true);
 
     try {
+      // Même event_id côté Pixel (navigateur) et CAPI (serveur) : Meta déduplique.
+      const metaEventId = generateEventId();
+
       const res = await fetch("/api/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -105,6 +109,7 @@ function PlanActionContent() {
                   utmSource: searchParams.get("utm_source") || undefined,
                   utmMedium: searchParams.get("utm_medium") || undefined,
                   utmCampaign: searchParams.get("utm_campaign") || undefined,
+                  ...metaTrackingFields(metaEventId),
                 }),
       });
 
@@ -112,6 +117,8 @@ function PlanActionContent() {
         const data = await res.json();
         throw new Error(data.error || "Une erreur est survenue");
       }
+
+      trackMeta("Lead", { content_name: "plan-action" }, metaEventId);
 
       posthog.capture("plan_action_form_submitted", {
         source: "plan-action",

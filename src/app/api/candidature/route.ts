@@ -7,6 +7,7 @@ import {
   type CandidatureAnswers,
 } from "@/lib/candidature";
 import { isOutOfRegion } from "@/lib/geo-filter";
+import { sendMetaEvent, getClientInfo } from "@/lib/meta-capi";
 
 const BREVO_LIST_QUALIFIE = 20; // Appel (qualifiés)
 const BREVO_LIST_NON_QUALIFIE = 21; // Appel (non qualifiés)
@@ -314,6 +315,39 @@ export async function POST(req: NextRequest) {
       ]);
     } catch (err) {
       console.error("Envoi emails candidature échoué:", err);
+    }
+
+    // Meta CAPI : Lead (capture de contact) + SubmitApplication (candidature),
+    // dédupliqués avec le Pixel navigateur via metaEventId et son dérivé "-sa".
+    // Best-effort, ne bloque jamais la redirection.
+    if (body.metaEventId) {
+      const { clientIp, userAgent } = getClientInfo(req);
+      const userData = {
+        email,
+        phone,
+        firstName,
+        fbp: body.fbp,
+        fbc: body.fbc,
+        clientIp,
+        userAgent,
+      };
+      const eventSourceUrl = body.eventSourceUrl || "https://www.jeremypitault.com/appel";
+      await Promise.all([
+        sendMetaEvent({
+          eventName: "Lead",
+          eventId: body.metaEventId,
+          eventSourceUrl,
+          userData,
+          customData: { content_name: "candidature" },
+        }),
+        sendMetaEvent({
+          eventName: "SubmitApplication",
+          eventId: `${body.metaEventId}-sa`,
+          eventSourceUrl,
+          userData,
+          customData: { content_name: qualified ? "candidature-qualifiee" : "candidature-non-qualifiee" },
+        }),
+      ]);
     }
 
     let redirectUrl: string;

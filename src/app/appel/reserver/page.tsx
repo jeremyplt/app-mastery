@@ -4,6 +4,7 @@ import { Suspense, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useSearchParams } from "next/navigation";
 import posthog from "posthog-js";
+import { generateEventId, metaTrackingFields, trackMeta } from "@/lib/meta-pixel";
 
 const CALENDLY_BASE = "https://calendly.com/jeremypltpro/30min";
 
@@ -34,11 +35,31 @@ function ReserverContent() {
         e.data?.event === "calendly.event_scheduled"
       ) {
         posthog.capture("appel_booked", { email: email || undefined });
+
+        // Meta : Schedule côté Pixel + relay CAPI serveur (même event_id,
+        // Meta déduplique). Le webhook Calendly ne peut pas partager cet
+        // event_id, donc tout part d'ici. Best-effort.
+        const metaEventId = generateEventId();
+        const meta = metaTrackingFields(metaEventId);
+        trackMeta("Schedule", { content_name: "appel-decouverte" }, metaEventId);
+        fetch("/api/meta-event", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            eventName: "Schedule",
+            eventId: metaEventId,
+            email: email || undefined,
+            firstName: firstName || undefined,
+            fbp: meta.fbp,
+            fbc: meta.fbc,
+            eventSourceUrl: meta.eventSourceUrl,
+          }),
+        }).catch(() => {});
       }
     }
     window.addEventListener("message", onMessage);
     return () => window.removeEventListener("message", onMessage);
-  }, [email]);
+  }, [email, firstName]);
 
   const calendlyUrl = (() => {
     const params = new URLSearchParams({ hide_gdpr_banner: "1" });
