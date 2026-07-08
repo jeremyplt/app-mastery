@@ -1,22 +1,29 @@
 "use client";
 
 import Script from "next/script";
-import { Suspense, useEffect } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { persistFbclid } from "@/lib/meta-pixel";
 
 const PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID;
 
-// PageView manuel à chaque navigation (App Router = SPA, le snippet de base ne
-// se recharge pas entre les pages). Même pattern que PostHogPageView.
+// PageView manuel aux navigations SPA (App Router : le snippet de base ne se
+// recharge pas entre les pages). Le PageView du chargement initial est envoyé
+// par le snippet lui-même : au premier rendu, window.fbq n'existe pas encore
+// (script afterInteractive), l'effet ne peut donc pas s'en charger.
 function MetaPixelPageView() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const isInitialLoad = useRef(true);
 
   useEffect(() => {
     if (!pathname) return;
     // Persiste le fbclid des pubs Meta avant tout événement (cookie _fbc 90j).
     persistFbclid(searchParams.get("fbclid"));
+    if (isInitialLoad.current) {
+      isInitialLoad.current = false;
+      return;
+    }
     if (window.fbq) window.fbq("track", "PageView");
   }, [pathname, searchParams]);
 
@@ -41,6 +48,7 @@ n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
 t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}
 (window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
 fbq('init','${PIXEL_ID}');
+fbq('track','PageView');
 `,
         }}
       />
