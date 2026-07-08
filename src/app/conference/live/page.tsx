@@ -17,6 +17,8 @@ const VSL_MP4_URL =
 // (moment où le CTA est annoncé dans la vidéo).
 const CTA_REVEAL_SECONDS = 18 * 60 + 30; // 18min30
 const CTA_UNLOCKED_KEY = "vsl_cta_unlocked";
+// Position de lecture sauvegardée pour reprendre au même endroit après un reload.
+const POSITION_KEY = "vsl_position";
 
 // Courbe de progression non linéaire : avance vite au début, ralentit vers la fin.
 // progress = log(1 + k·x) / log(1 + k), avec x = temps réel / durée totale.
@@ -34,6 +36,11 @@ function VslPlayer({ onCtaUnlock }: { onCtaUnlock: () => void }) {
   const [soundOn, setSoundOn] = useState(false);
   const [playing, setPlaying] = useState(true);
   const [progress, setProgress] = useState(0);
+  const [ended, setEnded] = useState(false);
+  // Écran de choix affiché quand le prospect revient avec une position sauvegardée
+  const [resumePrompt, setResumePrompt] = useState(false);
+  const restoredRef = useRef(false);
+  const lastSaveRef = useRef(0);
 
   useEffect(() => {
     const v = videoRef.current;
@@ -68,6 +75,17 @@ function VslPlayer({ onCtaUnlock }: { onCtaUnlock: () => void }) {
     const v = videoRef.current;
     if (!v) return;
 
+    // Le choix continuer/recommencer se fait via les boutons dédiés
+    if (resumePrompt) return;
+
+    if (ended) {
+      // Revoir la vidéo depuis le début
+      v.currentTime = 0;
+      v.play();
+      setEnded(false);
+      return;
+    }
+
     if (!soundOn) {
       // Relance du début avec le son
       v.muted = false;
@@ -82,6 +100,29 @@ function VslPlayer({ onCtaUnlock }: { onCtaUnlock: () => void }) {
     } else {
       v.pause();
     }
+  }
+
+  function resumeWatching(e: React.MouseEvent) {
+    e.stopPropagation();
+    const v = videoRef.current;
+    if (!v) return;
+    v.muted = false;
+    v.play();
+    setSoundOn(true);
+    setResumePrompt(false);
+  }
+
+  function restartFromBeginning(e: React.MouseEvent) {
+    e.stopPropagation();
+    const v = videoRef.current;
+    if (!v) return;
+    v.muted = false;
+    v.currentTime = 0;
+    lastSaveRef.current = 0;
+    localStorage.setItem(POSITION_KEY, "0");
+    v.play();
+    setSoundOn(true);
+    setResumePrompt(false);
   }
 
   function toggleFullscreen(e: React.MouseEvent) {
@@ -113,26 +154,86 @@ function VslPlayer({ onCtaUnlock }: { onCtaUnlock: () => void }) {
         <video
           ref={videoRef}
           className="absolute inset-0 w-full h-full"
-          autoPlay
           muted
           playsInline
           preload="auto"
           disablePictureInPicture
+          onLoadedMetadata={(e) => {
+            if (restoredRef.current) return;
+            restoredRef.current = true;
+            const v = e.currentTarget;
+            const saved = parseFloat(localStorage.getItem(POSITION_KEY) || "0");
+            if (saved > 1 && saved < v.duration - 5) {
+              // Le prospect revient : on se place où il en était et on lui laisse le choix
+              v.currentTime = saved;
+              setResumePrompt(true);
+            } else {
+              // Première visite : autoplay en muet
+              v.play().catch(() => {});
+            }
+          }}
           onTimeUpdate={(e) => {
             const v = e.currentTarget;
             if (v.duration > 0) setProgress(curvedProgress(v.currentTime / v.duration));
             if (v.currentTime >= CTA_REVEAL_SECONDS) onCtaUnlock();
+            // Sauvegarde de la position (throttle ~3s)
+            if (Math.abs(v.currentTime - lastSaveRef.current) > 3) {
+              lastSaveRef.current = v.currentTime;
+              localStorage.setItem(POSITION_KEY, String(v.currentTime));
+            }
           }}
-          onPlay={() => setPlaying(true)}
+          onPlay={() => {
+            setPlaying(true);
+            setEnded(false);
+          }}
           onPause={() => setPlaying(false)}
           onEnded={() => {
             setPlaying(false);
+            setEnded(true);
             setProgress(1);
+            // Visionnage terminé : le prochain passage repart du début
+            localStorage.removeItem(POSITION_KEY);
+            lastSaveRef.current = 0;
           }}
         />
 
+        {/* Overlay retour : le prospect avait déjà commencé la vidéo */}
+        {resumePrompt && (
+          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-5 sm:gap-8 bg-black/70 backdrop-blur-sm px-4">
+            <p className="text-xl sm:text-3xl font-black tracking-tight text-white text-center text-balance">
+              Tu avais déjà commencé cette vidéo...
+            </p>
+            <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4">
+              <button
+                type="button"
+                onClick={resumeWatching}
+                className="inline-flex items-center gap-2.5 rounded-full bg-gradient-to-r from-red-600 to-red-500 px-7 py-3.5 text-base font-bold text-white hover:from-red-500 hover:to-red-400 transition-all shadow-lg shadow-red-600/40 whitespace-nowrap"
+              >
+                <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M8 5.14v13.72c0 .8.87 1.3 1.56.88l10.54-6.86a1.05 1.05 0 000-1.76L9.56 4.26A1.04 1.04 0 008 5.14z" />
+                </svg>
+                Continuer de regarder
+              </button>
+              <button
+                type="button"
+                onClick={restartFromBeginning}
+                className="inline-flex items-center gap-2.5 rounded-full border border-white/30 bg-white/10 px-7 py-3.5 text-base font-bold text-white hover:bg-white/20 transition-colors whitespace-nowrap"
+              >
+                <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"
+                  />
+                </svg>
+                Recommencer du début
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Overlay initial : la vidéo tourne en muet, clic = relancer avec le son */}
-        {!soundOn && (
+        {!soundOn && !ended && !resumePrompt && (
           <div className="absolute inset-0 z-10 flex items-center justify-center">
             <div className="mx-4 flex flex-col items-center gap-2 sm:gap-4 rounded-xl sm:rounded-2xl bg-red-600/85 px-5 py-4 sm:px-10 sm:py-8 text-center shadow-2xl shadow-red-950/50 backdrop-blur-sm">
               <p className="text-base sm:text-2xl font-black tracking-tight text-white">
@@ -156,8 +257,31 @@ function VslPlayer({ onCtaUnlock }: { onCtaUnlock: () => void }) {
           </div>
         )}
 
+        {/* Overlay fin : revoir la vidéo */}
+        {ended && (
+          <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/60">
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleClick();
+              }}
+              className="inline-flex items-center gap-3 rounded-full bg-gradient-to-r from-red-600 to-red-500 px-8 py-4 text-lg font-bold text-white hover:from-red-500 hover:to-red-400 transition-all shadow-lg shadow-red-600/40"
+            >
+              <svg className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"
+                />
+              </svg>
+              Revoir la vidéo
+            </button>
+          </div>
+        )}
+
         {/* Overlay pause */}
-        {soundOn && !playing && (
+        {soundOn && !playing && !ended && (
           <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/30">
             <span className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-r from-red-600 to-red-500 shadow-lg shadow-red-600/40 transition-transform hover:scale-105">
               <svg className="ml-1 h-9 w-9 text-white" fill="currentColor" viewBox="0 0 24 24">
