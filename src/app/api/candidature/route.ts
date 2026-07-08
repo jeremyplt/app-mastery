@@ -317,9 +317,10 @@ export async function POST(req: NextRequest) {
       console.error("Envoi emails candidature échoué:", err);
     }
 
-    // Meta CAPI : Lead (capture de contact) + SubmitApplication (candidature),
-    // dédupliqués avec le Pixel navigateur via metaEventId et son dérivé "-sa".
-    // Best-effort, ne bloque jamais la redirection.
+    // Meta CAPI : SubmitApplication (candidature), + Lead uniquement si le
+    // prospect n'est pas déjà passé par un optin (includeLead, sinon double
+    // comptage : le Lead a déjà été envoyé à l'optin). Dédupliqués avec le
+    // Pixel navigateur via metaEventId et son dérivé "-sa". Best-effort.
     if (body.metaEventId) {
       const { clientIp, userAgent } = getClientInfo(req);
       const userData = {
@@ -332,22 +333,27 @@ export async function POST(req: NextRequest) {
         userAgent,
       };
       const eventSourceUrl = body.eventSourceUrl || "https://www.jeremypitault.com/appel";
-      await Promise.all([
+      const events = [
         sendMetaEvent({
-          eventName: "Lead",
-          eventId: body.metaEventId,
-          eventSourceUrl,
-          userData,
-          customData: { content_name: "candidature" },
-        }),
-        sendMetaEvent({
-          eventName: "SubmitApplication",
+          eventName: "SubmitApplication" as const,
           eventId: `${body.metaEventId}-sa`,
           eventSourceUrl,
           userData,
           customData: { content_name: qualified ? "candidature-qualifiee" : "candidature-non-qualifiee" },
         }),
-      ]);
+      ];
+      if (body.includeLead !== false) {
+        events.push(
+          sendMetaEvent({
+            eventName: "Lead",
+            eventId: body.metaEventId,
+            eventSourceUrl,
+            userData,
+            customData: { content_name: "candidature" },
+          }),
+        );
+      }
+      await Promise.all(events);
     }
 
     let redirectUrl: string;

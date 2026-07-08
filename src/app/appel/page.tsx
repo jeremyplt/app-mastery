@@ -45,6 +45,9 @@ function CandidatureContent() {
   // Repasse à false si la validation échoue, pour afficher le formulaire.
   const [skipContactStep, setSkipContactStep] = useState(false);
   const autoSubmitAttemptedRef = useRef(false);
+  // Déjà passé par un optin : le Lead Meta a déjà été envoyé à ce moment-là,
+  // la candidature n'enverra que SubmitApplication (sinon double comptage).
+  const hadOptinRef = useRef(false);
 
   useEffect(() => {
     const detected = detectCountry();
@@ -59,6 +62,7 @@ function CandidatureContent() {
       setEmail(contact.email);
       setPhone(contact.phone);
       setSkipContactStep(true);
+      hadOptinRef.current = true;
     }
   }, []);
 
@@ -215,6 +219,8 @@ function CandidatureContent() {
           utmMedium: searchParams.get("utm_medium") || undefined,
           utmCampaign: searchParams.get("utm_campaign") || undefined,
           ...metaTrackingFields(metaEventId),
+          // Lead déjà envoyé à l'optin : la candidature n'émet que SubmitApplication.
+          includeLead: !hadOptinRef.current,
         }),
       });
 
@@ -229,7 +235,9 @@ function CandidatureContent() {
         return;
       }
 
-      trackMeta("Lead", { content_name: "candidature" }, metaEventId);
+      if (!hadOptinRef.current) {
+        trackMeta("Lead", { content_name: "candidature" }, metaEventId);
+      }
       trackMeta("SubmitApplication", { content_name: "candidature" }, `${metaEventId}-sa`);
 
       posthog.capture("candidature_submitted", {
