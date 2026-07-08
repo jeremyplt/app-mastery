@@ -29,6 +29,9 @@ export const metadata: Metadata = {
       "Transforme ton idee en application rentable sur l'App Store et Google Play grace a l'IA.",
     type: "website",
   },
+  other: {
+    "facebook-domain-verification": "jyv3yrlmzy0twdapkaplq3c50mfq5i",
+  },
 };
 
 export default function RootLayout({
