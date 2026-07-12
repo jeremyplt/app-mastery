@@ -14,6 +14,9 @@ if (
     ui_host: "https://us.posthog.com",
     capture_pageview: false, // We capture manually to track route changes
     capture_pageleave: true,
+    // Params d'ads custom (ad = variante, hook = accroche) traités comme des
+    // UTM : propriétés sur les événements + propriétés initiales de la personne.
+    custom_campaign_params: ["ad", "hook"],
   });
 }
 
