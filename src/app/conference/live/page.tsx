@@ -6,7 +6,8 @@ import AdDisclaimer from "@/components/AdDisclaimer";
 import { useSearchParams } from "next/navigation";
 import posthog from "posthog-js";
 import type Hls from "hls.js";
-import { trackMetaCustom } from "@/lib/meta-pixel";
+import { generateEventId, metaTrackingFields, trackMeta, trackMetaCustom } from "@/lib/meta-pixel";
+import { loadOptinContact, type OptinContact } from "@/lib/optin-contact";
 
 // Flux direct Bunny Stream (lecture native, aucun contrôle affiché).
 // HLS en priorité (synchro audio/vidéo fiable + qualité adaptative), MP4 en secours.
@@ -14,6 +15,8 @@ const VSL_HLS_URL =
   "https://vz-0fb759fa-b02.b-cdn.net/1ab63722-1ef3-4c0d-b585-19514fab0f61/playlist.m3u8";
 const VSL_MP4_URL =
   "https://vz-0fb759fa-b02.b-cdn.net/1ab63722-1ef3-4c0d-b585-19514fab0f61/play_720p.mp4";
+
+const CALENDLY_BASE = "https://calendly.com/masteryapp-jeremy/30min";
 
 // Le CTA de candidature n'apparaît qu'une fois ce temps de visionnage atteint
 // (moment où le CTA est annoncé dans la vidéo).
@@ -388,6 +391,64 @@ function VslPlayer({ onCtaUnlock }: { onCtaUnlock: () => void }) {
   );
 }
 
+function CalendlyModal({ calendlyUrl, onClose }: { calendlyUrl: string; onClose: () => void }) {
+  // Bloque le scroll de la page derrière la pop-up + fermeture via Échap
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") onClose();
+    }
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [onClose]);
+
+  return (
+    <motion.div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-3 sm:p-6"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Réserver un appel découverte"
+    >
+      <motion.div
+        className="relative w-full max-w-5xl"
+        initial={{ opacity: 0, y: 24, scale: 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.3 }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Fermer"
+          className="absolute -top-11 right-0 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-bold text-white hover:bg-white/20 transition-colors"
+        >
+          Fermer
+          <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+
+        <div className="overflow-hidden rounded-2xl border border-white/10 bg-white shadow-2xl">
+          <iframe
+            src={calendlyUrl}
+            width="100%"
+            frameBorder="0"
+            title="Réserver un appel découverte"
+            className="block w-full h-[min(780px,calc(100dvh-7rem))]"
+          />
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
 export default function ConferenceLivePage() {
   return (
     <Suspense>
@@ -398,16 +459,91 @@ export default function ConferenceLivePage() {
 
 function ConferenceLiveContent() {
   const searchParams = useSearchParams();
-  const utm = searchParams.toString();
-  const appelHref = `/appel?utm_source=vsl-conference&utm_medium=cta&utm_campaign=vsl${utm ? `&${utm}` : ""}`;
 
   // CTA masqué tant que le prospect n'a pas vu 18min30 de vidéo.
   // Persisté en localStorage pour ne pas re-verrouiller au rechargement.
   const [ctaVisible, setCtaVisible] = useState(false);
+  const [calendlyOpen, setCalendlyOpen] = useState(false);
+  // Contact capturé à l'optin : pré-remplit le formulaire Calendly.
+  // Chargé en effect (localStorage indisponible au rendu serveur).
+  const [optinContact, setOptinContact] = useState<OptinContact | null>(null);
 
   useEffect(() => {
+    setOptinContact(loadOptinContact());
+  }, []);
+
+  useEffect(() => {
+    // Dev uniquement : CTA toujours visible pour tester sans regarder 18min30.
+    // Inerte en production (le build remplace NODE_ENV, la branche est éliminée).
+    if (process.env.NODE_ENV === "development") {
+      setCtaVisible(true);
+      return;
+    }
     if (localStorage.getItem(CTA_UNLOCKED_KEY) === "1") setCtaVisible(true);
   }, []);
+
+  // Capture le booking réel (Calendly poste un message à la prise de RDV).
+  useEffect(() => {
+    function onMessage(e: MessageEvent) {
+      if (
+        e.origin === "https://calendly.com" &&
+        e.data?.event === "calendly.event_scheduled"
+      ) {
+        posthog.capture("appel_booked", { email: optinContact?.email });
+
+        // Meta : Schedule côté Pixel + relay CAPI serveur (même event_id,
+        // Meta déduplique). content_category = utm_source pour segmenter
+        // les bookings par origine dans Events Manager. Best-effort.
+        const utmSource = searchParams.get("utm_source") || "vsl-conference";
+        const metaEventId = generateEventId();
+        const meta = metaTrackingFields(metaEventId);
+        trackMeta(
+          "Schedule",
+          { content_name: "appel-decouverte", content_category: utmSource },
+          metaEventId,
+        );
+        fetch("/api/meta-event", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            eventName: "Schedule",
+            eventId: metaEventId,
+            email: optinContact?.email,
+            firstName: optinContact?.firstName,
+            utmSource,
+            fbp: meta.fbp,
+            fbc: meta.fbc,
+            eventSourceUrl: meta.eventSourceUrl,
+          }),
+        }).catch(() => {});
+      }
+    }
+    window.addEventListener("message", onMessage);
+    return () => window.removeEventListener("message", onMessage);
+  }, [searchParams, optinContact]);
+
+  const calendlyUrl = (() => {
+    // embed_domain + embed_type sont REQUIS pour que Calendly envoie les
+    // postMessages (calendly.event_scheduled) à la page parente. Sans eux,
+    // aucun événement de booking ne remonte (ni Meta Schedule ni PostHog).
+    const params = new URLSearchParams({
+      hide_gdpr_banner: "1",
+      embed_domain: "www.jeremypitault.com",
+      embed_type: "Inline",
+    });
+    // Pré-remplissage depuis le contact optin : name/email natifs Calendly,
+    // a1 = première question custom du formulaire (le numéro de téléphone).
+    if (optinContact) {
+      params.set("name", optinContact.firstName);
+      params.set("email", optinContact.email);
+      params.set("a1", optinContact.phone);
+    }
+    // UTM nativement supportés par Calendly : attribution jusqu'à la résa.
+    params.set("utm_source", searchParams.get("utm_source") || "vsl-conference");
+    params.set("utm_medium", searchParams.get("utm_medium") || "cta");
+    params.set("utm_campaign", searchParams.get("utm_campaign") || "vsl");
+    return `${CALENDLY_BASE}?${params.toString()}`;
+  })();
 
   const unlockCta = useCallback(() => {
     setCtaVisible((visible) => {
@@ -483,16 +619,17 @@ function ConferenceLiveContent() {
                 </p>
 
                 <div className="mt-7">
-                  <a
-                    href={appelHref}
+                  <button
+                    type="button"
                     onClick={() => {
                       trackMetaCustom("VSLCTAClick", { content_name: "vsl-conference" });
                       posthog.capture("vsl_cta_clicked");
+                      setCalendlyOpen(true);
                     }}
                     className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-red-600 to-red-500 px-10 py-4 text-lg font-bold text-white hover:from-red-500 hover:to-red-400 transition-all shadow-lg shadow-red-600/30 whitespace-nowrap"
                   >
                     Candidater à l&apos;incubateur
-                  </a>
+                  </button>
                 </div>
 
                 <p className="mt-4 text-sm font-medium text-red-400">
@@ -500,8 +637,8 @@ function ConferenceLiveContent() {
                 </p>
 
                 <p className="mt-4 text-base text-gray-300 max-w-md mx-auto">
-                  Réponds à quelques questions, puis réserve ton appel. On définit ensemble si on
-                  peut t&apos;accompagner.
+                  Réserve ton appel directement. On définit ensemble si on peut
+                  t&apos;accompagner.
                 </p>
               </motion.div>
               )}
@@ -519,6 +656,11 @@ function ConferenceLiveContent() {
           }}
         />
       </div>
+
+      {calendlyOpen && (
+        <CalendlyModal calendlyUrl={calendlyUrl} onClose={() => setCalendlyOpen(false)} />
+      )}
+
       <AdDisclaimer />
     </div>
   );
