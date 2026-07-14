@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getAdminClient } from "@/lib/supabase";
 
 export async function POST(req: NextRequest) {
   try {
@@ -48,6 +49,30 @@ export async function POST(req: NextRequest) {
         };
 
     console.log(`Calendly ${isBooking ? "booking" : "cancellation"}: ${email} (${name})`);
+
+    // Mise à jour automatique du CRM (leads VSL et Plan d'action).
+    // Best-effort : le webhook ne doit jamais échouer à cause du CRM.
+    try {
+      const supabase = getAdminClient();
+      const update = isBooking
+        ? {
+            call_booked: true,
+            call_booked_at: startTime || new Date().toISOString(),
+            call_booked_auto: true,
+          }
+        : { call_booked: false, call_booked_at: null };
+      const { error: crmError } = await supabase
+        .from("crm_leads")
+        .update(update)
+        .eq("email", email.toLowerCase());
+      if (crmError) {
+        console.error("CRM call_booked update error:", crmError.message);
+      } else {
+        console.log(`CRM updated for ${email}: call_booked=${isBooking}`);
+      }
+    } catch (err) {
+      console.error("CRM call_booked update error:", err);
+    }
 
     // Send event to PostHog server-side
     const POSTHOG_KEY = process.env.NEXT_PUBLIC_POSTHOG_KEY;

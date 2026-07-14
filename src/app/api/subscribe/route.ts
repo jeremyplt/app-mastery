@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { validatePhone } from "@/lib/phone-validation";
 import { sendMetaEvent, getClientInfo } from "@/lib/meta-capi";
+import { getAdminClient } from "@/lib/supabase";
 
 // Map Brevo list IDs to transactional template IDs and tags
 const LIST_CONFIG: Record<number, { templateId: number; tag: string }> = {
@@ -312,6 +313,30 @@ export async function POST(req: NextRequest) {
       if (!customRes.ok) {
         const customData = await customRes.json();
         console.error("Brevo custom attributes update error:", JSON.stringify(customData));
+      }
+    }
+
+    // Step 1d: Enregistrer le lead dans le CRM (Supabase) pour les sources VSL
+    // et Plan d'action. Best-effort, ne bloque jamais l'inscription.
+    if (source === "vsl" || source === "plan-action") {
+      try {
+        const supabase = getAdminClient();
+        const { error: crmError } = await supabase
+          .from("crm_leads")
+          .upsert(
+            {
+              email: email.toLowerCase(),
+              source,
+              ...(firstName && { first_name: firstName }),
+              ...(validatedPhone && { phone: validatedPhone }),
+            },
+            { onConflict: "email,source" },
+          );
+        if (crmError) {
+          console.error("CRM lead upsert error:", crmError.message);
+        }
+      } catch (err) {
+        console.error("CRM lead upsert error:", err);
       }
     }
 
