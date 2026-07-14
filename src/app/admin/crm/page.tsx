@@ -174,8 +174,8 @@ export default function CrmAdmin() {
 
   const stats = useMemo(() => {
     const total = rows.length;
-    // Actifs = ni disqualifiés, ni injoignables (base des taux)
-    const active = rows.filter((r) => !r.disqualified && !r.unreachable);
+    // Base des taux = tout sauf injoignables (les disqualifiés gardent leur historique contacté/répondu/booké)
+    const active = rows.filter((r) => !r.unreachable);
     const contacted = active.filter((r) => r.contacted);
     const replied = active.filter((r) => r.replied);
     const booked = active.filter((r) => r.call_booked);
