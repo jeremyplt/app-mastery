@@ -43,6 +43,49 @@ const TIMESTAMP_FOR: Partial<Record<BooleanField, string>> = {
   call_booked: "call_booked_at",
 };
 
+// Mapping CRM -> attributs Brevo.
+// WHATSAPP_CONTACTED est tri-état : true = contacté, false = injoignable,
+// vide ("") = pas encore essayé.
+async function syncBrevoAttributes(
+  body: Record<string, unknown>,
+  lead: { email: string; contacted: boolean; replied: boolean; call_booked: boolean; disqualified: boolean; unreachable: boolean },
+) {
+  const BREVO_API_KEY = process.env.BREVO_API_KEY;
+  if (!BREVO_API_KEY) return;
+
+  const attributes: Record<string, boolean | string> = {};
+
+  if (typeof body.contacted === "boolean" || typeof body.unreachable === "boolean") {
+    attributes.WHATSAPP_CONTACTED = lead.contacted ? true : lead.unreachable ? false : "";
+  }
+  if (typeof body.replied === "boolean") {
+    attributes.WHATSAPP_REPLIED = lead.replied;
+  }
+  if (typeof body.call_booked === "boolean") {
+    attributes.CALL_BOOKED = lead.call_booked;
+  }
+  if (typeof body.disqualified === "boolean") {
+    attributes.DISQUALIFIED = lead.disqualified;
+  }
+
+  if (Object.keys(attributes).length === 0) return;
+
+  const res = await fetch(`https://api.brevo.com/v3/contacts/${encodeURIComponent(lead.email)}`, {
+    method: "PUT",
+    headers: {
+      "api-key": BREVO_API_KEY,
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({ attributes }),
+  });
+  if (!res.ok) {
+    console.error(`Brevo CRM sync error for ${lead.email}: ${res.status} ${await res.text()}`);
+  } else {
+    console.log(`Brevo CRM sync: ${lead.email} ${JSON.stringify(attributes)}`);
+  }
+}
+
 export async function PATCH(req: NextRequest) {
   try {
     await requireAdmin();
@@ -88,6 +131,12 @@ export async function PATCH(req: NextRequest) {
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 });
     }
+
+    // Répercuter les cases cochées sur le profil Brevo. Best-effort :
+    // une erreur Brevo ne bloque pas la mise à jour du CRM.
+    await syncBrevoAttributes(body, data).catch((err) =>
+      console.error("Brevo CRM sync error:", err),
+    );
 
     return NextResponse.json({ lead: data });
   } catch (err) {
