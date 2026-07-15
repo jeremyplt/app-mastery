@@ -177,6 +177,41 @@ export default function CrmAdmin() {
     setOpenNotes(null);
   }
 
+  async function deleteLead(lead: Lead) {
+    const ok = window.confirm(
+      `Supprimer ${lead.first_name || lead.email} ? Le lead sera retiré du CRM et de la liste Brevo du funnel.`,
+    );
+    if (!ok) return;
+    try {
+      const res = await fetch("/api/admin/crm", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: lead.id }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setLeads((l) => ({
+          ...l,
+          [lead.source]: l[lead.source].filter((r) => r.id !== lead.id),
+        }));
+      } else {
+        window.alert(`Suppression impossible : ${data.error || "erreur inconnue"}`);
+      }
+    } catch {
+      window.alert("Suppression impossible : erreur réseau");
+    }
+  }
+
+  // Priorité de contact : pré-qualifiés d'abord, puis sans réponses aux
+  // questions (abandon du form ou lead d'avant la mise en place), puis les
+  // non-qualifiés explicites. Tri stable : l'ordre chronologique est conservé
+  // à l'intérieur de chaque groupe. Sans effet sur Plan d'action (tous null).
+  function contactPriority(lead: Lead): number {
+    if (lead.qualified === true) return 0;
+    if (lead.qualified === null) return 1;
+    return 2;
+  }
+
   const rows = leads[tab];
 
   const stats = useMemo(() => {
@@ -248,7 +283,7 @@ export default function CrmAdmin() {
           (r.phone || "").includes(q),
       );
     }
-    return list;
+    return [...list].sort((a, b) => contactPriority(a) - contactPriority(b));
   }, [rows, filter, search]);
 
   if (authorized === null) {
@@ -409,7 +444,9 @@ export default function CrmAdmin() {
                       ? "border-orange-500/20 opacity-70"
                       : lead.call_booked
                         ? "border-green-500/30"
-                        : "border-white/10"
+                        : lead.source === "vsl" && lead.qualified === null
+                          ? "border-white/10 opacity-60"
+                          : "border-white/10"
                 }`}
               >
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3">
@@ -460,9 +497,9 @@ export default function CrmAdmin() {
                         {formatDate(lead.created_at)}
                       </span>
                     </div>
-                    {(lead.qualified !== null || lead.age) && (
+                    {lead.source === "vsl" && (
                       <div className="mt-1.5 flex flex-wrap items-center gap-2">
-                        {lead.qualified !== null && (
+                        {lead.qualified !== null ? (
                           <span
                             className={`inline-flex items-center rounded-md px-2 py-0.5 text-xs font-bold ${
                               lead.qualified
@@ -471,6 +508,10 @@ export default function CrmAdmin() {
                             }`}
                           >
                             {lead.qualified ? "Pré-qualifié ✓" : "Non qualifié"}
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center rounded-md bg-white/10 px-2 py-0.5 text-xs font-bold text-gray-400">
+                            Sans réponses aux questions
                           </span>
                         )}
                         <span className="text-xs font-medium text-gray-300">
@@ -559,6 +600,13 @@ export default function CrmAdmin() {
                       }`}
                     >
                       {lead.notes ? "Notes ●" : "Notes"}
+                    </button>
+                    <button
+                      onClick={() => deleteLead(lead)}
+                      className="rounded-md bg-white/10 px-2.5 py-1 text-xs font-bold text-red-300 transition-colors hover:bg-red-500/20"
+                      title="Supprimer ce lead du CRM et de la liste Brevo"
+                    >
+                      Suppr.
                     </button>
                   </div>
                 </div>

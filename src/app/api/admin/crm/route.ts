@@ -86,6 +86,66 @@ async function syncBrevoAttributes(
   }
 }
 
+// Suppression d'un lead (ex : lead de test). Retire aussi le contact de la
+// liste Brevo du funnel, sinon "Synchroniser depuis Brevo" le ré-importerait
+// au prochain sync. Le contact reste dans la base Brevo, juste hors liste.
+const LIST_FOR_SOURCE: Record<string, number> = { vsl: 22, "plan-action": 17 };
+
+export async function DELETE(req: NextRequest) {
+  try {
+    await requireAdmin();
+
+    const { id } = await req.json();
+    if (!id || typeof id !== "string") {
+      return NextResponse.json({ error: "id manquant" }, { status: 400 });
+    }
+
+    const supabase = getAdminClient();
+    const { data: lead, error: fetchError } = await supabase
+      .from("crm_leads")
+      .select("email, source")
+      .eq("id", id)
+      .single();
+
+    if (fetchError || !lead) {
+      return NextResponse.json({ error: "Lead introuvable" }, { status: 404 });
+    }
+
+    const { error: deleteError } = await supabase.from("crm_leads").delete().eq("id", id);
+    if (deleteError) {
+      return NextResponse.json({ error: deleteError.message }, { status: 500 });
+    }
+
+    const BREVO_API_KEY = process.env.BREVO_API_KEY;
+    const listId = LIST_FOR_SOURCE[lead.source];
+    if (BREVO_API_KEY && listId) {
+      const res = await fetch(
+        `https://api.brevo.com/v3/contacts/lists/${listId}/contacts/remove`,
+        {
+          method: "POST",
+          headers: {
+            "api-key": BREVO_API_KEY,
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          body: JSON.stringify({ emails: [lead.email] }),
+        },
+      );
+      if (!res.ok) {
+        console.error(`Brevo list remove error for ${lead.email}: ${res.status} ${await res.text()}`);
+      }
+    }
+
+    return NextResponse.json({ success: true });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Erreur";
+    if (message === "Accès non autorisé") {
+      return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
+    }
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
+}
+
 export async function PATCH(req: NextRequest) {
   try {
     await requireAdmin();
