@@ -322,15 +322,13 @@ export async function POST(req: NextRequest) {
     // comptage : le Lead a déjà été envoyé à l'optin). Dédupliqués avec le
     // Pixel navigateur via metaEventId et son dérivé "-sa". Best-effort.
     if (body.metaEventId) {
-      const { clientIp, userAgent } = getClientInfo(req);
       const userData = {
         email,
         phone,
         firstName,
         fbp: body.fbp,
         fbc: body.fbc,
-        clientIp,
-        userAgent,
+        ...getClientInfo(req),
       };
       const eventSourceUrl = body.eventSourceUrl || "https://www.jeremypitault.com/appel";
       const events = [
@@ -349,7 +347,9 @@ export async function POST(req: NextRequest) {
             eventId: body.metaEventId,
             eventSourceUrl,
             userData,
-            customData: { content_name: "candidature" },
+            // value/currency requis par Meta sur Lead pour le calcul du ROAS
+            // (valeur nominale, Meta exige value > 0).
+            customData: { content_name: "candidature", value: 1, currency: "EUR" },
           }),
         );
       }

@@ -515,6 +515,7 @@ function ConferenceLiveContent() {
             eventId: metaEventId,
             email: optinContact?.email,
             firstName: optinContact?.firstName,
+            phone: optinContact?.phone,
             utmSource,
             fbp: meta.fbp,
             fbc: meta.fbc,

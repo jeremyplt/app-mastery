@@ -116,7 +116,7 @@ export default function GuidePage() {
         throw new Error(data.error || "Une erreur est survenue");
       }
 
-      trackMeta("Lead", { content_name: slug }, metaEventId);
+      trackMeta("Lead", { content_name: slug, value: 1, currency: "EUR" }, metaEventId);
 
       // Mémorise le contact pour sauter l'étape contact de la candidature /appel.
       saveOptinContact({

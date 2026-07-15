@@ -236,7 +236,7 @@ function CandidatureContent() {
       }
 
       if (!hadOptinRef.current) {
-        trackMeta("Lead", { content_name: "candidature" }, metaEventId);
+        trackMeta("Lead", { content_name: "candidature", value: 1, currency: "EUR" }, metaEventId);
       }
       trackMeta("SubmitApplication", { content_name: "candidature" }, `${metaEventId}-sa`);
 

@@ -343,7 +343,6 @@ export async function POST(req: NextRequest) {
     // Meta CAPI : événement Lead serveur, dédupliqué avec le Pixel navigateur
     // via metaEventId. Best-effort, ne bloque jamais l'inscription.
     if (metaEventId) {
-      const { clientIp, userAgent } = getClientInfo(req);
       await sendMetaEvent({
         eventName: "Lead",
         eventId: metaEventId,
@@ -354,10 +353,15 @@ export async function POST(req: NextRequest) {
           firstName,
           fbp,
           fbc,
-          clientIp,
-          userAgent,
+          ...getClientInfo(req),
         },
-        customData: source ? { content_name: source } : undefined,
+        // value/currency requis par Meta sur Lead pour le calcul du ROAS
+        // (valeur nominale, Meta exige value > 0).
+        customData: {
+          value: 1,
+          currency: "EUR",
+          ...(source ? { content_name: source } : {}),
+        },
       });
     }
 

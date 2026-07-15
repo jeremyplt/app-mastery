@@ -84,7 +84,6 @@ export async function POST(req: NextRequest) {
     // Meta CAPI : Lead uniquement pour les leads qualifiés, pour que Meta
     // optimise le ciblage sur les bons profils.
     if (qualified && metaEventId) {
-      const { clientIp, userAgent } = getClientInfo(req);
       await sendMetaEvent({
         eventName: "Lead",
         eventId: metaEventId,
@@ -95,10 +94,11 @@ export async function POST(req: NextRequest) {
           firstName: firstName || undefined,
           fbp,
           fbc,
-          clientIp,
-          userAgent,
+          ...getClientInfo(req),
         },
-        customData: { content_name: "vsl" },
+        // value/currency requis par Meta sur Lead pour le calcul du ROAS
+        // (valeur nominale, Meta exige value > 0).
+        customData: { content_name: "vsl", value: 1, currency: "EUR" },
       });
     }
 

@@ -120,7 +120,7 @@ function PlanActionContent() {
         throw new Error(data.error || "Une erreur est survenue");
       }
 
-      trackMeta("Lead", { content_name: "plan-action" }, metaEventId);
+      trackMeta("Lead", { content_name: "plan-action", value: 1, currency: "EUR" }, metaEventId);
 
       // Mémorise le contact pour sauter l'étape contact de la candidature /appel.
       saveOptinContact({

@@ -194,7 +194,7 @@ function ConferenceContent() {
     // même event_id (Meta déduplique). Meta n'apprend que sur les bons profils.
     const metaEventId = generateEventId();
     if (qualified) {
-      trackMeta("Lead", { content_name: "vsl" }, metaEventId);
+      trackMeta("Lead", { content_name: "vsl", value: 1, currency: "EUR" }, metaEventId);
     }
 
     // Best-effort : l'enregistrement serveur ne bloque jamais l'accès à la vidéo.

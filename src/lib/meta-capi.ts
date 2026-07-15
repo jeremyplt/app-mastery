@@ -28,11 +28,29 @@ export function hashName(name: string): string {
   return sha256(name.trim().toLowerCase());
 }
 
+// Géo (ct/st/zp/country) : minuscules, sans accents, sans espaces ni
+// ponctuation (format requis par Meta avant hash, ex. "île-de-france" -> "iledefrance").
+function hashGeo(value: string): string {
+  return sha256(
+    value
+      .trim()
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9]/g, ""),
+  );
+}
+
 export interface MetaUserData {
   email?: string;
   phone?: string; // E.164 (+33612345678)
   firstName?: string;
   lastName?: string;
+  // Géo dérivée de l'IP (headers Vercel). Améliore l'Event Match Quality.
+  city?: string;
+  state?: string; // code région ISO (ex. "IDF")
+  zip?: string;
+  country?: string; // ISO-2 (ex. "FR")
   // fbp / fbc : cookies Meta bruts, JAMAIS hashés.
   fbp?: string;
   fbc?: string;
@@ -49,16 +67,43 @@ export interface MetaEventInput {
   customData?: Record<string, string | number>;
 }
 
-// Extrait IP + user-agent de la requête entrante : ces deux paramètres ne
-// peuvent être envoyés que côté serveur et boostent fortement l'Event Match Quality.
-export function getClientInfo(req: NextRequest): { clientIp?: string; userAgent?: string } {
+// Extrait IP + user-agent + géolocalisation de la requête entrante : ces
+// paramètres ne peuvent être envoyés que côté serveur et boostent fortement
+// l'Event Match Quality. La géo vient des headers Vercel (dérivée de l'IP,
+// gratuite, URL-encodée pour la ville).
+export function getClientInfo(req: NextRequest): {
+  clientIp?: string;
+  userAgent?: string;
+  city?: string;
+  state?: string;
+  zip?: string;
+  country?: string;
+} {
   const forwardedFor = req.headers.get("x-forwarded-for");
   const clientIp =
     forwardedFor?.split(",")[0]?.trim() ||
     req.headers.get("x-real-ip") ||
     undefined;
   const userAgent = req.headers.get("user-agent") || undefined;
-  return { clientIp, userAgent };
+
+  const geoHeader = (name: string): string | undefined => {
+    const value = req.headers.get(name);
+    if (!value) return undefined;
+    try {
+      return decodeURIComponent(value);
+    } catch {
+      return value;
+    }
+  };
+
+  return {
+    clientIp,
+    userAgent,
+    city: geoHeader("x-vercel-ip-city"),
+    state: geoHeader("x-vercel-ip-country-region"),
+    zip: geoHeader("x-vercel-ip-postal-code"),
+    country: geoHeader("x-vercel-ip-country"),
+  };
 }
 
 // Envoi best-effort : ne throw jamais, ne bloque jamais la réponse utilisateur.
@@ -81,6 +126,10 @@ export async function sendMetaEvent(input: MetaEventInput): Promise<void> {
   // external_id : identifiant stable inter-événements. On utilise le hash de
   // l'email pour relier optin -> candidature -> booking chez Meta.
   if (userData.email) user_data.external_id = [hashEmail(userData.email)];
+  if (userData.city) user_data.ct = [hashGeo(userData.city)];
+  if (userData.state) user_data.st = [hashGeo(userData.state)];
+  if (userData.zip) user_data.zp = [hashGeo(userData.zip)];
+  if (userData.country) user_data.country = [hashGeo(userData.country)];
   if (userData.fbp?.startsWith("fb.")) user_data.fbp = userData.fbp;
   if (userData.fbc?.startsWith("fb.")) user_data.fbc = userData.fbc;
   if (userData.clientIp) user_data.client_ip_address = userData.clientIp;
