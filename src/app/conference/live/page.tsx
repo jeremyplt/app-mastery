@@ -8,6 +8,7 @@ import posthog from "posthog-js";
 import type Hls from "hls.js";
 import { generateEventId, metaTrackingFields, trackMeta, trackMetaCustom } from "@/lib/meta-pixel";
 import { loadOptinContact, type OptinContact } from "@/lib/optin-contact";
+import { loadVslAnswers, type VslAnswers } from "@/lib/vsl-qualification";
 
 // Flux direct Bunny Stream (lecture native, aucun contrôle affiché).
 // HLS en priorité (synchro audio/vidéo fiable + qualité adaptative), MP4 en secours.
@@ -467,9 +468,13 @@ function ConferenceLiveContent() {
   // Contact capturé à l'optin : pré-remplit le formulaire Calendly.
   // Chargé en effect (localStorage indisponible au rendu serveur).
   const [optinContact, setOptinContact] = useState<OptinContact | null>(null);
+  // Réponses de pré-qualification de l'opt-in : pré-remplissent les questions
+  // radio du formulaire Calendly (a2/a3/a5).
+  const [vslAnswers, setVslAnswers] = useState<VslAnswers | null>(null);
 
   useEffect(() => {
     setOptinContact(loadOptinContact());
+    setVslAnswers(loadVslAnswers());
   }, []);
 
   useEffect(() => {
@@ -537,6 +542,14 @@ function ConferenceLiveContent() {
       params.set("name", optinContact.firstName);
       params.set("email", optinContact.email);
       params.set("a1", optinContact.phone);
+    }
+    // Réponses de pré-qualification : les params aN sont positionnels
+    // (a2 = âge, a3 = profession, a5 = objectif 3-6 mois). Les radios ne se
+    // pré-cochent que si le texte correspond exactement à l'option Calendly.
+    if (vslAnswers) {
+      params.set("a2", vslAnswers.age);
+      params.set("a3", vslAnswers.profession);
+      params.set("a5", vslAnswers.objectif);
     }
     // UTM nativement supportés par Calendly : attribution jusqu'à la résa.
     params.set("utm_source", searchParams.get("utm_source") || "vsl-conference");

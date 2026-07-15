@@ -19,6 +19,16 @@ create table if not exists crm_leads (
   -- Injoignable : faux numéro ou pas disponible sur WhatsApp
   unreachable boolean not null default false,
   notes text,
+  -- Pré-qualification opt-in VSL (migration "crm_leads_vsl_qualification",
+  -- appliquée le 2026-07-15). qualified null = opt-in avant la mise en place
+  -- des questions, ou questions abandonnées.
+  age text,
+  profession text,
+  objectif text,
+  -- Question d'engagement "prêt à investir sur toi" (migration
+  -- "crm_leads_vsl_invest", appliquée le 2026-07-15)
+  invest text,
+  qualified boolean,
   unique (email, source)
 );
 

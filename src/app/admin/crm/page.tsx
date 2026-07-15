@@ -19,6 +19,13 @@ type Lead = {
   disqualified: boolean;
   unreachable: boolean;
   notes: string | null;
+  // Pré-qualification opt-in VSL. null = opt-in avant la mise en place des
+  // questions, ou questions abandonnées.
+  age: string | null;
+  profession: string | null;
+  objectif: string | null;
+  invest: string | null;
+  qualified: boolean | null;
 };
 
 type Source = "vsl" | "plan-action";
@@ -453,6 +460,26 @@ export default function CrmAdmin() {
                         {formatDate(lead.created_at)}
                       </span>
                     </div>
+                    {(lead.qualified !== null || lead.age) && (
+                      <div className="mt-1.5 flex flex-wrap items-center gap-2">
+                        {lead.qualified !== null && (
+                          <span
+                            className={`inline-flex items-center rounded-md px-2 py-0.5 text-xs font-bold ${
+                              lead.qualified
+                                ? "bg-green-500/15 text-green-300"
+                                : "bg-red-500/15 text-red-300"
+                            }`}
+                          >
+                            {lead.qualified ? "Pré-qualifié ✓" : "Non qualifié"}
+                          </span>
+                        )}
+                        <span className="text-xs font-medium text-gray-300">
+                          {[lead.age, lead.profession, lead.objectif, lead.invest]
+                            .filter(Boolean)
+                            .join(" · ")}
+                        </span>
+                      </div>
+                    )}
                   </div>
 
                   <div className="flex flex-wrap items-center gap-x-4 gap-y-1">

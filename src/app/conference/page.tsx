@@ -12,6 +12,12 @@ import { COUNTRY_CODES, detectCountry } from "@/lib/phone-countries";
 import { looksLikeFakePattern } from "@/lib/phone-validation";
 import { generateEventId, metaTrackingFields, trackMeta } from "@/lib/meta-pixel";
 import { saveOptinContact } from "@/lib/optin-contact";
+import {
+  VSL_QUESTIONS,
+  qualifyVslLead,
+  saveVslAnswers,
+  type VslAnswers,
+} from "@/lib/vsl-qualification";
 
 // Liste Brevo dédiée aux leads de la conférence (VSL).
 // TODO : remplacer par l'ID réel de la nouvelle liste Brevo VSL.
@@ -32,6 +38,10 @@ function ConferenceContent() {
   const [countryIndex, setCountryIndex] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  // Étape 2 : questions de pré-qualification (contact déjà enregistré).
+  const [step, setStep] = useState<"contact" | "questions">("contact");
+  const [questionIndex, setQuestionIndex] = useState(0);
+  const [answers, setAnswers] = useState<Partial<VslAnswers>>({});
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -107,9 +117,10 @@ function ConferenceContent() {
     setLoading(true);
 
     try {
-      // Même event_id côté Pixel (navigateur) et CAPI (serveur) : Meta déduplique.
-      const metaEventId = generateEventId();
-
+      // Pas d'événement Meta Lead ici : il ne part qu'après les questions de
+      // pré-qualification, et uniquement pour les leads qualifiés. Le contact
+      // est quand même enregistré (Brevo + CRM + email d'accès) : même s'il
+      // abandonne aux questions, on peut le relancer par email.
       const res = await fetch("/api/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -122,7 +133,6 @@ function ConferenceContent() {
           utmSource: searchParams.get("utm_source") || undefined,
           utmMedium: searchParams.get("utm_medium") || undefined,
           utmCampaign: searchParams.get("utm_campaign") || undefined,
-          ...metaTrackingFields(metaEventId),
         }),
       });
 
@@ -131,9 +141,7 @@ function ConferenceContent() {
         throw new Error(data.error || "Une erreur est survenue");
       }
 
-      trackMeta("Lead", { content_name: "vsl" }, metaEventId);
-
-      // Mémorise le contact pour sauter l'étape contact de la candidature /appel.
+      // Mémorise le contact pour pré-remplir le formulaire Calendly de la VSL.
       saveOptinContact({
         firstName: firstName.trim(),
         email: email.trim().toLowerCase(),
@@ -147,13 +155,69 @@ function ConferenceContent() {
         utm_campaign: searchParams.get("utm_campaign") || undefined,
       });
 
-      const query = searchParams.toString();
-      router.push(`/conference/live${query ? `?${query}` : ""}`);
+      setLoading(false);
+      setStep("questions");
     } catch (err) {
       posthog.capture("vsl_optin_error", { reason: "server" });
       setError(err instanceof Error ? err.message : "Une erreur est survenue");
       setLoading(false);
     }
+  }
+
+  // Clic sur une option : enregistre la réponse et passe à la question
+  // suivante. Dernière question -> finalisation et accès à la vidéo.
+  function handleAnswer(option: string) {
+    const question = VSL_QUESTIONS[questionIndex];
+    const nextAnswers = { ...answers, [question.id]: option };
+    setAnswers(nextAnswers);
+
+    posthog.capture("vsl_qualification_answer", {
+      question: question.id,
+      answer: option,
+    });
+
+    if (questionIndex < VSL_QUESTIONS.length - 1) {
+      setQuestionIndex(questionIndex + 1);
+      return;
+    }
+
+    finalizeQualification(nextAnswers as VslAnswers);
+  }
+
+  function finalizeQualification(finalAnswers: VslAnswers) {
+    const qualified = qualifyVslLead(finalAnswers);
+
+    // Réponses persistées pour pré-remplir le popup Calendly de la VSL.
+    saveVslAnswers(finalAnswers);
+
+    // Meta Lead uniquement si qualifié : Pixel ici, CAPI côté serveur avec le
+    // même event_id (Meta déduplique). Meta n'apprend que sur les bons profils.
+    const metaEventId = generateEventId();
+    if (qualified) {
+      trackMeta("Lead", { content_name: "vsl" }, metaEventId);
+    }
+
+    // Best-effort : l'enregistrement serveur ne bloque jamais l'accès à la vidéo.
+    fetch("/api/vsl-qualify", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      keepalive: true,
+      body: JSON.stringify({
+        email: email.trim().toLowerCase(),
+        firstName: firstName.trim(),
+        phone: formatPhone(phone),
+        ...finalAnswers,
+        ...metaTrackingFields(metaEventId),
+      }),
+    }).catch(() => {});
+
+    posthog.capture("vsl_qualification_submitted", {
+      ...finalAnswers,
+      qualified,
+    });
+
+    const query = searchParams.toString();
+    router.push(`/conference/live${query ? `?${query}` : ""}`);
   }
 
   function scrollToForm() {
@@ -268,6 +332,8 @@ function ConferenceContent() {
                       </span>
                     </motion.div>
 
+                    {step === "contact" && (
+                      <>
                     {/* Headline */}
                     <motion.h1
                       className="mt-6 text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.05] text-balance text-white"
@@ -364,6 +430,40 @@ function ConferenceContent() {
                         Accès immédiat. 100% gratuit.
                       </p>
                     </motion.form>
+                      </>
+                    )}
+
+                    {step === "questions" && (
+                      <motion.div
+                        key={VSL_QUESTIONS[questionIndex].id}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.4 }}
+                        className="mx-auto max-w-xl"
+                      >
+                        <p className="mt-6 font-mono text-sm font-semibold tracking-widest uppercase text-gray-400">
+                          Question {questionIndex + 1} / {VSL_QUESTIONS.length}
+                        </p>
+                        <h1 className="mt-4 text-2xl sm:text-3xl font-black tracking-tight text-balance text-white">
+                          {VSL_QUESTIONS[questionIndex].title}
+                        </h1>
+                        <p className="mt-3 text-base font-medium text-gray-300">
+                          Dernière étape avant d&apos;accéder à la conférence.
+                        </p>
+                        <div className="mt-8 flex flex-col gap-3">
+                          {VSL_QUESTIONS[questionIndex].options.map((option) => (
+                            <button
+                              key={option}
+                              type="button"
+                              onClick={() => handleAnswer(option)}
+                              className="w-full rounded-full bg-white/5 border border-white/10 px-6 py-3.5 text-sm sm:text-base font-semibold text-white text-left hover:border-red-500/60 hover:bg-red-500/10 transition-colors"
+                            >
+                              {option}
+                            </button>
+                          ))}
+                        </div>
+                      </motion.div>
+                    )}
                   </div>
                 </div>
               </div>
