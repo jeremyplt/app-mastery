@@ -81,7 +81,7 @@ export default function MerciPage() {
 
             <div className="mt-8 flex justify-center">
               <a
-                href="/appel?utm_source=plan-action-merci&utm_medium=cta&utm_campaign=plan-action"
+                href="/appel/reserver?utm_source=plan-action-merci&utm_medium=cta&utm_campaign=plan-action"
                 className="inline-flex items-center justify-center gap-2 rounded-full bg-amber-500 px-10 py-4 text-lg font-bold text-white hover:bg-amber-400 transition-colors shadow-lg shadow-amber-500/25"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">

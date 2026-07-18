@@ -1,11 +1,101 @@
 "use client";
 
+import { Suspense, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import AdDisclaimer from "@/components/AdDisclaimer";
+import CalendlyModal from "@/components/CalendlyModal";
+import { useSearchParams } from "next/navigation";
+import posthog from "posthog-js";
+import { generateEventId, metaTrackingFields, trackMeta } from "@/lib/meta-pixel";
+import { loadOptinContact, type OptinContact } from "@/lib/optin-contact";
 
 const PLAN_ACTION_VIDEO_ID = "a1fa42ba-337e-4cf1-b0b7-24fc7ab5be24";
 
+const CALENDLY_BASE = "https://calendly.com/jeremypltpro/30min";
+
 export default function PlanActionVideoPage() {
+  return (
+    <Suspense>
+      <PlanActionVideoContent />
+    </Suspense>
+  );
+}
+
+function PlanActionVideoContent() {
+  const searchParams = useSearchParams();
+  const [calendlyOpen, setCalendlyOpen] = useState(false);
+  // Contact capturé à l'optin /plan-action : pré-remplit le formulaire
+  // Calendly. Chargé en effect (localStorage indisponible au rendu serveur).
+  const [optinContact, setOptinContact] = useState<OptinContact | null>(null);
+
+  useEffect(() => {
+    setOptinContact(loadOptinContact());
+  }, []);
+
+  // Capture le booking réel (Calendly poste un message à la prise de RDV).
+  useEffect(() => {
+    function onMessage(e: MessageEvent) {
+      if (
+        e.origin === "https://calendly.com" &&
+        e.data?.event === "calendly.event_scheduled"
+      ) {
+        posthog.capture("appel_booked", { email: optinContact?.email });
+
+        // Meta : Schedule côté Pixel + relay CAPI serveur (même event_id,
+        // Meta déduplique). content_category = utm_source pour segmenter
+        // les bookings par origine dans Events Manager. Best-effort.
+        const utmSource = searchParams.get("utm_source") || "plan-action-video";
+        const metaEventId = generateEventId();
+        const meta = metaTrackingFields(metaEventId);
+        trackMeta(
+          "Schedule",
+          { content_name: "appel-decouverte", content_category: utmSource },
+          metaEventId,
+        );
+        fetch("/api/meta-event", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            eventName: "Schedule",
+            eventId: metaEventId,
+            email: optinContact?.email,
+            firstName: optinContact?.firstName,
+            phone: optinContact?.phone,
+            utmSource,
+            fbp: meta.fbp,
+            fbc: meta.fbc,
+            eventSourceUrl: meta.eventSourceUrl,
+          }),
+        }).catch(() => {});
+      }
+    }
+    window.addEventListener("message", onMessage);
+    return () => window.removeEventListener("message", onMessage);
+  }, [searchParams, optinContact]);
+
+  const calendlyUrl = (() => {
+    // embed_domain + embed_type sont REQUIS pour que Calendly envoie les
+    // postMessages (calendly.event_scheduled) à la page parente. Sans eux,
+    // aucun événement de booking ne remonte (ni Meta Schedule ni PostHog).
+    const params = new URLSearchParams({
+      hide_gdpr_banner: "1",
+      embed_domain: "www.jeremypitault.com",
+      embed_type: "Inline",
+    });
+    // Pré-remplissage depuis le contact optin : name/email natifs Calendly,
+    // a1 = première question custom de jeremypltpro/30min (le téléphone).
+    if (optinContact) {
+      params.set("name", optinContact.firstName);
+      params.set("email", optinContact.email);
+      params.set("a1", optinContact.phone);
+    }
+    // UTM nativement supportés par Calendly : attribution jusqu'à la résa.
+    params.set("utm_source", searchParams.get("utm_source") || "plan-action-video");
+    params.set("utm_medium", searchParams.get("utm_medium") || "cta");
+    params.set("utm_campaign", searchParams.get("utm_campaign") || "plan-action");
+    return `${CALENDLY_BASE}?${params.toString()}`;
+  })();
+
   return (
     <div className="min-h-screen bg-gray-950 text-white antialiased">
       <div className="flex min-h-screen flex-col items-center justify-center px-4 py-16">
@@ -60,21 +150,30 @@ export default function PlanActionVideoPage() {
                 9 places gratuites restantes
               </span>
             </div>
-            <a
-              href="/appel?utm_source=plan-action-video&utm_medium=cta&utm_campaign=plan-action"
+            <button
+              type="button"
+              onClick={() => {
+                posthog.capture("plan_action_cta_clicked");
+                setCalendlyOpen(true);
+              }}
               className="inline-flex items-center justify-center gap-2 rounded-full bg-amber-500 px-8 py-4 text-lg font-bold text-white hover:bg-amber-400 transition-colors shadow-lg shadow-amber-500/25"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
               </svg>
               Réserve ton appel gratuit
-            </a>
+            </button>
             <p className="text-sm text-gray-400 max-w-md">
               Que tu aies déjà une app ou juste une idée, on définit ensemble tes prochaines étapes en 30 minutes.
             </p>
           </motion.div>
         </motion.div>
       </div>
+
+      {calendlyOpen && (
+        <CalendlyModal calendlyUrl={calendlyUrl} onClose={() => setCalendlyOpen(false)} />
+      )}
+
       <AdDisclaimer />
     </div>
   );

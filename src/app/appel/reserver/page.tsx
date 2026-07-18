@@ -1,11 +1,12 @@
 "use client";
 
-import { Suspense, useEffect } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import AdDisclaimer from "@/components/AdDisclaimer";
 import { useSearchParams } from "next/navigation";
 import posthog from "posthog-js";
 import { generateEventId, metaTrackingFields, trackMeta } from "@/lib/meta-pixel";
+import { loadOptinContact, type OptinContact } from "@/lib/optin-contact";
 
 const CALENDLY_BASE = "https://calendly.com/jeremypltpro/30min";
 
@@ -19,14 +20,27 @@ export default function ReserverPage() {
 
 function ReserverContent() {
   const searchParams = useSearchParams();
-  const firstName = searchParams.get("firstName") || "";
-  const email = searchParams.get("email") || "";
+  // Contact de l'optin (localStorage) : fallback quand les query params sont
+  // absents, et seule source pour le téléphone. Chargé après le mount pour
+  // éviter un mismatch d'hydratation (localStorage n'existe pas côté serveur).
+  const [contact, setContact] = useState<OptinContact | null>(null);
+  const [mounted, setMounted] = useState(false);
+  const firstName = searchParams.get("firstName") || contact?.firstName || "";
+  const email = searchParams.get("email") || contact?.email || "";
+  const phone = contact?.phone || "";
 
   useEffect(() => {
+    setContact(loadOptinContact());
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
     posthog.capture("appel_calendly_loaded", {
       has_prefill: Boolean(firstName && email),
+      has_phone_prefill: Boolean(phone),
     });
-  }, [firstName, email]);
+  }, [mounted, firstName, email, phone]);
 
   // Capture le booking réel (Calendly poste un message à la prise de RDV).
   useEffect(() => {
@@ -81,6 +95,9 @@ function ReserverContent() {
     });
     if (firstName) params.set("name", firstName);
     if (email) params.set("email", email);
+    // a1 = question custom "Numéro de téléphone" (position 0) de
+    // jeremypltpro/30min : Calendly pré-remplit le champ avec l'E.164.
+    if (phone) params.set("a1", phone);
     // UTM nativement supportés par Calendly : attribution jusqu'à la résa.
     const utmSource = searchParams.get("utm_source");
     const utmMedium = searchParams.get("utm_medium");
@@ -127,16 +144,20 @@ function ReserverContent() {
             </p>
           </div>
 
-          {/* Calendly embed */}
-          <div className="mt-8 rounded-xl overflow-hidden border border-white/10 bg-white">
-            <iframe
-              src={calendlyUrl}
-              width="100%"
-              height="780"
-              frameBorder="0"
-              title="Réserver un appel découverte"
-              className="w-full"
-            />
+          {/* Calendly embed : monté seulement une fois le contact localStorage
+              chargé, sinon l'iframe se charge sans préremplissage puis se
+              recharge avec (double chargement visible). */}
+          <div className="mt-8 rounded-xl overflow-hidden border border-white/10 bg-white min-h-[780px]">
+            {mounted && (
+              <iframe
+                src={calendlyUrl}
+                width="100%"
+                height="780"
+                frameBorder="0"
+                title="Réserver un appel découverte"
+                className="w-full"
+              />
+            )}
           </div>
 
           <p className="mt-6 text-center text-sm text-gray-300 font-medium">
