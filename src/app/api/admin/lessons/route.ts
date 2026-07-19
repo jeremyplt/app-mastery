@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminClient } from "@/lib/supabase";
-import { requireAdmin } from "@/lib/admin";
+import { requireOwner } from "@/lib/admin";
 
 export async function GET(req: NextRequest) {
   try {
-    await requireAdmin();
+    await requireOwner();
     const db = getAdminClient();
     const { searchParams } = new URL(req.url);
     const moduleId = searchParams.get("module_id");
@@ -34,7 +34,7 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    await requireAdmin();
+    await requireOwner();
     const db = getAdminClient();
     const { module_id, title, description, bunny_video_id, position } =
       await req.json();
@@ -57,7 +57,7 @@ export async function POST(req: NextRequest) {
 
 export async function PUT(req: NextRequest) {
   try {
-    await requireAdmin();
+    await requireOwner();
     const db = getAdminClient();
     const { id, title, description, bunny_video_id, position } =
       await req.json();
@@ -81,7 +81,7 @@ export async function PUT(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   try {
-    await requireAdmin();
+    await requireOwner();
     const db = getAdminClient();
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");

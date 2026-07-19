@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminClient } from "@/lib/supabase";
-import { requireAdmin } from "@/lib/admin";
+import { requireOwner } from "@/lib/admin";
 
 export async function POST(req: NextRequest) {
   try {
-    await requireAdmin();
+    await requireOwner();
     const db = getAdminClient();
 
     const formData = await req.formData();

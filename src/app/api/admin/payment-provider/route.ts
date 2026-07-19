@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireAdmin } from "@/lib/admin";
+import { requireOwner } from "@/lib/admin";
 import {
   getActiveProvider,
   setActiveProvider,
@@ -8,7 +8,7 @@ import {
 
 export async function GET() {
   try {
-    await requireAdmin();
+    await requireOwner();
     const active = await getActiveProvider();
     return NextResponse.json({ active });
   } catch {
@@ -18,7 +18,7 @@ export async function GET() {
 
 export async function PUT(req: NextRequest) {
   try {
-    await requireAdmin();
+    await requireOwner();
     const { provider } = await req.json();
 
     if (!provider || !isValidProvider(provider)) {

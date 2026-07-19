@@ -316,8 +316,12 @@ export default function AdminCoursPage() {
     fetch("/api/admin/check")
       .then((r) => r.json())
       .then((d) => {
-        if (d.admin) {
+        // Page réservée au propriétaire : les membres invités n'ont accès
+        // qu'au CRM et aux candidatures.
+        if (d.role === "owner") {
           setAuthorized(true);
+        } else if (d.admin) {
+          window.location.href = "/admin/crm";
         } else {
           window.location.href = "/membres";
         }

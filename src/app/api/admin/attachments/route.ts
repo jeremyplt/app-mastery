@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAdminClient } from "@/lib/supabase";
-import { requireAdmin } from "@/lib/admin";
+import { requireOwner } from "@/lib/admin";
 
 export async function GET(req: NextRequest) {
   try {
-    await requireAdmin();
+    await requireOwner();
     const db = getAdminClient();
     const { searchParams } = new URL(req.url);
     const lessonId = searchParams.get("lesson_id");
@@ -33,7 +33,7 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    await requireAdmin();
+    await requireOwner();
     const db = getAdminClient();
     const { lesson_id, name, file_path, file_size } = await req.json();
 
@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   try {
-    await requireAdmin();
+    await requireOwner();
     const db = getAdminClient();
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");

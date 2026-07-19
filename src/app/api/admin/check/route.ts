@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
-import { isAdmin } from "@/lib/admin";
+import { getAdminRole } from "@/lib/admin";
 
 export async function GET() {
   try {
-    const admin = await isAdmin();
-    return NextResponse.json({ admin });
+    const role = await getAdminRole();
+    return NextResponse.json({ admin: role !== null, role });
   } catch {
-    return NextResponse.json({ admin: false });
+    return NextResponse.json({ admin: false, role: null });
   }
 }

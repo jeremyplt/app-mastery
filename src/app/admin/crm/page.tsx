@@ -63,6 +63,7 @@ function pct(part: number, total: number): string {
 
 export default function CrmAdmin() {
   const [authorized, setAuthorized] = useState<boolean | null>(null);
+  const [isOwner, setIsOwner] = useState(false);
   const [leads, setLeads] = useState<Record<Source, Lead[]>>({ vsl: [], "plan-action": [] });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -87,8 +88,10 @@ export default function CrmAdmin() {
     fetch("/api/admin/check")
       .then((r) => r.json())
       .then((d) => {
-        if (d.admin) setAuthorized(true);
-        else window.location.href = "/membres";
+        if (d.admin) {
+          setAuthorized(true);
+          setIsOwner(d.role === "owner");
+        } else window.location.href = "/membres";
       })
       .catch(() => {
         window.location.href = "/membres";
@@ -305,13 +308,23 @@ export default function CrmAdmin() {
               automatiquement quand le lead réserve via Calendly.
             </p>
           </div>
-          <button
-            onClick={syncBrevo}
-            disabled={syncing}
-            className="rounded-lg bg-white/10 px-4 py-2 text-sm font-bold text-gray-100 transition-colors hover:bg-white/20 disabled:opacity-50"
-          >
-            {syncing ? "Synchronisation..." : "Synchroniser depuis Brevo"}
-          </button>
+          <div className="flex items-center gap-3">
+            {isOwner && (
+              <a
+                href="/admin/equipe"
+                className="rounded-lg bg-white/10 px-4 py-2 text-sm font-bold text-gray-100 transition-colors hover:bg-white/20"
+              >
+                Équipe
+              </a>
+            )}
+            <button
+              onClick={syncBrevo}
+              disabled={syncing}
+              className="rounded-lg bg-white/10 px-4 py-2 text-sm font-bold text-gray-100 transition-colors hover:bg-white/20 disabled:opacity-50"
+            >
+              {syncing ? "Synchronisation..." : "Synchroniser depuis Brevo"}
+            </button>
+          </div>
         </div>
 
         {syncMessage && (

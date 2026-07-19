@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createMagicLinkToken, hasEssentielAccess } from "@/lib/auth";
-import { ADMIN_EMAIL } from "@/lib/admin";
+import { getRoleForEmail } from "@/lib/admin";
 
 export async function POST(req: NextRequest) {
   try {
@@ -10,9 +10,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Email invalide" }, { status: 400 });
     }
 
-    // L'admin n'a pas d'achat LemonSqueezy : on le laisse toujours recevoir un lien.
-    const isAdminEmail = email.trim().toLowerCase() === ADMIN_EMAIL;
-    const hasAccess = isAdminEmail || (await hasEssentielAccess(email));
+    // Les membres de l'équipe admin n'ont pas d'achat LemonSqueezy :
+    // on les laisse toujours recevoir un lien.
+    const isTeamMember = (await getRoleForEmail(email)) !== null;
+    const hasAccess = isTeamMember || (await hasEssentielAccess(email));
     if (!hasAccess) {
       return NextResponse.json(
         { error: "Aucun achat trouvé pour cet email. Vérifie que tu utilises le même email que lors de ton achat." },
@@ -41,6 +42,7 @@ export async function POST(req: NextRequest) {
       body: JSON.stringify({
         sender: { name: "Jeremy Pitault", email: "contact@jeremypitault.com" },
         to: [{ email }],
+        tags: ["magic-link"],
         subject: "Ton lien de connexion App Mastery",
         htmlContent: `
           <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; padding: 40px 20px;">
