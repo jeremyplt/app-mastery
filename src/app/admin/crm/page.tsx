@@ -43,6 +43,12 @@ const SOURCE_LABELS: Record<Source, string> = {
   "plan-action": "Plan d'action",
 };
 
+// Clé localStorage + message WhatsApp par défaut. {prenom} est remplacé par le
+// prénom du lead au moment du clic.
+const WA_TEMPLATE_KEY = "crm_whatsapp_template";
+const WA_DEFAULT_TEMPLATE =
+  "Bonjour {prenom}, c'est Jeremy de App Mastery. Merci pour ton inscription ! J'aimerais échanger avec toi sur ton projet d'application. Tu es dispo quand pour un rapide appel ?";
+
 function formatDate(iso: string): string {
   try {
     return new Intl.DateTimeFormat("fr-FR", {
@@ -76,12 +82,46 @@ export default function CrmAdmin() {
   const [savingNote, setSavingNote] = useState(false);
   const [syncing, setSyncing] = useState(false);
   const [syncMessage, setSyncMessage] = useState<string | null>(null);
+  const [waTemplate, setWaTemplate] = useState(WA_DEFAULT_TEMPLATE);
+  const [waEditorOpen, setWaEditorOpen] = useState(false);
+  const [waDraft, setWaDraft] = useState("");
 
   function copy(text: string, key: string) {
     navigator.clipboard.writeText(text).then(() => {
       setCopied(key);
       setTimeout(() => setCopied((c) => (c === key ? null : c)), 1500);
     });
+  }
+
+  // Charge le template WhatsApp depuis le localStorage au montage.
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(WA_TEMPLATE_KEY);
+      if (saved) setWaTemplate(saved);
+    } catch {
+      /* localStorage indisponible */
+    }
+  }, []);
+
+  function saveWaTemplate() {
+    const next = waDraft.trim() || WA_DEFAULT_TEMPLATE;
+    setWaTemplate(next);
+    try {
+      localStorage.setItem(WA_TEMPLATE_KEY, next);
+    } catch {
+      /* localStorage indisponible */
+    }
+    setWaEditorOpen(false);
+  }
+
+  // Copie le numéro puis ouvre WhatsApp avec le message pré-rempli.
+  function openWhatsApp(lead: Lead) {
+    if (!lead.phone) return;
+    copy(lead.phone, `${lead.id}-phone`);
+    const digits = lead.phone.replace(/\D/g, "");
+    const message = waTemplate.replace(/\{prenom\}/gi, lead.first_name?.trim() || "");
+    const url = `https://wa.me/${digits}?text=${encodeURIComponent(message)}`;
+    window.open(url, "_blank", "noopener,noreferrer");
   }
 
   useEffect(() => {
@@ -318,6 +358,15 @@ export default function CrmAdmin() {
               </a>
             )}
             <button
+              onClick={() => {
+                setWaDraft(waTemplate);
+                setWaEditorOpen((o) => !o);
+              }}
+              className="rounded-lg bg-white/10 px-4 py-2 text-sm font-bold text-gray-100 transition-colors hover:bg-white/20"
+            >
+              Message WhatsApp
+            </button>
+            <button
               onClick={syncBrevo}
               disabled={syncing}
               className="rounded-lg bg-white/10 px-4 py-2 text-sm font-bold text-gray-100 transition-colors hover:bg-white/20 disabled:opacity-50"
@@ -326,6 +375,46 @@ export default function CrmAdmin() {
             </button>
           </div>
         </div>
+
+        {waEditorOpen && (
+          <div className="mt-4 rounded-xl border border-white/10 bg-white/5 p-4">
+            <label className="block text-sm font-bold text-gray-100">
+              Message WhatsApp pré-rempli
+            </label>
+            <p className="mt-1 text-sm font-medium text-gray-300">
+              Envoyé quand tu cliques sur un numéro. Utilise{" "}
+              <code className="rounded bg-white/10 px-1 font-mono text-amber-300">{"{prenom}"}</code>{" "}
+              pour insérer le prénom du lead.
+            </p>
+            <textarea
+              value={waDraft}
+              onChange={(e) => setWaDraft(e.target.value)}
+              rows={4}
+              className="mt-3 w-full rounded-lg border border-white/10 bg-gray-900 px-3 py-2 text-sm font-medium text-white outline-none focus:border-amber-400"
+              placeholder={WA_DEFAULT_TEMPLATE}
+            />
+            <div className="mt-3 flex items-center gap-3">
+              <button
+                onClick={saveWaTemplate}
+                className="rounded-lg bg-amber-400 px-4 py-2 text-sm font-bold text-gray-950 transition-colors hover:bg-amber-300"
+              >
+                Enregistrer
+              </button>
+              <button
+                onClick={() => setWaEditorOpen(false)}
+                className="rounded-lg bg-white/10 px-4 py-2 text-sm font-bold text-gray-100 transition-colors hover:bg-white/20"
+              >
+                Annuler
+              </button>
+              <button
+                onClick={() => setWaDraft(WA_DEFAULT_TEMPLATE)}
+                className="ml-auto text-sm font-semibold text-gray-300 underline transition-colors hover:text-white"
+              >
+                Réinitialiser
+              </button>
+            </div>
+          </div>
+        )}
 
         {syncMessage && (
           <p className="mt-3 text-sm font-semibold text-amber-300">{syncMessage}</p>
@@ -490,19 +579,19 @@ export default function CrmAdmin() {
                         <span
                           role="button"
                           tabIndex={0}
-                          onClick={() => copy(lead.phone!, `${lead.id}-phone`)}
+                          onClick={() => openWhatsApp(lead)}
                           onKeyDown={(e) => {
                             if (e.key === "Enter" || e.key === " ") {
                               e.preventDefault();
-                              copy(lead.phone!, `${lead.id}-phone`);
+                              openWhatsApp(lead);
                             }
                           }}
                           className="inline-flex cursor-pointer items-center gap-1.5 rounded-md bg-white/10 px-2 py-0.5 text-sm font-semibold text-gray-100 transition-colors hover:bg-white/20"
-                          title="Copier le numéro"
+                          title="Copier le numéro et ouvrir WhatsApp"
                         >
                           <span>{lead.phone}</span>
                           <span className="text-xs text-amber-300">
-                            {copied === `${lead.id}-phone` ? "Copié ✓" : "Copier"}
+                            {copied === `${lead.id}-phone` ? "Copié ✓ · WhatsApp" : "WhatsApp"}
                           </span>
                         </span>
                       )}
