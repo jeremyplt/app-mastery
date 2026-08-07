@@ -349,6 +349,12 @@ export default function CrmAdmin() {
             </p>
           </div>
           <div className="flex items-center gap-3">
+            <a
+              href="/admin/calendrier"
+              className="rounded-lg bg-white/10 px-4 py-2 text-sm font-bold text-gray-100 transition-colors hover:bg-white/20"
+            >
+              Répartition appels
+            </a>
             {isOwner && (
               <a
                 href="/admin/equipe"

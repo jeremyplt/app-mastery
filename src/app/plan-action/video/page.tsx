@@ -27,9 +27,19 @@ function PlanActionVideoContent() {
   // Contact capturé à l'optin /plan-action : pré-remplit le formulaire
   // Calendly. Chargé en effect (localStorage indisponible au rendu serveur).
   const [optinContact, setOptinContact] = useState<OptinContact | null>(null);
+  // Base Calendly assignée côté serveur selon la répartition % (admin).
+  const [calendarBase, setCalendarBase] = useState<string | null>(null);
 
   useEffect(() => {
     setOptinContact(loadOptinContact());
+  }, []);
+
+  // Assigne un calendrier (une fois par visite) et incrémente son compteur.
+  useEffect(() => {
+    fetch("/api/calendar/assign", { method: "POST" })
+      .then((r) => r.json())
+      .then((d) => setCalendarBase(d.calendlyBase || CALENDLY_BASE))
+      .catch(() => setCalendarBase(CALENDLY_BASE));
   }, []);
 
   // Capture le booking réel (Calendly poste un message à la prise de RDV).
@@ -93,7 +103,7 @@ function PlanActionVideoContent() {
     params.set("utm_source", searchParams.get("utm_source") || "plan-action-video");
     params.set("utm_medium", searchParams.get("utm_medium") || "cta");
     params.set("utm_campaign", searchParams.get("utm_campaign") || "plan-action");
-    return `${CALENDLY_BASE}?${params.toString()}`;
+    return `${calendarBase ?? CALENDLY_BASE}?${params.toString()}`;
   })();
 
   return (
@@ -139,7 +149,7 @@ function PlanActionVideoContent() {
             transition={{ delay: 0.5, duration: 0.5 }}
           >
             <p className="text-xl font-semibold text-white mb-2">
-              Tu veux un plan d&apos;action personnalisé pour ton projet ?
+              Tu souhaites te faire accompagner pour créer ton app rentable ?
             </p>
             <div className="inline-flex items-center gap-2 rounded-full bg-red-500/10 border border-red-500/30 px-3 py-1.5">
               <span className="relative flex h-2 w-2">

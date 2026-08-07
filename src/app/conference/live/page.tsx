@@ -414,10 +414,20 @@ function ConferenceLiveContent() {
   // Réponses de pré-qualification de l'opt-in : pré-remplissent les questions
   // radio du formulaire Calendly (a2/a3/a5).
   const [vslAnswers, setVslAnswers] = useState<VslAnswers | null>(null);
+  // Base Calendly assignée côté serveur selon la répartition % (admin).
+  const [calendarBase, setCalendarBase] = useState<string | null>(null);
 
   useEffect(() => {
     setOptinContact(loadOptinContact());
     setVslAnswers(loadVslAnswers());
+  }, []);
+
+  // Assigne un calendrier (une fois par visite) et incrémente son compteur.
+  useEffect(() => {
+    fetch("/api/calendar/assign", { method: "POST" })
+      .then((r) => r.json())
+      .then((d) => setCalendarBase(d.calendlyBase || CALENDLY_BASE))
+      .catch(() => setCalendarBase(CALENDLY_BASE));
   }, []);
 
   useEffect(() => {
@@ -499,7 +509,7 @@ function ConferenceLiveContent() {
     params.set("utm_source", searchParams.get("utm_source") || "vsl-conference");
     params.set("utm_medium", searchParams.get("utm_medium") || "cta");
     params.set("utm_campaign", searchParams.get("utm_campaign") || "vsl");
-    return `${CALENDLY_BASE}?${params.toString()}`;
+    return `${calendarBase ?? CALENDLY_BASE}?${params.toString()}`;
   })();
 
   const unlockCta = useCallback(() => {

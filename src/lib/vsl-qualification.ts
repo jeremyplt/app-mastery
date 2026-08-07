@@ -35,8 +35,8 @@ export const VSL_QUESTIONS: VslQuestion[] = [
     title:
       "Quelle situation désires-tu avec ce business des apps mobiles dans les 3 à 6 prochains mois ?",
     options: [
-      "Générer 1,000€ à 3,000€/mois net en complément de mon salaire",
-      "Atteindre +3,000/mois NET pour envisager de quitter mon job",
+      "Générer 1,000€ à 3,000€/mois NET en complément de mon salaire (ou juste pour démarrer)",
+      "Atteindre +3,000/mois NET pour envisager de quitter mon job ou changer de vie",
       "Dépasser 5,000€/mois NET et viser l'indépendance totale",
       "Construire un business principal dépassant 10,000€/mois NET sur le long-terme",
     ],

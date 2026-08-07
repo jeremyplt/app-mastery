@@ -25,6 +25,8 @@ function ReserverContent() {
   // éviter un mismatch d'hydratation (localStorage n'existe pas côté serveur).
   const [contact, setContact] = useState<OptinContact | null>(null);
   const [mounted, setMounted] = useState(false);
+  // Base Calendly assignée côté serveur selon la répartition % (admin).
+  const [calendarBase, setCalendarBase] = useState<string | null>(null);
   const firstName = searchParams.get("firstName") || contact?.firstName || "";
   const email = searchParams.get("email") || contact?.email || "";
   const phone = contact?.phone || "";
@@ -32,6 +34,14 @@ function ReserverContent() {
   useEffect(() => {
     setContact(loadOptinContact());
     setMounted(true);
+  }, []);
+
+  // Assigne un calendrier (une fois par visite) et incrémente son compteur.
+  useEffect(() => {
+    fetch("/api/calendar/assign", { method: "POST" })
+      .then((r) => r.json())
+      .then((d) => setCalendarBase(d.calendlyBase || CALENDLY_BASE))
+      .catch(() => setCalendarBase(CALENDLY_BASE));
   }, []);
 
   useEffect(() => {
@@ -105,7 +115,7 @@ function ReserverContent() {
     if (utmSource) params.set("utm_source", utmSource);
     if (utmMedium) params.set("utm_medium", utmMedium);
     if (utmCampaign) params.set("utm_campaign", utmCampaign);
-    return `${CALENDLY_BASE}?${params.toString()}`;
+    return `${calendarBase ?? CALENDLY_BASE}?${params.toString()}`;
   })();
 
   return (
@@ -148,7 +158,7 @@ function ReserverContent() {
               chargé, sinon l'iframe se charge sans préremplissage puis se
               recharge avec (double chargement visible). */}
           <div className="mt-8 rounded-xl overflow-hidden border border-white/10 bg-white min-h-[780px]">
-            {mounted && (
+            {mounted && calendarBase && (
               <iframe
                 src={calendlyUrl}
                 width="100%"
