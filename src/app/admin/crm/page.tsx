@@ -43,11 +43,15 @@ const SOURCE_LABELS: Record<Source, string> = {
   "plan-action": "Plan d'action",
 };
 
-// Clé localStorage + message WhatsApp par défaut. {prenom} est remplacé par le
-// prénom du lead au moment du clic.
-const WA_TEMPLATE_KEY = "crm_whatsapp_template";
-const WA_DEFAULT_TEMPLATE =
-  "Bonjour {prenom}, c'est Jeremy de App Mastery. Merci pour ton inscription ! J'aimerais échanger avec toi sur ton projet d'application. Tu es dispo quand pour un rapide appel ?";
+// Clés localStorage + messages WhatsApp par défaut, un par source. {prenom} est
+// remplacé par le prénom du lead au moment du clic.
+const WA_TEMPLATE_KEY = "crm_whatsapp_template"; // ancienne clé (message unique)
+const WA_TEMPLATES_KEY = "crm_whatsapp_templates"; // nouvelle clé (JSON par source)
+const WA_DEFAULT_TEMPLATES: Record<Source, string> = {
+  vsl: "Bonjour {prenom}, c'est Jeremy de App Mastery. Merci d'avoir suivi la conférence ! J'aimerais échanger avec toi sur ton projet d'application. Tu es dispo quand pour un rapide appel ?",
+  "plan-action":
+    "Bonjour {prenom}, c'est Jeremy de App Mastery. Merci pour ton inscription ! J'aimerais échanger avec toi sur ton projet d'application. Tu es dispo quand pour un rapide appel ?",
+};
 
 function formatDate(iso: string): string {
   try {
@@ -82,9 +86,9 @@ export default function CrmAdmin() {
   const [savingNote, setSavingNote] = useState(false);
   const [syncing, setSyncing] = useState(false);
   const [syncMessage, setSyncMessage] = useState<string | null>(null);
-  const [waTemplate, setWaTemplate] = useState(WA_DEFAULT_TEMPLATE);
+  const [waTemplates, setWaTemplates] = useState<Record<Source, string>>(WA_DEFAULT_TEMPLATES);
   const [waEditorOpen, setWaEditorOpen] = useState(false);
-  const [waDraft, setWaDraft] = useState("");
+  const [waDraft, setWaDraft] = useState<Record<Source, string>>(WA_DEFAULT_TEMPLATES);
 
   function copy(text: string, key: string) {
     navigator.clipboard.writeText(text).then(() => {
@@ -93,33 +97,47 @@ export default function CrmAdmin() {
     });
   }
 
-  // Charge le template WhatsApp depuis le localStorage au montage.
+  // Charge les templates WhatsApp depuis le localStorage au montage.
   useEffect(() => {
     try {
-      const saved = localStorage.getItem(WA_TEMPLATE_KEY);
-      if (saved) setWaTemplate(saved);
+      const saved = localStorage.getItem(WA_TEMPLATES_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved) as Partial<Record<Source, string>>;
+        setWaTemplates((t) => ({
+          vsl: parsed.vsl || t.vsl,
+          "plan-action": parsed["plan-action"] || t["plan-action"],
+        }));
+        return;
+      }
+      // Migration depuis l'ancien message unique : on l'applique aux deux sources.
+      const legacy = localStorage.getItem(WA_TEMPLATE_KEY);
+      if (legacy) setWaTemplates({ vsl: legacy, "plan-action": legacy });
     } catch {
       /* localStorage indisponible */
     }
   }, []);
 
-  function saveWaTemplate() {
-    const next = waDraft.trim() || WA_DEFAULT_TEMPLATE;
-    setWaTemplate(next);
+  function saveWaTemplates() {
+    const next: Record<Source, string> = {
+      vsl: waDraft.vsl.trim() || WA_DEFAULT_TEMPLATES.vsl,
+      "plan-action": waDraft["plan-action"].trim() || WA_DEFAULT_TEMPLATES["plan-action"],
+    };
+    setWaTemplates(next);
     try {
-      localStorage.setItem(WA_TEMPLATE_KEY, next);
+      localStorage.setItem(WA_TEMPLATES_KEY, JSON.stringify(next));
     } catch {
       /* localStorage indisponible */
     }
     setWaEditorOpen(false);
   }
 
-  // Copie le numéro puis ouvre WhatsApp avec le message pré-rempli.
+  // Copie le numéro puis ouvre WhatsApp avec le message pré-rempli selon la source.
   function openWhatsApp(lead: Lead) {
     if (!lead.phone) return;
     copy(lead.phone, `${lead.id}-phone`);
     const digits = lead.phone.replace(/\D/g, "");
-    const message = waTemplate.replace(/\{prenom\}/gi, lead.first_name?.trim() || "");
+    const template = waTemplates[lead.source] || WA_DEFAULT_TEMPLATES[lead.source];
+    const message = template.replace(/\{prenom\}/gi, lead.first_name?.trim() || "");
     const url = `https://wa.me/${digits}?text=${encodeURIComponent(message)}`;
     window.open(url, "_blank", "noopener,noreferrer");
   }
@@ -365,12 +383,12 @@ export default function CrmAdmin() {
             )}
             <button
               onClick={() => {
-                setWaDraft(waTemplate);
+                setWaDraft(waTemplates);
                 setWaEditorOpen((o) => !o);
               }}
               className="rounded-lg bg-white/10 px-4 py-2 text-sm font-bold text-gray-100 transition-colors hover:bg-white/20"
             >
-              Message WhatsApp
+              Messages WhatsApp
             </button>
             <button
               onClick={syncBrevo}
@@ -384,24 +402,37 @@ export default function CrmAdmin() {
 
         {waEditorOpen && (
           <div className="mt-4 rounded-xl border border-white/10 bg-white/5 p-4">
-            <label className="block text-sm font-bold text-gray-100">
-              Message WhatsApp pré-rempli
-            </label>
-            <p className="mt-1 text-sm font-medium text-gray-300">
-              Envoyé quand tu cliques sur un numéro. Utilise{" "}
+            <p className="text-sm font-medium text-gray-300">
+              Un message par source, envoyé quand tu cliques sur un numéro. Utilise{" "}
               <code className="rounded bg-white/10 px-1 font-mono text-amber-300">{"{prenom}"}</code>{" "}
-              pour insérer le prénom du lead.
+              pour insérer le prénom du lead. Les emojis sont acceptés.
             </p>
+
+            <label className="mt-4 block text-sm font-bold text-gray-100">
+              Message VSL (conférence)
+            </label>
             <textarea
-              value={waDraft}
-              onChange={(e) => setWaDraft(e.target.value)}
+              value={waDraft.vsl}
+              onChange={(e) => setWaDraft((d) => ({ ...d, vsl: e.target.value }))}
               rows={4}
-              className="mt-3 w-full rounded-lg border border-white/10 bg-gray-900 px-3 py-2 text-sm font-medium text-white outline-none focus:border-amber-400"
-              placeholder={WA_DEFAULT_TEMPLATE}
+              className="mt-2 w-full rounded-lg border border-white/10 bg-gray-900 px-3 py-2 text-sm font-medium text-white outline-none focus:border-amber-400"
+              placeholder={WA_DEFAULT_TEMPLATES.vsl}
             />
+
+            <label className="mt-4 block text-sm font-bold text-gray-100">
+              Message Plan d&apos;action
+            </label>
+            <textarea
+              value={waDraft["plan-action"]}
+              onChange={(e) => setWaDraft((d) => ({ ...d, "plan-action": e.target.value }))}
+              rows={4}
+              className="mt-2 w-full rounded-lg border border-white/10 bg-gray-900 px-3 py-2 text-sm font-medium text-white outline-none focus:border-amber-400"
+              placeholder={WA_DEFAULT_TEMPLATES["plan-action"]}
+            />
+
             <div className="mt-3 flex items-center gap-3">
               <button
-                onClick={saveWaTemplate}
+                onClick={saveWaTemplates}
                 className="rounded-lg bg-amber-400 px-4 py-2 text-sm font-bold text-gray-950 transition-colors hover:bg-amber-300"
               >
                 Enregistrer
@@ -413,7 +444,7 @@ export default function CrmAdmin() {
                 Annuler
               </button>
               <button
-                onClick={() => setWaDraft(WA_DEFAULT_TEMPLATE)}
+                onClick={() => setWaDraft(WA_DEFAULT_TEMPLATES)}
                 className="ml-auto text-sm font-semibold text-gray-300 underline transition-colors hover:text-white"
               >
                 Réinitialiser
