@@ -16,6 +16,37 @@ function getApiKey() {
   return process.env.BREVO_API_KEY!;
 }
 
+// Liste Brevo "Skool Members" : tous les élèves invités sur le Skool.
+export const SKOOL_MEMBERS_LIST_ID = 19;
+
+/**
+ * Ajoute (ou crée) un contact dans une liste Brevo donnée. Best-effort :
+ * ne jette jamais, log seulement. Utilisé pour tenir à jour la liste
+ * "Skool Members" à chaque nouvel élève invité.
+ */
+export async function addContactToBrevoList(email: string, listId: number) {
+  const apiKey = getApiKey();
+  if (!apiKey) return;
+  try {
+    const res = await fetch("https://api.brevo.com/v3/contacts", {
+      method: "POST",
+      headers: {
+        "api-key": apiKey,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email,
+        updateEnabled: true,
+        listIds: [listId],
+      }),
+    });
+    const body = await res.text();
+    console.log(`Brevo add ${email} to list ${listId}: ${res.status} ${body}`);
+  } catch (err) {
+    console.error(`Brevo add to list ${listId} failed:`, err);
+  }
+}
+
 /**
  * Create or update a Brevo contact and add to the correct list.
  * Also fires a custom event to reliably trigger automations

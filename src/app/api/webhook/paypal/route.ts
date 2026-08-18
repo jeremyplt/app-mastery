@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PostHog } from "posthog-node";
-import { addBrevoContact } from "@/lib/brevo";
+import { addBrevoContact, addContactToBrevoList, SKOOL_MEMBERS_LIST_ID } from "@/lib/brevo";
 
 function getSkoolWebhookUrl() {
   return process.env.SKOOL_WEBHOOK_URL!;
@@ -88,6 +88,9 @@ async function handlePurchase(email: string, plan: string, amount?: number, curr
     } catch (err) {
       console.error("Skool invite failed:", err);
     }
+
+    // Tenir à jour la liste Brevo "Skool Members" avec chaque nouvel élève.
+    await addContactToBrevoList(email, SKOOL_MEMBERS_LIST_ID);
   }
 
   // Track purchase in PostHog
