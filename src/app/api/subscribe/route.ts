@@ -3,13 +3,16 @@ import { validatePhone } from "@/lib/phone-validation";
 import { sendMetaEvent, getClientInfo } from "@/lib/meta-capi";
 import { getAdminClient } from "@/lib/supabase";
 
-// Map Brevo list IDs to transactional template IDs and tags
-const LIST_CONFIG: Record<number, { templateId: number; tag: string }> = {
-  12: { templateId: 16, tag: "piscine-epitech" },
-  13: { templateId: 17, tag: "prompt-50-saas" },
-  14: { templateId: 19, tag: "workflow-make" },
-  15: { templateId: 11, tag: "monetisation" },
-  16: { templateId: 14, tag: "openclaw" },
+// Map lead-magnet sources to their Brevo transactional template ID and tag.
+// Keyed by `source` (the guide slug), not by list ID: tous les leads magnets
+// partagent désormais la liste maître "Lead" (23), donc le template de
+// livraison ne peut plus être déduit de la liste.
+const SOURCE_CONFIG: Record<string, { templateId: number; tag: string }> = {
+  "piscine-epitech": { templateId: 16, tag: "piscine-epitech" },
+  "prompt-50-saas": { templateId: 17, tag: "prompt-50-saas" },
+  "workflow-make": { templateId: 19, tag: "workflow-make" },
+  monetisation: { templateId: 11, tag: "monetisation" },
+  openclaw: { templateId: 14, tag: "openclaw" },
 };
 
 async function sendAppelEmail(apiKey: string, email: string, firstName?: string) {
@@ -161,6 +164,51 @@ async function sendPlanActionEmail(apiKey: string, email: string, firstName?: st
   return res.ok;
 }
 
+async function sendMetabaseEmail(apiKey: string, email: string, firstName?: string) {
+  const greeting = firstName ? `Salut ${firstName},` : "Salut,";
+  const htmlContent = `
+<p>${greeting}</p>
+
+<p>Merci d'avoir demandé le pack Metabase. Voici ton fichier à télécharger :</p>
+
+<p><a href="https://www.jeremypitault.com/downloads/metabase-hostinger-m9k4p2.zip">Télécharger le pack .zip</a></p>
+
+<p>Dedans, tu trouveras :</p>
+
+<ul>
+  <li>Le tutoriel pas à pas pour préparer ton VPS Hostinger (KVM 2)</li>
+  <li>Le prompt IA qui installe et sécurise Metabase pour toi, en Docker</li>
+  <li>Tout ce qu'il faut pour avoir ton dashboard analytics auto-hébergé en HTTPS</li>
+</ul>
+
+<p>Suis le tutoriel d'abord, il te prépare le VPS et te donne les infos à copier dans le prompt. Ensuite, tu envoies le prompt à l'IA et tu la laisses installer Metabase.</p>
+
+<p>À très vite,<br>Jeremy</p>
+
+<p>P.S. Si tu bloques quelque part, réponds directement à cet email. Je lis tout.</p>
+`;
+
+  const res = await fetch("https://api.brevo.com/v3/smtp/email", {
+    method: "POST",
+    headers: {
+      "api-key": apiKey,
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify({
+      sender: { name: "Jeremy Pitault", email: "contact@jeremypitault.com" },
+      to: [{ email }],
+      subject: "Ton pack Metabase est prêt",
+      htmlContent,
+      tags: ["metabase"],
+    }),
+  });
+
+  const body = await res.text();
+  console.log(`Brevo metabase email to ${email}: ${res.status} ${body}`);
+  return res.ok;
+}
+
 async function sendTransactionalEmail(apiKey: string, email: string, templateId: number, tag: string) {
   const res = await fetch("https://api.brevo.com/v3/smtp/email", {
     method: "POST",
@@ -227,6 +275,7 @@ export async function POST(req: NextRequest) {
     // and would make the entire create call fail. They're applied in step 1c below.)
     const attributes: Record<string, string | boolean> = {};
     if (firstName) attributes.FIRSTNAME = firstName;
+    if (source) attributes.LEAD_SOURCE = source;
     if (utmSource) attributes.UTM_SOURCE = utmSource;
     if (utmMedium) attributes.UTM_MEDIUM = utmMedium;
     if (utmCampaign) attributes.UTM_CAMPAIGN = utmCampaign;
@@ -372,8 +421,10 @@ export async function POST(req: NextRequest) {
       await sendPlanActionEmail(BREVO_API_KEY, email, firstName);
     } else if (source === "appel") {
       await sendAppelEmail(BREVO_API_KEY, email, firstName);
+    } else if (source === "metabase") {
+      await sendMetabaseEmail(BREVO_API_KEY, email, firstName);
     } else {
-      const config = targetListId ? LIST_CONFIG[targetListId] : undefined;
+      const config = source ? SOURCE_CONFIG[source] : undefined;
       if (config) {
         await sendTransactionalEmail(BREVO_API_KEY, email, config.templateId, config.tag);
       }
