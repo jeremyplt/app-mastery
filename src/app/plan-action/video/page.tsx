@@ -14,6 +14,10 @@ const PLAN_ACTION_VIDEO_ID = "a1fa42ba-337e-4cf1-b0b7-24fc7ab5be24";
 
 const CALENDLY_BASE = "https://calendly.com/jeremypltpro/30min";
 
+// Désactivé tant que la page /appel/confirme n'a pas assez de contenu (vidéos).
+// Passer à true pour rediriger vers la page de confirmation après le booking.
+const CONFIRM_REDIRECT_ENABLED = false;
+
 export default function PlanActionVideoPage() {
   return (
     <Suspense>
@@ -82,11 +86,13 @@ function PlanActionVideoContent() {
         }).catch(() => {});
 
         // Redirige vers la page de confirmation (récap + vidéos + équipe).
-        const confirmParams = new URLSearchParams();
-        if (optinContact?.firstName)
-          confirmParams.set("firstName", optinContact.firstName);
-        const query = confirmParams.toString();
-        window.location.href = `/appel/confirme${query ? `?${query}` : ""}`;
+        if (CONFIRM_REDIRECT_ENABLED) {
+          const confirmParams = new URLSearchParams();
+          if (optinContact?.firstName)
+            confirmParams.set("firstName", optinContact.firstName);
+          const query = confirmParams.toString();
+          window.location.href = `/appel/confirme${query ? `?${query}` : ""}`;
+        }
       }
     }
     window.addEventListener("message", onMessage);
