@@ -6,30 +6,18 @@ type Theme = "dark" | "light";
 
 function applyTheme(theme: Theme) {
   const root = document.documentElement;
-  if (theme === "light") root.classList.add("light");
-  else root.classList.remove("light");
+  if (theme === "dark") root.classList.add("dark");
+  else root.classList.remove("dark");
 }
 
 export default function ThemeToggle({ className = "" }: { className?: string }) {
-  const [theme, setTheme] = useState<Theme>("dark");
+  // Light par défaut ; l'utilisateur peut passer en sombre, choix mémorisé.
+  const [theme, setTheme] = useState<Theme>("light");
 
   useEffect(() => {
-    const stored = localStorage.getItem("theme") as Theme | null;
-    const prefersLight = window.matchMedia?.("(prefers-color-scheme: light)").matches;
-    const initial: Theme = stored ?? (prefersLight ? "light" : "dark");
-    setTheme(initial);
-    applyTheme(initial);
-
-    // Suit les changements système tant que l'utilisateur n'a pas choisi manuellement.
-    const mq = window.matchMedia("(prefers-color-scheme: dark)");
-    const onChange = (e: MediaQueryListEvent) => {
-      if (localStorage.getItem("theme")) return;
-      const next: Theme = e.matches ? "dark" : "light";
-      setTheme(next);
-      applyTheme(next);
-    };
-    mq.addEventListener("change", onChange);
-    return () => mq.removeEventListener("change", onChange);
+    const stored = (localStorage.getItem("theme") as Theme | null) ?? "light";
+    setTheme(stored);
+    applyTheme(stored);
   }, []);
 
   function toggle() {

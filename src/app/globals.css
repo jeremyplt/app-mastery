@@ -43,43 +43,8 @@ button:disabled {
    macOS DESIGN TOKENS
    ============================== */
 
-/* Dark mode (default) */
+/* Light mode (default) */
 :root {
-  --bg: #09090b;
-  --fg: #f5f5f7;
-  --fg2: rgba(235, 235, 245, 0.62);
-  --fg3: rgba(235, 235, 245, 0.34);
-  --muted: #1a1a1c;
-  --muted-fg: rgba(235, 235, 245, 0.34);
-  --border: rgba(255, 255, 255, 0.11);
-  --sep: rgba(255, 255, 255, 0.09);
-  --card: rgba(255, 255, 255, 0.045);
-  --card-solid: #141416;
-  --card-fg: #f5f5f7;
-  --group: #1a1a1c;
-  --field: rgba(255, 255, 255, 0.06);
-  --field-brd: rgba(255, 255, 255, 0.13);
-  --accent: #0a84ff;
-  --accent2: #409cff;
-  --accent-fg: #ffffff;
-  --green: #30d158;
-  --red: #ff453a;
-  --orange: #ff9f0a;
-  --glass: rgba(28, 28, 30, 0.55);
-  --glass-brd: rgba(255, 255, 255, 0.09);
-  --glass-hi: rgba(255, 255, 255, 0.6);
-  --tile: rgba(120, 120, 128, 0.22);
-  --sel: rgba(10, 132, 255, 0.28);
-  --accent-glow: rgba(10, 132, 255, 0.28);
-
-  /* Motion (Emil / Apple: strong custom curves, never ease-in) */
-  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
-  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
-  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
-}
-
-/* Light mode */
-:root.light {
   --bg: #eceef2;
   --fg: #1d1d1f;
   --fg2: rgba(0, 0, 0, 0.56);
@@ -106,13 +71,48 @@ button:disabled {
   --tile: rgba(255, 255, 255, 0.7);
   --sel: rgba(0, 122, 255, 0.14);
   --accent-glow: rgba(0, 122, 255, 0.25);
+
+  /* Motion (Emil / Apple: strong custom curves, never ease-in) */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+/* Dark mode (opt-in via .dark) */
+:root.dark {
+  --bg: #09090b;
+  --fg: #f5f5f7;
+  --fg2: rgba(235, 235, 245, 0.62);
+  --fg3: rgba(235, 235, 245, 0.34);
+  --muted: #1a1a1c;
+  --muted-fg: rgba(235, 235, 245, 0.34);
+  --border: rgba(255, 255, 255, 0.11);
+  --sep: rgba(255, 255, 255, 0.09);
+  --card: rgba(255, 255, 255, 0.045);
+  --card-solid: #141416;
+  --card-fg: #f5f5f7;
+  --group: #1a1a1c;
+  --field: rgba(255, 255, 255, 0.06);
+  --field-brd: rgba(255, 255, 255, 0.13);
+  --accent: #0a84ff;
+  --accent2: #409cff;
+  --accent-fg: #ffffff;
+  --green: #30d158;
+  --red: #ff453a;
+  --orange: #ff9f0a;
+  --glass: rgba(28, 28, 30, 0.55);
+  --glass-brd: rgba(255, 255, 255, 0.09);
+  --glass-hi: rgba(255, 255, 255, 0.6);
+  --tile: rgba(120, 120, 128, 0.22);
+  --sel: rgba(10, 132, 255, 0.28);
+  --accent-glow: rgba(10, 132, 255, 0.28);
 }
 
 html {
   scroll-behavior: smooth;
-  color-scheme: dark;
+  color-scheme: light;
 }
-html.light { color-scheme: light; }
+html.dark { color-scheme: dark; }
 
 body {
   background: var(--bg);

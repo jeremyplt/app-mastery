@@ -11,6 +11,10 @@ import ThemeToggle from "@/components/ThemeToggle";
 
 const CALENDLY_BASE = "https://calendly.com/jeremypltpro/30min";
 
+// Désactivé tant que la page /appel/confirme n'a pas assez de contenu (vidéos).
+// Passer à true pour rediriger vers la page de confirmation après le booking.
+const CONFIRM_REDIRECT_ENABLED = false;
+
 export default function ReserverPage() {
   return (
     <Suspense>
@@ -93,10 +97,12 @@ function ReserverContent() {
         }).catch(() => {});
 
         // Redirige vers la page de confirmation (récap + vidéos + équipe).
-        const confirmParams = new URLSearchParams();
-        if (firstName) confirmParams.set("firstName", firstName);
-        const query = confirmParams.toString();
-        window.location.href = `/appel/confirme${query ? `?${query}` : ""}`;
+        if (CONFIRM_REDIRECT_ENABLED) {
+          const confirmParams = new URLSearchParams();
+          if (firstName) confirmParams.set("firstName", firstName);
+          const query = confirmParams.toString();
+          window.location.href = `/appel/confirme${query ? `?${query}` : ""}`;
+        }
       }
     }
     window.addEventListener("message", onMessage);
@@ -155,7 +161,7 @@ function ReserverContent() {
           <div className="text-center">
             <div className="mac-icon lg g-blue mx-auto w-16 h-16" style={{ borderRadius: "18px" }}>
               <svg
-                className="w-8 h-8"
+                className="w-7 h-7"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth={2}
