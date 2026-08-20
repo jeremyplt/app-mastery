@@ -31,26 +31,26 @@ export default function FaqV3() {
       <div className="px-4 sm:px-6 lg:px-8">
         {/* Section label */}
         <div className="mb-8 flex items-center gap-4">
-          <span className="font-mono text-sm font-semibold tracking-widest uppercase text-amber-400">
+          <span className="font-mono text-sm font-semibold tracking-widest uppercase text-[var(--accent2)]">
             FAQ
           </span>
-          <div className="h-px flex-1 bg-white/10" />
+          <div className="h-px flex-1 bg-[var(--field)]" />
         </div>
 
         {/* Two-column layout: info left, questions right */}
         <div className="grid lg:grid-cols-[1fr_2fr] gap-8 lg:gap-12">
           {/* Left: title + description + contact */}
           <div className="lg:sticky lg:top-8 lg:self-start">
-            <h2 className="text-[2.5rem]/10 font-medium tracking-tighter text-balance text-white">
+            <h2 className="text-[2.5rem]/10 font-medium tracking-[-0.035em] text-balance text-[var(--fg)]">
               Questions frequentes
             </h2>
-            <p className="mt-4 text-base/7 text-gray-400">
+            <p className="mt-4 text-base/7 text-[var(--fg2)]">
               Tu ne trouves pas la reponse a ta question ? N&apos;hesite pas a nous contacter directement.
             </p>
 
             {/* Contact card */}
-            <div className="mt-8 isolate overflow-hidden rounded-2xl bg-gray-950 p-2 outline outline-white/10">
-              <div className="relative rounded-xl bg-white/5 p-5 overflow-hidden">
+            <div className="mt-8 isolate overflow-hidden rounded-2xl bg-[var(--bg)] p-2 outline outline-[var(--sep)]">
+              <div className="relative rounded-xl bg-[var(--field)] p-5 overflow-hidden">
                 {/* Dot pattern */}
                 <div
                   className="pointer-events-none absolute inset-0 opacity-30"
@@ -61,17 +61,17 @@ export default function FaqV3() {
                 />
                 <div className="relative">
                   <div className="flex items-center gap-3 mb-3">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/10">
-                      <Mail size={16} className="text-amber-400" />
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[color-mix(in_srgb,var(--accent)_10%,transparent)]">
+                      <Mail size={16} className="text-[var(--accent2)]" />
                     </div>
-                    <span className="text-sm font-semibold text-white">Contacte-moi</span>
+                    <span className="text-sm font-semibold text-[var(--fg)]">Contacte-moi</span>
                   </div>
-                  <p className="text-xs/5 text-gray-500 mb-4">
+                  <p className="text-xs/5 text-[var(--fg2)] mb-4">
                     Une question specifique ? Je te reponds en moins de 24h.
                   </p>
                   <a
                     href="#"
-                    className="inline-flex items-center justify-center rounded-full bg-white/5 px-4 py-2 text-xs font-semibold text-gray-300 outline outline-white/10 hover:outline-white/20 transition-colors"
+                    className="inline-flex items-center justify-center rounded-full bg-[var(--field)] px-4 py-2 text-xs font-semibold text-[var(--fg2)] outline outline-[var(--sep)] hover:outline-[var(--sep)] transition-colors"
                   >
                     Envoyer un message
                   </a>
@@ -81,8 +81,8 @@ export default function FaqV3() {
           </div>
 
           {/* Right: questions accordion */}
-          <div className="isolate overflow-hidden rounded-2xl bg-gray-950 p-2 outline outline-white/10">
-            <div className="relative rounded-xl bg-white/5 p-2 overflow-hidden">
+          <div className="isolate overflow-hidden rounded-2xl bg-[var(--bg)] p-2 outline outline-[var(--sep)]">
+            <div className="relative rounded-xl bg-[var(--field)] p-2 overflow-hidden">
               {/* Dot pattern */}
               <div
                 className="pointer-events-none absolute inset-0 opacity-30"
@@ -97,24 +97,24 @@ export default function FaqV3() {
                   return (
                     <div
                       key={index}
-                      className="rounded-lg bg-gray-950"
+                      className="rounded-lg bg-[var(--bg)]"
                     >
                       <button
                         onClick={() => toggle(index)}
-                        className="w-full flex items-center justify-between px-4 py-3.5 text-left cursor-pointer hover:bg-white/5 rounded-lg transition-colors"
+                        className="w-full flex items-center justify-between px-4 py-3.5 text-left cursor-pointer hover:bg-[var(--field)] rounded-lg transition-colors"
                       >
                         <div className="flex items-center gap-3 pr-4">
-                          <span className="font-mono text-xs text-white/20 shrink-0">
+                          <span className="font-mono text-xs text-[var(--fg)]/20 shrink-0">
                             {String(index + 1).padStart(2, "0")}
                           </span>
-                          <span className="text-sm font-semibold text-white">{item.q}</span>
+                          <span className="text-sm font-semibold text-[var(--fg)]">{item.q}</span>
                         </div>
                         <motion.span
                           animate={{ rotate: isOpen ? 180 : 0 }}
                           transition={{ duration: 0.2 }}
                           className="flex-shrink-0"
                         >
-                          <ChevronDown size={14} className="text-gray-600" />
+                          <ChevronDown size={14} className="text-[var(--fg3)]" />
                         </motion.span>
                       </button>
 
@@ -127,7 +127,7 @@ export default function FaqV3() {
                             transition={{ duration: 0.2, ease: "easeInOut" }}
                             className="overflow-hidden"
                           >
-                            <p className="px-4 pb-3.5 pl-11 text-gray-500 text-sm/6">{item.a}</p>
+                            <p className="px-4 pb-3.5 pl-11 text-[var(--fg2)] text-sm/6">{item.a}</p>
                           </motion.div>
                         )}
                       </AnimatePresence>
@@ -141,7 +141,7 @@ export default function FaqV3() {
       </div>
 
       {/* Hairline */}
-      <div className="relative mt-20 before:absolute before:top-0 before:h-px before:w-[200vw] before:-left-[100vw] before:bg-white/10" />
+      <div className="relative mt-20 before:absolute before:top-0 before:h-px before:w-[200vw] before:-left-[100vw] before:bg-[var(--field)]" />
     </section>
   );
 }

@@ -44,10 +44,10 @@ function getTimeLeft(): TimeLeft {
 function TimeBlock({ value, label }: { value: number; label: string }) {
   return (
     <div className="flex flex-col items-center">
-      <span className="text-3xl sm:text-5xl font-bold tracking-tight tabular-nums text-white">
+      <span className="text-3xl sm:text-5xl font-bold tracking-[-0.03em] tabular-nums text-[var(--fg)]">
         {String(value).padStart(2, "0")}
       </span>
-      <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-white/50 mt-1">
+      <span className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-[var(--fg3)] mt-1">
         {label}
       </span>
     </div>
@@ -56,7 +56,7 @@ function TimeBlock({ value, label }: { value: number; label: string }) {
 
 function Separator() {
   return (
-    <span className="text-2xl sm:text-4xl font-bold text-white/30 self-start mt-1">
+    <span className="text-2xl sm:text-4xl font-bold text-[var(--fg3)] self-start mt-1">
       :
     </span>
   );
@@ -89,7 +89,7 @@ export function CountdownTimerLarge() {
 
   if (expired) {
     return (
-      <p className="text-xl sm:text-2xl font-bold text-red-400">
+      <p className="text-xl sm:text-2xl font-bold text-[var(--red)]">
         Les inscriptions sont fermées.
       </p>
     );
@@ -129,7 +129,7 @@ export function CountdownTimerCompact() {
   parts.push(`${String(time.seconds).padStart(2, "0")}s`);
 
   return (
-    <span className="tabular-nums font-bold text-amber-400">
+    <span className="tabular-nums font-bold text-[var(--accent2)]">
       {parts.join(" ")}
     </span>
   );

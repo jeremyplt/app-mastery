@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense, useCallback, useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import AdDisclaimer from "@/components/AdDisclaimer";
 import CalendlyModal from "@/components/CalendlyModal";
 import { useSearchParams } from "next/navigation";
@@ -174,7 +174,7 @@ function VslPlayer({ onCtaUnlock }: { onCtaUnlock: () => void }) {
   }
 
   return (
-    <div className="isolate overflow-hidden rounded-2xl bg-gray-950 p-2 outline outline-red-500/20">
+    <div className="isolate overflow-hidden rounded-2xl bg-[var(--bg)] p-2 outline outline-red-500/20">
       <div
         ref={containerRef}
         className="relative rounded-xl overflow-hidden aspect-video cursor-pointer select-none bg-black"
@@ -250,14 +250,14 @@ function VslPlayer({ onCtaUnlock }: { onCtaUnlock: () => void }) {
         {/* Overlay retour : le prospect avait déjà commencé la vidéo */}
         {resumePrompt && (
           <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-5 sm:gap-8 bg-black/70 backdrop-blur-sm px-4">
-            <p className="text-xl sm:text-3xl font-black tracking-tight text-white text-center text-balance">
+            <p className="text-xl sm:text-3xl font-black tracking-tight text-[var(--fg)] text-center text-balance">
               Tu avais déjà commencé cette vidéo...
             </p>
             <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4">
               <button
                 type="button"
                 onClick={resumeWatching}
-                className="inline-flex items-center gap-2.5 rounded-full bg-gradient-to-r from-red-600 to-red-500 px-7 py-3.5 text-base font-bold text-white hover:from-red-500 hover:to-red-400 transition-all shadow-lg shadow-red-600/40 whitespace-nowrap"
+                className="mac-btn mac-btn-primary whitespace-nowrap"
               >
                 <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M8 5.14v13.72c0 .8.87 1.3 1.56.88l10.54-6.86a1.05 1.05 0 000-1.76L9.56 4.26A1.04 1.04 0 008 5.14z" />
@@ -267,7 +267,7 @@ function VslPlayer({ onCtaUnlock }: { onCtaUnlock: () => void }) {
               <button
                 type="button"
                 onClick={restartFromBeginning}
-                className="inline-flex items-center gap-2.5 rounded-full border border-white/30 bg-white/10 px-7 py-3.5 text-base font-bold text-white hover:bg-white/20 transition-colors whitespace-nowrap"
+                className="mac-btn mac-btn-def whitespace-nowrap"
               >
                 <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                   <path
@@ -285,7 +285,7 @@ function VslPlayer({ onCtaUnlock }: { onCtaUnlock: () => void }) {
         {/* Overlay initial : la vidéo tourne en muet, clic = relancer avec le son */}
         {!soundOn && !ended && !resumePrompt && (
           <div className="absolute inset-0 z-10 flex items-center justify-center">
-            <div className="mx-4 flex flex-col items-center gap-2 sm:gap-4 rounded-xl sm:rounded-2xl bg-red-600/85 px-5 py-4 sm:px-10 sm:py-8 text-center shadow-2xl shadow-red-950/50 backdrop-blur-sm">
+            <div className="mx-4 flex flex-col items-center gap-2 sm:gap-4 rounded-xl sm:rounded-2xl bg-[color-mix(in_srgb,var(--red)_88%,transparent)] px-5 py-4 sm:px-10 sm:py-8 text-center shadow-2xl shadow-black/40 backdrop-blur-sm">
               <p className="text-base sm:text-2xl font-black tracking-tight text-white">
                 La vidéo a déjà commencé
               </p>
@@ -316,7 +316,7 @@ function VslPlayer({ onCtaUnlock }: { onCtaUnlock: () => void }) {
                 e.stopPropagation();
                 handleClick();
               }}
-              className="inline-flex items-center gap-3 rounded-full bg-gradient-to-r from-red-600 to-red-500 px-8 py-4 text-lg font-bold text-white hover:from-red-500 hover:to-red-400 transition-all shadow-lg shadow-red-600/40"
+              className="mac-btn mac-btn-primary mac-btn-lg"
             >
               <svg className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                 <path
@@ -333,8 +333,8 @@ function VslPlayer({ onCtaUnlock }: { onCtaUnlock: () => void }) {
         {/* Overlay pause */}
         {soundOn && !playing && !ended && (
           <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/30">
-            <span className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-r from-red-600 to-red-500 shadow-lg shadow-red-600/40 transition-transform hover:scale-105">
-              <svg className="ml-1 h-9 w-9 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <span className="flex h-20 w-20 items-center justify-center rounded-full bg-[var(--accent)] shadow-lg shadow-[var(--accent-glow)] transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] [@media(hover:hover)]:hover:scale-105 active:scale-95">
+              <svg className="ml-1 h-9 w-9 text-[var(--fg)]" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M8 5.14v13.72c0 .8.87 1.3 1.56.88l10.54-6.86a1.05 1.05 0 000-1.76L9.56 4.26A1.04 1.04 0 008 5.14z" />
               </svg>
             </span>
@@ -351,7 +351,7 @@ function VslPlayer({ onCtaUnlock }: { onCtaUnlock: () => void }) {
                 handleClick();
               }}
               aria-label={playing ? "Mettre en pause" : "Lire"}
-              className="text-white/90 hover:text-white transition-colors drop-shadow-lg"
+              className="text-[var(--fg)]/90 hover:text-[var(--fg)] transition-colors drop-shadow-lg"
             >
               {playing ? (
                 <svg className="h-7 w-7" fill="currentColor" viewBox="0 0 24 24">
@@ -367,7 +367,7 @@ function VslPlayer({ onCtaUnlock }: { onCtaUnlock: () => void }) {
               type="button"
               onClick={toggleFullscreen}
               aria-label="Plein écran"
-              className="text-white/90 hover:text-white transition-colors drop-shadow-lg"
+              className="text-[var(--fg)]/90 hover:text-[var(--fg)] transition-colors drop-shadow-lg"
             >
               <svg className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                 <path
@@ -381,10 +381,10 @@ function VslPlayer({ onCtaUnlock }: { onCtaUnlock: () => void }) {
         )}
 
         {/* Barre de progression custom, directement sur la vidéo */}
-        <div className="absolute inset-x-0 bottom-0 z-20 h-1.5 bg-white/20 pointer-events-none">
+        <div className="absolute inset-x-0 bottom-0 z-20 h-1.5 bg-[var(--sep)] pointer-events-none">
           <div
             ref={progressBarRef}
-            className="h-full bg-gradient-to-r from-red-600 to-red-500"
+            className="h-full bg-[var(--accent)]"
             style={{ width: "0%" }}
           />
         </div>
@@ -523,11 +523,11 @@ function ConferenceLiveContent() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white antialiased">
+    <div className="min-h-screen bg-[var(--bg)] text-[var(--fg)] antialiased">
       <div className="grid min-h-screen grid-cols-[1fr_minmax(0,80rem)_1fr]">
         {/* Left gutter */}
         <div
-          className="border-r border-white/10 bg-fixed"
+          className="border-r border-[var(--sep)] bg-fixed"
           style={{
             backgroundImage:
               "repeating-linear-gradient(315deg, rgba(255,255,255,0.06) 0, rgba(255,255,255,0.06) 1px, transparent 0, transparent 50%)",
@@ -545,19 +545,19 @@ function ConferenceLiveContent() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
               >
-                <span className="font-mono text-sm sm:text-base font-semibold tracking-widest uppercase text-red-400">
+                <span className="font-mono text-sm sm:text-base font-semibold tracking-widest uppercase text-[var(--red)]">
                   Conférence privée
                 </span>
 
-                <h1 className="mt-5 text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-[1.05] text-balance text-white">
+                <h1 className="mt-5 text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-[1.05] text-balance text-[var(--fg)]">
                   Le Nouvel{" "}
-                  <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-rose-400 to-red-600">
+                  <span className="mac-accent">
                     Eldorado
                   </span>{" "}
                   Des Applications Mobiles
                 </h1>
 
-                <p className="mt-4 text-base sm:text-lg font-medium text-gray-300 max-w-2xl mx-auto">
+                <p className="mt-4 text-base sm:text-lg font-medium text-[var(--fg2)] max-w-2xl mx-auto">
                   Regarde la conférence en entier. À la fin, tu sauras exactement comment lancer
                   ton app rentable, et comment postuler pour qu&apos;on t&apos;accompagne.
                 </p>
@@ -581,7 +581,7 @@ function ConferenceLiveContent() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
               >
-                <p className="text-2xl sm:text-3xl font-black tracking-tight text-white text-balance">
+                <p className="text-2xl sm:text-3xl font-black tracking-tight text-[var(--fg)] text-balance">
                   Prêt à lancer ton app avec notre accompagnement ?
                 </p>
 
@@ -593,17 +593,17 @@ function ConferenceLiveContent() {
                       posthog.capture("vsl_cta_clicked");
                       setCalendlyOpen(true);
                     }}
-                    className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-red-600 to-red-500 px-10 py-4 text-lg font-bold text-white hover:from-red-500 hover:to-red-400 transition-all shadow-lg shadow-red-600/30 whitespace-nowrap"
+                    className="mac-btn mac-btn-primary mac-btn-lg whitespace-nowrap"
                   >
                     Candidater à l&apos;incubateur
                   </button>
                 </div>
 
-                <p className="mt-4 text-sm font-medium text-red-400">
+                <p className="mt-4 text-sm font-medium text-[var(--red)]">
                   Places limitées ce mois-ci
                 </p>
 
-                <p className="mt-4 text-base text-gray-300 max-w-md mx-auto">
+                <p className="mt-4 text-base text-[var(--fg2)] max-w-md mx-auto">
                   Réserve ton appel directement. On définit ensemble si on peut
                   t&apos;accompagner.
                 </p>
@@ -615,7 +615,7 @@ function ConferenceLiveContent() {
 
         {/* Right gutter */}
         <div
-          className="border-l border-white/10 bg-fixed"
+          className="border-l border-[var(--sep)] bg-fixed"
           style={{
             backgroundImage:
               "repeating-linear-gradient(315deg, rgba(255,255,255,0.06) 0, rgba(255,255,255,0.06) 1px, transparent 0, transparent 50%)",
@@ -624,9 +624,11 @@ function ConferenceLiveContent() {
         />
       </div>
 
-      {calendlyOpen && (
-        <CalendlyModal calendlyUrl={calendlyUrl} onClose={() => setCalendlyOpen(false)} />
-      )}
+      <AnimatePresence>
+        {calendlyOpen && (
+          <CalendlyModal calendlyUrl={calendlyUrl} onClose={() => setCalendlyOpen(false)} />
+        )}
+      </AnimatePresence>
 
       <AdDisclaimer />
     </div>

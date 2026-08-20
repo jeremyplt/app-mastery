@@ -3,8 +3,8 @@
 // pour protéger le compte publicitaire (règles "brand usage").
 export default function AdDisclaimer() {
   return (
-    <div className="border-t border-white/10 px-4 py-6">
-      <p className="mx-auto max-w-3xl text-center text-xs leading-relaxed text-gray-400">
+    <div className="border-t border-[var(--sep)] px-4 py-6">
+      <p className="mx-auto max-w-3xl text-center text-xs leading-relaxed text-[var(--fg3)]">
         Ce site ne fait pas partie du site Facebook™, Instagram™, YouTube™ ou
         Google™ et n&apos;est affilié ni à Meta Platforms, Inc. ni à Google LLC.
         Ce site n&apos;est en aucune façon approuvé par Facebook™, Instagram™,

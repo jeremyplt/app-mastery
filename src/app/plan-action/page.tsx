@@ -12,6 +12,7 @@ import { COUNTRY_CODES, detectCountry } from "@/lib/phone-countries";
 import { looksLikeFakePattern } from "@/lib/phone-validation";
 import { generateEventId, metaTrackingFields, trackMeta } from "@/lib/meta-pixel";
 import { saveOptinContact } from "@/lib/optin-contact";
+import ThemeToggle from "@/components/ThemeToggle";
 
 export default function PlanActionPage() {
   return (
@@ -146,246 +147,249 @@ function PlanActionContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white antialiased">
+    <div className="min-h-screen text-[var(--fg)] antialiased">
+      {/* Decorative background glows */}
       <div
-        className="grid min-h-screen grid-cols-[1fr_minmax(0,80rem)_1fr]"
-        style={{ "--gutter": "2.5rem" } as React.CSSProperties}
-      >
-        {/* Left gutter */}
-        <div
-          className="border-r border-white/10 bg-fixed"
-          style={{
-            backgroundImage:
-              "repeating-linear-gradient(315deg, rgba(255,255,255,0.06) 0, rgba(255,255,255,0.06) 1px, transparent 0, transparent 50%)",
-            backgroundSize: "10px 10px",
-          }}
-        />
+        aria-hidden
+        className="fixed inset-0 -z-10 pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(60% 45% at 78% -5%, var(--accent-glow), transparent 62%), radial-gradient(50% 40% at 8% 6%, color-mix(in srgb, var(--green) 12%, transparent), transparent 60%)",
+        }}
+      />
 
-        {/* Center content */}
-        <div className="flex min-h-screen flex-col justify-center min-w-0">
-          <section className="relative pt-6 pb-10 sm:pt-16 lg:pt-24 lg:pb-16">
-            <div className="px-4 sm:px-6 lg:px-8">
-              {/* Main card */}
-              <div className="isolate overflow-hidden rounded-2xl bg-gray-950 p-2 outline outline-amber-500/20">
-                <div className="relative rounded-xl bg-white/5 overflow-hidden">
-                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-amber-500/5 via-transparent to-orange-500/5" />
+      {/* Subtle theme toggle (preference, not a CTA) */}
+      <div className="fixed top-4 right-4 z-50">
+        <ThemeToggle />
+      </div>
 
-                  {/* Top bar: label + prix */}
-                  <motion.div
-                    className="flex items-center gap-4 px-5 pt-5 sm:px-12 sm:pt-8"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.4 }}
-                  >
-                    <span className="font-mono text-base sm:text-lg font-semibold tracking-widest uppercase text-amber-400">
-                      Étude de cas offerte
-                    </span>
-                    <div className="flex items-center gap-2">
-                      <span className="text-gray-500 line-through text-lg font-medium">197€</span>
-                      <span className="rounded-full bg-green-500/15 border border-green-500/30 px-3 py-1 text-sm font-bold text-green-400">GRATUIT</span>
+      <div className="flex min-h-screen flex-col justify-center px-4 py-10 sm:py-16">
+        <section className="w-full max-w-[1120px] mx-auto">
+          <motion.div
+            className="relative overflow-hidden rounded-[22px] border-[0.5px] border-[var(--sep)] bg-[var(--card)] shadow-[0_30px_80px_rgba(0,0,0,0.4)]"
+            style={{ backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)" }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0"
+              style={{
+                background:
+                  "radial-gradient(90% 60% at 80% 0%, var(--accent-glow), transparent 60%)",
+              }}
+            />
+
+            {/* Top row: eyebrow + price */}
+            <div className="relative flex items-center gap-4 flex-wrap px-6 sm:px-10 pt-6 sm:pt-8">
+              <span className="mac-eyebrow">Étude de cas offerte</span>
+              <div className="ml-auto flex items-center gap-2.5">
+                <span className="text-[var(--fg3)] line-through text-[15px] font-medium">
+                  197€
+                </span>
+                <span className="badge badge-success">Gratuit</span>
+              </div>
+            </div>
+
+            <div className="relative grid lg:grid-cols-2 gap-2 px-6 sm:px-10 pb-8 pt-4">
+              {/* Left: form */}
+              <div>
+                <motion.h1
+                  className="mac-h1 mt-1.5"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6 }}
+                >
+                  La méthode à copier-coller qui a fait passer l&apos;app Shinobi{" "}
+                  <span className="mac-accent">de 0 à 140K$/an</span>
+                </motion.h1>
+
+                <motion.form
+                  onSubmit={handleSubmit}
+                  className="mt-7"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.35 }}
+                >
+                  <div className="flex flex-col gap-2.5 max-w-md">
+                    <input
+                      type="text"
+                      required
+                      placeholder="Ton prénom"
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                      className="mac-field"
+                    />
+                    <input
+                      type="email"
+                      required
+                      placeholder="Ton adresse email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="mac-field"
+                    />
+                    <div className="flex gap-2">
+                      <select
+                        value={countryIndex}
+                        onChange={(e) => setCountryIndex(Number(e.target.value))}
+                        className="mac-field shrink-0 appearance-none text-center"
+                        style={{ width: "6.5rem" }}
+                      >
+                        {COUNTRY_CODES.map((c, i) => (
+                          <option key={`${c.country}-${i}`} value={i}>
+                            {c.flag} {c.code}
+                          </option>
+                        ))}
+                      </select>
+                      <input
+                        type="tel"
+                        required
+                        placeholder="Ton numéro de téléphone"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        className="mac-field flex-1 min-w-0"
+                      />
                     </div>
-                  </motion.div>
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="mac-btn mac-btn-primary w-full mt-0.5"
+                    >
+                      {loading ? "..." : "Recevoir le Plan d'Action"}
+                    </button>
+                  </div>
+                  {error && (
+                    <p className="mt-3 text-sm font-medium text-[var(--red)]">{error}</p>
+                  )}
+                  <p className="mt-4 flex items-center gap-2 text-[13px] font-medium text-[var(--fg3)]">
+                    <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                    Gratuit. Pas de spam. Désabonnement en un clic.
+                  </p>
+                </motion.form>
 
-                  <div className="grid lg:grid-cols-2 gap-0">
-                    {/* Left: text content */}
-                    <div className="relative px-5 py-2 sm:px-12 sm:py-4 lg:py-5">
+                {/* Mobile ARR chart */}
+                <motion.div
+                  className="mt-7 lg:hidden rounded-[14px] overflow-hidden border-[0.5px] border-[var(--sep)]"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.45 }}
+                >
+                  <Image
+                    src="/proof/arr-chart.png"
+                    alt="Revenus Shinobi Japanese : de 0 à 140K$/an"
+                    width={1232}
+                    height={700}
+                    className="w-full h-auto"
+                    quality={90}
+                  />
+                </motion.div>
 
-                      <motion.h1
-                        className="text-3xl/tight sm:text-4xl/tight lg:text-[3rem]/tight font-medium tracking-tighter text-balance text-white"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6 }}
-                      >
-                        La méthode à copier-coller qui m&apos;a permis de faire passer l&apos;app Shinobi{" "}
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-orange-300 to-amber-500">
-                          de 0 à 140K$/an
-                        </span>
-                      </motion.h1>
-
-                      <motion.form
-                        onSubmit={handleSubmit}
-                        className="mt-8"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 0.35 }}
-                      >
-                        <div className="flex flex-col gap-3 max-w-md">
-                          <input
-                            type="text"
-                            required
-                            placeholder="Ton prénom"
-                            value={firstName}
-                            onChange={(e) => setFirstName(e.target.value)}
-                            className="w-full rounded-full bg-white/5 border border-white/10 px-5 py-3 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/50 transition-colors"
-                          />
-                          <input
-                            type="email"
-                            required
-                            placeholder="Ton adresse email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="w-full rounded-full bg-white/5 border border-white/10 px-5 py-3 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/50 transition-colors"
-                          />
-                          <div className="flex gap-2">
-                            <select
-                              value={countryIndex}
-                              onChange={(e) => setCountryIndex(Number(e.target.value))}
-                              className="w-24 shrink-0 rounded-full bg-white/5 border border-white/10 px-3 py-3 text-sm text-white focus:outline-none focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/50 transition-colors appearance-none text-center"
-                            >
-                              {COUNTRY_CODES.map((c, i) => (
-                                <option key={`${c.country}-${i}`} value={i}>
-                                  {c.flag} {c.code}
-                                </option>
-                              ))}
-                            </select>
-                            <input
-                              type="tel"
-                              required
-                              placeholder="Ton numéro de téléphone"
-                              value={phone}
-                              onChange={(e) => setPhone(e.target.value)}
-                              className="flex-1 min-w-0 rounded-full bg-white/5 border border-white/10 px-5 py-3 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-amber-500/50 focus:ring-1 focus:ring-amber-500/50 transition-colors"
-                            />
-                          </div>
-                          <button
-                            type="submit"
-                            disabled={loading}
-                            className="w-full rounded-full bg-amber-500 px-6 py-3 text-sm font-semibold text-white hover:bg-amber-400 transition-colors shadow-lg shadow-amber-500/25 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
-                          >
-                            {loading ? "..." : "Recevoir le Plan d'Action"}
-                          </button>
-                        </div>
-                        {error && (
-                          <p className="mt-3 text-sm text-red-400">{error}</p>
-                        )}
-                        <p className="mt-4 text-xs text-gray-500">
-                          Gratuit. Pas de spam. Tu peux te désabonner à tout
-                          moment.
-                        </p>
-                      </motion.form>
-
-                      {/* Mobile ARR chart */}
-                      <motion.div
-                        className="mt-8 lg:hidden rounded-xl overflow-hidden border border-white/10"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: 0.45 }}
+                <motion.div
+                  className="mt-6 flex items-center gap-3"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.6, delay: 0.5 }}
+                >
+                  <div className="flex -space-x-2">
+                    {[
+                      "/avatars/avatar-1.jpg",
+                      "/avatars/avatar-2.jpg",
+                      "/avatars/avatar-3.jpg",
+                      "/avatars/avatar-4.jpg",
+                    ].map((src, i) => (
+                      <div
+                        key={i}
+                        className="w-8 h-8 rounded-full border-2 border-[var(--bg)] overflow-hidden"
                       >
                         <Image
-                          src="/proof/arr-chart.png"
-                          alt="Revenus Shinobi Japanese : de 0 à 140K$/an"
-                          width={1232}
-                          height={700}
-                          className="w-full h-auto"
-                          quality={90}
+                          src={src}
+                          alt=""
+                          width={32}
+                          height={32}
+                          className="w-full h-full object-cover"
                         />
-                      </motion.div>
-
-                      <motion.div
-                        className="mt-6 flex items-center gap-3"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.6, delay: 0.5 }}
-                      >
-                        <div className="flex -space-x-2">
-                          {[
-                            "/avatars/avatar-1.jpg",
-                            "/avatars/avatar-2.jpg",
-                            "/avatars/avatar-3.jpg",
-                            "/avatars/avatar-4.jpg",
-                          ].map((src, i) => (
-                            <div
-                              key={i}
-                              className="w-8 h-8 rounded-full border-2 border-gray-950 overflow-hidden"
-                            >
-                              <Image
-                                src={src}
-                                alt=""
-                                width={32}
-                                height={32}
-                                className="w-full h-full object-cover"
-                              />
-                            </div>
-                          ))}
-                          <div className="w-8 h-8 rounded-full bg-gray-800 border-2 border-gray-950 flex items-center justify-center text-sm font-semibold text-white">
-                            +
-                          </div>
-                        </div>
-                        <span className="text-sm font-medium text-gray-300">
-                          Ils ont déjà lancé leur app
-                        </span>
-                      </motion.div>
-                    </div>
-
-                    {/* Right: video preview */}
-                    <motion.div
-                      className="relative hidden lg:flex items-center justify-center p-6"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ duration: 0.8, delay: 0.3 }}
-                    >
-                      <div className="relative w-full">
-                        <div className="rounded-xl overflow-hidden border border-white/10">
-                          <Image
-                            src="/proof/arr-chart.png"
-                            alt="Revenus Shinobi Japanese : de 0 à 140K$/an"
-                            width={1232}
-                            height={700}
-                            className="w-full h-auto"
-                            quality={90}
-                          />
-                        </div>
-
-                        {/* Bullet points sous la vidéo */}
-                        <ul className="mt-5 space-y-3 text-base text-white">
-                          {[
-                            "Pourquoi les apps mobiles sont la meilleure opportunité en 2026 (et pas les SaaS)",
-                            "Ma méthode pour trouver et valider une idée de niche rentable",
-                            "Comment créer une app complète avec l'IA, sans savoir coder",
-                            "Les secrets d'un onboarding et d'un paywall qui convertissent",
-                            "La stratégie de contenu viral qui a généré des millions de vues",
-                            "Comment utiliser les micro-influenceurs pour scaler sans budget",
-                            "Le plan d'action complet en 28 jours, de l'idée à la publication",
-                          ].map((item, i) => (
-                            <li key={i} className="flex items-start gap-3">
-                              <span className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center shrink-0 mt-0.5">
-                                <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" strokeWidth={4} viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                                </svg>
-                              </span>
-                              {item}
-                            </li>
-                          ))}
-                        </ul>
                       </div>
-                    </motion.div>
+                    ))}
+                    <div className="w-8 h-8 rounded-full bg-[var(--field)] border-2 border-[var(--bg)] flex items-center justify-center text-sm font-semibold text-[var(--fg)]">
+                      +
+                    </div>
                   </div>
-
-                </div>
+                  <span className="text-sm font-semibold text-[var(--fg2)]">
+                    Ils ont déjà lancé leur app
+                  </span>
+                </motion.div>
               </div>
 
-              {/* Bottom credit */}
-              <motion.p
-                className="mt-8 text-center text-sm text-gray-500"
+              {/* Right: proof + checklist */}
+              <motion.div
+                className="relative hidden lg:block pt-2"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 0.5 }}
+                transition={{ duration: 0.8, delay: 0.3 }}
               >
-                Par Jeremy, créateur de Shinobi Japanese
-              </motion.p>
-            </div>
-          </section>
-        </div>
+                <div className="rounded-[14px] overflow-hidden border-[0.5px] border-[var(--sep)] mb-4">
+                  <Image
+                    src="/proof/arr-chart.png"
+                    alt="Revenus Shinobi Japanese : de 0 à 140K$/an"
+                    width={1232}
+                    height={700}
+                    className="w-full h-auto"
+                    quality={90}
+                  />
+                </div>
 
-        {/* Right gutter */}
-        <div
-          className="border-l border-white/10 bg-fixed"
-          style={{
-            backgroundImage:
-              "repeating-linear-gradient(315deg, rgba(255,255,255,0.06) 0, rgba(255,255,255,0.06) 1px, transparent 0, transparent 50%)",
-            backgroundSize: "10px 10px",
-          }}
-        />
+                <p className="mac-grouplabel">Ce que tu vas apprendre dans la vidéo</p>
+                <motion.div
+                  className="mac-group"
+                  initial="hidden"
+                  animate="show"
+                  variants={{
+                    hidden: {},
+                    show: { transition: { staggerChildren: 0.05, delayChildren: 0.45 } },
+                  }}
+                >
+                  {[
+                    "Pourquoi les apps mobiles sont la meilleure opportunité en 2026, pas les SaaS",
+                    "Ma méthode pour trouver et valider une idée de niche rentable",
+                    "Comment créer une app complète avec l'IA, sans savoir coder",
+                    "Les secrets d'un onboarding et d'un paywall qui convertissent",
+                    "La stratégie de contenu viral qui a généré des millions de vues",
+                    "Le plan d'action complet en 28 jours, de l'idée à la publication",
+                  ].map((item, i) => (
+                    <motion.div
+                      key={i}
+                      className="mac-row items-start"
+                      variants={{
+                        hidden: { opacity: 0, y: 8 },
+                        show: { opacity: 1, y: 0, transition: { duration: 0.35 } },
+                      }}
+                    >
+                      <span className="mac-chk mt-0.5">
+                        <svg fill="none" stroke="currentColor" strokeWidth={4} viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                        </svg>
+                      </span>
+                      <span className="mac-t leading-snug">{item}</span>
+                    </motion.div>
+                  ))}
+                </motion.div>
+              </motion.div>
+            </div>
+          </motion.div>
+
+          {/* Bottom credit */}
+          <motion.p
+            className="mt-8 text-center text-sm font-medium text-[var(--fg3)]"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5 }}
+          >
+            Par Jeremy, créateur de Shinobi Japanese
+          </motion.p>
+        </section>
       </div>
       <AdDisclaimer />
     </div>

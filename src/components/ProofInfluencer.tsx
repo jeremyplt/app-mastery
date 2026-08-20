@@ -27,22 +27,20 @@ export default function ProofInfluencer() {
     <section className="relative py-20">
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="mb-8 flex items-center gap-4">
-          <span className="font-mono text-base font-semibold tracking-widest uppercase text-violet-400">
-            Influenceurs
-          </span>
-          <div className="h-px flex-1 bg-white/10" />
+          <span className="mac-eyebrow">Influenceurs</span>
+          <div className="h-px flex-1 bg-[var(--sep)]" />
         </div>
 
         <div className="mb-12 max-w-2xl">
-          <h2 className="text-2xl sm:text-[2.5rem]/10 font-medium tracking-tighter text-balance text-white">
+          <h2 className="text-2xl sm:text-[2.5rem]/10 font-bold tracking-[-0.035em] text-balance text-[var(--fg)]">
             On t&apos;apprend à{" "}
             <span className="relative inline-block">
               trouver, négocier et closer
-              <SketchUnderline className="absolute top-full left-0 w-full text-violet-400 -mt-1" />
+              <SketchUnderline className="absolute top-full left-0 w-full text-[var(--accent2)] -mt-1" />
             </span>{" "}
             les influenceurs comme un pro
           </h2>
-          <p className="mt-6 text-lg text-gray-300 max-w-xl">
+          <p className="mt-6 text-lg text-[var(--fg2)] max-w-xl leading-relaxed">
             Pas besoin de budget pub massif. On te montre comment identifier les
             bons créateurs, les contacter avec le bon message, négocier des
             deals rentables et les transformer en vrais partenaires de
@@ -51,24 +49,15 @@ export default function ProofInfluencer() {
         </div>
 
         <motion.div
-          className="isolate overflow-hidden rounded-2xl bg-gray-950 p-2 outline outline-violet-500/20"
+          className="overflow-hidden rounded-[18px] border-[0.5px] border-[var(--sep)] bg-[var(--card)]"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <div className="relative rounded-xl bg-white/5 p-6 overflow-hidden">
-            <div
-              className="pointer-events-none absolute inset-0 opacity-20"
-              style={{
-                backgroundImage:
-                  "radial-gradient(rgba(255,255,255,0.15) 1px, transparent 1px)",
-                backgroundSize: "16px 16px",
-              }}
-            />
-
+          <div className="relative p-6 overflow-hidden">
             <div className="relative">
               <div className="flex items-center gap-2 mb-4">
-                <span className="text-sm font-semibold text-violet-400 uppercase tracking-wider">
+                <span className="text-sm font-semibold text-[var(--accent2)] uppercase tracking-wider">
                   Vraie conversation avec un influenceur
                 </span>
               </div>
@@ -91,7 +80,7 @@ export default function ProofInfluencer() {
               />
 
               <motion.p
-                className="mt-4 text-lg text-violet-400 font-medium italic"
+                className="mt-4 text-lg text-[var(--accent2)] font-medium italic"
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
@@ -105,7 +94,7 @@ export default function ProofInfluencer() {
         </motion.div>
       </div>
 
-      <div className="relative mt-20 before:absolute before:top-0 before:h-px before:w-[200vw] before:-left-[100vw] before:bg-white/10" />
+      <div className="relative mt-20 before:absolute before:top-0 before:h-px before:w-[200vw] before:-left-[100vw] before:bg-[var(--sep)]" />
     </section>
   );
 }

@@ -231,7 +231,7 @@ function ConferenceContent() {
       text: (
         <>
           La raison étonnante qui explique pourquoi{" "}
-          <span className="font-semibold text-red-400">93% des applications</span> ne sont jamais
+          <span className="font-semibold text-[var(--red)]">93% des applications</span> ne sont jamais
           rentables (et comment éviter ce piège).
         </>
       ),
@@ -240,9 +240,9 @@ function ConferenceContent() {
       emoji: "🚀",
       text: (
         <>
-          Les <span className="font-semibold text-red-400">3 piliers indispensables</span> pour
+          Les <span className="font-semibold text-[var(--red)]">3 piliers indispensables</span> pour
           générer jusqu&apos;à{" "}
-          <span className="font-semibold text-red-400">10 000€ TOUS les mois</span> avec une seule
+          <span className="font-semibold text-[var(--red)]">10 000€ TOUS les mois</span> avec une seule
           application.
         </>
       ),
@@ -252,7 +252,7 @@ function ConferenceContent() {
       text: (
         <>
           La méthode exacte pour créer votre app avec l&apos;IA en{" "}
-          <span className="font-semibold text-red-400">moins d&apos;une semaine</span>, sans écrire
+          <span className="font-semibold text-[var(--red)]">moins d&apos;une semaine</span>, sans écrire
           une seule ligne de code.
         </>
       ),
@@ -299,11 +299,11 @@ function ConferenceContent() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white antialiased">
+    <div className="min-h-screen bg-[var(--bg)] text-[var(--fg)] antialiased">
       <div className="grid min-h-screen grid-cols-[1fr_minmax(0,80rem)_1fr]">
         {/* Left gutter */}
         <div
-          className="border-r border-white/10 bg-fixed"
+          className="border-r border-[var(--sep)] bg-fixed"
           style={{
             backgroundImage:
               "repeating-linear-gradient(315deg, rgba(255,255,255,0.06) 0, rgba(255,255,255,0.06) 1px, transparent 0, transparent 50%)",
@@ -316,9 +316,9 @@ function ConferenceContent() {
           <section className="relative pt-6 pb-16 sm:pt-16 lg:pt-20">
             <div className="px-4 sm:px-6 lg:px-8">
               {/* Main card */}
-              <div className="isolate overflow-hidden rounded-2xl bg-gray-950 p-2 outline outline-red-500/20">
-                <div className="relative rounded-xl bg-white/5 overflow-hidden">
-                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-red-500/5 via-transparent to-rose-500/5" />
+              <div className="isolate overflow-hidden rounded-2xl bg-[var(--bg)] p-2 outline outline-red-500/20">
+                <div className="relative rounded-xl bg-[var(--card)] overflow-hidden">
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[color-mix(in_srgb,var(--accent)_8%,transparent)] via-transparent to-transparent" />
 
                   <div className="relative mx-auto max-w-3xl px-5 py-10 sm:px-12 sm:py-14 text-center">
                     {/* Top label */}
@@ -327,7 +327,7 @@ function ConferenceContent() {
                       animate={{ opacity: 1 }}
                       transition={{ duration: 0.4 }}
                     >
-                      <span className="font-mono text-sm sm:text-base font-semibold tracking-widest uppercase text-red-400">
+                      <span className="font-mono text-sm sm:text-base font-semibold tracking-widest uppercase text-[var(--red)]">
                         Conférence privée offerte
                       </span>
                     </motion.div>
@@ -336,13 +336,13 @@ function ConferenceContent() {
                       <>
                     {/* Headline */}
                     <motion.h1
-                      className="mt-6 text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.05] text-balance text-white"
+                      className="mt-6 text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.05] text-balance text-[var(--fg)]"
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.6 }}
                     >
                       Le Nouvel{" "}
-                      <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-rose-400 to-red-600">
+                      <span className="mac-accent">
                         Eldorado
                       </span>{" "}
                       Des Applications Mobiles
@@ -350,18 +350,18 @@ function ConferenceContent() {
 
                     {/* Subheadline */}
                     <motion.p
-                      className="mt-5 text-lg sm:text-xl font-medium text-white text-balance"
+                      className="mt-5 text-lg sm:text-xl font-medium text-[var(--fg)] text-balance"
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.6, delay: 0.15 }}
                     >
                       Comment une discrète révolution permet de générer jusqu&apos;à{" "}
-                      <span className="text-red-400 font-semibold">10 000€ par mois</span> avec une
+                      <span className="text-[var(--red)] font-semibold">10 000€ par mois</span> avec une
                       seule application mobile.
                     </motion.p>
 
                     <motion.p
-                      className="mt-3 text-base sm:text-lg font-medium text-gray-300"
+                      className="mt-3 text-base sm:text-lg font-medium text-[var(--fg2)]"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ duration: 0.6, delay: 0.25 }}
@@ -386,7 +386,7 @@ function ConferenceContent() {
                           placeholder="Ton prénom"
                           value={firstName}
                           onChange={(e) => setFirstName(e.target.value)}
-                          className="w-full rounded-full bg-white/5 border border-white/10 px-5 py-3 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/50 transition-colors"
+                          className="w-full rounded-full bg-[var(--card)] border border-[var(--sep)] px-5 py-3 text-sm text-[var(--fg)] placeholder:text-[var(--fg2)] focus:outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/50 transition-colors"
                         />
                         <input
                           type="email"
@@ -394,13 +394,13 @@ function ConferenceContent() {
                           placeholder="Ton adresse email"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
-                          className="w-full rounded-full bg-white/5 border border-white/10 px-5 py-3 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/50 transition-colors"
+                          className="w-full rounded-full bg-[var(--card)] border border-[var(--sep)] px-5 py-3 text-sm text-[var(--fg)] placeholder:text-[var(--fg2)] focus:outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/50 transition-colors"
                         />
                         <div className="flex gap-2">
                           <select
                             value={countryIndex}
                             onChange={(e) => setCountryIndex(Number(e.target.value))}
-                            className="w-24 shrink-0 rounded-full bg-white/5 border border-white/10 px-3 py-3 text-sm text-white focus:outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/50 transition-colors appearance-none text-center"
+                            className="w-24 shrink-0 rounded-full bg-[var(--card)] border border-[var(--sep)] px-3 py-3 text-sm text-[var(--fg)] focus:outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/50 transition-colors appearance-none text-center"
                           >
                             {COUNTRY_CODES.map((c, i) => (
                               <option key={`${c.country}-${i}`} value={i}>
@@ -414,19 +414,19 @@ function ConferenceContent() {
                             placeholder="Ton numéro de téléphone"
                             value={phone}
                             onChange={(e) => setPhone(e.target.value)}
-                            className="flex-1 min-w-0 rounded-full bg-white/5 border border-white/10 px-5 py-3 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/50 transition-colors"
+                            className="flex-1 min-w-0 rounded-full bg-[var(--card)] border border-[var(--sep)] px-5 py-3 text-sm text-[var(--fg)] placeholder:text-[var(--fg2)] focus:outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/50 transition-colors"
                           />
                         </div>
                         <button
                           type="submit"
                           disabled={loading}
-                          className="w-full rounded-full bg-gradient-to-r from-red-600 to-red-500 px-6 py-3.5 text-base font-bold text-white hover:from-red-500 hover:to-red-400 transition-all shadow-lg shadow-red-600/30 disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+                          className="mac-btn mac-btn-primary w-full whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           {loading ? "..." : "Accéder à la conférence privée"}
                         </button>
                       </div>
-                      {error && <p className="mt-3 text-sm text-red-400">{error}</p>}
-                      <p className="mt-4 text-xs text-gray-400">
+                      {error && <p className="mt-3 text-sm text-[var(--red)]">{error}</p>}
+                      <p className="mt-4 text-xs text-[var(--fg2)]">
                         Accès immédiat. 100% gratuit.
                       </p>
                     </motion.form>
@@ -441,13 +441,13 @@ function ConferenceContent() {
                         transition={{ duration: 0.4 }}
                         className="mx-auto max-w-xl"
                       >
-                        <p className="mt-6 font-mono text-sm font-semibold tracking-widest uppercase text-gray-400">
+                        <p className="mt-6 font-mono text-sm font-semibold tracking-widest uppercase text-[var(--fg2)]">
                           Question {questionIndex + 1} / {VSL_QUESTIONS.length}
                         </p>
-                        <h1 className="mt-4 text-2xl sm:text-3xl font-black tracking-tight text-balance text-white">
+                        <h1 className="mt-4 text-2xl sm:text-3xl font-black tracking-tight text-balance text-[var(--fg)]">
                           {VSL_QUESTIONS[questionIndex].title}
                         </h1>
-                        <p className="mt-3 text-base font-medium text-gray-300">
+                        <p className="mt-3 text-base font-medium text-[var(--fg2)]">
                           Dernière étape avant d&apos;accéder à la conférence.
                         </p>
                         <div className="mt-8 flex flex-col gap-3">
@@ -456,7 +456,7 @@ function ConferenceContent() {
                               key={option}
                               type="button"
                               onClick={() => handleAnswer(option)}
-                              className="w-full rounded-full bg-white/5 border border-white/10 px-6 py-3.5 text-sm sm:text-base font-semibold text-white text-left hover:border-red-500/60 hover:bg-red-500/10 transition-colors"
+                              className="w-full rounded-full bg-[var(--card)] border border-[var(--sep)] px-6 py-3.5 text-sm sm:text-base font-semibold text-[var(--fg)] text-left hover:border-[var(--accent)] hover:bg-[var(--sel)] transition-colors"
                             >
                               {option}
                             </button>
@@ -476,14 +476,14 @@ function ConferenceContent() {
                 viewport={{ once: true, margin: "-80px" }}
                 transition={{ duration: 0.5 }}
               >
-                <h2 className="text-center text-2xl sm:text-3xl font-black tracking-tight text-white">
+                <h2 className="text-center text-2xl sm:text-3xl font-black tracking-tight text-[var(--fg)]">
                   Dans cette conférence privée, vous allez découvrir :
                 </h2>
-                <div className="mt-6 divide-y divide-white/10 border-y border-white/10">
+                <div className="mt-6 divide-y divide-white/10 border-y border-[var(--sep)]">
                   {bullets.map((b, i) => (
                     <div key={i} className="flex items-start gap-4 py-6">
                       <span className="text-2xl leading-none shrink-0 mt-0.5">{b.emoji}</span>
-                      <p className="text-base sm:text-lg text-white leading-snug text-left">
+                      <p className="text-base sm:text-lg text-[var(--fg)] leading-snug text-left">
                         {b.text}
                       </p>
                     </div>
@@ -494,7 +494,7 @@ function ConferenceContent() {
               {/* Preuves */}
               <div className="mt-20">
                 <motion.h2
-                  className="text-center text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-white"
+                  className="text-center text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-[var(--fg)]"
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-80px" }}
@@ -513,21 +513,21 @@ function ConferenceContent() {
                       transition={{ duration: 0.5 }}
                     >
                       <div className="text-center">
-                        <p className="font-mono text-sm font-semibold uppercase tracking-widest text-red-400">
+                        <p className="font-mono text-sm font-semibold uppercase tracking-widest text-[var(--red)]">
                           {c.name}
                         </p>
-                        <p className="mt-2 text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-white text-balance">
-                          <span className="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-rose-400 to-red-600 whitespace-nowrap">
+                        <p className="mt-2 text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[var(--fg)] text-balance">
+                          <span className="mac-accent whitespace-nowrap">
                             {c.amount}
                           </span>{" "}
                           {c.unit}
                         </p>
-                        <p className="mt-2 text-lg sm:text-xl font-medium text-gray-300">
+                        <p className="mt-2 text-lg sm:text-xl font-medium text-[var(--fg2)]">
                           {c.detail}
                         </p>
                       </div>
                       {c.image && (
-                        <div className="mt-6 isolate overflow-hidden rounded-2xl bg-gray-950 p-2 outline outline-red-500/20">
+                        <div className="mt-6 isolate overflow-hidden rounded-2xl bg-[var(--bg)] p-2 outline outline-red-500/20">
                           <div className="rounded-xl overflow-hidden">
                             <Image
                               src={c.image.src}
@@ -556,11 +556,11 @@ function ConferenceContent() {
               >
                 <button
                   onClick={scrollToForm}
-                  className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-red-600 to-red-500 px-8 py-4 text-base font-bold text-white hover:from-red-500 hover:to-red-400 transition-all shadow-lg shadow-red-600/30 whitespace-nowrap"
+                  className="mac-btn mac-btn-primary mac-btn-lg whitespace-nowrap"
                 >
                   Accéder à la conférence privée
                 </button>
-                <p className="mt-8 text-sm text-gray-400">
+                <p className="mt-8 text-sm text-[var(--fg2)]">
                   Par Jeremy, créateur de Shinobi Japanese
                 </p>
               </motion.div>
@@ -570,7 +570,7 @@ function ConferenceContent() {
 
         {/* Right gutter */}
         <div
-          className="border-l border-white/10 bg-fixed"
+          className="border-l border-[var(--sep)] bg-fixed"
           style={{
             backgroundImage:
               "repeating-linear-gradient(315deg, rgba(255,255,255,0.06) 0, rgba(255,255,255,0.06) 1px, transparent 0, transparent 50%)",

@@ -1,4 +1,6 @@
 import { Metadata } from "next";
+import Link from "next/link";
+import ThemeToggle from "@/components/ThemeToggle";
 
 export const metadata: Metadata = {
   title: "Politique de Remboursement - App Mastery",
@@ -7,12 +9,21 @@ export const metadata: Metadata = {
 
 export default function PolitiqueRemboursementPage() {
   return (
-    <div className="min-h-screen bg-gray-950 text-white antialiased">
-      <div className="mx-auto max-w-3xl px-6 py-20">
-        <h1 className="text-3xl font-bold tracking-tight mb-2">
+    <div className="min-h-screen text-[var(--fg)] antialiased">
+      <div aria-hidden className="fixed inset-0 -z-10 pointer-events-none" style={{ background: "radial-gradient(50% 30% at 50% -4%, var(--accent-glow), transparent 60%)" }} />
+      <div className="mx-auto max-w-3xl px-6">
+        <nav className="mac-nav mt-5">
+          <Link href="/" className="flex items-center gap-2.5 font-bold text-[15px] tracking-tight text-[var(--fg)]">
+            <span className="grid place-items-center w-7 h-7 rounded-lg text-[12px] font-extrabold tracking-tight text-[var(--accent)] border-[0.5px] border-white/10" style={{ background: "linear-gradient(150deg, #2b2b2e, #000)" }}>AM</span>
+            App Mastery
+          </Link>
+          <ThemeToggle />
+        </nav>
+        <div className="pt-14 pb-16 sm:pt-16">
+        <h1 className="text-[32px] font-bold tracking-[-0.03em] mb-2">
           Politique de Remboursement
         </h1>
-        <p className="text-white/50 mb-12">
+        <p className="text-[var(--fg3)] mb-12">
           Dernière mise à jour : 12 mars 2026
         </p>
 
@@ -32,7 +43,7 @@ export default function PolitiqueRemboursementPage() {
           </p>
           <p>Ce délai inclut et dépasse le droit de rétractation légal de 14 jours.</p>
 
-          <h3 className="text-lg font-semibold text-white mt-6 mb-3">
+          <h3 className="text-[17px] font-semibold text-[var(--fg)] mt-6 mb-3">
             Comment demander un remboursement ?
           </h3>
           <ol className="list-decimal pl-6 space-y-2">
@@ -52,7 +63,7 @@ export default function PolitiqueRemboursementPage() {
             </li>
           </ol>
 
-          <h3 className="text-lg font-semibold text-white mt-6 mb-3">
+          <h3 className="text-[17px] font-semibold text-[var(--fg)] mt-6 mb-3">
             En cas de paiement en 3 mensualités
           </h3>
           <p>
@@ -69,7 +80,7 @@ export default function PolitiqueRemboursementPage() {
             pour vous aider à débloquer votre monétisation.
           </p>
 
-          <h3 className="text-lg font-semibold text-white mt-6 mb-3">
+          <h3 className="text-[17px] font-semibold text-[var(--fg)] mt-6 mb-3">
             Conditions d&apos;éligibilité
           </h3>
           <p>
@@ -97,7 +108,7 @@ export default function PolitiqueRemboursementPage() {
             </li>
           </ul>
 
-          <h3 className="text-lg font-semibold text-white mt-6 mb-3">
+          <h3 className="text-[17px] font-semibold text-[var(--fg)] mt-6 mb-3">
             Ce que comprend le coaching
           </h3>
           <ul className="list-disc pl-6 space-y-1">
@@ -121,7 +132,7 @@ export default function PolitiqueRemboursementPage() {
               Pour les détails complets, consultez nos{" "}
               <a
                 href="/cgv"
-                className="text-sky-400 hover:text-sky-300 underline"
+                className="text-[var(--accent2)] underline"
               >
                 Conditions Générales de Vente
               </a>{" "}
@@ -134,13 +145,14 @@ export default function PolitiqueRemboursementPage() {
           </ul>
         </Section>
 
-        <div className="mt-16 pt-8 border-t border-white/10">
+        <div className="mt-16 pt-8 border-t-[0.5px] border-[var(--sep)]">
           <a
-            href="/formation"
-            className="text-sky-400 hover:text-sky-300 transition-colors font-medium"
+            href="/"
+            className="text-[var(--accent2)] hover:underline font-medium"
           >
-            &larr; Retour à la page de la Formation
+            &larr; Retour à l'accueil
           </a>
+        </div>
         </div>
       </div>
     </div>
@@ -156,8 +168,8 @@ function Section({
 }) {
   return (
     <section className="mb-12">
-      <h2 className="text-xl font-semibold text-white mb-4">{title}</h2>
-      <div className="space-y-3 text-lg/7 text-gray-300">{children}</div>
+      <h2 className="text-[20px] font-bold tracking-[-0.02em] text-[var(--fg)] mb-4">{title}</h2>
+      <div className="space-y-3 text-[17px]/7 text-[var(--fg2)]">{children}</div>
     </section>
   );
 }

@@ -44,31 +44,29 @@ export default function Solution() {
     <section className="relative py-20">
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="mb-8 flex items-center gap-4">
-          <span className="font-mono text-base font-semibold tracking-widest uppercase text-cyan-400">
-            La Méthode
-          </span>
-          <div className="h-px flex-1 bg-white/10" />
+          <span className="badge badge-blue">La Méthode</span>
+          <div className="h-px flex-1 bg-[var(--sep)]" />
         </div>
 
         <div className="mb-4 max-w-2xl">
           {/* Proprietary method name (Brunson) — creates perceived IP */}
-          <h2 className="text-2xl sm:text-[2.5rem]/10 font-medium tracking-tighter text-balance text-white">
+          <h2 className="text-2xl sm:text-[2.5rem]/10 font-medium tracking-tighter text-balance text-[var(--fg)]">
             La Méthode App Mastery en 3 phases
           </h2>
-          <p className="mt-4 text-xl/8 text-gray-300">
+          <p className="mt-4 text-xl/8 text-[var(--fg2)]">
             Pas de théorie inutile. Un système éprouvé qui transforme ton idée
             en app publiée, marketée et monétisée. De la conception au
             marketing, je t&apos;accompagne sur tout.
           </p>
         </div>
 
-        <div className="isolate overflow-hidden rounded-2xl bg-gray-950 p-2 outline outline-white/10">
-          <div className="rounded-xl bg-white/5 p-2">
+        <div className="isolate overflow-hidden rounded-[16px] border-[0.5px] border-[var(--sep)] bg-[var(--card)] p-2">
+          <div className="rounded-[12px] p-2">
             <div className="grid md:grid-cols-3 gap-2">
               {phases.map((step, i) => (
                 <motion.div
                   key={i}
-                  className="relative overflow-hidden rounded-xl bg-gray-950 p-6"
+                  className="relative overflow-hidden rounded-[12px] bg-[var(--group)] p-6"
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
@@ -78,7 +76,7 @@ export default function Solution() {
                     className="pointer-events-none absolute inset-0 opacity-30"
                     style={{
                       backgroundImage:
-                        "radial-gradient(rgba(255,255,255,0.15) 1px, transparent 1px)",
+                        "radial-gradient(var(--sep) 1px, transparent 1px)",
                       backgroundSize: "16px 16px",
                     }}
                   />
@@ -88,13 +86,13 @@ export default function Solution() {
                     >
                       <step.icon size={20} className={step.color} />
                     </div>
-                    <span className="text-sm font-semibold text-gray-600 uppercase tracking-wider">
+                    <span className="text-sm font-semibold text-[var(--fg3)] uppercase tracking-wider">
                       {step.phase}
                     </span>
-                    <h3 className="text-lg font-semibold text-white mt-1 mb-2">
+                    <h3 className="text-lg font-semibold text-[var(--fg)] mt-1 mb-2">
                       {step.title}
                     </h3>
-                    <p className="text-lg/7 text-gray-300">
+                    <p className="text-lg/7 text-[var(--fg2)]">
                       {step.description}
                     </p>
                   </div>
@@ -113,13 +111,13 @@ export default function Solution() {
           transition={{ duration: 0.5, delay: 0.3 }}
         >
           {expired ? (
-            <span className="inline-flex items-center justify-center rounded-full bg-white/10 px-8 py-4 text-lg font-bold text-white/30 cursor-not-allowed">
+            <span className="inline-flex items-center justify-center rounded-full bg-[var(--field)] px-8 py-4 text-lg font-bold text-[var(--fg3)] cursor-not-allowed">
               Inscription fermée
             </span>
           ) : (
             <a
               href="#pricing"
-              className="inline-flex items-center justify-center rounded-full bg-sky-500 px-8 py-4 text-lg font-bold text-white hover:bg-sky-400 transition-colors shadow-lg shadow-sky-500/25"
+              className="btn-primary text-lg px-8 py-4"
               data-ph-capture-attribute-section="solution"
             >
               Lancer mon app maintenant
@@ -129,7 +127,7 @@ export default function Solution() {
 
         {/* Open loop — transition to proof */}
         <motion.p
-          className="mt-8 text-center text-xl font-semibold text-white"
+          className="mt-8 text-center text-xl font-semibold text-[var(--fg)]"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
@@ -139,7 +137,7 @@ export default function Solution() {
         </motion.p>
       </div>
 
-      <div className="relative mt-20 before:absolute before:top-0 before:h-px before:w-[200vw] before:-left-[100vw] before:bg-white/10" />
+      <div className="relative mt-20 before:absolute before:top-0 before:h-px before:w-[200vw] before:-left-[100vw] before:bg-[var(--sep)]" />
     </section>
   );
 }

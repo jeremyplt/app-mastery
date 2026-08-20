@@ -349,19 +349,19 @@ export default function CrmAdmin() {
 
   if (authorized === null) {
     return (
-      <div className="min-h-screen bg-gray-950 text-white flex items-center justify-center">
+      <div className="min-h-screen bg-[var(--bg)] text-[var(--fg)] flex items-center justify-center">
         Vérification...
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white antialiased">
+    <div className="min-h-screen bg-[var(--bg)] text-[var(--fg)] antialiased">
       <div className="mx-auto max-w-6xl px-5 py-10">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <h1 className="text-3xl font-bold tracking-tight">CRM</h1>
-            <p className="mt-2 text-gray-300 font-medium">
+            <p className="mt-2 text-[var(--fg2)] font-medium">
               Suivi des leads VSL et Plan d&apos;action. La case &quot;Call booké&quot; se coche
               automatiquement quand le lead réserve via Calendly.
             </p>
@@ -369,14 +369,14 @@ export default function CrmAdmin() {
           <div className="flex items-center gap-3">
             <a
               href="/admin/calendrier"
-              className="rounded-lg bg-white/10 px-4 py-2 text-sm font-bold text-gray-100 transition-colors hover:bg-white/20"
+              className="rounded-lg bg-[var(--field)] px-4 py-2 text-sm font-bold text-[var(--fg)] transition-colors hover:bg-[color-mix(in_srgb,var(--fg)_10%,transparent)]"
             >
               Répartition appels
             </a>
             {isOwner && (
               <a
                 href="/admin/equipe"
-                className="rounded-lg bg-white/10 px-4 py-2 text-sm font-bold text-gray-100 transition-colors hover:bg-white/20"
+                className="rounded-lg bg-[var(--field)] px-4 py-2 text-sm font-bold text-[var(--fg)] transition-colors hover:bg-[color-mix(in_srgb,var(--fg)_10%,transparent)]"
               >
                 Équipe
               </a>
@@ -386,14 +386,14 @@ export default function CrmAdmin() {
                 setWaDraft(waTemplates);
                 setWaEditorOpen((o) => !o);
               }}
-              className="rounded-lg bg-white/10 px-4 py-2 text-sm font-bold text-gray-100 transition-colors hover:bg-white/20"
+              className="rounded-lg bg-[var(--field)] px-4 py-2 text-sm font-bold text-[var(--fg)] transition-colors hover:bg-[color-mix(in_srgb,var(--fg)_10%,transparent)]"
             >
               Messages WhatsApp
             </button>
             <button
               onClick={syncBrevo}
               disabled={syncing}
-              className="rounded-lg bg-white/10 px-4 py-2 text-sm font-bold text-gray-100 transition-colors hover:bg-white/20 disabled:opacity-50"
+              className="rounded-lg bg-[var(--field)] px-4 py-2 text-sm font-bold text-[var(--fg)] transition-colors hover:bg-[color-mix(in_srgb,var(--fg)_10%,transparent)] disabled:opacity-50"
             >
               {syncing ? "Synchronisation..." : "Synchroniser depuis Brevo"}
             </button>
@@ -401,51 +401,51 @@ export default function CrmAdmin() {
         </div>
 
         {waEditorOpen && (
-          <div className="mt-4 rounded-xl border border-white/10 bg-white/5 p-4">
-            <p className="text-sm font-medium text-gray-300">
+          <div className="mt-4 rounded-xl border border-[var(--sep)] bg-[var(--card)] p-4">
+            <p className="text-sm font-medium text-[var(--fg2)]">
               Un message par source, envoyé quand tu cliques sur un numéro. Utilise{" "}
-              <code className="rounded bg-white/10 px-1 font-mono text-amber-300">{"{prenom}"}</code>{" "}
+              <code className="rounded bg-[var(--field)] px-1 font-mono text-[var(--accent2)]">{"{prenom}"}</code>{" "}
               pour insérer le prénom du lead. Les emojis sont acceptés.
             </p>
 
-            <label className="mt-4 block text-sm font-bold text-gray-100">
+            <label className="mt-4 block text-sm font-bold text-[var(--fg)]">
               Message VSL (conférence)
             </label>
             <textarea
               value={waDraft.vsl}
               onChange={(e) => setWaDraft((d) => ({ ...d, vsl: e.target.value }))}
               rows={4}
-              className="mt-2 w-full rounded-lg border border-white/10 bg-gray-900 px-3 py-2 text-sm font-medium text-white outline-none focus:border-amber-400"
+              className="mt-2 w-full rounded-lg border border-[var(--sep)] bg-[var(--group)] px-3 py-2 text-sm font-medium text-[var(--fg)] outline-none focus:border-[var(--accent)]"
               placeholder={WA_DEFAULT_TEMPLATES.vsl}
             />
 
-            <label className="mt-4 block text-sm font-bold text-gray-100">
+            <label className="mt-4 block text-sm font-bold text-[var(--fg)]">
               Message Plan d&apos;action
             </label>
             <textarea
               value={waDraft["plan-action"]}
               onChange={(e) => setWaDraft((d) => ({ ...d, "plan-action": e.target.value }))}
               rows={4}
-              className="mt-2 w-full rounded-lg border border-white/10 bg-gray-900 px-3 py-2 text-sm font-medium text-white outline-none focus:border-amber-400"
+              className="mt-2 w-full rounded-lg border border-[var(--sep)] bg-[var(--group)] px-3 py-2 text-sm font-medium text-[var(--fg)] outline-none focus:border-[var(--accent)]"
               placeholder={WA_DEFAULT_TEMPLATES["plan-action"]}
             />
 
             <div className="mt-3 flex items-center gap-3">
               <button
                 onClick={saveWaTemplates}
-                className="rounded-lg bg-amber-400 px-4 py-2 text-sm font-bold text-gray-950 transition-colors hover:bg-amber-300"
+                className="rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-bold text-[var(--accent-fg)] transition-colors hover:bg-[var(--accent)]"
               >
                 Enregistrer
               </button>
               <button
                 onClick={() => setWaEditorOpen(false)}
-                className="rounded-lg bg-white/10 px-4 py-2 text-sm font-bold text-gray-100 transition-colors hover:bg-white/20"
+                className="rounded-lg bg-[var(--field)] px-4 py-2 text-sm font-bold text-[var(--fg)] transition-colors hover:bg-[color-mix(in_srgb,var(--fg)_10%,transparent)]"
               >
                 Annuler
               </button>
               <button
                 onClick={() => setWaDraft(WA_DEFAULT_TEMPLATES)}
-                className="ml-auto text-sm font-semibold text-gray-300 underline transition-colors hover:text-white"
+                className="ml-auto text-sm font-semibold text-[var(--fg2)] underline transition-colors hover:text-[var(--fg)]"
               >
                 Réinitialiser
               </button>
@@ -454,7 +454,7 @@ export default function CrmAdmin() {
         )}
 
         {syncMessage && (
-          <p className="mt-3 text-sm font-semibold text-amber-300">{syncMessage}</p>
+          <p className="mt-3 text-sm font-semibold text-[var(--accent2)]">{syncMessage}</p>
         )}
 
         {/* Onglets source */}
@@ -468,8 +468,8 @@ export default function CrmAdmin() {
               }}
               className={`rounded-lg px-4 py-2 text-sm font-bold transition-colors ${
                 tab === s
-                  ? "bg-amber-400 text-gray-950"
-                  : "bg-white/10 text-gray-200 hover:bg-white/20"
+                  ? "bg-[var(--accent)] text-[var(--accent-fg)]"
+                  : "bg-[var(--field)] text-[var(--fg)] hover:bg-[color-mix(in_srgb,var(--fg)_10%,transparent)]"
               }`}
             >
               {SOURCE_LABELS[s]} ({leads[s].length})
@@ -479,54 +479,54 @@ export default function CrmAdmin() {
 
         {/* Stats */}
         <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-          <div className="rounded-xl border border-white/10 bg-white/5 p-4">
-            <p className="text-sm font-bold text-gray-300">Leads</p>
+          <div className="rounded-xl border border-[var(--sep)] bg-[var(--card)] p-4">
+            <p className="text-sm font-bold text-[var(--fg2)]">Leads</p>
             <p className="mt-1 text-2xl font-bold">{stats.total}</p>
-            <p className="mt-1 text-xs font-semibold text-gray-400">
+            <p className="mt-1 text-xs font-semibold text-[var(--fg2)]">
               dont {stats.disqualified} disqualifiés ({stats.disqualifiedRate})
             </p>
           </div>
-          <div className="rounded-xl border border-white/10 bg-white/5 p-4">
-            <p className="text-sm font-bold text-gray-300">Contactés</p>
+          <div className="rounded-xl border border-[var(--sep)] bg-[var(--card)] p-4">
+            <p className="text-sm font-bold text-[var(--fg2)]">Contactés</p>
             <p className="mt-1 text-2xl font-bold">
               {stats.contacted}{" "}
-              <span className="text-base font-bold text-amber-300">{stats.contactedRate}</span>
+              <span className="text-base font-bold text-[var(--accent2)]">{stats.contactedRate}</span>
             </p>
-            <p className="mt-1 text-xs font-semibold text-gray-400">des leads actifs</p>
+            <p className="mt-1 text-xs font-semibold text-[var(--fg2)]">des leads actifs</p>
           </div>
-          <div className="rounded-xl border border-white/10 bg-white/5 p-4">
-            <p className="text-sm font-bold text-gray-300">Injoignables</p>
+          <div className="rounded-xl border border-[var(--sep)] bg-[var(--card)] p-4">
+            <p className="text-sm font-bold text-[var(--fg2)]">Injoignables</p>
             <p className="mt-1 text-2xl font-bold">
               {stats.unreachable}{" "}
-              <span className="text-base font-bold text-orange-300">{stats.unreachableRate}</span>
+              <span className="text-base font-bold text-[var(--orange)]">{stats.unreachableRate}</span>
             </p>
-            <p className="mt-1 text-xs font-semibold text-gray-400">faux numéro / pas WhatsApp</p>
+            <p className="mt-1 text-xs font-semibold text-[var(--fg2)]">faux numéro / pas WhatsApp</p>
           </div>
-          <div className="rounded-xl border border-white/10 bg-white/5 p-4">
-            <p className="text-sm font-bold text-gray-300">Réponses</p>
+          <div className="rounded-xl border border-[var(--sep)] bg-[var(--card)] p-4">
+            <p className="text-sm font-bold text-[var(--fg2)]">Réponses</p>
             <p className="mt-1 text-2xl font-bold">
               {stats.replied}{" "}
-              <span className="text-base font-bold text-amber-300">{stats.replyRate}</span>
+              <span className="text-base font-bold text-[var(--accent2)]">{stats.replyRate}</span>
             </p>
-            <p className="mt-1 text-xs font-semibold text-gray-400">des contactés</p>
+            <p className="mt-1 text-xs font-semibold text-[var(--fg2)]">des contactés</p>
           </div>
-          <div className="rounded-xl border border-white/10 bg-white/5 p-4">
-            <p className="text-sm font-bold text-gray-300">Calls bookés</p>
+          <div className="rounded-xl border border-[var(--sep)] bg-[var(--card)] p-4">
+            <p className="text-sm font-bold text-[var(--fg2)]">Calls bookés</p>
             <p className="mt-1 text-2xl font-bold">
               {stats.booked}{" "}
-              <span className="text-base font-bold text-green-300">{stats.bookedRate}</span>
+              <span className="text-base font-bold text-[var(--green)]">{stats.bookedRate}</span>
             </p>
-            <p className="mt-1 text-xs font-semibold text-gray-400">
+            <p className="mt-1 text-xs font-semibold text-[var(--fg2)]">
               dont {stats.bookedDirect} en direct (sans contact)
             </p>
           </div>
-          <div className="rounded-xl border border-white/10 bg-white/5 p-4">
-            <p className="text-sm font-bold text-gray-300">Réponse → call</p>
+          <div className="rounded-xl border border-[var(--sep)] bg-[var(--card)] p-4">
+            <p className="text-sm font-bold text-[var(--fg2)]">Réponse → call</p>
             <p className="mt-1 text-2xl font-bold">
               {stats.bookedAfterReply}{" "}
-              <span className="text-base font-bold text-green-300">{stats.bookedFromReplyRate}</span>
+              <span className="text-base font-bold text-[var(--green)]">{stats.bookedFromReplyRate}</span>
             </p>
-            <p className="mt-1 text-xs font-semibold text-gray-400">
+            <p className="mt-1 text-xs font-semibold text-[var(--fg2)]">
               ont répondu puis booké un call
             </p>
           </div>
@@ -548,8 +548,8 @@ export default function CrmAdmin() {
               onClick={() => setFilter(key)}
               className={`rounded-lg px-3 py-2 text-sm font-bold transition-colors ${
                 filter === key
-                  ? "bg-amber-400 text-gray-950"
-                  : "bg-white/10 text-gray-200 hover:bg-white/20"
+                  ? "bg-[var(--accent)] text-[var(--accent-fg)]"
+                  : "bg-[var(--field)] text-[var(--fg)] hover:bg-[color-mix(in_srgb,var(--fg)_10%,transparent)]"
               }`}
             >
               {lbl}
@@ -559,15 +559,15 @@ export default function CrmAdmin() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Rechercher (nom, email, tel)"
-            className="ml-auto w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm font-semibold text-white placeholder-gray-500 outline-none focus:border-amber-400 sm:w-64"
+            className="ml-auto w-full rounded-lg border border-[var(--sep)] bg-[var(--card)] px-3 py-2 text-sm font-semibold text-[var(--fg)] placeholder-[var(--fg3)] outline-none focus:border-[var(--accent)] sm:w-64"
           />
         </div>
 
-        {loading && <p className="mt-8 text-gray-300">Chargement...</p>}
-        {error && <p className="mt-8 font-bold text-red-400">{error}</p>}
+        {loading && <p className="mt-8 text-[var(--fg2)]">Chargement...</p>}
+        {error && <p className="mt-8 font-bold text-[var(--red)]">{error}</p>}
 
         {!loading && !error && filtered.length === 0 && (
-          <p className="mt-8 text-gray-300">Aucun lead pour ce filtre.</p>
+          <p className="mt-8 text-[var(--fg2)]">Aucun lead pour ce filtre.</p>
         )}
 
         <div className="mt-6 space-y-2">
@@ -576,21 +576,21 @@ export default function CrmAdmin() {
             return (
               <div
                 key={lead.id}
-                className={`rounded-xl border bg-white/5 ${
+                className={`rounded-xl border bg-[var(--card)] ${
                   lead.disqualified
-                    ? "border-red-500/20 opacity-60"
+                    ? "border-[color-mix(in_srgb,var(--red)_35%,transparent)] opacity-60"
                     : lead.unreachable
-                      ? "border-orange-500/20 opacity-70"
+                      ? "border-[color-mix(in_srgb,var(--orange)_35%,transparent)] opacity-70"
                       : lead.call_booked
-                        ? "border-green-500/30"
+                        ? "border-[color-mix(in_srgb,var(--green)_40%,transparent)]"
                         : lead.source === "vsl" && lead.qualified === null
-                          ? "border-white/10 opacity-60"
-                          : "border-white/10"
+                          ? "border-[var(--sep)] opacity-60"
+                          : "border-[var(--sep)]"
                 }`}
               >
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3">
                   <div className="min-w-0 flex-1">
-                    <p className="truncate font-bold text-white">
+                    <p className="truncate font-bold text-[var(--fg)]">
                       {lead.first_name || "(sans prénom)"}
                     </p>
                     <div className="mt-0.5 flex flex-wrap items-center gap-2">
@@ -604,11 +604,11 @@ export default function CrmAdmin() {
                             copy(lead.email, `${lead.id}-email`);
                           }
                         }}
-                        className="inline-flex cursor-pointer items-center gap-1.5 rounded-md bg-white/10 px-2 py-0.5 text-sm font-semibold text-gray-100 transition-colors hover:bg-white/20"
+                        className="inline-flex cursor-pointer items-center gap-1.5 rounded-md bg-[var(--field)] px-2 py-0.5 text-sm font-semibold text-[var(--fg)] transition-colors hover:bg-[color-mix(in_srgb,var(--fg)_10%,transparent)]"
                         title="Copier l'email"
                       >
                         <span className="truncate">{lead.email}</span>
-                        <span className="text-xs text-amber-300">
+                        <span className="text-xs text-[var(--accent2)]">
                           {copied === `${lead.id}-email` ? "Copié ✓" : "Copier"}
                         </span>
                       </span>
@@ -623,16 +623,16 @@ export default function CrmAdmin() {
                               openWhatsApp(lead);
                             }
                           }}
-                          className="inline-flex cursor-pointer items-center gap-1.5 rounded-md bg-white/10 px-2 py-0.5 text-sm font-semibold text-gray-100 transition-colors hover:bg-white/20"
+                          className="inline-flex cursor-pointer items-center gap-1.5 rounded-md bg-[var(--field)] px-2 py-0.5 text-sm font-semibold text-[var(--fg)] transition-colors hover:bg-[color-mix(in_srgb,var(--fg)_10%,transparent)]"
                           title="Copier le numéro et ouvrir WhatsApp"
                         >
                           <span>{lead.phone}</span>
-                          <span className="text-xs text-amber-300">
+                          <span className="text-xs text-[var(--accent2)]">
                             {copied === `${lead.id}-phone` ? "Copié ✓ · WhatsApp" : "WhatsApp"}
                           </span>
                         </span>
                       )}
-                      <span className="text-xs font-medium text-gray-400">
+                      <span className="text-xs font-medium text-[var(--fg2)]">
                         {formatDate(lead.created_at)}
                       </span>
                     </div>
@@ -642,18 +642,18 @@ export default function CrmAdmin() {
                           <span
                             className={`inline-flex items-center rounded-md px-2 py-0.5 text-xs font-bold ${
                               lead.qualified
-                                ? "bg-green-500/15 text-green-300"
-                                : "bg-red-500/15 text-red-300"
+                                ? "bg-[color-mix(in_srgb,var(--green)_15%,transparent)] text-[var(--green)]"
+                                : "bg-[color-mix(in_srgb,var(--red)_15%,transparent)] text-[var(--red)]"
                             }`}
                           >
                             {lead.qualified ? "Pré-qualifié ✓" : "Non qualifié"}
                           </span>
                         ) : (
-                          <span className="inline-flex items-center rounded-md bg-white/10 px-2 py-0.5 text-xs font-bold text-gray-400">
+                          <span className="inline-flex items-center rounded-md bg-[var(--field)] px-2 py-0.5 text-xs font-bold text-[var(--fg2)]">
                             Sans réponses aux questions
                           </span>
                         )}
-                        <span className="text-xs font-medium text-gray-300">
+                        <span className="text-xs font-medium text-[var(--fg2)]">
                           {[lead.age, lead.profession, lead.objectif, lead.invest]
                             .filter(Boolean)
                             .join(" · ")}
@@ -663,63 +663,63 @@ export default function CrmAdmin() {
                   </div>
 
                   <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-                    <label className="flex cursor-pointer items-center gap-1.5 text-sm font-semibold text-gray-200">
+                    <label className="flex cursor-pointer items-center gap-1.5 text-sm font-semibold text-[var(--fg)]">
                       <input
                         type="checkbox"
                         checked={lead.contacted}
                         onChange={(e) =>
                           patchLead(lead.id, lead.source, { contacted: e.target.checked })
                         }
-                        className="h-4 w-4 accent-amber-400"
+                        className="h-4 w-4 accent-[var(--accent)]"
                       />
                       Contacté
                     </label>
-                    <label className="flex cursor-pointer items-center gap-1.5 text-sm font-semibold text-gray-200">
+                    <label className="flex cursor-pointer items-center gap-1.5 text-sm font-semibold text-[var(--fg)]">
                       <input
                         type="checkbox"
                         checked={lead.replied}
                         onChange={(e) =>
                           patchLead(lead.id, lead.source, { replied: e.target.checked })
                         }
-                        className="h-4 w-4 accent-amber-400"
+                        className="h-4 w-4 accent-[var(--accent)]"
                       />
                       A répondu
                     </label>
-                    <label className="flex cursor-pointer items-center gap-1.5 text-sm font-semibold text-gray-200">
+                    <label className="flex cursor-pointer items-center gap-1.5 text-sm font-semibold text-[var(--fg)]">
                       <input
                         type="checkbox"
                         checked={lead.call_booked}
                         onChange={(e) =>
                           patchLead(lead.id, lead.source, { call_booked: e.target.checked })
                         }
-                        className="h-4 w-4 accent-green-400"
+                        className="h-4 w-4 accent-[var(--green)]"
                       />
                       Call booké
                       {lead.call_booked_auto && (
-                        <span className="rounded-full bg-green-500/15 px-2 py-0.5 text-xs font-bold text-green-300">
+                        <span className="rounded-full bg-[color-mix(in_srgb,var(--green)_15%,transparent)] px-2 py-0.5 text-xs font-bold text-[var(--green)]">
                           Auto
                         </span>
                       )}
                     </label>
-                    <label className="flex cursor-pointer items-center gap-1.5 text-sm font-semibold text-gray-200">
+                    <label className="flex cursor-pointer items-center gap-1.5 text-sm font-semibold text-[var(--fg)]">
                       <input
                         type="checkbox"
                         checked={lead.unreachable}
                         onChange={(e) =>
                           patchLead(lead.id, lead.source, { unreachable: e.target.checked })
                         }
-                        className="h-4 w-4 accent-orange-400"
+                        className="h-4 w-4 accent-[var(--orange)]"
                       />
                       Injoignable
                     </label>
-                    <label className="flex cursor-pointer items-center gap-1.5 text-sm font-semibold text-gray-200">
+                    <label className="flex cursor-pointer items-center gap-1.5 text-sm font-semibold text-[var(--fg)]">
                       <input
                         type="checkbox"
                         checked={lead.disqualified}
                         onChange={(e) =>
                           patchLead(lead.id, lead.source, { disqualified: e.target.checked })
                         }
-                        className="h-4 w-4 accent-red-400"
+                        className="h-4 w-4 accent-[var(--red)]"
                       />
                       Disqualifié
                     </label>
@@ -734,15 +734,15 @@ export default function CrmAdmin() {
                       }}
                       className={`rounded-md px-2.5 py-1 text-xs font-bold transition-colors ${
                         lead.notes
-                          ? "bg-amber-400/15 text-amber-300 hover:bg-amber-400/25"
-                          : "bg-white/10 text-gray-300 hover:bg-white/20"
+                          ? "bg-[color-mix(in_srgb,var(--accent)_15%,transparent)] text-[var(--accent2)] hover:bg-[color-mix(in_srgb,var(--accent)_25%,transparent)]"
+                          : "bg-[var(--field)] text-[var(--fg2)] hover:bg-[color-mix(in_srgb,var(--fg)_10%,transparent)]"
                       }`}
                     >
                       {lead.notes ? "Notes ●" : "Notes"}
                     </button>
                     <button
                       onClick={() => deleteLead(lead)}
-                      className="rounded-md bg-white/10 px-2.5 py-1 text-xs font-bold text-red-300 transition-colors hover:bg-red-500/20"
+                      className="rounded-md bg-[var(--field)] px-2.5 py-1 text-xs font-bold text-[var(--red)] transition-colors hover:bg-[color-mix(in_srgb,var(--red)_20%,transparent)]"
                       title="Supprimer ce lead du CRM et de la liste Brevo"
                     >
                       Suppr.
@@ -751,25 +751,25 @@ export default function CrmAdmin() {
                 </div>
 
                 {notesOpen && (
-                  <div className="border-t border-white/10 px-4 py-3">
+                  <div className="border-t border-[var(--sep)] px-4 py-3">
                     <textarea
                       value={noteDraft}
                       onChange={(e) => setNoteDraft(e.target.value)}
                       rows={3}
                       placeholder="Notes sur ce lead..."
-                      className="w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm font-medium text-white placeholder-gray-500 outline-none focus:border-amber-400"
+                      className="w-full rounded-lg border border-[var(--sep)] bg-[var(--card)] px-3 py-2 text-sm font-medium text-[var(--fg)] placeholder-[var(--fg3)] outline-none focus:border-[var(--accent)]"
                     />
                     <div className="mt-2 flex gap-2">
                       <button
                         onClick={() => saveNote(lead)}
                         disabled={savingNote}
-                        className="rounded-lg bg-amber-400 px-4 py-1.5 text-sm font-bold text-gray-950 transition-colors hover:bg-amber-300 disabled:opacity-50"
+                        className="rounded-lg bg-[var(--accent)] px-4 py-1.5 text-sm font-bold text-[var(--accent-fg)] transition-colors hover:bg-[var(--accent)] disabled:opacity-50"
                       >
                         {savingNote ? "Enregistrement..." : "Enregistrer"}
                       </button>
                       <button
                         onClick={() => setOpenNotes(null)}
-                        className="rounded-lg bg-white/10 px-4 py-1.5 text-sm font-bold text-gray-200 transition-colors hover:bg-white/20"
+                        className="rounded-lg bg-[var(--field)] px-4 py-1.5 text-sm font-bold text-[var(--fg)] transition-colors hover:bg-[color-mix(in_srgb,var(--fg)_10%,transparent)]"
                       >
                         Annuler
                       </button>

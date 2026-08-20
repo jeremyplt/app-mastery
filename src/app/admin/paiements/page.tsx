@@ -105,28 +105,28 @@ export default function PaymentsAdmin() {
 
   if (authorized === null || loading) {
     return (
-      <div className="min-h-screen bg-gray-950 flex items-center justify-center">
-        <div className="text-white text-lg">Chargement...</div>
+      <div className="min-h-screen bg-[var(--bg)] flex items-center justify-center">
+        <div className="text-[var(--fg)] text-lg">Chargement...</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white p-8">
+    <div className="min-h-screen bg-[var(--bg)] text-[var(--fg)] p-8">
       <div className="max-w-2xl mx-auto">
         <h1 className="text-3xl font-bold mb-2">Mode de paiement</h1>
-        <p className="text-white/60 mb-8">
+        <p className="text-[var(--fg)]/60 mb-8">
           Change le provider de paiement actif. Le changement est instantané.
         </p>
 
         {error && (
-          <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 font-medium">
+          <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-[var(--red)] font-medium">
             {error}
           </div>
         )}
 
         {success && (
-          <div className="mb-6 p-4 rounded-xl bg-green-500/10 border border-green-500/30 text-green-400 font-medium">
+          <div className="mb-6 p-4 rounded-xl bg-green-500/10 border border-green-500/30 text-[var(--green)] font-medium">
             {success}
           </div>
         )}
@@ -139,10 +139,10 @@ export default function PaymentsAdmin() {
             return (
               <div
                 key={provider.id}
-                className={`relative rounded-2xl p-6 border-2 transition-all ${
+                className={`relative rounded-2xl p-6 border-2 transition-[border-color,background-color,transform] duration-150 ${
                   isActive
-                    ? "border-sky-500 bg-sky-500/5"
-                    : "border-white/10 bg-white/5 hover:border-white/20"
+                    ? "border-[var(--accent)] bg-[var(--accent)]/5"
+                    : "border-[var(--sep)] bg-white/5 hover:border-white/20"
                 }`}
               >
                 <div className="flex items-start justify-between gap-4">
@@ -151,12 +151,12 @@ export default function PaymentsAdmin() {
                       <div className={`w-3 h-3 rounded-full ${provider.color}`} />
                       <h2 className="text-xl font-semibold">{provider.label}</h2>
                       {isActive && (
-                        <span className="px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-400 text-xs font-bold uppercase tracking-wider">
+                        <span className="px-2 py-0.5 rounded-full bg-[var(--accent)]/20 text-[var(--accent2)] text-xs font-bold uppercase tracking-wider">
                           Actif
                         </span>
                       )}
                     </div>
-                    <p className="text-white/60">{provider.description}</p>
+                    <p className="text-[var(--fg)]/60">{provider.description}</p>
                   </div>
 
                   {!isActive && (
@@ -174,35 +174,35 @@ export default function PaymentsAdmin() {
           })}
         </div>
 
-        <div className="mt-12 p-6 rounded-2xl bg-white/5 border border-white/10">
+        <div className="mt-12 p-6 rounded-2xl bg-white/5 border border-[var(--sep)]">
           <h3 className="text-lg font-semibold mb-3">Variables requises par provider</h3>
           <div className="space-y-4 text-sm font-mono">
             <div>
               <p className="text-indigo-400 font-bold mb-1">Stripe</p>
-              <p className="text-white/50">STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET</p>
-              <p className="text-white/50">STRIPE_PRICE_ESSENTIEL, STRIPE_PRICE_COMPLET, STRIPE_PRICE_COMPLET_3X</p>
-              <p className="text-white/50">STRIPE_PRICE_VIP, STRIPE_PRICE_VIP_3X</p>
+              <p className="text-[var(--fg)]/50">STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET</p>
+              <p className="text-[var(--fg)]/50">STRIPE_PRICE_ESSENTIEL, STRIPE_PRICE_COMPLET, STRIPE_PRICE_COMPLET_3X</p>
+              <p className="text-[var(--fg)]/50">STRIPE_PRICE_VIP, STRIPE_PRICE_VIP_3X</p>
             </div>
             <div>
               <p className="text-yellow-400 font-bold mb-1">Lemon Squeezy</p>
-              <p className="text-white/50">LS_API_KEY, LS_STORE_ID, LS_WEBHOOK_SECRET</p>
-              <p className="text-white/50">LS_VARIANT_ESSENTIEL, LS_VARIANT_COMPLET, LS_VARIANT_COMPLET_3X</p>
-              <p className="text-white/50">LS_VARIANT_VIP, LS_VARIANT_VIP_3X</p>
+              <p className="text-[var(--fg)]/50">LS_API_KEY, LS_STORE_ID, LS_WEBHOOK_SECRET</p>
+              <p className="text-[var(--fg)]/50">LS_VARIANT_ESSENTIEL, LS_VARIANT_COMPLET, LS_VARIANT_COMPLET_3X</p>
+              <p className="text-[var(--fg)]/50">LS_VARIANT_VIP, LS_VARIANT_VIP_3X</p>
             </div>
             <div>
               <p className="text-pink-400 font-bold mb-1">Gumroad</p>
-              <p className="text-white/50">GUMROAD_URL_ESSENTIEL, GUMROAD_URL_COMPLET, GUMROAD_URL_COMPLET_3X</p>
-              <p className="text-white/50">GUMROAD_URL_VIP, GUMROAD_URL_VIP_3X</p>
+              <p className="text-[var(--fg)]/50">GUMROAD_URL_ESSENTIEL, GUMROAD_URL_COMPLET, GUMROAD_URL_COMPLET_3X</p>
+              <p className="text-[var(--fg)]/50">GUMROAD_URL_VIP, GUMROAD_URL_VIP_3X</p>
             </div>
             <div>
               <p className="text-blue-400 font-bold mb-1">PayPal</p>
-              <p className="text-white/50">PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET, PAYPAL_WEBHOOK_ID</p>
-              <p className="text-white/50">PAYPAL_MODE (sandbox ou live)</p>
+              <p className="text-[var(--fg)]/50">PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET, PAYPAL_WEBHOOK_ID</p>
+              <p className="text-[var(--fg)]/50">PAYPAL_MODE (sandbox ou live)</p>
             </div>
           </div>
         </div>
 
-        <div className="mt-6 text-white/40 text-sm">
+        <div className="mt-6 text-[var(--fg)]/40 text-sm">
           Les webhooks fonctionnent en parallèle. Chaque provider a sa propre URL de webhook.
           Seul le checkout (bouton d&apos;achat) est affecté par ce réglage.
         </div>

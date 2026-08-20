@@ -116,17 +116,17 @@ export default function EquipeAdmin() {
 
   if (authorized === null) {
     return (
-      <div className="min-h-screen bg-gray-950 text-white flex items-center justify-center">
+      <div className="min-h-screen bg-[var(--bg)] text-[var(--fg)] flex items-center justify-center">
         Vérification...
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white antialiased">
+    <div className="min-h-screen bg-[var(--bg)] text-[var(--fg)] antialiased">
       <div className="mx-auto max-w-3xl px-5 py-10">
         <h1 className="text-3xl font-bold tracking-tight">Équipe</h1>
-        <p className="mt-2 text-gray-400">
+        <p className="mt-2 text-[var(--fg2)]">
           Les membres invités ont accès aux candidatures et au CRM (contacts,
           suivi, cases à cocher). Seul le propriétaire gère l&apos;équipe, les
           cours et les paiements.
@@ -138,12 +138,12 @@ export default function EquipeAdmin() {
             value={inviteEmail}
             onChange={(e) => setInviteEmail(e.target.value)}
             placeholder="email@exemple.com"
-            className="flex-1 rounded-lg border border-gray-700 bg-gray-900 px-4 py-2.5 text-white placeholder-gray-500 focus:border-sky-500 focus:outline-none"
+            className="flex-1 rounded-lg border border-[var(--sep)] bg-[var(--group)] px-4 py-2.5 text-[var(--fg)] placeholder-gray-500 focus:border-[var(--accent)] focus:outline-none"
           />
           <button
             type="submit"
             disabled={inviting || !inviteEmail.trim()}
-            className="rounded-lg bg-sky-500 px-5 py-2.5 font-semibold text-white hover:bg-sky-400 disabled:opacity-50"
+            className="rounded-lg bg-[var(--accent)] px-5 py-2.5 font-semibold text-[var(--fg)] hover:bg-[var(--accent)] disabled:opacity-50"
           >
             {inviting ? "Envoi..." : "Inviter"}
           </button>
@@ -160,9 +160,9 @@ export default function EquipeAdmin() {
           </div>
         )}
 
-        <div className="mt-8 divide-y divide-gray-800 rounded-xl border border-gray-800">
+        <div className="mt-8 divide-y divide-[var(--sep)] rounded-xl border border-[var(--sep)]">
           {loading ? (
-            <div className="px-5 py-8 text-center text-gray-400">
+            <div className="px-5 py-8 text-center text-[var(--fg2)]">
               Chargement...
             </div>
           ) : (
@@ -173,7 +173,7 @@ export default function EquipeAdmin() {
               >
                 <div>
                   <div className="font-semibold">{u.email}</div>
-                  <div className="text-gray-400">
+                  <div className="text-[var(--fg2)]">
                     {u.role === "owner"
                       ? "Propriétaire"
                       : `Membre, invité le ${formatDate(u.created_at)}`}
@@ -182,7 +182,7 @@ export default function EquipeAdmin() {
                 {u.role !== "owner" && (
                   <button
                     onClick={() => remove(u)}
-                    className="rounded-lg border border-red-800 px-4 py-2 font-semibold text-red-400 hover:bg-red-950/50"
+                    className="rounded-lg border border-red-800 px-4 py-2 font-semibold text-[var(--red)] hover:bg-red-950/50"
                   >
                     Retirer
                   </button>

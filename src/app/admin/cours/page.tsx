@@ -35,7 +35,7 @@ import { CSS } from "@dnd-kit/utilities";
 const TipTapEditor = dynamic(() => import("@/components/TipTapEditor"), {
   ssr: false,
   loading: () => (
-    <div className="h-[200px] bg-white/5 border border-white/10 rounded-lg animate-pulse" />
+    <div className="h-[200px] bg-white/5 border border-[var(--sep)] rounded-lg animate-pulse" />
   ),
 });
 
@@ -80,7 +80,7 @@ function formatFileSize(bytes: number | null): string {
 
 function Spinner() {
   return (
-    <div className="w-5 h-5 border-2 border-sky-400 border-t-transparent rounded-full animate-spin" />
+    <div className="w-5 h-5 border-2 border-[var(--accent)] border-t-transparent rounded-full animate-spin" />
   );
 }
 
@@ -129,7 +129,7 @@ function SortableModuleRow({
           type="text"
           value={moduleTitle}
           onChange={(e) => setModuleTitle(e.target.value)}
-          className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-sky-500"
+          className="w-full bg-white/5 border border-[var(--sep)] rounded-lg px-3 py-2 text-sm text-[var(--fg)] focus:outline-none focus:border-[var(--accent)]"
           autoFocus
           onKeyDown={(e) => {
             if (e.key === "Enter") onSave();
@@ -140,13 +140,13 @@ function SortableModuleRow({
           <button
             onClick={onSave}
             disabled={savingModule}
-            className="flex-1 bg-sky-500 hover:bg-sky-600 text-white text-xs font-medium py-1.5 rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-1"
+            className="flex-1 bg-[var(--accent)] hover:bg-[var(--accent)] text-[var(--fg)] text-xs font-medium py-1.5 rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-1"
           >
             {savingModule ? <Spinner /> : <><Save size={12} /> Enregistrer</>}
           </button>
           <button
             onClick={onCancelEdit}
-            className="px-2 py-1.5 text-gray-400 hover:text-white transition-colors"
+            className="px-2 py-1.5 text-[var(--fg2)] hover:text-[var(--fg)] transition-colors"
           >
             <X size={12} />
           </button>
@@ -161,29 +161,29 @@ function SortableModuleRow({
       style={style}
       className={`group flex items-center gap-2 px-3 py-2.5 rounded-lg cursor-pointer transition-colors ${
         isSelected
-          ? "bg-sky-500/10 text-sky-400"
-          : "text-gray-300 hover:bg-white/5 hover:text-white"
+          ? "bg-[var(--accent)]/10 text-[var(--accent2)]"
+          : "text-[var(--fg2)] hover:bg-white/5 hover:text-[var(--fg)]"
       }`}
       onClick={onSelect}
     >
       <GripVertical
         size={14}
-        className="text-gray-600 shrink-0 cursor-grab active:cursor-grabbing"
+        className="text-[var(--fg3)] shrink-0 cursor-grab active:cursor-grabbing"
         {...attributes}
         {...listeners}
       />
       <span className="flex-1 text-sm font-medium truncate">{mod.title}</span>
-      <span className="text-xs text-gray-500 shrink-0">{mod.lessons.length}</span>
+      <span className="text-xs text-[var(--fg3)] shrink-0">{mod.lessons.length}</span>
       <button
         onClick={(e) => { e.stopPropagation(); onEdit(); }}
-        className="opacity-0 group-hover:opacity-100 p-1 rounded hover:bg-white/10 text-gray-400 hover:text-white transition-all"
+        className="opacity-0 group-hover:opacity-100 p-1 rounded hover:bg-[color-mix(in_srgb,var(--fg)_10%,transparent)] text-[var(--fg2)] hover:text-[var(--fg)] transition-[opacity,background-color,color] duration-150"
         title="Modifier"
       >
         <Pencil size={12} />
       </button>
       <button
         onClick={(e) => { e.stopPropagation(); onDelete(); }}
-        className="opacity-0 group-hover:opacity-100 p-1 rounded hover:bg-red-500/20 text-gray-400 hover:text-red-400 transition-all"
+        className="opacity-0 group-hover:opacity-100 p-1 rounded hover:bg-[color-mix(in_srgb,var(--red)_18%,transparent)] text-[var(--fg2)] hover:text-[var(--red)] transition-[opacity,background-color,color] duration-150"
         title="Supprimer"
       >
         <Trash2 size={12} />
@@ -222,30 +222,30 @@ function SortableLessonRow({
       style={style}
       className={`group flex items-center gap-2 px-3 py-2.5 rounded-lg cursor-pointer transition-colors ${
         isSelected
-          ? "bg-sky-500/10 text-sky-400"
-          : "text-gray-300 hover:bg-white/5 hover:text-white"
+          ? "bg-[var(--accent)]/10 text-[var(--accent2)]"
+          : "text-[var(--fg2)] hover:bg-white/5 hover:text-[var(--fg)]"
       }`}
       onClick={onSelect}
     >
       <GripVertical
         size={14}
-        className="text-gray-600 shrink-0 cursor-grab active:cursor-grabbing"
+        className="text-[var(--fg3)] shrink-0 cursor-grab active:cursor-grabbing"
         {...attributes}
         {...listeners}
       />
       <div className="flex-1 min-w-0">
         <p className="text-sm font-medium truncate">{lesson.title}</p>
         <div className="flex items-center gap-2 mt-0.5">
-          {lesson.description && <FileText size={10} className="text-gray-500" />}
+          {lesson.description && <FileText size={10} className="text-[var(--fg3)]" />}
           {lesson.bunny_video_id && (
-            <span className="text-[10px] text-gray-500">Vidéo</span>
+            <span className="text-[10px] text-[var(--fg3)]">Vidéo</span>
           )}
         </div>
       </div>
-      <ChevronRight size={14} className="text-gray-600 shrink-0" />
+      <ChevronRight size={14} className="text-[var(--fg3)] shrink-0" />
       <button
         onClick={(e) => { e.stopPropagation(); onDelete(); }}
-        className="opacity-0 group-hover:opacity-100 p-1 rounded hover:bg-red-500/20 text-gray-400 hover:text-red-400 transition-all"
+        className="opacity-0 group-hover:opacity-100 p-1 rounded hover:bg-[color-mix(in_srgb,var(--red)_18%,transparent)] text-[var(--fg2)] hover:text-[var(--red)] transition-[opacity,background-color,color] duration-150"
         title="Supprimer"
       >
         <Trash2 size={12} />
@@ -622,7 +622,7 @@ export default function AdminCoursPage() {
 
   if (authorized === null) {
     return (
-      <div className="min-h-screen bg-gray-950 flex items-center justify-center">
+      <div className="min-h-screen bg-[var(--bg)] flex items-center justify-center">
         <Spinner />
       </div>
     );
@@ -633,11 +633,11 @@ export default function AdminCoursPage() {
   /* ================================================================ */
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white antialiased">
+    <div className="min-h-screen bg-[var(--bg)] text-[var(--fg)] antialiased">
       {/* Header */}
-      <header className="border-b border-white/10 px-6 py-4 flex items-center justify-between">
+      <header className="border-b border-[var(--sep)] px-6 py-4 flex items-center justify-between">
         <div>
-          <span className="font-mono text-xs font-semibold tracking-widest uppercase text-sky-400">
+          <span className="font-mono text-xs font-semibold tracking-widest uppercase text-[var(--accent2)]">
             Admin
           </span>
           <h1 className="text-xl font-bold tracking-tight">
@@ -646,7 +646,7 @@ export default function AdminCoursPage() {
         </div>
         <a
           href="/membres/cours"
-          className="text-sm text-gray-400 hover:text-white transition-colors"
+          className="text-sm text-[var(--fg2)] hover:text-[var(--fg)] transition-colors"
         >
           Voir le cours &rarr;
         </a>
@@ -656,9 +656,9 @@ export default function AdminCoursPage() {
         {/* ============================================================ */}
         {/*  LEFT: Modules list                                          */}
         {/* ============================================================ */}
-        <aside className="w-72 shrink-0 border-r border-white/10 overflow-y-auto">
-          <div className="p-4 border-b border-white/10 flex items-center justify-between">
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-400">
+        <aside className="w-72 shrink-0 border-r border-[var(--sep)] overflow-y-auto">
+          <div className="p-4 border-b border-[var(--sep)] flex items-center justify-between">
+            <h2 className="text-sm font-semibold uppercase tracking-wider text-[var(--fg2)]">
               Modules
             </h2>
             <button
@@ -666,7 +666,7 @@ export default function AdminCoursPage() {
                 setAddingModule(true);
                 setNewModuleTitle("");
               }}
-              className="p-1.5 rounded-lg hover:bg-white/10 text-sky-400 transition-colors"
+              className="p-1.5 rounded-lg hover:bg-white/10 text-[var(--accent2)] transition-colors"
               title="Ajouter un module"
             >
               <Plus size={16} />
@@ -675,13 +675,13 @@ export default function AdminCoursPage() {
 
           {/* Add module form */}
           {addingModule && (
-            <div className="p-3 border-b border-white/10 space-y-2">
+            <div className="p-3 border-b border-[var(--sep)] space-y-2">
               <input
                 type="text"
                 value={newModuleTitle}
                 onChange={(e) => setNewModuleTitle(e.target.value)}
                 placeholder="Titre du module"
-                className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-sky-500"
+                className="w-full bg-white/5 border border-[var(--sep)] rounded-lg px-3 py-2 text-sm text-[var(--fg)] placeholder:text-[var(--fg3)] focus:outline-none focus:border-[var(--accent)]"
                 autoFocus
                 onKeyDown={(e) => {
                   if (e.key === "Enter") handleAddModule();
@@ -692,13 +692,13 @@ export default function AdminCoursPage() {
                 <button
                   onClick={handleAddModule}
                   disabled={savingModule}
-                  className="flex-1 bg-sky-500 hover:bg-sky-600 text-white text-sm font-medium py-1.5 rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-1"
+                  className="flex-1 bg-[var(--accent)] hover:bg-[var(--accent)] text-[var(--fg)] text-sm font-medium py-1.5 rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-1"
                 >
                   {savingModule ? <Spinner /> : <><Plus size={14} /> Ajouter</>}
                 </button>
                 <button
                   onClick={() => setAddingModule(false)}
-                  className="px-3 py-1.5 text-sm text-gray-400 hover:text-white transition-colors"
+                  className="px-3 py-1.5 text-sm text-[var(--fg2)] hover:text-[var(--fg)] transition-colors"
                 >
                   <X size={14} />
                 </button>
@@ -747,7 +747,7 @@ export default function AdminCoursPage() {
                   ))}
 
                   {modules.length === 0 && !loading && (
-                    <p className="text-center text-gray-500 text-sm py-8">
+                    <p className="text-center text-[var(--fg3)] text-sm py-8">
                       Aucun module. Cliquez sur + pour en créer un.
                     </p>
                   )}
@@ -760,15 +760,15 @@ export default function AdminCoursPage() {
         {/* ============================================================ */}
         {/*  CENTER: Lessons list                                        */}
         {/* ============================================================ */}
-        <div className="w-80 shrink-0 border-r border-white/10 overflow-y-auto">
+        <div className="w-80 shrink-0 border-r border-[var(--sep)] overflow-y-auto">
           {selectedModule ? (
             <>
-              <div className="p-4 border-b border-white/10 flex items-center justify-between">
+              <div className="p-4 border-b border-[var(--sep)] flex items-center justify-between">
                 <div>
-                  <h2 className="text-sm font-semibold uppercase tracking-wider text-gray-400">
+                  <h2 className="text-sm font-semibold uppercase tracking-wider text-[var(--fg2)]">
                     Leçons
                   </h2>
-                  <p className="text-xs text-gray-500 mt-0.5">
+                  <p className="text-xs text-[var(--fg3)] mt-0.5">
                     {selectedModule.title}
                   </p>
                 </div>
@@ -777,7 +777,7 @@ export default function AdminCoursPage() {
                     setAddingLesson(true);
                     setNewLessonTitle("");
                   }}
-                  className="p-1.5 rounded-lg hover:bg-white/10 text-sky-400 transition-colors"
+                  className="p-1.5 rounded-lg hover:bg-white/10 text-[var(--accent2)] transition-colors"
                   title="Ajouter une leçon"
                 >
                   <Plus size={16} />
@@ -786,13 +786,13 @@ export default function AdminCoursPage() {
 
               {/* Add lesson form */}
               {addingLesson && (
-                <div className="p-3 border-b border-white/10 space-y-2">
+                <div className="p-3 border-b border-[var(--sep)] space-y-2">
                   <input
                     type="text"
                     value={newLessonTitle}
                     onChange={(e) => setNewLessonTitle(e.target.value)}
                     placeholder="Titre de la leçon"
-                    className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:border-sky-500"
+                    className="w-full bg-white/5 border border-[var(--sep)] rounded-lg px-3 py-2 text-sm text-[var(--fg)] placeholder:text-[var(--fg3)] focus:outline-none focus:border-[var(--accent)]"
                     autoFocus
                     onKeyDown={(e) => {
                       if (e.key === "Enter") handleAddLesson();
@@ -803,7 +803,7 @@ export default function AdminCoursPage() {
                     <button
                       onClick={handleAddLesson}
                       disabled={savingLesson}
-                      className="flex-1 bg-sky-500 hover:bg-sky-600 text-white text-sm font-medium py-1.5 rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-1"
+                      className="flex-1 bg-[var(--accent)] hover:bg-[var(--accent)] text-[var(--fg)] text-sm font-medium py-1.5 rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-1"
                     >
                       {savingLesson ? (
                         <Spinner />
@@ -815,7 +815,7 @@ export default function AdminCoursPage() {
                     </button>
                     <button
                       onClick={() => setAddingLesson(false)}
-                      className="px-3 py-1.5 text-sm text-gray-400 hover:text-white transition-colors"
+                      className="px-3 py-1.5 text-sm text-[var(--fg2)] hover:text-[var(--fg)] transition-colors"
                     >
                       <X size={14} />
                     </button>
@@ -845,7 +845,7 @@ export default function AdminCoursPage() {
                     ))}
 
                     {selectedModule.lessons.length === 0 && (
-                      <p className="text-center text-gray-500 text-sm py-8">
+                      <p className="text-center text-[var(--fg3)] text-sm py-8">
                         Aucune leçon. Cliquez sur + pour en créer une.
                       </p>
                     )}
@@ -854,7 +854,7 @@ export default function AdminCoursPage() {
               </DndContext>
             </>
           ) : (
-            <div className="flex items-center justify-center h-full text-gray-500 text-sm px-6 text-center">
+            <div className="flex items-center justify-center h-full text-[var(--fg3)] text-sm px-6 text-center">
               Sélectionnez un module pour voir ses leçons.
             </div>
           )}
@@ -873,7 +873,7 @@ export default function AdminCoursPage() {
                     setSelectedLessonId(null);
                     setLessonForm(null);
                   }}
-                  className="p-2 rounded-lg hover:bg-white/10 text-gray-400 hover:text-white transition-colors"
+                  className="p-2 rounded-lg hover:bg-white/10 text-[var(--fg2)] hover:text-[var(--fg)] transition-colors"
                 >
                   <X size={18} />
                 </button>
@@ -881,7 +881,7 @@ export default function AdminCoursPage() {
 
               {/* Title */}
               <div className="space-y-1.5">
-                <label className="text-sm font-medium text-gray-400">
+                <label className="text-sm font-medium text-[var(--fg2)]">
                   Titre
                 </label>
                 <input
@@ -890,13 +890,13 @@ export default function AdminCoursPage() {
                   onChange={(e) =>
                     setLessonForm({ ...lessonForm, title: e.target.value })
                   }
-                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-sky-500 transition-colors"
+                  className="w-full bg-white/5 border border-[var(--sep)] rounded-lg px-4 py-2.5 text-[var(--fg)] focus:outline-none focus:border-[var(--accent)] transition-colors"
                 />
               </div>
 
               {/* Bunny Video ID */}
               <div className="space-y-1.5">
-                <label className="text-sm font-medium text-gray-400">
+                <label className="text-sm font-medium text-[var(--fg2)]">
                   Bunny Video ID
                 </label>
                 <input
@@ -909,13 +909,13 @@ export default function AdminCoursPage() {
                     })
                   }
                   placeholder="ex: abc123-def456"
-                  className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 text-white placeholder:text-gray-600 focus:outline-none focus:border-sky-500 transition-colors font-mono text-sm"
+                  className="w-full bg-white/5 border border-[var(--sep)] rounded-lg px-4 py-2.5 text-[var(--fg)] placeholder:text-[var(--fg3)] focus:outline-none focus:border-[var(--accent)] transition-colors font-mono text-sm"
                 />
               </div>
 
               {/* Description */}
               <div className="space-y-1.5">
-                <label className="text-sm font-medium text-gray-400">
+                <label className="text-sm font-medium text-[var(--fg2)]">
                   Description
                 </label>
                 <TipTapEditor
@@ -933,7 +933,7 @@ export default function AdminCoursPage() {
               <button
                 onClick={handleSaveLesson}
                 disabled={savingLesson}
-                className="bg-sky-500 hover:bg-sky-600 text-white font-semibold px-6 py-2.5 rounded-lg transition-colors disabled:opacity-50 flex items-center gap-2"
+                className="bg-[var(--accent)] hover:bg-[var(--accent)] text-[var(--fg)] font-semibold px-6 py-2.5 rounded-lg transition-colors disabled:opacity-50 flex items-center gap-2"
               >
                 {savingLesson ? (
                   <Spinner />
@@ -947,8 +947,8 @@ export default function AdminCoursPage() {
               {/* ---------------------------------------------------- */}
               {/*  Attachments                                          */}
               {/* ---------------------------------------------------- */}
-              <div className="border-t border-white/10 pt-6 space-y-4">
-                <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-400 flex items-center gap-2">
+              <div className="border-t border-[var(--sep)] pt-6 space-y-4">
+                <h3 className="text-sm font-semibold uppercase tracking-wider text-[var(--fg2)] flex items-center gap-2">
                   <Paperclip size={14} />
                   Pièces jointes
                 </h3>
@@ -961,18 +961,18 @@ export default function AdminCoursPage() {
                         key={att.id}
                         className="flex items-center gap-3 bg-white/5 rounded-lg px-4 py-3"
                       >
-                        <FileText size={16} className="text-sky-400 shrink-0" />
+                        <FileText size={16} className="text-[var(--accent2)] shrink-0" />
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-medium truncate">
                             {att.name}
                           </p>
-                          <p className="text-xs text-gray-500">
+                          <p className="text-xs text-[var(--fg3)]">
                             {formatFileSize(att.file_size)}
                           </p>
                         </div>
                         <button
                           onClick={() => handleDeleteAttachment(att.id)}
-                          className="p-1.5 rounded hover:bg-red-500/20 text-gray-400 hover:text-red-400 transition-colors"
+                          className="p-1.5 rounded hover:bg-red-500/20 text-[var(--fg2)] hover:text-[var(--red)] transition-colors"
                           title="Supprimer"
                         >
                           <Trash2 size={14} />
@@ -981,7 +981,7 @@ export default function AdminCoursPage() {
                     ))}
                   </div>
                 ) : (
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-[var(--fg3)]">
                     Aucune pièce jointe pour cette leçon.
                   </p>
                 )}
@@ -998,7 +998,7 @@ export default function AdminCoursPage() {
                   <button
                     onClick={() => fileInputRef.current?.click()}
                     disabled={uploading}
-                    className="bg-white/5 hover:bg-white/10 border border-white/10 text-white text-sm font-medium px-4 py-2.5 rounded-lg transition-colors disabled:opacity-50 flex items-center gap-2"
+                    className="bg-white/5 hover:bg-white/10 border border-[var(--sep)] text-[var(--fg)] text-sm font-medium px-4 py-2.5 rounded-lg transition-colors disabled:opacity-50 flex items-center gap-2"
                   >
                     {uploading ? (
                       <>
@@ -1014,7 +1014,7 @@ export default function AdminCoursPage() {
               </div>
             </div>
           ) : (
-            <div className="flex items-center justify-center h-full text-gray-500 text-sm">
+            <div className="flex items-center justify-center h-full text-[var(--fg3)] text-sm">
               Sélectionnez une leçon pour la modifier.
             </div>
           )}

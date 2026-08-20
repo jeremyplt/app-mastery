@@ -7,6 +7,7 @@ import { useSearchParams } from "next/navigation";
 import posthog from "posthog-js";
 import { generateEventId, metaTrackingFields, trackMeta } from "@/lib/meta-pixel";
 import { loadOptinContact, type OptinContact } from "@/lib/optin-contact";
+import ThemeToggle from "@/components/ThemeToggle";
 
 const CALENDLY_BASE = "https://calendly.com/jeremypltpro/30min";
 
@@ -77,6 +78,8 @@ function ReserverContent() {
         fetch("/api/meta-event", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
+          // keepalive : la requête survit à la redirection vers /appel/confirme.
+          keepalive: true,
           body: JSON.stringify({
             eventName: "Schedule",
             eventId: metaEventId,
@@ -88,6 +91,12 @@ function ReserverContent() {
             eventSourceUrl: meta.eventSourceUrl,
           }),
         }).catch(() => {});
+
+        // Redirige vers la page de confirmation (récap + vidéos + équipe).
+        const confirmParams = new URLSearchParams();
+        if (firstName) confirmParams.set("firstName", firstName);
+        const query = confirmParams.toString();
+        window.location.href = `/appel/confirme${query ? `?${query}` : ""}`;
       }
     }
     window.addEventListener("message", onMessage);
@@ -119,7 +128,22 @@ function ReserverContent() {
   })();
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white antialiased">
+    <div className="min-h-screen text-[var(--fg)] antialiased">
+      {/* Decorative background glow */}
+      <div
+        aria-hidden
+        className="fixed inset-0 -z-10 pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(55% 38% at 50% -6%, var(--accent-glow), transparent 62%)",
+        }}
+      />
+
+      {/* Theme toggle */}
+      <div className="fixed top-4 right-4 z-50">
+        <ThemeToggle />
+      </div>
+
       <div className="flex min-h-screen flex-col items-center px-4 py-12 sm:py-16">
         <motion.div
           className="w-full max-w-3xl"
@@ -129,9 +153,9 @@ function ReserverContent() {
         >
           {/* Header */}
           <div className="text-center">
-            <div className="mx-auto w-16 h-16 rounded-full bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
+            <div className="mac-icon lg g-blue mx-auto w-16 h-16" style={{ borderRadius: "18px" }}>
               <svg
-                className="w-8 h-8 text-amber-400"
+                className="w-8 h-8"
                 fill="none"
                 stroke="currentColor"
                 strokeWidth={2}
@@ -145,19 +169,19 @@ function ReserverContent() {
               </svg>
             </div>
 
-            <h1 className="mt-5 text-3xl sm:text-4xl font-medium tracking-tighter text-white text-balance">
+            <h1 className="mt-5 text-[28px] sm:text-[38px] font-bold tracking-[-0.035em] text-balance">
               {firstName ? `${firstName}, ton appel n'est pas encore réservé.` : "Ton appel n'est pas encore réservé."}
             </h1>
 
-            <p className="mt-4 text-lg text-gray-200 font-medium max-w-2xl mx-auto">
-              Dernière étape : choisis ton créneau ci-dessous pour confirmer ton appel. Sans ça, rien n&apos;est réservé. On se voit ensuite en visio pendant 30 minutes pour faire le point sur ton projet et voir si on peut travailler ensemble.
+            <p className="mt-4 text-[17px] leading-relaxed text-[var(--fg2)] font-medium max-w-2xl mx-auto">
+              Dernière étape : choisis ton créneau ci-dessous pour confirmer ton appel avec un expert de l&apos;équipe. Sans ça, rien n&apos;est réservé. Pendant 30 minutes, on regarde ta situation et on détermine ensemble si notre accompagnement peut t&apos;aider à avancer. Ce n&apos;est pas un appel de conseils gratuits.
             </p>
           </div>
 
           {/* Calendly embed : monté seulement une fois le contact localStorage
               chargé, sinon l'iframe se charge sans préremplissage puis se
               recharge avec (double chargement visible). */}
-          <div className="mt-8 rounded-xl overflow-hidden border border-white/10 bg-white min-h-[780px]">
+          <div className="mt-8 rounded-[16px] overflow-hidden border-[0.5px] border-[var(--sep)] bg-white min-h-[780px]">
             {mounted && calendarBase && (
               <iframe
                 src={calendlyUrl}
@@ -170,7 +194,7 @@ function ReserverContent() {
             )}
           </div>
 
-          <p className="mt-6 text-center text-sm text-gray-300 font-medium">
+          <p className="mt-6 text-center text-[14px] text-[var(--fg2)] font-medium">
             Tu recevras une confirmation par email avec le lien de visio dès que ton créneau est validé.
           </p>
         </motion.div>

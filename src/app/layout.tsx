@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, JetBrains_Mono, Caveat } from "next/font/google";
 import { PostHogProvider } from "./posthog-provider";
 import { MetaPixelProvider } from "./meta-pixel-provider";
+import MotionProvider from "@/components/MotionProvider";
 import "./globals.css";
 
 const inter = Inter({
@@ -20,13 +21,13 @@ const caveat = Caveat({
 });
 
 export const metadata: Metadata = {
-  title: "App Mastery - Cree, Lance et Monetise ton App Mobile en 28 Jours",
+  title: "Jeremy Pitault - Crée ton app mobile rentable avec l'IA",
   description:
-    "La formation complete pour creer une application mobile rentable de A a Z avec l'IA et le vibecoding. 14 modules, 90+ lecons. Meme sans experience en programmation.",
+    "Développeur d'apps mobiles et créateur de Shinobi Japanese. Je t'accompagne pour créer, lancer et monétiser une app rentable avec l'IA, même sans savoir coder.",
   openGraph: {
-    title: "App Mastery - Cree ton App Mobile en 28 Jours",
+    title: "Jeremy Pitault - Crée ton app mobile rentable avec l'IA",
     description:
-      "Transforme ton idee en application rentable sur l'App Store et Google Play grace a l'IA.",
+      "Transforme ton idée en application rentable sur l'App Store et Google Play grâce à l'IA. Réserve un appel pour en parler.",
     type: "website",
   },
   other: {
@@ -40,12 +41,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr">
+    <html lang="fr" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='light'){document.documentElement.classList.add('light')}else if(!t&&window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)').matches){document.documentElement.classList.add('light')}}catch(e){}})();`,
+          }}
+        />
+      </head>
       <body
         className={`${inter.variable} ${jetbrainsMono.variable} ${caveat.variable} antialiased`}
       >
         <MetaPixelProvider />
-        <PostHogProvider>{children}</PostHogProvider>
+        <PostHogProvider>
+          <MotionProvider>{children}</MotionProvider>
+        </PostHogProvider>
       </body>
     </html>
   );

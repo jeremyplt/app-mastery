@@ -36,18 +36,18 @@ function ModuleRow({ module }: { module: Module }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="rounded-lg bg-gray-950 transition-colors">
+    <div className="rounded-lg bg-[var(--bg)] transition-colors">
       <button
-        className="w-full flex items-center gap-4 text-left cursor-pointer px-4 py-3 hover:bg-white/5 rounded-lg transition-colors"
+        className="w-full flex items-center gap-4 text-left cursor-pointer px-4 py-3 hover:bg-[var(--field)] rounded-lg transition-colors"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <span className="font-mono text-sm font-semibold text-white/25 w-6 shrink-0">
+        <span className="font-mono text-sm font-semibold text-[var(--fg)]/25 w-6 shrink-0">
           {String(module.number).padStart(2, "0")}
         </span>
         <div className="flex-1">
-          <span className="text-sm font-semibold text-white">{module.title}</span>
+          <span className="text-sm font-semibold text-[var(--fg)]">{module.title}</span>
         </div>
-        <span className="text-xs text-gray-600 shrink-0 hidden sm:block font-mono">
+        <span className="text-xs text-[var(--fg3)] shrink-0 hidden sm:block font-mono">
           {module.lessons} lecon{module.lessons > 1 ? "s" : ""}
         </span>
         <motion.div
@@ -55,7 +55,7 @@ function ModuleRow({ module }: { module: Module }) {
           transition={{ duration: 0.2 }}
           className="shrink-0"
         >
-          <ChevronDown size={14} className="text-gray-600" />
+          <ChevronDown size={14} className="text-[var(--fg3)]" />
         </motion.div>
       </button>
 
@@ -69,7 +69,7 @@ function ModuleRow({ module }: { module: Module }) {
             className="overflow-hidden"
           >
             <div className="px-4 pb-3 pl-14">
-              <p className="text-gray-500 text-xs/5">{module.description}</p>
+              <p className="text-[var(--fg2)] text-xs/5">{module.description}</p>
             </div>
           </motion.div>
         )}
@@ -84,30 +84,30 @@ export default function ProgramV3() {
       <div className="px-4 sm:px-6 lg:px-8">
         {/* Section label */}
         <div className="mb-8 flex items-center gap-4">
-          <span className="font-mono text-sm font-semibold tracking-widest uppercase text-amber-400">
+          <span className="font-mono text-sm font-semibold tracking-widest uppercase text-[var(--accent2)]">
             Programme
           </span>
-          <div className="h-px flex-1 bg-white/10" />
+          <div className="h-px flex-1 bg-[var(--field)]" />
         </div>
 
         <div className="mb-12 max-w-2xl">
-          <h2 className="text-[2.5rem]/10 font-medium tracking-tighter text-balance text-white">
+          <h2 className="text-[2.5rem]/10 font-medium tracking-[-0.035em] text-balance text-[var(--fg)]">
             Le programme complet
           </h2>
-          <p className="mt-4 text-base/7 text-gray-400">
+          <p className="mt-4 text-base/7 text-[var(--fg2)]">
             14 modules, 90+ lecons — du zero a l&apos;app publiee.
           </p>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-2">
           {/* Coeur */}
-          <div className="isolate overflow-hidden rounded-2xl bg-gray-950 p-2 outline outline-white/10">
-            <div className="rounded-xl bg-white/5 p-3">
+          <div className="isolate overflow-hidden rounded-2xl bg-[var(--bg)] p-2 outline outline-[var(--sep)]">
+            <div className="rounded-xl bg-[var(--field)] p-3">
               <div className="flex items-center gap-2 mb-3 px-2">
-                <span className="inline-flex items-center rounded-full bg-amber-500/10 px-2.5 py-0.5 text-xs font-semibold text-amber-400 outline outline-amber-500/20">
+                <span className="inline-flex items-center rounded-full bg-[color-mix(in_srgb,var(--accent)_10%,transparent)] px-2.5 py-0.5 text-xs font-semibold text-[var(--accent2)] outline outline-[color-mix(in_srgb,var(--accent)_20%,transparent)]">
                   Coeur
                 </span>
-                <span className="text-xs text-gray-600">Le parcours principal</span>
+                <span className="text-xs text-[var(--fg3)]">Le parcours principal</span>
               </div>
               <div className="flex flex-col gap-0.5">
                 {coeurModules.map((module) => (
@@ -118,8 +118,8 @@ export default function ProgramV3() {
           </div>
 
           {/* Bonus */}
-          <div className="isolate overflow-hidden rounded-2xl bg-gray-950 p-2 outline outline-white/10">
-            <div className="relative rounded-xl bg-white/5 p-3 overflow-hidden">
+          <div className="isolate overflow-hidden rounded-2xl bg-[var(--bg)] p-2 outline outline-[var(--sep)]">
+            <div className="relative rounded-xl bg-[var(--field)] p-3 overflow-hidden">
               {/* Dot pattern */}
               <div
                 className="pointer-events-none absolute inset-0 opacity-30"
@@ -130,10 +130,10 @@ export default function ProgramV3() {
               />
               <div className="relative">
                 <div className="flex items-center gap-2 mb-3 px-2">
-                  <span className="inline-flex items-center rounded-full bg-white/5 px-2.5 py-0.5 text-xs font-semibold text-gray-400 outline outline-white/10">
+                  <span className="inline-flex items-center rounded-full bg-[var(--field)] px-2.5 py-0.5 text-xs font-semibold text-[var(--fg2)] outline outline-[var(--sep)]">
                     Bonus
                   </span>
-                  <span className="text-xs text-gray-600">Modules complementaires</span>
+                  <span className="text-xs text-[var(--fg3)]">Modules complementaires</span>
                 </div>
                 <div className="flex flex-col gap-0.5">
                   {bonusModules.map((module) => (
@@ -147,7 +147,7 @@ export default function ProgramV3() {
       </div>
 
       {/* Hairline */}
-      <div className="relative mt-20 before:absolute before:top-0 before:h-px before:w-[200vw] before:-left-[100vw] before:bg-white/10" />
+      <div className="relative mt-20 before:absolute before:top-0 before:h-px before:w-[200vw] before:-left-[100vw] before:bg-[var(--field)]" />
     </section>
   );
 }

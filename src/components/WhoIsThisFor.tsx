@@ -26,14 +26,14 @@ export default function WhoIsThisFor() {
       <div className="px-4 sm:px-6 lg:px-8">
         {/* Section label */}
         <div className="mb-8 flex items-center gap-4">
-          <span className="font-mono text-base font-semibold tracking-widest uppercase text-emerald-400">
-            Pour Qui ?
+          <span className="mac-eyebrow" style={{ color: "var(--green)" }}>
+            Pour qui ?
           </span>
-          <div className="h-px flex-1 bg-white/10" />
+          <div className="h-px flex-1 bg-[var(--sep)]" />
         </div>
 
         <div className="mb-12 max-w-2xl">
-          <h2 className="text-2xl sm:text-[2.5rem]/10 font-medium tracking-tighter text-balance text-white">
+          <h2 className="text-2xl sm:text-[2.5rem]/10 font-bold tracking-[-0.03em] text-balance text-[var(--fg)]">
             C&apos;est pour toi si...
           </h2>
         </div>
@@ -42,91 +42,76 @@ export default function WhoIsThisFor() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {/* Left column — Pour toi */}
           <motion.div
-            className="isolate overflow-hidden rounded-2xl bg-gray-950 p-2 outline outline-emerald-500/20"
+            className="rounded-[16px] border-[0.5px] border-[var(--sep)] bg-[var(--card)] overflow-hidden"
+            style={{ borderLeft: "3px solid color-mix(in srgb, var(--green) 55%, transparent)" }}
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <div className="relative rounded-xl bg-white/5 overflow-hidden border-l-4 border-emerald-500/40">
-              <div
-                className="pointer-events-none absolute inset-0 opacity-30"
-                style={{
-                  backgroundImage:
-                    "radial-gradient(rgba(255,255,255,0.15) 1px, transparent 1px)",
-                  backgroundSize: "16px 16px",
-                }}
-              />
-              <div className="relative p-5">
-                <h3 className="text-lg font-semibold text-emerald-400 mb-4">
-                  C&apos;est pour toi si...
-                </h3>
-                <div className="flex flex-col gap-3">
-                  {forYou.map((item, i) => (
-                    <motion.div
-                      key={i}
-                      className="flex items-start gap-3"
-                      initial={{ opacity: 0, x: -10 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.3, delay: i * 0.08 }}
-                    >
-                      <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-emerald-500/20 mt-0.5">
-                        <Check size={14} className="text-emerald-400" />
-                      </div>
-                      <p className="text-lg text-gray-200">{item}</p>
-                    </motion.div>
-                  ))}
-                </div>
+            <div className="p-6">
+              <h3 className="text-lg font-semibold mb-4" style={{ color: "var(--green)" }}>
+                C&apos;est pour toi si...
+              </h3>
+              <div className="flex flex-col gap-3.5">
+                {forYou.map((item, i) => (
+                  <motion.div
+                    key={i}
+                    className="flex items-start gap-3"
+                    initial={{ opacity: 0, x: -10 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.3, delay: i * 0.06 }}
+                  >
+                    <span className="mac-chk mt-0.5">
+                      <Check size={13} strokeWidth={3.5} className="text-white" />
+                    </span>
+                    <p className="text-[17px] leading-relaxed text-[var(--fg2)]">{item}</p>
+                  </motion.div>
+                ))}
               </div>
             </div>
           </motion.div>
 
           {/* Right column — Pas pour toi */}
           <motion.div
-            className="isolate overflow-hidden rounded-2xl bg-gray-950 p-2 outline outline-red-500/20 h-full"
+            className="rounded-[16px] border-[0.5px] border-[var(--sep)] bg-[var(--card)] overflow-hidden h-full"
+            style={{ borderLeft: "3px solid color-mix(in srgb, var(--red) 55%, transparent)" }}
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <div className="relative rounded-xl bg-white/5 overflow-hidden border-l-4 border-red-500/40 h-full">
-              <div
-                className="pointer-events-none absolute inset-0 opacity-30"
-                style={{
-                  backgroundImage:
-                    "radial-gradient(rgba(255,255,255,0.15) 1px, transparent 1px)",
-                  backgroundSize: "16px 16px",
-                }}
-              />
-              <div className="relative p-5">
-                <h3 className="text-lg font-semibold text-red-400 mb-4">
-                  Ce n&apos;est PAS pour toi si...
-                </h3>
-                <div className="flex flex-col gap-3">
-                  {notForYou.map((item, i) => (
-                    <motion.div
-                      key={i}
-                      className="flex items-start gap-3"
-                      initial={{ opacity: 0, x: 10 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.3, delay: i * 0.08 }}
+            <div className="p-6 h-full">
+              <h3 className="text-lg font-semibold mb-4" style={{ color: "var(--red)" }}>
+                Ce n&apos;est PAS pour toi si...
+              </h3>
+              <div className="flex flex-col gap-3.5">
+                {notForYou.map((item, i) => (
+                  <motion.div
+                    key={i}
+                    className="flex items-start gap-3"
+                    initial={{ opacity: 0, x: 10 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.3, delay: i * 0.06 }}
+                  >
+                    <span
+                      className="flex h-6 w-6 shrink-0 items-center justify-center rounded-[7px] mt-0.5"
+                      style={{ background: "color-mix(in srgb, var(--red) 20%, transparent)" }}
                     >
-                      <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-red-500/20 mt-0.5">
-                        <X size={14} className="text-red-400" />
-                      </div>
-                      <p className="text-lg text-gray-200">{item}</p>
-                    </motion.div>
-                  ))}
-                </div>
+                      <X size={14} strokeWidth={3} style={{ color: "var(--red)" }} />
+                    </span>
+                    <p className="text-[17px] leading-relaxed text-[var(--fg2)]">{item}</p>
+                  </motion.div>
+                ))}
               </div>
             </div>
           </motion.div>
         </div>
       </div>
 
-      <div className="relative mt-20 before:absolute before:top-0 before:h-px before:w-[200vw] before:-left-[100vw] before:bg-white/10" />
+      <div className="relative mt-20 before:absolute before:top-0 before:h-px before:w-[200vw] before:-left-[100vw] before:bg-[var(--sep)]" />
     </section>
   );
 }

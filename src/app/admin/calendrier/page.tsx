@@ -108,43 +108,40 @@ export default function CalendrierAdmin() {
 
   if (authorized === null) {
     return (
-      <div className="min-h-screen bg-gray-950 text-white flex items-center justify-center">
+      <div className="min-h-screen bg-[var(--bg)] text-[var(--fg)] flex items-center justify-center">
         Vérification...
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white antialiased">
+    <div className="min-h-screen bg-[var(--bg)] text-[var(--fg)] antialiased">
       <div className="mx-auto max-w-3xl px-5 py-10">
         <div className="flex items-center justify-between gap-4">
           <h1 className="text-3xl font-bold tracking-tight">Répartition des appels</h1>
-          <a
-            href="/admin/crm"
-            className="rounded-lg bg-white/10 px-4 py-2 text-sm font-bold text-gray-100 transition-colors hover:bg-white/20"
-          >
+          <a href="/admin/crm" className="mac-btn mac-btn-def mac-btn-sm">
             CRM
           </a>
         </div>
-        <p className="mt-2 text-gray-400">
+        <p className="mt-2 text-[var(--fg2)]">
           Répartit les prises de rendez-vous entre les calendriers Calendly selon
           le pourcentage choisi. Le total doit faire 100%. Enregistrer remet les
           compteurs à zéro : la nouvelle répartition repart d&apos;une base propre.
         </p>
 
         {error && (
-          <div className="mt-4 rounded-lg border border-red-800 bg-red-950/50 px-4 py-3 text-red-300">
+          <div className="mt-4 rounded-[12px] border-[0.5px] border-[color-mix(in_srgb,var(--red)_40%,transparent)] bg-[color-mix(in_srgb,var(--red)_12%,transparent)] px-4 py-3 text-[var(--red)]">
             {error}
           </div>
         )}
         {notice && (
-          <div className="mt-4 rounded-lg border border-emerald-800 bg-emerald-950/50 px-4 py-3 text-emerald-300">
+          <div className="mt-4 rounded-[12px] border-[0.5px] border-[color-mix(in_srgb,var(--green)_40%,transparent)] bg-[color-mix(in_srgb,var(--green)_12%,transparent)] px-4 py-3 text-[var(--green)]">
             {notice}
           </div>
         )}
 
         {loading ? (
-          <div className="mt-8 rounded-xl border border-gray-800 px-5 py-8 text-center text-gray-400">
+          <div className="mt-8 rounded-xl border border-[var(--sep)] px-5 py-8 text-center text-[var(--fg2)]">
             Chargement...
           </div>
         ) : (
@@ -161,7 +158,7 @@ export default function CalendrierAdmin() {
                   <button
                     key={p.pct}
                     onClick={() => applyPreset(p.pct)}
-                    className="rounded-lg border border-gray-700 bg-gray-900 px-4 py-2 font-semibold text-gray-200 hover:border-sky-500 hover:text-white"
+                    className="rounded-lg border border-[var(--sep)] bg-[var(--group)] px-4 py-2 font-semibold text-[var(--fg)] hover:border-[var(--accent)] hover:text-[var(--fg)]"
                   >
                     {p.label}
                   </button>
@@ -179,12 +176,12 @@ export default function CalendrierAdmin() {
                 return (
                   <div
                     key={route.slug}
-                    className="rounded-xl border border-gray-800 bg-gray-900/40 p-5"
+                    className="rounded-[14px] border-[0.5px] border-[var(--sep)] bg-[var(--card)] p-5"
                   >
                     <div className="flex items-center justify-between gap-4">
                       <div>
                         <div className="text-lg font-bold">{route.label}</div>
-                        <div className="text-sm text-gray-400">
+                        <div className="text-sm text-[var(--fg2)]">
                           {route.calendly_base.replace("https://calendly.com/", "")}
                         </div>
                       </div>
@@ -197,9 +194,9 @@ export default function CalendrierAdmin() {
                           onChange={(e) =>
                             setWeight(route.slug, Number(e.target.value))
                           }
-                          className="w-20 rounded-lg border border-gray-700 bg-gray-950 px-3 py-2 text-right text-lg font-bold text-white focus:border-sky-500 focus:outline-none"
+                          className="w-20 rounded-lg border border-[var(--sep)] bg-[var(--bg)] px-3 py-2 text-right text-lg font-bold text-[var(--fg)] focus:border-[var(--accent)] focus:outline-none"
                         />
-                        <span className="text-lg font-bold text-gray-300">%</span>
+                        <span className="text-lg font-bold text-[var(--fg2)]">%</span>
                       </div>
                     </div>
 
@@ -211,10 +208,10 @@ export default function CalendrierAdmin() {
                       onChange={(e) =>
                         setWeight(route.slug, Number(e.target.value))
                       }
-                      className="mt-4 w-full accent-sky-500"
+                      className="mt-4 w-full accent-[var(--accent)]"
                     />
 
-                    <div className="mt-3 text-sm text-gray-400">
+                    <div className="mt-3 text-sm text-[var(--fg2)]">
                       {route.assigned_count} appel
                       {route.assigned_count > 1 ? "s" : ""} attribué
                       {route.assigned_count > 1 ? "s" : ""} depuis le dernier
@@ -229,7 +226,7 @@ export default function CalendrierAdmin() {
             <div className="mt-6 flex items-center justify-between gap-4">
               <div
                 className={`text-lg font-bold ${
-                  total === 100 ? "text-emerald-400" : "text-red-400"
+                  total === 100 ? "text-[var(--green)]" : "text-[var(--red)]"
                 }`}
               >
                 Total : {total}%
@@ -238,7 +235,7 @@ export default function CalendrierAdmin() {
               <button
                 onClick={save}
                 disabled={saving || total !== 100}
-                className="rounded-lg bg-sky-500 px-6 py-2.5 font-semibold text-white hover:bg-sky-400 disabled:opacity-50"
+                className="mac-btn mac-btn-primary"
               >
                 {saving ? "Enregistrement..." : "Enregistrer"}
               </button>

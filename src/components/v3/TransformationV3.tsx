@@ -16,20 +16,20 @@ export default function TransformationV3() {
       <div className="px-4 sm:px-6 lg:px-8">
         {/* Section label */}
         <div className="mb-8 flex items-center gap-4">
-          <span className="font-mono text-sm font-semibold tracking-widest uppercase text-emerald-400">
+          <span className="font-mono text-sm font-semibold tracking-widest uppercase text-[var(--green)]">
             Resultats
           </span>
-          <div className="h-px flex-1 bg-white/10" />
+          <div className="h-px flex-1 bg-[var(--field)]" />
         </div>
 
         <div className="mb-12 max-w-2xl">
-          <h2 className="text-[2.5rem]/10 font-medium tracking-tighter text-balance text-white">
+          <h2 className="text-[2.5rem]/10 font-medium tracking-[-0.035em] text-balance text-[var(--fg)]">
             Dans 28 jours, tu auras...
           </h2>
         </div>
 
-        <div className="isolate overflow-hidden rounded-2xl bg-gray-950 p-2 outline outline-emerald-500/20">
-          <div className="relative rounded-xl bg-white/5 p-2 overflow-hidden">
+        <div className="isolate overflow-hidden rounded-2xl bg-[var(--bg)] p-2 outline outline-[color-mix(in_srgb,var(--green)_20%,transparent)]">
+          <div className="relative rounded-xl bg-[var(--field)] p-2 overflow-hidden">
             {/* Dot pattern */}
             <div
               className="pointer-events-none absolute inset-0 opacity-30"
@@ -42,16 +42,16 @@ export default function TransformationV3() {
               {achievements.map((text, i) => (
                 <motion.div
                   key={i}
-                  className="flex items-center gap-4 rounded-lg bg-gray-950 px-5 py-4"
+                  className="flex items-center gap-4 rounded-lg bg-[var(--bg)] px-5 py-4"
                   initial={{ opacity: 0, x: -20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.4, delay: i * 0.1 }}
                 >
-                  <span className="font-mono text-sm font-semibold text-emerald-400/50 shrink-0">
+                  <span className="font-mono text-sm font-semibold text-[color-mix(in_srgb,var(--green)_50%,transparent)] shrink-0">
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <p className="text-sm font-medium text-white">{text}</p>
+                  <p className="text-sm font-medium text-[var(--fg)]">{text}</p>
                 </motion.div>
               ))}
             </div>
@@ -60,7 +60,7 @@ export default function TransformationV3() {
       </div>
 
       {/* Hairline */}
-      <div className="relative mt-20 before:absolute before:top-0 before:h-px before:w-[200vw] before:-left-[100vw] before:bg-white/10" />
+      <div className="relative mt-20 before:absolute before:top-0 before:h-px before:w-[200vw] before:-left-[100vw] before:bg-[var(--field)]" />
     </section>
   );
 }

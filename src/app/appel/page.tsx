@@ -12,6 +12,16 @@ import { looksLikeFakePattern } from "@/lib/phone-validation";
 import { QUESTIONS, isValidAnswer } from "@/lib/candidature";
 import { generateEventId, metaTrackingFields, trackMeta } from "@/lib/meta-pixel";
 import { loadOptinContact } from "@/lib/optin-contact";
+import ThemeToggle from "@/components/ThemeToggle";
+
+// macOS selectable option (choice / rescue buttons)
+const CHOICE_BASE =
+  "w-full text-left rounded-[12px] border-[0.5px] px-5 py-4 text-[16px] font-semibold transition-[background-color,border-color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.99]";
+function choiceCls(selected: boolean) {
+  return selected
+    ? `${CHOICE_BASE} border-[var(--accent)] bg-[color-mix(in_srgb,var(--accent)_15%,transparent)] text-[var(--fg)]`
+    : `${CHOICE_BASE} border-[var(--field-brd)] bg-[var(--field)] text-[var(--fg)] hover:bg-[color-mix(in_srgb,var(--fg)_7%,transparent)]`;
+}
 
 export default function CandidaturePage() {
   return (
@@ -257,15 +267,31 @@ function CandidatureContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white antialiased">
+    <div className="min-h-screen text-[var(--fg)] antialiased">
+      {/* Decorative background glow */}
+      <div
+        aria-hidden
+        className="fixed inset-0 -z-10 pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(55% 40% at 50% -6%, var(--accent-glow), transparent 62%)",
+        }}
+      />
+
       {/* Barre de progression */}
-      <div className="fixed top-0 left-0 right-0 h-1.5 bg-white/10 z-50">
+      <div className="fixed top-0 left-0 right-0 h-1 bg-[var(--sep)] z-50">
         <motion.div
-          className="h-full bg-gradient-to-r from-amber-400 to-orange-500"
+          className="h-full"
+          style={{ background: "linear-gradient(90deg, var(--accent2), var(--accent))" }}
           initial={false}
           animate={{ width: `${progress}%` }}
-          transition={{ duration: 0.4, ease: "easeOut" }}
+          transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
         />
+      </div>
+
+      {/* Theme toggle (preference, not a CTA) */}
+      <div className="fixed top-4 right-4 z-50">
+        <ThemeToggle />
       </div>
 
       <div className="flex min-h-screen flex-col items-center justify-center px-5 py-16 sm:py-20">
@@ -281,16 +307,13 @@ function CandidatureContent() {
                 transition={{ duration: 0.35 }}
                 className="text-center"
               >
-                <h1 className="text-3xl sm:text-5xl font-bold tracking-tight text-balance">
+                <h1 className="mac-h1 text-[32px] sm:text-[46px]">
                   Quelques questions rapides pour que notre appel soit vraiment utile.
                 </h1>
-                <p className="mt-5 text-lg sm:text-xl text-gray-200 font-medium max-w-xl mx-auto">
+                <p className="mt-5 text-[17px] sm:text-[19px] text-[var(--fg2)] font-medium max-w-xl mx-auto leading-relaxed">
                   Ça prend moins d&apos;une minute. C&apos;est ce qui me permet de personnaliser l&apos;appel à ton projet et à ta situation.
                 </p>
-                <button
-                  onClick={goNext}
-                  className="mt-9 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 px-8 py-4 text-lg font-bold text-gray-950 transition-transform hover:scale-[1.03] active:scale-100"
-                >
+                <button onClick={goNext} className="mac-btn mac-btn-primary mac-btn-lg mt-9">
                   C&apos;est parti
                   <span aria-hidden>→</span>
                 </button>
@@ -306,10 +329,10 @@ function CandidatureContent() {
                 exit={{ opacity: 0, x: -40 }}
                 transition={{ duration: 0.3 }}
               >
-                <p className="text-sm font-bold uppercase tracking-wide text-amber-400">
+                <p className="text-[13px] font-semibold text-[var(--accent2)]">
                   Question {step} / {QUESTIONS.length}
                 </p>
-                <h2 className="mt-3 text-2xl sm:text-4xl font-bold tracking-tight text-balance">
+                <h2 className="mt-3 text-[24px] sm:text-[36px] font-bold tracking-[-0.03em] text-balance">
                   {question.title}
                 </h2>
 
@@ -325,11 +348,7 @@ function CandidatureContent() {
                         <button
                           key={opt.value}
                           onClick={() => handleChoice(question.id, opt.value)}
-                          className={`w-full text-left rounded-xl border-2 px-5 py-4 text-lg font-semibold transition-all ${
-                            selected
-                              ? "border-amber-400 bg-amber-400/15 text-white"
-                              : "border-white/15 bg-white/5 text-gray-100 hover:border-amber-400/60 hover:bg-white/10"
-                          }`}
+                          className={choiceCls(selected)}
                         >
                           {opt.label}
                         </button>
@@ -348,37 +367,32 @@ function CandidatureContent() {
                           <div className="mt-2">
                             <label
                               htmlFor="autre-input"
-                              className="block text-base font-bold text-amber-300"
+                              className="block text-[14px] font-semibold text-[var(--accent2)]"
                             >
                               Dis-moi en quelques mots
                             </label>
-                            <div className="mt-2 flex items-center gap-3 border-b-2 border-amber-400/60 focus-within:border-amber-400">
-                              <svg className="h-5 w-5 shrink-0 text-amber-400" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z" />
-                              </svg>
-                              <input
-                                id="autre-input"
-                                type="text"
-                                autoFocus
-                                value={(answers[question.id] || "").replace(/^autre:\s?/, "")}
-                                onChange={(e) =>
-                                  setAnswer(
-                                    question.id,
-                                    e.target.value ? `autre: ${e.target.value}` : "autre",
-                                  )
+                            <input
+                              id="autre-input"
+                              type="text"
+                              autoFocus
+                              value={(answers[question.id] || "").replace(/^autre:\s?/, "")}
+                              onChange={(e) =>
+                                setAnswer(
+                                  question.id,
+                                  e.target.value ? `autre: ${e.target.value}` : "autre",
+                                )
+                              }
+                              onKeyDown={(e) => {
+                                if (
+                                  e.key === "Enter" &&
+                                  isValidAnswer(question, answers[question.id] || "")
+                                ) {
+                                  goNext();
                                 }
-                                onKeyDown={(e) => {
-                                  if (
-                                    e.key === "Enter" &&
-                                    isValidAnswer(question, answers[question.id] || "")
-                                  ) {
-                                    goNext();
-                                  }
-                                }}
-                                placeholder="Ex : freelance à mi-temps, en reconversion..."
-                                className="w-full bg-transparent py-3 text-lg font-medium text-white placeholder:text-gray-500 focus:outline-none"
-                              />
-                            </div>
+                              }}
+                              placeholder="Ex : freelance à mi-temps, en reconversion..."
+                              className="mac-field mt-2 text-[16px]"
+                            />
                           </div>
                           <button
                             onClick={() => {
@@ -388,7 +402,7 @@ function CandidatureContent() {
                               }
                               goNext();
                             }}
-                            className="mt-5 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 px-7 py-3.5 text-lg font-bold text-gray-950 transition-transform hover:scale-[1.03] active:scale-100"
+                            className="mac-btn mac-btn-primary mt-5"
                           >
                             Continuer <span aria-hidden>→</span>
                           </button>
@@ -405,7 +419,7 @@ function CandidatureContent() {
                       value={answers[question.id] || ""}
                       onChange={(e) => setAnswer(question.id, e.target.value)}
                       placeholder={question.placeholder}
-                      className="w-full rounded-xl border-2 border-white/15 bg-white/5 px-5 py-4 text-lg font-medium text-white placeholder:text-gray-400 focus:border-amber-400 focus:outline-none"
+                      className="mac-field text-[16px] resize-none"
                     />
                     <button
                       onClick={() => {
@@ -415,7 +429,7 @@ function CandidatureContent() {
                         }
                         goNext();
                       }}
-                      className="mt-5 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 px-7 py-3.5 text-lg font-bold text-gray-950 transition-transform hover:scale-[1.03] active:scale-100"
+                      className="mac-btn mac-btn-primary mt-5"
                     >
                       Continuer <span aria-hidden>→</span>
                     </button>
@@ -423,12 +437,12 @@ function CandidatureContent() {
                 )}
 
                 {error && (
-                  <p className="mt-5 text-base font-bold text-red-400">{error}</p>
+                  <p className="mt-5 text-[15px] font-semibold text-[var(--red)]">{error}</p>
                 )}
 
                 <button
                   onClick={goBack}
-                  className="mt-8 text-sm font-bold text-gray-400 hover:text-white"
+                  className="mt-8 text-[13px] font-semibold text-[var(--fg3)] hover:text-[var(--fg)] transition-colors"
                 >
                   ← Retour
                 </button>
@@ -446,14 +460,14 @@ function CandidatureContent() {
                 transition={{ duration: 0.3 }}
                 className="text-center"
               >
-                <h2 className="text-2xl sm:text-4xl font-bold tracking-tight text-balance">
+                <h2 className="text-[24px] sm:text-[36px] font-bold tracking-[-0.03em] text-balance">
                   Envoi de ta candidature...
                 </h2>
-                <p className="mt-4 text-lg text-gray-200 font-medium">
+                <p className="mt-4 text-[17px] text-[var(--fg2)] font-medium">
                   Un instant{firstName ? ` ${firstName}` : ""}, on prépare la suite.
                 </p>
                 <div className="mt-8 flex justify-center">
-                  <div className="h-10 w-10 animate-spin rounded-full border-4 border-amber-400 border-t-transparent" />
+                  <div className="h-10 w-10 animate-spin rounded-full border-[3px] border-[var(--accent)] border-t-transparent" />
                 </div>
               </motion.div>
             )}
@@ -467,13 +481,13 @@ function CandidatureContent() {
                 exit={{ opacity: 0, x: -40 }}
                 transition={{ duration: 0.3 }}
               >
-                <p className="text-sm font-bold uppercase tracking-wide text-amber-400">
+                <p className="text-[13px] font-semibold text-[var(--accent2)]">
                   Dernière étape
                 </p>
-                <h2 className="mt-3 text-2xl sm:text-4xl font-bold tracking-tight text-balance">
+                <h2 className="mt-3 text-[24px] sm:text-[36px] font-bold tracking-[-0.03em] text-balance">
                   Où est-ce que je t&apos;envoie la suite ?
                 </h2>
-                <p className="mt-4 text-lg text-gray-200 font-medium">
+                <p className="mt-4 text-[17px] text-[var(--fg2)] font-medium leading-relaxed">
                   Ton prénom, ton email et ton téléphone, pour préparer l&apos;appel et te recontacter.
                 </p>
 
@@ -494,20 +508,21 @@ function CandidatureContent() {
                     value={firstName}
                     onChange={(e) => setFirstName(e.target.value)}
                     placeholder="Ton prénom"
-                    className="w-full rounded-xl border-2 border-white/15 bg-white/5 px-5 py-4 text-lg font-medium text-white placeholder:text-gray-400 focus:border-amber-400 focus:outline-none"
+                    className="mac-field text-[16px]"
                   />
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Ton email"
-                    className="w-full rounded-xl border-2 border-white/15 bg-white/5 px-5 py-4 text-lg font-medium text-white placeholder:text-gray-400 focus:border-amber-400 focus:outline-none"
+                    className="mac-field text-[16px]"
                   />
                   <div className="flex gap-3">
                     <select
                       value={countryIndex}
                       onChange={(e) => setCountryIndex(Number(e.target.value))}
-                      className="w-28 shrink-0 appearance-none rounded-xl border-2 border-white/15 bg-white/5 px-3 py-4 text-center text-lg font-medium text-white focus:border-amber-400 focus:outline-none"
+                      className="mac-field shrink-0 appearance-none text-center text-[16px]"
+                      style={{ width: "7rem" }}
                     >
                       {COUNTRY_CODES.map((c, i) => (
                         <option key={`${c.country}-${i}`} value={i}>
@@ -520,26 +535,26 @@ function CandidatureContent() {
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
                       placeholder="Ton numéro de téléphone"
-                      className="min-w-0 flex-1 rounded-xl border-2 border-white/15 bg-white/5 px-5 py-4 text-lg font-medium text-white placeholder:text-gray-400 focus:border-amber-400 focus:outline-none"
+                      className="mac-field min-w-0 flex-1 text-[16px]"
                     />
                   </div>
                 </div>
 
                 {error && (
-                  <p className="mt-5 text-base font-bold text-red-400">{error}</p>
+                  <p className="mt-5 text-[15px] font-semibold text-[var(--red)]">{error}</p>
                 )}
 
                 <button
                   onClick={handleSubmit}
                   disabled={loading}
-                  className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-amber-400 to-orange-500 px-8 py-4 text-lg font-bold text-gray-950 transition-transform hover:scale-[1.02] active:scale-100 disabled:opacity-60"
+                  className="mac-btn mac-btn-primary mac-btn-lg w-full mt-7"
                 >
                   {loading ? "Un instant..." : "Valider ma candidature"}
                 </button>
 
                 <button
                   onClick={goBack}
-                  className="mt-8 text-sm font-bold text-gray-400 hover:text-white"
+                  className="mt-8 text-[13px] font-semibold text-[var(--fg3)] hover:text-[var(--fg)] transition-colors"
                 >
                   ← Retour
                 </button>
@@ -555,10 +570,10 @@ function CandidatureContent() {
                 exit={{ opacity: 0, x: -40 }}
                 transition={{ duration: 0.3 }}
               >
-                <h2 className="text-2xl sm:text-4xl font-bold tracking-tight text-balance">
+                <h2 className="text-[24px] sm:text-[36px] font-bold tracking-[-0.03em] text-balance">
                   Une dernière chose.
                 </h2>
-                <p className="mt-4 text-lg sm:text-xl text-gray-200 font-medium">
+                <p className="mt-4 text-[17px] sm:text-[19px] text-[var(--fg2)] font-medium leading-relaxed">
                   Est-ce que tu as un budget que tu peux allouer pour avancer sur ton projet et ta progression ?
                 </p>
 
@@ -566,24 +581,24 @@ function CandidatureContent() {
                   <button
                     onClick={() => submit("oui")}
                     disabled={loading}
-                    className="w-full rounded-xl border-2 border-white/15 bg-white/5 px-5 py-4 text-left text-lg font-semibold text-gray-100 transition-all hover:border-amber-400/60 hover:bg-white/10 disabled:opacity-60"
+                    className={`${choiceCls(false)} disabled:opacity-60`}
                   >
                     Oui, je peux investir pour avancer
                   </button>
                   <button
                     onClick={() => submit("non")}
                     disabled={loading}
-                    className="w-full rounded-xl border-2 border-white/15 bg-white/5 px-5 py-4 text-left text-lg font-semibold text-gray-100 transition-all hover:border-amber-400/60 hover:bg-white/10 disabled:opacity-60"
+                    className={`${choiceCls(false)} disabled:opacity-60`}
                   >
                     Non, pas pour le moment
                   </button>
                 </div>
 
                 {loading && (
-                  <p className="mt-5 text-base font-medium text-gray-400">Un instant...</p>
+                  <p className="mt-5 text-[15px] font-medium text-[var(--fg3)]">Un instant...</p>
                 )}
                 {error && (
-                  <p className="mt-5 text-base font-bold text-red-400">{error}</p>
+                  <p className="mt-5 text-[15px] font-semibold text-[var(--red)]">{error}</p>
                 )}
               </motion.div>
             )}

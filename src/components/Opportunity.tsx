@@ -21,20 +21,18 @@ export default function Opportunity() {
     <section className="relative py-20">
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="mb-8 flex items-center gap-4">
-          <span className="font-mono text-base font-semibold tracking-widest uppercase text-emerald-400">
-            L&apos;Opportunité
-          </span>
-          <div className="h-px flex-1 bg-white/10" />
+          <span className="badge badge-success">L&apos;Opportunité</span>
+          <div className="h-px flex-1 bg-[var(--sep)]" />
         </div>
 
         <div className="mb-12 max-w-2xl">
-          <h2 className="text-2xl sm:text-[2.5rem]/10 font-medium tracking-tighter text-balance text-white">
+          <h2 className="text-2xl sm:text-[2.5rem]/10 font-medium tracking-tighter text-balance text-[var(--fg)]">
             Tout le monde se bat sur les SaaS.{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">
+            <span className="text-[var(--green)]">
               Le vrai argent est ailleurs.
             </span>
           </h2>
-          <p className="mt-4 text-xl/8 text-gray-300">
+          <p className="mt-4 text-xl/8 text-[var(--fg2)]">
             En 2026, le marché SaaS est bondé. Des milliers de nouvelles apps
             web chaque jour, toutes identiques. Pendant ce temps, un marché
             gigantesque est passé sous les radars.
@@ -42,12 +40,12 @@ export default function Opportunity() {
         </div>
 
         {/* SaaS vs Apps comparison */}
-        <div className="isolate overflow-hidden rounded-2xl bg-gray-950 p-2 outline outline-white/10">
-          <div className="rounded-xl bg-white/5 p-2">
+        <div className="isolate overflow-hidden rounded-[16px] border-[0.5px] border-[var(--sep)] bg-[var(--card)] p-2">
+          <div className="rounded-[12px] p-2">
             <div className="grid md:grid-cols-2 gap-2">
               {/* SaaS column */}
               <motion.div
-                className="relative overflow-hidden rounded-xl bg-gray-950 p-6"
+                className="relative overflow-hidden rounded-[12px] bg-[var(--group)] p-6"
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
@@ -57,15 +55,15 @@ export default function Opportunity() {
                   className="pointer-events-none absolute inset-0 opacity-30"
                   style={{
                     backgroundImage:
-                      "radial-gradient(rgba(255,255,255,0.15) 1px, transparent 1px)",
+                      "radial-gradient(var(--sep) 1px, transparent 1px)",
                     backgroundSize: "16px 16px",
                   }}
                 />
                 <div className="relative">
                   <div className="flex items-center gap-3 mb-6">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-red-500/10">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[color-mix(in_srgb,var(--red)_14%,transparent)]">
                       <svg
-                        className="w-5 h-5 text-red-400"
+                        className="w-5 h-5 text-[var(--red)]"
                         fill="none"
                         stroke="currentColor"
                         strokeWidth={2}
@@ -79,10 +77,10 @@ export default function Opportunity() {
                       </svg>
                     </div>
                     <div>
-                      <p className="text-lg font-semibold text-white">
+                      <p className="text-lg font-semibold text-[var(--fg)]">
                         SaaS en 2026
                       </p>
-                      <p className="text-base text-red-400 font-medium">
+                      <p className="text-base text-[var(--red)] font-medium">
                         Océan rouge
                       </p>
                     </div>
@@ -91,10 +89,10 @@ export default function Opportunity() {
                   <div className="space-y-3">
                     {saasPoints.map((point, i) => (
                       <div key={i} className="flex items-start gap-3">
-                        <span className="text-red-400 text-lg mt-0.5">
+                        <span className="text-[var(--red)] text-lg mt-0.5">
                           &#10005;
                         </span>
-                        <p className="text-lg text-gray-300">{point}</p>
+                        <p className="text-lg text-[var(--fg2)]">{point}</p>
                       </div>
                     ))}
                   </div>
@@ -111,7 +109,7 @@ export default function Opportunity() {
                       )
                     )}
                   </div>
-                  <p className="mt-2 text-base text-gray-500 text-center">
+                  <p className="mt-2 text-base text-[var(--fg2)] text-center">
                     Marges en baisse
                   </p>
                 </div>
@@ -119,7 +117,7 @@ export default function Opportunity() {
 
               {/* Apps column */}
               <motion.div
-                className="relative overflow-hidden rounded-xl bg-gray-950 p-6"
+                className="relative overflow-hidden rounded-[12px] bg-[var(--group)] p-6"
                 initial={{ opacity: 0, x: 20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
@@ -129,15 +127,15 @@ export default function Opportunity() {
                   className="pointer-events-none absolute inset-0 opacity-30"
                   style={{
                     backgroundImage:
-                      "radial-gradient(rgba(255,255,255,0.15) 1px, transparent 1px)",
+                      "radial-gradient(var(--sep) 1px, transparent 1px)",
                     backgroundSize: "16px 16px",
                   }}
                 />
                 <div className="relative">
                   <div className="flex items-center gap-3 mb-6">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-500/10">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[color-mix(in_srgb,var(--green)_14%,transparent)]">
                       <svg
-                        className="w-5 h-5 text-emerald-400"
+                        className="w-5 h-5 text-[var(--green)]"
                         fill="none"
                         stroke="currentColor"
                         strokeWidth={2}
@@ -151,10 +149,10 @@ export default function Opportunity() {
                       </svg>
                     </div>
                     <div>
-                      <p className="text-lg font-semibold text-white">
+                      <p className="text-lg font-semibold text-[var(--fg)]">
                         Apps Mobiles en 2026
                       </p>
-                      <p className="text-base text-emerald-400 font-medium">
+                      <p className="text-base text-[var(--green)] font-medium">
                         Océan bleu
                       </p>
                     </div>
@@ -163,10 +161,10 @@ export default function Opportunity() {
                   <div className="space-y-3">
                     {appPoints.map((point, i) => (
                       <div key={i} className="flex items-start gap-3">
-                        <span className="text-emerald-400 text-lg mt-0.5">
+                        <span className="text-[var(--green)] text-lg mt-0.5">
                           &#10003;
                         </span>
-                        <p className="text-lg text-gray-300">{point}</p>
+                        <p className="text-lg text-[var(--fg2)]">{point}</p>
                       </div>
                     ))}
                   </div>
@@ -183,7 +181,7 @@ export default function Opportunity() {
                       )
                     )}
                   </div>
-                  <p className="mt-2 text-base text-gray-500 text-center">
+                  <p className="mt-2 text-base text-[var(--fg2)] text-center">
                     Revenus en hausse
                   </p>
                 </div>
@@ -194,26 +192,26 @@ export default function Opportunity() {
 
         {/* Market size stat */}
         <motion.div
-          className="mt-6 isolate overflow-hidden rounded-2xl bg-gray-950 p-2 outline outline-emerald-500/20"
+          className="mt-6 isolate overflow-hidden rounded-[16px] border-[0.5px] border-[color-mix(in_srgb,var(--green)_25%,transparent)] bg-[var(--card)] p-2"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.3 }}
         >
-          <div className="relative rounded-xl bg-white/5 p-8 overflow-hidden">
+          <div className="relative rounded-[12px] p-8 overflow-hidden">
             <div
               className="pointer-events-none absolute inset-0 opacity-30"
               style={{
                 backgroundImage:
-                  "radial-gradient(rgba(255,255,255,0.15) 1px, transparent 1px)",
+                  "radial-gradient(var(--sep) 1px, transparent 1px)",
                 backgroundSize: "16px 16px",
               }}
             />
             <div className="relative text-center space-y-4">
-              <p className="text-5xl sm:text-6xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">
+              <p className="text-5xl sm:text-6xl font-bold tracking-tight text-[var(--green)]">
                 500 milliards $
               </p>
-              <p className="text-xl text-gray-300 max-w-lg mx-auto">
+              <p className="text-xl text-[var(--fg2)] max-w-lg mx-auto">
                 C&apos;est le marché mondial des apps mobiles. Et il grandit
                 chaque année. La plupart des gens n&apos;en profitent pas parce
                 qu&apos;ils pensent que c&apos;est &quot;trop compliqué&quot;.
@@ -230,18 +228,18 @@ export default function Opportunity() {
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.4 }}
         >
-          <p className="text-xl font-medium text-white">
+          <p className="text-xl font-medium text-[var(--fg)]">
             Et grâce à l&apos;IA, tu n&apos;as plus besoin de savoir coder pour
             en profiter.
           </p>
-          <p className="text-xl text-gray-300">
+          <p className="text-xl text-[var(--fg2)]">
             Il te manque juste la méthode. Et quelqu&apos;un qui l&apos;a déjà
             fait pour te montrer le chemin.
           </p>
         </motion.div>
       </div>
 
-      <div className="relative mt-20 before:absolute before:top-0 before:h-px before:w-[200vw] before:-left-[100vw] before:bg-white/10" />
+      <div className="relative mt-20 before:absolute before:top-0 before:h-px before:w-[200vw] before:-left-[100vw] before:bg-[var(--sep)]" />
     </section>
   );
 }

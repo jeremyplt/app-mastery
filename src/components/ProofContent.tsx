@@ -114,10 +114,10 @@ function VideoModal({
     >
       <motion.div
         className="relative w-full max-w-sm"
-        initial={{ scale: 0.9, opacity: 0 }}
+        initial={{ scale: 0.95, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.9, opacity: 0 }}
-        transition={{ type: "spring", damping: 25, stiffness: 300 }}
+        exit={{ scale: 0.95, opacity: 0 }}
+        transition={{ type: "spring", bounce: 0.15, duration: 0.4 }}
         onClick={(e) => e.stopPropagation()}
       >
         <button
@@ -190,7 +190,7 @@ function VideoCard({
       >
         <button
           onClick={handleOpen}
-          className="group relative block w-full rounded-xl bg-gray-900 border border-white/10 overflow-hidden cursor-pointer"
+          className="group relative block w-full rounded-xl bg-[var(--group)] border-[0.5px] border-[var(--sep)] overflow-hidden cursor-pointer"
         >
           <div className="aspect-[9/16] relative">
             <video
@@ -220,14 +220,14 @@ function VideoCard({
 
         <div className="mt-3 flex items-center justify-between px-1">
           <div className="flex items-center gap-1.5">
-            <span className="text-2xl font-bold text-white">{stat}</span>
-            <span className="text-lg text-gray-300">{statLabel}</span>
+            <span className="text-2xl font-bold text-[var(--fg)]">{stat}</span>
+            <span className="text-lg text-[var(--fg2)]">{statLabel}</span>
           </div>
           <a
             href={link}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-sm text-sky-400/70 hover:text-sky-400 transition-colors"
+            className="text-sm text-[var(--accent2)] hover:brightness-110 transition-[filter]"
           >
             Voir &rarr;
           </a>
@@ -246,51 +246,40 @@ export default function ProofContent() {
     <section className="relative py-20">
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="mb-8 flex items-center gap-4">
-          <span className="font-mono text-base font-semibold tracking-widest uppercase text-sky-400">
-            Marketing
-          </span>
-          <div className="h-px flex-1 bg-white/10" />
+          <span className="mac-eyebrow">Marketing</span>
+          <div className="h-px flex-1 bg-[var(--sep)]" />
         </div>
 
         <div className="mb-12 max-w-2xl">
-          <h2 className="text-2xl sm:text-[2.5rem]/10 font-medium tracking-tighter text-balance text-white">
+          <h2 className="text-2xl sm:text-[2.5rem]/10 font-bold tracking-[-0.035em] text-balance text-[var(--fg)]">
             On t&apos;apprend aussi à{" "}
             <span className="relative inline-block">
               faire exploser ta visibilité
-              <SketchUnderline className="absolute top-full left-0 w-full text-sky-400 -mt-1" />
+              <SketchUnderline className="absolute top-full left-0 w-full text-[var(--accent2)] -mt-1" />
             </span>
           </h2>
         </div>
 
-        <div className="isolate overflow-hidden rounded-2xl bg-gray-950 p-2 outline outline-sky-500/20">
-          <div className="relative rounded-xl bg-white/5 p-6 sm:p-8 overflow-hidden">
-            <div
-              className="pointer-events-none absolute inset-0 opacity-20"
-              style={{
-                backgroundImage:
-                  "radial-gradient(rgba(255,255,255,0.15) 1px, transparent 1px)",
-                backgroundSize: "16px 16px",
-              }}
-            />
-
+        <div className="overflow-hidden rounded-[18px] border-[0.5px] border-[var(--sep)] bg-[var(--card)]">
+          <div className="relative p-6 sm:p-8 overflow-hidden">
             <div className="relative">
               {/* Logan's photo + name + hand-drawn arrows to the content */}
               <div className="flex flex-col items-center mb-8">
                 <motion.div
                   className="relative"
-                  initial={{ opacity: 0, scale: 0.9 }}
+                  initial={{ opacity: 0, scale: 0.95 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5 }}
                 >
                   {/* Logan's photo */}
-                  <div className="w-20 h-20 rounded-full overflow-hidden outline-2 outline-offset-2 outline outline-sky-500/30 shadow-xl shadow-sky-500/10">
-                      <Image src="/proof/logan-v2.png" alt="Logan" width={80} height={80} className="w-full h-full object-cover" />
+                  <div className="w-20 h-20 rounded-full overflow-hidden border-[0.5px] border-[var(--sep)] shadow-xl">
+                    <Image src="/proof/logan-v2.png" alt="Logan" width={80} height={80} className="w-full h-full object-cover" />
                   </div>
 
                   {/* Hand-drawn arrows going left and right from Logan to the content */}
-                  <SketchCurvedArrow className="absolute -right-20 sm:-right-28 top-2 w-20 sm:w-28 h-16 sm:h-20 text-sky-400" />
-                  <SketchCurvedArrowLeft className="absolute -left-20 sm:-left-28 top-2 w-20 sm:w-28 h-16 sm:h-20 text-sky-400" />
+                  <SketchCurvedArrow className="absolute -right-20 sm:-right-28 top-2 w-20 sm:w-28 h-16 sm:h-20 text-[var(--accent2)]" />
+                  <SketchCurvedArrowLeft className="absolute -left-20 sm:-left-28 top-2 w-20 sm:w-28 h-16 sm:h-20 text-[var(--accent2)]" />
                 </motion.div>
 
                 <motion.div
@@ -300,16 +289,15 @@ export default function ProofContent() {
                   viewport={{ once: true }}
                   transition={{ delay: 0.2 }}
                 >
-                  {/* PLACEHOLDER: mettre le vrai nom de Logan */}
-                  <p className="text-lg font-semibold text-white">Logan</p>
-                  <p className="text-lg text-gray-200">
-                    Cofondateur de Shinobi Japanese, expert marketing & contenu organique
+                  <p className="text-lg font-semibold text-[var(--fg)]">Logan</p>
+                  <p className="text-lg text-[var(--fg2)]">
+                    Cofondateur de Shinobi Japanese, expert marketing &amp; contenu organique
                   </p>
                 </motion.div>
 
                 {/* Hand-drawn annotation text */}
                 <motion.p
-                  className="mt-3 text-lg text-sky-400 font-medium italic text-center max-w-xs"
+                  className="mt-3 text-lg text-[var(--accent2)] font-medium italic text-center max-w-xs"
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
                   viewport={{ once: true }}
@@ -347,16 +335,16 @@ export default function ProofContent() {
 
               {/* CTA line — Logan teaches this in the formation */}
               <motion.div
-                className="mt-8 pt-6 border-t border-white/5 text-center"
+                className="mt-8 pt-6 border-t border-[var(--sep)] text-center"
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.5 }}
               >
-                <p className="text-lg text-gray-200">
+                <p className="text-lg text-[var(--fg2)]">
                   Logan intervient directement dans la formation pour
                   t&apos;apprendre ses{" "}
-                  <span className="text-white font-medium">
+                  <span className="text-[var(--fg)] font-medium">
                     stratégies de contenu viral
                   </span>{" "}
                   , les mêmes qui ont généré ces résultats.
@@ -367,7 +355,7 @@ export default function ProofContent() {
         </div>
       </div>
 
-      <div className="relative mt-20 before:absolute before:top-0 before:h-px before:w-[200vw] before:-left-[100vw] before:bg-white/10" />
+      <div className="relative mt-20 before:absolute before:top-0 before:h-px before:w-[200vw] before:-left-[100vw] before:bg-[var(--sep)]" />
     </section>
   );
 }

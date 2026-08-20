@@ -37,48 +37,38 @@ export default function PainPoints() {
       <div className="px-4 sm:px-6 lg:px-8">
         {/* Section label */}
         <div className="mb-8 flex items-center gap-4">
-          <span className="font-mono text-base font-semibold tracking-widest uppercase text-pink-400">
-            Le Problème
-          </span>
-          <div className="h-px flex-1 bg-white/10" />
+          <span className="badge badge-danger">Le Problème</span>
+          <div className="h-px flex-1 bg-[var(--sep)]" />
         </div>
 
         <div className="mb-12 max-w-2xl">
           {/* Empathetic heading — "Peut-etre que..." (Stan Leloup) */}
-          <h2 className="text-2xl sm:text-[2.5rem]/10 font-medium tracking-tighter text-balance text-white">
+          <h2 className="text-2xl sm:text-[2.5rem]/10 font-bold tracking-[-0.03em] text-balance text-[var(--fg)]">
             Peut-être que tu te reconnais...
           </h2>
-          <p className="mt-4 text-xl/8 text-gray-300">
+          <p className="mt-4 text-xl/8 text-[var(--fg2)]">
             Si tu lis cette page, c&apos;est probablement parce que tu vis l&apos;une
             de ces situations. Et tu n&apos;es pas seul.
           </p>
         </div>
 
         {/* Pain points — single column for readability and emotional impact */}
-        <div className="isolate overflow-hidden rounded-2xl bg-gray-950 p-2 outline outline-pink-500/20">
-          <div className="relative rounded-xl bg-white/5 p-2 overflow-hidden">
-            <div
-              className="pointer-events-none absolute inset-0 opacity-30"
-              style={{
-                backgroundImage:
-                  "radial-gradient(rgba(255,255,255,0.15) 1px, transparent 1px)",
-                backgroundSize: "16px 16px",
-              }}
-            />
+        <div className="isolate overflow-hidden rounded-[16px] border-[0.5px] border-[color-mix(in_srgb,var(--red)_25%,transparent)] bg-[var(--card)] p-2">
+          <div className="relative rounded-[12px] p-2 overflow-hidden">
             <div className="relative flex flex-col gap-1">
               {painPoints.map((point, i) => (
                 <motion.div
                   key={i}
-                  className="flex items-start gap-4 rounded-lg bg-gray-950 px-5 py-4"
+                  className="flex items-start gap-4 rounded-[10px] bg-[var(--group)] px-5 py-4"
                   initial={{ opacity: 0, x: -20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.4, delay: i * 0.08 }}
                 >
-                  <span className="font-mono text-base font-bold text-pink-400 shrink-0 pt-0.5">
+                  <span className="font-mono text-base font-bold text-[var(--red)] shrink-0 pt-0.5">
                     {point.emoji}
                   </span>
-                  <p className="text-lg/7 text-gray-300">{point.text}</p>
+                  <p className="text-lg/7 text-[var(--fg2)]">{point.text}</p>
                 </motion.div>
               ))}
             </div>
@@ -87,7 +77,7 @@ export default function PainPoints() {
 
         {/* Rhetorical question — trial close (Brunson) */}
         <motion.p
-          className="mt-8 text-center text-xl font-semibold text-white italic"
+          className="mt-8 text-center text-xl font-semibold text-[var(--fg)] italic"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
@@ -97,7 +87,7 @@ export default function PainPoints() {
         </motion.p>
       </div>
 
-      <div className="relative mt-20 before:absolute before:top-0 before:h-px before:w-[200vw] before:-left-[100vw] before:bg-white/10" />
+      <div className="relative mt-20 before:absolute before:top-0 before:h-px before:w-[200vw] before:-left-[100vw] before:bg-[var(--sep)]" />
     </section>
   );
 }

@@ -51,68 +51,54 @@ const bonuses = [
 ];
 
 export default function Bonuses() {
-
   return (
     <section className="relative py-20">
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="mb-8 flex items-center gap-4">
-          <span className="font-mono text-base font-semibold tracking-widest uppercase text-amber-400">
-            Bonus Inclus
-          </span>
-          <div className="h-px flex-1 bg-white/10" />
+          <span className="mac-eyebrow">Bonus inclus</span>
+          <div className="h-px flex-1 bg-[var(--sep)]" />
         </div>
 
         <div className="mb-12 max-w-2xl">
-          <h2 className="text-2xl sm:text-[2.5rem]/10 font-medium tracking-tighter text-balance text-white">
+          <h2 className="text-2xl sm:text-[2.5rem]/10 font-bold tracking-[-0.03em] text-balance text-[var(--fg)]">
             Et ce n&apos;est pas tout...
           </h2>
-          <p className="mt-4 text-xl text-gray-300">
+          <p className="mt-4 text-xl text-[var(--fg2)]">
             En plus de la formation complète, tu reçois{" "}
-            <span className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-green-300">
+            <span className="text-2xl font-bold" style={{ color: "var(--green)" }}>
               7 bonus exclusifs
             </span>{" "}
             inclus sans supplément.
           </p>
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-2.5">
           {bonuses.map((bonus, i) => (
             <motion.div
               key={i}
-              className="isolate overflow-hidden rounded-2xl bg-gray-950 p-2 outline outline-white/10"
+              className="rounded-[16px] border-[0.5px] border-[var(--sep)] bg-[var(--card)] p-5"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: i * 0.08 }}
+              transition={{ duration: 0.4, delay: i * 0.06 }}
             >
-              <div className="relative rounded-xl bg-white/5 p-5 overflow-hidden">
-                <div
-                  className="pointer-events-none absolute inset-0 opacity-30"
-                  style={{
-                    backgroundImage:
-                      "radial-gradient(rgba(255,255,255,0.15) 1px, transparent 1px)",
-                    backgroundSize: "16px 16px",
-                  }}
-                />
-                <div className="relative flex items-start gap-4">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-amber-500/10">
-                    <Gift size={18} className="text-amber-400" />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="text-base font-semibold text-white mb-1">
-                      {bonus.title}
-                    </h3>
-                    <p className="text-lg/7 text-gray-300">{bonus.benefit}</p>
-                  </div>
+              <div className="flex items-start gap-4">
+                <span className="mac-icon lg g-orange shrink-0">
+                  <Gift size={17} className="text-white" />
+                </span>
+                <div className="flex-1">
+                  <h3 className="text-base font-semibold text-[var(--fg)] mb-1">
+                    {bonus.title}
+                  </h3>
+                  <p className="text-[17px] leading-relaxed text-[var(--fg2)]">{bonus.benefit}</p>
                 </div>
               </div>
             </motion.div>
           ))}
         </div>
-
       </div>
 
-      <div className="relative mt-20 before:absolute before:top-0 before:h-px before:w-[200vw] before:-left-[100vw] before:bg-white/10" />
+      <div className="relative mt-20 before:absolute before:top-0 before:h-px before:w-[200vw] before:-left-[100vw] before:bg-[var(--sep)]" />
     </section>
   );
 }

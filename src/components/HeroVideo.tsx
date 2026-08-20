@@ -33,7 +33,7 @@ export default function HeroVideo() {
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
           <motion.div
-            className="isolate overflow-hidden rounded-2xl bg-gray-950 p-2 outline outline-white/10"
+            className="isolate overflow-hidden rounded-[16px] border-[0.5px] border-[var(--sep)] bg-[var(--card)] p-2"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -59,16 +59,16 @@ export default function HeroVideo() {
               {/* Play overlay — hidden once playing with sound */}
               {!isPlaying && (
                 <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/40 transition-opacity">
-                  <div className="w-16 h-16 rounded-full bg-sky-500/20 backdrop-blur-sm flex items-center justify-center mb-4 hover:bg-sky-500/30 transition-colors">
+                  <div className="w-16 h-16 rounded-full bg-[color-mix(in_srgb,var(--accent)_25%,transparent)] backdrop-blur-sm flex items-center justify-center mb-4 hover:bg-[color-mix(in_srgb,var(--accent)_35%,transparent)] transition-colors">
                     <svg
-                      className="w-7 h-7 text-sky-400 ml-1"
+                      className="w-7 h-7 text-white ml-1"
                       fill="currentColor"
                       viewBox="0 0 24 24"
                     >
                       <path d="M8 5v14l11-7z" />
                     </svg>
                   </div>
-                  <p className="text-base text-gray-300 font-medium">
+                  <p className="text-base text-white font-medium">
                     Regarde cette vidéo (3 min)
                   </p>
                 </div>
@@ -77,7 +77,7 @@ export default function HeroVideo() {
           </motion.div>
 
           <motion.p
-            className="mt-4 text-center text-lg font-medium italic text-gray-300"
+            className="mt-4 text-center text-lg font-medium italic text-[var(--fg2)]"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}

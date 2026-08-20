@@ -30,7 +30,7 @@ async function sendAppelEmail(apiKey: string, email: string, firstName?: string)
 
 <ul>
   <li>On fait le point sur ton projet d'app et ta situation actuelle</li>
-  <li>Je te dis honnêtement si la formation ou l'accompagnement peuvent t'aider</li>
+  <li>Je te dis honnêtement si un accompagnement peut t'aider</li>
   <li>Si oui, on définit ensemble la solution la plus adaptée</li>
   <li>Si non, je te donne quand même un plan d'action concret pour avancer seul</li>
 </ul>

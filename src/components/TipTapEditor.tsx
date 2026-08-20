@@ -45,8 +45,8 @@ function ToolbarButton({
       title={title}
       className={`p-1.5 rounded transition-colors ${
         active
-          ? "bg-sky-500/20 text-sky-400"
-          : "text-gray-400 hover:bg-white/10 hover:text-white"
+          ? "bg-[var(--accent)]/20 text-[var(--accent2)]"
+          : "text-[var(--fg2)] hover:bg-white/10 hover:text-[var(--fg)]"
       }`}
     >
       {children}
@@ -63,7 +63,7 @@ export default function TipTapEditor({ content, onChange }: TipTapEditorProps) {
       }),
       Link.configure({
         openOnClick: false,
-        HTMLAttributes: { class: "text-sky-400 underline" },
+        HTMLAttributes: { class: "text-[var(--accent2)] underline" },
       }),
       Underline,
     ],
@@ -71,7 +71,7 @@ export default function TipTapEditor({ content, onChange }: TipTapEditorProps) {
     editorProps: {
       attributes: {
         class:
-          "prose prose-invert max-w-none min-h-[200px] px-4 py-3 text-sm text-white leading-relaxed focus:outline-none",
+          "prose prose-invert max-w-none min-h-[200px] px-4 py-3 text-sm text-[var(--fg)] leading-relaxed focus:outline-none",
       },
     },
     onUpdate: ({ editor }) => {
@@ -108,9 +108,9 @@ export default function TipTapEditor({ content, onChange }: TipTapEditorProps) {
   const s = 14;
 
   return (
-    <div className="bg-white/5 border border-white/10 rounded-lg overflow-hidden focus-within:border-sky-500 transition-colors">
+    <div className="bg-white/5 border border-[var(--sep)] rounded-lg overflow-hidden focus-within:border-[var(--accent)] transition-colors">
       {/* Toolbar */}
-      <div className="flex flex-wrap items-center gap-0.5 px-2 py-1.5 border-b border-white/10 bg-white/[0.02]">
+      <div className="flex flex-wrap items-center gap-0.5 px-2 py-1.5 border-b border-[var(--sep)] bg-white/[0.02]">
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleBold().run()}
           active={editor.isActive("bold")}

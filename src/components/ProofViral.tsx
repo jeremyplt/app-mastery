@@ -78,26 +78,22 @@ export default function ProofViral() {
     <section className="relative py-20">
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="mb-8 flex items-center gap-4">
-          <span className="font-mono text-base font-semibold tracking-widest uppercase text-pink-400">
-            Contenu viral
-          </span>
-          <div className="h-px flex-1 bg-white/10" />
+          <span className="mac-eyebrow">Contenu viral</span>
+          <div className="h-px flex-1 bg-[var(--sep)]" />
         </div>
 
         <div className="mb-12 max-w-2xl">
           <motion.h2
-            className="text-2xl sm:text-[2.5rem]/10 font-medium tracking-tighter text-balance text-white"
+            className="text-2xl sm:text-[2.5rem]/10 font-bold tracking-[-0.035em] text-balance text-[var(--fg)]"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
             On t&apos;apprend à transformer tes influenceurs en{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-rose-500">
-              machines à contenus viraux
-            </span>
+            <span className="mac-accent">machines à contenus viraux</span>
           </motion.h2>
           <motion.p
-            className="mt-4 text-xl/8 text-gray-300"
+            className="mt-4 text-xl/8 text-[var(--fg2)]"
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -113,8 +109,8 @@ export default function ProofViral() {
 
       {/* Infinite marquee using Framer Motion */}
       <div className="relative overflow-hidden">
-        <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-gray-950 to-transparent z-10" />
-        <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-gray-950 to-transparent z-10" />
+        <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-[var(--bg)] to-transparent z-10" />
+        <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-[var(--bg)] to-transparent z-10" />
 
         <motion.div
           className="flex gap-4 w-max"
@@ -136,7 +132,7 @@ export default function ProofViral() {
 
       <div className="px-4 sm:px-6 lg:px-8">
         <motion.p
-          className="mt-10 text-center text-xl sm:text-2xl font-medium tracking-tight text-white"
+          className="mt-10 text-center text-xl sm:text-2xl font-semibold tracking-[-0.02em] text-[var(--fg)]"
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
@@ -146,7 +142,7 @@ export default function ProofViral() {
         </motion.p>
       </div>
 
-      <div className="relative mt-20 before:absolute before:top-0 before:h-px before:w-[200vw] before:-left-[100vw] before:bg-white/10" />
+      <div className="relative mt-20 before:absolute before:top-0 before:h-px before:w-[200vw] before:-left-[100vw] before:bg-[var(--sep)]" />
     </section>
   );
 }

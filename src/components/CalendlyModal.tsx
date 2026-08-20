@@ -32,6 +32,8 @@ export default function CalendlyModal({
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-3 sm:p-6"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -39,16 +41,17 @@ export default function CalendlyModal({
     >
       <motion.div
         className="relative w-full max-w-5xl"
-        initial={{ opacity: 0, y: 24, scale: 0.98 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.3 }}
+        initial={{ opacity: 0, y: 24, scale: 0.98, filter: "blur(6px)" }}
+        animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+        exit={{ opacity: 0, y: 12, scale: 0.98, filter: "blur(4px)", transition: { duration: 0.18, ease: [0.23, 1, 0.32, 1] } }}
+        transition={{ duration: 0.32, ease: [0.32, 0.72, 0, 1] }}
         onClick={(e) => e.stopPropagation()}
       >
         <button
           type="button"
           onClick={onClose}
           aria-label="Fermer"
-          className="absolute -top-11 right-0 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-bold text-white hover:bg-white/20 transition-colors"
+          className="absolute -top-11 right-0 inline-flex items-center gap-2 rounded-full bg-[var(--glass)] backdrop-blur-md border border-[var(--glass-brd)] px-4 py-2 text-sm font-semibold text-[var(--fg)] hover:bg-[color-mix(in_srgb,var(--fg)_12%,transparent)] transition-colors"
         >
           Fermer
           <svg className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
@@ -56,7 +59,7 @@ export default function CalendlyModal({
           </svg>
         </button>
 
-        <div className="overflow-hidden rounded-2xl border border-white/10 bg-white shadow-2xl">
+        <div className="overflow-hidden rounded-[20px] border-[0.5px] border-[var(--glass-brd)] bg-white shadow-2xl">
           <iframe
             src={calendlyUrl}
             width="100%"

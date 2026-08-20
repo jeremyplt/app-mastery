@@ -108,17 +108,17 @@ export default function CandidaturesAdmin() {
 
   if (authorized === null) {
     return (
-      <div className="min-h-screen bg-gray-950 text-white flex items-center justify-center">
+      <div className="min-h-screen text-[var(--fg)] flex items-center justify-center">
         Vérification...
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white antialiased">
+    <div className="min-h-screen text-[var(--fg)] antialiased">
       <div className="mx-auto max-w-5xl px-5 py-10">
-        <h1 className="text-3xl font-bold tracking-tight">Candidatures</h1>
-        <p className="mt-2 text-gray-300 font-medium">
+        <h1 className="text-[30px] font-bold tracking-[-0.03em]">Candidatures</h1>
+        <p className="mt-2 text-[var(--fg2)] font-medium">
           Formulaire de qualification /appel.
         </p>
 
@@ -132,10 +132,10 @@ export default function CandidaturesAdmin() {
             <button
               key={key}
               onClick={() => setFilter(key)}
-              className={`rounded-lg px-4 py-2 text-sm font-bold transition-colors ${
+              className={`rounded-[9px] px-4 py-2 text-sm font-semibold transition-colors ${
                 filter === key
-                  ? "bg-amber-400 text-gray-950"
-                  : "bg-white/10 text-gray-200 hover:bg-white/20"
+                  ? "bg-[var(--accent)] text-[var(--accent-fg)]"
+                  : "bg-[var(--field)] text-[var(--fg2)] hover:bg-[color-mix(in_srgb,var(--fg)_8%,transparent)]"
               }`}
             >
               {lbl}
@@ -143,11 +143,11 @@ export default function CandidaturesAdmin() {
           ))}
         </div>
 
-        {loading && <p className="mt-8 text-gray-300">Chargement...</p>}
-        {error && <p className="mt-8 font-bold text-red-400">{error}</p>}
+        {loading && <p className="mt-8 text-[var(--fg2)]">Chargement...</p>}
+        {error && <p className="mt-8 font-semibold text-[var(--red)]">{error}</p>}
 
         {!loading && !error && filtered.length === 0 && (
-          <p className="mt-8 text-gray-300">Aucune candidature pour ce filtre.</p>
+          <p className="mt-8 text-[var(--fg2)]">Aucune candidature pour ce filtre.</p>
         )}
 
         <div className="mt-6 space-y-3">
@@ -156,14 +156,14 @@ export default function CandidaturesAdmin() {
             return (
               <div
                 key={c.id}
-                className="overflow-hidden rounded-xl border border-white/10 bg-white/5"
+                className="overflow-hidden rounded-[14px] border-[0.5px] border-[var(--sep)] bg-[var(--card)]"
               >
                 <button
                   onClick={() => setOpen(isOpen ? null : c.id)}
                   className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
                 >
                   <div className="min-w-0">
-                    <p className="truncate text-lg font-bold text-white">
+                    <p className="truncate text-lg font-bold text-[var(--fg)]">
                       {c.first_name}
                     </p>
                     <div className="mt-1 flex flex-wrap items-center gap-2">
@@ -181,11 +181,11 @@ export default function CandidaturesAdmin() {
                             copy(c.email, `${c.id}-email`);
                           }
                         }}
-                        className="inline-flex items-center gap-1.5 rounded-md bg-white/10 px-2.5 py-1 text-sm font-semibold text-gray-100 transition-colors hover:bg-white/20"
+                        className="inline-flex items-center gap-1.5 rounded-md bg-[var(--field)] px-2.5 py-1 text-sm font-semibold text-[var(--fg)] transition-colors hover:bg-[color-mix(in_srgb,var(--fg)_8%,transparent)]"
                         title="Copier l'email"
                       >
                         <span className="truncate">{c.email}</span>
-                        <span className="text-xs text-amber-300">
+                        <span className="text-xs text-[var(--accent2)]">
                           {copied === `${c.id}-email` ? "Copié ✓" : "Copier"}
                         </span>
                       </span>
@@ -204,40 +204,34 @@ export default function CandidaturesAdmin() {
                               copy(c.phone!, `${c.id}-phone`);
                             }
                           }}
-                          className="inline-flex items-center gap-1.5 rounded-md bg-white/10 px-2.5 py-1 text-sm font-semibold text-gray-100 transition-colors hover:bg-white/20"
+                          className="inline-flex items-center gap-1.5 rounded-md bg-[var(--field)] px-2.5 py-1 text-sm font-semibold text-[var(--fg)] transition-colors hover:bg-[color-mix(in_srgb,var(--fg)_8%,transparent)]"
                           title="Copier le numéro"
                         >
                           <span>{c.phone}</span>
-                          <span className="text-xs text-amber-300">
+                          <span className="text-xs text-[var(--accent2)]">
                             {copied === `${c.id}-phone` ? "Copié ✓" : "Copier"}
                           </span>
                         </span>
                       )}
                     </div>
-                    <p className="mt-1 text-sm font-medium text-gray-400">
+                    <p className="mt-1 text-sm font-medium text-[var(--fg3)]">
                       {formatDate(c.created_at)}
                       {c.utm_source ? ` · ${c.utm_source}` : ""}
                     </p>
                   </div>
                   <div className="flex shrink-0 items-center gap-3">
-                    <span className="text-sm font-bold text-gray-300">
+                    <span className="text-sm font-bold text-[var(--fg2)]">
                       {c.score} pts
                     </span>
-                    <span
-                      className={`rounded-full px-3 py-1 text-xs font-bold ${
-                        c.qualified
-                          ? "bg-green-500/15 text-green-300"
-                          : "bg-red-500/15 text-red-300"
-                      }`}
-                    >
+                    <span className={`badge ${c.qualified ? "badge-success" : "badge-danger"}`}>
                       {c.qualified ? "Qualifié" : "Non qualifié"}
                     </span>
-                    <span className="text-gray-400">{isOpen ? "▲" : "▼"}</span>
+                    <span className="text-[var(--fg3)]">{isOpen ? "▲" : "▼"}</span>
                   </div>
                 </button>
 
                 {isOpen && (
-                  <div className="border-t border-white/10 px-5 py-4 space-y-3">
+                  <div className="border-t border-[var(--sep)] px-5 py-4 space-y-3">
                     {QUESTIONS.map((q) => {
                       const key = {
                         q1: c.q1_stage,
@@ -249,10 +243,10 @@ export default function CandidaturesAdmin() {
                       }[q.id];
                       return (
                         <div key={q.id}>
-                          <p className="text-sm font-bold text-amber-400">
+                          <p className="text-sm font-bold text-[var(--accent2)]">
                             {q.title}
                           </p>
-                          <p className="mt-0.5 text-base font-medium text-gray-100 whitespace-pre-wrap">
+                          <p className="mt-0.5 text-base font-medium text-[var(--fg)] whitespace-pre-wrap">
                             {q.type === "text" ? key : label(q.id, key || "")}
                           </p>
                         </div>
@@ -260,10 +254,10 @@ export default function CandidaturesAdmin() {
                     })}
                     {c.budget_ready && (
                       <div>
-                        <p className="text-sm font-bold text-amber-400">
+                        <p className="text-sm font-bold text-[var(--accent2)]">
                           Rattrapage budget
                         </p>
-                        <p className="mt-0.5 text-base font-medium text-gray-100">
+                        <p className="mt-0.5 text-base font-medium text-[var(--fg)]">
                           {c.budget_ready === "oui"
                             ? "Oui, prêt à investir"
                             : "Non, pas pour le moment"}

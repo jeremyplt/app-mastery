@@ -95,22 +95,22 @@ export default function CoursPage() {
 
   if (authenticated === null) {
     return (
-      <div className="min-h-screen bg-gray-950 flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-sky-400 border-t-transparent rounded-full animate-spin" />
+      <div className="min-h-screen bg-[var(--bg)] flex items-center justify-center">
+        <div className="w-8 h-8 border-2 border-[var(--accent)] border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-950 text-white antialiased">
+    <div className="min-h-screen bg-[var(--bg)] text-[var(--fg)] antialiased">
       <div className="flex">
         {/* Sidebar */}
-        <aside className="hidden lg:flex w-80 shrink-0 flex-col border-r border-white/10 bg-gray-950 h-screen sticky top-0 overflow-y-auto">
-          <div className="p-6 border-b border-white/10">
-            <span className="font-mono text-xs font-semibold tracking-widest uppercase text-sky-400">
+        <aside className="hidden lg:flex w-80 shrink-0 flex-col border-r border-[var(--sep)] bg-[var(--bg)] h-screen sticky top-0 overflow-y-auto">
+          <div className="p-6 border-b border-[var(--sep)]">
+            <span className="font-mono text-xs font-semibold tracking-widest uppercase text-[var(--accent2)]">
               App Mastery
             </span>
-            <h2 className="mt-1 text-lg font-semibold text-white tracking-tight">
+            <h2 className="mt-1 text-lg font-semibold text-[var(--fg)] tracking-tight">
               Essentiel
             </h2>
           </div>
@@ -118,7 +118,7 @@ export default function CoursPage() {
           <nav className="flex-1 p-4 space-y-6">
             {modules.map((mod) => (
               <div key={mod.id}>
-                <h3 className="text-xs font-semibold tracking-wider uppercase text-gray-500 px-3 mb-2">
+                <h3 className="text-xs font-semibold tracking-wider uppercase text-[var(--fg2)] px-3 mb-2">
                   {mod.title}
                 </h3>
                 <div className="space-y-1">
@@ -128,11 +128,11 @@ export default function CoursPage() {
                       onClick={() => setCurrentLesson(lesson)}
                       className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left text-sm transition-colors cursor-pointer ${
                         currentLesson?.id === lesson.id
-                          ? "bg-sky-500/10 text-sky-400"
-                          : "text-gray-400 hover:bg-white/5 hover:text-white"
+                          ? "bg-[var(--sel)] text-[var(--accent2)]"
+                          : "text-[var(--fg2)] hover:bg-[var(--card)] hover:text-[var(--fg)]"
                       }`}
                     >
-                      <span className="w-6 h-6 rounded-full bg-white/5 flex items-center justify-center text-xs font-medium shrink-0">
+                      <span className="w-6 h-6 rounded-full bg-[var(--card)] flex items-center justify-center text-xs font-medium shrink-0">
                         {i + 1}
                       </span>
                       <span className="truncate">{lesson.title}</span>
@@ -147,12 +147,12 @@ export default function CoursPage() {
         {/* Main content */}
         <main className="flex-1 min-w-0">
           {/* Mobile header */}
-          <div className="lg:hidden border-b border-white/10 p-4">
-            <span className="font-mono text-xs font-semibold tracking-widest uppercase text-sky-400">
+          <div className="lg:hidden border-b border-[var(--sep)] p-4">
+            <span className="font-mono text-xs font-semibold tracking-widest uppercase text-[var(--accent2)]">
               App Mastery Essentiel
             </span>
             <select
-              className="mt-2 w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 text-sm text-white"
+              className="mt-2 w-full rounded-lg bg-[var(--card)] border border-[var(--sep)] px-3 py-2 text-sm text-[var(--fg)]"
               value={currentLesson?.id || ""}
               onChange={(e) => {
                 for (const mod of modules) {
@@ -192,8 +192,8 @@ export default function CoursPage() {
                   />
                 </div>
               ) : (
-                <div className="relative w-full flex items-center justify-center bg-gray-900 border-b border-white/10" style={{ paddingTop: "56.25%" }}>
-                  <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-500">
+                <div className="relative w-full flex items-center justify-center bg-[var(--card)] border-b border-[var(--sep)]" style={{ paddingTop: "56.25%" }}>
+                  <div className="absolute inset-0 flex flex-col items-center justify-center text-[var(--fg2)]">
                     <svg className="w-12 h-12 mb-3 opacity-40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9A2.25 2.25 0 0013.5 5.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z" />
                     </svg>
@@ -204,7 +204,7 @@ export default function CoursPage() {
 
               {/* Lesson info */}
               <div className="p-6 lg:p-10">
-                <h1 className="text-2xl font-semibold tracking-tight text-white">
+                <h1 className="text-2xl font-semibold tracking-tight text-[var(--fg)]">
                   {currentLesson.title}
                 </h1>
 
@@ -212,7 +212,7 @@ export default function CoursPage() {
                 {currentLesson.description && (
                   <div
                     ref={descRef}
-                    className="lesson-description mt-6 text-gray-300 leading-relaxed text-base"
+                    className="lesson-description mt-6 text-[var(--fg2)] leading-relaxed text-base"
                     dangerouslySetInnerHTML={{ __html: currentLesson.description }}
                   />
                 )}
@@ -220,7 +220,7 @@ export default function CoursPage() {
                 {/* Attachments */}
                 {currentLesson.attachments && currentLesson.attachments.length > 0 && (
                   <div className="mt-8">
-                    <h2 className="text-lg font-semibold text-white mb-4">
+                    <h2 className="text-lg font-semibold text-[var(--fg)] mb-4">
                       Pièces jointes
                     </h2>
                     <div className="space-y-3">
@@ -231,20 +231,20 @@ export default function CoursPage() {
                           download
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center gap-4 bg-white/5 border border-white/10 rounded-lg px-4 py-3 hover:bg-white/10 transition-colors group"
+                          className="flex items-center gap-4 bg-[var(--card)] border border-[var(--sep)] rounded-lg px-4 py-3 hover:bg-[var(--field)] transition-colors group"
                         >
-                          <Paperclip className="w-5 h-5 text-gray-400 shrink-0" />
+                          <Paperclip className="w-5 h-5 text-[var(--fg2)] shrink-0" />
                           <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium text-white truncate">
+                            <p className="text-sm font-medium text-[var(--fg)] truncate">
                               {attachment.name}
                             </p>
                             {attachment.file_size != null && (
-                              <p className="text-xs text-gray-400 mt-0.5">
+                              <p className="text-xs text-[var(--fg2)] mt-0.5">
                                 {formatFileSize(attachment.file_size)}
                               </p>
                             )}
                           </div>
-                          <Download className="w-5 h-5 text-gray-500 group-hover:text-sky-400 transition-colors shrink-0" />
+                          <Download className="w-5 h-5 text-[var(--fg2)] group-hover:text-[var(--accent2)] transition-colors shrink-0" />
                         </a>
                       ))}
                     </div>

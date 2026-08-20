@@ -1,4 +1,6 @@
 import { Metadata } from "next";
+import Link from "next/link";
+import ThemeToggle from "@/components/ThemeToggle";
 
 export const metadata: Metadata = {
   title: "Conditions Générales de Vente - App Mastery",
@@ -7,12 +9,30 @@ export const metadata: Metadata = {
 
 export default function CGVPage() {
   return (
-    <div className="min-h-screen bg-gray-950 text-white antialiased">
-      <div className="mx-auto max-w-3xl px-6 py-20">
-        <h1 className="text-3xl font-bold tracking-tight mb-2">
+    <div className="min-h-screen text-[var(--fg)] antialiased">
+      <div
+        aria-hidden
+        className="fixed inset-0 -z-10 pointer-events-none"
+        style={{ background: "radial-gradient(50% 30% at 50% -4%, var(--accent-glow), transparent 60%)" }}
+      />
+      <div className="mx-auto max-w-3xl px-6">
+        <nav className="mac-nav mt-5">
+          <Link href="/" className="flex items-center gap-2.5 font-bold text-[15px] tracking-tight text-[var(--fg)]">
+            <span
+              className="grid place-items-center w-7 h-7 rounded-lg text-[12px] font-extrabold tracking-tight text-[var(--accent)] border-[0.5px] border-white/10"
+              style={{ background: "linear-gradient(150deg, #2b2b2e, #000)" }}
+            >
+              AM
+            </span>
+            App Mastery
+          </Link>
+          <ThemeToggle />
+        </nav>
+        <div className="py-14 sm:py-16">
+        <h1 className="text-[32px] font-bold tracking-[-0.03em] mb-2">
           Conditions Générales de Vente
         </h1>
-        <p className="text-white/50 mb-12">
+        <p className="text-[var(--fg3)] mb-12">
           Dernière mise à jour : 11 mars 2026
         </p>
 
@@ -149,7 +169,7 @@ export default function CGVPage() {
             Client à débloquer sa monétisation.
           </p>
 
-          <h4 className="text-lg font-semibold text-white mt-6 mb-3">
+          <h4 className="text-[17px] font-semibold text-[var(--fg)] mt-6 mb-3">
             6.1 - Conditions d&apos;éligibilité
           </h4>
           <p>
@@ -237,7 +257,7 @@ export default function CGVPage() {
             </li>
           </ol>
 
-          <h4 className="text-lg font-semibold text-white mt-6 mb-3">
+          <h4 className="text-[17px] font-semibold text-[var(--fg)] mt-6 mb-3">
             6.2 - Preuves à fournir
           </h4>
           <p>
@@ -278,7 +298,7 @@ export default function CGVPage() {
             </li>
           </ul>
 
-          <h4 className="text-lg font-semibold text-white mt-6 mb-3">
+          <h4 className="text-[17px] font-semibold text-[var(--fg)] mt-6 mb-3">
             6.3 - Ce que comprend le coaching garanti
           </h4>
           <p>
@@ -304,7 +324,7 @@ export default function CGVPage() {
             est considérée comme remplie.
           </p>
 
-          <h4 className="text-lg font-semibold text-white mt-6 mb-3">
+          <h4 className="text-[17px] font-semibold text-[var(--fg)] mt-6 mb-3">
             6.4 - Exclusions
           </h4>
           <p>La Garantie 90 jours ne s&apos;applique pas si :</p>
@@ -434,13 +454,14 @@ export default function CGVPage() {
         </Section>
 
         {/* Footer */}
-        <div className="mt-16 pt-8 border-t border-white/10">
+        <div className="mt-16 pt-8 border-t-[0.5px] border-[var(--sep)]">
           <a
-            href="/formation"
-            className="text-sky-400 hover:text-sky-300 transition-colors font-medium"
+            href="/"
+            className="text-[var(--accent2)] hover:underline font-medium"
           >
-            &larr; Retour à la page de la Formation
+            &larr; Retour à l'accueil
           </a>
+        </div>
         </div>
       </div>
     </div>
@@ -456,8 +477,8 @@ function Section({
 }) {
   return (
     <section className="mb-12">
-      <h2 className="text-xl font-semibold text-white mb-4">{title}</h2>
-      <div className="space-y-3 text-lg/7 text-gray-300">{children}</div>
+      <h2 className="text-[20px] font-bold tracking-[-0.02em] text-[var(--fg)] mb-4">{title}</h2>
+      <div className="space-y-3 text-[17px]/7 text-[var(--fg2)]">{children}</div>
     </section>
   );
 }

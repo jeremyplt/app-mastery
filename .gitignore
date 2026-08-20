@@ -42,3 +42,8 @@ next-env.d.ts
 public/videos/presentation-original.mp4
 public/videos/vsl.mov
 public/videos/vsl-original.mov
+
+# Agent skills (local tooling, pas du code app)
+.agents/
+.claude/skills/
+skills-lock.json

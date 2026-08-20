@@ -27,16 +27,23 @@ export default function StickyTopBar() {
           exit={{ y: -60 }}
           transition={{ duration: 0.3, ease: "easeOut" }}
         >
-          <div className="bg-gray-950/95 backdrop-blur-lg border-b border-white/10 px-4 py-2.5">
+          <div
+            className="border-b-[0.5px] border-[var(--glass-brd)] px-4 py-2.5"
+            style={{
+              background: "var(--glass)",
+              backdropFilter: "blur(28px) saturate(1.8)",
+              WebkitBackdropFilter: "blur(28px) saturate(1.8)",
+            }}
+          >
             <div className="flex items-center justify-center gap-3">
               {expired ? (
                 <>
-                  <span className="text-sm font-semibold text-white/90">
+                  <span className="text-sm font-semibold text-[var(--fg)]">
                     Tu veux un plan d&apos;action personnalisé ?
                   </span>
                   <a
                     href="/appel?utm_source=landing&utm_medium=cta&utm_campaign=sticky-top-bar"
-                    className="ml-2 rounded-full bg-amber-500 px-4 py-1.5 text-sm font-semibold text-white hover:bg-amber-400 transition-colors shadow-lg shadow-amber-500/25"
+                    className="btn-primary ml-2 py-1.5! px-4! text-sm!"
                   >
                     Appel découverte
                   </a>
@@ -44,16 +51,16 @@ export default function StickyTopBar() {
               ) : (
                 <>
                   <span className="relative flex h-2 w-2 shrink-0">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500" />
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--red)] opacity-75" />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--red)]" />
                   </span>
-                  <span className="text-sm font-semibold text-white/90">
+                  <span className="text-sm font-semibold text-[var(--fg)]">
                     Les inscriptions ferment dans
                   </span>
                   <CountdownTimerCompact />
                   <a
                     href="#pricing"
-                    className="hidden sm:inline-flex ml-2 rounded-full bg-sky-500 px-4 py-1.5 text-sm font-semibold text-white hover:bg-sky-400 transition-colors shadow-lg shadow-sky-500/25"
+                    className="btn-primary hidden sm:inline-flex ml-2 py-1.5! px-4! text-sm!"
                     data-ph-capture-attribute-section="sticky-top-bar"
                   >
                     Rejoindre maintenant

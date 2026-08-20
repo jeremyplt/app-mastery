@@ -80,10 +80,10 @@ export default function Timeline() {
               <span className={`mt-2 text-xs font-semibold uppercase tracking-wider ${step.color}`}>
                 {step.week}
               </span>
-              <span className="mt-1 text-lg font-medium text-white">
+              <span className="mt-1 text-lg font-medium text-[var(--fg)]">
                 {step.title}
               </span>
-              <span className="mt-1 text-lg text-gray-300 max-w-xs">
+              <span className="mt-1 text-lg text-[var(--fg2)] max-w-xs">
                 {step.desc}
               </span>
             </motion.div>
@@ -115,10 +115,10 @@ export default function Timeline() {
               <span className={`mt-3 text-xs font-semibold uppercase tracking-wider ${step.color}`}>
                 {step.week}
               </span>
-              <span className="mt-1 text-lg font-medium text-white">
+              <span className="mt-1 text-lg font-medium text-[var(--fg)]">
                 {step.title}
               </span>
-              <span className="mt-1 text-base text-gray-300 max-w-[180px]">
+              <span className="mt-1 text-base text-[var(--fg2)] max-w-[180px]">
                 {step.desc}
               </span>
             </motion.div>
@@ -126,7 +126,7 @@ export default function Timeline() {
         </div>
       </div>
 
-      <div className="relative mt-10 before:absolute before:top-0 before:h-px before:w-[200vw] before:-left-[100vw] before:bg-white/10" />
+      <div className="relative mt-10 before:absolute before:top-0 before:h-px before:w-[200vw] before:-left-[100vw] before:bg-[var(--sep)]" />
     </section>
   );
 }

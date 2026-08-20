@@ -28,17 +28,15 @@ export default function Transformation() {
     <section className="relative py-20">
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="mb-8 flex items-center gap-4">
-          <span className="font-mono text-base font-semibold tracking-widest uppercase text-emerald-400">
-            Transformation
-          </span>
-          <div className="h-px flex-1 bg-white/10" />
+          <span className="mac-eyebrow">Transformation</span>
+          <div className="h-px flex-1 bg-[var(--sep)]" />
         </div>
 
         <div className="mb-12 max-w-2xl">
-          <h2 className="text-2xl sm:text-[2.5rem]/10 font-medium tracking-tighter text-balance text-white">
+          <h2 className="text-2xl sm:text-[2.5rem]/10 font-bold tracking-[-0.035em] text-balance text-[var(--fg)]">
             Imagine dans 28 jours...
           </h2>
-          <p className="mt-4 text-xl/8 text-gray-300">
+          <p className="mt-4 text-xl/8 text-[var(--fg2)]">
             Tu ouvres ton téléphone et tu vois ton app sur l&apos;App Store et
             le Google Play Store. Avec de vrais utilisateurs. Et tes premiers
             revenus qui tombent.
@@ -46,26 +44,17 @@ export default function Transformation() {
         </div>
 
         {/* Before/After grid — most persuasive format (Hormozi) */}
-        <div className="isolate overflow-hidden rounded-2xl bg-gray-950 p-2 outline outline-emerald-500/20">
-          <div className="relative rounded-xl bg-white/5 p-2 overflow-hidden">
-            <div
-              className="pointer-events-none absolute inset-0 opacity-30"
-              style={{
-                backgroundImage:
-                  "radial-gradient(rgba(255,255,255,0.15) 1px, transparent 1px)",
-                backgroundSize: "16px 16px",
-              }}
-            />
-
+        <div className="overflow-hidden rounded-[18px] border-[0.5px] border-[var(--sep)] bg-[var(--card)] p-2">
+          <div className="relative overflow-hidden">
             {/* Header row */}
             <div className="relative grid grid-cols-2 gap-2 mb-2">
-              <div className="rounded-lg bg-gray-950 px-5 py-3">
-                <span className="text-sm font-semibold text-pink-400 uppercase tracking-wider">
+              <div className="rounded-lg bg-[var(--group)] px-5 py-3">
+                <span className="text-sm font-semibold text-[var(--red)] uppercase tracking-wider">
                   Avant
                 </span>
               </div>
-              <div className="rounded-lg bg-gray-950 px-5 py-3">
-                <span className="text-sm font-semibold text-emerald-400 uppercase tracking-wider">
+              <div className="rounded-lg bg-[var(--group)] px-5 py-3">
+                <span className="text-sm font-semibold text-[var(--green)] uppercase tracking-wider">
                   Après App Mastery
                 </span>
               </div>
@@ -82,13 +71,13 @@ export default function Transformation() {
                   viewport={{ once: true }}
                   transition={{ duration: 0.4, delay: i * 0.1 }}
                 >
-                  <div className="rounded-lg bg-gray-950 px-5 py-4">
-                    <p className="text-lg text-gray-300 line-through decoration-pink-500/30">
+                  <div className="rounded-lg bg-[var(--group)] px-5 py-4">
+                    <p className="text-lg text-[var(--fg2)] line-through decoration-[color-mix(in_srgb,var(--red)_40%,transparent)]">
                       {row.before}
                     </p>
                   </div>
-                  <div className="rounded-lg bg-gray-950 px-5 py-4">
-                    <p className="text-lg text-white font-medium">
+                  <div className="rounded-lg bg-[var(--group)] px-5 py-4">
+                    <p className="text-lg text-[var(--fg)] font-medium">
                       {row.after}
                     </p>
                   </div>
@@ -100,7 +89,7 @@ export default function Transformation() {
 
         {/* Trial close */}
         <motion.p
-          className="mt-10 text-center text-2xl sm:text-3xl font-medium tracking-tight text-white"
+          className="mt-10 text-center text-2xl sm:text-3xl font-semibold tracking-[-0.02em] text-[var(--fg)]"
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -110,7 +99,7 @@ export default function Transformation() {
         </motion.p>
       </div>
 
-      <div className="relative mt-20 before:absolute before:top-0 before:h-px before:w-[200vw] before:-left-[100vw] before:bg-white/10" />
+      <div className="relative mt-20 before:absolute before:top-0 before:h-px before:w-[200vw] before:-left-[100vw] before:bg-[var(--sep)]" />
     </section>
   );
 }

@@ -111,61 +111,49 @@ export default function Faq() {
     <section className="relative py-20">
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="mb-8 flex items-center gap-4">
-          <span className="font-mono text-base font-semibold tracking-widest uppercase text-amber-400">
+          <span className="text-[13px] font-semibold tracking-wide uppercase text-[var(--fg3)]">
             FAQ
           </span>
-          <div className="h-px flex-1 bg-white/10" />
+          <div className="h-px flex-1 bg-[var(--sep)]" />
         </div>
 
         <div className="grid lg:grid-cols-[1fr_2fr] gap-8 lg:gap-12">
           {/* Left: title + contact */}
           <div className="lg:sticky lg:top-8 lg:self-start">
-            <h2 className="text-2xl sm:text-[2.5rem]/10 font-medium tracking-tighter text-balance text-white">
+            <h2 className="text-2xl sm:text-[2.5rem]/10 font-bold tracking-[-0.035em] text-balance text-[var(--fg)]">
               Encore des questions ?
             </h2>
-            <p className="mt-4 text-xl/8 text-gray-300">
+            <p className="mt-4 text-xl/8 text-[var(--fg2)] leading-relaxed">
               Si ta question n&apos;est pas ici, écris-moi. Je réponds
               personnellement en moins de 24h.
             </p>
 
             {/* Contact card */}
-            <div className="mt-8 isolate overflow-hidden rounded-2xl bg-gray-950 p-2 outline outline-white/10">
-              <div className="relative rounded-xl bg-white/5 p-5 overflow-hidden">
-                <div
-                  className="pointer-events-none absolute inset-0 opacity-30"
-                  style={{
-                    backgroundImage:
-                      "radial-gradient(rgba(255,255,255,0.1) 1px, transparent 1px)",
-                    backgroundSize: "16px 16px",
-                  }}
-                />
-                <div className="relative">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-green-500/10">
-                      <svg className="w-4 h-4 text-green-400" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-                      </svg>
-                    </div>
-                    <span className="text-sm font-semibold text-white">
-                      Écris-moi sur WhatsApp
-                    </span>
-                  </div>
-                  <p className="text-sm/6 text-gray-300 mb-4">
-                    Je réponds personnellement à chaque message.
-                  </p>
-                  <a
-                    href="https://wa.me/33756823921?text=Salut%20Jeremy%20!%20J%27ai%20une%20question%20sur%20App%20Mastery."
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 rounded-full bg-white/5 px-4 py-2 text-sm font-semibold text-gray-300 outline outline-white/10 hover:outline-white/20 transition-colors"
-                  >
-                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-                    </svg>
-                    Écrire sur WhatsApp
-                  </a>
+            <div className="mt-8 rounded-[16px] border-[0.5px] border-[var(--sep)] bg-[var(--card)] p-5">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[color-mix(in_srgb,var(--green)_16%,transparent)]">
+                  <svg className="w-4 h-4 text-[var(--green)]" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                  </svg>
                 </div>
+                <span className="text-sm font-semibold text-[var(--fg)]">
+                  Écris-moi sur WhatsApp
+                </span>
               </div>
+              <p className="text-sm/6 text-[var(--fg2)] mb-4">
+                Je réponds personnellement à chaque message.
+              </p>
+              <a
+                href="https://wa.me/33756823921?text=Salut%20Jeremy%20!%20J%27ai%20une%20question%20sur%20App%20Mastery."
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-secondary text-sm!"
+              >
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                </svg>
+                Écrire sur WhatsApp
+              </a>
             </div>
           </div>
 
@@ -179,10 +167,8 @@ export default function Faq() {
                   onClick={() => setActiveTab(i)}
                   className={`px-5 py-2.5 rounded-full text-base font-semibold transition-colors cursor-pointer ${
                     activeTab === i
-                      ? i === 1
-                        ? "bg-amber-500 text-white"
-                        : "bg-white text-gray-950"
-                      : "bg-white/5 text-gray-300 outline outline-white/10 hover:bg-white/10"
+                      ? "bg-[var(--accent)] text-[var(--accent-fg)]"
+                      : "bg-[var(--field)] text-[var(--fg2)] border-[0.5px] border-[var(--field-brd)] hover:bg-[color-mix(in_srgb,var(--fg)_8%,transparent)]"
                   }`}
                 >
                   {cat.label}
@@ -190,69 +176,59 @@ export default function Faq() {
               ))}
             </div>
 
-            <div className="isolate overflow-hidden rounded-2xl bg-gray-950 p-2 outline outline-white/10">
-              <div className="relative rounded-xl bg-white/5 p-2 overflow-hidden">
-                <div
-                  className="pointer-events-none absolute inset-0 opacity-30"
-                  style={{
-                    backgroundImage:
-                      "radial-gradient(rgba(255,255,255,0.15) 1px, transparent 1px)",
-                    backgroundSize: "16px 16px",
-                  }}
-                />
-                <div className="relative flex flex-col gap-1">
-                  {activeCategory.items.map((item, index) => {
-                    const key = `${activeTab}-${index}`;
-                    const isOpen = openItems.includes(key);
-                    return (
-                      <div key={key} className="rounded-lg bg-gray-950">
-                        <button
-                          onClick={() => toggle(key)}
-                          className="w-full flex items-center justify-between px-4 py-3.5 text-left cursor-pointer hover:bg-white/5 rounded-lg transition-colors"
+            <div className="rounded-[16px] border-[0.5px] border-[var(--sep)] bg-[var(--group)] p-2">
+              <div className="flex flex-col">
+                {activeCategory.items.map((item, index) => {
+                  const key = `${activeTab}-${index}`;
+                  const isOpen = openItems.includes(key);
+                  return (
+                    <div key={key} className="rounded-[10px]">
+                      <button
+                        onClick={() => toggle(key)}
+                        className="w-full flex items-center justify-between px-4 py-3.5 text-left cursor-pointer hover:bg-[color-mix(in_srgb,var(--fg)_5%,transparent)] rounded-[10px] transition-colors"
+                      >
+                        <div className="flex items-center gap-3 pr-4">
+                          <span className="font-mono text-sm text-[var(--fg3)] shrink-0">
+                            {String(index + 1).padStart(2, "0")}
+                          </span>
+                          <span className="text-base font-semibold text-[var(--fg)]">
+                            {item.q}
+                          </span>
+                        </div>
+                        <motion.span
+                          animate={{ rotate: isOpen ? 180 : 0 }}
+                          transition={{ duration: 0.2 }}
+                          className="flex-shrink-0"
                         >
-                          <div className="flex items-center gap-3 pr-4">
-                            <span className="font-mono text-sm text-white/20 shrink-0">
-                              {String(index + 1).padStart(2, "0")}
-                            </span>
-                            <span className="text-base font-semibold text-white">
-                              {item.q}
-                            </span>
-                          </div>
-                          <motion.span
-                            animate={{ rotate: isOpen ? 180 : 0 }}
-                            transition={{ duration: 0.2 }}
-                            className="flex-shrink-0"
-                          >
-                            <ChevronDown size={14} className="text-gray-600" />
-                          </motion.span>
-                        </button>
+                          <ChevronDown size={14} className="text-[var(--fg3)]" />
+                        </motion.span>
+                      </button>
 
-                        <AnimatePresence initial={false}>
-                          {isOpen && (
-                            <motion.div
-                              initial={{ height: 0, opacity: 0 }}
-                              animate={{ height: "auto", opacity: 1 }}
-                              exit={{ height: 0, opacity: 0 }}
-                              transition={{ duration: 0.2, ease: "easeInOut" }}
-                              className="overflow-hidden"
-                            >
-                              <p className="px-4 pb-3.5 pl-11 text-gray-300 text-lg/8">
-                                {item.a}
-                              </p>
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
-                      </div>
-                    );
-                  })}
-                </div>
+                      <AnimatePresence initial={false}>
+                        {isOpen && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0, filter: "blur(4px)" }}
+                            animate={{ height: "auto", opacity: 1, filter: "blur(0px)" }}
+                            exit={{ height: 0, opacity: 0, filter: "blur(4px)" }}
+                            transition={{ duration: 0.26, ease: [0.32, 0.72, 0, 1] }}
+                            className="overflow-hidden"
+                          >
+                            <p className="px-4 pb-3.5 pl-11 text-[var(--fg2)] text-lg/8 leading-relaxed">
+                              {item.a}
+                            </p>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="relative mt-20 before:absolute before:top-0 before:h-px before:w-[200vw] before:-left-[100vw] before:bg-white/10" />
+      <div className="relative mt-20 before:absolute before:top-0 before:h-px before:w-[200vw] before:-left-[100vw] before:bg-[var(--sep)]" />
     </section>
   );
 }
