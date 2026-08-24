@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,21 +10,22 @@ import ThemeToggle from "@/components/ThemeToggle";
 
 // Vidéos Bunny (lib 613852). Placeholders : laisser "" tant que la vidéo
 // n'est pas prête → un bloc "Vidéo en cours de préparation" s'affiche.
-const MAIN_VIDEO_ID = ""; // vidéo principale à regarder avant l'appel
-const PREP_VIDEO_ID = ""; // vidéo de préparation "AVANT le rendez-vous"
-const TESTIMONIAL_VIDEO_ID = ""; // témoignage membre (une seule pour l'instant)
+const MAIN_VIDEO_ID = "ce2619f3-8b5e-425d-b60c-91efaa35f778"; // vidéo principale à regarder avant l'appel
+
+// Vidéo YouTube "Pour en savoir plus"
+const YOUTUBE_ID = "--Q8sMT656Y";
 
 // Photos équipe : à remplacer quand Jeremy fournit le visuel définitif de
 // Jeremy Hochwelker. jeremy-v2.jpg est la photo de branding (Jeremy Pitault).
 const TEAM = [
   {
-    name: "Jeremy Pitault",
+    name: "Jeremy",
     role: "Créateur de Shinobi Japanese, 400K€/an",
     photo: "/jeremy-v2.jpg",
     imgClass: "object-cover object-top",
   },
   {
-    name: "Jeremy Hochwelker",
+    name: "Nolan",
     role: "Associé App Mastery",
     photo: "", // à fournir
     imgClass: "object-cover",
@@ -131,48 +132,47 @@ function ConfirmeContent() {
             </div>
           </div>
 
-          {/* Vidéo principale + étapes sur la même row (layout référence) */}
-          <div className="mt-10 grid lg:grid-cols-2 gap-6 lg:gap-8 items-center">
-            {/* Vidéo à gauche */}
-            <VideoBlock videoId={MAIN_VIDEO_ID} />
+          {/* Vidéo principale en grand format (autoplay comme la VSL) */}
+          <div className="mt-10 max-w-4xl mx-auto">
+            <MainVideo videoId={MAIN_VIDEO_ID} />
+          </div>
 
-            {/* Étapes à droite */}
-            <div>
-              <h2 className="text-[22px] font-bold tracking-[-0.03em] text-[var(--fg)] mb-4">
-                Ce qu&apos;il se passe maintenant
-              </h2>
-              <div className="space-y-2.5">
-                {STEPS.map((step, i) => (
-                  <div
-                    key={i}
-                    className="flex items-start gap-3 rounded-[14px] bg-[var(--card)] border-[0.5px] border-[var(--sep)] p-3.5"
-                  >
-                    <div className="shrink-0 w-7 h-7 rounded-full bg-[var(--accent)] flex items-center justify-center text-[13px] font-bold text-[var(--accent-fg)]">
-                      {i + 1}
-                    </div>
-                    <div>
-                      <h3 className="text-[15px] font-bold text-[var(--fg)] leading-tight">
-                        {step.title}
-                      </h3>
-                      <p className="mt-1 text-[13.5px] text-[var(--fg2)] font-medium leading-snug">
-                        {step.body}
-                      </p>
-                    </div>
+          {/* Étapes */}
+          <div className="mt-12 max-w-4xl mx-auto">
+            <h2 className="text-[22px] font-bold tracking-[-0.03em] text-[var(--fg)] mb-4 text-center">
+              Ce qu&apos;il se passe maintenant
+            </h2>
+            <div className="grid sm:grid-cols-2 gap-2.5">
+              {STEPS.map((step, i) => (
+                <div
+                  key={i}
+                  className="flex items-start gap-3 rounded-[14px] bg-[var(--card)] border-[0.5px] border-[var(--sep)] p-3.5"
+                >
+                  <div className="shrink-0 w-7 h-7 rounded-full bg-[var(--accent)] flex items-center justify-center text-[13px] font-bold text-[var(--accent-fg)]">
+                    {i + 1}
                   </div>
-                ))}
-              </div>
+                  <div>
+                    <h3 className="text-[15px] font-bold text-[var(--fg)] leading-tight">
+                      {step.title}
+                    </h3>
+                    <p className="mt-1 text-[13.5px] text-[var(--fg2)] font-medium leading-snug">
+                      {step.body}
+                    </p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
 
-          {/* Vidéo de préparation à regarder AVANT le RDV */}
+          {/* Vidéo YouTube complémentaire */}
           <div className="mt-14 max-w-3xl mx-auto">
             <div className="mb-4 text-center">
-              <span className="mac-eyebrow">Important</span>
+              <span className="mac-eyebrow">Pour aller plus loin</span>
               <h2 className="mt-2 text-[22px] font-bold tracking-[-0.03em] text-[var(--fg)]">
-                À regarder AVANT ton rendez-vous
+                Découvre mon application
               </h2>
             </div>
-            <VideoBlock videoId={PREP_VIDEO_ID} />
+            <YouTubeBlock id={YOUTUBE_ID} />
           </div>
 
           {/* Notre équipe (avant le social proof) */}
@@ -219,24 +219,6 @@ function ConfirmeContent() {
               ))}
             </div>
 
-            <p className="mt-5 text-center text-[16px] text-[var(--fg2)] font-medium">
-              Oui, on est deux Jeremy, et on est associés sur App Mastery. Deux
-              fois plus de prénom, deux fois plus déterminés à faire décoller ton
-              projet. 😉
-            </p>
-          </div>
-
-          {/* Social proof : un témoignage vidéo pour l'instant */}
-          <div className="mt-14 max-w-3xl mx-auto">
-            <h2 className="text-[22px] font-bold tracking-[-0.03em] text-[var(--fg)] text-center">
-              Ils l&apos;ont fait avant toi
-            </h2>
-            <p className="mt-2 text-center text-[16px] text-[var(--fg2)] font-medium">
-              Le résultat de ceux qui sont passés à l&apos;action.
-            </p>
-            <div className="mt-6 max-w-sm mx-auto">
-              <VideoBlock videoId={TESTIMONIAL_VIDEO_ID} vertical />
-            </div>
           </div>
         </motion.div>
       </div>
@@ -264,26 +246,15 @@ const STEPS = [
   },
 ];
 
-// Bloc vidéo : embed Bunny si un ID est fourni, sinon placeholder.
-function VideoBlock({
-  videoId,
-  vertical = false,
-}: {
-  videoId: string;
-  vertical?: boolean;
-}) {
-  const ratio = vertical ? "aspect-[9/16]" : "aspect-video";
-  return (
-    <div className="overflow-hidden rounded-[16px] bg-[var(--card)] border-[0.5px] border-[var(--sep)] p-2">
-      <div className={`relative rounded-[12px] overflow-hidden ${ratio}`}>
-        {videoId ? (
-          <iframe
-            src={`https://iframe.mediadelivery.net/embed/613852/${videoId}?autoplay=false&preload=true&responsive=true`}
-            className="absolute inset-0 w-full h-full"
-            allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
-            allowFullScreen
-          />
-        ) : (
+// Vidéo principale Bunny, façon VSL : autoplay en sourdine (aperçu qui boucle)
+// puis clic pour la lancer avec le son. Placeholder si aucun ID.
+function MainVideo({ videoId }: { videoId: string }) {
+  const [played, setPlayed] = useState(false);
+
+  if (!videoId) {
+    return (
+      <div className="overflow-hidden rounded-[16px] bg-[var(--card)] border-[0.5px] border-[var(--sep)] p-2">
+        <div className="relative rounded-[12px] overflow-hidden aspect-video">
           <div className="absolute inset-0 flex items-center justify-center bg-[var(--group)]">
             <div className="text-center px-6">
               <div className="mac-icon lg g-blue mx-auto mb-4 w-16 h-16" style={{ borderRadius: "50%" }}>
@@ -296,7 +267,58 @@ function VideoBlock({
               </p>
             </div>
           </div>
+        </div>
+      </div>
+    );
+  }
+
+  const base = `https://iframe.mediadelivery.net/embed/613852/${videoId}`;
+  const src = played
+    ? `${base}?autoplay=true&loop=false&muted=false&preload=true&responsive=true`
+    : `${base}?autoplay=true&loop=true&muted=true&preload=true&responsive=true`;
+
+  return (
+    <div className="overflow-hidden rounded-[16px] bg-[var(--card)] border-[0.5px] border-[var(--sep)] p-2">
+      <div
+        className="relative rounded-[12px] overflow-hidden aspect-video bg-black cursor-pointer"
+        onClick={!played ? () => setPlayed(true) : undefined}
+      >
+        <iframe
+          key={played ? "on" : "off"}
+          src={src}
+          className="absolute inset-0 w-full h-full"
+          allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
+          allowFullScreen
+        />
+        {!played && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/40 pointer-events-none">
+            <div className="w-16 h-16 rounded-full bg-[color-mix(in_srgb,var(--accent)_25%,transparent)] backdrop-blur-sm flex items-center justify-center mb-4">
+              <svg className="w-7 h-7 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+            </div>
+            <p className="text-base text-white font-medium">
+              Regarde cette vidéo
+            </p>
+          </div>
         )}
+      </div>
+    </div>
+  );
+}
+
+// Embed YouTube standard.
+function YouTubeBlock({ id }: { id: string }) {
+  return (
+    <div className="overflow-hidden rounded-[16px] bg-[var(--card)] border-[0.5px] border-[var(--sep)] p-2">
+      <div className="relative rounded-[12px] overflow-hidden aspect-video bg-black">
+        <iframe
+          src={`https://www.youtube.com/embed/${id}`}
+          className="absolute inset-0 w-full h-full"
+          title="Vidéo YouTube"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowFullScreen
+        />
       </div>
     </div>
   );
