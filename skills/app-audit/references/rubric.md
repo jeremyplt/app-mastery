@@ -13,7 +13,7 @@ Invariants (à vérifier quelle que soit l'app) : ASO orienté bénéfices, carr
 - **Titre** : contient des mots-clés réellement recherchés, 30 caractères max bien exploités. Mauvais = mot-clé du titre pas recherché. Indiquer le compteur (ex. "Titre (29/30 caractères)").
 - **Sous-titre** : existe, optimisé, 30 caractères, sans répéter les mots du titre. Sous-titre vide = un tiers de la surface de référencement perdue.
 - **Keywords** : champ de 100 caractères rempli, sans répéter titre/sous-titre.
-- **Densité de mots-clés de la description** : orientée vers les requêtes qui font ranker (vérifier avec un keyword density, ex. AppFigures). Mauvais = les termes les plus denses sont des mots vides (ton, la, et, à, de) → "écrite pour être lue et pas pour être indexée". Retravailler avec Claude/ChatGPT pour intégrer les mots cibles.
+- **Densité de mots-clés de la description** : la mesurer avec l'outil **Keyword Density Analyzer d'AppFigures** (menu Tools → coller la description), PAS un calcul maison. Mettre un screenshot du rapport comme source. Orientée vers les requêtes qui font ranker. Rappel (Jeremy) : **personne ne lit la description** ; ce qui convainc l'utilisateur, c'est les **screenshots**. La description ne sert QU'à l'indexation. Elle doit donc être remplie de mots recherchés, pas écrite comme une histoire. Mauvais = les termes les plus denses sont des mots vides ou de marque.
 - **Popularité vs compétitivité des mots-clés** : chiffrer (ex. "ai stylist : popularité 18, compétitivité 66" vs "outfit planner : popularité 47"). Mettre le mot-clé à plus forte popularité en principal.
 - **Screenshots** : vérifier sur mobile ET iPad. Doivent parler de **bénéfices, pas de fonctionnalités** ("Ajoute tout en un clic" → "Habille-toi en 1 clic"), avec du zoom. "Trois visuels soignés convertissent mieux que six visuels moyens."
 - **Langues** selon les marchés visés.
@@ -23,6 +23,11 @@ Invariants (à vérifier quelle que soit l'app) : ASO orienté bénéfices, carr
 Si l'app n'est pas encore publiée : reporter l'ASO à plus tard (une fois publiée) et le noter.
 
 ## 2. Onboarding (structure et copywriting) , la section la plus dense
+
+**Structure de départ (Jeremy, ~95% du temps) :** la landing = un **carrousel de 3 slides** (on ne demande rien avant, surtout pas le prénom). Juste **après le carrousel**, demander le **prénom** pour personnaliser le reste de l'onboarding (quand ça fait sens dans la niche).
+
+**Principe niche temps d'écran :** plus d'écrans = mieux. Un onboarding court qui balance le paywall/l'avis/l'ATT trop tôt convertit mal. Enchaîner beaucoup de questions diagnostic pour faire investir l'utilisateur, puis réaffirmation + preuve + Paradis + engagement AVANT la conversion. Livrer une section **"Proposition d'onboarding"** (la liste complète des étapes, existe / à ajouter) à affiner avec l'analyse concurrents.
+
 
 - **Premier écran / carrousel** : axé **proposition de valeur et bénéfices**, pas le process ni le nom de l'app. Reco par défaut = remplacer une landing pauvre par un **carrousel de 3 ou 4 slides**, une slide par bénéfice, racontant une progression. Fournir titres + copy + illustration slide par slide.
 - **Animation** : slides animées (2-3 s en boucle), montrer les interactions automatiquement (drag and drop) pour l'effet wow et faire comprendre un concept sans lire.
@@ -35,7 +40,9 @@ Si l'app n'est pas encore publiée : reporter l'ASO à plus tard (une fois publi
 - **Preuve scientifique** : APRÈS les objectifs, au moment d'annoncer le progrès potentiel (pour rassurer), jamais avant (erreur VocabRecall = "loi de Zipf" trop tôt).
 - **Cohérence tutoiement / vouvoiement** sur TOUS les écrans (jamais mélangés). Le choix dépend de la niche (tutoiement pour hommes 18-35, enfants/lycéens).
 - **Retour en arrière possible** pour corriger une erreur (le forcing vers l'avant frustre et fait abandonner).
-- **Écrans d'éducation** : 1 titre + 1 phrase + 1 illustration max, lisibles en moins de 10 secondes. Trop de texte = personne ne lit.
+- **Écrans d'éducation** : 1 titre + 1 phrase + 1 illustration max, lisibles en moins de 10 secondes. Trop de texte = personne ne lit. Ne pas couper le message en 3 blocs de texte sur le même écran.
+- **Phrases simples et directes, pas des énigmes.** Le copy doit aller droit au but, compréhensible du premier coup. Mauvais (Unfried) : "Unfried gives you something that gets fried first" = incompréhensible.
+- **Lisibilité / accessibilité** : textes assez grands, contraste suffisant, bien aérés (pas resserrés/collés), et l'écran exploité (le contenu prend la place). Sur mobile natif : gros contenu, peu d'infos par écran, facile à lire et à cliquer. L'utilisateur vient des réseaux (TikTok/Insta), attention ultra-limitée, il ne lit QUE ce qui est en gras. Mettre l'essentiel en gras, virer le superflu. (Cf. règle produit : jamais de petit texte gris.)
 - **Pas d'icônes/visuels dupliqués** sur un même écran (une icône doit être distinctive, sinon aucune).
 - **Objectif abstrait en mini-goals** : jamais de chiffre total démoralisant ("1 347 mots pour passer en A2", "5700 mots") → promesse positive et atteignable ("A2 en 1 mois avec 5 min/jour !"). Rappel : l'utilisateur vient des réseaux, attention et motivation limitées, veut parler anglais sans faire d'effort.
 - **Pas de dark patterns** : mots négatifs ("effort"), faux boutons (aspect bouton, même border-radius/drop-shadow, sans interaction réelle).
@@ -49,7 +56,7 @@ Si l'app n'est pas encore publiée : reporter l'ASO à plus tard (une fois publi
 
 ## 3. ATT et tracking
 
-- Consentement ATT demandé **le plus tôt possible**, idéalement dès la première ouverture. Sans IDFA, pas d'attribution des events (TikTok, etc.), donc pubs mal optimisées.
+- Consentement ATT demandé **dès le tout premier lancement, par-dessus le premier écran (le carrousel/landing)** , pas un écran séparé, pas plus tard. Sans IDFA, pas d'attribution des events (TikTok, etc.), donc pubs mal optimisées.
 - ATT **jamais juste avant/pendant le paywall** (distraction au pire moment).
 
 ## 4. Notifications
@@ -68,6 +75,11 @@ Si l'app n'est pas encore publiée : reporter l'ASO à plus tard (une fois publi
 - **Lisibilité petits écrans** ; **CTA sticky** ; status bar adaptée à la couleur de fond ; bouton de fermeture discret ; checkmark en position absolue en haut à droite pour aligner les prix à droite.
 - **Structure d'offre** : mensuel volontairement plus cher (ex. 9,99 €) pour gonfler le % de réduction de l'annuel ; afficher l'économie ; envisager de retirer le trimestriel ; essai gratuit réservé au plan annuel ; **3 jours plutôt que 7** (72 h = annuler devient délibéré, et le livrable est déjà consommé).
 - **Hard paywall** montré même avant usage de l'app (l'un des paywalls qui convertit le mieux), mais seulement si l'onboarding l'a bien préparé.
+- **Paywall en 1 seul écran, l'utilisateur accepte direct.** La timeline "comment marche ton essai" (Aujourd'hui → Jour 5 rappel → Jour 7 débit annulable) + le plan annuel (essai 7 jours) + le prix ramené à la semaine ("X/an, soit ~Y/semaine") + un seul bouton "Start my free trial". Que l'annuel, pas d'autres plans, pas de lien "voir les autres plans". Essai 7 jours sur l'annuel UNIQUEMENT (seuls les gens engagés à l'année l'ont). Inspirations dans `references/inspirations/paywall-free-trial/`.
+- **Essai gratuit AVEC carte requise (engagement).** Le but des 7 jours gratuits, c'est que l'utilisateur mette sa carte sans être débité tout de suite, puis soit débité à la fin (ou annule volontairement). Un essai "no card, no sign-up" = zéro engagement = l'utilisateur ne paiera jamais = le pire des deux mondes. Ne pas retirer la carte.
+- **Hard paywall + essai gratuit, pas de freemium (app de blocage d'écran).** Quand la fonctionnalité principale est de bloquer les écrans, le freemium est trop compliqué à monétiser (si le blocage est gratuit, personne ne paie). Commencer par un hard paywall bien clair, avec toutes les infos et un essai gratuit qui pousse à l'engagement (carte requise).
+- **Ne pas réinventer la roue.** Les gens ne veulent pas d'innovation sur le paywall : ils veulent du simple, du familier, ne pas réfléchir. Paywall classique : plans clairs, prix visible, un seul CTA fort, peu de texte, visuel. Profiter des habitudes (comme la nav en bas sur mobile), ne pas les combattre.
+- **Engager au pic de motivation = pendant l'onboarding.** On croit devoir réduire la friction pendant l'onboarding, mais l'onboarding est justement le moment où l'utilisateur a le moins de friction et le plus de motivation : juste au téléchargement, il vient de télécharger parce qu'il veut changer. C'est là qu'il faut le faire s'engager (carte + abonnement), pas dans 7 jours (la motivation est retombée, il est parti). Le rôle de l'app ensuite = entretenir cette motivation.
 - **Reprendre l'objectif choisi** par l'utilisateur dans l'accroche du paywall.
 
 ## 6. Rétention et engagement

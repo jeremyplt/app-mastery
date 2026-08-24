@@ -38,7 +38,7 @@ Si le screen recording manque, donner le `capture-protocol.md` et demander la vi
    `ffmpeg -i "<video>" -vf "select='gt(scene,0.3)',showinfo" -vsync vfr "<scratch>/frames/scene_%04d.jpg"`.
    Puis **Read** les frames dans l'ordre pour reconstituer le parcours écran par écran.
 
-2. **Transcription (si Jeremy ou l'élève parle dans la vidéo).** Utiliser le setup Whisper/MacWhisper local (voir la skill `macwhisper-video-summary`). La narration donne le contexte des intentions.
+2. **Transcription (OBLIGATOIRE si Jeremy parle dans la vidéo).** Utiliser le setup Whisper/MacWhisper local (voir la skill `macwhisper-video-summary`). La narration de Jeremy EST le verdict : ne jamais déduire l'avis à partir des visuels seuls. Les captures = preuve, la narration = jugement. Voir `lessons.md` (2026-08-22).
 
 3. **Récupérer la fiche App Store.** Depuis le lien, récupérer titre, sous-titre, description, screenshots, note, avis, disponibilité iPad. WebFetch sur l'URL `apps.apple.com`, ou Claude in Chrome si le contenu est rendu en JS. Sert la partie ASO.
 
@@ -66,6 +66,7 @@ Si l'élève fournit le repo :
 
 ## Règles
 
+- **Une preuve visuelle par information.** Chaque donnée du rapport (fiche store, densité, popularité/compétitivité de chaque mot-clé) a son screenshot source juste à côté, dans la même section. Pour l'ASO : screenshot de la fiche App Store, screenshot de la description (source de la densité), et un screenshot AppFigures par mot-clé (panneau Insights, terme visible dans la barre). Voir `references/lessons.md`.
 - Français correct, tous les accents. **Jamais de tiret cadratin.**
 - Ne pas noter sur 100. Prioriser par temporalité (maintenant / second temps) et par impact, comme Jeremy.
 - Distinguer les recos fermes des hypothèses à tester.
