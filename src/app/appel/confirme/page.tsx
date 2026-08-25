@@ -27,8 +27,8 @@ const TEAM = [
   {
     name: "Nolan",
     role: "Associé App Mastery",
-    photo: "", // à fournir
-    imgClass: "object-cover",
+    photo: "/nolan.jpg",
+    imgClass: "object-cover object-top",
   },
 ];
 
