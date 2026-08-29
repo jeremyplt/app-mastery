@@ -250,7 +250,7 @@ function VslPlayer({ onCtaUnlock }: { onCtaUnlock: () => void }) {
         {/* Overlay retour : le prospect avait déjà commencé la vidéo */}
         {resumePrompt && (
           <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-5 sm:gap-8 bg-black/70 backdrop-blur-sm px-4">
-            <p className="text-xl sm:text-3xl font-black tracking-tight text-[var(--fg)] text-center text-balance">
+            <p className="text-xl sm:text-3xl font-black tracking-tight text-white text-center text-balance">
               Tu avais déjà commencé cette vidéo...
             </p>
             <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4">
@@ -267,7 +267,7 @@ function VslPlayer({ onCtaUnlock }: { onCtaUnlock: () => void }) {
               <button
                 type="button"
                 onClick={restartFromBeginning}
-                className="mac-btn mac-btn-def whitespace-nowrap"
+                className="mac-btn whitespace-nowrap !bg-white/15 !text-white !border-[0.5px] !border-white/30 hover:!bg-white/25"
               >
                 <svg className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                   <path
