@@ -174,7 +174,7 @@ function VslPlayer({ onCtaUnlock }: { onCtaUnlock: () => void }) {
   }
 
   return (
-    <div className="isolate overflow-hidden rounded-2xl bg-[var(--bg)] p-2 outline outline-red-500/20">
+    <div className="isolate overflow-hidden rounded-2xl bg-[var(--bg)] p-2 outline outline-[color-mix(in_srgb,var(--accent)_25%,transparent)]">
       <div
         ref={containerRef}
         className="relative rounded-xl overflow-hidden aspect-video cursor-pointer select-none bg-black"
@@ -285,7 +285,7 @@ function VslPlayer({ onCtaUnlock }: { onCtaUnlock: () => void }) {
         {/* Overlay initial : la vidéo tourne en muet, clic = relancer avec le son */}
         {!soundOn && !ended && !resumePrompt && (
           <div className="absolute inset-0 z-10 flex items-center justify-center">
-            <div className="mx-4 flex flex-col items-center gap-2 sm:gap-4 rounded-xl sm:rounded-2xl bg-[color-mix(in_srgb,var(--red)_88%,transparent)] px-5 py-4 sm:px-10 sm:py-8 text-center shadow-2xl shadow-black/40 backdrop-blur-sm">
+            <div className="mx-4 flex flex-col items-center gap-2 sm:gap-4 rounded-xl sm:rounded-2xl bg-[color-mix(in_srgb,var(--accent)_90%,transparent)] px-5 py-4 sm:px-10 sm:py-8 text-center shadow-2xl shadow-black/40 backdrop-blur-sm">
               <p className="text-base sm:text-2xl font-black tracking-tight text-white">
                 La vidéo a déjà commencé
               </p>
@@ -545,7 +545,7 @@ function ConferenceLiveContent() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
               >
-                <span className="font-mono text-sm sm:text-base font-semibold tracking-widest uppercase text-[var(--red)]">
+                <span className="font-mono text-sm sm:text-base font-semibold tracking-widest uppercase text-[var(--accent)]">
                   Conférence privée
                 </span>
 
@@ -599,7 +599,7 @@ function ConferenceLiveContent() {
                   </button>
                 </div>
 
-                <p className="mt-4 text-sm font-medium text-[var(--red)]">
+                <p className="mt-4 text-sm font-semibold text-[var(--accent)]">
                   Places limitées ce mois-ci
                 </p>
 

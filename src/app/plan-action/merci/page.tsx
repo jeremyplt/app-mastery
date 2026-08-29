@@ -83,12 +83,12 @@ export default function MerciPage() {
                 prochaines étapes concrètes.
               </p>
 
-              <div className="mt-4 inline-flex items-center gap-2 rounded-[8px] bg-[color-mix(in_srgb,var(--red)_15%,transparent)] px-3.5 py-2">
+              <div className="mt-4 inline-flex items-center gap-2 rounded-[8px] bg-[color-mix(in_srgb,var(--accent)_12%,transparent)] px-3.5 py-2">
                 <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--red)] opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--red)]" />
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--accent)]" />
                 </span>
-                <span className="text-[13.5px] font-semibold text-[var(--red)]">
+                <span className="text-[13.5px] font-semibold text-[var(--accent)]">
                   Gratuit pour les 10 prochaines personnes
                 </span>
               </div>

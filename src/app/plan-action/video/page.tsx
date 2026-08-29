@@ -180,12 +180,12 @@ function PlanActionVideoContent() {
             <p className="text-[19px] font-semibold text-[var(--fg)] mb-2">
               Tu souhaites te faire accompagner pour créer ton app rentable ?
             </p>
-            <div className="inline-flex items-center gap-2 rounded-[8px] bg-[color-mix(in_srgb,var(--red)_15%,transparent)] px-3.5 py-1.5">
+            <div className="inline-flex items-center gap-2 rounded-[8px] bg-[color-mix(in_srgb,var(--accent)_12%,transparent)] px-3.5 py-1.5">
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--red)] opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--red)]" />
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--accent)]" />
               </span>
-              <span className="text-[13.5px] font-semibold text-[var(--red)]">
+              <span className="text-[13.5px] font-semibold text-[var(--accent)]">
                 9 places gratuites restantes
               </span>
             </div>
