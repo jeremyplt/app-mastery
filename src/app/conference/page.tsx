@@ -231,7 +231,7 @@ function ConferenceContent() {
       text: (
         <>
           La raison étonnante qui explique pourquoi{" "}
-          <span className="font-semibold text-[var(--red)]">93% des applications</span> ne sont jamais
+          <span className="font-semibold text-[var(--accent)]">93% des applications</span> ne sont jamais
           rentables (et comment éviter ce piège).
         </>
       ),
@@ -240,9 +240,9 @@ function ConferenceContent() {
       emoji: "🚀",
       text: (
         <>
-          Les <span className="font-semibold text-[var(--red)]">3 piliers indispensables</span> pour
+          Les <span className="font-semibold text-[var(--accent)]">3 piliers indispensables</span> pour
           générer jusqu&apos;à{" "}
-          <span className="font-semibold text-[var(--red)]">10 000€ TOUS les mois</span> avec une seule
+          <span className="font-semibold text-[var(--accent)]">10 000€ TOUS les mois</span> avec une seule
           application.
         </>
       ),
@@ -252,7 +252,7 @@ function ConferenceContent() {
       text: (
         <>
           La méthode exacte pour créer votre app avec l&apos;IA en{" "}
-          <span className="font-semibold text-[var(--red)]">moins d&apos;une semaine</span>, sans écrire
+          <span className="font-semibold text-[var(--accent)]">moins d&apos;une semaine</span>, sans écrire
           une seule ligne de code.
         </>
       ),
@@ -316,7 +316,7 @@ function ConferenceContent() {
           <section className="relative pt-6 pb-16 sm:pt-16 lg:pt-20">
             <div className="px-4 sm:px-6 lg:px-8">
               {/* Main card */}
-              <div className="isolate overflow-hidden rounded-2xl bg-[var(--bg)] p-2 outline outline-red-500/20">
+              <div className="isolate overflow-hidden rounded-2xl bg-[var(--bg)] p-2 outline outline-[color-mix(in_srgb,var(--accent)_25%,transparent)]">
                 <div className="relative rounded-xl bg-[var(--card)] overflow-hidden">
                   <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-[color-mix(in_srgb,var(--accent)_8%,transparent)] via-transparent to-transparent" />
 
@@ -327,7 +327,7 @@ function ConferenceContent() {
                       animate={{ opacity: 1 }}
                       transition={{ duration: 0.4 }}
                     >
-                      <span className="font-mono text-sm sm:text-base font-semibold tracking-widest uppercase text-[var(--red)]">
+                      <span className="font-mono text-sm sm:text-base font-semibold tracking-widest uppercase text-[var(--accent)]">
                         Conférence privée offerte
                       </span>
                     </motion.div>
@@ -356,7 +356,7 @@ function ConferenceContent() {
                       transition={{ duration: 0.6, delay: 0.15 }}
                     >
                       Comment une discrète révolution permet de générer jusqu&apos;à{" "}
-                      <span className="text-[var(--red)] font-semibold">10 000€ par mois</span> avec une
+                      <span className="text-[var(--accent)] font-semibold">10 000€ par mois</span> avec une
                       seule application mobile.
                     </motion.p>
 
@@ -386,7 +386,7 @@ function ConferenceContent() {
                           placeholder="Ton prénom"
                           value={firstName}
                           onChange={(e) => setFirstName(e.target.value)}
-                          className="w-full rounded-full bg-[var(--card)] border border-[var(--sep)] px-5 py-3 text-sm text-[var(--fg)] placeholder:text-[var(--fg2)] focus:outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/50 transition-colors"
+                          className="w-full rounded-full bg-[var(--card)] border border-[var(--sep)] px-5 py-3 text-sm text-[var(--fg)] placeholder:text-[var(--fg2)] focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] transition-colors"
                         />
                         <input
                           type="email"
@@ -394,13 +394,13 @@ function ConferenceContent() {
                           placeholder="Ton adresse email"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
-                          className="w-full rounded-full bg-[var(--card)] border border-[var(--sep)] px-5 py-3 text-sm text-[var(--fg)] placeholder:text-[var(--fg2)] focus:outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/50 transition-colors"
+                          className="w-full rounded-full bg-[var(--card)] border border-[var(--sep)] px-5 py-3 text-sm text-[var(--fg)] placeholder:text-[var(--fg2)] focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] transition-colors"
                         />
                         <div className="flex gap-2">
                           <select
                             value={countryIndex}
                             onChange={(e) => setCountryIndex(Number(e.target.value))}
-                            className="w-24 shrink-0 rounded-full bg-[var(--card)] border border-[var(--sep)] px-3 py-3 text-sm text-[var(--fg)] focus:outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/50 transition-colors appearance-none text-center"
+                            className="w-24 shrink-0 rounded-full bg-[var(--card)] border border-[var(--sep)] px-3 py-3 text-sm text-[var(--fg)] focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] transition-colors appearance-none text-center"
                           >
                             {COUNTRY_CODES.map((c, i) => (
                               <option key={`${c.country}-${i}`} value={i}>
@@ -414,7 +414,7 @@ function ConferenceContent() {
                             placeholder="Ton numéro de téléphone"
                             value={phone}
                             onChange={(e) => setPhone(e.target.value)}
-                            className="flex-1 min-w-0 rounded-full bg-[var(--card)] border border-[var(--sep)] px-5 py-3 text-sm text-[var(--fg)] placeholder:text-[var(--fg2)] focus:outline-none focus:border-red-500/50 focus:ring-1 focus:ring-red-500/50 transition-colors"
+                            className="flex-1 min-w-0 rounded-full bg-[var(--card)] border border-[var(--sep)] px-5 py-3 text-sm text-[var(--fg)] placeholder:text-[var(--fg2)] focus:outline-none focus:border-[var(--accent)] focus:ring-1 focus:ring-[var(--accent)] transition-colors"
                           />
                         </div>
                         <button
@@ -513,7 +513,7 @@ function ConferenceContent() {
                       transition={{ duration: 0.5 }}
                     >
                       <div className="text-center">
-                        <p className="font-mono text-sm font-semibold uppercase tracking-widest text-[var(--red)]">
+                        <p className="font-mono text-sm font-semibold uppercase tracking-widest text-[var(--accent)]">
                           {c.name}
                         </p>
                         <p className="mt-2 text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[var(--fg)] text-balance">
@@ -527,7 +527,7 @@ function ConferenceContent() {
                         </p>
                       </div>
                       {c.image && (
-                        <div className="mt-6 isolate overflow-hidden rounded-2xl bg-[var(--bg)] p-2 outline outline-red-500/20">
+                        <div className="mt-6 isolate overflow-hidden rounded-2xl bg-[var(--bg)] p-2 outline outline-[color-mix(in_srgb,var(--accent)_25%,transparent)]">
                           <div className="rounded-xl overflow-hidden">
                             <Image
                               src={c.image.src}
