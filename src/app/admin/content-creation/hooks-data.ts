@@ -222,6 +222,27 @@ If you start your videos with something like this, you are going to hook the vie
     transcript: `(Vidéo sans parole utile. Texte à l'écran : Hire Maibella to be your next UGC/content creator, she also does social media management.)
 Plan fixe dans la rue, elle arrive en marchant puis saute, le texte apparaît par-dessus en gros.`,
   },
+  {
+    id: "Dbu46DFAqJy",
+    url: "https://www.instagram.com/reel/Dbu46DFAqJy/",
+    author: "Brock Johnson",
+    handle: "brock11johnson",
+    title: "7 façons de commencer une vidéo (mouvement caméra)",
+    likes: 5731,
+    comments: 145,
+    date: "2026-08-07",
+    lang: "en",
+    summary:
+      "Texte à l'écran : Steal these hooks. 7 mouvements de caméra ou de corps pour ouvrir une vidéo face caméra : marcher vers la caméra, retourner le téléphone, poser le téléphone, le ramasser au sol, le rapprocher du visage, zoomer, jump cut serré.",
+    transcript: `(Texte à l'écran : Steal these hooks.)
+Start your video by walking towards the camera.
+Start your video by flipping the phone towards yourself on a wide angle lens.
+Start your video by putting your phone down and leaning forwards.
+Start your video by taking a phone up off the ground.
+Start your video and then bring your phone close to your face.
+Start your video and then zoom in on your face.
+Start your video and then jump cut to a close up of your face.`,
+  },
 ];
 
 export type Hook = {
@@ -692,5 +713,69 @@ export const HOOKS: Hook[] = [
     fr: "Marcher vers la caméra + gros bloc de texte avec l'offre.",
     exemple:
       "Plan fixe, tu arrives en marchant, un gros texte noir apparaît : \"Tu veux lancer une app sans coder ? Regarde ça.\" Format simple pour une pub.",
+  },
+  // Visuels : Brock Johnson
+  {
+    id: "brock-1",
+    sourceId: "Dbu46DFAqJy",
+    category: "visuel",
+    fr: "Marcher vers la caméra en parlant.",
+    en: "Start your video by walking towards the camera.",
+    exemple:
+      "Téléphone posé, tu es à 3 mètres, tu avances vers l'objectif en lançant ta première phrase. Le mouvement arrête le pouce avant le premier mot.",
+  },
+  {
+    id: "brock-2",
+    sourceId: "Dbu46DFAqJy",
+    category: "visuel",
+    fr: "Retourner le téléphone vers soi en grand angle.",
+    en: "Start your video by flipping the phone towards yourself on a wide angle lens.",
+    exemple:
+      "Caméra 0,5x, bras tendu, tu fais pivoter le téléphone vers ton visage. Le décor défile une demi-seconde puis tu apparais.",
+  },
+  {
+    id: "brock-3",
+    sourceId: "Dbu46DFAqJy",
+    category: "visuel",
+    fr: "Poser le téléphone puis se pencher vers l'objectif.",
+    en: "Start your video by putting your phone down and leaning forwards.",
+    exemple:
+      "Tu poses le téléphone sur le bureau, tu t'assois et tu te penches en avant vers la caméra. Impression de confidence, comme si tu allais dire un secret.",
+  },
+  {
+    id: "brock-4",
+    sourceId: "Dbu46DFAqJy",
+    category: "visuel",
+    fr: "Ramasser le téléphone au sol.",
+    en: "Start your video by taking a phone up off the ground.",
+    exemple:
+      "Le téléphone est au sol, caméra vers le plafond. Tu le ramasses et il arrive sur ton visage. Première image bizarre, le cerveau veut comprendre.",
+  },
+  {
+    id: "brock-5",
+    sourceId: "Dbu46DFAqJy",
+    category: "visuel",
+    fr: "Rapprocher le téléphone du visage.",
+    en: "Start your video and then bring your phone close to your face.",
+    exemple:
+      "Plan normal, puis tu ramènes le téléphone très près de ton visage sur un mot clé. Marche bien pour appuyer un chiffre ou une vérité qui pique.",
+  },
+  {
+    id: "brock-6",
+    sourceId: "Dbu46DFAqJy",
+    category: "visuel",
+    fr: "Zoom progressif sur le visage.",
+    en: "Start your video and then zoom in on your face.",
+    exemple:
+      "Tu zoomes doucement pendant la première phrase (au montage ou avec les doigts). Le cadre bouge, l'œil reste accroché.",
+  },
+  {
+    id: "brock-7",
+    sourceId: "Dbu46DFAqJy",
+    category: "visuel",
+    fr: "Jump cut vers un gros plan du visage.",
+    en: "Start your video and then jump cut to a close up of your face.",
+    exemple:
+      "Plan large sur les 3 premiers mots, coupe sèche sur un plan très serré pour la suite. La coupe brutale relance l'attention.",
   },
 ];
