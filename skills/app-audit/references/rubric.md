@@ -22,6 +22,19 @@ Invariants (à vérifier quelle que soit l'app) : ASO orienté bénéfices, carr
 
 Si l'app n'est pas encore publiée : reporter l'ASO à plus tard (une fois publiée) et le noter.
 
+## 1 bis. Invariants UI mobile (tous les écrans)
+
+- **CTA pleine largeur, aligné en bas** sur TOUS les écrans (onboarding, paywall) : cliquable d'une main, droitier ou gaucher. Jamais un bouton au milieu de l'écran.
+- **Sélecteur de langue banni** : récupérer la langue du téléphone dans le code, anglais par défaut si non supportée.
+- **Logo / nom de l'app à enlever des écrans d'onboarding** : prend de la place et distrait le regard.
+- **Un SEUL chemin par écran d'onboarding** : jamais deux liens/boutons concurrents (pas de "Voir l'analyse complète" à côté de "Continuer"). L'utilisateur ne doit pas réfléchir.
+- **Un bon design se comprend sans lire la langue** : si quelqu'un qui ne lit pas l'anglais comprend l'écran (éléments barrés, croix, grisés, icônes), le design est bon.
+- **Navigation mobile TOUJOURS en bas, jamais de hamburger** : le menu hamburger est un pattern web ; sur une app native on navigue entre les sections en 1 clic via une barre en bas.
+- **L'action principale de l'app toujours accessible** (ex. "Nouvelle séance" sur une app de conversation) : l'utilisateur ne doit jamais être bloqué sans pouvoir relancer le coeur de l'app.
+- **Textes générés adressés à l'utilisateur en "tu/on/nous"**, jamais "le client" / "le mentor" en 3e personne (sinon on dirait un outil pour thérapeutes/pros, pas pour l'utilisateur final).
+- **Chasser les clés i18n brutes** ("session.summary_close") : parcourir l'app dans chaque langue et chercher les textes en "xxx.yyy".
+- **Tester soi-même chaque feature avant de la citer** (vocal, TTS, boutons) : un contrôle visible n'est pas une feature qui marche.
+
 ## 2. Onboarding (structure et copywriting) , la section la plus dense
 
 **Structure de départ (Jeremy, ~95% du temps) :** la landing = un **carrousel de 3 slides** (on ne demande rien avant, surtout pas le prénom). Juste **après le carrousel**, demander le **prénom** pour personnaliser le reste de l'onboarding (quand ça fait sens dans la niche).
@@ -33,7 +46,9 @@ Si l'app n'est pas encore publiée : reporter l'ASO à plus tard (une fois publi
 - **Animation** : slides animées (2-3 s en boucle), montrer les interactions automatiquement (drag and drop) pour l'effet wow et faire comprendre un concept sans lire.
 - **Démontrer, ne pas mettre l'app dans l'app** : bannir les mockups de téléphone en in-app (ça relève du marketing store).
 - **Ordre des questions logique**, récolte toutes les infos nécessaires.
-- **Prénom demandé tôt** puis réutilisé ("Quel est ton objectif, Livio ?"). Pas de prénom = trop froid.
+- **Prénom demandé EN PREMIER** (avant toute question diagnostic) puis réutilisé ("Quel est ton objectif, Livio ?"). Pas de prénom = trop froid. Si l'app a une mascotte, c'est ELLE qui se présente et le demande ("Salut, moi c'est... Et toi, comment tu t'appelles ?") : la mascotte porte tout l'onboarding en format dialogue (Duolingo, Brilliant, Shinobi). Pas besoin de l'animer au début, des illustrations suffisent.
+- **Annoncer un test/quiz avant de le commencer** ("On va te poser quelques questions pour définir ta personnalité, prêt ?") : donne l'objectif, permet ensuite "en fonction de ta personnalité, voici le plan recommandé".
+- **Écrans d'affirmation intercalés dans les questionnaires longs** (sinon effet interrogatoire) : aérer, appuyer sur la douleur, rassurer, positionner l'app en source d'autorité. Social proof chiffré ("80 % des gens font face au même problème", "97 % l'ont résolu en une semaine"), en visuel (graphique, illustration), pas en pavé de texte.
 - **Questions sur le pourquoi / l'objectif et la douleur** (pas seulement sur le produit-objet ; ex. DogGenius posait plein de questions sur le chien, aucune sur le maître). Faire **verbaliser le besoin** et récupérer la data.
 - **Écran d'affirmation / réaffirmation** adapté à la réponse juste donnée (ex. "Trop dur pour moi" → "si tu trouves ça trop dur, c'est qu'on ne te l'a pas bien expliqué").
 - **Phase "Paradis"** : écran avant le paywall montrant les résultats futurs (avec vs sans l'app), **personnalisé selon l'objectif et les réponses**. Erreur = Paradis trop tôt (avant de connaître l'objectif et d'avoir appuyé sur la douleur) → il perd son effet.
@@ -81,6 +96,13 @@ Si l'app n'est pas encore publiée : reporter l'ASO à plus tard (une fois publi
 - **Ne pas réinventer la roue.** Les gens ne veulent pas d'innovation sur le paywall : ils veulent du simple, du familier, ne pas réfléchir. Paywall classique : plans clairs, prix visible, un seul CTA fort, peu de texte, visuel. Profiter des habitudes (comme la nav en bas sur mobile), ne pas les combattre.
 - **Engager au pic de motivation = pendant l'onboarding.** On croit devoir réduire la friction pendant l'onboarding, mais l'onboarding est justement le moment où l'utilisateur a le moins de friction et le plus de motivation : juste au téléchargement, il vient de télécharger parce qu'il veut changer. C'est là qu'il faut le faire s'engager (carte + abonnement), pas dans 7 jours (la motivation est retombée, il est parti). Le rôle de l'app ensuite = entretenir cette motivation.
 - **Reprendre l'objectif choisi** par l'utilisateur dans l'accroche du paywall.
+- **L'accroche parle du résultat, JAMAIS d'argent** : "Invest in yourself" est mauvais (implique une dépense). Dire "Deviens celui que tu veux être", "Finis-en avec les émotions qui te bouffent". Aucun mot lié au paiement dans le texte qui doit convaincre.
+- **Proposition de valeur visible sur le paywall** : on doit savoir POURQUOI prendre le premium (petit tableau de comparaison par exemple).
+- **App mobile = viser la masse, pas le ticket élevé** : passer sous la barre des 100 €/an ; de façon optimale ~5 €/mois sur le plan annuel (la personne s'engage, le prix doit être vraiment intéressant). À arbitrer selon les coûts (API IA...).
+- **Paiement IMMÉDIAT au clic du paywall** : le CTA ("Continue", pas "Sign up + prix") ouvre directement la pop-up de paiement. Création de compte APRÈS le paiement, jamais avant.
+- **Downsell : le % de réduction se calcule vs le mensuel ANNUALISÉ** (prix mensuel × 12 vs prix downsell annualisé) et doit être gonflé en conséquence (un "-50 %" qui est en fait -70 % te fait perdre ton meilleur argument). Pertes illustrées visuellement (barré, croix, grisé), pas une liste de texte. Si l'utilisateur refuse : on RESTE sur le paywall, pas d'écran de sortie.
+- **Chat IA payant = jamais accessible gratuitement** : parler à l'IA est ce pour quoi on paie (et chaque message consomme des tokens). Gate la conversation derrière le hard paywall.
+- **Valeur ajoutée d'un chat IA = widgets in-conversation** : sans eux, aucun avantage vs ChatGPT (un pré-prompt ne suffit pas). Ex. exercice de respiration → widget bulle qui grossit (inspirer) / diminue (expirer) + timer. Réponses courtes, pas des pavés. Le premier message reprend les éléments de l'onboarding ("J'ai compris que tu vivais X... tu m'en dis plus ?").
 
 ## 6. Rétention et engagement
 

@@ -49,7 +49,7 @@ Naviguer **écran par écran, dans l'ordre où l'utilisateur les rencontre**, en
 
 Chaque point suit : **problème observé → pourquoi ça compte (mécanisme UX ou business) → correction concrète (avec un exemple de wording quand pertinent)**. Citer une **app de référence** quand c'est parlant.
 
-**Pas de tags "Maintenant / Ferme / À tester"** dans le rapport (Jeremy les trouve inutiles). Ne pas mettre de badges de temporalité/confiance.
+**Pas de tags "Maintenant / Ferme / À tester"** dans le rapport (Jeremy les trouve inutiles). Ne pas mettre de badges de temporalité/confiance. **Règle élargie (2026-08-25, Whyme) : AUCUN tag/badge/pill nulle part** : ni pastilles descriptives dans le hero ("App de soutien émotionnel", "Prototype non publié"...), ni badges sur les findings ("À revoir", "À garder", "Priorité"). Seule exception : les marqueurs "existe / à ajouter" dans la Proposition d'onboarding (information réelle, demandée).
 
 Exemple de mise en forme :
 

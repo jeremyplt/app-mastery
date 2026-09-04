@@ -375,6 +375,14 @@ export default function CrmAdmin() {
             </a>
             {isOwner && (
               <a
+                href="/admin/content-creation"
+                className="rounded-lg bg-[var(--field)] px-4 py-2 text-sm font-bold text-[var(--fg)] transition-colors hover:bg-[color-mix(in_srgb,var(--fg)_10%,transparent)]"
+              >
+                Contenus
+              </a>
+            )}
+            {isOwner && (
+              <a
                 href="/admin/equipe"
                 className="rounded-lg bg-[var(--field)] px-4 py-2 text-sm font-bold text-[var(--fg)] transition-colors hover:bg-[color-mix(in_srgb,var(--fg)_10%,transparent)]"
               >
