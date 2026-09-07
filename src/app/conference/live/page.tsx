@@ -406,7 +406,9 @@ function ConferenceLiveContent() {
 
   // CTA masqué tant que le prospect n'a pas vu 18min30 de vidéo.
   // Persisté en localStorage pour ne pas re-verrouiller au rechargement.
-  const [ctaVisible, setCtaVisible] = useState(false);
+  // En dev uniquement : toujours visible pour tester la popup Calendly
+  // sans regarder 18 minutes de vidéo.
+  const [ctaVisible, setCtaVisible] = useState(process.env.NODE_ENV === "development");
   const [calendlyOpen, setCalendlyOpen] = useState(false);
   // Contact capturé à l'optin : pré-remplit le formulaire Calendly.
   // Chargé en effect (localStorage indisponible au rendu serveur).

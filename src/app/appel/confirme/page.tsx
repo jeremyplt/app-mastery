@@ -1,12 +1,14 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import AdDisclaimer from "@/components/AdDisclaimer";
+import BunnyVideo from "@/components/BunnyVideo";
 import ThemeToggle from "@/components/ThemeToggle";
+import { FLORIAN } from "@/lib/temoignages";
 
 // Vidéos Bunny (lib 613852). Placeholders : laisser "" tant que la vidéo
 // n'est pas prête → un bloc "Vidéo en cours de préparation" s'affiche.
@@ -134,7 +136,7 @@ function ConfirmeContent() {
 
           {/* Vidéo principale en grand format (autoplay comme la VSL) */}
           <div className="mt-10 max-w-4xl mx-auto">
-            <MainVideo videoId={MAIN_VIDEO_ID} />
+            <BunnyVideo videoId={MAIN_VIDEO_ID} />
           </div>
 
           {/* Étapes */}
@@ -161,6 +163,52 @@ function ConfirmeContent() {
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+
+          {/* Témoignage Florian : preuve à regarder avant l'appel */}
+          <div className="mt-14 max-w-4xl mx-auto">
+            <div className="text-center mb-6">
+              <span className="mac-eyebrow">Il est passé par là avant toi</span>
+              <h2 className="mt-2 text-[24px] sm:text-[30px] font-bold tracking-[-0.035em] leading-[1.1] text-balance">
+                {FLORIAN.firstName}, {FLORIAN.age} ans : de 0 à{" "}
+                <span className="mac-accent whitespace-nowrap">1 793 $</span> en 28 jours, sans une seule pub
+              </h2>
+              <p className="mt-3 text-[15.5px] font-medium text-[var(--fg2)] max-w-xl mx-auto">
+                Il a créé {FLORIAN.appName} sans savoir coder. Six semaines après la sortie, ses chiffres ont décollé. Il raconte tout, tableaux de bord à l&apos;écran.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mb-4">
+              {FLORIAN.stats.map((s) => (
+                <div
+                  key={s.label}
+                  className="rounded-[14px] bg-[var(--card)] border-[0.5px] border-[var(--sep)] px-3 py-3.5 text-center"
+                >
+                  <p className="text-[24px] font-bold tracking-[-0.04em] leading-none text-[var(--accent2)]">
+                    {s.value}
+                  </p>
+                  <p className="mt-1.5 text-[13px] font-semibold text-[var(--fg)] leading-tight">{s.label}</p>
+                </div>
+              ))}
+            </div>
+
+            <BunnyVideo videoId={FLORIAN.videoId} poster={FLORIAN.poster} label={`Regarde le témoignage de ${FLORIAN.firstName}`} />
+
+            <div className="mt-4 flex items-center justify-center gap-3">
+              <Image
+                src={FLORIAN.photo}
+                alt={FLORIAN.firstName}
+                width={40}
+                height={40}
+                className="w-9 h-9 rounded-full object-cover"
+              />
+              <Link
+                href={`/temoignage/${FLORIAN.slug}`}
+                className="text-[15px] font-semibold text-[var(--accent2)] hover:underline"
+              >
+                Voir son parcours complet, étape par étape
+              </Link>
             </div>
           </div>
 
@@ -245,67 +293,6 @@ const STEPS = [
     body: "Évite les transports et les salles d'attente. Un endroit calme, un casque, et de quoi prendre des notes.",
   },
 ];
-
-// Vidéo principale Bunny, façon VSL : autoplay en sourdine (aperçu qui boucle)
-// puis clic pour la lancer avec le son. Placeholder si aucun ID.
-function MainVideo({ videoId }: { videoId: string }) {
-  const [played, setPlayed] = useState(false);
-
-  if (!videoId) {
-    return (
-      <div className="overflow-hidden rounded-[16px] bg-[var(--card)] border-[0.5px] border-[var(--sep)] p-2">
-        <div className="relative rounded-[12px] overflow-hidden aspect-video">
-          <div className="absolute inset-0 flex items-center justify-center bg-[var(--group)]">
-            <div className="text-center px-6">
-              <div className="mac-icon lg g-blue mx-auto mb-4 w-16 h-16" style={{ borderRadius: "50%" }}>
-                <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M8 5v14l11-7z" />
-                </svg>
-              </div>
-              <p className="text-[var(--fg2)] text-[17px] font-semibold">
-                Vidéo en cours de préparation
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  const base = `https://iframe.mediadelivery.net/embed/613852/${videoId}`;
-  const src = played
-    ? `${base}?autoplay=true&loop=false&muted=false&preload=true&responsive=true`
-    : `${base}?autoplay=true&loop=true&muted=true&preload=true&responsive=true`;
-
-  return (
-    <div className="overflow-hidden rounded-[16px] bg-[var(--card)] border-[0.5px] border-[var(--sep)] p-2">
-      <div
-        className="relative rounded-[12px] overflow-hidden aspect-video bg-black cursor-pointer"
-        onClick={!played ? () => setPlayed(true) : undefined}
-      >
-        <iframe
-          key={played ? "on" : "off"}
-          src={src}
-          className="absolute inset-0 w-full h-full"
-          allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture"
-          allowFullScreen
-        />
-        {!played && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/40 pointer-events-none">
-            <div className="w-16 h-16 rounded-full bg-[color-mix(in_srgb,var(--accent)_25%,transparent)] backdrop-blur-sm flex items-center justify-center mb-4">
-              <svg className="w-7 h-7 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M8 5v14l11-7z" />
-              </svg>
-            </div>
-            <p className="text-base text-white font-medium">
-              Regarde cette vidéo
-            </p>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}
 
 // Embed YouTube standard.
 function YouTubeBlock({ id }: { id: string }) {
