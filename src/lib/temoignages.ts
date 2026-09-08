@@ -35,8 +35,8 @@ export const FLORIAN: Temoignage = {
   recordedOn: "16 juillet 2026",
   headline: "De 0 à 1 793 $ en 28 jours, sans une seule pub",
   stats: [
-    { value: "120+", label: "installations par jour", detail: "contre 3 à 4 par jour six semaines plus tôt" },
     { value: "1 793 $", label: "de revenus sur 28 jours", detail: "70 abonnements actifs, 53 essais en cours" },
+    { value: "120+", label: "installations par jour", detail: "contre 3 à 4 par jour six semaines plus tôt" },
     { value: "1 M", label: "de vues Instagram en 30 jours", detail: "des reels à 100 000 et 200 000 vues" },
     { value: "0 €", label: "de publicité", detail: "100 % de contenu organique, posté depuis son téléphone" },
   ],
