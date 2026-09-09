@@ -36,9 +36,26 @@ type Totals = {
   unsubscribed: number;
 } | null;
 
+type EmailContent = { email: string; subject: string; date: string; body: string; events: { name: string; time: string }[] };
+
 type Payload = { days: number; truncated: boolean; totals: Totals; rows: Row[]; scheduled: Scheduled[]; waiting: Waiting[] };
 
 const DAYS = [7, 30, 90] as const;
+
+const EVENT_LABELS: Record<string, string> = {
+  sent: "Envoyé",
+  requests: "Envoyé",
+  delivered: "Délivré",
+  open: "Ouvert",
+  opened: "Ouvert",
+  click: "Cliqué",
+  clicks: "Cliqué",
+  blocked: "Bloqué",
+  hardBounce: "Rebond",
+  softBounce: "Rebond",
+  deferred: "Différé",
+  unsubscribe: "Désabonné",
+};
 
 function fmtDate(iso: string) {
   const d = new Date(iso);
@@ -78,6 +95,23 @@ export default function AdminEmailsPage() {
   const [search, setSearch] = useState("");
   const [data, setData] = useState<Payload | null>(null);
   const [error, setError] = useState<string | null>(null);
+  // Email ouvert en fiche (contenu complet chargé depuis Brevo).
+  const [opened, setOpened] = useState<Row | null>(null);
+  const [content, setContent] = useState<EmailContent | null>(null);
+  const [contentError, setContentError] = useState<string | null>(null);
+
+  function openRow(r: Row) {
+    setOpened(r);
+    setContent(null);
+    setContentError(null);
+    fetch(`/api/admin/emails/content?email=${encodeURIComponent(r.email)}&messageId=${encodeURIComponent(r.messageId)}`)
+      .then(async (res) => {
+        const d = await res.json();
+        if (!res.ok) throw new Error(d.error || "Erreur");
+        setContent(d);
+      })
+      .catch((e) => setContentError(e instanceof Error ? e.message : "Erreur"));
+  }
   // Chargement déduit : pas de données, ou données d'une autre période.
   const loading = !error && (data === null || data.days !== days);
 
@@ -374,7 +408,11 @@ export default function AdminEmailsPage() {
               </thead>
               <tbody>
                 {rows.map((r) => (
-                  <tr key={r.messageId} className="border-t border-[var(--sep)] align-top">
+                  <tr
+                    key={r.messageId}
+                    onClick={() => openRow(r)}
+                    className="border-t border-[var(--sep)] align-top cursor-pointer hover:bg-[color-mix(in_srgb,var(--fg)_5%,transparent)]"
+                  >
                     <td className="px-4 py-2.5 whitespace-nowrap text-[var(--fg2)]">{fmtDate(r.sentAt)}</td>
                     <td className="px-4 py-2.5 whitespace-nowrap">{r.email}</td>
                     <td className="px-4 py-2.5 whitespace-nowrap font-semibold">{r.label}</td>
@@ -389,6 +427,59 @@ export default function AdminEmailsPage() {
             </table>
           )}
         </div>
+        {opened && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-3 sm:p-6"
+            onClick={() => setOpened(null)}
+            role="dialog"
+            aria-modal="true"
+          >
+            <div
+              className="flex max-h-[92vh] w-full max-w-3xl flex-col overflow-hidden rounded-[18px] border-[0.5px] border-[var(--sep)] bg-[var(--bg)] shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-start justify-between gap-4 border-b border-[var(--sep)] px-5 py-4">
+                <div className="min-w-0">
+                  <p className="text-[12px] font-bold uppercase tracking-wider text-[var(--accent2)]">{opened.label}</p>
+                  <h3 className="mt-1 text-lg font-bold tracking-tight">{content?.subject ?? opened.subject}</h3>
+                  <p className="mt-1 text-sm text-[var(--fg2)]">
+                    À {opened.email} · {fmtDateLong(content?.date ?? opened.sentAt)}
+                  </p>
+                  {content && content.events.length > 0 && (
+                    <p className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-[12.5px] font-medium text-[var(--fg2)]">
+                      {content.events.map((ev, i) => (
+                        <span key={i}>
+                          {EVENT_LABELS[ev.name] ?? ev.name} {fmtDate(ev.time)}
+                        </span>
+                      ))}
+                    </p>
+                  )}
+                </div>
+                <button
+                  onClick={() => setOpened(null)}
+                  className="shrink-0 rounded-lg bg-[var(--field)] px-3 py-1.5 text-sm font-bold text-[var(--fg)] hover:bg-[color-mix(in_srgb,var(--fg)_10%,transparent)]"
+                >
+                  Fermer
+                </button>
+              </div>
+              <div className="min-h-[300px] flex-1 overflow-hidden bg-white">
+                {contentError ? (
+                  <div className="px-5 py-10 text-center text-[var(--fg2)]">{contentError}</div>
+                ) : !content ? (
+                  <div className="px-5 py-10 text-center text-[var(--fg2)]">Chargement du contenu...</div>
+                ) : (
+                  <iframe
+                    title="Contenu de l'email"
+                    srcDoc={content.body}
+                    sandbox=""
+                    className="h-[70vh] w-full border-0 bg-white"
+                  />
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
         {data?.truncated && (
           <p className="mt-3 text-sm text-[var(--fg2)]">Liste limitée aux 2 500 derniers événements Brevo. Réduis la période pour tout voir.</p>
         )}
