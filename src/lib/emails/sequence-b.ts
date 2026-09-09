@@ -117,7 +117,7 @@ ${hostParagraph}
 <li ${LI}>On commence à poser ton plan d'action, à partir de tes objectifs à toi.</li>
 <li ${LI}>Tu rejoins la communauté et tu as accès à toutes nos ressources dès le soir même.</li>
 </ol>
-${image(`${SITE}/jeremy-bureau.jpg`, "Jeremy à son bureau", "Entre deux appels, je suis sur les apps des élèves.")}
+${image(`${SITE}/jeremy-bureau.jpg`, "Jeremy à son bureau", ctx.host === "Nolan" ? "Pendant que Nolan prend les appels, moi je suis sur les apps des élèves." : "Le reste du temps, je suis sur les apps des élèves.")}
 <p ${P}>Pour que ça se passe comme ça, prends dix minutes d'ici là pour regarder la vidéo sur ta page de confirmation. J'y montre comment se déroulent les douze semaines de l'accompagnement. Note les questions qui te viennent en la regardant, l'appel est fait pour y répondre.</p>
 <p ${P}>Et si quelqu'un d'autre fait partie du projet, ou gère les finances avec toi, il faut que cette personne soit présente à l'appel. Sinon vous devrez en refaire un, et les créneaux sont limités.</p>
 <p ${P}>Juste en dessous, tu verras Florian. Il ne savait pas coder. Six semaines après la sortie de son app, elle lui rapportait 1 793 dollars sur 28 jours, sans un euro de pub.</p>
