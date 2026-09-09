@@ -12,7 +12,8 @@ import { FLORIAN } from "@/lib/temoignages";
 
 // Vidéos Bunny (lib 613852). Placeholders : laisser "" tant que la vidéo
 // n'est pas prête → un bloc "Vidéo en cours de préparation" s'affiche.
-const MAIN_VIDEO_ID = "a8334af7-09b2-464e-bcf8-6d4b07e10413"; // présentation de l'accompagnement, à regarder avant l'appel
+const MAIN_VIDEO_ID = "ce2619f3-8b5e-425d-b60c-91efaa35f778"; // vidéo principale : préparation de l'appel
+const ACCOMPAGNEMENT_VIDEO_ID = "a8334af7-09b2-464e-bcf8-6d4b07e10413"; // présentation de l'accompagnement (6 min)
 
 // Vidéo YouTube "Pour en savoir plus"
 const YOUTUBE_ID = "--Q8sMT656Y";
@@ -117,8 +118,8 @@ function ConfirmeContent() {
             </h1>
 
             <p className="mt-4 text-[17px] leading-relaxed text-[var(--fg2)] font-medium max-w-xl mx-auto">
-              Regarde la vidéo ci-dessous, six minutes, elle présente l&apos;accompagnement
-              et te prépare à notre échange.
+              Regarde bien la vidéo ci-dessous, elle est importante pour préparer
+              notre échange.
             </p>
 
             {/* Récap du RDV */}
@@ -164,6 +165,25 @@ function ConfirmeContent() {
                 </div>
               ))}
             </div>
+          </div>
+
+          {/* Présentation de l'accompagnement (vidéo en plus de la préparation) */}
+          <div className="mt-14 max-w-4xl mx-auto">
+            <div className="text-center mb-6">
+              <span className="mac-eyebrow">Ce qu&apos;il y a dans l&apos;accompagnement</span>
+              <h2 className="mt-2 text-[22px] sm:text-[26px] font-bold tracking-[-0.03em] text-balance">
+                La communauté, les coachings de groupe et le suivi personnel, expliqués en 6 minutes
+              </h2>
+              <p className="mt-3 text-[15.5px] font-medium text-[var(--fg2)] max-w-xl mx-auto">
+                Regarde-la avant l&apos;appel et note tes questions, c&apos;est le moment de les poser.
+              </p>
+            </div>
+            <BunnyVideo videoId={ACCOMPAGNEMENT_VIDEO_ID} poster="/jeremy-bureau.jpg" label="Regarder la présentation" />
+            <p className="mt-4 text-center">
+              <Link href="/accompagnement" className="text-[15px] font-semibold text-[var(--accent2)] hover:underline">
+                Voir le détail de l&apos;accompagnement
+              </Link>
+            </p>
           </div>
 
           {/* Témoignage Florian : preuve à regarder avant l'appel */}
