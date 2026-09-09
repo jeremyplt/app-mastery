@@ -38,6 +38,16 @@ type Totals = {
 
 type EmailContent = { email: string; subject: string; date: string; body: string; events: { name: string; time: string }[] };
 
+type Sheet = {
+  kind: "sent" | "preview";
+  label: string;
+  subject: string;
+  meta: string;
+  body?: string;
+  events?: { name: string; time: string }[];
+  error?: string;
+};
+
 type Payload = { days: number; truncated: boolean; totals: Totals; rows: Row[]; scheduled: Scheduled[]; waiting: Waiting[] };
 
 const DAYS = [7, 30, 90] as const;
@@ -95,22 +105,44 @@ export default function AdminEmailsPage() {
   const [search, setSearch] = useState("");
   const [data, setData] = useState<Payload | null>(null);
   const [error, setError] = useState<string | null>(null);
-  // Email ouvert en fiche (contenu complet chargé depuis Brevo).
-  const [opened, setOpened] = useState<Row | null>(null);
-  const [content, setContent] = useState<EmailContent | null>(null);
-  const [contentError, setContentError] = useState<string | null>(null);
+  // Fiche ouverte : un email envoyé (contenu stocké par Brevo) ou l'aperçu
+  // d'un gabarit du schéma (rendu avec des données d'exemple).
+  const [sheet, setSheet] = useState<Sheet | null>(null);
 
   function openRow(r: Row) {
-    setOpened(r);
-    setContent(null);
-    setContentError(null);
+    setSheet({ kind: "sent", label: r.label, subject: r.subject, meta: `À ${r.email} · ${fmtDateLong(r.sentAt)}` });
     fetch(`/api/admin/emails/content?email=${encodeURIComponent(r.email)}&messageId=${encodeURIComponent(r.messageId)}`)
       .then(async (res) => {
-        const d = await res.json();
+        const d = (await res.json()) as EmailContent & { error?: string };
         if (!res.ok) throw new Error(d.error || "Erreur");
-        setContent(d);
+        setSheet((s) =>
+          s && s.kind === "sent"
+            ? { ...s, subject: d.subject, meta: `À ${d.email} · ${fmtDateLong(d.date)}`, body: d.body, events: d.events }
+            : s,
+        );
       })
-      .catch((e) => setContentError(e instanceof Error ? e.message : "Erreur"));
+      .catch((e) => setSheet((s) => (s ? { ...s, error: e instanceof Error ? e.message : "Erreur" } : s)));
+  }
+
+  function openStep(step: { tag: string; preview?: string; subject: string; label: string; when: string }, flowTitle: string) {
+    const tag = step.preview ?? step.tag;
+    setSheet({ kind: "preview", label: `${flowTitle} · ${step.label}`, subject: step.subject, meta: `Aperçu du gabarit, envoi : ${step.when.toLowerCase()}` });
+    fetch(`/api/admin/emails/preview?tag=${encodeURIComponent(tag)}`)
+      .then(async (res) => {
+        const d = (await res.json()) as { subject: string; body: string; source: string; sample?: string; error?: string };
+        if (!res.ok) throw new Error(d.error || "Erreur");
+        setSheet((s) =>
+          s && s.kind === "preview"
+            ? {
+                ...s,
+                subject: d.subject,
+                body: d.body,
+                meta: d.source === "brevo" ? "Modèle Brevo, tel qu'il est enregistré" : `Aperçu avec un prospect d'exemple (${d.sample ?? "Thomas"})`,
+              }
+            : s,
+        );
+      })
+      .catch((e) => setSheet((s) => (s ? { ...s, error: e instanceof Error ? e.message : "Erreur" } : s)));
   }
   // Chargement déduit : pas de données, ou données d'une autre période.
   const loading = !error && (data === null || data.days !== days);
@@ -266,7 +298,7 @@ export default function AdminEmailsPage() {
         <div className="mt-8">
           <h2 className="text-lg font-bold tracking-tight">Automatisations en place</h2>
           <p className="mt-1 text-sm text-[var(--fg2)] font-medium">
-            Ce qui part, après quel déclencheur, et quand. Le chiffre sous chaque email est le nombre d&apos;envois sur la période choisie. En pointillé : prévu, pas encore en place.
+            Ce qui part, après quel déclencheur, et quand. Clique sur un email pour le voir tel qu&apos;il partirait aujourd&apos;hui. Le chiffre sous chaque email est le nombre d&apos;envois sur la période choisie. En pointillé : prévu, pas encore en place.
           </p>
           <div className="mt-4 grid gap-3">
             {FLOWS.map((flow) => (
@@ -285,11 +317,14 @@ export default function AdminEmailsPage() {
                   {flow.steps.map((step) => (
                     <div key={step.tag} className="flex items-center gap-2">
                       <span className="text-[var(--fg2)]" aria-hidden>→</span>
-                      <div
-                        className={`flex w-[190px] flex-col rounded-[10px] border px-3 py-2 ${
+                      <button
+                        type="button"
+                        disabled={step.status !== "live" || step.tag === "candidature-admin"}
+                        onClick={() => openStep(step, flow.title)}
+                        className={`flex w-[190px] flex-col rounded-[10px] border px-3 py-2 text-left transition-colors ${
                           step.status === "live"
-                            ? "border-[color-mix(in_srgb,var(--accent)_35%,transparent)] bg-[color-mix(in_srgb,var(--accent)_8%,transparent)]"
-                            : "border-dashed border-[var(--sep)] bg-transparent opacity-70"
+                            ? "border-[color-mix(in_srgb,var(--accent)_35%,transparent)] bg-[color-mix(in_srgb,var(--accent)_8%,transparent)] hover:bg-[color-mix(in_srgb,var(--accent)_16%,transparent)] cursor-pointer disabled:cursor-default disabled:hover:bg-[color-mix(in_srgb,var(--accent)_8%,transparent)]"
+                            : "border-dashed border-[var(--sep)] bg-transparent opacity-70 cursor-default"
                         }`}
                       >
                         <div className="flex items-center justify-between gap-2">
@@ -299,9 +334,9 @@ export default function AdminEmailsPage() {
                         <span className="mt-1 text-[13px] font-semibold leading-snug">{step.subject}</span>
                         {step.note && <span className="mt-1 text-[11.5px] leading-snug text-[var(--fg2)]">{step.note}</span>}
                         <span className="mt-1.5 text-[11.5px] font-semibold text-[var(--fg2)]">
-                          {step.status === "live" ? `${tagCounts[step.tag] ?? 0} envoi${(tagCounts[step.tag] ?? 0) > 1 ? "s" : ""} sur ${days} j` : "À venir"}
+                          {step.status === "live" ? `${tagCounts[step.tag] ?? 0} envoi${(tagCounts[step.tag] ?? 0) > 1 ? "s" : ""} sur ${days} j · voir` : "À venir"}
                         </span>
-                      </div>
+                      </button>
                     </div>
                   ))}
                 </div>
@@ -427,10 +462,10 @@ export default function AdminEmailsPage() {
             </table>
           )}
         </div>
-        {opened && (
+        {sheet && (
           <div
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-3 sm:p-6"
-            onClick={() => setOpened(null)}
+            onClick={() => setSheet(null)}
             role="dialog"
             aria-modal="true"
           >
@@ -440,14 +475,12 @@ export default function AdminEmailsPage() {
             >
               <div className="flex items-start justify-between gap-4 border-b border-[var(--sep)] px-5 py-4">
                 <div className="min-w-0">
-                  <p className="text-[12px] font-bold uppercase tracking-wider text-[var(--accent2)]">{opened.label}</p>
-                  <h3 className="mt-1 text-lg font-bold tracking-tight">{content?.subject ?? opened.subject}</h3>
-                  <p className="mt-1 text-sm text-[var(--fg2)]">
-                    À {opened.email} · {fmtDateLong(content?.date ?? opened.sentAt)}
-                  </p>
-                  {content && content.events.length > 0 && (
+                  <p className="text-[12px] font-bold uppercase tracking-wider text-[var(--accent2)]">{sheet.label}</p>
+                  <h3 className="mt-1 text-lg font-bold tracking-tight">{sheet.subject}</h3>
+                  <p className="mt-1 text-sm text-[var(--fg2)]">{sheet.meta}</p>
+                  {sheet.events && sheet.events.length > 0 && (
                     <p className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-[12.5px] font-medium text-[var(--fg2)]">
-                      {content.events.map((ev, i) => (
+                      {sheet.events.map((ev, i) => (
                         <span key={i}>
                           {EVENT_LABELS[ev.name] ?? ev.name} {fmtDate(ev.time)}
                         </span>
@@ -456,24 +489,19 @@ export default function AdminEmailsPage() {
                   )}
                 </div>
                 <button
-                  onClick={() => setOpened(null)}
+                  onClick={() => setSheet(null)}
                   className="shrink-0 rounded-lg bg-[var(--field)] px-3 py-1.5 text-sm font-bold text-[var(--fg)] hover:bg-[color-mix(in_srgb,var(--fg)_10%,transparent)]"
                 >
                   Fermer
                 </button>
               </div>
               <div className="min-h-[300px] flex-1 overflow-hidden bg-white">
-                {contentError ? (
-                  <div className="px-5 py-10 text-center text-[var(--fg2)]">{contentError}</div>
-                ) : !content ? (
+                {sheet.error ? (
+                  <div className="px-5 py-10 text-center text-[var(--fg2)]">{sheet.error}</div>
+                ) : sheet.body === undefined ? (
                   <div className="px-5 py-10 text-center text-[var(--fg2)]">Chargement du contenu...</div>
                 ) : (
-                  <iframe
-                    title="Contenu de l'email"
-                    srcDoc={content.body}
-                    sandbox=""
-                    className="h-[70vh] w-full border-0 bg-white"
-                  />
+                  <iframe title="Contenu de l'email" srcDoc={sheet.body} sandbox="" className="h-[70vh] w-full border-0 bg-white" />
                 )}
               </div>
             </div>

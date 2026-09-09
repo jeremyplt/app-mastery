@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { magicLink as magicLinkEmail } from "@/lib/emails/transactional";
 import { createMagicLinkToken, hasEssentielAccess } from "@/lib/auth";
 import { getRoleForEmail } from "@/lib/admin";
 
@@ -23,6 +24,7 @@ export async function POST(req: NextRequest) {
 
     const token = await createMagicLinkToken(email);
     const magicLink = `${req.nextUrl.origin}/api/auth/verify?token=${token}`;
+    const built = magicLinkEmail(magicLink);
 
     // Send email via Brevo
     const BREVO_API_KEY = process.env.BREVO_API_KEY;
@@ -42,22 +44,9 @@ export async function POST(req: NextRequest) {
       body: JSON.stringify({
         sender: { name: "Jeremy Pitault", email: "contact@jeremypitault.com" },
         to: [{ email }],
-        tags: ["magic-link"],
-        subject: "Ton lien de connexion App Mastery",
-        htmlContent: `
-          <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; padding: 40px 20px;">
-            <h2 style="color: #111; font-size: 20px;">Connexion a ton espace App Mastery</h2>
-            <p style="color: #555; font-size: 15px; line-height: 1.6;">
-              Clique sur le bouton ci-dessous pour acceder a tes cours. Ce lien expire dans 1 heure.
-            </p>
-            <a href="${magicLink}" style="display: inline-block; background: #0ea5e9; color: white; padding: 12px 32px; border-radius: 9999px; text-decoration: none; font-weight: 600; font-size: 14px; margin-top: 16px;">
-              Acceder a mes cours
-            </a>
-            <p style="color: #999; font-size: 12px; margin-top: 24px;">
-              Si tu n'as pas demande ce lien, ignore cet email.
-            </p>
-          </div>
-        `,
+        tags: [built.tag],
+        subject: built.subject,
+        htmlContent: built.html,
       }),
     });
 

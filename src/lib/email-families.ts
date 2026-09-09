@@ -55,6 +55,8 @@ export type FlowStep = {
   when: string;
   status: "live" | "planned";
   note?: string;
+  // Tag à utiliser pour l'aperçu quand l'étape regroupe plusieurs tags.
+  preview?: string;
 };
 
 export type Flow = {
@@ -127,7 +129,7 @@ export const FLOWS: Flow[] = [
     family: "guides",
     title: "Guides gratuits",
     trigger: "Optin sur une page guide (Metabase, Piscine Epitech, prompts SaaS, Make, monétisation, OpenClaw)",
-    steps: [{ tag: "guides", label: "1", subject: "Livraison du guide", when: "Tout de suite", status: "live" }],
+    steps: [{ tag: "guides", label: "1", subject: "Livraison du guide", when: "Tout de suite", status: "live", preview: "metabase" }],
   },
   {
     id: "membres",
@@ -135,7 +137,7 @@ export const FLOWS: Flow[] = [
     title: "Espace membres",
     trigger: "Paiement reçu, ou demande de lien de connexion",
     steps: [
-      { tag: "welcome", label: "1", subject: "Bienvenue (selon le plan)", when: "Au paiement", status: "live" },
+      { tag: "welcome", label: "1", subject: "Bienvenue (selon le plan)", when: "Au paiement", status: "live", preview: "welcome-essentiel" },
       { tag: "magic-link", label: "2", subject: "Ton lien de connexion App Mastery", when: "À la demande", status: "live" },
     ],
   },

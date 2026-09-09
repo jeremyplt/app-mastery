@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { validatePhone } from "@/lib/phone-validation";
 import { sendMetaEvent, getClientInfo } from "@/lib/meta-capi";
 import { getAdminClient } from "@/lib/supabase";
+import { appelDecouverte, metabase, planAction, vslAccess, type BuiltEmail } from "@/lib/emails/transactional";
 
 // Map lead-magnet sources to their Brevo transactional template ID and tag.
 // Keyed by `source` (the guide slug), not by list ID: tous les leads magnets
@@ -15,33 +16,8 @@ const SOURCE_CONFIG: Record<string, { templateId: number; tag: string }> = {
   openclaw: { templateId: 14, tag: "openclaw" },
 };
 
-async function sendAppelEmail(apiKey: string, email: string, firstName?: string) {
-  const greeting = firstName ? `Salut ${firstName},` : "Salut,";
-  const htmlContent = `
-<p>${greeting}</p>
-
-<p>Merci d'avoir rempli le formulaire pour réserver un appel découverte.</p>
-
-<p>Si tu n'as pas encore choisi de créneau, voici le lien direct pour le faire maintenant :</p>
-
-<p><a href="https://www.jeremypitault.com/appel/reserver">Réserver mon appel</a></p>
-
-<p>Avant qu'on se parle, prends 2 minutes pour bien comprendre l'objectif de cet appel :</p>
-
-<ul>
-  <li>On fait le point sur ton projet d'app et ta situation actuelle</li>
-  <li>Je te dis honnêtement si un accompagnement peut t'aider</li>
-  <li>Si oui, on définit ensemble la solution la plus adaptée</li>
-  <li>Si non, je te donne quand même un plan d'action concret pour avancer seul</li>
-</ul>
-
-<p>L'idée de l'appel, c'est vraiment de voir ensemble si on peut travailler ensemble. Pour que ce soit utile pour toi, viens en étant ouvert à investir sur toi et sur ton projet, c'est ce qui fait toute la différence.</p>
-
-<p>À très vite,<br>Jeremy</p>
-
-<p>P.S. Si tu as des questions avant l'appel, réponds directement à cet email. Je lis tout.</p>
-`;
-
+// Envoi d'un email construit par src/lib/emails/transactional.ts.
+async function sendBuilt(apiKey: string, email: string, built: BuiltEmail) {
   const res = await fetch("https://api.brevo.com/v3/smtp/email", {
     method: "POST",
     headers: {
@@ -52,160 +28,13 @@ async function sendAppelEmail(apiKey: string, email: string, firstName?: string)
     body: JSON.stringify({
       sender: { name: "Jeremy Pitault", email: "contact@jeremypitault.com" },
       to: [{ email }],
-      subject: "Ton appel découverte est presque réservé",
-      htmlContent,
-      tags: ["appel-decouverte"],
+      subject: built.subject,
+      htmlContent: built.html,
+      tags: [built.tag],
     }),
   });
-
   const body = await res.text();
-  console.log(`Brevo appel email to ${email}: ${res.status} ${body}`);
-  return res.ok;
-}
-
-async function sendVslEmail(apiKey: string, email: string, firstName?: string) {
-  const greeting = firstName ? `Salut ${firstName},` : "Salut,";
-  const htmlContent = `
-<p>${greeting}</p>
-
-<p>Merci de t'être inscrit à la conférence privée.</p>
-
-<p>Voici ton accès direct : <a href="https://www.jeremypitault.com/conference/live">Accéder à la conférence</a></p>
-
-<p>Dedans, tu vas découvrir :</p>
-
-<ul>
-  <li>Pourquoi 93% des applications ne sont jamais rentables (et comment éviter ce piège)</li>
-  <li>Les 3 piliers indispensables pour générer jusqu'à 10 000€ par mois avec une seule app</li>
-  <li>La méthode exacte pour créer ton app avec l'IA en moins d'une semaine, sans coder</li>
-</ul>
-
-<p>Regarde-la en entier. À la fin, tu sauras exactement quoi faire pour lancer ton app rentable.</p>
-
-<p>À très vite,<br>Jeremy</p>
-
-<p>P.S. Si tu as des questions, réponds directement à cet email. Je lis tout.</p>
-`;
-
-  const res = await fetch("https://api.brevo.com/v3/smtp/email", {
-    method: "POST",
-    headers: {
-      "api-key": apiKey,
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    },
-    body: JSON.stringify({
-      sender: { name: "Jeremy Pitault", email: "contact@jeremypitault.com" },
-      to: [{ email }],
-      subject: "Ton accès à la conférence privée",
-      htmlContent,
-      tags: ["vsl-conference"],
-    }),
-  });
-
-  const body = await res.text();
-  console.log(`Brevo vsl email to ${email}: ${res.status} ${body}`);
-  return res.ok;
-}
-
-async function sendPlanActionEmail(apiKey: string, email: string, firstName?: string) {
-  const greeting = firstName ? `Salut ${firstName},` : "Salut,";
-  const htmlContent = `
-<p>${greeting}</p>
-
-<p>Merci d'avoir demandé le Plan d'Action.</p>
-
-<p>Voici ton accès : <a href="https://www.jeremypitault.com/plan-action/video">Regarder le Plan d'Action</a></p>
-
-<p>Dedans, tu vas découvrir :</p>
-
-<ul>
-  <li>Comment j'ai trouvé et validé mon idée d'app (et l'erreur qui m'a fait perdre 3 mois)</li>
-  <li>Le workflow exact que j'utilise pour créer des apps avec l'IA, sans coder moi-même</li>
-  <li>La stratégie marketing qui a généré des millions de vues en organique</li>
-  <li>La stratégie de scaling pour atteindre 10k MRR</li>
-</ul>
-
-<p>Prends quelques minutes pour la regarder. C'est la version condensée de tout ce que j'ai appris en 3 ans.</p>
-
-<p>Mais il y a un truc que je n'ai pas mis dans la vidéo.</p>
-
-<p>C'est le moment précis où tout a basculé pour moi. Le jour où j'ai failli tout abandonner, et ce qui s'est passé juste après.</p>
-
-<p>Je t'en parle demain.</p>
-
-<p>En attendant, si tu as déjà une app ou un projet en tête, je propose un appel découverte. On fait le point sur ton projet et on voit si on peut travailler ensemble. Réponds à quelques questions et choisis ton créneau :</p>
-
-<p><a href="https://www.jeremypitault.com/appel?utm_source=email&utm_medium=email&utm_campaign=plan-action">Réserver mon appel découverte</a></p>
-
-<p>À demain,<br>Jeremy</p>
-
-<p>P.S. Si tu as des questions après avoir regardé le Plan d'Action, réponds directement à cet email. Je lis tout.</p>
-`;
-
-  const res = await fetch("https://api.brevo.com/v3/smtp/email", {
-    method: "POST",
-    headers: {
-      "api-key": apiKey,
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    },
-    body: JSON.stringify({
-      sender: { name: "Jeremy Pitault", email: "contact@jeremypitault.com" },
-      to: [{ email }],
-      subject: "Ton Plan d'Action est prêt",
-      htmlContent,
-      tags: ["plan-action"],
-    }),
-  });
-
-  const body = await res.text();
-  console.log(`Brevo plan-action email to ${email}: ${res.status} ${body}`);
-  return res.ok;
-}
-
-async function sendMetabaseEmail(apiKey: string, email: string, firstName?: string) {
-  const greeting = firstName ? `Salut ${firstName},` : "Salut,";
-  const htmlContent = `
-<p>${greeting}</p>
-
-<p>Merci d'avoir demandé le pack Metabase. Voici ton fichier à télécharger :</p>
-
-<p><a href="https://www.jeremypitault.com/downloads/metabase-hostinger-m9k4p2.zip">Télécharger le pack .zip</a></p>
-
-<p>Dedans, tu trouveras :</p>
-
-<ul>
-  <li>Le tutoriel pas à pas pour préparer ton VPS Hostinger (KVM 2)</li>
-  <li>Le prompt IA qui installe et sécurise Metabase pour toi, en Docker</li>
-  <li>Tout ce qu'il faut pour avoir ton dashboard analytics auto-hébergé en HTTPS</li>
-</ul>
-
-<p>Suis le tutoriel d'abord, il te prépare le VPS et te donne les infos à copier dans le prompt. Ensuite, tu envoies le prompt à l'IA et tu la laisses installer Metabase.</p>
-
-<p>À très vite,<br>Jeremy</p>
-
-<p>P.S. Si tu bloques quelque part, réponds directement à cet email. Je lis tout.</p>
-`;
-
-  const res = await fetch("https://api.brevo.com/v3/smtp/email", {
-    method: "POST",
-    headers: {
-      "api-key": apiKey,
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    },
-    body: JSON.stringify({
-      sender: { name: "Jeremy Pitault", email: "contact@jeremypitault.com" },
-      to: [{ email }],
-      subject: "Ton pack Metabase est prêt",
-      htmlContent,
-      tags: ["metabase"],
-    }),
-  });
-
-  const body = await res.text();
-  console.log(`Brevo metabase email to ${email}: ${res.status} ${body}`);
+  console.log(`Brevo ${built.tag} email to ${email}: ${res.status} ${body}`);
   return res.ok;
 }
 
@@ -416,13 +245,13 @@ export async function POST(req: NextRequest) {
 
     // Step 2: Send first email instantly via transactional API
     if (source === "vsl") {
-      await sendVslEmail(BREVO_API_KEY, email, firstName);
+      await sendBuilt(BREVO_API_KEY, email, vslAccess(firstName));
     } else if (source === "plan-action") {
-      await sendPlanActionEmail(BREVO_API_KEY, email, firstName);
+      await sendBuilt(BREVO_API_KEY, email, planAction(firstName));
     } else if (source === "appel") {
-      await sendAppelEmail(BREVO_API_KEY, email, firstName);
+      await sendBuilt(BREVO_API_KEY, email, appelDecouverte(firstName));
     } else if (source === "metabase") {
-      await sendMetabaseEmail(BREVO_API_KEY, email, firstName);
+      await sendBuilt(BREVO_API_KEY, email, metabase(firstName));
     } else {
       const config = source ? SOURCE_CONFIG[source] : undefined;
       if (config) {

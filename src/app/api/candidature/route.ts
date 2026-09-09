@@ -8,6 +8,7 @@ import {
 } from "@/lib/candidature";
 import { isOutOfRegion } from "@/lib/geo-filter";
 import { sendMetaEvent, getClientInfo } from "@/lib/meta-capi";
+import { candidatureProspect } from "@/lib/emails/transactional";
 
 const BREVO_LIST_QUALIFIE = 20; // Appel (qualifiés)
 const BREVO_LIST_NON_QUALIFIE = 21; // Appel (non qualifiés)
@@ -178,31 +179,8 @@ async function sendAdminNotif(
 
 // Email de confirmation au prospect (contenu selon qualification).
 async function sendProspectEmail(firstName: string, email: string, qualified: boolean) {
-  const greeting = `Salut ${firstName},`;
-  const htmlContent = qualified
-    ? `
-      <p>${greeting}</p>
-      <p>Merci pour ta candidature, elle est validée.</p>
-      <p>Dernière étape : choisis ton créneau pour qu'on se parle 30 minutes de ton projet.</p>
-      <p><a href="https://www.jeremypitault.com/appel/reserver?firstName=${encodeURIComponent(firstName)}&email=${encodeURIComponent(email)}">Réserver mon appel</a></p>
-      <p>Tant que tu n'as pas choisi de créneau, rien n'est réservé.</p>
-      <p>À très vite,<br>Jeremy</p>`
-    : `
-      <p>${greeting}</p>
-      <p>Merci pour ta candidature.</p>
-      <p>Vu là où tu en es, le mieux est de commencer par poser des bases solides avant un appel. Voici par où démarrer, gratuitement :</p>
-      <p><a href="https://www.jeremypitault.com/plan-action/video">Le plan d'action gratuit</a></p>
-      <p>Avance avec ça, et on se reparle quand ton projet aura pris de l'ampleur.</p>
-      <p>À bientôt,<br>Jeremy</p>`;
-
-  await sendEmail({
-    to: [{ email }],
-    subject: qualified
-      ? "Ta candidature est validée, réserve ton appel"
-      : "Merci pour ta candidature",
-    tags: [qualified ? "candidature-qualifie" : "candidature-non-qualifie"],
-    htmlContent,
-  });
+  const built = candidatureProspect(firstName, email, qualified);
+  await sendEmail({ to: [{ email }], subject: built.subject, tags: [built.tag], htmlContent: built.html });
 }
 
 export async function POST(req: NextRequest) {
