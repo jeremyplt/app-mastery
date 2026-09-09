@@ -100,10 +100,8 @@ export function buildSequenceBEmail(
         ? `<p ${P}>C'est Nolan, mon associé, qui va te recevoir. On a construit l'accompagnement ensemble et il prend en charge tous les premiers appels, ce qui me permet de rester à cent pour cent sur les élèves qu'on accompagne déjà.</p>`
         : `<p ${P}>C'est moi qui vais te recevoir. D'habitude c'est Nolan, mon associé, qui prend les premiers appels, mais sur ce créneau ce sera moi.</p>`;
 
-    const confirmUrl = utm(
-      `${SITE}/appel/confirme?invitee_first_name=${encodeURIComponent(ctx.firstName)}&event_start_time=${encodeURIComponent(ctx.startTime.toISOString())}`,
-      "seq-b-1",
-    );
+    // Page dédiée à la vidéo de présentation de l'accompagnement.
+    const confirmUrl = utm(`${SITE}/accompagnement`, "seq-b-1");
 
     const html = wrap(`
 <p ${P}>${salut}</p>
@@ -118,10 +116,10 @@ ${hostParagraph}
 <li ${LI}>Tu rejoins la communauté et tu as accès à toutes nos ressources dès le soir même.</li>
 </ol>
 ${image(`${SITE}/jeremy-bureau.jpg`, "Jeremy à son bureau", ctx.host === "Nolan" ? "Pendant que Nolan prend les appels, moi je suis sur les apps des élèves." : "Le reste du temps, je suis sur les apps des élèves.")}
-<p ${P}>Pour que ça se passe comme ça, prends dix minutes d'ici là pour regarder la vidéo sur ta page de confirmation. J'y montre comment se déroulent les douze semaines de l'accompagnement. Note les questions qui te viennent en la regardant, l'appel est fait pour y répondre.</p>
+<p ${P}>Pour que ça se passe comme ça, prends six minutes d'ici là pour regarder la vidéo de présentation de l'accompagnement. J'y montre ce qu'il y a dedans : l'espace de formation et la communauté, les coachings de groupe, et le suivi personnel avec moi. Note les questions qui te viennent en la regardant, l'appel est fait pour y répondre.</p>
 <p ${P}>Et si quelqu'un d'autre fait partie du projet, ou gère les finances avec toi, il faut que cette personne soit présente à l'appel. Sinon vous devrez en refaire un, et les créneaux sont limités.</p>
-<p ${P}>Juste en dessous, tu verras Florian. Il ne savait pas coder. Six semaines après la sortie de son app, elle lui rapportait 1 793 dollars sur 28 jours, sans un euro de pub.</p>
-${button("Regarder la vidéo de 10 minutes", confirmUrl)}
+<p ${P}>Sur la même page, tu verras Florian. Il ne savait pas coder. Six semaines après la sortie de son app, elle lui rapportait 1 793 dollars sur 28 jours, sans un euro de pub.</p>
+${button("Regarder la vidéo de 6 minutes", confirmUrl)}
 <p ${P}>Le lien de la visio est dans l'email de Calendly.</p>
 ${signature(`À ${jour}`)}
 ${ps(ctx.rescheduleUrl, "Si tu sais déjà que tu ne pourras pas être là, décale ton créneau maintenant plutôt que de ne pas venir. Il y a toujours quelqu'un qui attend derrière.")}
