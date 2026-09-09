@@ -176,7 +176,7 @@ function ConfirmeContent() {
                 Comment se passe l&apos;accompagnement
               </h2>
               <p className="mt-3 text-[15.5px] font-medium text-[var(--fg2)] max-w-xl mx-auto">
-                {PRESENTATION_DURATION_LABEL} pour voir concrètement ce qu&apos;on fait ensemble : la communauté, les cours, les coachings de groupe et le suivi de ton app. Regarde-la avant l&apos;appel et note tes questions.
+                {PRESENTATION_DURATION_LABEL} pour voir concrètement ce qu&apos;on fait ensemble : la communauté et les cours, les coachings de groupe, et le suivi personnel avec Jeremy sur WhatsApp. Regarde-la avant l&apos;appel et note tes questions.
               </p>
             </div>
             <BunnyVideo videoId={PRESENTATION_VIDEO_ID} label="Regarde la présentation" />

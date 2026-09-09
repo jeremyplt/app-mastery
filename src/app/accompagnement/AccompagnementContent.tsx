@@ -56,8 +56,8 @@ export default function AccompagnementContent() {
             </h1>
             <p className="mt-4 text-[17px] leading-relaxed text-[var(--fg2)] font-medium">
               {PRESENTATION_DURATION_LABEL} pour voir concrètement ce qu&apos;on fait ensemble : la
-              communauté, les cours, les coachings de groupe et le suivi de ton app, de
-              l&apos;idée jusqu&apos;à la sortie sur les stores.
+              communauté et les cours, les coachings de groupe, et le suivi personnel avec
+              Jeremy, en direct sur WhatsApp. Le tout, accessible à vie.
             </p>
           </div>
 

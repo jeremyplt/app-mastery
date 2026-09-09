@@ -5,11 +5,11 @@ import AccompagnementContent from "./AccompagnementContent";
 export const metadata: Metadata = {
   title: "Comment se passe l'accompagnement | App Mastery",
   description:
-    "En 6 minutes, Jeremy te montre de l'intérieur ce qu'on fait ensemble : la communauté, les cours, les coachings de groupe et le suivi de ton app jusqu'à sa sortie sur les stores.",
+    "En 6 minutes, Jeremy te montre de l'intérieur ce qu'on fait ensemble : la communauté et les cours, les coachings de groupe, et le suivi personnel en direct avec lui sur WhatsApp.",
   openGraph: {
     title: "Comment se passe l'accompagnement App Mastery",
     description:
-      "6 minutes pour voir de l'intérieur ce qu'on fait ensemble, de l'idée à la sortie de ton app sur les stores.",
+      "6 minutes pour voir de l'intérieur ce qu'on fait ensemble : communauté, cours, coachings de groupe et suivi personnel avec Jeremy.",
     images: [
       {
         url: `https://vz-0fb759fa-b02.b-cdn.net/${PRESENTATION_VIDEO_ID}/thumbnail.jpg`,
