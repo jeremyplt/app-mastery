@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { EMAIL_FAMILIES } from "@/lib/email-families";
+import { EMAIL_FAMILIES, FLOWS } from "@/lib/email-families";
 
 type Row = {
   messageId: string;
@@ -124,6 +124,21 @@ export default function AdminEmailsPage() {
     });
   }, [data, family, hideTests, search]);
 
+  // Nombre d'envois par tag sur la période (hors tests), pour le schéma.
+  const tagCounts = useMemo(() => {
+    const c: Record<string, number> = {};
+    for (const r of data?.rows ?? []) {
+      if (r.test) continue;
+      const base = r.tag;
+      c[base] = (c[base] ?? 0) + 1;
+      // Regroupements du schéma : guides et bienvenue.
+      const fam = EMAIL_FAMILIES.find((f) => f.id === "guides");
+      if (fam && fam.tags.includes(base)) c["guides"] = (c["guides"] ?? 0) + 1;
+      if (base.startsWith("welcome-")) c["welcome"] = (c["welcome"] ?? 0) + 1;
+    }
+    return c;
+  }, [data]);
+
   const familyCounts = useMemo(() => {
     const c: Record<string, number> = {};
     for (const r of data?.rows ?? []) {
@@ -212,6 +227,55 @@ export default function AdminEmailsPage() {
             ))}
           </div>
         )}
+
+        {/* Schéma des automatisations */}
+        <div className="mt-8">
+          <h2 className="text-lg font-bold tracking-tight">Automatisations en place</h2>
+          <p className="mt-1 text-sm text-[var(--fg2)] font-medium">
+            Ce qui part, après quel déclencheur, et quand. Le chiffre sous chaque email est le nombre d&apos;envois sur la période choisie. En pointillé : prévu, pas encore en place.
+          </p>
+          <div className="mt-4 grid gap-3">
+            {FLOWS.map((flow) => (
+              <div key={flow.id} className="rounded-[14px] border-[0.5px] border-[var(--sep)] bg-[var(--card)] p-4">
+                <div className="flex flex-wrap items-baseline justify-between gap-2">
+                  <h3 className="text-[15px] font-bold">{flow.title}</h3>
+                  <button onClick={() => setFamily(flow.family)} className="text-xs font-semibold text-[var(--accent2)] hover:underline">
+                    Voir les envois
+                  </button>
+                </div>
+                <div className="mt-3 flex flex-wrap items-stretch gap-2">
+                  <div className="flex min-w-[180px] max-w-[260px] flex-col justify-center rounded-[10px] bg-[var(--field)] px-3 py-2">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--fg2)]">Déclencheur</span>
+                    <span className="mt-0.5 text-[13px] font-semibold leading-snug">{flow.trigger}</span>
+                  </div>
+                  {flow.steps.map((step) => (
+                    <div key={step.tag} className="flex items-center gap-2">
+                      <span className="text-[var(--fg2)]" aria-hidden>→</span>
+                      <div
+                        className={`flex w-[190px] flex-col rounded-[10px] border px-3 py-2 ${
+                          step.status === "live"
+                            ? "border-[color-mix(in_srgb,var(--accent)_35%,transparent)] bg-[color-mix(in_srgb,var(--accent)_8%,transparent)]"
+                            : "border-dashed border-[var(--sep)] bg-transparent opacity-70"
+                        }`}
+                      >
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--accent2)]">{step.label}</span>
+                          <span className="text-[12px] font-bold">{step.when}</span>
+                        </div>
+                        <span className="mt-1 text-[13px] font-semibold leading-snug">{step.subject}</span>
+                        {step.note && <span className="mt-1 text-[11.5px] leading-snug text-[var(--fg2)]">{step.note}</span>}
+                        <span className="mt-1.5 text-[11.5px] font-semibold text-[var(--fg2)]">
+                          {step.status === "live" ? `${tagCounts[step.tag] ?? 0} envoi${(tagCounts[step.tag] ?? 0) > 1 ? "s" : ""} sur ${days} j` : "À venir"}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                {flow.exit && <p className="mt-3 text-[12.5px] text-[var(--fg2)]">{flow.exit}</p>}
+              </div>
+            ))}
+          </div>
+        </div>
 
         {/* Programmés */}
         {data && (data.scheduled.length > 0 || data.waiting.length > 0) && (

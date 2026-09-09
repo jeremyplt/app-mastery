@@ -374,7 +374,7 @@ export default function CrmAdmin() {
               Répartition appels
             </a>
             <a
-              href="/admin/emails"
+              href="/admin/crm/emails"
               className="rounded-lg bg-[var(--field)] px-4 py-2 text-sm font-bold text-[var(--fg)] transition-colors hover:bg-[color-mix(in_srgb,var(--fg)_10%,transparent)]"
             >
               Emails
