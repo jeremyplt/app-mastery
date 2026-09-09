@@ -9,6 +9,7 @@ import AdDisclaimer from "@/components/AdDisclaimer";
 import BunnyVideo from "@/components/BunnyVideo";
 import ThemeToggle from "@/components/ThemeToggle";
 import { FLORIAN } from "@/lib/temoignages";
+import { PRESENTATION_DURATION_LABEL, PRESENTATION_VIDEO_ID } from "@/lib/presentation";
 
 // Vidéos Bunny (lib 613852). Placeholders : laisser "" tant que la vidéo
 // n'est pas prête → un bloc "Vidéo en cours de préparation" s'affiche.
@@ -164,6 +165,21 @@ function ConfirmeContent() {
                 </div>
               ))}
             </div>
+          </div>
+
+          {/* Présentation de l'accompagnement : la vidéo promise dans l'email de
+              confirmation (séquence B, email 1). Aussi disponible sur /accompagnement. */}
+          <div className="mt-14 max-w-4xl mx-auto">
+            <div className="text-center mb-6">
+              <span className="mac-eyebrow">Vu de l&apos;intérieur</span>
+              <h2 className="mt-2 text-[24px] sm:text-[30px] font-bold tracking-[-0.035em] leading-[1.1] text-balance">
+                Comment se passe l&apos;accompagnement
+              </h2>
+              <p className="mt-3 text-[15.5px] font-medium text-[var(--fg2)] max-w-xl mx-auto">
+                {PRESENTATION_DURATION_LABEL} pour voir concrètement ce qu&apos;on fait ensemble : la communauté, les cours, les coachings de groupe et le suivi de ton app. Regarde-la avant l&apos;appel et note tes questions.
+              </p>
+            </div>
+            <BunnyVideo videoId={PRESENTATION_VIDEO_ID} label="Regarde la présentation" />
           </div>
 
           {/* Témoignage Florian : preuve à regarder avant l'appel */}
