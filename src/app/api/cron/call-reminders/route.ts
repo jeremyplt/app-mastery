@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getAdminClient } from "@/lib/supabase";
 import { CALL_LEAD_COLUMNS, scheduleReminders, type CallLead } from "@/lib/call-reminders";
+import { runSequenceA } from "@/lib/sequence-a";
 
 export const dynamic = "force-dynamic";
 
@@ -37,5 +38,14 @@ export async function GET(request: Request) {
     }
   }
 
-  return NextResponse.json({ ok: true, leads: (data || []).length, results });
+  // Séquence A : le passage principal est fait toutes les 15 minutes par
+  // Supabase (pg_cron). Celui-ci sert de filet si ce cron tombe.
+  let sequenceA: unknown;
+  try {
+    sequenceA = await runSequenceA();
+  } catch (err) {
+    sequenceA = { error: err instanceof Error ? err.message : String(err) };
+  }
+
+  return NextResponse.json({ ok: true, leads: (data || []).length, results, sequenceA });
 }

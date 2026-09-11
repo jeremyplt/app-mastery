@@ -77,6 +77,17 @@ export async function POST(req: NextRequest) {
       if (crmError) {
         console.error("CRM qualification update error:", crmError.message);
       }
+      // Séquence A : démarre à la première qualification, jamais remise à
+      // zéro si le lead repasse par l'optin.
+      if (qualified) {
+        const { error: seqError } = await supabase
+          .from("crm_leads")
+          .update({ seq_a_started_at: new Date().toISOString() })
+          .eq("email", normalizedEmail)
+          .eq("source", "vsl")
+          .is("seq_a_started_at", null);
+        if (seqError) console.error("CRM seq_a_started_at error:", seqError.message);
+      }
     } catch (err) {
       console.error("CRM qualification update error:", err);
     }

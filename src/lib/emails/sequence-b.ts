@@ -8,8 +8,7 @@
 // - jourj   : le jour de l'appel à 8 h (ou la veille à 20 h si l'appel est
 //             avant 10 h)
 
-const SITE = "https://www.jeremypitault.com";
-const PARIS = "Europe/Paris";
+import { LI, P, PARIS, SITE, button, esc, image, signature, utm, wrap } from "@/lib/emails/layout";
 
 export type CallHost = "Nolan" | "Jeremy";
 
@@ -46,40 +45,6 @@ export function formatHourFr(d: Date): string {
   return `${h}h${m}`;
 }
 
-function utm(url: string, campaign: string): string {
-  const u = new URL(url);
-  u.searchParams.set("utm_source", "email");
-  u.searchParams.set("utm_medium", "email");
-  u.searchParams.set("utm_campaign", campaign);
-  return u.toString();
-}
-
-function esc(s: string): string {
-  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-}
-
-const P = 'style="margin:0 0 18px;font-size:16px;line-height:1.6;color:#1d1d1f"';
-const LI = 'style="margin:0 0 10px;font-size:16px;line-height:1.6;color:#1d1d1f"';
-
-function button(label: string, href: string): string {
-  return `<p style="margin:26px 0"><a href="${href}" style="display:inline-block;background:#0a84ff;color:#ffffff;text-decoration:none;font-weight:600;font-size:16px;padding:13px 24px;border-radius:10px">${esc(label)}</a></p>`;
-}
-
-function image(src: string, alt: string, caption: string): string {
-  return `<p style="margin:0 0 6px"><img src="${src}" alt="${esc(alt)}" width="560" style="display:block;width:100%;max-width:560px;height:auto;border-radius:12px" /></p>
-<p style="margin:0 0 22px;font-size:14px;line-height:1.5;color:#6e6e73;font-style:italic">${esc(caption)}</p>`;
-}
-
-function wrap(body: string): string {
-  return `<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body style="margin:0;padding:0;background:#ffffff">
-<div style="max-width:600px;margin:0 auto;padding:28px 20px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif">
-${body}
-</div></body></html>`;
-}
-
-function signature(closing: string): string {
-  return `<p ${P}>${closing},<br>Jeremy</p>`;
-}
 
 function ps(rescheduleUrl: string, text: string): string {
   return `<p style="margin:26px 0 0;font-size:15px;line-height:1.6;color:#55555c">P.S. ${text} <a href="${rescheduleUrl}" style="color:#0060df">Décaler mon créneau</a></p>`;
@@ -115,7 +80,7 @@ ${hostParagraph}
 <li ${LI}>On commence à poser ton plan d'action, à partir de tes objectifs à toi.</li>
 <li ${LI}>Tu rejoins la communauté et tu as accès à toutes nos ressources dès le soir même.</li>
 </ol>
-${image(`${SITE}/jeremy-bureau.jpg`, "Jeremy à son bureau", ctx.host === "Nolan" ? "Pendant que Nolan prend les appels, moi je suis sur les apps des élèves." : "Le reste du temps, je suis sur les apps des élèves.")}
+${image(`${SITE}/jeremy-bureau.jpg`, "Jeremy à son bureau", ctx.host === "Nolan" ? "Pendant que Nolan prend les appels, je passe mes journées sur les applications des élèves." : "Le reste du temps, je passe mes journées sur les applications des élèves.")}
 <p ${P}>Pour que ça se passe comme ça, prends six minutes d'ici là pour regarder la vidéo de présentation de l'accompagnement. J'y montre ce qu'il y a dedans : l'espace de formation et la communauté, les coachings de groupe, et le suivi personnel avec moi. Note les questions qui te viennent en la regardant, l'appel est fait pour y répondre.</p>
 <p ${P}>Et si quelqu'un d'autre fait partie du projet, ou gère les finances avec toi, il faut que cette personne soit présente à l'appel. Sinon vous devrez en refaire un, et les créneaux sont limités.</p>
 <p ${P}>Sur la même page, tu verras Florian. Il ne savait pas coder. Six semaines après la sortie de son app, elle lui rapportait 1 793 dollars sur 28 jours, sans un euro de pub.</p>
@@ -124,7 +89,8 @@ ${button("Regarder la vidéo de 6 minutes", confirmUrl)}
 ${signature(`À ${jour}`)}
 ${ps(ctx.rescheduleUrl, "Si tu sais déjà que tu ne pourras pas être là, décale ton créneau maintenant plutôt que de ne pas venir. Il y a toujours quelqu'un qui attend derrière.")}
 `);
-    return { subject: "Avant ton appel", html, tag: "seq-b-1-confirm" };
+    const first = (ctx.firstName || "").trim();
+    return { subject: first ? `${first}, avant ton appel de ${jour}` : `Avant ton appel de ${jour}`, html, tag: "seq-b-1-confirm" };
   }
 
   if (kind === "veille") {
@@ -135,7 +101,7 @@ ${ps(ctx.rescheduleUrl, "Si tu sais déjà que tu ne pourras pas être là, déc
 <p ${P}>Florian a vingt ans et il n'avait jamais écrit une ligne de code. Il a passé quatre mois à construire son application de productivité tout seul, en apprenant sur le tas, et il est arrivé à son appel avec une app qui marchait à peu près et beaucoup de doutes sur la suite.</p>
 <p ${P}>Son application fonctionnait, mais elle n'était pas du tout optimisée pour transformer les utilisateurs en clients payants. On a vu que son profil collait, on a posé son plan d'action, et pendant un mois on a complètement revu le système de l'app. Un mois plus tard, elle était sur l'App Store, prête à recevoir des utilisateurs et à les convertir en clients premium.</p>
 <p ${P}>Il a ensuite appliqué la méthode marketing qu'on lui a donnée, tous les jours, jusqu'à trouver le format de contenu qui marche pour son app.</p>
-${image(`${SITE}/florian-poster.jpg`, "Florian", "Florian, pendant le live où il montre ses chiffres aux autres élèves.")}
+${image(`${SITE}/emails/florian-revenuecat-1793.jpg`, "Tableau de bord RevenueCat de Florian : 1 793 $ sur 28 jours", "Voilà le tableau de bord de Florian, 28 jours après avoir trouvé le bon format de contenu.")}
 <p ${P}>Vingt-huit jours plus tard, son application lui avait rapporté 1 793 dollars, sans dépenser un seul euro en publicité. Aujourd'hui il tourne à plus de cent téléchargements par jour.</p>
 <p ${P}>Ce que je retiens de son histoire, c'est ce qu'il a dit lui-même en live devant les autres élèves : quand on prend un accompagnement, on est débutant, on ne sait pas mieux, alors on applique ce qu'on nous dit et on regarde le résultat plus tard.</p>
 <p ${P}>Il raconte tout ça en vidéo, avec ses vrais chiffres à l'écran. Si tu veux savoir à quoi ressemble la suite de ton appel de demain, c'est le meilleur endroit pour le voir.</p>
@@ -144,7 +110,7 @@ ${button("Voir le témoignage de Florian", florianUrl)}
 ${signature("Bonne soirée")}
 ${ps(ctx.rescheduleUrl, "Un empêchement ? Décale ton créneau plutôt que de le laisser vide, quelqu'un d'autre pourra en profiter.")}
 `);
-    return { subject: "Demain", html, tag: "seq-b-2-veille" };
+    return { subject: "Demain, tu seras à la place de Florian", html, tag: "seq-b-2-veille" };
   }
 
   // jourj
@@ -161,5 +127,6 @@ ${image(`${SITE}/eleves-appel.jpg`, "Florian, Wassim et Soraya", "Florian, Wassi
 ${button(`Rejoindre l'appel à ${heure}`, ctx.joinUrl)}
 ${signature("Bon appel")}
 `);
-  return { subject: "C'est aujourd'hui", html, tag: "seq-b-3-jourj" };
+  const first = (ctx.firstName || "").trim();
+  return { subject: first ? `${first}, c'est aujourd'hui à ${heure}` : `C'est aujourd'hui à ${heure}`, html, tag: "seq-b-3-jourj" };
 }

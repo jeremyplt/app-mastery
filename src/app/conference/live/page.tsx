@@ -40,6 +40,34 @@ function curvedProgress(ratio: number): number {
 // moment où le CTA se débloque.
 const WATCH_MILESTONES = [60, 300, 600, 1110];
 
+// Palier atteint, envoyé au serveur pour la séquence A (version de
+// l'email 1, lien de reprise). Best-effort, jamais bloquant.
+function reportWatchProgress(seconds: number) {
+  const contact = loadOptinContact();
+  if (!contact?.email) return;
+  try {
+    fetch("/api/vsl-progress", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: contact.email, seconds: Math.round(seconds) }),
+      keepalive: true,
+    }).catch(() => {});
+  } catch {
+    // Réseau indisponible : le palier sera renvoyé au suivant.
+  }
+}
+
+// Position demandée par le lien de l'email "reprends où tu t'es arrêté"
+// (/conference/live?t=secondes). Prime sur la position sauvegardée.
+function positionFromLink(): number {
+  try {
+    const t = Number(new URLSearchParams(window.location.search).get("t"));
+    return Number.isFinite(t) && t > 0 ? t : 0;
+  } catch {
+    return 0;
+  }
+}
+
 function VslPlayer({ onCtaUnlock }: { onCtaUnlock: () => void }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -194,7 +222,8 @@ function VslPlayer({ onCtaUnlock }: { onCtaUnlock: () => void }) {
             if (restoredRef.current) return;
             restoredRef.current = true;
             const v = e.currentTarget;
-            const saved = parseFloat(localStorage.getItem(POSITION_KEY) || "0");
+            const fromLink = positionFromLink();
+            const saved = fromLink > 0 ? fromLink : parseFloat(localStorage.getItem(POSITION_KEY) || "0");
             if (saved > 1 && saved < v.duration - 5) {
               // Le prospect revient : on se place où il en était et on lui laisse le choix.
               // Les paliers déjà dépassés ne sont pas réémis (déjà comptés à la 1ère session).
@@ -218,6 +247,7 @@ function VslPlayer({ onCtaUnlock }: { onCtaUnlock: () => void }) {
               for (const m of WATCH_MILESTONES) {
                 if (v.currentTime >= m && !milestonesFiredRef.current.has(m)) {
                   milestonesFiredRef.current.add(m);
+                  reportWatchProgress(m);
                   posthog.capture("vsl_video_progress", {
                     seconds: m,
                     percent: v.duration > 0 ? Math.round((m / v.duration) * 100) : undefined,
@@ -240,7 +270,10 @@ function VslPlayer({ onCtaUnlock }: { onCtaUnlock: () => void }) {
           onEnded={(e) => {
             setPlaying(false);
             setEnded(true);
-            if (!e.currentTarget.muted) posthog.capture("vsl_video_completed");
+            if (!e.currentTarget.muted) {
+              posthog.capture("vsl_video_completed");
+              reportWatchProgress(e.currentTarget.duration || CTA_REVEAL_SECONDS);
+            }
             // Visionnage terminé : le prochain passage repart du début
             localStorage.removeItem(POSITION_KEY);
             lastSaveRef.current = 0;

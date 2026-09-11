@@ -49,7 +49,7 @@ function parisOffsetMs(at: Date): number {
 
 // Construit un instant "heure de Paris" : jour civil (Paris) de `ref`
 // décalé de `dayDelta`, à `hour`:00.
-function parisTime(ref: Date, dayDelta: number, hour: number): Date {
+export function parisTime(ref: Date, dayDelta: number, hour: number): Date {
   const offset = parisOffsetMs(ref);
   const local = new Date(ref.getTime() + offset);
   const target = Date.UTC(
@@ -66,7 +66,12 @@ function parisTime(ref: Date, dayDelta: number, hour: number): Date {
   return new Date(target - parisOffsetMs(guess));
 }
 
-function parisHour(at: Date): number {
+// Jour civil à Paris, "2026-09-11".
+export function parisDay(at: Date): string {
+  return new Intl.DateTimeFormat("en-CA", { timeZone: PARIS, year: "numeric", month: "2-digit", day: "2-digit" }).format(at);
+}
+
+export function parisHour(at: Date): number {
   return Number(
     new Intl.DateTimeFormat("en-US", { timeZone: PARIS, hourCycle: "h23", hour: "2-digit" }).format(at),
   );
