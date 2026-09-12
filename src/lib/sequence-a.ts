@@ -1,4 +1,4 @@
-import { getAdminClient } from "@/lib/supabase";
+import { getAdminClient, withRetry } from "@/lib/supabase";
 import { parisDay, parisHour, parisTime } from "@/lib/call-reminders";
 import { sendBuiltEmail } from "@/lib/emails/send";
 import { buildSequenceAEmail, variantFor, type SequenceAStep } from "@/lib/emails/sequence-a";
@@ -82,15 +82,16 @@ export async function sendSequenceAStep(lead: SequenceALead, step: SequenceAStep
 // Un passage du cron : envoie l'email dû de chaque lead actif.
 export async function runSequenceA(now = new Date()): Promise<{ active: number; sent: Record<string, string>; errors: Record<string, string> }> {
   const supabase = getAdminClient();
-  const { data, error } = await supabase
-    .from("crm_leads")
-    .select(SEQUENCE_A_COLUMNS)
-    .eq("source", "vsl")
-    .not("seq_a_started_at", "is", null)
-    .lt("seq_a_step", SEQUENCE_A_LAST_STEP)
-    .eq("call_booked", false)
-    .eq("disqualified", false);
-  if (error) throw new Error(error.message);
+  const data = await withRetry(() =>
+    supabase
+      .from("crm_leads")
+      .select(SEQUENCE_A_COLUMNS)
+      .eq("source", "vsl")
+      .not("seq_a_started_at", "is", null)
+      .lt("seq_a_step", SEQUENCE_A_LAST_STEP)
+      .eq("call_booked", false)
+      .eq("disqualified", false),
+  );
 
   const leads = (data || []) as SequenceALead[];
   const sent: Record<string, string> = {};
