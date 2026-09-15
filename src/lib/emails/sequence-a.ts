@@ -100,7 +100,7 @@ ${footnote(FOOT)}
 <p ${P}>Tu es allé jusqu'au bout de la conférence, merci, c'est déjà plus que la majorité des gens. Et tu n'as pas cliqué sur le bouton en dessous. Je comprends, on ne sait jamais trop ce qu'il y a derrière ce genre de bouton.</p>
 <p ${P}>Alors voilà ce qui se passe. Tu choisis un créneau de trente minutes pour un appel avec Nolan, mon associé, ou avec moi. Pendant cet appel, on regarde ta situation, ton projet, le temps que tu peux y consacrer, et on te dit franchement si l'accompagnement est fait pour toi. Ce n'est pas une session de conseils, et ce n'est pas un appel de vente déguisé non plus. On ne prend pas tout le monde.</p>
 <p ${P}>Si ton profil correspond, on commence à poser ton plan d'action pendant l'appel, et tu rejoins la communauté le soir même.</p>
-${imagePair({ src: `${SITE}/emails/nolan-appel.jpg`, alt: "Nolan en appel vidéo" }, { src: `${SITE}/emails/jeremy-appel.jpg`, alt: "Jeremy en appel vidéo" }, "Pendant l'appel, Nolan ou moi prenons trente minutes pour parler de ton projet et voir si l'accompagnement est fait pour toi.")}
+${imagePair({ src: `${SITE}/emails/nolan-appel.jpg`, alt: "Nolan en appel vidéo" }, { src: `${SITE}/emails/jeremy-appel.jpg`, alt: "Jeremy en appel vidéo" }, "Pendant l'appel, mon associé Nolan ou moi prenons trente minutes pour parler de ton projet et voir si l'accompagnement est fait pour toi.")}
 ${button("Réserver mon appel", url)}
 ${signature("À bientôt")}
 ${footnote(FOOT)}
