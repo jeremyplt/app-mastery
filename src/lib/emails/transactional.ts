@@ -24,8 +24,8 @@ export function appelDecouverte(firstName?: string): BuiltEmail {
 <ul>
   <li>On fait le point sur ton projet d'app et ta situation actuelle</li>
   <li>Je te dis honnêtement si un accompagnement peut t'aider</li>
-  <li>Si oui, on définit ensemble la solution la plus adaptée</li>
-  <li>Si non, je te donne quand même un plan d'action concret pour avancer seul</li>
+  <li>Si oui, on voit ensemble comment on travaille et par où on commence</li>
+  <li>Si non, je te le dis honnêtement, sans te faire perdre ton temps</li>
 </ul>
 
 <p>L'idée de l'appel, c'est vraiment de voir ensemble si on peut travailler ensemble. Pour que ce soit utile pour toi, viens en étant ouvert à investir sur toi et sur ton projet, c'est ce qui fait toute la différence.</p>

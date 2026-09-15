@@ -65,7 +65,7 @@ export function buildSequenceAEmail(step: SequenceAStep, ctx: SequenceAContext):
       const html = wrap(`
 <p ${P}>${salut}</p>
 <p ${P}>Tu t'es inscrit à la conférence il y a quelques heures et tu ne l'as pas encore lancée. Je ne t'en veux pas, on s'inscrit souvent à des choses qu'on regarde plus tard, et plus tard n'arrive jamais.</p>
-<p ${P}>Alors je vais te dire ce qu'il y a dans les trois premières minutes, pour que tu décides en connaissance de cause. Sur les 28 derniers jours, mon application m'a rapporté 21 084 euros. Je l'ai créée depuis ma chambre, sans savoir coder, et je t'explique la méthode que les grosses applications utilisent et que l'IA rend accessible à tout le monde aujourd'hui.</p>
+<p ${P}>Alors je vais te dire ce qu'il y a dans les trois premières minutes, pour que tu décides en connaissance de cause. Sur les 28 derniers jours, mon application m'a rapporté 21 084 euros. Je l'ai créée depuis ma chambre, et je t'explique la méthode que les grosses applications utilisent et que l'IA rend accessible à tout le monde aujourd'hui.</p>
 <p ${P}>Ce n'est pas une vidéo de motivation. C'est la raison pour laquelle 93 % des applications ne rapportent jamais rien, et les trois choses qui séparent celles qui gagnent des autres.</p>
 ${image(`${SITE}/emails/revenue-28-jours-21084.png`, "Tableau de bord RevenueCat : 21 084 € de revenus sur les 28 derniers jours", "Voilà ce que mon application m'a rapporté sur les 28 derniers jours.", 482)}
 <p ${P}>Elle dure 21 minutes. Regarde-la d'une traite, avec le son, c'est là que tout se joue.</p>
@@ -182,7 +182,7 @@ ${footnote(FOOT)}
 <p ${P}>Mes applications sont construites avec l'IA. Elles sont sur l'App Store depuis des années, avec des milliers d'abonnés qui payent chaque mois, et elles me rapportent des centaines de milliers d'euros chaque année. Florian n'avait jamais codé, son application est en ligne et lui rapporte de l'argent. Si le code était pourri, les utilisateurs partiraient. Ils restent.</p>
 <p ${P}>Ce que les développeurs oublient, c'est que le code n'a jamais été ce qui fait gagner de l'argent à une application. Ma première application avait un code impeccable et m'a rapporté 81 euros en trois mois. Ce qui compte, c'est que l'application résolve un vrai problème, qu'elle donne envie de payer, et qu'elle soit vue. Le code, l'IA s'en occupe. Le reste, c'est ce qu'on apprend ensemble.</p>
 ${image(`${SITE}/emails/claude-code-ecran-stats.jpg`, "Claude Code qui construit un écran de statistiques de lecture, avec le résultat affiché sur un iPhone à droite", "Cet écran d'application a été construit en quelques minutes sans écrire une ligne de code.")}
-<p ${P}>Si tu veux savoir ce que l'IA peut construire pour ton projet à toi, le plus simple est qu'on en parle. Réserve un appel, viens avec ton idée, même floue, et on te dit franchement si ça tient la route.</p>
+<p ${P}>Si tu veux qu'on construise ça avec toi, le plus simple est qu'on en parle. Réserve un appel avec Nolan, viens avec ton idée, même floue, et on te dit franchement si l'accompagnement est fait pour toi.</p>
 ${button("Réserver mon appel", url)}
 ${signature("À demain")}
 ${footnote(FOOT)}
