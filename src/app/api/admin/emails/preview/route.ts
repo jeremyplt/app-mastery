@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/admin";
 import { buildSequenceAEmail, type SequenceAStep } from "@/lib/emails/sequence-a";
 import { buildSequenceBEmail } from "@/lib/emails/sequence-b";
+import { buildSequenceCEmail, type SequenceCStep } from "@/lib/emails/sequence-c";
 import {
   BREVO_TEMPLATE_IDS,
   appelDecouverte,
@@ -40,6 +41,11 @@ function buildFromCode(tag: string): BuiltEmail | null {
     const variant = seqA[2] ? Number(seqA[2]) : 1;
     const watchSeconds = variant === 1 ? 0 : variant === 2 ? 400 : 1110;
     return buildSequenceAEmail(step, { firstName: SAMPLE_FIRST_NAME, email: "thomas@exemple.fr", watchSeconds });
+  }
+  // Séquence C : seq-c-1 à seq-c-8.
+  const seqC = /^seq-c-(\d)$/.exec(tag);
+  if (seqC) {
+    return buildSequenceCEmail(Number(seqC[1]) as SequenceCStep, { firstName: SAMPLE_FIRST_NAME, email: "thomas@exemple.fr" });
   }
   switch (tag) {
     case "seq-b-1-confirm":

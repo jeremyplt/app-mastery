@@ -3,6 +3,7 @@ import { validatePhone } from "@/lib/phone-validation";
 import { sendMetaEvent, getClientInfo } from "@/lib/meta-capi";
 import { getAdminClient } from "@/lib/supabase";
 import { appelDecouverte, metabase, planAction, vslAccess, type BuiltEmail } from "@/lib/emails/transactional";
+import { startSequenceC } from "@/lib/sequence-c";
 
 // Map lead-magnet sources to their Brevo transactional template ID and tag.
 // Keyed by `source` (the guide slug), not by list ID: tous les leads magnets
@@ -212,6 +213,10 @@ export async function POST(req: NextRequest) {
           );
         if (crmError) {
           console.error("CRM lead upsert error:", crmError.message);
+        } else if (source === "plan-action") {
+          // Séquence C : démarre à la première demande du Plan d'Action.
+          const started = await startSequenceC(email.toLowerCase());
+          console.log(`Séquence C pour ${email}: ${started}`);
         }
       } catch (err) {
         console.error("CRM lead upsert error:", err);
