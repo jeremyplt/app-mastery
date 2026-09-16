@@ -78,10 +78,10 @@ export function VideoCard({
   link,
 }: {
   src: string;
-  stat: string;
-  statLabel: string;
+  stat?: string;
+  statLabel?: string;
   delay: number;
-  link: string;
+  link?: string;
 }) {
   const previewRef = useRef<HTMLVideoElement>(null);
   const [showModal, setShowModal] = useState(false);
@@ -143,20 +143,24 @@ export function VideoCard({
           </div>
         </button>
 
-        <div className="mt-3 flex items-center justify-between px-1">
-          <div className="flex items-center gap-1.5">
-            <span className="text-2xl font-bold text-[var(--fg)]">{stat}</span>
-            <span className="text-lg text-[var(--fg2)]">{statLabel}</span>
+        {(stat || link) && (
+          <div className="mt-3 flex items-center justify-between px-1">
+            <div className="flex items-center gap-1.5">
+              {stat && <span className="text-2xl font-bold text-[var(--fg)]">{stat}</span>}
+              {statLabel && <span className="text-lg text-[var(--fg2)]">{statLabel}</span>}
+            </div>
+            {link && (
+              <a
+                href={link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm text-[var(--accent2)] hover:brightness-110 transition-[filter]"
+              >
+                Voir &rarr;
+              </a>
+            )}
           </div>
-          <a
-            href={link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-sm text-[var(--accent2)] hover:brightness-110 transition-[filter]"
-          >
-            Voir &rarr;
-          </a>
-        </div>
+        )}
       </motion.div>
 
       <AnimatePresence>

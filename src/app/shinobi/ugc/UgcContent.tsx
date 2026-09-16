@@ -1,33 +1,16 @@
 "use client";
 
 import { motion } from "framer-motion";
-import Image from "next/image";
 import Link from "next/link";
 import AdDisclaimer from "@/components/AdDisclaimer";
 import ThemeToggle from "@/components/ThemeToggle";
 import { VideoCard } from "@/components/VideoCard";
 
-// Les trois reels de Shinobi Japanese qui ont le plus tourné, avec leur
-// nombre de vues Instagram au moment de la capture.
-const REELS = [
-  {
-    src: "/proof/content-2.5M.mp4",
-    stat: "2,5 M",
-    link: "https://www.instagram.com/reel/DQVvpZuCe-p/",
-  },
-  {
-    src: "/proof/content-2.1M.mp4",
-    stat: "2,1 M",
-    link: "https://www.instagram.com/reel/DMVhjJ2J-aV/",
-  },
-  {
-    src: "/proof/content-1.9M.mp4",
-    stat: "1,9 M",
-    link: "https://www.instagram.com/reel/DP-Vu4jkuFU/",
-  },
-];
+// Les six vidéos UGC de Shinobi Japanese : des créateurs de contenu briefés
+// par nous, qui filment l'app dans leur quotidien d'apprentissage du japonais.
+const VIDEOS = [1, 2, 3, 4, 5, 6].map((i) => `/proof/influencer-videos/viral-${i}.mp4`);
 
-export default function ReelsContent() {
+export default function UgcContent() {
   return (
     <div className="min-h-screen text-[var(--fg)] antialiased">
       <div
@@ -59,30 +42,28 @@ export default function ReelsContent() {
 
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
           <div className="text-center max-w-3xl mx-auto">
-            <span className="mac-eyebrow">Marketing organique</span>
+            <span className="mac-eyebrow">Contenu viral</span>
             <h1 className="mt-4 text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.05] text-balance">
-              Les reels qui ont fait connaître{" "}
+              Les vidéos UGC qui ont fait connaître{" "}
               <span className="mac-accent">Shinobi Japanese</span>
             </h1>
             <p className="mt-6 text-lg sm:text-xl font-medium text-[var(--fg)] text-balance">
-              Trois vidéos, plus de 6 millions de vues en tout, zéro euro de pub. C&apos;est ce genre de
-              contenu, publié tous les jours, qui envoie les installations et les abonnements.
+              Des créateurs de contenu briefés par nous, qui filment l&apos;application dans leur quotidien.
+              Plusieurs millions de vues cumulées sur TikTok, Instagram Reels et YouTube Shorts.
             </p>
           </div>
 
-          <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 max-w-4xl mx-auto">
-            {REELS.map((r, i) => (
-              <VideoCard key={r.src} src={r.src} stat={r.stat} statLabel="vues" link={r.link} delay={0.15 * (i + 1)} />
+          <div className="mt-12 grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-5 max-w-4xl mx-auto">
+            {VIDEOS.map((src, i) => (
+              <VideoCard key={src} src={src} delay={0.1 * (i + 1)} />
             ))}
           </div>
 
-          <div className="mt-8 max-w-3xl mx-auto rounded-[16px] bg-[var(--card)] border-[0.5px] border-[var(--sep)] p-5 sm:p-6 flex flex-col sm:flex-row items-center gap-5">
-            <div className="w-16 h-16 shrink-0 rounded-full overflow-hidden border-[0.5px] border-[var(--sep)]">
-              <Image src="/proof/logan-v2.png" alt="Logan" width={80} height={80} className="w-full h-full object-cover" />
-            </div>
-            <p className="text-lg font-medium text-[var(--fg)] text-center sm:text-left">
-              Ces vidéos sont signées Logan, mon cofondateur sur Shinobi Japanese. C&apos;est cette méthode de
-              contenu que Florian a appliquée pour passer à plus de 120 installations par jour.
+          <div className="mt-8 max-w-3xl mx-auto rounded-[16px] bg-[var(--card)] border-[0.5px] border-[var(--sep)] p-5 sm:p-6">
+            <p className="text-lg font-medium text-[var(--fg)] text-center">
+              Trouver un créateur, c&apos;est 10 % du travail. Les 90 % restants, c&apos;est le briefer et le cadrer
+              pour qu&apos;il produise des vidéos qui explosent. C&apos;est exactement ce qu&apos;on te transmet dans
+              l&apos;accompagnement.
             </p>
           </div>
 
