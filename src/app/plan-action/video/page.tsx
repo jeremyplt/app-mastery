@@ -12,7 +12,7 @@ import ThemeToggle from "@/components/ThemeToggle";
 import Image from "next/image";
 import Link from "next/link";
 
-const PLAN_ACTION_VIDEO_ID = "a1fa42ba-337e-4cf1-b0b7-24fc7ab5be24";
+const PLAN_ACTION_VIDEO_ID = "ea7f621b-8b70-4573-a7a2-bcda8675377c";
 
 const CALENDLY_BASE = "https://calendly.com/jeremypltpro/30min";
 
