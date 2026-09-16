@@ -9,6 +9,8 @@ import posthog from "posthog-js";
 import { generateEventId, metaTrackingFields, trackMeta } from "@/lib/meta-pixel";
 import { loadOptinContact, type OptinContact } from "@/lib/optin-contact";
 import ThemeToggle from "@/components/ThemeToggle";
+import Image from "next/image";
+import Link from "next/link";
 
 const PLAN_ACTION_VIDEO_ID = "a1fa42ba-337e-4cf1-b0b7-24fc7ab5be24";
 
@@ -153,7 +155,7 @@ function PlanActionVideoContent() {
           </h1>
 
           <p className="mt-4 text-[17px] leading-relaxed text-[var(--fg2)] max-w-xl mx-auto">
-            Regarde cette vidéo pour découvrir la méthode exacte que j&apos;ai utilisée pour passer de 0 à 140 000$/an avec une app mobile.
+            Regarde cette vidéo pour découvrir la méthode exacte que j&apos;ai utilisée pour passer de 0 à plus de 30 000 € par mois avec une application mobile.
           </p>
 
           {/* Video player */}
@@ -180,13 +182,13 @@ function PlanActionVideoContent() {
             <p className="text-[19px] font-semibold text-[var(--fg)] mb-2">
               Tu souhaites te faire accompagner pour créer ton app rentable ?
             </p>
-            <div className="inline-flex items-center gap-2 rounded-[8px] bg-[color-mix(in_srgb,var(--accent)_12%,transparent)] px-3.5 py-1.5">
+            <div className="inline-flex items-center gap-2 rounded-[8px] bg-[color-mix(in_srgb,var(--orange)_14%,transparent)] px-3.5 py-1.5">
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--accent)]" />
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--orange)] opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--orange)]" />
               </span>
-              <span className="text-[13.5px] font-semibold text-[var(--accent)]">
-                9 places gratuites restantes
+              <span className="text-[13.5px] font-bold text-[var(--orange)]">
+                3 places restantes
               </span>
             </div>
             <button
@@ -203,8 +205,46 @@ function PlanActionVideoContent() {
               Réserve ton appel gratuit
             </button>
             <p className="text-[14px] text-[var(--fg2)] max-w-md">
-              Que tu aies déjà une app ou juste une idée, on définit ensemble tes prochaines étapes en 30 minutes.
+              Que tu aies déjà une app ou juste une idée, on regarde en 30 minutes si l&apos;accompagnement est fait pour toi.
             </p>
+          </motion.div>
+
+          {/* Preuve : Florian */}
+          <motion.div
+            className="mt-14 mx-auto max-w-xl text-left"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.7, duration: 0.5 }}
+          >
+            <p className="text-center text-[12px] font-bold uppercase tracking-[0.12em] text-[var(--fg2)]">
+              Il était exactement là où tu es
+            </p>
+            <div className="mt-4 flex flex-col sm:flex-row items-center gap-5 rounded-[18px] border-[0.5px] border-[var(--sep)] bg-[var(--card)] p-5">
+              <Image
+                src="/florian.jpg"
+                alt="Florian"
+                width={112}
+                height={112}
+                className="h-28 w-28 shrink-0 rounded-[16px] object-cover"
+              />
+              <div className="text-center sm:text-left">
+                <p className="text-[22px] font-bold tracking-[-0.02em] leading-tight">
+                  1 793 $ en 28 jours, sans savoir coder
+                </p>
+                <p className="mt-2 text-[15px] leading-relaxed text-[var(--fg2)]">
+                  Florian a vingt ans. Il a construit son application avec l&apos;IA, puis il a appliqué la méthode marketing tous les jours jusqu&apos;à trouver son format. Vingt-huit jours plus tard, son app lui avait rapporté 1 793 $, sans un euro de pub.
+                </p>
+                <Link
+                  href="/temoignage/florian?utm_source=plan-action-video&utm_medium=cta&utm_campaign=temoignage"
+                  className="mt-3 inline-flex items-center gap-1.5 text-[15px] font-semibold text-[var(--accent)] hover:underline"
+                >
+                  Voir son témoignage en vidéo
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                  </svg>
+                </Link>
+              </div>
+            </div>
           </motion.div>
         </motion.div>
       </div>
