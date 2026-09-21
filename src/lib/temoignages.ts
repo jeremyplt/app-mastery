@@ -49,7 +49,8 @@ export const FLORIAN: Temoignage = {
 export type MessageEleve = {
   firstName: string;
   photo: string;
-  // Capture WhatsApp entière, telle quelle (plus authentique qu'un recadrage).
+  // Capture WhatsApp : entière pour un tableau de bord (Wassim), recadrée sur
+  // la bulle pour un simple message texte (Soraya). Jeremy tranche au cas par cas.
   image: { src: string; width: number; height: number; alt: string };
   // Où il en est, en une phrase, en argent quand il y en a.
   status: string;
@@ -62,10 +63,10 @@ export const MESSAGES_ELEVES: MessageEleve[] = [
     firstName: "Soraya",
     photo: "/soraya.jpg",
     image: {
-      src: "/emails/soraya-message-v2.jpg",
-      width: 1213,
-      height: 559,
-      alt: "Conversation WhatsApp avec Soraya le lendemain du lancement de son application : premiers utilisateurs, 29 sessions le premier soir, prochaine étape le marketing",
+      src: "/emails/soraya-message-v3.jpg",
+      width: 744,
+      height: 364,
+      alt: "Message WhatsApp de Soraya le lendemain du lancement de son application : premiers utilisateurs, 29 sessions le premier soir, prochaine étape le marketing",
     },
     status: "Deux premières ventes et dix essais gratuits en cours, avec un seul post sur les réseaux",
     context:
@@ -78,10 +79,10 @@ export const MESSAGES_ELEVES: MessageEleve[] = [
       src: "/emails/wassim-message-v2.jpg",
       width: 840,
       height: 1944,
-      alt: "Conversation WhatsApp avec Wassim : ses tableaux de bord RevenueCat (premiers abonnements actifs, 83 puis 129 $ sur 28 jours, près de 600 nouveaux utilisateurs), « Lets gooo !!! » puis « Encore 1 » à minuit",
+      alt: "Conversation WhatsApp avec Wassim : ses tableaux de bord RevenueCat (premiers abonnements actifs, 83 puis 129 $ sur 28 jours, près de 600 nouveaux utilisateurs), puis « Lets gooo !!! »",
     },
     status: "Premiers abonnés payants, 129 $ et près de 600 nouveaux utilisateurs en 28 jours",
     context:
-      "Wassim m'a envoyé ce tableau de bord un soir à 21 h, avec trois mots et rien d'autre. À minuit, il m'en a renvoyé un autre avec un seul mot : « Encore 1 ». C'est petit, et c'est exactement le moment où tout commence. Florian était au même point six semaines avant ses 1 793 $.",
+      "Wassim m'a envoyé ce tableau de bord un soir à 21 h, avec trois mots et rien d'autre. C'est petit, et c'est exactement le moment où tout commence. Florian était au même point six semaines avant ses 1 793 $.",
   },
 ];
