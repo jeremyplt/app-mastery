@@ -44,11 +44,12 @@ export const FLORIAN: Temoignage = {
 
 // Messages reçus des élèves (captures WhatsApp), affichés sur /temoignages.
 // Pour ajouter un élève : déposer la capture recadrée sur la bulle dans
-// public/emails/<prenom>-message.jpg et ajouter une entrée ici.
+// public/emails/<prenom>-message-v2.jpg (nouveau nom à chaque remplacement,
+// pour le cache) et ajouter une entrée ici.
 export type MessageEleve = {
   firstName: string;
   photo: string;
-  // Capture du message, recadrée sur la bulle (sans vocal ni messages perso).
+  // Capture WhatsApp entière, telle quelle (plus authentique qu'un recadrage).
   image: { src: string; width: number; height: number; alt: string };
   // Où il en est, en une phrase, en argent quand il y en a.
   status: string;
@@ -61,10 +62,10 @@ export const MESSAGES_ELEVES: MessageEleve[] = [
     firstName: "Soraya",
     photo: "/soraya.jpg",
     image: {
-      src: "/emails/soraya-message.jpg",
-      width: 756,
-      height: 364,
-      alt: "Message WhatsApp de Soraya le lendemain du lancement de son application : premiers utilisateurs, 29 sessions le premier soir, prochaine étape le marketing",
+      src: "/emails/soraya-message-v2.jpg",
+      width: 1213,
+      height: 559,
+      alt: "Conversation WhatsApp avec Soraya le lendemain du lancement de son application : premiers utilisateurs, 29 sessions le premier soir, prochaine étape le marketing",
     },
     status: "Deux premières ventes et dix essais gratuits en cours, avec un seul post sur les réseaux",
     context:
@@ -74,10 +75,10 @@ export const MESSAGES_ELEVES: MessageEleve[] = [
     firstName: "Wassim",
     photo: "/wassim.jpg",
     image: {
-      src: "/emails/wassim-message.jpg",
-      width: 695,
-      height: 640,
-      alt: "Tableau de bord RevenueCat envoyé par Wassim : 12 essais actifs, 3 abonnements actifs, 83 $ sur 28 jours, 577 nouveaux utilisateurs en 28 jours, suivi de son message « Lets gooo !!! »",
+      src: "/emails/wassim-message-v2.jpg",
+      width: 840,
+      height: 1944,
+      alt: "Conversation WhatsApp avec Wassim : ses tableaux de bord RevenueCat (premiers abonnements actifs, 83 puis 129 $ sur 28 jours, près de 600 nouveaux utilisateurs), « Lets gooo !!! » puis « Encore 1 » à minuit",
     },
     status: "Premiers abonnés payants, 129 $ et près de 600 nouveaux utilisateurs en 28 jours",
     context:

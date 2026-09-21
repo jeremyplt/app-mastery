@@ -180,7 +180,7 @@ export default function TemoignagesContent() {
                     alt={m.image.alt}
                     width={m.image.width}
                     height={m.image.height}
-                    className="w-full md:w-[56%] shrink-0 rounded-[12px]"
+                    className={`w-full shrink-0 rounded-[12px] ${m.image.height > m.image.width ? "max-w-[360px] mx-auto md:mx-0 md:w-[36%]" : "md:w-[56%]"}`}
                   />
                   <div className="mt-4 md:mt-0">
                     <div className="flex items-center gap-3">
