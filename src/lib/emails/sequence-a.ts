@@ -132,7 +132,7 @@ ${footnote(FOOT)}
 <p ${P}>Je veux te présenter Florian, parce que son histoire répond à la question que tu te poses sûrement : est-ce que ça marche pour quelqu'un qui part de zéro ?</p>
 <p ${P}>Florian a vingt ans. Il n'avait jamais écrit une ligne de code. Il a passé quatre mois à construire son application de productivité tout seul, et il est arrivé avec une app qui fonctionnait mais qui ne transformait aucun utilisateur en client payant.</p>
 <p ${P}>On a revu tout le système de l'app pendant un mois. Puis il a appliqué la méthode marketing, tous les jours, jusqu'à trouver le format de contenu qui marche pour son app. Vingt-huit jours après l'avoir trouvé, son application lui avait rapporté 1 793 dollars, sans dépenser un euro en publicité. Aujourd'hui elle tourne à plus de cent téléchargements par jour.</p>
-${image(`${SITE}/emails/florian-revenuecat-1793.jpg`, "Tableau de bord RevenueCat de Florian : 1 793 $ de revenus sur 28 jours, 70 abonnements actifs", "Voilà le tableau de bord que Florian a montré en live aux autres élèves.")}
+${image(`${SITE}/emails/florian-revenuecat-1793-v2.jpg`, "Tableau de bord RevenueCat de Florian : 1 793 $ de revenus sur 28 jours, 70 abonnements actifs", "Voilà le tableau de bord que Florian a montré en live aux autres élèves.")}
 <p ${P}>Ce que je retiens, c'est ce qu'il a dit lui-même devant les autres élèves : quand on prend un accompagnement, on est débutant, on ne sait pas mieux, alors on applique ce qu'on nous dit et on regarde le résultat plus tard.</p>
 <p ${P}>Il raconte tout en vidéo, ses vrais chiffres à l'écran.</p>
 ${button("Voir le témoignage de Florian", url)}

@@ -196,7 +196,7 @@ ${image(`${SITE}/florian.jpg`, "Florian", "Voilà Florian. Il raconte toute son 
 <li ${LI}><b>Il a appliqué la méthode marketing tous les jours,</b> jusqu'à trouver le format de contenu qui marche pour son app.</li>
 </ol>
 <p ${P}>Vingt-huit jours après l'avoir trouvé, son application lui avait rapporté 1 793 dollars, sans un euro de publicité. Aujourd'hui, elle fait plus de cent téléchargements par jour.</p>
-${image(`${SITE}/emails/florian-revenuecat-1793.jpg`, "Tableau de bord RevenueCat de Florian : 1 793 $ de revenus sur 28 jours, 70 abonnements actifs", "Voilà le tableau de bord que Florian a montré en live aux autres élèves.")}
+${image(`${SITE}/emails/florian-revenuecat-1793-v2.jpg`, "Tableau de bord RevenueCat de Florian : 1 793 $ de revenus sur 28 jours, 70 abonnements actifs", "Voilà le tableau de bord que Florian a montré en live aux autres élèves.")}
 <p ${P}>Ce qu'il a dit devant les autres élèves, c'est que quand on prend un accompagnement, on est débutant, on ne sait pas mieux, alors on applique ce qu'on nous dit et on regarde le résultat plus tard.</p>
 <p ${P}>Wassim et Soraya ont suivi le même chemin, et plusieurs de mes élèves dépassent aujourd'hui 2 000 euros par mois. La différence avec ceux qui restent bloqués, ce n'est ni le talent ni le code. C'est qu'ils ont eu quelqu'un qui regardait leur projet de l'extérieur.</p>
 <p ${P}>Florian raconte tout ça lui-même en vidéo, avec ses vrais chiffres à l'écran. Prends dix minutes pour la regarder, c'est la meilleure façon de savoir si tu te reconnais dans son parcours.</p>

@@ -117,7 +117,7 @@ export default function TemoignagesContent() {
 
             <Card>
               <Image
-                src="/emails/florian-revenuecat-1793.jpg"
+                src="/emails/florian-revenuecat-1793-v2.jpg"
                 alt="Tableau de bord RevenueCat de Florian : 1 793 $ sur 28 jours"
                 width={955}
                 height={445}
