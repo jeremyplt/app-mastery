@@ -81,8 +81,8 @@ export const MESSAGES_ELEVES: MessageEleve[] = [
       height: 1944,
       alt: "Conversation WhatsApp avec Wassim : ses tableaux de bord RevenueCat (premiers abonnements actifs, 83 puis 129 $ sur 28 jours, près de 600 nouveaux utilisateurs), puis « Lets gooo !!! »",
     },
-    status: "Premiers abonnés payants, 129 $ et près de 600 nouveaux utilisateurs en 28 jours",
+    status: "Premiers abonnés payants et premiers 129 $",
     context:
-      "Wassim m'a envoyé ce tableau de bord un soir à 21 h. C'est petit, et c'est exactement le moment où tout commence. Florian était au même point six semaines avant ses 1 793 $.",
+      "Wassim m'a envoyé ce tableau de bord un soir à 21 h. C'est là que tout commence. Florian était au même point six semaines avant ses 1 793 $.",
   },
 ];
