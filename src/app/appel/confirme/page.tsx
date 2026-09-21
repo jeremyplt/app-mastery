@@ -229,6 +229,13 @@ function ConfirmeContent() {
               >
                 Voir son parcours complet, étape par étape
               </Link>
+              <span className="text-[15px] font-semibold text-[var(--fg2)]">·</span>
+              <Link
+                href="/temoignages?utm_source=appel-confirme&utm_medium=cta&utm_campaign=temoignages"
+                className="text-[15px] font-semibold text-[var(--accent2)] hover:underline"
+              >
+                Tous les résultats des élèves
+              </Link>
             </div>
           </div>
 

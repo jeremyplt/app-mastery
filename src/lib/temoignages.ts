@@ -41,3 +41,33 @@ export const FLORIAN: Temoignage = {
     { value: "0 €", label: "de publicité", detail: "100 % de contenu organique, posté depuis son téléphone" },
   ],
 };
+
+// Messages reçus des élèves (captures WhatsApp), affichés sur /temoignages.
+// Pour ajouter un élève : déposer la capture recadrée sur la bulle dans
+// public/emails/<prenom>-message.jpg et ajouter une entrée ici.
+export type MessageEleve = {
+  firstName: string;
+  photo: string;
+  // Capture du message, recadrée sur la bulle (sans vocal ni messages perso).
+  image: { src: string; width: number; height: number; alt: string };
+  // Où il en est, en une phrase, en argent quand il y en a.
+  status: string;
+  // Le contexte du message, dans les mots de Jeremy.
+  context: string;
+};
+
+export const MESSAGES_ELEVES: MessageEleve[] = [
+  {
+    firstName: "Soraya",
+    photo: "/soraya.jpg",
+    image: {
+      src: "/emails/soraya-message.jpg",
+      width: 756,
+      height: 364,
+      alt: "Message WhatsApp de Soraya le lendemain du lancement de son application : premiers utilisateurs, 29 sessions le premier soir, prochaine étape le marketing",
+    },
+    status: "Application lancée en septembre 2026, premiers utilisateurs dès le premier soir",
+    context:
+      "Soraya est arrivée sans savoir coder. Elle a construit son application avec l'IA, l'a publiée, et m'a envoyé ce message le lendemain matin de son lancement. Sa prochaine étape, c'est le marketing, comme pour tout le monde.",
+  },
+];

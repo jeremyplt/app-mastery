@@ -281,6 +281,12 @@ export default function FlorianContent() {
             <p className="mt-5 text-[14px] font-medium text-[var(--fg2)]">
               Par Jeremy, créateur de Shinobi Japanese
             </p>
+            <Link
+              href="/temoignages?utm_source=temoignage-florian&utm_medium=cta&utm_campaign=temoignages"
+              className="mt-3 inline-flex text-[15px] font-bold text-[var(--accent)] hover:underline"
+            >
+              Voir les résultats des autres élèves
+            </Link>
           </section>
         </motion.div>
       </div>

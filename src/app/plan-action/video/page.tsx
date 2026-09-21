@@ -46,7 +46,7 @@ function Places() {
         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--orange)] opacity-75" />
         <span className="relative inline-flex rounded-full h-2 w-2 bg-[var(--orange)]" />
       </span>
-      <span className="text-[14px] font-bold text-[var(--orange)]">3 places restantes</span>
+      <span className="text-[14px] font-bold text-[var(--orange)]">2 places restantes</span>
     </div>
   );
 }
@@ -295,6 +295,16 @@ function PlanActionVideoContent() {
               />
               <p className="mt-4 sm:mt-0 text-[16px] font-medium leading-relaxed">
                 Florian, Wassim et Soraya ont passé ce même appel il y a quelques mois. Aucun des trois ne savait faire connaître une application en arrivant. Plusieurs de mes élèves dépassent aujourd&apos;hui 2 000 € par mois.
+                <br />
+                <Link
+                  href="/temoignages?utm_source=plan-action-video&utm_medium=cta&utm_campaign=temoignages"
+                  className="mt-2 inline-flex items-center gap-1.5 text-[15px] font-bold text-[var(--accent)] hover:underline"
+                >
+                  Voir tous les résultats de mes élèves
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                  </svg>
+                </Link>
               </p>
             </div>
           </motion.div>
