@@ -43,3 +43,9 @@ public/videos/presentation-original.mp4
 public/videos/vsl.mov
 public/videos/vsl-original.mov
 
+
+# Captures déposées par Jeremy pour les emails (pas versionnées)
+captures/
+
+# Worktrees git créés par Claude Code (pas versionnés)
+.claude/worktrees/
