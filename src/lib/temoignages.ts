@@ -83,6 +83,6 @@ export const MESSAGES_ELEVES: MessageEleve[] = [
     },
     status: "Premiers abonnés payants, 129 $ et près de 600 nouveaux utilisateurs en 28 jours",
     context:
-      "Wassim m'a envoyé ce tableau de bord un soir à 21 h, avec trois mots et rien d'autre. C'est petit, et c'est exactement le moment où tout commence. Florian était au même point six semaines avant ses 1 793 $.",
+      "Wassim m'a envoyé ce tableau de bord un soir à 21 h. C'est petit, et c'est exactement le moment où tout commence. Florian était au même point six semaines avant ses 1 793 $.",
   },
 ];
