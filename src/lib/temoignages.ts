@@ -70,4 +70,17 @@ export const MESSAGES_ELEVES: MessageEleve[] = [
     context:
       "Soraya est arrivée sans savoir coder. Elle a construit son application avec l'IA, l'a publiée, et m'a envoyé ce message le lendemain matin de son lancement. Sa prochaine étape, c'est le marketing, comme pour tout le monde.",
   },
+  {
+    firstName: "Wassim",
+    photo: "/wassim.jpg",
+    image: {
+      src: "/emails/wassim-message.jpg",
+      width: 695,
+      height: 640,
+      alt: "Tableau de bord RevenueCat envoyé par Wassim : 12 essais actifs, 3 abonnements actifs, 83 $ sur 28 jours, 577 nouveaux utilisateurs en 28 jours, suivi de son message « Lets gooo !!! »",
+    },
+    status: "Premiers abonnés payants, 129 $ et près de 600 nouveaux utilisateurs en 28 jours",
+    context:
+      "Wassim m'a envoyé ce tableau de bord un soir à 21 h, avec trois mots et rien d'autre. À minuit, il m'en a renvoyé un autre avec un seul mot : « Encore 1 ». C'est petit, et c'est exactement le moment où tout commence. Florian était au même point six semaines avant ses 1 793 $.",
+  },
 ];
