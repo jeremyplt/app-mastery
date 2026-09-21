@@ -191,6 +191,18 @@ export default function TemoignagesContent() {
                       </div>
                     </div>
                     <p className="mt-3 text-[15.5px] font-medium leading-relaxed">{m.context}</p>
+                    {m.result && (
+                      <div className="mt-4">
+                        <Image
+                          src={m.result.src}
+                          alt={m.result.alt}
+                          width={m.result.width}
+                          height={m.result.height}
+                          className="w-full rounded-[12px]"
+                        />
+                        <p className="mt-2 text-[13.5px] font-medium text-[var(--fg2)]">{m.result.caption}</p>
+                      </div>
+                    )}
                   </div>
                 </Card>
               ))}

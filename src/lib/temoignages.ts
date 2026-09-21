@@ -56,6 +56,8 @@ export type MessageEleve = {
   status: string;
   // Le contexte du message, dans les mots de Jeremy.
   context: string;
+  // Capture de résultat (tableau de bord) à afficher sous le message, si on en a une.
+  result?: { src: string; width: number; height: number; alt: string; caption: string };
 };
 
 export const MESSAGES_ELEVES: MessageEleve[] = [
@@ -68,9 +70,16 @@ export const MESSAGES_ELEVES: MessageEleve[] = [
       height: 364,
       alt: "Message WhatsApp de Soraya le lendemain du lancement de son application : premiers utilisateurs, 29 sessions le premier soir, prochaine étape le marketing",
     },
-    status: "Deux premières ventes et dix essais gratuits en cours, avec un seul post sur les réseaux",
+    status: "Deux premières ventes, 115 $ sur 28 jours et cinq essais en cours, avec un seul post sur les réseaux",
+    result: {
+      src: "/emails/soraya-dashboard-115.jpg",
+      width: 1477,
+      height: 464,
+      alt: "Tableau de bord RevenueCat de Soraya : 2 abonnements actifs, 5 essais en cours, 115 $ sur 28 jours, 196 nouveaux utilisateurs",
+      caption: "Le tableau de bord de Soraya aujourd'hui, avec un seul post publié.",
+    },
     context:
-      "Soraya est arrivée sans savoir coder. Elle a construit son application avec l'IA, l'a publiée, et m'a envoyé ce message le lendemain matin de son lancement. Depuis, elle a fait ses deux premières ventes et elle a dix essais gratuits en cours, avec un seul post sur les réseaux. Sa prochaine étape, c'est le marketing, comme pour tout le monde.",
+      "Soraya est arrivée sans savoir coder. Elle a construit son application avec l'IA, l'a publiée, et m'a envoyé ce message le lendemain matin de son lancement. Depuis, elle a fait ses deux premières ventes, 115 $ sur 28 jours, et elle a cinq essais gratuits en cours, avec un seul post sur les réseaux. Sa prochaine étape, c'est le marketing, comme pour tout le monde.",
   },
   {
     firstName: "Wassim",
