@@ -66,9 +66,9 @@ export const MESSAGES_ELEVES: MessageEleve[] = [
       height: 364,
       alt: "Message WhatsApp de Soraya le lendemain du lancement de son application : premiers utilisateurs, 29 sessions le premier soir, prochaine étape le marketing",
     },
-    status: "Application lancée en septembre 2026, premiers utilisateurs dès le premier soir",
+    status: "Deux premières ventes et dix essais gratuits en cours, avec un seul post sur les réseaux",
     context:
-      "Soraya est arrivée sans savoir coder. Elle a construit son application avec l'IA, l'a publiée, et m'a envoyé ce message le lendemain matin de son lancement. Sa prochaine étape, c'est le marketing, comme pour tout le monde.",
+      "Soraya est arrivée sans savoir coder. Elle a construit son application avec l'IA, l'a publiée, et m'a envoyé ce message le lendemain matin de son lancement. Depuis, elle a fait ses deux premières ventes et elle a dix essais gratuits en cours, avec un seul post sur les réseaux. Sa prochaine étape, c'est le marketing, comme pour tout le monde.",
   },
   {
     firstName: "Wassim",

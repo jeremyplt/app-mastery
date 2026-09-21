@@ -131,7 +131,7 @@ export default function TemoignagesContent() {
                 </p>
               </div>
               <p className="mt-2 text-[15px] font-medium leading-relaxed">
-                Vingt ans, jamais codé. Il a construit {florian.appName} avec l&apos;IA, puis il a appliqué la méthode marketing tous les jours jusqu&apos;à trouver son format. Sans un euro de pub.
+                Mon tout premier élève. Vingt ans, jamais codé. Il a construit {florian.appName} avec l&apos;IA, puis il a appliqué la méthode marketing tous les jours jusqu&apos;à trouver son format. Sans un euro de pub.
               </p>
               <Link
                 href={`/temoignage/${florian.slug}?utm_source=temoignages&utm_medium=cta&utm_campaign=temoignage`}
