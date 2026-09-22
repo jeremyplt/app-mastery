@@ -14,9 +14,16 @@ export const SEQUENCE_C_LAST_STEP = 8;
 export type SequenceCContext = {
   firstName: string;
   email: string;
+  // Porte d'entrée dans la séquence : le Plan d'Action (défaut) ou un lead
+  // magnet en rapport avec les apps mobiles (checklist des 27 règles, guide
+  // monétisation). Seuls le pied de page et deux passages changent.
+  source?: "plan-action" | "guide";
 };
 
-const FOOT = "Tu reçois cet email parce que tu as demandé le Plan d'Action. Dès que tu réserves ton appel, ces emails s'arrêtent.";
+function foot(ctx: SequenceCContext): string {
+  const origin = ctx.source === "guide" ? "tu as demandé un de mes guides gratuits" : "tu as demandé le Plan d'Action";
+  return `Tu reçois cet email parce que ${origin}. Dès que tu réserves ton appel, ces emails s'arrêtent.`;
+}
 
 // Lien de réservation, pré-rempli : le prospect a déjà tout donné à l'optin.
 function bookingUrl(ctx: SequenceCContext, campaign: string): string {
@@ -42,6 +49,7 @@ export function buildSequenceCEmail(step: SequenceCStep, ctx: SequenceCContext):
   const booking = bookingUrl(ctx, tag);
   const florianUrl = utm(`${SITE}/temoignage/florian`, tag);
   const accompagnementUrl = utm(`${SITE}/accompagnement`, tag);
+  const planActionUrl = utm(`${SITE}/plan-action/video`, tag);
 
   if (step === 1) {
     const html = wrap(`
@@ -65,8 +73,12 @@ ${image(`${SITE}/eleves-appel.jpg`, "Florian, Wassim et Soraya, trois élèves d
 ${button("Réserver mon appel", booking)}
 <p ${P}>Demain, je te dis pourquoi le code ne sera jamais un problème pour toi non plus.</p>
 ${signature("À demain")}
-${ps(`Si tu n'as pas encore regardé le Plan d'Action, fais-le avant l'email de demain, tu comprendras mieux la suite.`)}
-${footnote(FOOT)}
+${ps(
+    ctx.source === "guide"
+      ? `Tu as le guide. Pour la méthode complète, de l'idée au marketing, regarde le Plan d'Action avant l'email de demain : <a href="${planActionUrl}" style="color:#0060df">voir le Plan d'Action</a>.`
+      : `Si tu n'as pas encore regardé le Plan d'Action, fais-le avant l'email de demain, tu comprendras mieux la suite.`,
+  )}
+${footnote(foot(ctx))}
 `);
     return { subject: subjectWithName(first, "pourquoi Shinobi a marché dès le premier mois", "Pourquoi shinobi a marché dès le premier mois"), html, tag: "seq-c-1", preview: "Ce n'est pas grâce au code. Je suis développeur, et pourtant." };
   }
@@ -89,7 +101,7 @@ ${image(`${SITE}/emails/claude-code-ecran-stats.jpg`, "Claude Code qui construit
 ${button("Réserver mon appel", booking)}
 <p ${P}>Demain, je te donne une méthode concrète pour savoir en 48 heures si ton idée vaut le coup, avant d'y passer trois mois.</p>
 ${signature("À demain")}
-${footnote(FOOT)}
+${footnote(foot(ctx))}
 `);
     return { subject: "Le code n'a jamais été ton problème", html, tag: "seq-c-2", preview: "En 2026, tout le monde peut faire une application qui marche. Et après ?" };
   }
@@ -111,7 +123,7 @@ ${image(`${SITE}/emails/app-store-niche-budget.jpg`, "Résultats de recherche Ap
 ${button("Réserver mon appel", booking)}
 <p ${P}>Demain, je te montre la stratégie qui a fait des millions de vues à Shinobi, sans un euro de pub.</p>
 ${signature("À bientôt")}
-${footnote(FOOT)}
+${footnote(foot(ctx))}
 `);
     return { subject: "Comment valider ton idée d'app en 48 heures", html, tag: "seq-c-3", preview: "La méthode exacte, à appliquer ce soir, sans écrire une ligne de code." };
   }
@@ -135,7 +147,7 @@ ${button("Réserver mon appel", booking)}
 <p ${P}>Demain, on parle argent. Je t'explique quel modèle de prix choisir, et les erreurs qui font perdre des mois de revenus.</p>
 ${signature("À bientôt")}
 ${ps(`Cette stratégie marche pour n'importe quelle niche. Le principe reste le même partout : tu fais du contenu natif, tu en fais beaucoup, et tu soignes la première seconde.`)}
-${footnote(FOOT)}
+${footnote(foot(ctx))}
 `);
     return { subject: subjectWithName(first, "des millions de vues sans un euro de pub", "Des millions de vues sans un euro de pub"), html, tag: "seq-c-4", preview: "Ce qu'on a fait exactement, et pourquoi tu peux le copier ce soir." };
   }
@@ -162,7 +174,7 @@ ${image(`${SITE}/emails/revenue-mensuel-sep25-juin26.jpg`, "Courbe des revenus m
 ${button("Réserver mon appel", booking)}
 <p ${P}>Demain, je t'envoie un email un peu différent, sur les raisons pour lesquelles certaines applications restent à zéro téléchargement pendant des mois.</p>
 ${signature("À bientôt")}
-${footnote(FOOT)}
+${footnote(foot(ctx))}
 `);
     return { subject: "Le modèle de prix qui convertit le mieux", html, tag: "seq-c-5", preview: "L'erreur qui m'a coûté des milliers d'euros, et ce qui marche aujourd'hui." };
   }
@@ -179,7 +191,7 @@ ${image(`${SITE}/emails/giga-banque-de-contenu-floutee.jpg`, "Six pages floutée
 ${button("Réserver mon appel", booking)}
 <p ${P}>Demain, je te présente Florian, qui était exactement là où tu es il y a quelques mois.</p>
 ${signature("À demain")}
-${footnote(FOOT)}
+${footnote(foot(ctx))}
 `);
     return { subject: "Ton app est sur l'App Store et il ne se passe rien", html, tag: "seq-c-6", preview: "La seule chose qui amène des téléchargements, et elle n'est pas dans l'application." };
   }
@@ -203,7 +215,7 @@ ${image(`${SITE}/emails/florian-revenuecat-1793-v2.jpg`, "Tableau de bord Revenu
 ${button("Voir le témoignage de Florian", florianUrl)}
 <p ${P}>Et si tu veux que ce soit ton tour, ça commence par un appel de trente minutes avec nous, pour voir si l'accompagnement est fait pour toi. Tu peux <a href="${booking}" style="color:#0060df">réserver ton appel ici</a>.</p>
 ${signature("À bientôt")}
-${footnote(FOOT)}
+${footnote(foot(ctx))}
 `);
     return { subject: "1 793 $ en 28 jours, sans savoir coder", html, tag: "seq-c-7", preview: "Florian a vingt ans, il n'avait jamais écrit une ligne de code, et voilà ce qu'il a fait." };
   }
@@ -232,11 +244,11 @@ ${imagePair({ src: `${SITE}/emails/nolan-appel.jpg`, alt: "Nolan en appel vidéo
 <li ${LI}><b>Les places sont limitées.</b> Le suivi personnel, c'est moi qui le fais, et je ne peux pas suivre cinquante personnes en même temps.</li>
 <li ${LI}><b>Le prix va augmenter.</b> Mon process s'est affiné, les résultats des élèves arrivent plus vite, et ceux qui réservent maintenant gardent les conditions actuelles.</li>
 </ol>
-<p ${P}>Si ce n'est vraiment pas le moment, aucun souci, tu gardes le Plan d'Action et tu recevras mes vidéos. Mais si tu hésites depuis une semaine, c'est sans doute que tu as envie d'y aller. Dans ce cas, c'est maintenant.</p>
+<p ${P}>Si ce n'est vraiment pas le moment, aucun souci, tu gardes ${ctx.source === "guide" ? "le guide" : "le Plan d'Action"} et tu recevras mes vidéos. Mais si tu hésites depuis une semaine, c'est sans doute que tu as envie d'y aller. Dans ce cas, c'est maintenant.</p>
 ${button("Réserver mon appel", booking)}
 ${signature("Merci d'avoir lu jusqu'ici")}
 ${ps(`Si tu as une question, réponds à cet email. Je lis tout et je réponds personnellement. Et si tu veux revoir l'histoire de Florian avant de te décider, elle est ici : <a href="${florianUrl}" style="color:#0060df">le témoignage de Florian</a>.`)}
-${footnote(FOOT)}
+${footnote(foot(ctx))}
 `);
     return { subject: subjectWithName(first, "mon dernier email, et une mauvaise nouvelle", "Mon dernier email, et une mauvaise nouvelle"), html, tag: "seq-c-8", preview: "Les places sont limitées et le prix de l'accompagnement va augmenter." };
   }

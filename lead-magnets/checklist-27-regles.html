@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Les 27 règles des apps qui rapportent</title>
+<style>
+  @page { size: A4; margin: 0; }
+  * { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  html, body { margin: 0; padding: 0; }
+  body { font-family: -apple-system, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif; color: #111; background: #fff; font-size: 12.5pt; line-height: 1.45; }
+  .page { width: 210mm; height: 297mm; padding: 18mm 18mm 16mm; page-break-after: always; position: relative; overflow: hidden; }
+  .page:last-child { page-break-after: auto; }
+
+  /* Cover */
+  .cover { background: #0a0a0a; color: #fff; display: flex; flex-direction: column; justify-content: space-between; }
+  .cover .kicker { color: #0A84FF; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; font-size: 11pt; }
+  .cover h1 { font-size: 44pt; line-height: 1.05; margin: 14mm 0 8mm; font-weight: 800; letter-spacing: -0.02em; }
+  .cover h1 span { color: #0A84FF; }
+  .cover .sub { font-size: 16pt; color: #d0d0d0; max-width: 150mm; }
+  .cover .bottom { display: flex; justify-content: space-between; align-items: flex-end; }
+  .cover .author { font-size: 13pt; font-weight: 700; }
+  .cover .author small { display: block; font-weight: 400; color: #9a9a9a; font-size: 10.5pt; margin-top: 2mm; }
+  .cover .badge { background: #0A84FF; color: #fff; border-radius: 12px; padding: 5mm 7mm; font-weight: 700; font-size: 12pt; text-align: center; line-height: 1.25; }
+  .cover .badge small { display: block; font-weight: 400; font-size: 9.5pt; opacity: .9; }
+
+  /* Interior */
+  h2 { font-size: 22pt; font-weight: 800; letter-spacing: -0.01em; margin: 0 0 3mm; }
+  h2 .num { color: #0A84FF; }
+  .lead { font-size: 12.5pt; color: #333; margin: 0 0 7mm; }
+  .part-kicker { color: #0A84FF; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; font-size: 9.5pt; margin-bottom: 1.5mm; }
+  .rule { display: flex; gap: 4mm; padding: 3.2mm 0; border-bottom: 1px solid #e6e6e6; }
+  .rule:last-child { border-bottom: none; }
+  .box { flex: 0 0 auto; width: 6mm; height: 6mm; border: 2px solid #0A84FF; border-radius: 4px; margin-top: 1mm; }
+  .rule .n { flex: 0 0 9mm; font-weight: 800; color: #0A84FF; font-size: 13pt; margin-top: .2mm; }
+  .rule .t { font-weight: 700; font-size: 12.5pt; }
+  .rule .d { color: #444; font-size: 11pt; margin-top: .8mm; }
+  .footer { position: absolute; left: 18mm; right: 18mm; bottom: 8mm; display: flex; justify-content: space-between; font-size: 9pt; color: #888; border-top: 1px solid #e6e6e6; padding-top: 2.5mm; }
+  .callout { background: #f2f6ff; border-left: 4px solid #0A84FF; border-radius: 6px; padding: 4mm 5mm; margin: 5mm 0; font-size: 11.5pt; }
+  .callout b { color: #0A84FF; }
+
+  /* Intro page */
+  .intro p { margin: 0 0 4mm; }
+  .intro .stat { display: flex; gap: 6mm; margin: 6mm 0 8mm; }
+  .intro .stat div { flex: 1; background: #0a0a0a; color: #fff; border-radius: 12px; padding: 5mm; }
+  .intro .stat b { display: block; font-size: 22pt; color: #0A84FF; letter-spacing: -0.02em; }
+  .intro .stat span { font-size: 10pt; color: #cfcfcf; }
+  ol.how { padding-left: 6mm; margin: 0; }
+  ol.how li { margin-bottom: 2.5mm; }
+
+  /* CTA page */
+  .cta { background: #0a0a0a; color: #fff; display: flex; flex-direction: column; justify-content: center; }
+  .cta h2 { color: #fff; font-size: 30pt; }
+  .cta h2 span { color: #0A84FF; }
+  .cta p { color: #d0d0d0; font-size: 13pt; max-width: 155mm; }
+  .cta .btn { display: inline-block; background: #0A84FF; color: #fff; font-weight: 800; padding: 5mm 8mm; border-radius: 12px; font-size: 14pt; margin: 6mm 0 3mm; text-decoration: none; }
+  .cta .url { color: #9a9a9a; font-size: 10.5pt; word-break: break-all; }
+  .cta ul { color: #d0d0d0; padding-left: 6mm; }
+  .cta ul li { margin-bottom: 2mm; }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<section class="page cover">
+  <div>
+    <div class="kicker">Checklist gratuite</div>
+    <h1>Les 27 règles<br>des apps <span>qui rapportent</span></h1>
+    <div class="sub">Ce que j'ai retenu en analysant 300 applications : onboarding, paywall et boucle de récompense. À garder ouverte à côté de toi pendant que tu construis ton app.</div>
+  </div>
+  <div class="bottom">
+    <div class="author">Jeremy Pitault<small>Créateur de Shinobi Japanese, 400 000 $ par an avec une seule app</small></div>
+    <div class="badge">27 règles<small>3 parties, 1 case à cocher par règle</small></div>
+  </div>
+</section>
+
+<!-- INTRO -->
+<section class="page intro">
+  <h2>Comment utiliser cette checklist</h2>
+  <p class="lead">Ces règles ne sortent pas d'un livre. Je les ai testées sur mon app de japonais et sur les apps des élèves que j'accompagne, qui font leurs premières ventes sans savoir coder.</p>
+  <div class="stat">
+    <div><b>300</b><span>apps analysées ces derniers mois</span></div>
+    <div><b>400 000 $</b><span>par an avec mon app Shinobi Japanese</span></div>
+    <div><b>27</b><span>règles qui séparent les apps qui rapportent des autres</span></div>
+  </div>
+  <ol class="how">
+    <li><b>Ouvre ton app à côté de cette liste</b> et passe chaque règle une par une. Coche la case seulement si ton app la respecte vraiment aujourd'hui.</li>
+    <li><b>Compte tes cases cochées.</b> Moins de 15 sur 27 : ton app perd de l'argent avant même le paywall. Entre 15 et 22 : tu as une base, il reste des fuites. Plus de 22 : tu es devant 90 % des apps que j'ai vues.</li>
+    <li><b>Corrige dans l'ordre des parties.</b> L'onboarding d'abord, le paywall ensuite, la boucle de récompense en dernier. Chaque partie dépend de la précédente.</li>
+    <li><b>Refais le test à chaque mise à jour.</b> Une app qui rapporte, c'est une app qu'on mesure.</li>
+  </ol>
+  <div class="callout"><b>Précision :</b> ces règles s'appliquent aux apps qui résolvent un problème (apprentissage, productivité, santé, sport, apparence). Pas aux jeux ni aux réseaux sociaux.</div>
+  <div class="footer"><span>Les 27 règles des apps qui rapportent</span><span>jeremypitault.com</span></div>
+</section>
+
+<!-- PART 1 -->
+<section class="page">
+  <div class="part-kicker">Partie 1 · Règles 1 à 8</div>
+  <h2>L'onboarding</h2>
+  <p class="lead">C'est là que 90 % des apps perdent leur argent, avant même d'avoir montré le paywall.</p>
+
+  <div class="rule"><div class="box"></div><div class="n">1</div><div><div class="t">La longueur dépend de ta niche et de ton offre</div><div class="d">Il n'y a pas de bonne longueur dans l'absolu. Elle dépend de ta niche et de ce que tu vends derrière : hard paywall ou pas, essai gratuit ou pas.</div></div></div>
+  <div class="rule"><div class="box"></div><div class="n">2</div><div><div class="t">Hard paywall ou essai gratuit : onboarding long</div><div class="d">Tu dois démontrer la valeur avant de demander la carte.</div></div></div>
+  <div class="rule"><div class="box"></div><div class="n">3</div><div><div class="t">Sinon, jamais court : 10 étapes minimum</div><div class="d">Moyen ou long, mais pas court. Un onboarding moyen, c'est au moins 10 étapes.</div></div></div>
+  <div class="rule"><div class="box"></div><div class="n">4</div><div><div class="t">Suis la structure RADAR</div><div class="d">Récolte, Affirmation, Démonstration, Autorisation, Révélation. Toujours dans cet ordre.</div></div></div>
+  <div class="rule"><div class="box"></div><div class="n">5</div><div><div class="t">But n°1 : l'Information</div><div class="d">Récupère les informations dont tu as besoin sur ton persona cible.</div></div></div>
+  <div class="rule"><div class="box"></div><div class="n">6</div><div><div class="t">But n°2 : la Douleur</div><div class="d">Appuie sur le problème de l'utilisateur, en pensant déjà au paywall qui arrive.</div></div></div>
+  <div class="rule"><div class="box"></div><div class="n">7</div><div><div class="t">But n°3 : l'Empathie</div><div class="d">Montre que tu comprends sa douleur et qu'il est au bon endroit.</div></div></div>
+  <div class="rule"><div class="box"></div><div class="n">8</div><div><div class="t">But n°4 : l'Autorité</div><div class="d">Il doit être convaincu que ton app est la bonne pour résoudre son problème.</div></div></div>
+
+  <div class="footer"><span>Partie 1 · L'onboarding</span><span>jeremypitault.com</span></div>
+</section>
+
+<!-- PART 2 -->
+<section class="page">
+  <div class="part-kicker">Partie 2 · Règles 9 à 14</div>
+  <h2>Le paywall</h2>
+  <p class="lead">Le meilleur onboarding du monde ne sert à rien si le paywall est mauvais.</p>
+
+  <div class="rule"><div class="box"></div><div class="n">9</div><div><div class="t">Le paywall arrive au pic de motivation</div><div class="d">Juste après l'effet wow. Trop tôt, il n'a rien vu. Trop tard, il est redescendu.</div></div></div>
+  <div class="rule"><div class="box"></div><div class="n">10</div><div><div class="t">Simple, zéro confusion</div><div class="d">Chaque élément qui crée une question dans sa tête te coûte des ventes.</div></div></div>
+  <div class="rule"><div class="box"></div><div class="n">11</div><div><div class="t">Une seule offre mise en avant</div><div class="d">L'utilisateur doit pouvoir déconnecter son cerveau, appuyer sur le bouton, et savoir en un clin d'œil qu'il a pris la meilleure offre et la meilleure affaire. Il ne compare pas.</div></div></div>
+  <div class="rule"><div class="box"></div><div class="n">12</div><div><div class="t">Mise en avant par la couleur</div><div class="d">L'offre que tu veux vendre est la seule en couleur.</div></div></div>
+  <div class="rule"><div class="box"></div><div class="n">13</div><div><div class="t">Mise en avant par le prix</div><div class="d">Elle doit apparaître comme la moins chère, ramenée au mois par exemple.</div></div></div>
+  <div class="rule"><div class="box"></div><div class="n">14</div><div><div class="t">Mise en avant par les avantages</div><div class="d">L'essai gratuit ou un bonus, uniquement sur cette offre.</div></div></div>
+
+  <div class="callout"><b>À la moitié.</b> Si tu as coché moins de 8 cases sur ces 14, corrige l'onboarding et le paywall avant de toucher à quoi que ce soit d'autre. C'est là que l'argent se perd le plus vite.</div>
+
+  <div class="footer"><span>Partie 2 · Le paywall</span><span>jeremypitault.com</span></div>
+</section>
+
+<!-- PART 3a -->
+<section class="page">
+  <div class="part-kicker">Partie 3 · Règles 15 à 21</div>
+  <h2>La boucle de récompense</h2>
+  <p class="lead">Ce qui fait qu'un utilisateur revient tous les jours au lieu de résilier au bout d'un mois.</p>
+
+  <div class="rule"><div class="box"></div><div class="n">15</div><div><div class="t">Ta boucle a 4 temps</div><div class="d">Un déclencheur, une action, une récompense variable, un investissement. Ça garde les utilisateurs sur le long terme, augmente la conversion et baisse le churn.</div></div></div>
+  <div class="rule"><div class="box"></div><div class="n">16</div><div><div class="t">Le déclencheur passe d'externe à interne</div><div class="d">Duolingo : la notification de 19 h « Ta série de 47 jours va expirer ». Avec le temps, l'utilisateur ouvre l'app sans notification. Ton app devient un réflexe émotionnel.</div></div></div>
+  <div class="rule"><div class="box"></div><div class="n">17</div><div><div class="t">L'action est minuscule</div><div class="d">Une leçon de 3 minutes. Plus la friction est basse, plus la boucle tourne.</div></div></div>
+  <div class="rule"><div class="box"></div><div class="n">18</div><div><div class="t">La récompense est variable</div><div class="d">XP qui varient, combos, coffres, ligue où on monte ou on se fait dépasser. Si la récompense est identique à chaque fois, le cerveau s'habitue et l'effet s'effondre.</div></div></div>
+  <div class="rule"><div class="box"></div><div class="n">19</div><div><div class="t">L'investissement charge le lendemain</div><div class="d">La série, le niveau, la ligue, les amis. Chaque action augmente ce que l'utilisateur perdrait en partant, et rend la notification de demain efficace.</div></div></div>
+  <div class="rule"><div class="box"></div><div class="n">20</div><div><div class="t">Greffe-toi sur un rituel existant</div><div class="d">Apps de calories : s'asseoir devant son assiette, 3 à 5 fois par jour, gratuitement. Les meilleures apps ne construisent pas un déclencheur, elles se greffent sur un rituel. La notification n'est qu'un secours.</div></div></div>
+  <div class="rule"><div class="box"></div><div class="n">21</div><div><div class="t">Réduis l'action de 2 minutes à 5 secondes</div><div class="d">Cal AI a explosé en remplaçant deux minutes de recherche dans une base de données par une photo de cinq secondes.</div></div></div>
+
+  <div class="footer"><span>Partie 3 · La boucle de récompense</span><span>jeremypitault.com</span></div>
+</section>
+
+<!-- PART 3b -->
+<section class="page">
+  <div class="part-kicker">Partie 3 · Règles 22 à 27</div>
+  <h2>La boucle de récompense <span class="num">(suite)</span></h2>
+  <p class="lead">Les apps de calories et de productivité montrent que la boucle marche aussi sans gamification visible.</p>
+
+  <div class="rule"><div class="box"></div><div class="n">22</div><div><div class="t">La récompense peut être un verdict</div><div class="d">« Combien de calories dans ce burger ? » Tu ne connais jamais la réponse à l'avance. L'utilisateur croit chercher une donnée, son cerveau vient chercher un tirage.</div></div></div>
+  <div class="rule"><div class="box"></div><div class="n">23</div><div><div class="t">L'historique est un investissement</div><div class="d">Après 30 jours, l'app connaît le poids, les habitudes, les courbes. Repartir de zéro ailleurs, c'est perdre toute la tendance.</div></div></div>
+  <div class="rule"><div class="box"></div><div class="n">24</div><div><div class="t">Positionne-toi comme soulagement d'un inconfort</div><div class="d">Apps de productivité : « envoie-moi le devis vendredi » crée une micro-tension. L'app est l'endroit où on la dépose. C'est le déclencheur interne le plus puissant.</div></div></div>
+  <div class="rule"><div class="box"></div><div class="n">25</div><div><div class="t">Capture en 3 secondes</div><div class="d">Widget, raccourci, saisie en langage naturel, montre, tablette, ordinateur. La capture rapide est une obsession, pas un bonus.</div></div></div>
+  <div class="rule"><div class="box"></div><div class="n">26</div><div><div class="t">Le check est une récompense variable</div><div class="d">Cocher une tâche donne une micro-décharge. La variabilité vient de la journée : 12 tâches un jour, 2 le lendemain. La vraie récompense, c'est l'écart entre la journée prévue et la journée réelle.</div></div></div>
+  <div class="rule"><div class="box"></div><div class="n">27</div><div><div class="t">Fais externaliser une partie de sa mémoire</div><div class="d">Après 3 mois : projets, tâches récurrentes, étiquettes, habitudes. Résilier, ce n'est pas perdre un historique, c'est récupérer la charge mentale déléguée. C'est pour ça que les gens restent des années.</div></div></div>
+
+  <div class="callout"><b>Ton score :</b> ______ / 27. Note la date et refais le test après ta prochaine mise à jour.</div>
+
+  <div class="footer"><span>Partie 3 · La boucle de récompense</span><span>jeremypitault.com</span></div>
+</section>
+
+<!-- CTA -->
+<section class="page cta">
+  <div class="kicker" style="color:#0A84FF;font-weight:700;letter-spacing:.12em;text-transform:uppercase;font-size:11pt;">Et maintenant ?</div>
+  <h2>Tu veux que je passe <span>ton app</span> au crible ?</h2>
+  <p>Cette checklist te dit quoi vérifier. Elle ne te dit pas quoi changer sur tes écrans, dans quel ordre, ni comment le faire sans coder. C'est exactement ce que je fais avec les élèves que j'accompagne : un rapport écran par écran, puis la méthode pour faire connaître l'app et la rendre rentable.</p>
+  <p>Le premier pas, c'est un appel de 30 minutes :</p>
+  <ul>
+    <li>On regarde ton app ou ton idée.</li>
+    <li>On voit si on peut t'aider.</li>
+    <li>Tu repars avec un plan clair, que tu travailles avec nous ou pas.</li>
+  </ul>
+  <a class="btn" href="https://www.jeremypitault.com/rdv?utm_source=leadmagnet&utm_medium=pdf&utm_campaign=300-apps-27-regles">Réserver mon appel de 30 minutes</a>
+  <div class="url">https://www.jeremypitault.com/rdv?utm_source=leadmagnet&amp;utm_medium=pdf&amp;utm_campaign=300-apps-27-regles</div>
+  <p style="margin-top:12mm;font-size:11pt;color:#9a9a9a;">Jeremy Pitault · Créateur de Shinobi Japanese, 400 000 $ par an avec une seule app · jeremypitault.com</p>
+</section>
+
+</body>
+</html>

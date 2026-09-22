@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import AdminNav from "@/components/admin/AdminNav";
 import { EMAIL_FAMILIES, FLOWS } from "@/lib/email-families";
 
 type Row = {
@@ -99,6 +100,7 @@ function Status({ r }: { r: Row }) {
 
 export default function AdminEmailsPage() {
   const [authorized, setAuthorized] = useState<boolean | null>(null);
+  const [isOwner, setIsOwner] = useState(false);
   const [days, setDays] = useState<(typeof DAYS)[number]>(30);
   const [family, setFamily] = useState<string>("all");
   const [hideTests, setHideTests] = useState(true);
@@ -151,8 +153,10 @@ export default function AdminEmailsPage() {
     fetch("/api/admin/check")
       .then((r) => r.json())
       .then((d) => {
-        if (d.admin) setAuthorized(true);
-        else window.location.href = "/membres";
+        if (d.admin) {
+          setAuthorized(true);
+          setIsOwner(d.role === "owner");
+        } else window.location.href = "/membres";
       })
       .catch(() => {
         window.location.href = "/membres";
@@ -237,18 +241,14 @@ export default function AdminEmailsPage() {
 
   return (
     <div className="min-h-screen bg-[var(--bg)] text-[var(--fg)] antialiased">
-      <div className="mx-auto max-w-6xl px-5 py-10">
+      <div className="mx-auto max-w-6xl px-5 py-6 sm:py-8">
+        <AdminNav current="emails" isOwner={isOwner} />
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Emails</h1>
+            <h1 className="text-[28px] font-bold tracking-tight">Emails</h1>
             <p className="mt-2 text-[var(--fg2)] font-medium">
               Tous les emails transactionnels envoyés par le site via Brevo, et les rappels de la séquence B encore programmés.
             </p>
-          </div>
-          <div className="flex items-center gap-3">
-            <a href="/admin/crm" className="rounded-lg bg-[var(--field)] px-4 py-2 text-sm font-bold text-[var(--fg)] transition-colors hover:bg-[color-mix(in_srgb,var(--fg)_10%,transparent)]">
-              CRM
-            </a>
           </div>
         </div>
 

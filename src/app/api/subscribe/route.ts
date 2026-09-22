@@ -2,8 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { validatePhone } from "@/lib/phone-validation";
 import { sendMetaEvent, getClientInfo } from "@/lib/meta-capi";
 import { getAdminClient } from "@/lib/supabase";
-import { appelDecouverte, metabase, planAction, vslAccess, type BuiltEmail } from "@/lib/emails/transactional";
+import { appelDecouverte, guide27Regles, metabase, planAction, vslAccess, type BuiltEmail } from "@/lib/emails/transactional";
 import { startSequenceC } from "@/lib/sequence-c";
+import { CRM_GUIDE_SLUGS } from "@/lib/guides";
 
 // Map lead-magnet sources to their Brevo transactional template ID and tag.
 // Keyed by `source` (the guide slug), not by list ID: tous les leads magnets
@@ -195,9 +196,12 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // Step 1d: Enregistrer le lead dans le CRM (Supabase) pour les sources VSL
-    // et Plan d'action. Best-effort, ne bloque jamais l'inscription.
-    if (source === "vsl" || source === "plan-action") {
+    // Step 1d: Enregistrer le lead dans le CRM (Supabase) pour les sources VSL,
+    // Plan d'action et les lead magnets en rapport avec les apps mobiles
+    // (source "guide", le slug est gardé dans guide_slug).
+    // Best-effort, ne bloque jamais l'inscription.
+    const isCrmGuide = typeof source === "string" && CRM_GUIDE_SLUGS.includes(source);
+    if (source === "vsl" || source === "plan-action" || isCrmGuide) {
       try {
         const supabase = getAdminClient();
         const { error: crmError } = await supabase
@@ -205,7 +209,8 @@ export async function POST(req: NextRequest) {
           .upsert(
             {
               email: email.toLowerCase(),
-              source,
+              source: isCrmGuide ? "guide" : source,
+              ...(isCrmGuide && { guide_slug: source }),
               ...(firstName && { first_name: firstName }),
               ...(validatedPhone && { phone: validatedPhone }),
             },
@@ -213,9 +218,10 @@ export async function POST(req: NextRequest) {
           );
         if (crmError) {
           console.error("CRM lead upsert error:", crmError.message);
-        } else if (source === "plan-action") {
-          // Séquence C : démarre à la première demande du Plan d'Action.
-          const started = await startSequenceC(email.toLowerCase());
+        } else if (source === "plan-action" || isCrmGuide) {
+          // Séquence C : démarre à la première demande du Plan d'Action ou
+          // d'un lead magnet en rapport avec les apps mobiles.
+          const started = await startSequenceC(email.toLowerCase(), isCrmGuide ? "guide" : "plan-action");
           console.log(`Séquence C pour ${email}: ${started}`);
         }
       } catch (err) {
@@ -257,6 +263,8 @@ export async function POST(req: NextRequest) {
       await sendBuilt(BREVO_API_KEY, email, appelDecouverte(firstName));
     } else if (source === "metabase") {
       await sendBuilt(BREVO_API_KEY, email, metabase(firstName));
+    } else if (source === "27-regles") {
+      await sendBuilt(BREVO_API_KEY, email, guide27Regles(firstName));
     } else {
       const config = source ? SOURCE_CONFIG[source] : undefined;
       if (config) {

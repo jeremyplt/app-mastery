@@ -7,7 +7,7 @@ export async function GET(req: NextRequest) {
     await requireAdmin();
 
     const source = req.nextUrl.searchParams.get("source");
-    if (source !== "vsl" && source !== "plan-action") {
+    if (source !== "vsl" && source !== "plan-action" && source !== "guide") {
       return NextResponse.json({ error: "Source invalide" }, { status: 400 });
     }
 
@@ -89,7 +89,8 @@ async function syncBrevoAttributes(
 // Suppression d'un lead (ex : lead de test). Retire aussi le contact de la
 // liste Brevo du funnel, sinon "Synchroniser depuis Brevo" le ré-importerait
 // au prochain sync. Le contact reste dans la base Brevo, juste hors liste.
-const LIST_FOR_SOURCE: Record<string, number> = { vsl: 22, "plan-action": 17 };
+// "guide" = liste maître "Lead" (23), partagée par tous les lead magnets.
+const LIST_FOR_SOURCE: Record<string, number> = { vsl: 22, "plan-action": 17, guide: 23 };
 
 export async function DELETE(req: NextRequest) {
   try {

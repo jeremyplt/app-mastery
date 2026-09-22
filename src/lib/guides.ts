@@ -12,9 +12,39 @@ export interface Guide {
   downloadUrl: string; // path to file in /public/downloads/ or external URL
   isExternalLink?: boolean; // if true, opens in new tab instead of download
   brevoListId?: number;
+  // Image de couverture affichée nette sur la page d'optin (sinon aperçu générique flouté).
+  previewImage?: string;
+  // Lead magnet en rapport direct avec les apps mobiles : ses leads sont
+  // suivis dans le CRM (onglet "Lead magnets", source "guide").
+  crm?: boolean;
+  // Libellé court affiché dans le CRM.
+  shortLabel?: string;
 }
 
 export const guides: Record<string, Guide> = {
+  "27-regles": {
+    slug: "27-regles",
+    title: "Récupère la checklist des",
+    highlight: "27 règles des apps qui rapportent",
+    subtitle:
+      "Ce que j'ai retenu en analysant 300 applications : onboarding, paywall et boucle de récompense. Une case à cocher par règle, à garder ouverte pendant que tu construis ton app.",
+    bullets: [
+      "Les 8 règles d'onboarding qui donnent envie de payer",
+      "Les 6 règles du paywall pour vendre sans que l'utilisateur réfléchisse",
+      "Les 13 règles de la boucle de récompense pour qu'il revienne tous les jours",
+    ],
+    ctaText: "Recevoir la checklist PDF",
+    merciTitle: "Ta checklist est",
+    merciHighlight: "en route.",
+    merciDescription:
+      "Télécharge la checklist et passe ton app au crible, règle par règle.",
+    downloadLabel: "Télécharger la checklist",
+    downloadUrl: "/downloads/27-regles-apps-rentables-k3r7p9.pdf",
+    brevoListId: 23,
+    previewImage: "/proof/27-regles-preview.jpg",
+    crm: true,
+    shortLabel: "Checklist 27 règles",
+  },
   "piscine-epitech": {
     slug: "piscine-epitech",
     title: "Récupère la",
@@ -95,6 +125,8 @@ export const guides: Record<string, Guide> = {
     downloadLabel: "Télécharger le Guide",
     downloadUrl: "/downloads/monetisation-x7k2m9.pdf",
     brevoListId: 23,
+    crm: true,
+    shortLabel: "Guide monétisation",
   },
   metabase: {
     slug: "metabase",
@@ -145,3 +177,14 @@ export function getGuide(slug: string): Guide | undefined {
 export function getAllGuideSlugs(): string[] {
   return Object.keys(guides);
 }
+
+// Lead magnets suivis dans le CRM (source "guide"), avec leur libellé court.
+export const CRM_GUIDE_SLUGS: string[] = Object.values(guides)
+  .filter((g) => g.crm)
+  .map((g) => g.slug);
+
+export const CRM_GUIDE_LABELS: Record<string, string> = Object.fromEntries(
+  Object.values(guides)
+    .filter((g) => g.crm)
+    .map((g) => [g.slug, g.shortLabel ?? g.highlight]),
+);

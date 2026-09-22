@@ -7,6 +7,7 @@ import {
   BREVO_TEMPLATE_IDS,
   appelDecouverte,
   candidatureProspect,
+  guide27Regles,
   magicLink,
   metabase,
   planAction,
@@ -42,10 +43,14 @@ function buildFromCode(tag: string): BuiltEmail | null {
     const watchSeconds = variant === 1 ? 0 : variant === 2 ? 400 : 1110;
     return buildSequenceAEmail(step, { firstName: SAMPLE_FIRST_NAME, email: "thomas@exemple.fr", watchSeconds });
   }
-  // Séquence C : seq-c-1 à seq-c-8.
-  const seqC = /^seq-c-(\d)$/.exec(tag);
+  // Séquence C : seq-c-1 à seq-c-8 (suffixe -guide = variante lead magnet).
+  const seqC = /^seq-c-(\d)(-guide)?$/.exec(tag);
   if (seqC) {
-    return buildSequenceCEmail(Number(seqC[1]) as SequenceCStep, { firstName: SAMPLE_FIRST_NAME, email: "thomas@exemple.fr" });
+    return buildSequenceCEmail(Number(seqC[1]) as SequenceCStep, {
+      firstName: SAMPLE_FIRST_NAME,
+      email: "thomas@exemple.fr",
+      source: seqC[2] ? "guide" : "plan-action",
+    });
   }
   switch (tag) {
     case "seq-b-1-confirm":
@@ -62,6 +67,8 @@ function buildFromCode(tag: string): BuiltEmail | null {
       return appelDecouverte(SAMPLE_FIRST_NAME);
     case "metabase":
       return metabase(SAMPLE_FIRST_NAME);
+    case "27-regles":
+      return guide27Regles(SAMPLE_FIRST_NAME);
     case "candidature-qualifie":
       return candidatureProspect(SAMPLE_FIRST_NAME, "thomas@exemple.fr", true);
     case "candidature-non-qualifie":

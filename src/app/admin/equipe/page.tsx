@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import AdminNav from "@/components/admin/AdminNav";
 
 type AdminUser = {
   id: string;
@@ -124,8 +125,9 @@ export default function EquipeAdmin() {
 
   return (
     <div className="min-h-screen bg-[var(--bg)] text-[var(--fg)] antialiased">
-      <div className="mx-auto max-w-3xl px-5 py-10">
-        <h1 className="text-3xl font-bold tracking-tight">Équipe</h1>
+      <div className="mx-auto max-w-6xl px-5 py-6 sm:py-8">
+        <AdminNav current="equipe" isOwner />
+        <h1 className="text-[28px] font-bold tracking-tight">Équipe</h1>
         <p className="mt-2 text-[var(--fg2)]">
           Les membres invités ont accès aux candidatures et au CRM (contacts,
           suivi, cases à cocher). Seul le propriétaire gère l&apos;équipe, les

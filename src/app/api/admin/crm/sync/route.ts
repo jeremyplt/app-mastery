@@ -1,11 +1,17 @@
 import { NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/admin";
 import { getAdminClient } from "@/lib/supabase";
+import { CRM_GUIDE_SLUGS } from "@/lib/guides";
 
-// Listes Brevo correspondant aux deux funnels du CRM
-const SOURCES: { source: "vsl" | "plan-action"; listId: number }[] = [
+type CrmSource = "vsl" | "plan-action" | "guide";
+
+// Listes Brevo correspondant aux funnels du CRM. La source "guide" lit la
+// liste maître "Lead" (23) et ne garde que les contacts dont LEAD_SOURCE est
+// un lead magnet en rapport avec les apps mobiles (CRM_GUIDE_SLUGS).
+const SOURCES: { source: CrmSource; listId: number }[] = [
   { source: "vsl", listId: 22 },
   { source: "plan-action", listId: 17 },
+  { source: "guide", listId: 23 },
 ];
 
 type BrevoContact = {
@@ -14,6 +20,7 @@ type BrevoContact = {
   attributes?: {
     FIRSTNAME?: string;
     SMS?: string;
+    LEAD_SOURCE?: string;
     CALL_BOOKED?: boolean;
     WHATSAPP_CONTACTED?: boolean;
   };
@@ -56,7 +63,12 @@ export async function POST() {
     > = {};
 
     for (const { source, listId } of SOURCES) {
-      const contacts = await fetchListContacts(BREVO_API_KEY, listId);
+      let contacts = await fetchListContacts(BREVO_API_KEY, listId);
+      if (source === "guide") {
+        contacts = contacts.filter(
+          (c) => c.attributes?.LEAD_SOURCE && CRM_GUIDE_SLUGS.includes(c.attributes.LEAD_SOURCE),
+        );
+      }
 
       if (contacts.length > 0) {
         const rows = contacts.map((c) => ({
@@ -64,6 +76,7 @@ export async function POST() {
           source,
           first_name: c.attributes?.FIRSTNAME || null,
           phone: c.attributes?.SMS || null,
+          ...(source === "guide" && { guide_slug: c.attributes?.LEAD_SOURCE ?? null }),
           ...(c.createdAt && { created_at: c.createdAt }),
         }));
 

@@ -126,6 +126,39 @@ export function metabase(firstName?: string): BuiltEmail {
   return { subject: "Ton pack Metabase est prêt", html, tag: "metabase" };
 }
 
+// Livraison de la checklist des 27 règles (lead magnet de la vidéo
+// « J'ai analysé 300 apps qui rapportent et j'ai appris ça »).
+export function guide27Regles(firstName?: string): BuiltEmail {
+  const html = `
+<p>${greeting(firstName)}</p>
+
+<p>Merci d'avoir demandé la checklist. Voici ton PDF :</p>
+
+<p><a href="https://www.jeremypitault.com/downloads/27-regles-apps-rentables-k3r7p9.pdf">Télécharger la checklist des 27 règles</a></p>
+
+<p>Dedans, tu trouveras les 27 règles que j'ai tirées de l'analyse de 300 applications, avec une case à cocher par règle :</p>
+
+<ul>
+  <li>Les 8 règles d'onboarding qui donnent envie de payer</li>
+  <li>Les 6 règles du paywall pour vendre sans que l'utilisateur réfléchisse</li>
+  <li>Les 13 règles de la boucle de récompense pour qu'il revienne tous les jours</li>
+</ul>
+
+<p>Ouvre ton app à côté de la liste et coche seulement les règles qu'elle respecte vraiment aujourd'hui. Moins de 15 sur 27, c'est normal, c'est le cas de 90 % des apps que j'ai vues. Corrige dans l'ordre : l'onboarding, puis le paywall, puis la boucle.</p>
+
+<p>Et si tu veux que je passe ton app au crible avec toi, écran par écran, c'est ce que je fais avec les élèves que j'accompagne. Le premier pas, c'est un appel de 30 minutes :</p>
+
+<p><a href="https://www.jeremypitault.com/appel?utm_source=email&utm_medium=email&utm_campaign=27-regles">Réserver mon appel</a></p>
+
+<p>Demain, je te raconte d'où vient Shinobi Japanese, et pourquoi elle a rapporté de l'argent dès le premier mois alors que des centaines d'apps aussi bien codées dorment sur l'App Store.</p>
+
+<p>À demain,<br>Jeremy</p>
+
+<p>P.S. Si une règle n'est pas claire, réponds directement à cet email. Je lis tout.</p>
+`;
+  return { subject: "Ta checklist des 27 règles est prête", html, tag: "27-regles" };
+}
+
 // Candidature : réponse au prospect selon la qualification.
 export function candidatureProspect(firstName: string, email: string, qualified: boolean): BuiltEmail {
   const html = qualified

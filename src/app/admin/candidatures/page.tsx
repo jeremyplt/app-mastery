@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import AdminNav from "@/components/admin/AdminNav";
 import { QUESTIONS } from "@/lib/candidature";
 
 type Candidature = {
@@ -56,6 +57,7 @@ export default function CandidaturesAdmin() {
   const [filter, setFilter] = useState<"all" | "qualified" | "unqualified">("all");
   const [open, setOpen] = useState<string | null>(null);
   const [copied, setCopied] = useState<string | null>(null);
+  const [isOwner, setIsOwner] = useState(false);
 
   function copy(text: string, key: string) {
     navigator.clipboard.writeText(text).then(() => {
@@ -68,8 +70,10 @@ export default function CandidaturesAdmin() {
     fetch("/api/admin/check")
       .then((r) => r.json())
       .then((d) => {
-        if (d.admin) setAuthorized(true);
-        else window.location.href = "/membres";
+        if (d.admin) {
+          setAuthorized(true);
+          setIsOwner(d.role === "owner");
+        } else window.location.href = "/membres";
       })
       .catch(() => {
         window.location.href = "/membres";
@@ -116,8 +120,9 @@ export default function CandidaturesAdmin() {
 
   return (
     <div className="min-h-screen text-[var(--fg)] antialiased">
-      <div className="mx-auto max-w-5xl px-5 py-10">
-        <h1 className="text-[30px] font-bold tracking-[-0.03em]">Candidatures</h1>
+      <div className="mx-auto max-w-6xl px-5 py-6 sm:py-8">
+        <AdminNav current="candidatures" isOwner={isOwner} />
+        <h1 className="text-[28px] font-bold tracking-tight">Candidatures</h1>
         <p className="mt-2 text-[var(--fg2)] font-medium">
           Formulaire de qualification /appel.
         </p>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import AdminNav from "@/components/admin/AdminNav";
 
 type CalendarRoute = {
   slug: string;
@@ -20,13 +21,16 @@ export default function CalendrierAdmin() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
+  const [isOwner, setIsOwner] = useState(false);
 
   useEffect(() => {
     fetch("/api/admin/check")
       .then((r) => r.json())
       .then((d) => {
-        if (d.admin) setAuthorized(true);
-        else window.location.href = "/membres";
+        if (d.admin) {
+          setAuthorized(true);
+          setIsOwner(d.role === "owner");
+        } else window.location.href = "/membres";
       })
       .catch(() => {
         window.location.href = "/membres";
@@ -116,13 +120,9 @@ export default function CalendrierAdmin() {
 
   return (
     <div className="min-h-screen bg-[var(--bg)] text-[var(--fg)] antialiased">
-      <div className="mx-auto max-w-3xl px-5 py-10">
-        <div className="flex items-center justify-between gap-4">
-          <h1 className="text-3xl font-bold tracking-tight">Répartition des appels</h1>
-          <a href="/admin/crm" className="mac-btn mac-btn-def mac-btn-sm">
-            CRM
-          </a>
-        </div>
+      <div className="mx-auto max-w-6xl px-5 py-6 sm:py-8">
+        <AdminNav current="calendrier" isOwner={isOwner} />
+        <h1 className="text-[28px] font-bold tracking-tight">Répartition des appels</h1>
         <p className="mt-2 text-[var(--fg2)]">
           Répartit les prises de rendez-vous entre les calendriers Calendly selon
           le pourcentage choisi. Le total doit faire 100%. Enregistrer remet les

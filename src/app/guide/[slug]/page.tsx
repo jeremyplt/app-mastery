@@ -288,7 +288,8 @@ export default function GuidePage() {
                 </motion.form>
               </div>
 
-              {/* Right: locked document preview (desktop) */}
+              {/* Right: document preview (desktop). Couverture réelle si le
+                  guide en a une, sinon aperçu générique flouté + cadenas. */}
               <div className="hidden lg:flex items-center justify-center p-6">
                 <motion.div
                   className="relative w-full max-w-[380px] aspect-[3/4] rounded-[14px] overflow-hidden border-[0.5px] border-[var(--sep)] shadow-2xl shadow-black/40"
@@ -296,23 +297,39 @@ export default function GuidePage() {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.6, delay: 0.3 }}
                 >
-                  <img
-                    src="/proof/guide-preview.jpg"
-                    alt=""
-                    className="absolute inset-0 w-full h-full object-cover object-top select-none"
-                    style={{ filter: "blur(2px)" }}
-                    draggable={false}
-                  />
-                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-[color-mix(in_srgb,var(--bg)_55%,transparent)] backdrop-blur-[1px]">
-                    <div className="mac-icon lg g-blue" style={{ width: 56, height: 56, borderRadius: 16 }}>
-                      <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
-                      </svg>
-                    </div>
-                    <p className="mt-3 text-sm font-semibold text-[var(--fg)]">
-                      Entre ton prénom et email pour débloquer
-                    </p>
-                  </div>
+                  {guide.previewImage ? (
+                    <>
+                      <img
+                        src={guide.previewImage}
+                        alt={`Couverture : ${guide.highlight}`}
+                        className="absolute inset-0 w-full h-full object-cover object-top select-none"
+                        draggable={false}
+                      />
+                      <span className="badge absolute top-3 right-3 bg-[color-mix(in_srgb,var(--bg)_75%,transparent)] text-[var(--fg)] backdrop-blur">
+                        PDF · 7 pages
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <img
+                        src="/proof/guide-preview.jpg"
+                        alt=""
+                        className="absolute inset-0 w-full h-full object-cover object-top select-none"
+                        style={{ filter: "blur(2px)" }}
+                        draggable={false}
+                      />
+                      <div className="absolute inset-0 flex flex-col items-center justify-center bg-[color-mix(in_srgb,var(--bg)_55%,transparent)] backdrop-blur-[1px]">
+                        <div className="mac-icon lg g-blue" style={{ width: 56, height: 56, borderRadius: 16 }}>
+                          <svg className="w-7 h-7" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                          </svg>
+                        </div>
+                        <p className="mt-3 text-sm font-semibold text-[var(--fg)]">
+                          Entre ton prénom et email pour débloquer
+                        </p>
+                      </div>
+                    </>
+                  )}
                 </motion.div>
               </div>
             </div>

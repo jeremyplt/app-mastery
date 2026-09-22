@@ -14,7 +14,7 @@ export const EMAIL_FAMILIES: EmailFamily[] = [
   { id: "plan-action", label: "Plan d'action · séquence C", tags: ["plan-action", "seq-c-1", "seq-c-2", "seq-c-3", "seq-c-4", "seq-c-5", "seq-c-6", "seq-c-7", "seq-c-8"] },
   { id: "appel", label: "Appel découverte (formulaire)", tags: ["appel-decouverte"] },
   { id: "candidature", label: "Candidature", tags: ["candidature-qualifie", "candidature-non-qualifie", "candidature-admin"] },
-  { id: "guides", label: "Guides gratuits", tags: ["metabase", "piscine-epitech", "prompt-50-saas", "workflow-make", "monetisation", "openclaw"] },
+  { id: "guides", label: "Guides gratuits", tags: ["27-regles", "metabase", "piscine-epitech", "prompt-50-saas", "workflow-make", "monetisation", "openclaw"] },
   { id: "membres", label: "Espace membres", tags: ["magic-link", "welcome-essentiel", "welcome-complet", "welcome-vip"] },
   { id: "admin", label: "Admin", tags: ["admin-invitation"] },
 ];
@@ -43,6 +43,7 @@ export const EMAIL_LABELS: Record<string, string> = {
   "seq-c-6": "C6 · Ton app est sur l'App Store et il ne se passe rien",
   "seq-c-7": "C7 · 1 793 $ en 28 jours, sans savoir coder",
   "seq-c-8": "C8 · Mon dernier email, et une mauvaise nouvelle",
+  "27-regles": "Checklist des 27 règles",
   "appel-decouverte": "Appel découverte",
   "candidature-qualifie": "Candidature qualifiée",
   "candidature-non-qualifie": "Candidature non qualifiée",
@@ -122,8 +123,8 @@ export const FLOWS: Flow[] = [
   {
     id: "plan-action",
     family: "plan-action",
-    title: "Plan d'action · séquence C (organique)",
-    trigger: "Optin sur /plan-action. La séquence C démarre à la création du lead, sauf s'il est déjà dans la séquence A.",
+    title: "Plan d'action et lead magnets · séquence C (organique)",
+    trigger: "Optin sur /plan-action, ou sur un lead magnet en rapport avec les apps mobiles (/guide/27-regles, /guide/monetisation). La séquence C démarre à la création du lead, sauf s'il est déjà dans la séquence A ou déjà dans la séquence C par l'autre porte d'entrée. Pour les leads magnets, le pied de page et deux passages parlent du guide au lieu du Plan d'Action.",
     exit: "Rendez-vous pris (Calendly) ou lead disqualifié : plus aucun envoi. Un passage toutes les 15 minutes (Supabase pg_cron), un email par jour à 9 h, jamais la nuit. L'automatisation Brevo \"Plan d'Action\" est en pause.",
     steps: [
       { tag: "plan-action", label: "C0", subject: "Ton Plan d'Action est prêt", when: "Tout de suite", status: "live" },
