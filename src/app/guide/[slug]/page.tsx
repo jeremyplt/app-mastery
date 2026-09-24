@@ -126,6 +126,13 @@ export default function GuidePage() {
         phone: formatPhone(phone),
       });
 
+      // Relie ce navigateur à l'email : les RDV Calendly (webhook, distinct_id =
+      // email) sont ainsi rattachés à la vidéo YouTube d'origine.
+      posthog.identify(email.trim().toLowerCase(), {
+        email: email.trim().toLowerCase(),
+        name: firstName.trim(),
+      });
+
       posthog.capture("guide_optin_submitted", {
         guide: slug,
         utm_source: searchParams.get("utm_source") || undefined,

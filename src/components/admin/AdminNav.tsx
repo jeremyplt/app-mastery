@@ -8,6 +8,7 @@ export type AdminSection =
   | "candidatures"
   | "calendrier"
   | "emails"
+  | "youtube"
   | "content-creation"
   | "equipe";
 
@@ -18,6 +19,7 @@ const ITEMS: Item[] = [
   { id: "candidatures", label: "Candidatures", href: "/admin/candidatures" },
   { id: "calendrier", label: "Calendrier", href: "/admin/calendrier" },
   { id: "emails", label: "Emails", href: "/admin/crm/emails" },
+  { id: "youtube", label: "YouTube", href: "/admin/youtube" },
   { id: "content-creation", label: "Contenus", href: "/admin/content-creation", ownerOnly: true },
   { id: "equipe", label: "Équipe", href: "/admin/equipe", ownerOnly: true },
 ];

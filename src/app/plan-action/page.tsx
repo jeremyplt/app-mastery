@@ -130,6 +130,13 @@ function PlanActionContent() {
         phone: formatPhone(phone),
       });
 
+      // Relie ce navigateur à l'email : les RDV Calendly (webhook, distinct_id =
+      // email) sont ainsi rattachés à la vidéo YouTube d'origine.
+      posthog.identify(email.trim().toLowerCase(), {
+        email: email.trim().toLowerCase(),
+        name: firstName.trim(),
+      });
+
       posthog.capture("plan_action_form_submitted", {
         source: "plan-action",
         utm_source: searchParams.get("utm_source") || undefined,

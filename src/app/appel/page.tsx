@@ -250,6 +250,13 @@ function CandidatureContent() {
       }
       trackMeta("SubmitApplication", { content_name: "candidature" }, `${metaEventId}-sa`);
 
+      // Relie ce navigateur à l'email : les RDV Calendly (webhook, distinct_id =
+      // email) sont ainsi rattachés à la vidéo YouTube d'origine.
+      posthog.identify(email.trim().toLowerCase(), {
+        email: email.trim().toLowerCase(),
+        name: firstName.trim(),
+      });
+
       posthog.capture("candidature_submitted", {
         qualified: data.qualified,
         budget_ready: budgetReady,
