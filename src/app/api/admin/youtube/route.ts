@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/admin";
+import { getAdminClient } from "@/lib/supabase";
 
 const POSTHOG_HOST = "https://us.posthog.com";
 // 0 = depuis le début (le suivi PostHog démarre en mars 2026).
@@ -62,6 +63,9 @@ async function fetchVideos(key: string): Promise<Video[]> {
 // laquelle il est arrivé. Les conversions sont comptées par personne sur la
 // période. Les robots de YouTube qui vérifient les liens des descriptions
 // (une seule page vue, jamais de $pageleave) sont exclus.
+const CONVERSION_EVENTS =
+  "'plan_action_form_submitted', 'guide_optin_submitted', 'candidature_submitted', 'appel_booked', 'calendly_booked'";
+
 function buildQuery(days: number): string {
   const yt = "event = '$pageview' AND properties.utm_source = 'youtube'";
   const since = days > 0 ? `timestamp >= now() - INTERVAL ${days} DAY` : "timestamp >= toDateTime('2026-01-01')";
@@ -82,24 +86,84 @@ function buildQuery(days: number): string {
         argMinIf(properties.utm_campaign, timestamp, ${yt}) AS campaign,
         argMinIf(properties.$pathname, timestamp, ${yt}) AS landing,
         minIf(timestamp, ${yt}) AS first_ts,
-        countIf(event = '$pageleave') > 0 OR count() > 2 AS engaged,
+        countIf(event = '$pageleave') > 0 OR countIf(event = '$pageview') > 1 AS engaged,
         countIf(event = 'plan_action_form_submitted') > 0 AS is_pa,
         countIf(event = 'guide_optin_submitted') > 0 AS is_guide,
         countIf(event = 'candidature_submitted') > 0 AS is_cand,
         countIf(event IN ('appel_booked', 'calendly_booked')) > 0 AS is_rdv
       FROM events
       WHERE ${since}
+        AND event IN ('$pageview', '$pageleave', ${CONVERSION_EVENTS})
         AND person_id IN (
           SELECT person_id FROM events
           WHERE ${yt} AND ${since}
         )
       GROUP BY person_id
     )
-    WHERE engaged
+    WHERE engaged OR is_pa OR is_guide OR is_cand OR is_rdv
     GROUP BY campaign, landing
     ORDER BY visitors DESC
     LIMIT 1000
   `;
+}
+
+type Row = {
+  campaign: string;
+  landing: string;
+  visitors: number;
+  planAction: number;
+  guide: number;
+  candidature: number;
+  rdv: number;
+  leads: number;
+  firstSeen: string;
+};
+
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+// PostHog répond 503/429 quand ses serveurs de requêtes saturent : on
+// retente deux fois avant d'abandonner.
+async function queryPostHog(key: string, projectId: string, days: number): Promise<Row[]> {
+  let lastStatus = 0;
+  for (const delay of [0, 1500, 4000]) {
+    if (delay) await sleep(delay);
+    const res = await fetch(`${POSTHOG_HOST}/api/projects/${projectId}/query/`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${key}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        query: { kind: "HogQLQuery", query: buildQuery(days) },
+        name: "admin-youtube-attribution",
+      }),
+      cache: "no-store",
+    });
+
+    if (res.ok) {
+      const data = (await res.json()) as { results: unknown[][] };
+      return (data.results ?? []).map((r) => ({
+        campaign: (r[0] as string | null) || "(sans campagne)",
+        landing: (r[1] as string | null) || "/",
+        visitors: Number(r[2]),
+        planAction: Number(r[3]),
+        guide: Number(r[4]),
+        candidature: Number(r[5]),
+        rdv: Number(r[6]),
+        leads: Number(r[7]),
+        firstSeen: r[8] as string,
+      }));
+    }
+
+    lastStatus = res.status;
+    console.error(`PostHog query error: ${res.status} ${await res.text()}`);
+    if (res.status !== 503 && res.status !== 429 && res.status !== 504) break;
+  }
+  throw new Error(
+    lastStatus === 503 || lastStatus === 429
+      ? "PostHog est surchargé en ce moment"
+      : `PostHog a répondu ${lastStatus}`,
+  );
 }
 
 export async function GET(req: NextRequest) {
@@ -128,40 +192,36 @@ export async function GET(req: NextRequest) {
         })
       : Promise.resolve(null);
 
-    const res = await fetch(`${POSTHOG_HOST}/api/projects/${projectId}/query/`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${key}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        query: { kind: "HogQLQuery", query: buildQuery(days) },
-        name: "admin-youtube-attribution",
-      }),
-      cache: "no-store",
-    });
+    const cacheKey = `youtube_stats_${days}`;
+    const supabase = getAdminClient();
+    let rows: Row[] | null = null;
+    let stale: { reason: string; savedAt: string } | null = null;
 
-    if (!res.ok) {
-      const text = await res.text();
-      console.error(`PostHog query error: ${res.status} ${text}`);
-      return NextResponse.json({ error: `PostHog a répondu ${res.status}` }, { status: 502 });
+    try {
+      rows = await queryPostHog(key, projectId, days);
+      // Garde le dernier résultat : PostHog renvoie parfois 503 quand ses
+      // serveurs de requêtes saturent, on réaffiche alors ces chiffres.
+      await supabase
+        .from("site_settings")
+        .upsert({ key: cacheKey, value: { rows }, updated_at: new Date().toISOString() })
+        .then(({ error }) => error && console.error("Cache stats YouTube:", error.message));
+    } catch (err) {
+      const reason = err instanceof Error ? err.message : "PostHog indisponible";
+      console.error("PostHog query error:", reason);
+      const { data } = await supabase
+        .from("site_settings")
+        .select("value, updated_at")
+        .eq("key", cacheKey)
+        .maybeSingle();
+      if (!data?.value?.rows) {
+        return NextResponse.json({ error: `${reason}. Réessaie dans quelques minutes.` }, { status: 502 });
+      }
+      rows = data.value.rows as Row[];
+      stale = { reason, savedAt: data.updated_at };
     }
 
-    const data = (await res.json()) as { results: unknown[][] };
-    const rows = (data.results ?? []).map((r) => ({
-      campaign: (r[0] as string | null) || "(sans campagne)",
-      landing: (r[1] as string | null) || "/",
-      visitors: Number(r[2]),
-      planAction: Number(r[3]),
-      guide: Number(r[4]),
-      candidature: Number(r[5]),
-      rdv: Number(r[6]),
-      leads: Number(r[7]),
-      firstSeen: r[8] as string,
-    }));
-
     const videos = await videosPromise;
-    return NextResponse.json({ rows, videos, days });
+    return NextResponse.json({ rows, videos, days, stale });
   } catch (err) {
     const message = err instanceof Error ? err.message : "Erreur";
     if (message === "Accès non autorisé") {

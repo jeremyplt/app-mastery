@@ -285,6 +285,7 @@ export default function YouTubeAdmin() {
   const [days, setDays] = useState(0);
   const [rows, setRows] = useState<Row[]>([]);
   const [videos, setVideos] = useState<Video[] | null>(null);
+  const [stale, setStale] = useState<{ reason: string; savedAt: string } | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [sort, setSort] = useState<{ key: SortKey; desc: boolean }>({ key: "leads", desc: true });
@@ -312,6 +313,7 @@ export default function YouTubeAdmin() {
         if (d.rows) {
           setRows(d.rows);
           setVideos(d.videos ?? null);
+          setStale(d.stale ?? null);
         } else setError(d.error || "Impossible de charger les stats");
         setLoading(false);
       })
@@ -438,6 +440,16 @@ export default function YouTubeAdmin() {
 
         {loading && <p className="mt-8 text-[var(--fg2)]">Chargement...</p>}
         {error && <p className="mt-8 font-semibold text-[var(--red)]">{error}</p>}
+
+        {!loading && !error && stale && (
+          <p className="mt-6 rounded-[10px] bg-[color-mix(in_srgb,var(--orange)_14%,transparent)] px-4 py-3 font-semibold text-[var(--orange)]">
+            {stale.reason}. Chiffres affichés : dernière mise à jour du{" "}
+            {new Intl.DateTimeFormat("fr-FR", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" }).format(
+              new Date(stale.savedAt),
+            )}
+            .
+          </p>
+        )}
 
         {!loading && !error && rows.length === 0 && (
           <p className="mt-8 text-[var(--fg2)]">Aucune visite YouTube sur cette période.</p>
