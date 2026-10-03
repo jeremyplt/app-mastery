@@ -45,6 +45,32 @@ function Card({ children, className = "" }: { children: React.ReactNode; classNa
   );
 }
 
+// Chiffres clés affichés dans la carte de la personne concernée.
+function StatTiles({ stats }: { stats: { value: string; label: string }[] }) {
+  return (
+    <div className="mt-4 grid grid-cols-2 gap-2.5">
+      {stats.map((s) => (
+        <div
+          key={s.label}
+          className="rounded-[14px] border-[0.5px] border-[var(--sep)] px-3 py-3 text-center"
+        >
+          <p className="text-[24px] sm:text-[26px] font-bold tracking-[-0.04em] leading-none text-[var(--accent2)]">
+            {s.value}
+          </p>
+          <p className="mt-1.5 text-[13.5px] font-bold leading-tight">{s.label}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+const JEREMY_STATS = [
+  { value: "10 000 $", label: "par mois en septembre 2025" },
+  { value: "38 000 $", label: "par mois en juin 2026" },
+  { value: "5 000+", label: "notes sur l'App Store" },
+  { value: "4,9 / 5", label: "de note moyenne" },
+];
+
 export default function TemoignagesContent() {
   const florian = FLORIAN;
 
@@ -86,10 +112,10 @@ export default function TemoignagesContent() {
           {/* En-tête */}
           <div className="text-center max-w-3xl mx-auto">
             <h1 className="text-[32px] sm:text-[48px] font-bold tracking-[-0.035em] leading-[1.05] text-balance">
-              Ce que ça donne, <span className="mac-accent">en argent</span>
+              Les résultats des membres de <span className="mac-accent">l&apos;accompagnement App Mastery</span>
             </h1>
             <p className="mt-5 text-[18px] sm:text-[20px] font-semibold leading-relaxed max-w-2xl mx-auto">
-              Mon application, celle d&apos;un élève parti de zéro, et les messages que je reçois des élèves. Tout est vérifiable, rien n&apos;est arrondi vers le haut.
+              Pas de promesses, des captures d&apos;écran. Les vrais chiffres de mon application, de Florian, et des élèves qui m&apos;écrivent quand les premiers euros tombent.
             </p>
           </div>
 
@@ -113,6 +139,7 @@ export default function TemoignagesContent() {
               <p className="mt-2 text-[15px] font-medium leading-relaxed">
                 Shinobi Japanese, mon application pour apprendre le japonais, mois par mois de septembre 2025 à juin 2026. Plus de 5 000 notes, 4,9 sur 5. C&apos;est la méthode que j&apos;applique avec les élèves.
               </p>
+              <StatTiles stats={JEREMY_STATS} />
             </Card>
 
             <Card>
@@ -131,33 +158,20 @@ export default function TemoignagesContent() {
                 </p>
               </div>
               <p className="mt-2 text-[15px] font-medium leading-relaxed">
-                Mon tout premier élève. Vingt ans, jamais codé. Il a construit {florian.appName} avec l&apos;IA, puis il a appliqué la méthode marketing tous les jours jusqu&apos;à trouver son format. Sans un euro de pub.
+                Mon tout premier élève. Vingt ans, jamais codé. Il a construit son app avec l&apos;IA, puis il a appliqué la méthode marketing tous les jours jusqu&apos;à trouver son format. Sans un euro de pub.
               </p>
+              <StatTiles stats={florian.stats} />
               <Link
                 href={`/temoignage/${florian.slug}?utm_source=temoignages&utm_medium=cta&utm_campaign=temoignage`}
-                className="mt-3 inline-flex items-center gap-1.5 text-[15px] font-bold text-[var(--accent)] hover:underline"
+                onClick={() => posthog.capture("temoignages_florian_video_clicked")}
+                className="mac-btn mac-btn-primary mac-btn-lg mt-4 w-full"
               >
-                Voir son témoignage en vidéo
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden>
+                  <path d="M8 5.14v13.72a1 1 0 001.5.86l11-6.86a1 1 0 000-1.72l-11-6.86A1 1 0 008 5.14z" />
                 </svg>
+                Voir le témoignage vidéo de Florian
               </Link>
             </Card>
-          </div>
-
-          {/* Chiffres de Florian */}
-          <div className="mt-4 grid grid-cols-2 lg:grid-cols-4 gap-3">
-            {florian.stats.map((s) => (
-              <div
-                key={s.label}
-                className="rounded-[16px] bg-[var(--card)] border-[0.5px] border-[var(--sep)] px-4 py-4 text-center"
-              >
-                <p className="text-[28px] sm:text-[32px] font-bold tracking-[-0.04em] leading-none text-[var(--accent2)]">
-                  {s.value}
-                </p>
-                <p className="mt-2 text-[14px] font-bold leading-tight">{s.label}</p>
-              </div>
-            ))}
           </div>
 
           {/* Messages des élèves */}
@@ -169,6 +183,9 @@ export default function TemoignagesContent() {
               </h2>
               <p className="mt-3 text-[16px] font-medium leading-relaxed">
                 Je les mets tels quels, captures d&apos;écran à l&apos;appui. Seul le nom de l&apos;application est masqué quand l&apos;élève le demande.
+              </p>
+              <p className="mt-2 text-[15px] font-semibold">
+                Toutes les captures de cette page sont publiées avec l&apos;autorisation des élèves concernés.
               </p>
             </div>
 
@@ -198,9 +215,21 @@ export default function TemoignagesContent() {
                           alt={m.result.alt}
                           width={m.result.width}
                           height={m.result.height}
-                          className="w-full rounded-[12px]"
+                          className={`w-full rounded-[12px] ${m.result.height > m.result.width ? "max-w-[300px]" : ""}`}
                         />
                         <p className="mt-2 text-[13.5px] font-medium text-[var(--fg2)]">{m.result.caption}</p>
+                      </div>
+                    )}
+                    {m.earlier && (
+                      <div className="mt-4">
+                        <Image
+                          src={m.earlier.src}
+                          alt={m.earlier.alt}
+                          width={m.earlier.width}
+                          height={m.earlier.height}
+                          className="w-full max-w-[220px] rounded-[12px]"
+                        />
+                        <p className="mt-2 text-[13.5px] font-medium text-[var(--fg2)]">{m.earlier.caption}</p>
                       </div>
                     )}
                   </div>

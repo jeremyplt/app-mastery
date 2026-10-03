@@ -195,7 +195,7 @@ function ConfirmeContent() {
                 <span className="mac-accent whitespace-nowrap">1 793 $</span> en 28 jours, sans une seule pub
               </h2>
               <p className="mt-3 text-[15.5px] font-medium text-[var(--fg2)] max-w-xl mx-auto">
-                Il a créé {FLORIAN.appName} sans savoir coder. Six semaines après la sortie, ses chiffres ont décollé. Il raconte tout, tableaux de bord à l&apos;écran.
+                Il a créé son app sans savoir coder. Six semaines après la sortie, ses chiffres ont décollé. Il raconte tout, tableaux de bord à l&apos;écran.
               </p>
             </div>
 

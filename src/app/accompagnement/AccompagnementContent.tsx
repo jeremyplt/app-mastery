@@ -144,7 +144,7 @@ export default function AccompagnementContent() {
                   <p className="text-[17px] font-bold text-[var(--fg)]">
                     {FLORIAN.firstName}, {FLORIAN.age} ans
                   </p>
-                  <p className="text-[14px] font-medium text-[var(--fg2)]">Créateur de {FLORIAN.appName}</p>
+                  <p className="text-[14px] font-medium text-[var(--fg2)]">Créateur d&apos;une app mobile</p>
                 </div>
               </div>
               <p className="mt-5 text-[22px] font-bold tracking-[-0.03em] leading-tight">

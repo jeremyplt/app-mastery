@@ -124,7 +124,7 @@ export default function FlorianContent() {
             <div className="mx-auto w-24 h-24 rounded-[24px] overflow-hidden shadow-[0_12px_30px_rgba(0,0,0,0.35)] border-[0.5px] border-white/10">
               <Image
                 src={t.photo}
-                alt={`${t.firstName}, créateur de ${t.appName}`}
+                alt={`${t.firstName}, ${t.age} ans`}
                 width={720}
                 height={720}
                 quality={90}
@@ -133,7 +133,7 @@ export default function FlorianContent() {
               />
             </div>
             <span className="mac-eyebrow mt-5">
-              {t.firstName}, {t.age} ans, créateur de {t.appName}
+              {t.firstName}, {t.age} ans, créateur d&apos;une app mobile
             </span>
             <h1 className="mt-4 text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.05] text-balance">
               De 0 à <span className="mac-accent whitespace-nowrap">1 793 $</span> en 28 jours,
@@ -233,7 +233,7 @@ export default function FlorianContent() {
             <div className="rounded-[16px] bg-[var(--card)] border-[0.5px] border-[var(--sep)] p-6 sm:p-8">
               <span className="mac-eyebrow">Ce qu&apos;on a changé ensemble</span>
               <h2 className="mt-2 text-[22px] font-bold tracking-[-0.03em]">
-                Un mois de travail sur {t.appName} avant la sortie
+                Un mois de travail sur son app avant la sortie
               </h2>
               <ul className="mt-5 space-y-3">
                 {CHANGES.map((c) => (

@@ -5,7 +5,7 @@ import FlorianContent from "./FlorianContent";
 export const metadata: Metadata = {
   title: `${FLORIAN.firstName}, ${FLORIAN.age} ans : ${FLORIAN.headline} | App Mastery`,
   description:
-    "Florian a créé Momentum sans savoir coder. Six semaines après la sortie : 1 793 $ de revenus en 28 jours et plus de 100 installations par jour, 100 % en organique. Son histoire, ses chiffres et ce qu'on a changé ensemble.",
+    "Florian a créé son app sans savoir coder. Six semaines après la sortie : 1 793 $ de revenus en 28 jours et plus de 100 installations par jour, 100 % en organique. Son histoire, ses chiffres et ce qu'on a changé ensemble.",
   openGraph: {
     title: `${FLORIAN.firstName} : ${FLORIAN.headline}`,
     description:
