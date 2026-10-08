@@ -32,6 +32,8 @@ type Lead = {
   qualified: boolean | null;
   // Source "guide" : slug du dernier lead magnet demandé.
   guide_slug: string | null;
+  // Devenu client : une vente a été déclarée dans /admin/ventes.
+  client: boolean;
 };
 
 type Filter =
@@ -90,6 +92,7 @@ function pct(part: number, total: number): string {
 // Statut lisible d'un lead, dans l'ordre de priorité d'affichage.
 type Status = { key: Filter; label: string; tone: "red" | "orange" | "green" | "blue" | "gray" | "accent" };
 function statusOf(lead: Lead): Status {
+  if (lead.client) return { key: "booked", label: "Client 🎉", tone: "green" };
   if (lead.disqualified) return { key: "disqualified", label: "Disqualifié", tone: "red" };
   if (lead.unreachable) return { key: "unreachable", label: "Injoignable", tone: "orange" };
   if (lead.call_booked) return { key: "booked", label: "Call booké", tone: "green" };
@@ -740,6 +743,13 @@ export default function CrmAdmin() {
                       <Toggle on={lead.unreachable} tone="orange" label="Injoignable" onChange={(v) => patchLead(lead.id, lead.source, { unreachable: v })} />
                       <Toggle on={lead.disqualified} tone="red" label="Disqualifié" onChange={(v) => patchLead(lead.id, lead.source, { disqualified: v })} />
                       <span className="mx-1 h-5 w-px bg-[var(--sep)]" aria-hidden />
+                      <a
+                        href={`/admin/ventes?${new URLSearchParams({ email: lead.email, prenom: lead.first_name ?? "", tel: lead.phone ?? "" })}`}
+                        className="rounded-md px-2.5 py-1 text-xs font-bold text-[var(--accent2)] transition-colors hover:bg-[color-mix(in_srgb,var(--accent)_15%,transparent)]"
+                        title="Déclarer une vente pour ce lead"
+                      >
+                        Vente
+                      </a>
                       <button
                         type="button"
                         onClick={() => {

@@ -62,7 +62,10 @@ export interface MetaEventInput {
   eventName: "Lead" | "SubmitApplication" | "Schedule" | "Purchase" | "PageView" | "ViewContent";
   // Doit être identique à l'eventID envoyé par fbq() côté navigateur (dédup).
   eventId: string;
-  eventSourceUrl: string;
+  // Obligatoire pour une action sur le site. Une vente conclue en appel
+  // (actionSource "phone_call") n'a pas d'URL.
+  eventSourceUrl?: string;
+  actionSource?: "website" | "phone_call" | "system_generated";
   userData: MetaUserData;
   customData?: Record<string, string | number>;
 }
@@ -139,10 +142,10 @@ export async function sendMetaEvent(input: MetaEventInput): Promise<void> {
     event_name: input.eventName,
     event_time: Math.floor(Date.now() / 1000),
     event_id: input.eventId,
-    event_source_url: input.eventSourceUrl,
-    action_source: "website",
+    action_source: input.actionSource ?? "website",
     user_data,
   };
+  if (input.eventSourceUrl) event.event_source_url = input.eventSourceUrl;
   if (input.customData) event.custom_data = input.customData;
 
   const payload: Record<string, unknown> = { data: [event] };

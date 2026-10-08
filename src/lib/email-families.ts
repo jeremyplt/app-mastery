@@ -15,6 +15,7 @@ export const EMAIL_FAMILIES: EmailFamily[] = [
   { id: "appel", label: "Appel découverte (formulaire)", tags: ["appel-decouverte"] },
   { id: "candidature", label: "Candidature", tags: ["candidature-qualifie", "candidature-non-qualifie", "candidature-admin"] },
   { id: "guides", label: "Guides gratuits", tags: ["27-regles", "metabase", "piscine-epitech", "prompt-50-saas", "workflow-make", "monetisation", "openclaw"] },
+  { id: "ventes", label: "Ventes · contrats, paiements et alertes", tags: ["vente-rappel-j7", "vente-rappel-j3", "vente-rappel-j1", "vente-rappel-j0", "vente-contrat-j1", "vente-contrat-j3", "vente-admin", "vente-admin-jour"] },
   { id: "membres", label: "Espace membres", tags: ["magic-link", "welcome-essentiel", "welcome-complet", "welcome-vip"] },
   { id: "admin", label: "Admin", tags: ["admin-invitation"] },
 ];
@@ -48,6 +49,14 @@ export const EMAIL_LABELS: Record<string, string> = {
   "candidature-qualifie": "Candidature qualifiée",
   "candidature-non-qualifie": "Candidature non qualifiée",
   "candidature-admin": "Alerte candidature (admin)",
+  "vente-rappel-j7": "Rappel de paiement · J-7",
+  "vente-rappel-j3": "Rappel de paiement · J-3",
+  "vente-rappel-j1": "Rappel de paiement · veille",
+  "vente-rappel-j0": "Rappel de paiement · jour J",
+  "vente-contrat-j1": "Relance contrat · J+1",
+  "vente-contrat-j3": "Relance contrat · J+3",
+  "vente-admin": "Alerte vente (admin)",
+  "vente-admin-jour": "Point du jour ventes (admin)",
   "magic-link": "Lien de connexion",
   "admin-invitation": "Invitation admin",
 };

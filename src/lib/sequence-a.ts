@@ -90,7 +90,8 @@ export async function runSequenceA(now = new Date()): Promise<{ active: number; 
       .not("seq_a_started_at", "is", null)
       .lt("seq_a_step", SEQUENCE_A_LAST_STEP)
       .eq("call_booked", false)
-      .eq("disqualified", false),
+      .eq("disqualified", false)
+      .eq("client", false),
   );
 
   const leads = (data || []) as SequenceALead[];

@@ -23,7 +23,10 @@ export async function POST(req: NextRequest) {
     }
 
     const token = await createMagicLinkToken(email);
-    const magicLink = `${req.nextUrl.origin}/api/auth/verify?token=${token}`;
+    // Hôte réellement demandé (en dev, nextUrl.origin vaut 0.0.0.0).
+    const host = req.headers.get("x-forwarded-host") ?? req.headers.get("host");
+    const origin = host ? `${req.nextUrl.protocol}//${host}` : req.nextUrl.origin;
+    const magicLink = `${origin}/api/auth/verify?token=${token}`;
     const built = magicLinkEmail(magicLink);
 
     // Send email via Brevo

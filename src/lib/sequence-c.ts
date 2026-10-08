@@ -118,7 +118,8 @@ export async function runSequenceC(now = new Date()): Promise<{ active: number; 
       .not("seq_c_started_at", "is", null)
       .lt("seq_c_step", SEQUENCE_C_LAST_STEP)
       .eq("call_booked", false)
-      .eq("disqualified", false),
+      .eq("disqualified", false)
+      .eq("client", false),
   );
   const leads = (data || []) as SequenceCLead[];
   const sent: Record<string, string> = {};

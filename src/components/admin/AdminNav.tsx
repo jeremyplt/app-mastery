@@ -5,6 +5,7 @@ import ThemeToggle from "@/components/ThemeToggle";
 
 export type AdminSection =
   | "crm"
+  | "ventes"
   | "candidatures"
   | "calendrier"
   | "emails"
@@ -16,6 +17,7 @@ type Item = { id: AdminSection; label: string; href: string; ownerOnly?: boolean
 
 const ITEMS: Item[] = [
   { id: "crm", label: "CRM", href: "/admin/crm" },
+  { id: "ventes", label: "Ventes", href: "/admin/ventes" },
   { id: "candidatures", label: "Candidatures", href: "/admin/candidatures" },
   { id: "calendrier", label: "Calendrier", href: "/admin/calendrier" },
   { id: "emails", label: "Emails", href: "/admin/crm/emails" },
