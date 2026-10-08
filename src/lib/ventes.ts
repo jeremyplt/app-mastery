@@ -1,7 +1,7 @@
 import { getAdminClient, withRetry } from "@/lib/supabase";
 import { parisDay, parisHour } from "@/lib/call-reminders";
 import { sendBuiltEmail } from "@/lib/emails/send";
-import { adminAlert, contractReminder, formatDueDate, formatMoney, paymentReminder, type BankDetails } from "@/lib/emails/ventes";
+import { adminAlert, contractReminder, formatDueDate, formatMoney, paymentReminder, amountTag, type BankDetails } from "@/lib/emails/ventes";
 import { contractsConfigured, contractStatus } from "@/lib/docuseal";
 import { inviteToSkool } from "@/lib/skool";
 import { sendMetaEvent } from "@/lib/meta-capi";
@@ -15,10 +15,11 @@ import { sendMetaEvent } from "@/lib/meta-capi";
 //   Skool, événement Purchase envoyé à Meta, alerte à Jeremy.
 // - Contrat envoyé mais pas signé : relance du client à J+1 puis J+3.
 // - Chaque échéance non payée reçoit un rappel par email aux jours choisis
-//   (par défaut J-3, J-1 et le jour J), à partir de 9 h, heure de Paris.
-//   Une échéance due le jour même de la vente (l'acompte) n'a pas de rappel.
-//   Pas de relance du client après l'échéance : un virement peut mettre
-//   plusieurs jours à arriver. Les retards vont dans le point du jour de Jeremy.
+//   (par défaut J-3, J-1, le jour J, puis J+3 et J+7 en retard), à partir de
+//   9 h, heure de Paris. Les rappels de retard (décalage négatif) annoncent la
+//   coupure de l'accès et ne partent que si le contrat est signé : il faut
+//   donc cocher « Payé » dès qu'un virement arrive. Une échéance due le jour
+//   même de la vente (l'acompte) n'a pas de rappel avant l'échéance.
 
 export type ContractStatus = "none" | "sent" | "delivered" | "completed" | "declined" | "voided";
 
@@ -205,6 +206,7 @@ export async function onConfirmed(sale: Sale): Promise<{ invited: boolean; error
 
   if (!sale.alerts_sent.client) {
     await alertJeremy(`🎉 ${fullName(sale)} est client (${formatMoney(sale.total_amount, sale.currency)})`, [
+      `Montant : ${amountTag(formatMoney(sale.total_amount, sale.currency))} en ${sale.installments} fois.`,
       `<b>${fullName(sale)}</b> a signé son contrat et son 1er paiement est reçu.`,
       sale.skool_invited_at || result.invited
         ? "L'invitation Skool est partie."
@@ -246,10 +248,16 @@ export function reminderDue(sale: Sale, payment: SalePayment, now = new Date()):
   if (payment.paid || sale.archived) return null;
   if (sale.contract_status === "declined" || sale.contract_status === "voided") return null;
   const today = parisDay(now);
-  if (payment.due_date <= parisDay(new Date(sale.created_at))) return null;
   const left = daysUntil(today, payment.due_date);
-  if (left < 0) return null;
-  const reached = sale.reminder_offsets.filter((o) => o >= left).sort((a, b) => a - b);
+  if (left < -30) return null;
+  // Avant l'échéance : pas de rappel pour un paiement dû le jour de la vente.
+  // Après : seulement si le contrat est signé (on ne menace pas de couper un
+  // accès qui n'a jamais été ouvert).
+  const offsets = sale.reminder_offsets.filter((o) =>
+    o < 0 ? sale.contract_status === "completed" : payment.due_date > parisDay(new Date(sale.created_at)),
+  );
+  // Une fois l'échéance passée, seuls les rappels de retard comptent.
+  const reached = offsets.filter((o) => o >= left && (o < 0 || left >= 0)).sort((a, b) => a - b);
   if (reached.length === 0) return null;
   const offset = reached[0];
   if (payment.reminders_sent[String(offset)]) return null;
@@ -294,9 +302,9 @@ export async function applyContractStatus(sale: Sale, next: ContractStatus, comp
   const first = sale.sale_payments.find((p) => p.position === 1);
   if (next === "completed" && !first?.paid && !sale.alerts_sent.signed) {
     await alertJeremy(`✍️ ${fullName(sale)} a signé son contrat`, [
-      `<b>${fullName(sale)}</b> vient de signer son contrat (${formatMoney(sale.total_amount, sale.currency)} en ${sale.installments} fois).`,
+      `<b>${fullName(sale)}</b> vient de signer son contrat (${amountTag(formatMoney(sale.total_amount, sale.currency))} en ${sale.installments} fois).`,
       first
-        ? `Dès que le virement de ${formatMoney(first.amount, sale.currency)} arrive, coche « Reçu » : l'invitation Skool partira toute seule.`
+        ? `Dès que le virement de ${amountTag(formatMoney(first.amount, sale.currency))} arrive, coche « Reçu » : l'invitation Skool partira toute seule.`
         : "",
     ]);
     await markAlert(sale, "signed");
@@ -411,7 +419,7 @@ async function sendDailyDigest(sales: Sale[], now: Date): Promise<boolean> {
     if (sale.contract_status === "declined" || sale.contract_status === "voided") continue;
     for (const p of sale.sale_payments) {
       if (p.paid || p.due_date > today) continue;
-      const line = `${fullName(sale)} : ${formatMoney(p.amount, sale.currency)} (échéance ${p.position}/${sale.installments}, ${formatDueDate(p.due_date)})`;
+      const line = `${fullName(sale)} : ${amountTag(formatMoney(p.amount, sale.currency), p.due_date < today)} (échéance ${p.position}/${sale.installments}, ${formatDueDate(p.due_date)})`;
       (p.due_date === today ? due : late).push(line);
     }
     if (
@@ -429,7 +437,7 @@ async function sendDailyDigest(sales: Sale[], now: Date): Promise<boolean> {
   const list = (items: string[]) => items.map((i) => `• ${i}`).join("<br>");
   const lines: string[] = [];
   if (due.length) lines.push(`<b>💶 Virements attendus aujourd'hui</b><br>${list(due)}`);
-  if (late.length) lines.push(`<b>⏰ Virements en retard</b> (vérifie ton compte, puis coche « Payé » ou relance le client toi-même)<br>${list(late)}`);
+  if (late.length) lines.push(`<b>⏰ Virements en retard</b> (vérifie ton compte et coche « Payé » si c'est arrivé : sinon le client reçoit une relance à J+3 et J+7 qui annonce la coupure de son accès)<br>${list(late)}`);
   if (unsigned.length) lines.push(`<b>✍️ Contrats pas encore signés</b><br>${list(unsigned)}`);
   const count = due.length + late.length;
   await alertJeremy(

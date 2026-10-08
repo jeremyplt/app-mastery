@@ -41,8 +41,17 @@ function groupIban(iban: string): string {
   return iban.replace(/\s+/g, "").replace(/(.{4})/g, "$1 ").trim();
 }
 
-function row(label: string, value: string): string {
-  return `<tr><td style="padding:6px 14px 6px 0;font-size:15px;color:#6e6e73;white-space:nowrap;vertical-align:top">${esc(label)}</td><td style="padding:6px 0;font-size:15px;font-weight:600;color:#1d1d1f;font-family:ui-monospace,Menlo,monospace">${esc(value)}</td></tr>`;
+const RED = "#d70015";
+const BLUE = "#0a84ff";
+
+// Montant mis en avant, en gras pour qu'on ne le rate pas : bleu tant que
+// l'échéance n'est pas passée, rouge quand le paiement est en retard.
+export function amountTag(text: string, late = false): string {
+  return `<strong style="color:${late ? RED : BLUE};white-space:nowrap">${esc(text)}</strong>`;
+}
+
+function row(label: string, value: string, color = "#1d1d1f"): string {
+  return `<tr><td style="padding:6px 14px 6px 0;font-size:15px;color:#6e6e73;white-space:nowrap;vertical-align:top">${esc(label)}</td><td style="padding:6px 0;font-size:15px;font-weight:600;color:${color};font-family:ui-monospace,Menlo,monospace">${esc(value)}</td></tr>`;
 }
 
 export function paymentReference(input: Pick<ReminderInput, "firstName" | "lastName" | "position" | "installments">): string {
@@ -50,29 +59,43 @@ export function paymentReference(input: Pick<ReminderInput, "firstName" | "lastN
   return `App Mastery ${name} ${input.position}/${input.installments}`;
 }
 
+// offset > 0 : avant l'échéance ; 0 : le jour J ; < 0 : en retard
+// (-3 = trois jours après l'échéance, -7 = dernier rappel avant suspension).
 export function paymentReminder(input: ReminderInput): BuiltEmail {
   const date = formatDueDate(input.dueDate);
+  const shortDate = date.replace(/^\S+ /, "");
   const amount = formatMoney(input.amount, input.currency);
   const ordinal = input.position === 1 ? "1re" : `${input.position}e`;
   const what = `la ${ordinal} échéance de ton accompagnement App Mastery`;
+  const late = input.offset < 0;
+  const last = input.offset <= -7;
+  const showAmount = (t: string) => amountTag(t, late);
 
-  const when =
-    input.offset === 0
-      ? `c'est aujourd'hui : ${what} (${amount}) est à régler ce ${date}.`
+  const intro = late
+    ? last
+      ? `<p ${P}>Je n'ai toujours pas reçu ${what} : ${showAmount(amount)}, qui était à régler le ${esc(date)}.</p>
+<p ${P}><strong>C'est mon dernier rappel.</strong> Sans paiement de ta part dans les prochains jours, je vais devoir <strong style="color:${RED}">couper ton accès</strong> à la communauté et au suivi, comme prévu dans ton contrat. Je préfère vraiment ne pas en arriver là.</p>`
+      : `<p ${P}>Je n'ai pas encore reçu ${what} : ${showAmount(amount)}, qui était à régler le ${esc(date)}.</p>
+<p ${P}>Merci de faire le virement au plus vite. Sans paiement, je vais devoir <strong style="color:${RED}">suspendre ton accès</strong> à la communauté et au suivi, comme prévu dans ton contrat.</p>`
+    : input.offset === 0
+      ? `<p ${P}>Petit rappel, c'est aujourd'hui : ${what}, ${showAmount(amount)}, est à régler ce ${esc(date)}.</p>`
       : input.offset === 1
-        ? `${what} (${amount}) arrive demain, le ${date}.`
-        : `${what} (${amount}) arrive le ${date}.`;
+        ? `<p ${P}>Petit rappel, ${what}, ${showAmount(amount)}, arrive demain, le ${esc(date)}.</p>`
+        : `<p ${P}>Petit rappel, ${what}, ${showAmount(amount)}, arrive le ${esc(date)}.</p>`;
 
-  const subject =
-    input.offset === 0
+  const subject = late
+    ? last
+      ? "Dernier rappel avant suspension"
+      : "Ton paiement est en retard"
+    : input.offset === 0
       ? "Ton échéance d'aujourd'hui"
       : input.offset === 1
         ? "Ton échéance de demain"
-        : `Ton échéance du ${date.replace(/^\S+ /, "")}`;
+        : `Ton échéance du ${shortDate}`;
 
   const b = input.bank;
   const table = `<table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 22px;padding:14px 18px;background:#f5f5f7;border-radius:12px;border-collapse:separate">
-${row("Montant", amount)}
+${row("Montant", amount, late ? RED : BLUE)}
 ${row("Bénéficiaire", b.holder)}
 ${b.address ? row("Adresse", b.address) : ""}
 ${row("IBAN", groupIban(b.iban))}
@@ -84,14 +107,15 @@ ${row("Référence", paymentReference(input))}
 
   const body = `
 <p ${P}>Salut ${esc(input.firstName)},</p>
-<p ${P}>Petit rappel, ${esc(when)}</p>
+${intro}
 <p ${P}>Voici les informations pour faire le virement :</p>
 ${table}
 <p ${P}>Une fois le virement fait, réponds simplement à cet email avec la capture du virement. Je le note de mon côté.</p>
-<p ${P}>Si tu l'as déjà fait, ne tiens pas compte de ce message.</p>
-${signature("À très vite")}`;
+<p ${P}>${late ? "Si tu as déjà fait le virement, envoie-moi la capture en réponse à cet email et ne tiens pas compte de ce message : un virement peut mettre quelques jours à arriver." : "Si tu l'as déjà fait, ne tiens pas compte de ce message."}</p>
+${signature(late ? "Merci" : "À très vite")}`;
 
-  return { subject, html: wrap(body), tag: `vente-rappel-j${input.offset}` };
+  const tag = late ? `vente-retard-j${-input.offset}` : `vente-rappel-j${input.offset}`;
+  return { subject, html: wrap(body), tag };
 }
 
 // Relance d'un contrat envoyé mais pas encore signé (J+1 puis J+3).

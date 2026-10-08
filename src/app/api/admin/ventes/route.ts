@@ -65,8 +65,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Chaque paiement doit avoir un montant et une date" }, { status: 400 });
     }
     const offsets: number[] = Array.isArray(b.reminder_offsets)
-      ? [...new Set<number>(b.reminder_offsets.map(Number).filter((n: number) => Number.isInteger(n) && n >= 0 && n <= 30))]
-      : [3, 1, 0];
+      ? [...new Set<number>(b.reminder_offsets.map(Number).filter((n: number) => Number.isInteger(n) && n >= -30 && n <= 30))]
+      : [3, 1, 0, -3, -7];
 
     const supabase = getAdminClient();
     const { origin, utm } = await linkLead(email);
@@ -142,7 +142,7 @@ export async function PATCH(req: NextRequest) {
     if (typeof b.notes === "string") update.notes = b.notes.trim() || null;
     if (typeof b.archived === "boolean") update.archived = b.archived;
     if (Array.isArray(b.reminder_offsets)) {
-      update.reminder_offsets = [...new Set<number>(b.reminder_offsets.map(Number).filter((n: number) => Number.isInteger(n) && n >= 0 && n <= 30))];
+      update.reminder_offsets = [...new Set<number>(b.reminder_offsets.map(Number).filter((n: number) => Number.isInteger(n) && n >= -30 && n <= 30))];
     }
     // Contrat géré à la main (envoyé hors du CRM) : on coche "signé".
     if (typeof b.contract_signed === "boolean") {

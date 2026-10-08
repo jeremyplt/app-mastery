@@ -54,14 +54,20 @@ function originLabel(origin: string | null) {
 
 type Bank = { holder: string; address: string; iban: string; bic: string; intermediaryBic: string; bank: string };
 
-// Rappels proposés, en jours avant l'échéance.
+// Rappels proposés, en jours avant l'échéance (négatif = après, en retard).
 const REMINDER_CHOICES: [number, string][] = [
   [7, "J-7"],
   [3, "J-3"],
   [1, "J-1"],
   [0, "Jour J"],
+  [-3, "J+3 retard"],
+  [-7, "J+7 dernier rappel"],
 ];
-const DEFAULT_OFFSETS = [3, 1, 0];
+const DEFAULT_OFFSETS = [3, 1, 0, -3, -7];
+
+function offsetLabel(o: number) {
+  return o === 0 ? "jour J" : o > 0 ? `J-${o}` : `J+${-o}`;
+}
 const DEFAULT_OFFER = "Pack Incubateur App Mastery";
 
 const CONTRACT_LABELS: Record<ContractStatus, { label: string; tone: Tone }> = {
@@ -719,7 +725,7 @@ export default function VentesPage() {
                         <Chip tone={state.tone}>{state.label}</Chip>
                         {sent.length > 0 && (
                           <span className="text-xs font-semibold text-[var(--fg2)]">
-                            Rappel envoyé : {sent.map((o) => (o === 0 ? "jour J" : `J-${o}`)).join(", ")}
+                            Rappel envoyé : {sent.map(offsetLabel).join(", ")}
                           </span>
                         )}
                         <span className="flex-1" />
@@ -730,6 +736,14 @@ export default function VentesPage() {
                           className="text-xs font-bold text-[var(--accent2)] hover:underline"
                         >
                           Voir le rappel
+                        </a>
+                        <a
+                          href={`/api/admin/ventes/apercu?payment=${p.id}&offset=-7`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-xs font-bold text-[var(--red)] hover:underline"
+                        >
+                          Voir la relance
                         </a>
                         <Toggle on={p.paid} label="Payé" disabled={busy === `pay-${p.id}`} onChange={(v) => patchPayment(p, { paid: v })} />
                       </div>
