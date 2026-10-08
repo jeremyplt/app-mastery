@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { verifyToken, createSessionToken } from "@/lib/auth";
+import { verifyToken, createSessionToken, SESSION_COOKIE } from "@/lib/auth";
+import { getRoleForEmail } from "@/lib/admin";
 
 // En dev, req.url porte l'adresse d'écoute du serveur (0.0.0.0), injoignable
 // depuis le navigateur : on redirige vers l'hôte réellement demandé.
@@ -22,16 +23,11 @@ export async function GET(req: NextRequest) {
 
   const sessionToken = await createSessionToken(result.email);
 
-  const response = NextResponse.redirect(
-    siteUrl(req, "/membres/cours")
-  );
-  response.cookies.set("session", sessionToken, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    maxAge: 60 * 60 * 24 * 30, // 30 days
-    path: "/",
-  });
+  // L'équipe arrive directement dans l'admin (l'espace formation n'est plus
+  // utilisé) ; les anciens élèves gardent l'accès à leurs cours.
+  const isTeam = (await getRoleForEmail(result.email)) !== null;
+  const response = NextResponse.redirect(siteUrl(req, isTeam ? "/admin/crm" : "/membres/cours"));
+  response.cookies.set("session", sessionToken, SESSION_COOKIE);
 
   return response;
 }

@@ -12,12 +12,21 @@ export async function createMagicLinkToken(email: string): Promise<string> {
     .sign(SECRET);
 }
 
+// Session sans date d'expiration : on reste connecté pour toujours.
 export async function createSessionToken(email: string): Promise<string> {
-  return new SignJWT({ email })
-    .setProtectedHeader({ alg: "HS256" })
-    .setExpirationTime("30d")
-    .sign(SECRET);
+  return new SignJWT({ email }).setProtectedHeader({ alg: "HS256" }).sign(SECRET);
 }
+
+// Les navigateurs plafonnent la durée d'un cookie à 400 jours. Le cookie est
+// renouvelé à chaque visite de l'admin (/api/admin/check), il n'expire donc
+// jamais tant qu'on revient au moins une fois tous les 400 jours.
+export const SESSION_COOKIE = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: "lax" as const,
+  maxAge: 60 * 60 * 24 * 400,
+  path: "/",
+};
 
 export async function verifyToken(
   token: string

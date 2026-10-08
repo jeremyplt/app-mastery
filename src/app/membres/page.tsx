@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
@@ -12,6 +12,16 @@ function LoginForm() {
   const [error, setError] = useState("");
   const searchParams = useSearchParams();
   const urlError = searchParams.get("error");
+
+  // Déjà connecté en tant que membre de l'équipe : direction l'admin.
+  useEffect(() => {
+    fetch("/api/admin/check")
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.admin) window.location.href = "/admin/crm";
+      })
+      .catch(() => {});
+  }, []);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
