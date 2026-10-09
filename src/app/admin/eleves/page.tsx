@@ -292,7 +292,16 @@ export default function ElevesPage() {
                         <span className="truncate text-[13px] font-medium text-[var(--fg2)]">{s.app || "App à définir"}</span>
                         <span className={`rounded-md px-1.5 py-0.5 text-[11px] font-bold ${TONE_CLASSES[status.tone]}`}>{status.label}</span>
                       </div>
-                      <p className="mt-0.5 text-[12px] font-medium text-[var(--fg3)]">Dernier échange : {lastContactLabel(s.last_contact_at)}</p>
+                      <p className="mt-0.5 text-[12px] font-medium text-[var(--fg3)]">
+                        Dernier échange : {lastContactLabel(s.last_contact_at)} ·{" "}
+                        {s.questionnaire_answered_at ? (
+                          <span className="font-semibold text-[var(--green)]">Kick-start reçu</span>
+                        ) : s.questionnaire_sent_at ? (
+                          <span className="font-semibold text-[var(--orange)]">Kick-start envoyé, pas encore rempli</span>
+                        ) : (
+                          "Kick-start pas envoyé"
+                        )}
+                      </p>
                     </div>
                   </div>
                   <Progress s={s} />

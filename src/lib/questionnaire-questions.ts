@@ -62,6 +62,7 @@ export const QUESTIONS: Question[] = [
       { id: "x", label: "X", url: true },
       { id: "reddit", label: "Reddit", url: true },
       { id: "website", label: "Site web", url: true },
+      { id: "other", label: "Autre", placeholder: "Autre réseau ou lien (ex. Threads, Discord...)", url: true },
     ],
   },
   {
