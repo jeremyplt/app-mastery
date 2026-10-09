@@ -23,7 +23,7 @@ import {
   today,
   type Student,
 } from "../shared";
-import { QUESTIONS } from "@/lib/questionnaire-questions";
+import { answerEntries } from "@/lib/questionnaire-questions";
 
 // Fiche élève : informations, parcours, paiements et notes. Les infos se
 // modifient dans un formulaire avec un bouton Enregistrer ; les étapes et les
@@ -448,7 +448,7 @@ export default function StudentPage() {
 
                 {/* Questionnaire de démarrage */}
                 <Card
-                  title="Questionnaire de démarrage"
+                  title="Kick-start (questionnaire de démarrage)"
                   action={
                     s.questionnaire_answered_at ? (
                       <span className={`rounded-md px-2 py-0.5 text-xs font-bold ${TONE_CLASSES.green}`}>Répondu le {frDate(s.questionnaire_answered_at.slice(0, 10))}</span>
@@ -461,10 +461,10 @@ export default function StudentPage() {
                 >
                   {s.questionnaire ? (
                     <dl className="space-y-3">
-                      {QUESTIONS.filter((q) => s.questionnaire?.[q.id]).map((q) => (
-                        <div key={q.id}>
-                          <dt className="text-[12.5px] font-bold text-[var(--fg2)]">{q.label}</dt>
-                          <dd className="mt-0.5 whitespace-pre-line text-[14.5px] font-semibold text-[var(--fg)]">{s.questionnaire?.[q.id]}</dd>
+                      {answerEntries(s.questionnaire).map((e) => (
+                        <div key={e.label}>
+                          <dt className="text-[12.5px] font-bold text-[var(--fg2)]">{e.label}</dt>
+                          <dd className="mt-0.5 whitespace-pre-line break-words text-[14.5px] font-semibold text-[var(--fg)]">{e.value}</dd>
                         </div>
                       ))}
                     </dl>

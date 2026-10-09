@@ -3,18 +3,10 @@
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import ThemeToggle from "@/components/ThemeToggle";
+import { ACCESS_ANSWER_ID, ACCESS_EMAIL, ACCESS_TODO, type Question } from "@/lib/questionnaire-questions";
 
-// Questionnaire de démarrage d'un nouvel élève. Le lien (envoyé par email)
-// contient son jeton unique : pas besoin de compte.
-
-type Question = {
-  id: string;
-  label: string;
-  type: "choice" | "text" | "long";
-  choices?: string[];
-  required?: boolean;
-  placeholder?: string;
-};
+// Questionnaire de démarrage d'un nouvel élève (« Kick-start App Mastery »).
+// Le lien envoyé par email contient son jeton unique : pas besoin de compte.
 
 const CHOICE_BASE =
   "w-full text-left rounded-[12px] border-[0.5px] px-4 py-3 text-[15px] font-semibold transition-[background-color,border-color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.99]";
@@ -28,6 +20,7 @@ export default function QuestionnairePage() {
   const { token } = useParams<{ token: string }>();
   const [questions, setQuestions] = useState<Question[]>([]);
   const [firstName, setFirstName] = useState("");
+  const [name, setName] = useState("");
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [state, setState] = useState<"loading" | "form" | "done" | "invalid">("loading");
   const [error, setError] = useState<string | null>(null);
@@ -40,6 +33,7 @@ export default function QuestionnairePage() {
         if (d.error) return setState("invalid");
         setQuestions(d.questions);
         setFirstName(d.firstName);
+        setName(d.name);
         setAnswers(d.answers ?? {});
         setState(d.answered ? "done" : "form");
       })
@@ -105,15 +99,32 @@ export default function QuestionnairePage() {
 
         {state === "form" && (
           <form onSubmit={submit} noValidate>
-            <h1 className="text-[30px] font-bold leading-tight tracking-tight">
-              Bienvenue {firstName} 👋
-            </h1>
+            <p className="text-[13px] font-bold uppercase tracking-widest text-[var(--accent2)]">Kick-start App Mastery</p>
+            <h1 className="mt-2 text-[30px] font-bold leading-tight tracking-tight">Bienvenue {firstName} 👋</h1>
             <p className="mt-3 text-[16px] font-medium leading-relaxed text-[var(--fg2)]">
-              Quelques questions pour bien démarrer ton accompagnement. Ça prend cinq minutes, et ça me permet de préparer notre premier appel.
+              Quelques questions sur ton application pour bien démarrer l&apos;accompagnement. Je lis tes réponses avant notre appel de démarrage.
             </p>
+            {/* En-tête du document : Nom et App, puis les questions numérotées */}
+            <div id="q-app" className="mac-group mt-6 grid gap-4 p-5 sm:grid-cols-2">
+              <div>
+                <p className="text-[13px] font-bold text-[var(--fg2)]">Nom</p>
+                <p className="mt-2 text-[17px] font-bold">{name}</p>
+              </div>
+              <label className="block">
+                <span className="text-[13px] font-bold text-[var(--fg2)]">App</span>
+                <input
+                  className="mac-field mt-1 !py-2.5"
+                  placeholder="Nom de ton application"
+                  value={answers.app ?? ""}
+                  onChange={(e) => setAnswers({ ...answers, app: e.target.value })}
+                />
+              </label>
+            </div>
 
             <div className="mt-8 space-y-4">
-              {questions.map((q, i) => (
+              {questions
+                .filter((q) => q.id !== "app")
+                .map((q, i) => (
                 <div key={q.id} id={`q-${q.id}`} className="mac-group p-5">
                   <p className="text-[16px] font-bold">
                     {i + 1}. {q.label}
@@ -137,9 +148,25 @@ export default function QuestionnairePage() {
                         onChange={(e) => setAnswers({ ...answers, [q.id]: e.target.value })}
                       />
                     )}
-                    {q.type === "long" && (
+                    {q.type === "fields" && (
+                      <div className="grid gap-2">
+                        {q.fields?.map((f) => (
+                          <label key={f.id} className="flex items-center gap-3">
+                            <span className="w-24 shrink-0 text-[14px] font-bold text-[var(--fg2)]">{f.label}</span>
+                            <input
+                              className="mac-field !py-2.5"
+                              inputMode={f.url ? "url" : undefined}
+                              placeholder={f.placeholder ?? (f.url ? "Lien" : "")}
+                              value={answers[`${q.id}.${f.id}`] ?? ""}
+                              onChange={(e) => setAnswers({ ...answers, [`${q.id}.${f.id}`]: e.target.value })}
+                            />
+                          </label>
+                        ))}
+                      </div>
+                    )}
+                    {(q.type === "long" || q.type === "list") && (
                       <textarea
-                        className="mac-field min-h-[110px]"
+                        className={`mac-field ${q.type === "list" ? "min-h-[96px]" : "min-h-[130px]"}`}
                         placeholder={q.placeholder}
                         value={answers[q.id] ?? ""}
                         onChange={(e) => setAnswers({ ...answers, [q.id]: e.target.value })}
@@ -148,6 +175,30 @@ export default function QuestionnairePage() {
                   </div>
                 </div>
               ))}
+            </div>
+
+            {/* À faire : accès en lecture seule */}
+            <div className="mac-group mt-4 border-[var(--accent)] p-5">
+              <p className="text-[16px] font-bold">À faire : envoie-moi un accès en lecture seule</p>
+              <p className="mt-1 text-[14.5px] font-medium text-[var(--fg2)]">
+                À l&apos;adresse <b className="text-[var(--fg)]">{ACCESS_EMAIL}</b>, en « read-only » :
+              </p>
+              <ul className="mt-2 space-y-1">
+                {ACCESS_TODO.map((t) => (
+                  <li key={t} className="text-[14.5px] font-semibold">
+                    • {t}
+                  </li>
+                ))}
+              </ul>
+              <label className="mt-4 flex cursor-pointer items-center gap-3 rounded-[12px] bg-[var(--field)] px-4 py-3">
+                <input
+                  type="checkbox"
+                  className="h-5 w-5 accent-[var(--accent)]"
+                  checked={answers[ACCESS_ANSWER_ID] === "Oui"}
+                  onChange={(e) => setAnswers({ ...answers, [ACCESS_ANSWER_ID]: e.target.checked ? "Oui" : "" })}
+                />
+                <span className="text-[15px] font-bold">J&apos;ai envoyé les accès</span>
+              </label>
             </div>
 
             {error && <p className="mt-5 text-[15px] font-bold text-[var(--red)]">{error}</p>}
