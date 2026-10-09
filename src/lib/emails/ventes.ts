@@ -143,8 +143,13 @@ ${signature("À très vite")}`;
 }
 
 // Alerte interne envoyée à Jeremy (jeremypltpro@gmail.com).
-export function adminAlert(subject: string, lines: string[], tag = "vente-admin"): BuiltEmail {
+export function adminAlert(
+  subject: string,
+  lines: string[],
+  tag = "vente-admin",
+  cta: { label: string; href: string } = { label: "Ouvrir les ventes", href: "https://www.jeremypitault.com/admin/ventes" },
+): BuiltEmail {
   const body = `${lines.map((l) => `<p ${P}>${l}</p>`).join("\n")}
-${button("Ouvrir les ventes", "https://www.jeremypitault.com/admin/ventes")}`;
+${button(cta.label, cta.href)}`;
   return { subject, html: wrap(body), tag };
 }

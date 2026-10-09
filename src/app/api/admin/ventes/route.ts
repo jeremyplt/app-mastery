@@ -3,6 +3,8 @@ import { getAdminRole } from "@/lib/admin";
 import { getSessionEmail } from "@/lib/auth";
 import { getAdminClient, withRetry } from "@/lib/supabase";
 import { contractsConfigured, hasTemplate } from "@/lib/docuseal";
+import { createStudentFromSale } from "@/lib/students";
+import { DEFAULT_COMMISSION_RATE, commissionFor } from "@/lib/commissions";
 import { SALE_SELECT, contractPending, getBankDetails, getSale, linkLead, normalize, onConfirmed, syncContract, unlinkLead, type Sale } from "@/lib/ventes";
 
 function fail(err: unknown) {
@@ -22,9 +24,12 @@ const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 export async function GET() {
   try {
     const role = await requireRole();
-    const rows = await withRetry(() =>
-      getAdminClient().from("sales").select(SALE_SELECT).order("created_at", { ascending: false }).limit(500),
-    );
+    // Un closer ne voit que ses propres ventes.
+    const me = (await getSessionEmail())?.trim().toLowerCase() ?? "";
+    const rows = await withRetry(() => {
+      const q = getAdminClient().from("sales").select(SALE_SELECT).order("created_at", { ascending: false }).limit(500);
+      return role === "closer" ? q.eq("closer_email", me) : q;
+    });
     const sales = ((rows ?? []) as Sale[]).map(normalize);
     // Contrats en attente : on relit leur statut chez DocuSeal à l'ouverture de
     // la page, pour afficher une signature tout de suite (le webhook ne peut
@@ -33,7 +38,10 @@ export async function GET() {
       sales.filter((s) => !s.archived && contractPending(s)).map((s) => syncContract(s).catch(() => null)),
     );
     const bank = await getBankDetails();
+    const { data: closers } = await getAdminClient().from("admin_users").select("email, name").eq("role", "closer").order("email");
     return NextResponse.json({
+      me: { email: await getSessionEmail(), role },
+      closers: closers ?? [],
       sales,
       bank,
       contracts: contractsConfigured(),
@@ -50,8 +58,18 @@ type PaymentInput = { amount: number; due_date: string };
 // Déclarer une vente : client + échéancier.
 export async function POST(req: NextRequest) {
   try {
-    await requireRole();
+    const role = await requireRole();
     const b = await req.json();
+
+    // Vendu par : un closer touche une commission. Un closer connecté ne peut
+    // déclarer que ses propres ventes.
+    const me = (await getSessionEmail())?.trim().toLowerCase() ?? null;
+    let closerEmail: string | null = role === "closer" ? me : String(b.closer_email ?? "").trim().toLowerCase() || null;
+    if (closerEmail) {
+      const { data: c } = await getAdminClient().from("admin_users").select("email").eq("email", closerEmail).eq("role", "closer").maybeSingle();
+      if (!c) closerEmail = null;
+    }
+    const commissionRate = Number(b.commission_rate) >= 0 && Number(b.commission_rate) <= 100 ? Number(b.commission_rate) : DEFAULT_COMMISSION_RATE;
 
     const email = String(b.email ?? "").trim().toLowerCase();
     const firstName = String(b.first_name ?? "").trim();
@@ -82,6 +100,9 @@ export async function POST(req: NextRequest) {
         phone: String(b.phone ?? "").trim() || null,
         offer: String(b.offer ?? "").trim() || undefined,
         total_amount: payments.reduce((s, p) => s + Number(p.amount), 0),
+        closer_email: closerEmail,
+        commission_rate: commissionRate,
+        commission_amount: closerEmail ? commissionFor(payments.reduce((s, p) => s + Number(p.amount), 0), commissionRate) : null,
         installments: payments.length,
         start_date: ISO_DATE.test(b.start_date ?? "") ? b.start_date : null,
         company: typeof b.company === "object" && b.company ? b.company : {},
@@ -100,7 +121,9 @@ export async function POST(req: NextRequest) {
       throw new Error(payErr.message);
     }
 
-    return NextResponse.json({ sale: await getSale(sale.id) });
+    const created = await getSale(sale.id);
+    await createStudentFromSale(created);
+    return NextResponse.json({ sale: created });
   } catch (err) {
     return fail(err);
   }
@@ -130,7 +153,11 @@ export async function PATCH(req: NextRequest) {
       if (update.amount !== undefined) {
         const { data: all } = await supabase.from("sale_payments").select("amount").eq("sale_id", data.sale_id);
         const total = (all ?? []).reduce((s, p) => s + Number(p.amount), 0);
-        await supabase.from("sales").update({ total_amount: total }).eq("id", data.sale_id);
+        const { data: cur } = await supabase.from("sales").select("closer_email, commission_rate").eq("id", data.sale_id).single();
+        await supabase
+          .from("sales")
+          .update({ total_amount: total, commission_amount: cur?.closer_email ? commissionFor(total, Number(cur.commission_rate)) : null })
+          .eq("id", data.sale_id);
       }
       const sale = await getSale(data.sale_id);
       const skool = await onConfirmed(sale);
@@ -141,6 +168,15 @@ export async function PATCH(req: NextRequest) {
     const update: Record<string, unknown> = {};
     if (typeof b.notes === "string") update.notes = b.notes.trim() || null;
     if (typeof b.archived === "boolean") update.archived = b.archived;
+    // Closer et taux de commission : modifiables par le propriétaire seulement.
+    if ((b.closer_email !== undefined || b.commission_rate !== undefined) && (await getAdminRole()) === "owner") {
+      const { data: cur } = await supabase.from("sales").select("total_amount, closer_email, commission_rate").eq("id", b.id).single();
+      const closer = b.closer_email !== undefined ? String(b.closer_email ?? "").trim().toLowerCase() || null : cur?.closer_email ?? null;
+      const rate = b.commission_rate !== undefined && Number(b.commission_rate) >= 0 && Number(b.commission_rate) <= 100 ? Number(b.commission_rate) : Number(cur?.commission_rate ?? DEFAULT_COMMISSION_RATE);
+      update.closer_email = closer;
+      update.commission_rate = rate;
+      update.commission_amount = closer ? commissionFor(Number(cur?.total_amount ?? 0), rate) : null;
+    }
     if (Array.isArray(b.reminder_offsets)) {
       update.reminder_offsets = [...new Set<number>(b.reminder_offsets.map(Number).filter((n: number) => Number.isInteger(n) && n >= -30 && n <= 30))];
     }
@@ -163,9 +199,16 @@ export async function PATCH(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   try {
-    await requireRole();
+    const role = await requireRole();
     const id = req.nextUrl.searchParams.get("id");
     if (!id) return NextResponse.json({ error: "id manquant" }, { status: 400 });
+    if (role === "closer") {
+      const me = (await getSessionEmail())?.trim().toLowerCase();
+      const { data: own } = await getAdminClient().from("sales").select("id").eq("id", id).eq("closer_email", me ?? "").maybeSingle();
+      if (!own) throw new Error("Accès non autorisé");
+    }
+    // L'élève créé par cette vente part avec elle (vente de test, erreur de saisie).
+    await getAdminClient().from("students").delete().eq("sale_id", id);
     const { data: deleted, error } = await getAdminClient().from("sales").delete().eq("id", id).select("email").single();
     if (error) throw new Error(error.message);
     await unlinkLead(deleted.email);

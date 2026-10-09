@@ -6,7 +6,8 @@ import AdminNav from "@/components/admin/AdminNav";
 type AdminUser = {
   id: string;
   email: string;
-  role: "owner" | "member";
+  name: string | null;
+  role: "owner" | "member" | "closer";
   invited_by: string | null;
   created_at: string;
 };
@@ -29,6 +30,8 @@ export default function EquipeAdmin() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [inviteEmail, setInviteEmail] = useState("");
+  const [inviteName, setInviteName] = useState("");
+  const [inviteRole, setInviteRole] = useState<"member" | "closer">("member");
   const [inviting, setInviting] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
 
@@ -73,7 +76,7 @@ export default function EquipeAdmin() {
       const r = await fetch("/api/admin/users", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: inviteEmail.trim() }),
+        body: JSON.stringify({ email: inviteEmail.trim(), name: inviteName.trim(), role: inviteRole }),
       });
       const d = await r.json();
       if (!r.ok) {
@@ -81,6 +84,7 @@ export default function EquipeAdmin() {
       } else {
         setUsers((u) => [...u, d.user]);
         setInviteEmail("");
+        setInviteName("");
         setNotice(
           d.emailSent
             ? `Invitation envoyée à ${d.user.email}`
@@ -92,6 +96,18 @@ export default function EquipeAdmin() {
     } finally {
       setInviting(false);
     }
+  }
+
+  async function updateUser(user: AdminUser, fields: { role?: AdminUser["role"]; name?: string }) {
+    setError(null);
+    const r = await fetch("/api/admin/users", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: user.id, ...fields }),
+    });
+    const d = await r.json();
+    if (!r.ok) setError(d.error || "Une erreur est survenue");
+    else setUsers((u) => u.map((x) => (x.id === user.id ? d.user : x)));
   }
 
   async function remove(user: AdminUser) {
@@ -129,19 +145,35 @@ export default function EquipeAdmin() {
         <AdminNav current="equipe" isOwner />
         <h1 className="text-[28px] font-bold tracking-tight">Équipe</h1>
         <p className="mt-2 text-[var(--fg2)]">
-          Les membres invités ont accès aux candidatures et au CRM (contacts,
-          suivi, cases à cocher). Seul le propriétaire gère l&apos;équipe, les
-          cours et les paiements.
+          Les membres ont accès au CRM, aux candidatures, aux ventes et aux élèves.
+          Un closer a les mêmes accès, déclare ses ventes et voit ses commissions
+          (20 % du HT par défaut). Seul le propriétaire gère l&apos;équipe et
+          les versements de commission.
         </p>
 
-        <form onSubmit={invite} className="mt-8 flex gap-3">
+        <form onSubmit={invite} className="mt-8 flex flex-wrap gap-3">
+          <input
+            value={inviteName}
+            onChange={(e) => setInviteName(e.target.value)}
+            placeholder="Prénom"
+            className="w-40 rounded-lg border border-[var(--sep)] bg-[var(--group)] px-4 py-2.5 text-[var(--fg)] focus:border-[var(--accent)] focus:outline-none"
+          />
           <input
             type="email"
             value={inviteEmail}
             onChange={(e) => setInviteEmail(e.target.value)}
             placeholder="email@exemple.com"
-            className="flex-1 rounded-lg border border-[var(--sep)] bg-[var(--group)] px-4 py-2.5 text-[var(--fg)] placeholder-gray-500 focus:border-[var(--accent)] focus:outline-none"
+            className="min-w-[220px] flex-1 rounded-lg border border-[var(--sep)] bg-[var(--group)] px-4 py-2.5 text-[var(--fg)] placeholder-gray-500 focus:border-[var(--accent)] focus:outline-none"
           />
+          <select
+            value={inviteRole}
+            onChange={(e) => setInviteRole(e.target.value as "member" | "closer")}
+            className="rounded-lg border border-[var(--sep)] bg-[var(--group)] px-3 py-2.5 font-semibold text-[var(--fg)]"
+            aria-label="Rôle"
+          >
+            <option value="member">Membre</option>
+            <option value="closer">Closer</option>
+          </select>
           <button
             type="submit"
             disabled={inviting || !inviteEmail.trim()}
@@ -173,21 +205,43 @@ export default function EquipeAdmin() {
                 key={u.id}
                 className="flex items-center justify-between gap-4 px-5 py-4"
               >
-                <div>
-                  <div className="font-semibold">{u.email}</div>
+                <div className="min-w-0 flex-1">
+                  {/* Prénom modifiable directement : c'est lui qui s'affiche
+                      dans les ventes, les commissions, etc. */}
+                  <input
+                    key={u.name ?? ""}
+                    defaultValue={u.name ?? ""}
+                    placeholder="Ajouter un prénom"
+                    aria-label={`Prénom de ${u.email}`}
+                    onBlur={(e) => e.target.value.trim() !== (u.name ?? "") && updateUser(u, { name: e.target.value })}
+                    onKeyDown={(e) => e.key === "Enter" && e.currentTarget.blur()}
+                    className="w-full max-w-[260px] rounded-lg border border-transparent bg-transparent px-2 py-1 -ml-2 text-[16px] font-bold text-[var(--fg)] placeholder:font-semibold placeholder:text-[var(--accent2)] hover:border-[var(--sep)] focus:border-[var(--accent)] focus:outline-none"
+                  />
+                  <div className="text-[14px] font-medium text-[var(--fg2)]">{u.email}</div>
                   <div className="text-[var(--fg2)]">
                     {u.role === "owner"
                       ? "Propriétaire"
-                      : `Membre, invité le ${formatDate(u.created_at)}`}
+                      : `${u.role === "closer" ? "Closer" : "Membre"}, invité le ${formatDate(u.created_at)}`}
                   </div>
                 </div>
                 {u.role !== "owner" && (
+                  <div className="flex items-center gap-2">
+                    <select
+                      value={u.role}
+                      onChange={(e) => updateUser(u, { role: e.target.value as AdminUser["role"] })}
+                      className="rounded-lg border border-[var(--sep)] bg-[var(--group)] px-3 py-2 font-semibold text-[var(--fg)]"
+                      aria-label={`Rôle de ${u.email}`}
+                    >
+                      <option value="member">Membre</option>
+                      <option value="closer">Closer</option>
+                    </select>
                   <button
                     onClick={() => remove(u)}
                     className="rounded-lg border border-red-800 px-4 py-2 font-semibold text-[var(--red)] hover:bg-red-950/50"
                   >
                     Retirer
                   </button>
+                  </div>
                 )}
               </div>
             ))

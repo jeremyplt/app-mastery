@@ -3,7 +3,8 @@ import { getAdminClient } from "@/lib/supabase";
 
 export const ADMIN_EMAIL = "jeremypltpro@gmail.com";
 
-export type AdminRole = "owner" | "member";
+// closer : comme un membre, avec en plus ses ventes et ses commissions.
+export type AdminRole = "owner" | "member" | "closer";
 
 // Vérifie si un email fait partie de l'équipe admin (table admin_users).
 export async function getRoleForEmail(
@@ -21,7 +22,7 @@ export async function getRoleForEmail(
       .select("role")
       .eq("email", normalized)
       .maybeSingle();
-    if (data?.role === "owner" || data?.role === "member") return data.role;
+    if (data?.role === "owner" || data?.role === "member" || data?.role === "closer") return data.role;
     return null;
   } catch {
     return null;

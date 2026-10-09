@@ -5,6 +5,7 @@ import { adminAlert, contractReminder, formatDueDate, formatMoney, paymentRemind
 import { contractsConfigured, contractStatus } from "@/lib/docuseal";
 import { inviteToSkool } from "@/lib/skool";
 import { sendMetaEvent } from "@/lib/meta-capi";
+import { addMonths, type StudentPayment } from "@/lib/students";
 
 // Ventes déclarées dans l'admin (/admin/ventes) : contrat DocuSeal,
 // échéancier payé par virement, invitation Skool.
@@ -118,8 +119,8 @@ function fullName(sale: Pick<Sale, "first_name" | "last_name">): string {
   return [sale.first_name, sale.last_name].filter(Boolean).join(" ");
 }
 
-async function alertJeremy(subject: string, lines: string[], tag?: string) {
-  const r = await sendBuiltEmail({ email: ADMIN_ALERT_EMAIL, name: "Jeremy" }, adminAlert(subject, lines, tag));
+async function alertJeremy(subject: string, lines: string[], tag?: string, cta?: { label: string; href: string }) {
+  const r = await sendBuiltEmail({ email: ADMIN_ALERT_EMAIL, name: "Jeremy" }, adminAlert(subject, lines, tag, cta));
   if (!r.ok) console.error(`Alerte vente "${subject}" non envoyée : ${r.error}`);
 }
 
@@ -402,9 +403,76 @@ export async function runVentes(now = new Date()) {
   return { active: sales.length, contracts, skool, reminders, digest, errors };
 }
 
+const SITE = "https://www.jeremypitault.com";
+
+// Jours avant une échéance où Jeremy est prévenu (0 = le jour même).
+const END_NOTICE_DAYS = [7, 1, 0];
+const BILAN_NOTICE_DAYS = [14, 7, 0];
+
+function dayGap(from: string, to: string): number {
+  return Math.round((Date.parse(`${to}T00:00:00Z`) - Date.parse(`${from}T00:00:00Z`)) / 86_400_000);
+}
+
+function inDays(n: number): string {
+  return n === 0 ? "aujourd'hui" : n === 1 ? "demain" : `dans ${n} jours`;
+}
+
+type StudentRow = {
+  id: string;
+  name: string;
+  app: string | null;
+  start_date: string | null;
+  sale_id: string | null;
+  payments: StudentPayment[];
+  bilan_done: boolean;
+};
+
+// Échéances des élèves (/admin/eleves) pour le point du jour : fin de
+// l'accompagnement (J-7, veille, jour J), bilan (J-14, J-7, jour J, puis
+// chaque lundi tant qu'il n'est pas coché) et paiements saisis à la main pour
+// les élèves sans vente (les autres sont déjà comptés avec les ventes).
+export async function studentDeadlines(today: string, isMonday: boolean) {
+  const { data } = await getAdminClient()
+    .from("students")
+    .select("id, name, app, start_date, sale_id, payments, bilan_done")
+    .eq("archived", false);
+  const ends: string[] = [];
+  const bilans: string[] = [];
+  const due: string[] = [];
+  const late: string[] = [];
+  for (const s of (data ?? []) as StudentRow[]) {
+    const who = `<a href="${SITE}/admin/eleves/${s.id}" style="color:#0a84ff;font-weight:600">${s.name}</a>${s.app ? ` (${s.app})` : ""}`;
+    if (s.start_date) {
+      const end = addMonths(s.start_date, 3);
+      const n = dayGap(today, end);
+      if (END_NOTICE_DAYS.includes(n)) {
+        ends.push(`${who} : fin le ${formatDueDate(end)}, ${inDays(n)}. Prévois l'appel de clôture.`);
+      }
+      const bilan = addMonths(s.start_date, 6);
+      const b = dayGap(today, bilan);
+      if (!s.bilan_done && (BILAN_NOTICE_DAYS.includes(b) || (b < 0 && isMonday))) {
+        bilans.push(
+          b < 0
+            ? `${who} : bilan prévu le ${formatDueDate(bilan)}, il y a ${-b} jours, pas encore coché.`
+            : `${who} : bilan le ${formatDueDate(bilan)}, ${inDays(b)}.`,
+        );
+      }
+    }
+    if (!s.sale_id) {
+      for (const p of s.payments) {
+        if (p.paid || p.date > today) continue;
+        const amount = p.amount ? amountTag(formatMoney(p.amount), p.date < today) : "montant non précisé";
+        (p.date === today ? due : late).push(`${who} : ${amount} (${formatDueDate(p.date)})`);
+      }
+    }
+  }
+  return { ends, bilans, due, late };
+}
+
 // Point du jour envoyé à Jeremy à 9 h (heure de Paris) s'il y a quelque chose
 // à vérifier : virements attendus aujourd'hui ou en retard, contrats envoyés
-// depuis plus de 2 jours et toujours pas signés. Une fois par jour au plus.
+// depuis plus de 2 jours et toujours pas signés, fins d'accompagnement et
+// bilans des élèves qui approchent. Une fois par jour au plus.
 async function sendDailyDigest(sales: Sale[], now: Date): Promise<boolean> {
   if (parisHour(now) < 9) return false;
   const today = parisDay(now);
@@ -431,19 +499,32 @@ async function sendDailyDigest(sales: Sale[], now: Date): Promise<boolean> {
     }
   }
 
+  const isMonday = new Intl.DateTimeFormat("en-US", { timeZone: "Europe/Paris", weekday: "short" }).format(now) === "Mon";
+  const students = await studentDeadlines(today, isMonday);
+  due.push(...students.due);
+  late.push(...students.late);
+
   await supabase.from("site_settings").upsert({ key: "ventes_digest", value: { day: today }, updated_at: now.toISOString() });
-  if (!due.length && !late.length && !unsigned.length) return false;
+  if (!due.length && !late.length && !unsigned.length && !students.ends.length && !students.bilans.length) return false;
 
   const list = (items: string[]) => items.map((i) => `• ${i}`).join("<br>");
   const lines: string[] = [];
   if (due.length) lines.push(`<b>💶 Virements attendus aujourd'hui</b><br>${list(due)}`);
   if (late.length) lines.push(`<b>⏰ Virements en retard</b> (vérifie ton compte et coche « Payé » si c'est arrivé : sinon le client reçoit une relance à J+3 et J+7 qui annonce la coupure de son accès)<br>${list(late)}`);
   if (unsigned.length) lines.push(`<b>✍️ Contrats pas encore signés</b><br>${list(unsigned)}`);
+  if (students.ends.length) lines.push(`<b>🏁 Fins d'accompagnement</b><br>${list(students.ends)}`);
+  if (students.bilans.length) lines.push(`<b>📋 Bilans (fin de garantie)</b><br>${list(students.bilans)}`);
   const count = due.length + late.length;
+  const onlyStudents = !count && !unsigned.length;
   await alertJeremy(
-    count ? `💶 ${count} virement${count > 1 ? "s" : ""} à vérifier aujourd'hui` : "✍️ Des contrats attendent une signature",
+    count
+      ? `💶 ${count} virement${count > 1 ? "s" : ""} à vérifier aujourd'hui`
+      : unsigned.length
+        ? "✍️ Des contrats attendent une signature"
+        : "📅 Échéances élèves du jour",
     lines,
     "vente-admin-jour",
+    onlyStudents ? { label: "Ouvrir les élèves", href: `${SITE}/admin/eleves` } : undefined,
   );
   return true;
 }

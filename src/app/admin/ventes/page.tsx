@@ -27,6 +27,10 @@ type Sale = {
   currency: string;
   installments: number;
   start_date: string | null;
+  closer_email: string | null;
+  commission_rate: number;
+  commission_amount: number | null;
+  commission_cancelled_at: string | null;
   reminder_offsets: number[];
   notes: string | null;
   contract_status: ContractStatus;
@@ -161,6 +165,22 @@ function paymentState(p: Payment): { label: string; tone: Tone } {
   return { label: "À venir", tone: "gray" };
 }
 
+// Commission du closer : taux x montant HT, avec toujours la TVA
+// luxembourgeoise (HT = TTC / 1,17). Même calcul que src/lib/commissions.ts.
+const DEFAULT_TOTAL = "3000";
+const DEFAULT_COMMISSION_RATE = 20;
+function commissionFor(ttc: number, rate: number) {
+  return Math.round((Math.round((ttc / 1.17) * 100) / 100) * rate) / 100;
+}
+
+type Closer = { email: string; name: string | null };
+
+// Valeurs par défaut d'une nouvelle vente : 3 000 €, 1er paiement et début de
+// l'accompagnement aujourd'hui.
+function newForm() {
+  return { ...EMPTY_FORM, total: DEFAULT_TOTAL, first_due: today(), start_date: today() };
+}
+
 const EMPTY_FORM = {
   first_name: "",
   last_name: "",
@@ -172,6 +192,8 @@ const EMPTY_FORM = {
   first_due: "",
   start_date: "",
   notes: "",
+  closer: "",
+  commissionRate: String(DEFAULT_COMMISSION_RATE),
   company: { name: "", legalForm: "", registration: "", address: "", signerRole: "" },
   offsets: DEFAULT_OFFSETS,
   sendContract: true,
@@ -192,6 +214,8 @@ export default function VentesPage() {
 
   const [formOpen, setFormOpen] = useState(false);
   const [form, setForm] = useState(EMPTY_FORM);
+  const [closers, setClosers] = useState<Closer[]>([]);
+  const [me, setMe] = useState<{ email: string | null; role: string | null }>({ email: null, role: null });
   const [schedule, setSchedule] = useState<{ amount: string; due_date: string }[]>([]);
   const [companyOpen, setCompanyOpen] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -219,13 +243,12 @@ export default function VentesPage() {
     // Arrivée depuis le CRM : /admin/ventes?email=...&prenom=...&tel=...
     const q = new URLSearchParams(window.location.search);
     if (q.get("email")) {
-      setForm((f) => ({
-        ...f,
+      setForm({
+        ...newForm(),
         email: q.get("email") ?? "",
         first_name: q.get("prenom") ?? "",
         phone: q.get("tel") ?? "",
-        first_due: today(),
-      }));
+      });
       setFormOpen(true);
     }
   }, [authorized]);
@@ -242,6 +265,8 @@ export default function VentesPage() {
       setSales(d.sales);
       setBank(d.bank);
       setContracts(d.contracts);
+      setClosers(d.closers ?? []);
+      if (d.me) setMe(d.me);
       setContractTemplates(d.contractTemplates ?? []);
       setError(null);
     } catch (e) {
@@ -310,6 +335,8 @@ export default function VentesPage() {
           offer: form.offer,
           start_date: form.start_date || null,
           notes: form.notes,
+          closer_email: form.closer || null,
+          commission_rate: Number(form.commissionRate.replace(",", ".")),
           company: Object.fromEntries(Object.entries(form.company).filter(([, v]) => v.trim())),
           reminder_offsets: form.offsets,
           payments: schedule.map((p) => ({ amount: Number(p.amount.replace(",", ".")), due_date: p.due_date })),
@@ -317,7 +344,7 @@ export default function VentesPage() {
       }).then((r) => r.json());
       if (res.error) throw new Error(res.error);
       setSales((list) => [res.sale, ...list]);
-      setForm(EMPTY_FORM);
+      setForm(newForm());
       setFormOpen(false);
       setFlash(`Vente de ${res.sale.first_name} enregistrée.`);
       if (form.sendContract && contracts && contractTemplates.includes(res.sale.installments)) {
@@ -397,7 +424,7 @@ export default function VentesPage() {
             )}
             <button
               onClick={() => {
-                setForm((f) => ({ ...f, first_due: f.first_due || today() }));
+                if (!formOpen) setForm(newForm());
                 setFormOpen((o) => !o);
               }}
               className="mac-btn mac-btn-primary mac-btn-sm"
@@ -537,6 +564,46 @@ export default function VentesPage() {
               ))}
             </div>
 
+            <p className="mac-grouplabel mt-5">Vendu par</p>
+            {me.role === "closer" ? (
+              <p className="text-sm font-semibold text-[var(--fg)]">
+                Toi ({me.email}) · {money(scheduleTotal)} TTC − TVA luxembourgeoise 17 % = {money(Math.round((scheduleTotal / 1.17) * 100) / 100)} HT × {DEFAULT_COMMISSION_RATE} %, soit{" "}
+                <b className="text-[var(--accent2)]">{money(commissionFor(scheduleTotal, DEFAULT_COMMISSION_RATE))}</b>
+              </p>
+            ) : (
+              <div className="flex flex-wrap items-end gap-3">
+                <select className="mac-field !w-auto min-w-[240px]" value={form.closer} onChange={(e) => setForm({ ...form, closer: e.target.value })} aria-label="Vendu par">
+                  <option value="">Jeremy (pas de commission)</option>
+                  {closers.map((c) => (
+                    <option key={c.email} value={c.email}>
+                      {c.name ? `${c.name} (${c.email})` : c.email}
+                    </option>
+                  ))}
+                </select>
+                {form.closer && (
+                  <>
+                    <label>
+                      <span className="mb-1 block text-xs font-bold text-[var(--fg2)]">Commission (% du HT)</span>
+                      <input
+                        className="mac-field !w-28"
+                        inputMode="decimal"
+                        value={form.commissionRate}
+                        onChange={(e) => setForm({ ...form, commissionRate: e.target.value })}
+                      />
+                    </label>
+                    <p className="pb-3 text-sm font-semibold text-[var(--fg)]">
+                      {money(scheduleTotal)} TTC − TVA luxembourgeoise 17 % (÷ 1,17) = {money(Math.round((scheduleTotal / 1.17) * 100) / 100)} HT ×{" "}
+                      {Number(form.commissionRate.replace(",", ".")) || 0} % ={" "}
+                      <b className="text-[var(--accent2)]">{money(commissionFor(scheduleTotal, Number(form.commissionRate.replace(",", ".")) || 0))}</b> de commission
+                    </p>
+                  </>
+                )}
+                {closers.length === 0 && (
+                  <p className="pb-3 text-sm font-semibold text-[var(--fg2)]">Ajoute un closer depuis la page Équipe pour lui attribuer des ventes.</p>
+                )}
+              </div>
+            )}
+
             <p className="mac-grouplabel mt-5">Notes</p>
             <textarea className="mac-field" rows={2} value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} placeholder="Offre négociée, contexte..." />
 
@@ -623,6 +690,13 @@ export default function VentesPage() {
                       <Chip tone="blue">{originLabel(sale.origin)}</Chip>
                       {sale.utm.campaign && <Chip tone="gray">{sale.utm.source ? `${sale.utm.source} · ` : ""}{sale.utm.campaign}</Chip>}
                       {sale.meta_purchase_sent_at && <Chip tone="green">Envoyé à Meta</Chip>}
+                      {sale.closer_email && (
+                        <Chip tone={sale.commission_cancelled_at ? "gray" : sale.sale_payments.every((p) => p.paid) ? "green" : "orange"}>
+                          Closer : {closers.find((c) => c.email === sale.closer_email)?.name ?? sale.closer_email} ·{" "}
+                          {money(sale.commission_amount ?? 0)}{" "}
+                          {sale.commission_cancelled_at ? "commission annulée" : sale.sale_payments.every((p) => p.paid) ? "à payer" : "en attente des paiements"}
+                        </Chip>
+                      )}
                     </div>
                     <p className="mt-1 text-[13px] font-medium text-[var(--fg2)]">
                       {sale.email}

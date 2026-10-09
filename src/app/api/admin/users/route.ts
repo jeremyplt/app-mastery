@@ -9,7 +9,7 @@ export async function GET() {
     const supabase = getAdminClient();
     const { data, error } = await supabase
       .from("admin_users")
-      .select("id, email, role, invited_by, created_at")
+      .select("id, email, name, role, invited_by, created_at")
       .order("created_at", { ascending: true });
     if (error) throw error;
     return NextResponse.json({ users: data });
@@ -26,7 +26,9 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const { email } = await req.json();
+    const { email, role: wanted, name } = await req.json();
+    // Membre (CRM, ventes) ou closer (pareil + ses commissions).
+    const role = wanted === "closer" ? "closer" : "member";
     if (!email || !email.includes("@")) {
       return NextResponse.json({ error: "Email invalide" }, { status: 400 });
     }
@@ -49,8 +51,8 @@ export async function POST(req: NextRequest) {
 
     const { data: user, error } = await supabase
       .from("admin_users")
-      .insert({ email: normalized, role: "member", invited_by: invitedBy })
-      .select("id, email, role, invited_by, created_at")
+      .insert({ email: normalized, role, name: String(name ?? "").trim() || null, invited_by: invitedBy })
+      .select("id, email, name, role, invited_by, created_at")
       .single();
     if (error) throw error;
 
@@ -150,4 +152,30 @@ export async function DELETE(req: NextRequest) {
       { status: 500 }
     );
   }
+}
+
+// Changer le rôle (membre / closer) ou le nom d'un membre de l'équipe.
+export async function PATCH(req: NextRequest) {
+  try {
+    await requireOwner();
+  } catch {
+    return NextResponse.json({ error: "Accès non autorisé" }, { status: 401 });
+  }
+  const { id, role, name } = await req.json();
+  if (!id) return NextResponse.json({ error: "Id manquant" }, { status: 400 });
+  const supabase = getAdminClient();
+  const { data: target } = await supabase.from("admin_users").select("role").eq("id", id).maybeSingle();
+  if (!target) return NextResponse.json({ error: "Utilisateur introuvable" }, { status: 404 });
+  const update: Record<string, unknown> = {};
+  if ((role === "member" || role === "closer") && target.role !== "owner") update.role = role;
+  if (typeof name === "string") update.name = name.trim() || null;
+  if (Object.keys(update).length === 0) return NextResponse.json({ error: "Rien à modifier" }, { status: 400 });
+  const { data, error } = await supabase
+    .from("admin_users")
+    .update(update)
+    .eq("id", id)
+    .select("id, email, name, role, invited_by, created_at")
+    .single();
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  return NextResponse.json({ user: data });
 }
