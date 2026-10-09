@@ -63,3 +63,16 @@ create table public.manual_commissions (
   cancelled_at timestamptz,
   cancel_reason text
 );
+
+-- 2026-10-09, migration "questionnaire_calls_commission_alerts" : questionnaire
+-- de démarrage, appels élève Calendly, alerte « commission débloquée ».
+alter table public.students
+  add column questionnaire_token uuid not null default gen_random_uuid(),
+  add column questionnaire_sent_at timestamptz,
+  add column questionnaire_answered_at timestamptz,
+  add column questionnaire jsonb,
+  add column kickoff_call_at timestamptz,
+  add column closing_call_at timestamptz;
+create unique index students_questionnaire_token_idx on public.students (questionnaire_token);
+alter table public.sales add column commission_unlock_notified_at timestamptz;
+alter table public.manual_commissions add column unlock_notified_at timestamptz;

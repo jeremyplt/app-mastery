@@ -6,6 +6,8 @@ import { contractsConfigured, contractStatus } from "@/lib/docuseal";
 import { inviteToSkool } from "@/lib/skool";
 import { sendMetaEvent } from "@/lib/meta-capi";
 import { addMonths, type StudentPayment } from "@/lib/students";
+import { sendQuestionnaire } from "@/lib/questionnaire";
+import { sendMonthlyRecap, sendUnlockAlerts } from "@/lib/commissions";
 
 // Ventes déclarées dans l'admin (/admin/ventes) : contrat DocuSeal,
 // échéancier payé par virement, invitation Skool.
@@ -181,6 +183,17 @@ export async function onConfirmed(sale: Sale): Promise<{ invited: boolean; error
   if (!isConfirmed(sale)) return { invited: false };
   let result: { invited: boolean; error?: string } = { invited: false };
   if (!sale.skool_invited_at) result = await inviteSkoolNow(sale);
+
+  // Questionnaire de démarrage, envoyé avec l'invitation Skool (une fois).
+  const { data: student } = await getAdminClient()
+    .from("students")
+    .select("id, questionnaire_sent_at")
+    .eq("sale_id", sale.id)
+    .maybeSingle();
+  if (student && !student.questionnaire_sent_at) {
+    const q = await sendQuestionnaire(student.id);
+    if (!q.ok) console.error(`Questionnaire non envoyé à ${sale.email} : ${q.error}`);
+  }
 
   // En local, on n'envoie pas de vraie vente à Meta (sauf avec un code de test
   // de l'Events Manager) : les tests ne doivent pas fausser les pubs.
@@ -395,12 +408,26 @@ export async function runVentes(now = new Date()) {
     }
   }
 
+  // Commissions : alerte au déblocage, récap du 1er du mois.
+  const commissionMail = async (to: { email: string; name?: string }, subject: string, lines: string[], tag: string) => {
+    const r = await sendBuiltEmail(to, adminAlert(subject, lines, tag, { label: "Voir les commissions", href: `${SITE}/admin/commissions` }));
+    if (!r.ok) throw new Error(r.error ?? "envoi impossible");
+  };
+  const unlocks = await sendUnlockAlerts(commissionMail, parisHour(now)).catch((err) => {
+    errors.commissions = err instanceof Error ? err.message : String(err);
+    return 0;
+  });
+  const recap = await sendMonthlyRecap(commissionMail, parisDay(now), parisHour(now)).catch((err) => {
+    errors.recap = err instanceof Error ? err.message : String(err);
+    return false;
+  });
+
   const digest = await sendDailyDigest(sales, now).catch((err) => {
     errors.digest = err instanceof Error ? err.message : String(err);
     return false;
   });
 
-  return { active: sales.length, contracts, skool, reminders, digest, errors };
+  return { active: sales.length, contracts, skool, reminders, digest, unlocks, recap, errors };
 }
 
 const SITE = "https://www.jeremypitault.com";

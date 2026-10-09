@@ -9,6 +9,7 @@ export type AdminSection =
   | "ventes"
   | "eleves"
   | "commissions"
+  | "chiffre-affaires"
   | "candidatures"
   | "calendrier"
   | "emails"
@@ -36,6 +37,7 @@ const GROUPS: Group[] = [
     items: [
       { id: "ventes", label: "Ventes", href: "/admin/ventes" },
       { id: "commissions", label: "Commissions", href: "/admin/commissions", ownerOnly: true, closerToo: true },
+      { id: "chiffre-affaires", label: "Chiffre d'affaires", href: "/admin/chiffre-affaires", ownerOnly: true },
     ],
   },
   { label: "Élèves", items: [{ id: "eleves", label: "Élèves", href: "/admin/eleves" }] },

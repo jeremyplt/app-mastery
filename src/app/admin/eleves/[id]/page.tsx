@@ -10,6 +10,7 @@ import {
   TONE_CLASSES,
   lastContactLabel,
   avatarColor,
+  callLink,
   bilanDate,
   endDate,
   frDate,
@@ -22,6 +23,7 @@ import {
   today,
   type Student,
 } from "../shared";
+import { QUESTIONS } from "@/lib/questionnaire-questions";
 
 // Fiche élève : informations, parcours, paiements et notes. Les infos se
 // modifient dans un formulaire avec un bouton Enregistrer ; les étapes et les
@@ -73,6 +75,7 @@ export default function StudentPage() {
   const [saving, setSaving] = useState(false);
   const [newPayment, setNewPayment] = useState<{ date: string; amount: string } | null>(null);
   const [newLink, setNewLink] = useState<{ label: string; url: string } | null>(null);
+  const [sendingQuestionnaire, setSendingQuestionnaire] = useState(false);
 
   useEffect(() => {
     fetch("/api/admin/check")
@@ -181,6 +184,25 @@ export default function StudentPage() {
       body: JSON.stringify({ id: student.id, last_contact_at: "now" }),
     });
     flash("Échange noté");
+  }
+
+  async function sendQuestionnaire() {
+    if (!student) return;
+    if (student.questionnaire_sent_at && !confirm(`Renvoyer le questionnaire à ${student.email} ?`)) return;
+    setSendingQuestionnaire(true);
+    const d = await fetch("/api/admin/eleves/questionnaire", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: student.id }),
+    }).then((r) => r.json());
+    setSendingQuestionnaire(false);
+    if (d.error) return setError(d.error);
+    setStudent({ ...student, questionnaire_sent_at: d.sent_at });
+    flash("Questionnaire envoyé");
+  }
+
+  function copy(text: string, message: string) {
+    navigator.clipboard.writeText(text).then(() => flash(message));
   }
 
   async function addLink() {
@@ -422,6 +444,77 @@ export default function StudentPage() {
                       )}
                     </div>
                   </form>
+                </Card>
+
+                {/* Questionnaire de démarrage */}
+                <Card
+                  title="Questionnaire de démarrage"
+                  action={
+                    s.questionnaire_answered_at ? (
+                      <span className={`rounded-md px-2 py-0.5 text-xs font-bold ${TONE_CLASSES.green}`}>Répondu le {frDate(s.questionnaire_answered_at.slice(0, 10))}</span>
+                    ) : s.questionnaire_sent_at ? (
+                      <span className={`rounded-md px-2 py-0.5 text-xs font-bold ${TONE_CLASSES.orange}`}>Envoyé le {frDate(s.questionnaire_sent_at.slice(0, 10))}</span>
+                    ) : (
+                      <span className={`rounded-md px-2 py-0.5 text-xs font-bold ${TONE_CLASSES.gray}`}>Pas envoyé</span>
+                    )
+                  }
+                >
+                  {s.questionnaire ? (
+                    <dl className="space-y-3">
+                      {QUESTIONS.filter((q) => s.questionnaire?.[q.id]).map((q) => (
+                        <div key={q.id}>
+                          <dt className="text-[12.5px] font-bold text-[var(--fg2)]">{q.label}</dt>
+                          <dd className="mt-0.5 whitespace-pre-line text-[14.5px] font-semibold text-[var(--fg)]">{s.questionnaire?.[q.id]}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                  ) : (
+                    <p className="text-sm font-semibold text-[var(--fg2)]">
+                      Envoyé automatiquement avec l&apos;invitation Skool. Les réponses arrivent ici, et tu reçois un email.
+                    </p>
+                  )}
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    <button type="button" onClick={sendQuestionnaire} disabled={sendingQuestionnaire || !s.email} className="mac-btn mac-btn-def mac-btn-sm disabled:opacity-50">
+                      {sendingQuestionnaire ? "Envoi..." : s.questionnaire_sent_at ? "Renvoyer par email" : "Envoyer par email"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => copy(`https://www.jeremypitault.com/questionnaire/${s.questionnaire_token}`, "Lien du questionnaire copié")}
+                      className="mac-btn mac-btn-def mac-btn-sm"
+                    >
+                      Copier le lien
+                    </button>
+                  </div>
+                  {!s.email && <p className="mt-2 text-[13px] font-semibold text-[var(--orange)]">Ajoute l&apos;email de l&apos;élève pour pouvoir lui envoyer.</p>}
+                </Card>
+
+                {/* Appels */}
+                <Card title="Appels">
+                  <ul className="space-y-3">
+                    {(
+                      [
+                        ["kickoff", "Appel de démarrage (kick-off)", s.kickoff_call_at],
+                        ["cloture", "Appel de clôture", s.closing_call_at],
+                      ] as const
+                    ).map(([kind, label, at]) => (
+                      <li key={kind} className="flex flex-wrap items-center justify-between gap-2">
+                        <div>
+                          <p className="text-[15px] font-bold">{label}</p>
+                          <p className={`text-[13px] font-semibold ${at ? "text-[var(--green)]" : "text-[var(--fg2)]"}`}>
+                            {at
+                              ? `Réservé le ${new Intl.DateTimeFormat("fr-FR", { weekday: "long", day: "numeric", month: "long", hour: "2-digit", minute: "2-digit", timeZone: "Europe/Paris" }).format(new Date(at))}`
+                              : "Pas encore réservé"}
+                          </p>
+                        </div>
+                        <button type="button" onClick={() => copy(callLink(s, kind), "Lien de réservation copié")} className="mac-btn mac-btn-def mac-btn-sm">
+                          Copier le lien de réservation
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="mt-3 text-[12.5px] font-medium text-[var(--fg2)]">
+                    Envoie le lien à l&apos;élève : le créneau réservé s&apos;affiche ici, et « Kick-off » se coche tout seul à la réservation.
+                  </p>
                 </Card>
 
                 {/* Liens et documents */}

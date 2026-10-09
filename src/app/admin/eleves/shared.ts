@@ -38,6 +38,12 @@ export type Student = {
   notes: string | null;
   links: StudentLink[];
   last_contact_at: string | null;
+  questionnaire_token: string;
+  questionnaire_sent_at: string | null;
+  questionnaire_answered_at: string | null;
+  questionnaire: Record<string, string> | null;
+  kickoff_call_at: string | null;
+  closing_call_at: string | null;
   archived: boolean;
   sales: { id: string; contract_status: string; skool_invited_at: string | null; sale_payments: SalePayment[] } | null;
 } & Record<Milestone, boolean>;
@@ -131,4 +137,14 @@ export function avatarColor(name: string): string {
   let h = 0;
   for (const c of name) h = (h * 31 + c.charCodeAt(0)) >>> 0;
   return AVATAR_COLORS[h % AVATAR_COLORS.length];
+}
+
+// Appels élève : événement Calendly « Appel App Mastery » de Jeremy. Le
+// paramètre utm_content dit au webhook s'il s'agit du kick-off ou de la clôture.
+export const STUDENT_CALL_URL = "https://calendly.com/jeremypltpro/appel-app-mastery";
+
+export function callLink(s: { name: string; email: string | null }, kind: "kickoff" | "cloture"): string {
+  const q = new URLSearchParams({ name: s.name, utm_source: "admin", utm_content: kind });
+  if (s.email) q.set("email", s.email);
+  return `${STUDENT_CALL_URL}?${q}`;
 }

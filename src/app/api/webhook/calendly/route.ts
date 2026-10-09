@@ -9,6 +9,45 @@ import {
   type CallLead,
 } from "@/lib/call-reminders";
 
+// Événement « Appel App Mastery » de Jeremy : appels avec les élèves (kick-off,
+// clôture), à ne surtout pas traiter comme un appel découverte.
+const STUDENT_EVENT_TYPE_URI = "https://api.calendly.com/event_types/d87fb821-a1fa-47ad-aa84-95c27cb38b26";
+
+// Appel élève réservé ou annulé : met à jour la fiche (/admin/eleves). Le lien
+// envoyé depuis la fiche porte utm_content=kickoff ou cloture ; sans lui, une
+// première réservation est considérée comme le kick-off.
+async function handleStudentCall(email: string, isBooking: boolean, startTime: string | undefined, utmContent: string | undefined) {
+  const supabase = getAdminClient();
+  const { data: student } = await supabase
+    .from("students")
+    .select("id, kickoff, kickoff_call_at, closing_call_at")
+    .ilike("email", email)
+    .maybeSingle();
+  if (!student) {
+    console.log(`Calendly appel élève : aucun élève avec l'email ${email}`);
+    return;
+  }
+  const kind = utmContent === "cloture" ? "cloture" : utmContent === "kickoff" || !student.kickoff_call_at ? "kickoff" : null;
+  const update: Record<string, unknown> = {};
+  if (isBooking) {
+    update.last_contact_at = new Date().toISOString();
+    if (kind === "kickoff") {
+      update.kickoff_call_at = startTime ?? null;
+      update.kickoff = true;
+    }
+    if (kind === "cloture") update.closing_call_at = startTime ?? null;
+  } else {
+    // Annulation : on efface le créneau correspondant (un report renverra
+    // aussitôt une nouvelle réservation).
+    // Comparaison en dates : Calendly et la base n'écrivent pas l'heure pareil.
+    const same = (a: string | null) => Boolean(a && startTime && new Date(a).getTime() === new Date(startTime).getTime());
+    if (same(student.kickoff_call_at)) update.kickoff_call_at = null;
+    if (same(student.closing_call_at)) update.closing_call_at = null;
+  }
+  if (Object.keys(update).length) await supabase.from("students").update(update).eq("id", student.id);
+  console.log(`Calendly appel élève ${isBooking ? "réservé" : "annulé"} (${kind ?? "autre"}) pour ${email}`);
+}
+
 // Webhook Calendly (scope organisation : couvre les calendriers
 // jeremypltpro et masteryapp-jeremy). À la réservation : CRM + Brevo +
 // PostHog, puis séquence B (email de confirmation tout de suite, rappels
@@ -42,6 +81,15 @@ export async function POST(req: NextRequest) {
     }
 
     const normalizedEmail = email.toLowerCase();
+
+    if (eventTypeUri === STUDENT_EVENT_TYPE_URI) {
+      try {
+        await handleStudentCall(normalizedEmail, event === "invitee.created", startTime, invitee.tracking?.utm_content ?? undefined);
+      } catch (err) {
+        console.error("Calendly appel élève :", err);
+      }
+      return NextResponse.json({ received: true });
+    }
     const firstName = name ? name.split(" ")[0] : undefined;
     const isBooking = event === "invitee.created";
     const host = hostForEventType(eventTypeUri);
