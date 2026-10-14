@@ -15,6 +15,16 @@ Quand une leçon se généralise (elle vaut pour toutes les apps, pas juste un c
 
 ---
 
+## 2026-10-09 , Ember (Malika) : app pas encore sortie, screenshots, clarté
+- **Contexte :** audit Ember (app de focus avec pauses actives), app pas encore publiée.
+- **Ce qui était faux :** (1) section « Data à vérifier » alors que l'app n'est pas sortie. (2) Screenshot de la quête qui montrait l'accueil (frame prise pendant une transition, vérifiée seulement sur la planche de miniatures). (3) Liste en vrac « marche, yeux, nuque, hydratation » que Jeremy n'a pas comprise. (4) Le bug du bouton Zen (écran blanc sur l'écran The Shield) n'était pas illustré.
+- **Règles à appliquer désormais :** app pas encore sortie = section « Data à mettre en place » (pas « à vérifier »). Toujours relire la frame finale extraite, jamais seulement la planche de miniatures. Jamais de liste de mots en vrac : des phrases complètes avec un exemple concret. Quand un bouton a un comportement différent selon l'écran (ou mène à un écran vide), montrer les captures avant / après côte à côte. Toujours recommander un système de feedback et de bug report dans les réglages.
+
+## 2026-10-05 , Sentinelle : maquettes, objectif de conversion, comptes
+- **Contexte :** premier jet d'audit Sentinelle (Julien) à partir des stats + maquettes V2, sans vidéo de Jeremy.
+- **Ce qui était faux :** (1) j'ai critiqué des écrans de maquettes comme si c'étaient des bugs (5 notifications identiques, écran d'erreur 403 « l'utilisateur gratuit tombe sur une erreur », données de portefeuille incohérentes). (2) J'ai visé « 4 à 5 % » puis 5 % de conversion. (3) J'ai recommandé de sortir le bloc « Si vous aviez investi 1 000 $ » du petit texte et de mettre en avant les insiders qui performent : Jeremy n'est pas d'accord, retiré. (4) J'ai critiqué un carrousel de cartes de profils dans l'onboarding (« chiffres minuscules, un seul profil en grand ») : Jeremy n'est pas d'accord, un carrousel de cartes qui montre la richesse du contenu est un bon écran d'onboarding.
+- **Règles à appliquer désormais :** des écrans fournis en zip/maquettes = des mises en situation (états, erreurs, contenus factices). Ne critiquer que le design et le wording des composants, jamais le contenu répété, les données affichées ou la présence d'un écran d'erreur. Objectif de conversion installation → payant à annoncer : **4 %**, pas plus. L'onboarding V2 peut être sur Superwall comme le paywall (Paywalls & Flows) : le chercher là. Pour l'ASO, l'analyse AppFigures (une capture par mot-clé, pays France + densité de description) est obligatoire même pour un premier jet. Claude ne crée pas de compte ni ne saisit de mot de passe : demander à Jeremy de se connecter (souvent « Sign in with Google »).
+
 ## 2026-08-26 , In-app Whyme : verdicts vidéo 2 + erreur "feature saluée sans test"
 - **Contexte :** audit in-app Whyme (compte membre). Ma version saluait "l'audio est déjà là" (TTS + micro visibles). La vidéo de Jeremy montre que NI la lecture vocale NI la dictée ne fonctionnent.
 - **Règle :** ne JAMAIS mettre un point en positif sans l'avoir testé soi-même. Un bouton visible n'est pas une feature qui marche. Tester chaque interaction citée dans le rapport (cliquer, écouter, dicter).
