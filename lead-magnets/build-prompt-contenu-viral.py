@@ -47,6 +47,49 @@ def render_prompt(raw: str) -> str:
     return "\n".join(out)
 
 
+# Telegram refuse les messages de plus de 4 096 caractères. On garde de la marge
+# pour ce que le lecteur ajoute dans « Mon contexte ».
+TELEGRAM_LIMIT = 3300
+
+
+def split_for_telegram(raw: str) -> list[str]:
+    """Découpe le prompt entre ses sections, en messages assez courts pour Telegram."""
+    body, last = raw.strip().rsplit("\n\n", 1)
+    chunks: list[str] = []
+    cur = ""
+    for sec in re.split(r"\n(?=## )", body):
+        for part in sec.split("\n\n") if len(sec) > TELEGRAM_LIMIT else [sec]:
+            if cur and len(cur) + 2 + len(part) > TELEGRAM_LIMIT:
+                chunks.append(cur)
+                cur = part
+            else:
+                cur = f"{cur}\n\n{part}" if cur else part
+    chunks.append(cur)
+    n = len(chunks)
+    messages = []
+    for i, chunk in enumerate(chunks, 1):
+        head = f"Instructions, partie {i}/{n} :\n\n"
+        if i == 1:
+            head = (f"Je vais t'envoyer mes instructions en {n} messages, parce qu'elles sont trop longues pour un seul. "
+                    "Ne commence rien pour l'instant : réponds juste « ok » à chaque message, jusqu'au dernier, "
+                    "où je te dirai que tu peux commencer.\n\n" + head)
+        if i == n:
+            tail = "\n\nC'était la dernière partie, tu as toutes les instructions. Tu peux commencer : " + last[0].lower() + last[1:]
+        else:
+            tail = f"\n\n(Fin de la partie {i}/{n}. Réponds juste « ok ».)"
+        messages.append(head + chunk + tail)
+    return messages
+
+
+def render_telegram(raw: str) -> str:
+    messages = split_for_telegram(raw)
+    n = len(messages)
+    return "\n".join(
+        f'<div class="tg-label">Message {i} sur {n}</div>\n<div class="prompt tg">\n{render_prompt(m)}\n</div>'
+        for i, m in enumerate(messages, 1)
+    )
+
+
 PAGE = """<!doctype html>
 <html lang="fr">
 <head>
@@ -106,6 +149,12 @@ PAGE = """<!doctype html>
   .prompt .l2 .mk { left: 5.5mm; }
   .prompt .fill { background: #e3efff; color: #0A5FD0; font-weight: 700; border-radius: 3px; padding: 0 1mm; }
 
+  /* Version Telegram */
+  .tg-head { break-before: page; margin-bottom: 5mm; }
+  .tg-head .kicker { font-size: 9.5pt; margin-bottom: 1.5mm; }
+  .tg-head p { margin: 0 0 2mm; color: #444; font-size: 11pt; }
+  .tg-label { font-weight: 800; font-size: 12pt; color: #0A84FF; margin: 6mm 0 2mm; break-after: avoid; }
+
   /* Dernière page */
   .cta { background: #0a0a0a; color: #fff; display: flex; flex-direction: column; justify-content: center; break-after: auto; }
   .cta h2 { color: #fff; font-size: 30pt; }
@@ -140,7 +189,7 @@ PAGE = """<!doctype html>
 
   <div class="step"><div class="n">1</div><div><div class="t">Prends une IA qui peut travailler sur un ordinateur</div><div class="d">Elle doit pouvoir télécharger un post, monter une vidéo et créer des images, pas seulement écrire du texte. Claude Code fait tout ça, et tu peux lui parler depuis ton téléphone.</div></div></div>
   <div class="step"><div class="n">2</div><div><div class="t">Remplis la partie « Mon contexte »</div><div class="d">Tout ce qui est surligné en bleu dans le prompt : le nom de ton app, ce qu'elle fait, ce qu'il faut montrer, ton public, tes plateformes et leur langue.</div></div></div>
-  <div class="step"><div class="n">3</div><div><div class="t">Colle le prompt en entier</div><div class="d">De la première à la dernière ligne, dans une nouvelle conversation. L'IA commence par te demander ce qui lui manque.</div></div></div>
+  <div class="step"><div class="n">3</div><div><div class="t">Colle le prompt en entier</div><div class="d">De la première à la dernière ligne, dans une nouvelle conversation. L'IA commence par te demander ce qui lui manque. Tu passes par Telegram et le message est trop long ? Utilise la version découpée en __TG_COUNT__ messages, juste après le prompt.</div></div></div>
   <div class="step"><div class="n">4</div><div><div class="t">Envoie ta première inspiration</div><div class="d">Le lien d'un post de ta niche qui a fait beaucoup de vues, avec des vidéos et des captures de ton app. L'IA te montre d'abord son analyse, puis elle crée le post.</div></div></div>
 
   <div class="callout"><b>Pourquoi copier au lieu d'inventer ?</b> Un post qui a fait des millions de vues a déjà prouvé qu'il marche. Tu changes le contenu (ton app, tes textes, ta réaction), pas la recette. Chaque idée « originale » est un pari, une inspiration éprouvée ne l'est pas.</div>
@@ -159,6 +208,14 @@ PAGE = """<!doctype html>
 __PROMPT__
 </div>
 
+<div class="tg-head">
+  <div class="kicker">Version Telegram</div>
+  <h2>Le même prompt en __TG_COUNT__ messages</h2>
+  <p>Telegram refuse les messages trop longs. Envoie ces __TG_COUNT__ messages dans l'ordre, chacun en entier. L'IA répond « ok » à chaque message, et le dernier lui dit de commencer.</p>
+  <p>Remplis les parties en bleu dans le message 1, comme dans le prompt complet.</p>
+</div>
+__TELEGRAM__
+
 <section class="page cta">
   <div class="kicker">Et maintenant ?</div>
   <h2>Tu veux qu'on fasse<br>décoller ton app <span>ensemble ?</span></h2>
@@ -176,6 +233,10 @@ __PROMPT__
 
 def main() -> None:
     page = PAGE.replace("__PROMPT__", render_prompt(SRC.read_text(encoding="utf-8"))).replace("__CALL__", CALL_URL)
+    raw = SRC.read_text(encoding="utf-8")
+    page = page.replace("__TELEGRAM__", render_telegram(raw)).replace("__TG_COUNT__", str(len(split_for_telegram(raw))))
+    for i, m in enumerate(split_for_telegram(raw), 1):
+        print(f"Message Telegram {i} : {len(m)} caractères")
     OUT_HTML.write_text(page, encoding="utf-8")
     subprocess.run(
         [CHROME, "--headless=new", "--disable-gpu", "--no-pdf-header-footer",

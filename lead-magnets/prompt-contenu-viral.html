@@ -57,6 +57,12 @@
   .prompt .l2 .mk { left: 5.5mm; }
   .prompt .fill { background: #e3efff; color: #0A5FD0; font-weight: 700; border-radius: 3px; padding: 0 1mm; }
 
+  /* Version Telegram */
+  .tg-head { break-before: page; margin-bottom: 5mm; }
+  .tg-head .kicker { font-size: 9.5pt; margin-bottom: 1.5mm; }
+  .tg-head p { margin: 0 0 2mm; color: #444; font-size: 11pt; }
+  .tg-label { font-weight: 800; font-size: 12pt; color: #0A84FF; margin: 6mm 0 2mm; break-after: avoid; }
+
   /* Dernière page */
   .cta { background: #0a0a0a; color: #fff; display: flex; flex-direction: column; justify-content: center; break-after: auto; }
   .cta h2 { color: #fff; font-size: 30pt; }
@@ -91,7 +97,7 @@
 
   <div class="step"><div class="n">1</div><div><div class="t">Prends une IA qui peut travailler sur un ordinateur</div><div class="d">Elle doit pouvoir télécharger un post, monter une vidéo et créer des images, pas seulement écrire du texte. Claude Code fait tout ça, et tu peux lui parler depuis ton téléphone.</div></div></div>
   <div class="step"><div class="n">2</div><div><div class="t">Remplis la partie « Mon contexte »</div><div class="d">Tout ce qui est surligné en bleu dans le prompt : le nom de ton app, ce qu'elle fait, ce qu'il faut montrer, ton public, tes plateformes et leur langue.</div></div></div>
-  <div class="step"><div class="n">3</div><div><div class="t">Colle le prompt en entier</div><div class="d">De la première à la dernière ligne, dans une nouvelle conversation. L'IA commence par te demander ce qui lui manque.</div></div></div>
+  <div class="step"><div class="n">3</div><div><div class="t">Colle le prompt en entier</div><div class="d">De la première à la dernière ligne, dans une nouvelle conversation. L'IA commence par te demander ce qui lui manque. Tu passes par Telegram et le message est trop long ? Utilise la version découpée en 5 messages, juste après le prompt.</div></div></div>
   <div class="step"><div class="n">4</div><div><div class="t">Envoie ta première inspiration</div><div class="d">Le lien d'un post de ta niche qui a fait beaucoup de vues, avec des vidéos et des captures de ton app. L'IA te montre d'abord son analyse, puis elle crée le post.</div></div></div>
 
   <div class="callout"><b>Pourquoi copier au lieu d'inventer ?</b> Un post qui a fait des millions de vues a déjà prouvé qu'il marche. Tu changes le contenu (ton app, tes textes, ta réaction), pas la recette. Chaque idée « originale » est un pari, une inspiration éprouvée ne l'est pas.</div>
@@ -209,6 +215,157 @@
 <div class="li l1"><span class="mk n">4.</span>En une ligne : l&#x27;inspiration utilisée et ce que tu as vérifié.</div>
 <div class="gap"></div>
 <div class="p">Commence par me demander ce qui manque dans « Mon contexte » et les pièces jointes dont tu as besoin, puis analyse la première inspiration que je t&#x27;envoie.</div>
+</div>
+
+<div class="tg-head">
+  <div class="kicker">Version Telegram</div>
+  <h2>Le même prompt en 5 messages</h2>
+  <p>Telegram refuse les messages trop longs. Envoie ces 5 messages dans l'ordre, chacun en entier. L'IA répond « ok » à chaque message, et le dernier lui dit de commencer.</p>
+  <p>Remplis les parties en bleu dans le message 1, comme dans le prompt complet.</p>
+</div>
+<div class="tg-label">Message 1 sur 5</div>
+<div class="prompt tg">
+<div class="p">Je vais t&#x27;envoyer mes instructions en 5 messages, parce qu&#x27;elles sont trop longues pour un seul. Ne commence rien pour l&#x27;instant : réponds juste « ok » à chaque message, jusqu&#x27;au dernier, où je te dirai que tu peux commencer.</div>
+<div class="gap"></div>
+<div class="p">Instructions, partie 1/5 :</div>
+<div class="gap"></div>
+<div class="p">Tu es mon monteur vidéo, mon designer et mon community manager. On crée du contenu court pour promouvoir mon app sur TikTok et Instagram, à partir de posts d&#x27;inspiration qui ont déjà bien marché. Deux formats :</div>
+<div class="li l1"><span class="mk">-</span>REEL : une vidéo verticale, de deux types :</div>
+<div class="li l2"><span class="mk">·</span>RÉACTION : une personne réagit face caméra, puis on montre l&#x27;app en action ;</div>
+<div class="li l2"><span class="mk">·</span>POV UGC : des plans filmés au téléphone, en vue subjective ou façon vlog (mains qui tiennent le téléphone avec l&#x27;app ouverte, bureau d&#x27;étude, café, transports, lit le soir...), avec du texte à l&#x27;écran du type « POV : ... ».</div>
+<div class="li l1"><span class="mk">-</span>CARROUSEL : une série d&#x27;images qu&#x27;on fait défiler (mode photo TikTok, carrousel Instagram).</div>
+<div class="p">Pour chaque inspiration, regarde d&#x27;abord si c&#x27;est un reel (réaction ou POV UGC) ou un carrousel, et applique la partie correspondante.</div>
+<div class="gap"></div>
+<div class="gap"></div>
+<div class="ph">Comment on travaille</div>
+<div class="li l1"><span class="mk">-</span>On échange dans cette conversation, depuis mon téléphone. Je t&#x27;envoie tout en pièce jointe : les posts d&#x27;inspiration (ou leurs liens), les vidéos et captures de mon app, les clips de réaction ou les plans POV que j&#x27;ai filmés, les musiques. Ne me parle jamais de dossiers ni de chemins de fichiers.</div>
+<div class="li l1"><span class="mk">-</span>S&#x27;il te manque une pièce pour faire un post, dis-moi exactement laquelle et je te l&#x27;envoie.</div>
+<div class="li l1"><span class="mk">-</span>Tu produis les fichiers toi-même avec tes outils (ffmpeg et Python pour les vidéos, une page HTML rendue en image pour les slides) et tu me les renvoies ici, en pièce jointe.</div>
+<div class="li l1"><span class="mk">-</span>Si je t&#x27;envoie un lien plutôt qu&#x27;un fichier, télécharge le post toi-même (yt-dlp pour les vidéos, gallery-dl pour les posts photo TikTok).</div>
+<div class="li l1"><span class="mk">-</span>Garde tes messages courts : je lis sur un petit écran.</div>
+<div class="gap"></div>
+<div class="gap"></div>
+<div class="ph">Mon contexte</div>
+<div class="li l1"><span class="mk">-</span>App : <span class="fill">[nom de l&#x27;app]</span>, ce qu&#x27;elle fait en une phrase : <span class="fill">[...]</span></div>
+<div class="li l1"><span class="mk">-</span>Ses fonctionnalités à montrer : <span class="fill">[...]</span></div>
+<div class="li l1"><span class="mk">-</span>Public visé : <span class="fill">[...]</span></div>
+<div class="li l1"><span class="mk">-</span>Plateformes et langue de chacune : <span class="fill">[ex. TikTok en français, Instagram en anglais]</span></div>
+<div class="gap"></div>
+<div class="gap"></div>
+<div class="ph">Règle d&#x27;or : on copie l&#x27;inspiration, on n&#x27;invente pas</div>
+<div class="p">Chaque post est une copie fidèle de son inspiration. On ne change que le contenu : mon app à la place de la leur, ma réaction à la place de la leur, mes textes à la place des leurs. La structure, le rythme, la musique, la mise en page, le style des textes et la légende restent les mêmes. Une inspiration a déjà prouvé qu&#x27;elle marche : chaque écart est un risque.</div>
+<div class="gap"></div>
+<div class="gap"></div>
+<div class="p">(Fin de la partie 1/5. Réponds juste « ok ».)</div>
+</div>
+<div class="tg-label">Message 2 sur 5</div>
+<div class="prompt tg">
+<div class="p">Instructions, partie 2/5 :</div>
+<div class="gap"></div>
+<div class="ph">Étape 1 : analyse de l&#x27;inspiration (avant de produire quoi que ce soit)</div>
+<div class="p">Pour chaque inspiration, fais une fiche courte, et envoie-moi celle de la première avant de produire.</div>
+<div class="gap"></div>
+<div class="p">Si c&#x27;est un REEL :</div>
+<div class="li l1"><span class="mk n">1.</span>Type de reel (réaction ou POV UGC), durée totale, format (9:16, 1080x1920), images par seconde.</div>
+<div class="li l1"><span class="mk n">2.</span>Timeline plan par plan, au dixième de seconde : début et fin de chaque plan, type de plan (réaction, démo, plan POV, texte seul), transitions (cut sec, zoom, flash...). Méthode : détection de scènes avec ffmpeg (select=&#x27;gt(scene,0.3)&#x27;,showinfo) plus une planche contact d&#x27;une image toutes les 0,5 s, que tu vérifies à l&#x27;œil.</div>
+<div class="li l1"><span class="mk n">3.</span>Durée du hook (la réaction ou le premier plan avant la démo). Elle doit rester identique, à 0,2 s près.</div>
+<div class="li l1 cont">Pour un reel POV UGC, décris aussi chaque plan : cadrage (gros plan sur les mains, plan large, par-dessus l&#x27;épaule), point de vue, décor, action, objets, lumière, mouvement de caméra, et ce qu&#x27;on voit sur l&#x27;écran du téléphone.</div>
+<div class="li l1"><span class="mk n">4.</span>Chaque texte à l&#x27;écran : texte exact, moments d&#x27;apparition et de disparition, position, taille, style (fond blanc arrondi, contour noir, bande sombre, ombre...), emojis, animation.</div>
+<div class="li l1"><span class="mk n">5.</span>Mise en page : démo en plein écran ? réaction détourée en incrustation dans un coin ? écran partagé ?</div>
+<div class="li l1"><span class="mk n">6.</span>Son : musique ou voix ? Si c&#x27;est une musique, identifie-la (titre, artiste, son tendance de la plateforme) et note où tombent les coupes par rapport aux temps forts. Si c&#x27;est une voix, transcris-la (whisper).</div>
+<div class="gap"></div>
+<div class="p">Si c&#x27;est un CARROUSEL :</div>
+<div class="li l1"><span class="mk n">1.</span>Nombre de slides et rôle de chacune (hook, élément de liste, astuce, preuve, appel à l&#x27;action, note de fin).</div>
+<div class="li l1"><span class="mk n">2.</span>Position exacte de l&#x27;app promue (slide 3, 4, 5...) et façon de la citer : nommée sur la slide, seulement montrée en capture d&#x27;écran, ou seulement dans la légende.</div>
+<div class="li l1"><span class="mk n">3.</span>Pour chaque slide : texte exact, position, taille, style (texte blanc à contour noir, étiquette blanche arrondie, carte blanche avec titre et puces, note du type « 9/10 »...), emojis.</div>
+<div class="li l1"><span class="mk n">4.</span>Visuels : photo d&#x27;ambiance (quel genre de personne, de lieu, de lumière), fond flouté, capture d&#x27;app dans un cadre de téléphone ou en plein écran, icônes d&#x27;apps.</div>
+<div class="li l1"><span class="mk n">5.</span>Le son ajouté au carrousel (les carrousels qui marchent ont presque toujours un son tendance).</div>
+<div class="gap"></div>
+<div class="p">Dans les deux cas, note aussi la légende du post : structure (accroche, emojis, mention de l&#x27;app, appel à l&#x27;action), longueur, nombre et type de hashtags, et le commentaire épinglé s&#x27;il y en a un.</div>
+<div class="gap"></div>
+<div class="gap"></div>
+<div class="p">(Fin de la partie 2/5. Réponds juste « ok ».)</div>
+</div>
+<div class="tg-label">Message 3 sur 5</div>
+<div class="prompt tg">
+<div class="p">Instructions, partie 3/5 :</div>
+<div class="gap"></div>
+<div class="ph">Étape 2a : montage d&#x27;un REEL</div>
+<div class="li l1"><span class="mk">-</span>Mêmes points de coupe, même durée de hook, même rythme que l&#x27;inspiration. Si mes rushs sont plus longs, choisis les passages, mais ne change pas la vitesse.</div>
+<div class="li l1"><span class="mk">-</span>Même musique, calée de la même façon : les coupes tombent sur les mêmes temps forts.</div>
+<div class="li l1"><span class="mk">-</span>Si l&#x27;audio de l&#x27;inspiration est une voix (quelqu&#x27;un qui parle, la démo d&#x27;une autre app), ne la réutilise jamais. Remplace-la par une musique du même genre et de la même énergie.</div>
+<div class="li l1"><span class="mk">-</span>Droits musicaux : si la musique est un son tendance de TikTok ou d&#x27;Instagram, le plus sûr est de l&#x27;ajouter dans l&#x27;app au moment de publier (sinon le son risque d&#x27;être coupé). Dans ce cas, envoie une version avec la musique pour validation et une version sans, et donne le nom du son à ajouter.</div>
+<div class="li l1"><span class="mk">-</span>Mêmes styles de texte, aux mêmes moments, avec le même nombre de lignes. Les textes sont réécrits pour mon app : même ton, même structure de phrase, mêmes emojis, mais rien de faux sur ce que fait l&#x27;app.</div>
+<div class="li l1"><span class="mk">-</span>Reel POV UGC : mêmes plans que l&#x27;inspiration, dans le même ordre, avec le même cadrage, la même action et la même ambiance (lumière naturelle, caméra à la main, rien de trop propre). Partout où l&#x27;inspiration montre un écran, on doit voir mon app, lisible et dans la langue de la publication.</div>
+<div class="li l1"><span class="mk">-</span>Si je n&#x27;ai pas encore filmé les plans POV, envoie-moi d&#x27;abord une liste de plans à tourner au téléphone, numérotée et courte : pour chaque plan, le cadrage, le décor, l&#x27;action, ce qui doit être à l&#x27;écran et la durée à filmer (prévois 2 à 3 s de marge avant et après). Monte seulement quand j&#x27;ai envoyé les plans.</div>
+<div class="li l1"><span class="mk">-</span>Réaction : naturelle, expressive, crédible, proche de la personne de l&#x27;inspiration (âge, ambiance). Écarte les clips qui ont l&#x27;air générés par IA. Légère correction de couleur, pas de filtre.</div>
+<div class="li l1"><span class="mk">-</span>Démo : uniquement des moments où il se passe quelque chose de visible (un tap qui ouvre une carte, une animation, une bonne réponse, des confettis, une progression). Pas d&#x27;écran statique. La démo doit durer assez longtemps pour qu&#x27;on comprenne ce que fait l&#x27;app, et l&#x27;app doit être dans la langue de la publication quand c&#x27;est possible.</div>
+<div class="li l1"><span class="mk">-</span>Export 1080x1920, H.264 + AAC, 30 images par seconde.</div>
+<div class="gap"></div>
+<div class="gap"></div>
+<div class="p">(Fin de la partie 3/5. Réponds juste « ok ».)</div>
+</div>
+<div class="tg-label">Message 4 sur 5</div>
+<div class="prompt tg">
+<div class="p">Instructions, partie 4/5 :</div>
+<div class="gap"></div>
+<div class="ph">Étape 2b : création d&#x27;un CARROUSEL</div>
+<div class="li l1"><span class="mk">-</span>Format toujours 4:5, 1080x1350 px, pour TikTok comme pour Instagram (le seul portrait qui n&#x27;est pas rogné sur Instagram). Jamais de 3:4 ni de carré.</div>
+<div class="li l1"><span class="mk">-</span>Même nombre de slides que l&#x27;inspiration, et mon app exactement à la même position. Ne mets jamais l&#x27;app en première slide par défaut : si l&#x27;inspiration la place en slide 5 sur 8, entourée d&#x27;autres apps ou d&#x27;autres astuces, fais pareil. Une app en slide 1 fait tout de suite publicité et le carrousel perd sa crédibilité.</div>
+<div class="li l1"><span class="mk">-</span>Cite l&#x27;app de la même façon que l&#x27;inspiration (nommée sur la slide, seulement en capture, ou seulement dans la légende).</div>
+<div class="li l1"><span class="mk">-</span>Slide 1 (le hook) : même type de photo que l&#x27;inspiration (même genre de personne, même ambiance, même cadrage), avec un texte court et lisible, dans le même style et à la même place.</div>
+<div class="li l1"><span class="mk">-</span>Les autres éléments (autres apps, autres astuces) doivent être vrais et utiles, avec une note honnête. Mon app ne doit pas être la seule chose intéressante du carrousel.</div>
+<div class="li l1"><span class="mk">-</span>Captures de l&#x27;app : prends-les dans les vidéos et captures que je t&#x27;envoie, dans la langue de la publication, sans la barre d&#x27;état (heure, point rouge d&#x27;enregistrement). Garde la même présentation que l&#x27;inspiration (cadre de téléphone, plein écran, carte).</div>
+<div class="li l1"><span class="mk">-</span>Reprends les mêmes styles de texte que l&#x27;inspiration. Police proche de celle de la plateforme (TikTok Sans par exemple), texte blanc avec contour ou ombre sur les photos, étiquettes et cartes blanches arrondies pour les listes.</div>
+<div class="li l1"><span class="mk">-</span>Méthode conseillée : une slide = une page HTML de 1080x1350, rendue en PNG. Ça permet de régénérer toutes les slides d&#x27;un coup (et la version dans l&#x27;autre langue) après une correction.</div>
+<div class="li l1"><span class="mk">-</span>Photos d&#x27;ambiance (Pinterest par exemple) : évite les filigranes (小红书, 抖音号, logos). Ces images ne sont pas libres de droits : à utiliser en organique, jamais en publicité payante.</div>
+<div class="li l1"><span class="mk">-</span>Envoie les slides en JPEG (TikTok les demande souvent dans ce format pour le mode photo), dans l&#x27;ordre, groupées dans un seul message.</div>
+<div class="gap"></div>
+<div class="gap"></div>
+<div class="ph">Zone de sécurité du texte (très important)</div>
+<div class="p">Les éléments de l&#x27;app (TikTok, Instagram, Facebook) et du téléphone cachent les bords de l&#x27;image.</div>
+<div class="p">Reel, en 1080x1920 :</div>
+<div class="li l1"><span class="mk">-</span>Jamais de texte dans les 15 % du haut (0 à 290 px) : il est caché par l&#x27;heure, la Dynamic Island de l&#x27;iPhone et la barre du haut de l&#x27;app.</div>
+<div class="li l1"><span class="mk">-</span>Jamais de texte dans les 25 % du bas (sous 1440 px) : légende, pseudo, ligne de musique.</div>
+<div class="li l1"><span class="mk">-</span>Jamais de texte dans les 12 % de droite (environ 130 px) : boutons like, commentaire, partage.</div>
+<div class="p">Carrousel, en 1080x1350 :</div>
+<div class="li l1"><span class="mk">-</span>Garde les textes importants loin du bas (environ 20 %, là où TikTok affiche la légende) et du bord droit (les boutons), avec au moins 60 px de marge sur les côtés.</div>
+<div class="p">Dans les deux cas :</div>
+<div class="li l1"><span class="mk">-</span>Si le texte de l&#x27;inspiration est collé au bord, ramène-le dans la zone sûre en gardant son style.</div>
+<div class="li l1"><span class="mk">-</span>Jamais de texte par-dessus le contenu important d&#x27;une capture d&#x27;app (texte de l&#x27;app, carte, image). Si la place manque, réduis un peu la capture ou la démo.</div>
+<div class="li l1"><span class="mk">-</span>Aucun texte coupé, et un texte lisible sur téléphone (au moins 40 px de haut sur un carrousel).</div>
+<div class="gap"></div>
+<div class="gap"></div>
+<div class="p">(Fin de la partie 4/5. Réponds juste « ok ».)</div>
+</div>
+<div class="tg-label">Message 5 sur 5</div>
+<div class="prompt tg">
+<div class="p">Instructions, partie 5/5 :</div>
+<div class="gap"></div>
+<div class="ph">Langues</div>
+<div class="p">Une version par langue de publication. Les textes à l&#x27;écran sont traduits naturellement, dans le langage parlé des réseaux, pas mot à mot. Les captures de l&#x27;app sont dans la même langue que le texte quand c&#x27;est possible. La légende est dans la langue de la plateforme.</div>
+<div class="gap"></div>
+<div class="gap"></div>
+<div class="ph">Légende du post</div>
+<div class="p">Reprends exactement la structure de la légende de l&#x27;inspiration : même type d&#x27;accroche, emojis au même endroit, même nombre de hashtags. Remplace le contenu par mon app et des hashtags de ma niche. Si l&#x27;inspiration ne nomme pas l&#x27;app dans la légende, nomme-la dans le commentaire épinglé.</div>
+<div class="gap"></div>
+<div class="gap"></div>
+<div class="ph">Contrôle qualité avant de m&#x27;envoyer un post</div>
+<div class="li l1"><span class="mk">-</span>Planche contact de mon post à côté de celle de l&#x27;inspiration (une image toutes les 0,5 s pour un reel, toutes les slides pour un carrousel) : même structure, mêmes moments, mêmes positions.</div>
+<div class="li l1"><span class="mk">-</span>Reel : durée à 0,3 s près de celle de l&#x27;inspiration ; son présent, aucune voix étrangère, volume correct.</div>
+<div class="li l1"><span class="mk">-</span>Carrousel : même nombre de slides, app à la même position, 1080x1350, aucun filigrane.</div>
+<div class="li l1"><span class="mk">-</span>Aucun texte hors de la zone sûre, coupé ou posé sur le contenu de l&#x27;app.</div>
+<div class="p">Corrige tout ce qui échoue avant de m&#x27;envoyer le post, puis dis-moi en une ligne ce que tu as vérifié.</div>
+<div class="gap"></div>
+<div class="gap"></div>
+<div class="ph">Ce que tu m&#x27;envoies pour chaque post</div>
+<div class="p">Un message par post et par langue, dans cet ordre :</div>
+<div class="li l1"><span class="mk n">1.</span>La vidéo ou les slides en pièce jointe. Si une vidéo dépasse la limite d&#x27;envoi, compresse-la sans perte visible.</div>
+<div class="li l1"><span class="mk n">2.</span>La légende de chaque plateforme, chacune dans un bloc séparé, prête à copier.</div>
+<div class="li l1"><span class="mk n">3.</span>Le son à ajouter dans l&#x27;app au moment de publier, et le commentaire à épingler.</div>
+<div class="li l1"><span class="mk n">4.</span>En une ligne : l&#x27;inspiration utilisée et ce que tu as vérifié.</div>
+<div class="gap"></div>
+<div class="p">C&#x27;était la dernière partie, tu as toutes les instructions. Tu peux commencer : commence par me demander ce qui manque dans « Mon contexte » et les pièces jointes dont tu as besoin, puis analyse la première inspiration que je t&#x27;envoie.</div>
 </div>
 
 <section class="page cta">
