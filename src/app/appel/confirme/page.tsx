@@ -8,7 +8,7 @@ import { useSearchParams } from "next/navigation";
 import AdDisclaimer from "@/components/AdDisclaimer";
 import BunnyVideo from "@/components/BunnyVideo";
 import ThemeToggle from "@/components/ThemeToggle";
-import { FLORIAN } from "@/lib/temoignages";
+import { TEMOIGNAGE_VEDETTE as T } from "@/lib/temoignages";
 
 // Vidéos Bunny (lib 613852). Placeholders : laisser "" tant que la vidéo
 // n'est pas prête → un bloc "Vidéo en cours de préparation" s'affiche.
@@ -186,21 +186,21 @@ function ConfirmeContent() {
             </p>
           </div>
 
-          {/* Témoignage Florian : preuve à regarder avant l'appel */}
+          {/* Témoignage vedette (Wassim) : preuve à regarder avant l'appel */}
           <div className="mt-14 max-w-4xl mx-auto">
             <div className="text-center mb-6">
               <span className="mac-eyebrow">Il est passé par là avant toi</span>
               <h2 className="mt-2 text-[24px] sm:text-[30px] font-bold tracking-[-0.035em] leading-[1.1] text-balance">
-                {FLORIAN.firstName}, {FLORIAN.age} ans : de 0 à{" "}
-                <span className="mac-accent whitespace-nowrap">1 793 $</span> en 28 jours, sans une seule pub
+                {T.firstName}, {T.age} ans : de 0 à{" "}
+                <span className="mac-accent whitespace-nowrap">7 300 $</span> en 14 jours, sans une seule pub
               </h2>
               <p className="mt-3 text-[15.5px] font-medium text-[var(--fg2)] max-w-xl mx-auto">
-                Il a créé son app sans savoir coder. Six semaines après la sortie, ses chiffres ont décollé. Il raconte tout, tableaux de bord à l&apos;écran.
+                Son app ne vendait presque rien quand il nous a rejoints. Deux mois plus tard, il fait 1 700 $ en une seule journée. Il raconte tout dans le podcast, tableaux de bord à l&apos;écran.
               </p>
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mb-4">
-              {FLORIAN.stats.map((s) => (
+              {T.stats.map((s) => (
                 <div
                   key={s.label}
                   className="rounded-[14px] bg-[var(--card)] border-[0.5px] border-[var(--sep)] px-3 py-3.5 text-center"
@@ -213,18 +213,18 @@ function ConfirmeContent() {
               ))}
             </div>
 
-            <BunnyVideo videoId={FLORIAN.videoId} poster={FLORIAN.poster} label={`Regarde le témoignage de ${FLORIAN.firstName}`} />
+            <BunnyVideo videoId={T.videoId} youtubeId={T.youtubeId} poster={T.poster} label={`Regarde le témoignage de ${T.firstName}`} />
 
             <div className="mt-4 flex items-center justify-center gap-3">
               <Image
-                src={FLORIAN.photo}
-                alt={FLORIAN.firstName}
+                src={T.photo}
+                alt={T.firstName}
                 width={40}
                 height={40}
                 className="w-9 h-9 rounded-full object-cover"
               />
               <Link
-                href={`/temoignage/${FLORIAN.slug}`}
+                href={`/temoignage/${T.slug}`}
                 className="text-[15px] font-semibold text-[var(--accent2)] hover:underline"
               >
                 Voir son parcours complet, étape par étape

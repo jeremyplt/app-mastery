@@ -258,23 +258,23 @@ function PlanActionVideoContent() {
 
               <div className="rounded-[18px] border-[0.5px] border-[var(--sep)] bg-[var(--card)] p-4">
                 <Image
-                  src="/emails/florian-revenuecat-1793-v2.jpg"
-                  alt="Tableau de bord RevenueCat de Florian : 1 793 $ sur 28 jours"
-                  width={955}
-                  height={445}
+                  src="/emails/wassim-revenuecat-7269-v1.jpg"
+                  alt="Tableau de bord RevenueCat de Wassim : 7 269 $ de revenus sur 28 jours, 251 abonnements actifs, 232 essais en cours"
+                  width={900}
+                  height={272}
                   className="w-full rounded-[12px]"
                 />
                 <div className="mt-4 flex items-center gap-3">
-                  <Image src="/florian.jpg" alt="Florian" width={56} height={56} className="h-14 w-14 shrink-0 rounded-full object-cover" />
+                  <Image src="/wassim.jpg" alt="Wassim" width={56} height={56} className="h-14 w-14 shrink-0 rounded-full object-cover" />
                   <p className="text-[22px] font-bold tracking-[-0.02em] leading-tight">
-                    Florian : <span className="mac-accent">1 793 $ en 28 jours</span>
+                    Wassim : <span className="mac-accent">7 300 $ en 14 jours</span>
                   </p>
                 </div>
                 <p className="mt-2 text-[15px] font-medium leading-relaxed">
-                  Vingt ans, jamais codé. Il a construit son application avec l&apos;IA, puis il a appliqué la méthode marketing tous les jours jusqu&apos;à trouver son format. Sans un euro de pub.
+                  Vingt-deux ans. Son application ne vendait presque rien quand il nous a rejoints. Deux mois plus tard, 1 700 $ en une seule journée, seul, sans un euro de pub.
                 </p>
                 <Link
-                  href="/temoignage/florian?utm_source=plan-action-video&utm_medium=cta&utm_campaign=temoignage"
+                  href="/temoignage/wassim?utm_source=plan-action-video&utm_medium=cta&utm_campaign=temoignage"
                   className="mt-3 inline-flex items-center gap-1.5 text-[15px] font-bold text-[var(--accent)] hover:underline"
                 >
                   Voir son témoignage en vidéo

@@ -100,6 +100,7 @@ ${footnote(FOOT)}
 <p ${P}>Tu es allé jusqu'au bout de la conférence, merci, c'est déjà plus que la majorité des gens. Et tu n'as pas cliqué sur le bouton en dessous. Je comprends, on ne sait jamais trop ce qu'il y a derrière ce genre de bouton.</p>
 <p ${P}>Alors voilà ce qui se passe. Tu choisis un créneau de trente minutes pour un appel avec Nolan, mon associé, ou avec moi. Pendant cet appel, on regarde ta situation, ton projet, le temps que tu peux y consacrer, et on te dit franchement si l'accompagnement est fait pour toi. Ce n'est pas une session de conseils, et ce n'est pas un appel de vente déguisé non plus. On ne prend pas tout le monde.</p>
 <p ${P}>Si ton profil correspond, on commence à poser ton plan d'action pendant l'appel, et tu rejoins la communauté le soir même.</p>
+<p ${P}>Wassim a passé ce même appel début août. Son application était sur l'App Store mais ne vendait presque rien. Deux mois plus tard, elle lui a rapporté 1 700 dollars en une seule journée.</p>
 ${imagePair({ src: `${SITE}/emails/nolan-appel.jpg`, alt: "Nolan en appel vidéo" }, { src: `${SITE}/emails/jeremy-appel.jpg`, alt: "Jeremy en appel vidéo" }, "Pendant l'appel, mon associé Nolan ou moi prenons trente minutes pour parler de ton projet et voir si l'accompagnement est fait pour toi.")}
 ${button("Réserver mon appel", url)}
 ${signature("À bientôt")}
@@ -116,7 +117,7 @@ ${footnote(FOOT)}
 <p ${P}>Justement. En 2026, tout le monde lance un SaaS. Il y en a des milliers par mois, avec les mêmes outils, les mêmes idées, les mêmes pages de vente. Pour vendre un abonnement à un logiciel sur ordinateur, il faut trouver des entreprises, les convaincre une par une, et se battre contre des concurrents qui ont dix fois ton budget.</p>
 <p ${P}>Pendant ce temps, les applications mobiles ont été oubliées. Les gens ont l'App Store dans la poche, ils y achètent des abonnements sans y réfléchir, et personne ne se bat sur les petites niches. Une application d'apprentissage du japonais, ce n'est pas un marché qui fait rêver un fonds d'investissement. C'est pourtant celui qui me rapporte 400 000 euros par an, et ça continue de monter. En septembre dernier, l'application faisait 10 000 dollars dans le mois. En juin, elle est passée à près de 40 000 dollars, sans lever un centime et sans embaucher personne.</p>
 ${image(`${SITE}/emails/revenue-mensuel-sep25-juin26.jpg`, "Courbe des revenus mensuels de septembre 2025 à juin 2026, de 10 000 à près de 40 000 dollars par mois", "Voilà les revenus de l'application, mois par mois, de septembre 2025 à juin 2026.")}
-<p ${P}>Et ce n'est pas que moi. Florian, Soraya, Wassim : à chaque fois la même recette, une niche précise, une application construite avec l'IA, et du contenu qui la fait connaître. C'est cette recette qu'on applique avec les élèves, et ça porte ses fruits. Demain je te partagerai les résultats de Florian.</p>
+<p ${P}>Et ce n'est pas que moi. Wassim, Florian, Soraya : à chaque fois la même recette, une niche précise, une application construite avec l'IA, et du contenu qui la fait connaître. C'est cette recette qu'on applique avec les élèves, et ça porte ses fruits. Demain je te partagerai les résultats de Wassim.</p>
 <p ${P}>Si tu veux voir à quoi ressemble une de ces applications de l'intérieur, j'ai fait une vidéo où je te montre la mienne, écran par écran.</p>
 ${button("Voir l'application de l'intérieur", url)}
 ${signature("À demain")}
@@ -126,20 +127,21 @@ ${footnote(FOOT)}
   }
 
   if (step === 3) {
-    const url = utm(`${SITE}/temoignage/florian`, tag);
+    const url = utm(`${SITE}/temoignage/wassim`, tag);
     const html = wrap(`
 <p ${P}>${salut}</p>
-<p ${P}>Je veux te présenter Florian, parce que son histoire répond à la question que tu te poses sûrement : est-ce que ça marche pour quelqu'un qui part de zéro ?</p>
-<p ${P}>Florian a vingt ans. Il n'avait jamais écrit une ligne de code. Il a passé quatre mois à construire son application de productivité tout seul, et il est arrivé avec une app qui fonctionnait mais qui ne transformait aucun utilisateur en client payant.</p>
-<p ${P}>On a revu tout le système de l'app pendant un mois. Puis il a appliqué la méthode marketing, tous les jours, jusqu'à trouver le format de contenu qui marche pour son app. Vingt-huit jours après l'avoir trouvé, son application lui avait rapporté 1 793 dollars, sans dépenser un euro en publicité. Aujourd'hui elle tourne à plus de cent téléchargements par jour.</p>
-${image(`${SITE}/emails/florian-revenuecat-1793-v2.jpg`, "Tableau de bord RevenueCat de Florian : 1 793 $ de revenus sur 28 jours, 70 abonnements actifs", "Voilà le tableau de bord que Florian a montré en live aux autres élèves.")}
-<p ${P}>Ce que je retiens, c'est ce qu'il a dit lui-même devant les autres élèves : quand on prend un accompagnement, on est débutant, on ne sait pas mieux, alors on applique ce qu'on nous dit et on regarde le résultat plus tard.</p>
-<p ${P}>Il raconte tout en vidéo, ses vrais chiffres à l'écran.</p>
-${button("Voir le témoignage de Florian", url)}
+<p ${P}>Je veux te présenter Wassim, parce que son histoire répond à la question que tu te poses sûrement : une fois que l'application existe, comment on fait pour qu'elle rapporte de l'argent ?</p>
+<p ${P}>Wassim a vingt-deux ans. Quand il nous a rejoints début août, son application était déjà sur l'App Store. Elle était bien construite, mais elle ne faisait presque aucune vente.</p>
+<p ${P}>On a commencé par un audit complet de l'app : l'onboarding, le paywall, les prix. Puis il s'est mis au contenu, tous les jours. Ses premières vidéos faisaient des milliers de vues mais très peu de ventes. En fouillant ses statistiques, on a trouvé pourquoi : la moitié de ses utilisateurs avaient moins de 17 ans, et ils ne pouvaient pas payer. On a changé son contenu pour parler à des adultes, et tout s'est enchaîné.</p>
+<p ${P}>Une de ses vidéos a dépassé 700 000 vues, et son application a fait 7 300 dollars en 14 jours, dont 1 700 dollars en une seule journée. Sans dépenser un euro en publicité, et tout seul.</p>
+${image(`${SITE}/emails/wassim-revenuecat-7269-v1.jpg`, "Tableau de bord RevenueCat de Wassim : 7 269 $ de revenus sur 28 jours, 251 abonnements actifs, 232 essais en cours", "Voilà le tableau de bord que Wassim a montré pendant le podcast.")}
+<p ${P}>Ce que je retiens, c'est sa façon de travailler. Chaque conseil que je lui donnais était appliqué le lendemain. Pas dans une semaine, le lendemain.</p>
+<p ${P}>On a enregistré un podcast ensemble où il raconte tout, ses vrais chiffres à l'écran.</p>
+${button("Voir le témoignage de Wassim", url)}
 ${signature("À demain")}
 ${footnote(FOOT)}
 `);
-    return { subject: "1 793 $ en 28 jours, sans savoir coder", html, tag };
+    return { subject: "7 300 $ en 14 jours, sans une seule pub", html, tag };
   }
 
   if (step === 4) {
@@ -149,6 +151,7 @@ ${footnote(FOOT)}
 <p ${P}>Depuis trois jours je te parle de l'accompagnement sans t'avoir vraiment montré ce qu'il y a dedans. Je répare ça aujourd'hui, en six minutes de vidéo.</p>
 <p ${P}>Il y a trois parties. La communauté et les cours, avec plus d'une centaine de vidéos pour construire ton application avec l'IA, la faire convertir et la faire connaître, et un accès à vie. Les coachings de groupe, deux fois par mois, où je réponds à toutes les questions. Et le suivi personnel, sur plusieurs mois, avec moi, sur WhatsApp, avec des messages vocaux et des corrections directement sur ton app.</p>
 ${image(`${SITE}/jeremy-bureau.jpg`, "Jeremy à son bureau, en train de travailler sur une application", "Le suivi personnel, c'est moi qui le fais, pas un coach que tu ne connais pas.")}
+<p ${P}>C'est ce suivi qui a tout débloqué pour Wassim. Ses vidéos faisaient des milliers de vues, mais presque aucune vente. En regardant ses statistiques ensemble, on a vu que la moitié de son public avait moins de 17 ans et ne pouvait pas payer. On a changé son contenu, et quelques semaines plus tard il faisait 7 300 dollars en 14 jours.</p>
 <p ${P}>C'est cette dernière partie qui prend du temps, et c'est pour ça que les places sont limitées et qu'il y a un appel avant. Pas pour te vendre quelque chose, pour vérifier qu'on peut vraiment t'aider et que tu as le temps de t'y mettre.</p>
 <p ${P}>Regarde la vidéo, et note les questions qui te viennent. Si tu réserves un appel ensuite, c'est le moment de les poser.</p>
 ${button("Voir ce qu'il y a dans l'accompagnement", url)}
@@ -195,7 +198,7 @@ ${footnote(FOOT)}
     const html = wrap(`
 <p ${P}>${salut}</p>
 <p ${P}>Je vais être franc avec toi aujourd'hui, parce que je préfère que tu le saches avant de réserver un appel plutôt que pendant.</p>
-<p ${P}>L'accompagnement demande dix heures par semaine, minimum. Pas pour coder, l'IA fait le gros du travail. Pour construire l'application, la corriger, puis surtout pour faire du contenu sur les réseaux sociaux tous les jours, pour trouver un format qui marche et faire connaître ton application. Florian postait plusieurs fois par jour pendant des semaines avant que ça décolle. Il n'y a pas de raccourci là-dessus.</p>
+<p ${P}>L'accompagnement demande dix heures par semaine, minimum. Pas pour coder, l'IA fait le gros du travail. Pour construire l'application, la corriger, puis surtout pour faire du contenu sur les réseaux sociaux tous les jours, pour trouver un format qui marche et faire connaître ton application. Wassim, lui, y passe trois à quatre heures par jour, seul : trois vidéos par jour sur plusieurs comptes, pendant des semaines, avant que ça décolle. Il n'y a pas de raccourci là-dessus.</p>
 <p ${P}>Si tu ne peux pas dégager ces dix heures, ce n'est pas le bon moment, et je préfère te le dire. Garde l'accès à la conférence et à mes vidéos, et reviens quand ce sera possible. Il n'y a aucune honte à ça.</p>
 ${image(`${SITE}/eleves-appel.jpg`, "Florian, Wassim et Soraya, trois élèves de l'accompagnement", "Florian, Wassim et Soraya y consacrent chacun dix heures par semaine.")}
 <p ${P}>Si tu peux, alors tu as le seul critère qui compte vraiment. Le reste, l'idée, la technique, le marketing, on le construit ensemble. Réserve ton appel, et dis à Nolan combien d'heures tu peux y mettre, honnêtement. C'est la première question qu'il te posera.</p>
@@ -212,8 +215,8 @@ ${footnote(FOOT)}
 <p ${P}>${salut}</p>
 <p ${P}>Ça fait une semaine que je t'écris, et c'est le dernier email de cette série. Je ne vais pas te relancer indéfiniment, ce n'est pas mon style. Mais avant de te laisser tranquille, il y a deux choses que je dois te dire, parce qu'elles changent la donne si tu comptes attendre.</p>
 <p ${P}>La première, c'est que les places sont limitées. Le suivi personnel, c'est moi qui le fais, sur WhatsApp, avec des corrections directement sur ton application. Je ne peux pas suivre cinquante personnes en même temps, donc je prends quelques élèves à la fois, et quand c'est plein, il faut attendre qu'une place se libère.</p>
-<p ${P}>La deuxième, c'est que je vais augmenter le prix de l'accompagnement. Pas pour le plaisir. Mon process s'est beaucoup affiné ces derniers mois, les résultats des élèves arrivent de plus en plus vite, et Florian n'est plus le seul à avoir des chiffres à montrer. Ce que tu peux avoir aujourd'hui à ce tarif, tu ne l'auras plus au même prix dans quelques semaines. Ceux qui réservent maintenant gardent les conditions actuelles.</p>
-<p ${P}>Tu as vu la conférence. Tu as vu Florian passer de zéro à 1 793 dollars en 28 jours. Tu as vu ce qu'il y a dans l'accompagnement, et ce qu'on attend de toi. Il ne reste qu'une chose que je ne peux pas faire à ta place : réserver l'appel.</p>
+<p ${P}>La deuxième, c'est que je vais augmenter le prix de l'accompagnement. Pas pour le plaisir. Mon process s'est beaucoup affiné ces derniers mois, les résultats des élèves arrivent de plus en plus vite, et ils ont de plus en plus de chiffres à montrer. Ce que tu peux avoir aujourd'hui à ce tarif, tu ne l'auras plus au même prix dans quelques semaines. Ceux qui réservent maintenant gardent les conditions actuelles.</p>
+<p ${P}>Tu as vu la conférence. Tu as vu Wassim faire 7 300 dollars en 14 jours avec son application. Tu as vu ce qu'il y a dans l'accompagnement, et ce qu'on attend de toi. Il ne reste qu'une chose que je ne peux pas faire à ta place : réserver l'appel.</p>
 <p ${P}>Si ce n'est vraiment pas le moment, aucun souci, tu gardes l'accès à la conférence et tu recevras mes vidéos quand j'en publie. Mais si tu hésites depuis une semaine, c'est sans doute que tu as envie d'y aller. Dans ce cas, c'est maintenant.</p>
 ${button("Réserver mon appel", url)}
 ${signature("Merci d'avoir lu jusqu'ici")}

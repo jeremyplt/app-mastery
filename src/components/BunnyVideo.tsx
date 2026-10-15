@@ -9,17 +9,20 @@ import { useState } from "react";
 // Si l'ID est vide, affiche un bloc "Vidéo en cours de préparation".
 export default function BunnyVideo({
   videoId,
+  youtubeId,
   label = "Regarde cette vidéo",
   poster,
 }: {
   videoId: string;
+  // Vidéo hébergée sur YouTube : remplace videoId, même comportement au clic.
+  youtubeId?: string;
   label?: string;
-  // Image de couverture. Par défaut, la miniature générée par Bunny.
+  // Image de couverture. Par défaut, la miniature générée par Bunny (ou YouTube).
   poster?: string;
 }) {
   const [played, setPlayed] = useState(false);
 
-  if (!videoId) {
+  if (!videoId && !youtubeId) {
     return (
       <div className="overflow-hidden rounded-[16px] bg-[var(--card)] border-[0.5px] border-[var(--sep)] p-2">
         <div className="relative rounded-[12px] overflow-hidden aspect-video">
@@ -40,8 +43,14 @@ export default function BunnyVideo({
     );
   }
 
-  const posterUrl = poster ?? `https://vz-0fb759fa-b02.b-cdn.net/${videoId}/thumbnail.jpg`;
-  const src = `https://iframe.mediadelivery.net/embed/613852/${videoId}?autoplay=true&loop=false&muted=false&preload=true&responsive=true`;
+  const posterUrl =
+    poster ??
+    (youtubeId
+      ? `https://i.ytimg.com/vi/${youtubeId}/maxresdefault.jpg`
+      : `https://vz-0fb759fa-b02.b-cdn.net/${videoId}/thumbnail.jpg`);
+  const src = youtubeId
+    ? `https://www.youtube-nocookie.com/embed/${youtubeId}?autoplay=1&rel=0&modestbranding=1&playsinline=1`
+    : `https://iframe.mediadelivery.net/embed/613852/${videoId}?autoplay=true&loop=false&muted=false&preload=true&responsive=true`;
 
   return (
     <div className="overflow-hidden rounded-[16px] bg-[var(--card)] border-[0.5px] border-[var(--sep)] p-2">

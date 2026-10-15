@@ -79,8 +79,8 @@ export default function UgcContent() {
               <Link href="/appel" className="mac-btn mac-btn-primary mac-btn-lg">
                 Réserver mon appel
               </Link>
-              <Link href="/temoignage/florian" className="text-[15px] font-semibold text-[var(--accent)] hover:underline">
-                Voir le témoignage de Florian &rarr;
+              <Link href="/temoignage/wassim" className="text-[15px] font-semibold text-[var(--accent)] hover:underline">
+                Voir le témoignage de Wassim &rarr;
               </Link>
             </div>
           </div>

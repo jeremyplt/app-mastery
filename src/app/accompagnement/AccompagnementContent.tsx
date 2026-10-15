@@ -6,7 +6,7 @@ import Link from "next/link";
 import AdDisclaimer from "@/components/AdDisclaimer";
 import BunnyVideo from "@/components/BunnyVideo";
 import ThemeToggle from "@/components/ThemeToggle";
-import { FLORIAN } from "@/lib/temoignages";
+import { WASSIM } from "@/lib/temoignages";
 
 // Vidéo Bunny (lib 613852) : présentation de l'accompagnement, 6 minutes.
 const VIDEO_ID = "a8334af7-09b2-464e-bcf8-6d4b07e10413";
@@ -129,31 +129,31 @@ export default function AccompagnementContent() {
               </ul>
             </div>
 
-            {/* Florian */}
+            {/* Wassim */}
             <div className="rounded-[16px] bg-[var(--card)] border-[0.5px] border-[var(--sep)] p-6 sm:p-8">
               <span className="mac-eyebrow">Il est passé par là avant toi</span>
               <div className="mt-4 flex items-center gap-4">
                 <Image
-                  src={FLORIAN.photo}
-                  alt={FLORIAN.firstName}
+                  src={WASSIM.photo}
+                  alt={WASSIM.firstName}
                   width={72}
                   height={72}
                   className="w-16 h-16 rounded-[18px] object-cover"
                 />
                 <div>
                   <p className="text-[17px] font-bold text-[var(--fg)]">
-                    {FLORIAN.firstName}, {FLORIAN.age} ans
+                    {WASSIM.firstName}, {WASSIM.age} ans
                   </p>
                   <p className="text-[14px] font-medium text-[var(--fg2)]">Créateur d&apos;une app mobile</p>
                 </div>
               </div>
               <p className="mt-5 text-[22px] font-bold tracking-[-0.03em] leading-tight">
-                De 0 à <span className="mac-accent whitespace-nowrap">1 793 $</span> en 28 jours, sans une seule pub
+                De 0 à <span className="mac-accent whitespace-nowrap">7 300 $</span> en 14 jours, sans une seule pub
               </p>
               <p className="mt-3 text-[15px] leading-relaxed text-[var(--fg2)] font-medium">
-                Il ne savait pas coder. Un mois de refonte avec Jeremy, puis la méthode marketing tous les jours jusqu&apos;à trouver le format qui marche. Il raconte tout en vidéo, ses vrais chiffres à l&apos;écran.
+                Son app ne vendait presque rien. Un audit complet avec Jeremy, puis du contenu tous les jours, et 1 700 $ en une seule journée deux mois plus tard. Il raconte tout en vidéo, ses vrais chiffres à l&apos;écran.
               </p>
-              <Link href="/temoignage/florian" className="mac-btn mac-btn-def mt-5 inline-flex whitespace-nowrap">
+              <Link href="/temoignage/wassim" className="mac-btn mac-btn-def mt-5 inline-flex whitespace-nowrap">
                 Voir son témoignage
               </Link>
             </div>

@@ -4,12 +4,12 @@ import TemoignagesContent from "./TemoignagesContent";
 export const metadata: Metadata = {
   title: "Les résultats des membres de l'accompagnement | App Mastery",
   description:
-    "Ce que donne l'accompagnement, en argent : ma courbe de revenus, le tableau de bord de Florian (1 793 $ en 28 jours) et les messages que m'envoient les élèves.",
+    "Ce que donne l'accompagnement, en argent : Wassim (7 300 $ en 14 jours) et Florian (1 793 $ en 28 jours) racontent tout en vidéo, plus les messages que m'envoient les élèves.",
   openGraph: {
     title: "Les résultats des membres de l'accompagnement App Mastery",
     description:
-      "Ma courbe de revenus, le tableau de bord de Florian et les messages des élèves. Tout est vérifiable.",
-    images: [{ url: "/eleves-appel.jpg", width: 1200, height: 400 }],
+      "Les témoignages vidéo de Wassim et Florian, et les messages des élèves. Tout est vérifiable.",
+    images: [{ url: "/wassim-poster-v2.jpg", width: 1280, height: 720 }],
   },
 };
 

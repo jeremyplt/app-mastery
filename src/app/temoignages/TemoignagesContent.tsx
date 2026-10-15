@@ -5,8 +5,9 @@ import Image from "next/image";
 import Link from "next/link";
 import posthog from "posthog-js";
 import AdDisclaimer from "@/components/AdDisclaimer";
+import BunnyVideo from "@/components/BunnyVideo";
 import ThemeToggle from "@/components/ThemeToggle";
-import { FLORIAN, MESSAGES_ELEVES } from "@/lib/temoignages";
+import { FLORIAN, MESSAGES_ELEVES, WASSIM, type Temoignage } from "@/lib/temoignages";
 
 const BOOKING = "/appel/reserver?utm_source=temoignages&utm_medium=cta&utm_campaign=temoignages";
 
@@ -64,6 +65,43 @@ function StatTiles({ stats }: { stats: { value: string; label: string }[] }) {
   );
 }
 
+// Témoignage vidéo d'un élève : la vidéo, le chiffre clé, ses chiffres et le
+// lien vers sa page complète.
+function VideoTemoignage({ t, title, body }: { t: Temoignage; title: React.ReactNode; body: string }) {
+  return (
+    <Card>
+      <BunnyVideo
+        videoId={t.videoId}
+        youtubeId={t.youtubeId}
+        poster={t.poster}
+        label={`Regarde le témoignage de ${t.firstName}`}
+      />
+      <div className="mt-4 flex items-center gap-3">
+        <Image src={t.photo} alt={t.firstName} width={56} height={56} className="h-14 w-14 shrink-0 rounded-full object-cover" />
+        <p className="text-[22px] sm:text-[26px] font-bold tracking-[-0.02em] leading-tight">{title}</p>
+      </div>
+      <p className="mt-2 text-[15.5px] font-medium leading-relaxed">{body}</p>
+      <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-2.5">
+        {t.stats.map((s) => (
+          <div key={s.label} className="rounded-[14px] border-[0.5px] border-[var(--sep)] px-3 py-3 text-center">
+            <p className="text-[24px] sm:text-[26px] font-bold tracking-[-0.04em] leading-none text-[var(--accent2)]">
+              {s.value}
+            </p>
+            <p className="mt-1.5 text-[13.5px] font-bold leading-tight">{s.label}</p>
+          </div>
+        ))}
+      </div>
+      <Link
+        href={`/temoignage/${t.slug}?utm_source=temoignages&utm_medium=cta&utm_campaign=temoignage`}
+        onClick={() => posthog.capture("temoignages_page_eleve_clicked", { eleve: t.slug })}
+        className="mt-4 inline-flex text-[15px] font-bold text-[var(--accent)] hover:underline"
+      >
+        Voir toute l&apos;histoire de {t.firstName} &rarr;
+      </Link>
+    </Card>
+  );
+}
+
 const JEREMY_STATS = [
   { value: "10 000 $", label: "par mois en septembre 2025" },
   { value: "38 000 $", label: "par mois en juin 2026" },
@@ -72,8 +110,6 @@ const JEREMY_STATS = [
 ];
 
 export default function TemoignagesContent() {
-  const florian = FLORIAN;
-
   return (
     <div className="min-h-screen text-[var(--fg)] antialiased">
       <div
@@ -115,63 +151,30 @@ export default function TemoignagesContent() {
               Les résultats des membres de <span className="mac-accent">l&apos;accompagnement App Mastery</span>
             </h1>
             <p className="mt-5 text-[18px] sm:text-[20px] font-semibold leading-relaxed max-w-2xl mx-auto">
-              Pas de promesses, des captures d&apos;écran. Les vrais chiffres de mon application, de Florian, et des élèves qui m&apos;écrivent quand les premiers euros tombent.
+              Pas de promesses, des vidéos et des captures d&apos;écran. Wassim et Florian racontent leur parcours avec leurs vrais chiffres, et les autres élèves m&apos;écrivent quand les premiers euros tombent.
             </p>
           </div>
 
-          {/* Jeremy + Florian */}
-          <div className="mt-10 grid gap-4 md:grid-cols-2">
-            <Card>
-              <Image
-                src="/emails/revenue-mensuel-sep25-juin26.jpg"
-                alt="Revenus mensuels de Shinobi Japanese, de 10 000 à près de 40 000 dollars par mois"
-                width={960}
-                height={490}
-                priority
-                className="w-full rounded-[12px]"
-              />
-              <div className="mt-4 flex items-center gap-3">
-                <Image src="/jeremy-v2.jpg" alt="Jeremy" width={56} height={56} className="h-14 w-14 shrink-0 rounded-full object-cover object-top" />
-                <p className="text-[22px] font-bold tracking-[-0.02em] leading-tight">
-                  Moi : de 10 000 à <span className="mac-accent">près de 40 000 $ par mois</span>
-                </p>
-              </div>
-              <p className="mt-2 text-[15px] font-medium leading-relaxed">
-                Shinobi Japanese, mon application pour apprendre le japonais, mois par mois de septembre 2025 à juin 2026. Plus de 5 000 notes, 4,9 sur 5. C&apos;est la méthode que j&apos;applique avec les élèves.
-              </p>
-              <StatTiles stats={JEREMY_STATS} />
-            </Card>
-
-            <Card>
-              <Image
-                src="/emails/florian-revenuecat-1793-v2.jpg"
-                alt="Tableau de bord RevenueCat de Florian : 1 793 $ sur 28 jours"
-                width={955}
-                height={445}
-                priority
-                className="w-full rounded-[12px]"
-              />
-              <div className="mt-4 flex items-center gap-3">
-                <Image src={florian.photo} alt={florian.firstName} width={56} height={56} className="h-14 w-14 shrink-0 rounded-full object-cover" />
-                <p className="text-[22px] font-bold tracking-[-0.02em] leading-tight">
-                  {florian.firstName} : <span className="mac-accent">1 793 $ en 28 jours</span>
-                </p>
-              </div>
-              <p className="mt-2 text-[15px] font-medium leading-relaxed">
-                Mon tout premier élève. Vingt ans, jamais codé. Il a construit son app avec l&apos;IA, puis il a appliqué la méthode marketing tous les jours jusqu&apos;à trouver son format. Sans un euro de pub.
-              </p>
-              <StatTiles stats={florian.stats} />
-              <Link
-                href={`/temoignage/${florian.slug}?utm_source=temoignages&utm_medium=cta&utm_campaign=temoignage`}
-                onClick={() => posthog.capture("temoignages_florian_video_clicked")}
-                className="mac-btn mac-btn-primary mac-btn-lg mt-4 w-full"
-              >
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden>
-                  <path d="M8 5.14v13.72a1 1 0 001.5.86l11-6.86a1 1 0 000-1.72l-11-6.86A1 1 0 008 5.14z" />
-                </svg>
-                Voir le témoignage vidéo de Florian
-              </Link>
-            </Card>
+          {/* Témoignages vidéo : Wassim d'abord, puis Florian */}
+          <div className="mt-10 space-y-4">
+            <VideoTemoignage
+              t={WASSIM}
+              title={
+                <>
+                  {WASSIM.firstName}, {WASSIM.age} ans : <span className="mac-accent">7 300 $ en 14 jours</span>
+                </>
+              }
+              body="Son app ne vendait presque rien quand il nous a rejoints. Deux mois plus tard, il fait 1 700 $ en une seule journée, seul, sans un euro de pub. Il raconte tout dans le podcast, chiffres à l'écran."
+            />
+            <VideoTemoignage
+              t={FLORIAN}
+              title={
+                <>
+                  {FLORIAN.firstName}, {FLORIAN.age} ans : <span className="mac-accent">1 793 $ en 28 jours</span>
+                </>
+              }
+              body="Mon tout premier élève. Vingt ans, jamais codé. Il a construit son app avec l'IA, puis il a appliqué la méthode marketing tous les jours jusqu'à trouver son format. Sans un euro de pub."
+            />
           </div>
 
           {/* Messages des élèves */}
@@ -237,6 +240,30 @@ export default function TemoignagesContent() {
               ))}
             </div>
           </section>
+
+          {/* Mes propres chiffres */}
+          <div className="mt-16 max-w-3xl mx-auto">
+            <Card>
+              <Image
+                src="/emails/revenue-mensuel-sep25-juin26.jpg"
+                alt="Revenus mensuels de Shinobi Japanese, de 10 000 à près de 40 000 dollars par mois"
+                width={960}
+                height={490}
+                className="w-full rounded-[12px]"
+              />
+              <div className="mt-4 flex items-center gap-3">
+                <Image src="/jeremy-v2.jpg" alt="Jeremy" width={56} height={56} className="h-14 w-14 shrink-0 rounded-full object-cover object-top" />
+                <p className="text-[22px] font-bold tracking-[-0.02em] leading-tight">
+                  Moi : de 10 000 à <span className="mac-accent">près de 40 000 $ par mois</span>
+                </p>
+              </div>
+              <p className="mt-2 text-[15px] font-medium leading-relaxed">
+                Shinobi Japanese, mon application pour apprendre le japonais, mois par mois de septembre 2025 à juin 2026. Plus de 5 000 notes, 4,9 sur 5. C&apos;est la méthode que j&apos;applique avec les élèves.
+              </p>
+              <StatTiles stats={JEREMY_STATS} />
+            </Card>
+
+          </div>
 
           {/* Bande photo */}
           <Card className="mt-4 sm:flex sm:items-center sm:gap-5">

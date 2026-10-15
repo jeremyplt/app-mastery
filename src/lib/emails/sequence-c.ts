@@ -47,7 +47,7 @@ export function buildSequenceCEmail(step: SequenceCStep, ctx: SequenceCContext):
   const salut = prenom ? `Salut ${prenom},` : "Salut,";
   const tag = `seq-c-${step}`;
   const booking = bookingUrl(ctx, tag);
-  const florianUrl = utm(`${SITE}/temoignage/florian`, tag);
+  const wassimUrl = utm(`${SITE}/temoignage/wassim`, tag);
   const accompagnementUrl = utm(`${SITE}/accompagnement`, tag);
   const planActionUrl = utm(`${SITE}/plan-action/video`, tag);
 
@@ -97,6 +97,7 @@ ${image(`${SITE}/emails/claude-code-ecran-stats.jpg`, "Claude Code qui construit
 </ol>
 <p ${P}>Construire, c'est 20 % du travail. Convertir et faire connaître, c'est les 80 % qui restent, et c'est là que se fait tout le résultat. Personne n'enseigne ça, parce que tout le monde vend "crée ton app avec l'IA".</p>
 <p ${P}>C'est pour ça que Shinobi rapporte plus de 400 000 euros par an, alors que des centaines d'applications de japonais aussi bien codées dorment sur l'App Store.</p>
+<p ${P}>Et c'est exactement ce qui est arrivé à Wassim, un de mes élèves. Son application était bien construite, mais elle ne vendait presque rien. Le jour où on a réglé la conversion et le contenu, elle a fait 7 300 dollars en 14 jours. Je te raconte son histoire dans quelques jours.</p>
 <p ${P}>Si tu te demandes comment gagner de l'argent avec ton application et comment la faire connaître, c'est exactement ce qu'on règle dans l'accompagnement. Pour savoir s'il est fait pour toi, réserve un appel avec nous. Nolan, mon associé, prend trente minutes pour te poser des questions sur ton projet et sur ta situation, et vous décidez ensemble si ça a du sens qu'on travaille avec toi.</p>
 ${button("Réserver mon appel", booking)}
 <p ${P}>Demain, je te donne une méthode concrète pour savoir en 48 heures si ton idée vaut le coup, avant d'y passer trois mois.</p>
@@ -140,6 +141,7 @@ ${image(`${SITE}/emails/reels-millions-de-vues.jpg`, "Trois reels de Shinobi Jap
 <li ${LI}><b>On soigne la première seconde.</b> Elle décide de tout. Nos accroches qui ont le mieux marché sont une question qui pique, comme "Tu utilises vraiment Duolingo pour apprendre le japonais ?", un résultat surprenant, ou une rupture visuelle dès la première image.</li>
 <li ${LI}><b>On fait du volume.</b> On a publié trois à cinq vidéos par semaine pendant six mois. La plupart font entre 1 000 et 10 000 vues, quelques-unes dépassent les deux millions, et personne ne sait à l'avance laquelle.</li>
 </ol>
+<p ${P}>Et ça ne marche pas que pour moi. Wassim, un de mes élèves, applique exactement ça : trois vidéos par jour sur plusieurs comptes, avec son application au centre de chaque vidéo. Une de ses vidéos a dépassé 700 000 vues, et son application a fait 1 700 dollars en une seule journée.</p>
 <p ${P}>Quand le contenu tourne, on ajoute un deuxième levier. On est allés chercher les créateurs qui parlaient déjà aux gens qui apprennent le japonais, on leur a écrit, et beaucoup ont répondu oui. Tu peux faire exactement pareil dans ta niche.</p>
 ${image(`${SITE}/emails/influenceur-collaboration.jpg`, "Conversation Instagram avec une créatrice qui accepte une collaboration pour Shinobi Japanese", "Cette créatrice a accepté une collaboration après deux messages. C'est plus simple que la plupart des gens ne le pensent.")}
 <p ${P}>Cette stratégie coûte zéro euro. Elle demande du temps, de la régularité, et surtout quelqu'un qui te dise par où commencer. C'est ce que je fais avec les élèves de l'accompagnement. Pour savoir s'il est fait pour toi, réserve un appel avec nous.</p>
@@ -184,12 +186,12 @@ ${footnote(foot(ctx))}
 <p ${P}>${salut}</p>
 <p ${P}>Si tu as déjà publié une application, tu connais peut-être ce moment. Tu rafraîchis l'App Store Connect tous les matins, et rien ne bouge. C'est là que la plupart des gens abandonnent.</p>
 <p ${P}>Dans ce cas, le problème n'est pas à chercher dans l'application. Ce n'est pas l'application qui amène les téléchargements, c'est le marketing.</p>
-<p ${P}>Et je vais être honnête avec toi, il n'y a pas de secret. Ce qui amène des téléchargements, c'est de créer du contenu et d'en publier tous les jours. Pas trois fois par semaine quand tu as le temps, tous les jours. C'est comme ça que Shinobi a décollé, et c'est comme ça que Florian, un de mes élèves, a décollé (je te raconte son histoire dans le prochain email).</p>
+<p ${P}>Et je vais être honnête avec toi, il n'y a pas de secret. Ce qui amène des téléchargements, c'est de créer du contenu et d'en publier tous les jours. Pas trois fois par semaine quand tu as le temps, tous les jours. C'est comme ça que Shinobi a décollé, et c'est comme ça que Wassim, un de mes élèves, a décollé (je te raconte son histoire dans le prochain email).</p>
 <p ${P}>La seule vraie difficulté, c'est de trouver le bon contenu pour ton application. Le format, l'angle, la façon de montrer l'app, ce qui fait que les gens s'arrêtent sur ta vidéo au lieu de passer à la suivante. Tant que tu ne l'as pas trouvé, tu publies dans le vide. Le jour où tu le trouves, tout change.</p>
 ${image(`${SITE}/emails/giga-banque-de-contenu-floutee.jpg`, "Six pages floutées de la banque de contenu donnée aux élèves, classée par niche", "Voilà une partie du document qu'on donne aux élèves : des centaines de vidéos qui ont marché, classées par niche, pour trouver le bon contenu sans partir de zéro. Je l'ai flouté, il est réservé à l'accompagnement.")}
 <p ${P}>Et ça, on peut t'aider à le trouver. C'est une grosse partie de ce qu'on fait dans l'accompagnement : on regarde ce qui marche déjà dans ta niche, on définit les formats à tester, et tu publies jusqu'à ce que ça prenne. Pour savoir si c'est fait pour toi, réserve un appel avec mon associé Nolan. Il va te poser des questions sur ton projet, et vous déciderez ensemble.</p>
 ${button("Réserver mon appel", booking)}
-<p ${P}>Demain, je te présente Florian, qui était exactement là où tu es il y a quelques mois.</p>
+<p ${P}>Demain, je te présente Wassim, qui était exactement là où tu es il y a deux mois.</p>
 ${signature("À demain")}
 ${footnote(foot(ctx))}
 `);
@@ -199,25 +201,26 @@ ${footnote(foot(ctx))}
   if (step === 7) {
     const html = wrap(`
 <p ${P}>${salut}</p>
-<p ${P}>Est-ce que ça marche pour quelqu'un qui part de zéro ? Florian, un de mes élèves, répond à cette question mieux que moi.</p>
-${image(`${SITE}/florian.jpg`, "Florian", "Voilà Florian. Il raconte toute son histoire en vidéo, le lien est en bas de cet email.", 320)}
-<p ${P}>Florian a vingt ans et il n'avait jamais écrit une ligne de code. Il a construit son application de productivité tout seul, avec l'IA, en quatre mois. Elle marchait, mais elle ne transformait aucun utilisateur en client payant.</p>
-<p ${P}>C'est exactement le problème dont je te parle depuis une semaine. Voilà ce qu'on a fait ensemble.</p>
+<p ${P}>Depuis une semaine, je te dis que ce qui fait vendre une application, c'est le marketing. Wassim, un de mes élèves, le prouve mieux que moi.</p>
+${image(`${SITE}/wassim.jpg`, "Wassim", "Voilà Wassim. Il raconte toute son histoire en vidéo, le lien est en bas de cet email.", 320)}
+<p ${P}>Wassim a vingt-deux ans. Quand il nous a rejoints début août, son application était déjà sur l'App Store. Elle était bien construite, mais elle ne faisait presque aucune vente.</p>
+<p ${P}>Voilà ce qu'on a fait ensemble.</p>
 <ol style="margin:0 0 18px;padding-left:22px">
-<li ${LI}><b>On a passé un mois à revoir tout le système de l'application,</b> pour qu'elle convertisse.</li>
-<li ${LI}><b>Il a appliqué la méthode marketing tous les jours,</b> jusqu'à trouver le format de contenu qui marche pour son app.</li>
+<li ${LI}><b>Un audit complet de l'application,</b> l'onboarding, le paywall et les prix, pour qu'elle convertisse.</li>
+<li ${LI}><b>Du contenu tous les jours,</b> en reprenant les formats qui marchaient déjà dans sa niche, avec son app au centre de chaque vidéo.</li>
+<li ${LI}><b>Une plongée dans ses statistiques,</b> qui a montré que la moitié de ses utilisateurs avaient moins de 17 ans et ne pouvaient pas payer. On a changé son contenu pour parler à des adultes.</li>
 </ol>
-<p ${P}>Vingt-huit jours après l'avoir trouvé, son application lui avait rapporté 1 793 dollars, sans un euro de publicité. Aujourd'hui, elle fait plus de cent téléchargements par jour.</p>
-${image(`${SITE}/emails/florian-revenuecat-1793-v2.jpg`, "Tableau de bord RevenueCat de Florian : 1 793 $ de revenus sur 28 jours, 70 abonnements actifs", "Voilà le tableau de bord que Florian a montré en live aux autres élèves.")}
-<p ${P}>Ce qu'il a dit devant les autres élèves, c'est que quand on prend un accompagnement, on est débutant, on ne sait pas mieux, alors on applique ce qu'on nous dit et on regarde le résultat plus tard.</p>
-<p ${P}>Wassim et Soraya ont suivi le même chemin, et plusieurs de mes élèves dépassent aujourd'hui 2 000 euros par mois. La différence avec ceux qui restent bloqués, ce n'est ni le talent ni le code. C'est qu'ils ont eu quelqu'un qui regardait leur projet de l'extérieur.</p>
-<p ${P}>Florian raconte tout ça lui-même en vidéo, avec ses vrais chiffres à l'écran. Prends dix minutes pour la regarder, c'est la meilleure façon de savoir si tu te reconnais dans son parcours.</p>
-${button("Voir le témoignage de Florian", florianUrl)}
+<p ${P}>À partir de là, tout s'est enchaîné. Une de ses vidéos a dépassé 700 000 vues, et son application a fait 7 300 dollars en 14 jours, dont 1 700 dollars en une seule journée. Sans un euro de publicité, et tout seul.</p>
+${image(`${SITE}/emails/wassim-revenuecat-7269-v1.jpg`, "Tableau de bord RevenueCat de Wassim : 7 269 $ de revenus sur 28 jours, 251 abonnements actifs, 232 essais en cours", "Voilà le tableau de bord que Wassim a montré pendant le podcast.")}
+<p ${P}>Ce que je retiens, c'est sa façon de travailler : chaque conseil que je lui donnais était appliqué le lendemain.</p>
+<p ${P}>Florian et Soraya ont suivi le même chemin, et plusieurs de mes élèves dépassent aujourd'hui 2 000 euros par mois. La différence avec ceux qui restent bloqués, ce n'est ni le talent ni le code. C'est qu'ils ont eu quelqu'un qui regardait leur projet de l'extérieur.</p>
+<p ${P}>Wassim raconte tout ça lui-même dans un podcast, avec ses vrais chiffres à l'écran. Prends dix minutes pour le regarder, c'est la meilleure façon de savoir si tu te reconnais dans son parcours.</p>
+${button("Voir le témoignage de Wassim", wassimUrl)}
 <p ${P}>Et si tu veux que ce soit ton tour, ça commence par un appel de trente minutes avec nous, pour voir si l'accompagnement est fait pour toi. Tu peux <a href="${booking}" style="color:#0060df">réserver ton appel ici</a>.</p>
 ${signature("À bientôt")}
 ${footnote(foot(ctx))}
 `);
-    return { subject: "1 793 $ en 28 jours, sans savoir coder", html, tag: "seq-c-7", preview: "Florian a vingt ans, il n'avait jamais écrit une ligne de code, et voilà ce qu'il a fait." };
+    return { subject: "7 300 $ en 14 jours, sans une seule pub", html, tag: "seq-c-7", preview: "Son application ne vendait presque rien. Deux mois plus tard, 1 700 dollars en une seule journée." };
   }
 
   if (step === 8) {
@@ -231,6 +234,7 @@ ${footnote(foot(ctx))}
 <li ${LI}>Tu sais ce qui amène vraiment des téléchargements, et ce qui n'en amène pas.</li>
 </ul>
 <p ${P}>Si tu n'en appliques qu'une seule, tu es déjà en avance sur la plupart des gens. Mais je vais être direct : la différence entre ceux qui réussissent et ceux qui restent bloqués, ce n'est pas l'information. C'est quelqu'un qui regarde ton projet de l'extérieur et qui te dit : fais ça, ne fais pas ça, concentre-toi là-dessus.</p>
+<p ${P}>C'est ce qui a débloqué Wassim. Ses vidéos faisaient des vues mais pas de ventes, et c'est en regardant ses statistiques de l'extérieur qu'on a vu pourquoi : la moitié de son public avait moins de 17 ans. Deux semaines après avoir corrigé ça, il avait fait 7 300 dollars.</p>
 <p ${P}>C'est ce que je fais dans l'accompagnement, qui a trois parties.</p>
 <ol style="margin:0 0 18px;padding-left:22px">
 <li ${LI}><b>Tu rejoins la communauté et les cours.</b> Tu as accès à vie à plus d'une centaine de vidéos.</li>
@@ -247,7 +251,7 @@ ${imagePair({ src: `${SITE}/emails/nolan-appel.jpg`, alt: "Nolan en appel vidéo
 <p ${P}>Si ce n'est vraiment pas le moment, aucun souci, tu gardes ${ctx.source === "guide" ? "le guide" : "le Plan d'Action"} et tu recevras mes vidéos. Mais si tu hésites depuis une semaine, c'est sans doute que tu as envie d'y aller. Dans ce cas, c'est maintenant.</p>
 ${button("Réserver mon appel", booking)}
 ${signature("Merci d'avoir lu jusqu'ici")}
-${ps(`Si tu as une question, réponds à cet email. Je lis tout et je réponds personnellement. Et si tu veux revoir l'histoire de Florian avant de te décider, elle est ici : <a href="${florianUrl}" style="color:#0060df">le témoignage de Florian</a>.`)}
+${ps(`Si tu as une question, réponds à cet email. Je lis tout et je réponds personnellement. Et si tu veux revoir l'histoire de Wassim avant de te décider, elle est ici : <a href="${wassimUrl}" style="color:#0060df">le témoignage de Wassim</a>.`)}
 ${footnote(foot(ctx))}
 `);
     return { subject: subjectWithName(first, "mon dernier email, et une mauvaise nouvelle", "Mon dernier email, et une mauvaise nouvelle"), html, tag: "seq-c-8", preview: "Les places sont limitées et le prix de l'accompagnement va augmenter." };

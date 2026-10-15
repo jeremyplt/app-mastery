@@ -1,9 +1,8 @@
-// Témoignages d'élèves accompagnés. Données partagées entre la page dédiée
-// (/temoignage/florian) et les blocs "preuve" affichés ailleurs (page de
-// confirmation d'appel, emails, etc.).
+// Témoignages d'élèves accompagnés. Données partagées entre les pages
+// dédiées (/temoignage/<slug>) et les blocs "preuve" affichés ailleurs (page
+// de confirmation d'appel, emails, etc.).
 //
-// Chiffres relevés à l'écran pendant le live du 16 juillet 2026
-// (RevenueCat + Instagram de son app). Ne pas arrondir vers le haut.
+// TEMOIGNAGE_VEDETTE est la vidéo à pousser partout (aujourd'hui Wassim).
 
 export type Temoignage = {
   slug: string;
@@ -15,6 +14,8 @@ export type Temoignage = {
   // vidéo n'est pas uploadée : un bloc "Vidéo en cours de préparation"
   // s'affiche à la place.
   videoId: string;
+  // Si la vidéo est sur YouTube, son ID : il remplace videoId.
+  youtubeId?: string;
   // Image affichée avant le clic (le lecteur Bunny n'est chargé qu'au clic).
   poster: string;
   recordedOn: string;
@@ -22,6 +23,8 @@ export type Temoignage = {
   stats: { value: string; label: string; detail: string }[];
 };
 
+// Chiffres relevés à l'écran pendant le live du 16 juillet 2026
+// (RevenueCat + Instagram de son app). Ne pas arrondir vers le haut.
 export const FLORIAN: Temoignage = {
   slug: "florian",
   firstName: "Florian",
@@ -39,6 +42,31 @@ export const FLORIAN: Temoignage = {
     { value: "0 €", label: "de publicité", detail: "100 % de contenu organique, posté depuis son téléphone" },
   ],
 };
+
+// Podcast du 12 octobre 2026, chiffres montrés à l'écran sur RevenueCat
+// (7 269 $ sur 28 jours, gagnés en deux semaines et demie, pic à 1 691 $ le
+// 7 octobre). Jeremy affiche « 7 300 $ en 14 jours » et « 1 700 $ en un jour ».
+// Ne jamais nommer son application : le nom n'apparaît que dans la vidéo.
+export const WASSIM: Temoignage = {
+  slug: "wassim",
+  firstName: "Wassim",
+  age: 22,
+  appTagline: "Application de style et de mode avec l'IA",
+  photo: "/wassim.jpg",
+  videoId: "",
+  youtubeId: "XlCzXq5Do6M",
+  poster: "/wassim-poster-v2.jpg",
+  recordedOn: "12 octobre 2026",
+  headline: "7 300 $ en 14 jours, sans une seule pub",
+  stats: [
+    { value: "7 300 $", label: "de revenus en 14 jours", detail: "251 abonnés payants, 232 essais en cours" },
+    { value: "1 700 $", label: "en une seule journée", detail: "portée par une vidéo à plus de 700 000 vues" },
+    { value: "1 585 $", label: "de revenus récurrents par mois", detail: "des abonnements qui se renouvellent tout seuls" },
+    { value: "0 €", label: "de publicité", detail: "100 % de contenu organique, seul, 3 à 4 heures par jour" },
+  ],
+};
+
+export const TEMOIGNAGE_VEDETTE = WASSIM;
 
 // Messages reçus des élèves (captures WhatsApp), affichés sur /temoignages.
 // Pour ajouter un élève : déposer la capture recadrée sur la bulle dans

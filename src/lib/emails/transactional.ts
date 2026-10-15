@@ -28,6 +28,8 @@ export function appelDecouverte(firstName?: string): BuiltEmail {
   <li>Si non, je te le dis honnêtement, sans te faire perdre ton temps</li>
 </ul>
 
+<p>Wassim a passé ce même appel début août. Deux mois plus tard, son application lui rapportait 7 300 dollars en 14 jours. Il raconte tout ici : <a href="https://www.jeremypitault.com/temoignage/wassim?utm_source=email&utm_medium=email&utm_campaign=appel-decouverte">le témoignage de Wassim</a>.</p>
+
 <p>L'idée de l'appel, c'est vraiment de voir ensemble si on peut travailler ensemble. Pour que ce soit utile pour toi, viens en étant ouvert à investir sur toi et sur ton projet, c'est ce qui fait toute la différence.</p>
 
 <p>À très vite,<br>Jeremy</p>
@@ -89,7 +91,7 @@ export function planAction(firstName?: string): BuiltEmail {
 
 <p>Je t'en parle demain.</p>
 
-<p>En attendant, si tu as déjà une app ou un projet en tête, je propose un appel découverte. On fait le point sur ton projet et on voit si on peut travailler ensemble. Réponds à quelques questions et choisis ton créneau :</p>
+<p>En attendant, si tu as déjà une app ou un projet en tête, je propose un appel découverte. C'est par là qu'a commencé Wassim, un de mes élèves : deux mois après son appel, son application faisait 7 300 dollars en 14 jours. On fait le point sur ton projet et on voit si on peut travailler ensemble. Réponds à quelques questions et choisis ton créneau :</p>
 
 <p><a href="https://www.jeremypitault.com/appel?utm_source=email&utm_medium=email&utm_campaign=plan-action">Réserver mon appel découverte</a></p>
 
@@ -146,7 +148,7 @@ export function guide27Regles(firstName?: string): BuiltEmail {
 
 <p>Ouvre ton app à côté de la liste et coche seulement les règles qu'elle respecte vraiment aujourd'hui. Moins de 15 sur 27, c'est normal, c'est le cas de 90 % des apps que j'ai vues. Corrige dans l'ordre : l'onboarding, puis le paywall, puis la boucle.</p>
 
-<p>Et si tu veux que je passe ton app au crible avec toi, écran par écran, c'est ce que je fais avec les élèves que j'accompagne. Le premier pas, c'est un appel de 30 minutes :</p>
+<p>Et si tu veux que je passe ton app au crible avec toi, écran par écran, c'est ce que je fais avec les élèves que j'accompagne. C'est comme ça qu'on a trouvé l'étape de l'onboarding qui faisait partir 15 % des utilisateurs de Wassim. Deux mois après son arrivée, son app faisait 7 300 $ en 14 jours. Le premier pas, c'est un appel de 30 minutes :</p>
 
 <p><a href="https://www.jeremypitault.com/appel?utm_source=email&utm_medium=email&utm_campaign=27-regles">Réserver mon appel</a></p>
 

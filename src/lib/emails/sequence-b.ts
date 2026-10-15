@@ -83,7 +83,7 @@ ${hostParagraph}
 ${image(`${SITE}/jeremy-bureau.jpg`, "Jeremy à son bureau", ctx.host === "Nolan" ? "Pendant que Nolan prend les appels, je passe mes journées sur les applications des élèves." : "Le reste du temps, je passe mes journées sur les applications des élèves.")}
 <p ${P}>Pour que ça se passe comme ça, prends six minutes d'ici là pour regarder la vidéo de présentation de l'accompagnement. J'y montre ce qu'il y a dedans : l'espace de formation et la communauté, les coachings de groupe, et le suivi personnel avec moi. Note les questions qui te viennent en la regardant, l'appel est fait pour y répondre.</p>
 <p ${P}>Et si quelqu'un d'autre fait partie du projet, ou gère les finances avec toi, il faut que cette personne soit présente à l'appel. Sinon vous devrez en refaire un, et les créneaux sont limités.</p>
-<p ${P}>Sur la même page, tu verras Florian. Il ne savait pas coder. Six semaines après la sortie de son app, elle lui rapportait 1 793 dollars sur 28 jours, sans un euro de pub.</p>
+<p ${P}>Sur la même page, tu verras Wassim. Son application ne vendait presque rien quand il nous a rejoints. Deux mois plus tard, elle lui a rapporté 1 700 dollars en une seule journée, sans un euro de pub.</p>
 ${button("Regarder la vidéo de 6 minutes", confirmUrl)}
 <p ${P}>Le lien de la visio est dans l'email de Calendly.</p>
 ${signature(`À ${jour}`)}
@@ -94,23 +94,22 @@ ${ps(ctx.rescheduleUrl, "Si tu sais déjà que tu ne pourras pas être là, déc
   }
 
   if (kind === "veille") {
-    const florianUrl = utm(`${SITE}/temoignage/florian`, "seq-b-2");
+    const wassimUrl = utm(`${SITE}/temoignage/wassim`, "seq-b-2");
     const html = wrap(`
 <p ${P}>${salut}</p>
-<p ${P}>Avant ton appel de demain, je voulais te parler de Florian, parce qu'il était exactement à ta place il y a quelques mois.</p>
-<p ${P}>Florian a vingt ans et il n'avait jamais écrit une ligne de code. Il a passé quatre mois à construire son application de productivité tout seul, en apprenant sur le tas, et il est arrivé à son appel avec une app qui marchait à peu près et beaucoup de doutes sur la suite.</p>
-<p ${P}>Son application fonctionnait, mais elle n'était pas du tout optimisée pour transformer les utilisateurs en clients payants. On a vu que son profil collait, on a posé son plan d'action, et pendant un mois on a complètement revu le système de l'app. Un mois plus tard, elle était sur l'App Store, prête à recevoir des utilisateurs et à les convertir en clients premium.</p>
-<p ${P}>Il a ensuite appliqué la méthode marketing qu'on lui a donnée, tous les jours, jusqu'à trouver le format de contenu qui marche pour son app.</p>
-${image(`${SITE}/emails/florian-revenuecat-1793-v2.jpg`, "Tableau de bord RevenueCat de Florian : 1 793 $ sur 28 jours", "Voilà le tableau de bord de Florian, 28 jours après avoir trouvé le bon format de contenu.")}
-<p ${P}>Vingt-huit jours plus tard, son application lui avait rapporté 1 793 dollars, sans dépenser un seul euro en publicité. Aujourd'hui il tourne à plus de cent téléchargements par jour.</p>
-<p ${P}>Ce que je retiens de son histoire, c'est ce qu'il a dit lui-même en live devant les autres élèves : quand on prend un accompagnement, on est débutant, on ne sait pas mieux, alors on applique ce qu'on nous dit et on regarde le résultat plus tard.</p>
-<p ${P}>Il raconte tout ça en vidéo, avec ses vrais chiffres à l'écran. Si tu veux savoir à quoi ressemble la suite de ton appel de demain, c'est le meilleur endroit pour le voir.</p>
-${button("Voir le témoignage de Florian", florianUrl)}
+<p ${P}>Avant ton appel de demain, je voulais te parler de Wassim, parce qu'il était exactement à ta place il y a deux mois.</p>
+<p ${P}>Wassim a vingt-deux ans. Il est arrivé à son appel avec une application déjà sur l'App Store, qui ne faisait presque aucune vente, et beaucoup de doutes. Il se demandait si les applications pouvaient vraiment marcher, et si j'étais la bonne personne pour l'aider.</p>
+<p ${P}>On a vu que son profil collait et on a posé son plan d'action. On a commencé par un audit complet de son app, puis il s'est mis au contenu tous les jours. À chaque blocage, on cherchait ensemble ce qui coinçait : l'appel à l'action caché à la fin de ses carrousels, une étape de l'onboarding qui faisait partir 15 % des gens, et surtout un contenu qui attirait des moins de 17 ans qui ne pouvaient pas payer.</p>
+${image(`${SITE}/emails/wassim-revenuecat-7269-v1.jpg`, "Tableau de bord RevenueCat de Wassim : 7 269 $ de revenus sur 28 jours, 251 abonnements actifs, 232 essais en cours", "Voilà le tableau de bord de Wassim, deux mois après son appel.")}
+<p ${P}>Résultat : 7 300 dollars en 14 jours, dont 1 700 dollars en une seule journée, sans dépenser un seul euro en publicité.</p>
+<p ${P}>Ce que je retiens de son histoire, c'est sa façon de travailler. Chaque conseil que je lui donnais était appliqué le lendemain. C'est ce qui fait la différence entre ceux qui avancent et ceux qui restent bloqués.</p>
+<p ${P}>Il raconte tout ça dans un podcast, avec ses vrais chiffres à l'écran. Si tu veux savoir à quoi ressemble la suite de ton appel de demain, c'est le meilleur endroit pour le voir.</p>
+${button("Voir le témoignage de Wassim", wassimUrl)}
 <p ${P}>On se retrouve demain à ${heure}. Le lien de la visio est dans ton email Calendly.</p>
 ${signature("Bonne soirée")}
 ${ps(ctx.rescheduleUrl, "Un empêchement ? Décale ton créneau plutôt que de le laisser vide, quelqu'un d'autre pourra en profiter.")}
 `);
-    return { subject: "Demain, tu seras à la place de Florian", html, tag: "seq-b-2-veille" };
+    return { subject: "Demain, tu seras à la place de Wassim", html, tag: "seq-b-2-veille" };
   }
 
   // jourj
