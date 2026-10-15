@@ -11,6 +11,7 @@ import {
   magicLink,
   metabase,
   planAction,
+  promptContenuViral,
   vslAccess,
   type BuiltEmail,
 } from "@/lib/emails/transactional";
@@ -69,6 +70,8 @@ function buildFromCode(tag: string): BuiltEmail | null {
       return metabase(SAMPLE_FIRST_NAME);
     case "27-regles":
       return guide27Regles(SAMPLE_FIRST_NAME);
+    case "prompt-contenu-viral":
+      return promptContenuViral(SAMPLE_FIRST_NAME);
     case "candidature-qualifie":
       return candidatureProspect(SAMPLE_FIRST_NAME, "thomas@exemple.fr", true);
     case "candidature-non-qualifie":

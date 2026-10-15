@@ -159,6 +159,39 @@ export function guide27Regles(firstName?: string): BuiltEmail {
   return { subject: "Ta checklist des 27 règles est prête", html, tag: "27-regles" };
 }
 
+// Livraison du prompt contenu viral (reels et carrousels copiés sur des
+// posts qui ont déjà marché, avec l'app de l'élève à la place).
+export function promptContenuViral(firstName?: string): BuiltEmail {
+  const html = `
+<p>${greeting(firstName)}</p>
+
+<p>Merci d'avoir demandé le prompt. Voici ton PDF :</p>
+
+<p><a href="https://www.jeremypitault.com/downloads/prompt-contenu-viral-r8t3w6.pdf">Télécharger le prompt contenu viral</a></p>
+
+<p>Avec ce prompt, ton IA devient ton monteur vidéo, ton designer et ton community manager. Tu lui envoies un post qui a déjà cartonné dans ta niche, et elle te rend le même avec ton app à la place :</p>
+
+<ul>
+  <li>Des reels montés au même rythme que l'original, avec ton app à l'écran</li>
+  <li>Des carrousels avec ton app à la bonne place, pour que ça ne fasse pas pub</li>
+  <li>La légende, les hashtags et le commentaire à épingler, prêts à copier</li>
+</ul>
+
+<p>Pour démarrer, remplis la partie « Mon contexte » (les passages en bleu), colle le prompt en entier dans ton IA, puis envoie-lui le lien d'un post de ta niche qui a fait beaucoup de vues, avec quelques vidéos de ton app.</p>
+
+<p>C'est exactement la méthode de Wassim, un des élèves que j'accompagne. Il reprend les vidéos des apps qui explosent, les fait adapter à son app par l'IA, et se filme avec son iPhone. Résultat : 7 300 $ en 14 jours, dont 1 700 $ en une seule journée, sans dépenser un euro en publicité. Si tu veux qu'on regarde ton app ensemble, le premier pas, c'est un appel de 30 minutes :</p>
+
+<p><a href="https://www.jeremypitault.com/appel?utm_source=email&utm_medium=email&utm_campaign=prompt-contenu-viral">Réserver mon appel</a></p>
+
+<p>Demain, je te raconte d'où vient Shinobi Japanese, et pourquoi elle a rapporté de l'argent dès le premier mois alors que des centaines d'apps aussi bien codées dorment sur l'App Store.</p>
+
+<p>À demain,<br>Jeremy</p>
+
+<p>P.S. Si quelque chose bloque avec le prompt, réponds directement à cet email. Je lis tout.</p>
+`;
+  return { subject: "Ton prompt est prêt", html, tag: "prompt-contenu-viral" };
+}
+
 // Candidature : réponse au prospect selon la qualification.
 export function candidatureProspect(firstName: string, email: string, qualified: boolean): BuiltEmail {
   const html = qualified

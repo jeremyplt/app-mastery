@@ -14,6 +14,8 @@ export interface Guide {
   brevoListId?: number;
   // Image de couverture affichée nette sur la page d'optin (sinon aperçu générique flouté).
   previewImage?: string;
+  // Badge affiché sur la couverture (ex. "PDF · 7 pages").
+  previewBadge?: string;
   // Lead magnet en rapport direct avec les apps mobiles : ses leads sont
   // suivis dans le CRM (onglet "Lead magnets", source "guide").
   crm?: boolean;
@@ -42,8 +44,33 @@ export const guides: Record<string, Guide> = {
     downloadUrl: "/downloads/27-regles-apps-rentables-k3r7p9.pdf",
     brevoListId: 23,
     previewImage: "/proof/27-regles-preview.jpg",
+    previewBadge: "PDF · 7 pages",
     crm: true,
     shortLabel: "Checklist 27 règles",
+  },
+  "prompt-contenu-viral": {
+    slug: "prompt-contenu-viral",
+    title: "Récupère le prompt qui transforme",
+    highlight: "un post viral en post pour ton app",
+    subtitle:
+      "Ton IA devient ton monteur vidéo, ton designer et ton community manager. Tu lui envoies un post qui a déjà cartonné sur TikTok ou Instagram, elle te rend le même avec ton app à la place, prêt à publier.",
+    bullets: [
+      "Des reels montés au même rythme que l'original, avec ton app à l'écran",
+      "Des carrousels avec ton app à la bonne place, pour ne pas faire pub",
+      "La légende, les hashtags et le commentaire à épingler, prêts à copier",
+    ],
+    ctaText: "Recevoir le prompt PDF",
+    merciTitle: "Ton prompt est",
+    merciHighlight: "en route.",
+    merciDescription:
+      "Télécharge le prompt, remplis la partie sur ton app et envoie ta première inspiration à ton IA.",
+    downloadLabel: "Télécharger le prompt",
+    downloadUrl: "/downloads/prompt-contenu-viral-r8t3w6.pdf",
+    brevoListId: 23,
+    previewImage: "/proof/prompt-contenu-viral-preview.jpg",
+    previewBadge: "PDF · 8 pages",
+    crm: true,
+    shortLabel: "Prompt contenu viral",
   },
   "piscine-epitech": {
     slug: "piscine-epitech",

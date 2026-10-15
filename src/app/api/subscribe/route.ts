@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { validatePhone } from "@/lib/phone-validation";
 import { sendMetaEvent, getClientInfo } from "@/lib/meta-capi";
 import { getAdminClient } from "@/lib/supabase";
-import { appelDecouverte, guide27Regles, metabase, planAction, vslAccess, type BuiltEmail } from "@/lib/emails/transactional";
+import { appelDecouverte, guide27Regles, metabase, planAction, promptContenuViral, vslAccess, type BuiltEmail } from "@/lib/emails/transactional";
 import { startSequenceC } from "@/lib/sequence-c";
 import { CRM_GUIDE_SLUGS } from "@/lib/guides";
 
@@ -265,6 +265,8 @@ export async function POST(req: NextRequest) {
       await sendBuilt(BREVO_API_KEY, email, metabase(firstName));
     } else if (source === "27-regles") {
       await sendBuilt(BREVO_API_KEY, email, guide27Regles(firstName));
+    } else if (source === "prompt-contenu-viral") {
+      await sendBuilt(BREVO_API_KEY, email, promptContenuViral(firstName));
     } else {
       const config = source ? SOURCE_CONFIG[source] : undefined;
       if (config) {

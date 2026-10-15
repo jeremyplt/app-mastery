@@ -312,9 +312,11 @@ export default function GuidePage() {
                         className="absolute inset-0 w-full h-full object-cover object-top select-none"
                         draggable={false}
                       />
-                      <span className="badge absolute top-3 right-3 bg-[color-mix(in_srgb,var(--bg)_75%,transparent)] text-[var(--fg)] backdrop-blur">
-                        PDF · 7 pages
-                      </span>
+                      {guide.previewBadge && (
+                        <span className="badge absolute top-3 right-3 !bg-white/90 !text-black backdrop-blur">
+                          {guide.previewBadge}
+                        </span>
+                      )}
                     </>
                   ) : (
                     <>
