@@ -76,3 +76,7 @@ alter table public.students
 create unique index students_questionnaire_token_idx on public.students (questionnaire_token);
 alter table public.sales add column commission_unlock_notified_at timestamptz;
 alter table public.manual_commissions add column unlock_notified_at timestamptz;
+
+-- 2026-10-15, migration "students_skool_invited_at" : invitation Skool envoyée
+-- depuis la fiche élève (élèves sans vente liée).
+alter table public.students add column skool_invited_at timestamptz;

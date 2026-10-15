@@ -93,6 +93,7 @@ export default function ElevesPage() {
   const [formOpen, setFormOpen] = useState(false);
   const [form, setForm] = useState(EMPTY_FORM);
   const [formPayments, setFormPayments] = useState<Payment[]>([]);
+  const [creating, setCreating] = useState(false);
 
   useEffect(() => {
     fetch("/api/admin/check")
@@ -122,12 +123,16 @@ export default function ElevesPage() {
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
+    // Un seul envoi : le temps d'aller sur la fiche, un 2e clic créait un doublon.
+    if (creating) return;
+    setCreating(true);
     const d = await fetch("/api/admin/eleves", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ ...form, payments: formPayments }),
     }).then((r) => r.json());
     if (d.error) {
+      setCreating(false);
       setFlash(`Erreur : ${d.error}`);
       return;
     }
@@ -230,8 +235,8 @@ export default function ElevesPage() {
             </button>
 
             <div className="mt-4 flex gap-2">
-              <button type="submit" className="mac-btn mac-btn-primary mac-btn-sm">
-                Créer la fiche
+              <button type="submit" disabled={creating} className="mac-btn mac-btn-primary mac-btn-sm disabled:opacity-50">
+                {creating ? "Création..." : "Créer la fiche"}
               </button>
               <button type="button" onClick={() => setFormOpen(false)} className="mac-btn mac-btn-def mac-btn-sm">
                 Annuler

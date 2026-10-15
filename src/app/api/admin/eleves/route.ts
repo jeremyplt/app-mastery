@@ -57,6 +57,19 @@ export async function POST(req: NextRequest) {
     const row: Record<string, unknown> = { name, payments: cleanPayments(b.payments) };
     for (const f of TEXT_FIELDS) if (f !== "name" && typeof b[f] === "string") row[f] = b[f].trim() || null;
     if (ISO_DATE.test(b.start_date ?? "")) row.start_date = b.start_date;
+    // Même élève créé il y a moins de 5 min (double clic, double envoi) : on
+    // renvoie la fiche existante au lieu d'en créer une 2e.
+    if (row.email) {
+      const since = new Date(Date.now() - 5 * 60_000).toISOString();
+      const { data: recent } = await getAdminClient()
+        .from("students")
+        .select("*")
+        .eq("email", row.email)
+        .gte("created_at", since)
+        .limit(1)
+        .maybeSingle();
+      if (recent) return NextResponse.json({ student: { ...recent, sales: null } });
+    }
     const { data, error } = await getAdminClient().from("students").insert(row).select("*").single();
     if (error) throw new Error(error.message);
     return NextResponse.json({ student: { ...data, sales: null } });

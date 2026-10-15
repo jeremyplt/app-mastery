@@ -38,6 +38,7 @@ export type Student = {
   notes: string | null;
   links: StudentLink[];
   last_contact_at: string | null;
+  skool_invited_at: string | null;
   questionnaire_token: string;
   questionnaire_sent_at: string | null;
   questionnaire_answered_at: string | null;

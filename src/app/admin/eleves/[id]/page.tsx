@@ -76,6 +76,7 @@ export default function StudentPage() {
   const [newPayment, setNewPayment] = useState<{ date: string; amount: string } | null>(null);
   const [newLink, setNewLink] = useState<{ label: string; url: string } | null>(null);
   const [sendingQuestionnaire, setSendingQuestionnaire] = useState(false);
+  const [invitingSkool, setInvitingSkool] = useState(false);
 
   useEffect(() => {
     fetch("/api/admin/check")
@@ -199,6 +200,23 @@ export default function StudentPage() {
     if (d.error) return setError(d.error);
     setStudent({ ...student, questionnaire_sent_at: d.sent_at });
     flash("Questionnaire envoyé");
+  }
+
+  // Invitation Skool (et questionnaire s'il n'est pas encore parti).
+  async function inviteSkool() {
+    if (!student) return;
+    const already = student.skool_invited_at ?? student.sales?.skool_invited_at;
+    if (already && !confirm(`Renvoyer l'invitation Skool à ${student.email} ?`)) return;
+    setInvitingSkool(true);
+    const d = await fetch("/api/admin/eleves/skool", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: student.id }),
+    }).then((r) => r.json());
+    setInvitingSkool(false);
+    if (d.error) return setError(`Invitation Skool impossible : ${d.error}`);
+    setStudent({ ...student, skool_invited_at: d.skool_invited_at, questionnaire_sent_at: d.questionnaire_sent_at });
+    flash(!student.questionnaire_sent_at && d.questionnaire_sent_at ? "Invitation Skool et questionnaire envoyés" : "Invitation Skool envoyée");
   }
 
   function copy(text: string, message: string) {
@@ -446,6 +464,30 @@ export default function StudentPage() {
                   </form>
                 </Card>
 
+                {/* Invitation Skool */}
+                <Card
+                  title="Communauté Skool"
+                  action={
+                    s.skool_invited_at || s.sales?.skool_invited_at ? (
+                      <span className={`rounded-md px-2 py-0.5 text-xs font-bold ${TONE_CLASSES.green}`}>
+                        Invité le {frDate((s.skool_invited_at ?? s.sales?.skool_invited_at ?? "").slice(0, 10))}
+                      </span>
+                    ) : (
+                      <span className={`rounded-md px-2 py-0.5 text-xs font-bold ${TONE_CLASSES.gray}`}>Pas invité</span>
+                    )
+                  }
+                >
+                  <p className="text-sm font-semibold text-[var(--fg2)]">
+                    Skool envoie lui-même l&apos;email d&apos;invitation. Le questionnaire de démarrage part avec, s&apos;il n&apos;est pas encore parti.
+                  </p>
+                  <div className="mt-4">
+                    <button type="button" onClick={inviteSkool} disabled={invitingSkool || !s.email} className="mac-btn mac-btn-def mac-btn-sm disabled:opacity-50">
+                      {invitingSkool ? "Envoi..." : s.skool_invited_at || s.sales?.skool_invited_at ? "Renvoyer l'invitation Skool" : "Inviter sur Skool"}
+                    </button>
+                  </div>
+                  {!s.email && <p className="mt-2 text-[13px] font-semibold text-[var(--orange)]">Ajoute l&apos;email de l&apos;élève pour pouvoir l&apos;inviter.</p>}
+                </Card>
+
                 {/* Questionnaire de démarrage */}
                 <Card
                   title="Kick-start (questionnaire de démarrage)"
@@ -470,7 +512,7 @@ export default function StudentPage() {
                     </dl>
                   ) : (
                     <p className="text-sm font-semibold text-[var(--fg2)]">
-                      Envoyé automatiquement avec l&apos;invitation Skool. Les réponses arrivent ici, et tu reçois un email.
+                      Part automatiquement avec l&apos;invitation Skool. Ce bouton envoie seulement le questionnaire. Les réponses arrivent ici, et tu reçois un email.
                     </p>
                   )}
                   <div className="mt-4 flex flex-wrap gap-2">
