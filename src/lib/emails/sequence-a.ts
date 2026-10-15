@@ -133,15 +133,15 @@ ${footnote(FOOT)}
 <p ${P}>Je veux te présenter Wassim, parce que son histoire répond à la question que tu te poses sûrement : une fois que l'application existe, comment on fait pour qu'elle rapporte de l'argent ?</p>
 <p ${P}>Wassim a vingt-deux ans. Quand il nous a rejoints début août, son application était déjà sur l'App Store. Elle était bien construite, mais elle ne faisait presque aucune vente.</p>
 <p ${P}>On a commencé par un audit complet de l'app : l'onboarding, le paywall, les prix. Puis il s'est mis au contenu, tous les jours. Ses premières vidéos faisaient des milliers de vues mais très peu de ventes. En fouillant ses statistiques, on a trouvé pourquoi : la moitié de ses utilisateurs avaient moins de 17 ans, et ils ne pouvaient pas payer. On a changé son contenu pour parler à des adultes, et tout s'est enchaîné.</p>
-<p ${P}>Une de ses vidéos a dépassé 700 000 vues, et son application a fait 7 300 dollars en 14 jours, dont 1 700 dollars en une seule journée. Sans dépenser un euro en publicité, et tout seul.</p>
-${image(`${SITE}/emails/wassim-revenuecat-7269-v1.jpg`, "Tableau de bord RevenueCat de Wassim : 7 269 $ de revenus sur 28 jours, 251 abonnements actifs, 232 essais en cours", "Voilà le tableau de bord que Wassim a montré pendant le podcast.")}
+<p ${P}>Une de ses vidéos a dépassé 700 000 vues, et son application a fait 7 269 dollars en 14 jours, dont 1 700 dollars en une seule journée. Sans dépenser un euro en publicité, et tout seul.</p>
+${image(`${SITE}/emails/wassim-revenuecat-7269-v1.jpg`, "Tableau de bord RevenueCat de Wassim : 7 269 $ de revenus, 251 abonnements actifs, 232 essais en cours", "Voilà le tableau de bord que Wassim a montré pendant le podcast.")}
 <p ${P}>Ce que je retiens, c'est sa façon de travailler. Chaque conseil que je lui donnais était appliqué le lendemain. Pas dans une semaine, le lendemain.</p>
 <p ${P}>On a enregistré un podcast ensemble où il raconte tout, ses vrais chiffres à l'écran.</p>
 ${button("Voir le témoignage de Wassim", url)}
 ${signature("À demain")}
 ${footnote(FOOT)}
 `);
-    return { subject: "7 300 $ en 14 jours, sans une seule pub", html, tag };
+    return { subject: "7 269 $ en 14 jours, sans une seule pub", html, tag };
   }
 
   if (step === 4) {
@@ -151,7 +151,7 @@ ${footnote(FOOT)}
 <p ${P}>Depuis trois jours je te parle de l'accompagnement sans t'avoir vraiment montré ce qu'il y a dedans. Je répare ça aujourd'hui, en six minutes de vidéo.</p>
 <p ${P}>Il y a trois parties. La communauté et les cours, avec plus d'une centaine de vidéos pour construire ton application avec l'IA, la faire convertir et la faire connaître, et un accès à vie. Les coachings de groupe, deux fois par mois, où je réponds à toutes les questions. Et le suivi personnel, sur plusieurs mois, avec moi, sur WhatsApp, avec des messages vocaux et des corrections directement sur ton app.</p>
 ${image(`${SITE}/jeremy-bureau.jpg`, "Jeremy à son bureau, en train de travailler sur une application", "Le suivi personnel, c'est moi qui le fais, pas un coach que tu ne connais pas.")}
-<p ${P}>C'est ce suivi qui a tout débloqué pour Wassim. Ses vidéos faisaient des milliers de vues, mais presque aucune vente. En regardant ses statistiques ensemble, on a vu que la moitié de son public avait moins de 17 ans et ne pouvait pas payer. On a changé son contenu, et quelques semaines plus tard il faisait 7 300 dollars en 14 jours.</p>
+<p ${P}>C'est ce suivi qui a tout débloqué pour Wassim. Ses vidéos faisaient des milliers de vues, mais presque aucune vente. En regardant ses statistiques ensemble, on a vu que la moitié de son public avait moins de 17 ans et ne pouvait pas payer. On a changé son contenu, et quelques semaines plus tard il faisait 7 269 dollars en 14 jours.</p>
 <p ${P}>C'est cette dernière partie qui prend du temps, et c'est pour ça que les places sont limitées et qu'il y a un appel avant. Pas pour te vendre quelque chose, pour vérifier qu'on peut vraiment t'aider et que tu as le temps de t'y mettre.</p>
 <p ${P}>Regarde la vidéo, et note les questions qui te viennent. Si tu réserves un appel ensuite, c'est le moment de les poser.</p>
 ${button("Voir ce qu'il y a dans l'accompagnement", url)}
@@ -216,7 +216,7 @@ ${footnote(FOOT)}
 <p ${P}>Ça fait une semaine que je t'écris, et c'est le dernier email de cette série. Je ne vais pas te relancer indéfiniment, ce n'est pas mon style. Mais avant de te laisser tranquille, il y a deux choses que je dois te dire, parce qu'elles changent la donne si tu comptes attendre.</p>
 <p ${P}>La première, c'est que les places sont limitées. Le suivi personnel, c'est moi qui le fais, sur WhatsApp, avec des corrections directement sur ton application. Je ne peux pas suivre cinquante personnes en même temps, donc je prends quelques élèves à la fois, et quand c'est plein, il faut attendre qu'une place se libère.</p>
 <p ${P}>La deuxième, c'est que je vais augmenter le prix de l'accompagnement. Pas pour le plaisir. Mon process s'est beaucoup affiné ces derniers mois, les résultats des élèves arrivent de plus en plus vite, et ils ont de plus en plus de chiffres à montrer. Ce que tu peux avoir aujourd'hui à ce tarif, tu ne l'auras plus au même prix dans quelques semaines. Ceux qui réservent maintenant gardent les conditions actuelles.</p>
-<p ${P}>Tu as vu la conférence. Tu as vu Wassim faire 7 300 dollars en 14 jours avec son application. Tu as vu ce qu'il y a dans l'accompagnement, et ce qu'on attend de toi. Il ne reste qu'une chose que je ne peux pas faire à ta place : réserver l'appel.</p>
+<p ${P}>Tu as vu la conférence. Tu as vu Wassim faire 7 269 dollars en 14 jours avec son application. Tu as vu ce qu'il y a dans l'accompagnement, et ce qu'on attend de toi. Il ne reste qu'une chose que je ne peux pas faire à ta place : réserver l'appel.</p>
 <p ${P}>Si ce n'est vraiment pas le moment, aucun souci, tu gardes l'accès à la conférence et tu recevras mes vidéos quand j'en publie. Mais si tu hésites depuis une semaine, c'est sans doute que tu as envie d'y aller. Dans ce cas, c'est maintenant.</p>
 ${button("Réserver mon appel", url)}
 ${signature("Merci d'avoir lu jusqu'ici")}

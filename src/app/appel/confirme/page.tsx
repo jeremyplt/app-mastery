@@ -192,7 +192,7 @@ function ConfirmeContent() {
               <span className="mac-eyebrow">Il est passé par là avant toi</span>
               <h2 className="mt-2 text-[24px] sm:text-[30px] font-bold tracking-[-0.035em] leading-[1.1] text-balance">
                 {T.firstName}, {T.age} ans : de 0 à{" "}
-                <span className="mac-accent whitespace-nowrap">7 300 $</span> en 14 jours, sans une seule pub
+                <span className="mac-accent whitespace-nowrap">7 269 $</span> en 14 jours, sans une seule pub
               </h2>
               <p className="mt-3 text-[15.5px] font-medium text-[var(--fg2)] max-w-xl mx-auto">
                 Son app ne vendait presque rien quand il nous a rejoints. Deux mois plus tard, il fait 1 700 $ en une seule journée. Il raconte tout dans le podcast, tableaux de bord à l&apos;écran.

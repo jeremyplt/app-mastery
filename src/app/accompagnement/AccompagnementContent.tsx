@@ -148,7 +148,7 @@ export default function AccompagnementContent() {
                 </div>
               </div>
               <p className="mt-5 text-[22px] font-bold tracking-[-0.03em] leading-tight">
-                De 0 à <span className="mac-accent whitespace-nowrap">7 300 $</span> en 14 jours, sans une seule pub
+                De 0 à <span className="mac-accent whitespace-nowrap">7 269 $</span> en 14 jours, sans une seule pub
               </p>
               <p className="mt-3 text-[15px] leading-relaxed text-[var(--fg2)] font-medium">
                 Son app ne vendait presque rien. Un audit complet avec Jeremy, puis du contenu tous les jours, et 1 700 $ en une seule journée deux mois plus tard. Il raconte tout en vidéo, ses vrais chiffres à l&apos;écran.

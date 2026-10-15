@@ -97,7 +97,7 @@ ${image(`${SITE}/emails/claude-code-ecran-stats.jpg`, "Claude Code qui construit
 </ol>
 <p ${P}>Construire, c'est 20 % du travail. Convertir et faire connaître, c'est les 80 % qui restent, et c'est là que se fait tout le résultat. Personne n'enseigne ça, parce que tout le monde vend "crée ton app avec l'IA".</p>
 <p ${P}>C'est pour ça que Shinobi rapporte plus de 400 000 euros par an, alors que des centaines d'applications de japonais aussi bien codées dorment sur l'App Store.</p>
-<p ${P}>Et c'est exactement ce qui est arrivé à Wassim, un de mes élèves. Son application était bien construite, mais elle ne vendait presque rien. Le jour où on a réglé la conversion et le contenu, elle a fait 7 300 dollars en 14 jours. Je te raconte son histoire dans quelques jours.</p>
+<p ${P}>Et c'est exactement ce qui est arrivé à Wassim, un de mes élèves. Son application était bien construite, mais elle ne vendait presque rien. Le jour où on a réglé la conversion et le contenu, elle a fait 7 269 dollars en 14 jours. Je te raconte son histoire dans quelques jours.</p>
 <p ${P}>Si tu te demandes comment gagner de l'argent avec ton application et comment la faire connaître, c'est exactement ce qu'on règle dans l'accompagnement. Pour savoir s'il est fait pour toi, réserve un appel avec nous. Nolan, mon associé, prend trente minutes pour te poser des questions sur ton projet et sur ta situation, et vous décidez ensemble si ça a du sens qu'on travaille avec toi.</p>
 ${button("Réserver mon appel", booking)}
 <p ${P}>Demain, je te donne une méthode concrète pour savoir en 48 heures si ton idée vaut le coup, avant d'y passer trois mois.</p>
@@ -210,8 +210,8 @@ ${image(`${SITE}/wassim.jpg`, "Wassim", "Voilà Wassim. Il raconte toute son his
 <li ${LI}><b>Du contenu tous les jours,</b> en reprenant les formats qui marchaient déjà dans sa niche, avec son app au centre de chaque vidéo.</li>
 <li ${LI}><b>Une plongée dans ses statistiques,</b> qui a montré que la moitié de ses utilisateurs avaient moins de 17 ans et ne pouvaient pas payer. On a changé son contenu pour parler à des adultes.</li>
 </ol>
-<p ${P}>À partir de là, tout s'est enchaîné. Une de ses vidéos a dépassé 700 000 vues, et son application a fait 7 300 dollars en 14 jours, dont 1 700 dollars en une seule journée. Sans un euro de publicité, et tout seul.</p>
-${image(`${SITE}/emails/wassim-revenuecat-7269-v1.jpg`, "Tableau de bord RevenueCat de Wassim : 7 269 $ de revenus sur 28 jours, 251 abonnements actifs, 232 essais en cours", "Voilà le tableau de bord que Wassim a montré pendant le podcast.")}
+<p ${P}>À partir de là, tout s'est enchaîné. Une de ses vidéos a dépassé 700 000 vues, et son application a fait 7 269 dollars en 14 jours, dont 1 700 dollars en une seule journée. Sans un euro de publicité, et tout seul.</p>
+${image(`${SITE}/emails/wassim-revenuecat-7269-v1.jpg`, "Tableau de bord RevenueCat de Wassim : 7 269 $ de revenus, 251 abonnements actifs, 232 essais en cours", "Voilà le tableau de bord que Wassim a montré pendant le podcast.")}
 <p ${P}>Ce que je retiens, c'est sa façon de travailler : chaque conseil que je lui donnais était appliqué le lendemain.</p>
 <p ${P}>Florian et Soraya ont suivi le même chemin, et plusieurs de mes élèves dépassent aujourd'hui 2 000 euros par mois. La différence avec ceux qui restent bloqués, ce n'est ni le talent ni le code. C'est qu'ils ont eu quelqu'un qui regardait leur projet de l'extérieur.</p>
 <p ${P}>Wassim raconte tout ça lui-même dans un podcast, avec ses vrais chiffres à l'écran. Prends dix minutes pour le regarder, c'est la meilleure façon de savoir si tu te reconnais dans son parcours.</p>
@@ -220,7 +220,7 @@ ${button("Voir le témoignage de Wassim", wassimUrl)}
 ${signature("À bientôt")}
 ${footnote(foot(ctx))}
 `);
-    return { subject: "7 300 $ en 14 jours, sans une seule pub", html, tag: "seq-c-7", preview: "Son application ne vendait presque rien. Deux mois plus tard, 1 700 dollars en une seule journée." };
+    return { subject: "7 269 $ en 14 jours, sans une seule pub", html, tag: "seq-c-7", preview: "Son application ne vendait presque rien. Deux mois plus tard, 1 700 dollars en une seule journée." };
   }
 
   if (step === 8) {
@@ -234,7 +234,7 @@ ${footnote(foot(ctx))}
 <li ${LI}>Tu sais ce qui amène vraiment des téléchargements, et ce qui n'en amène pas.</li>
 </ul>
 <p ${P}>Si tu n'en appliques qu'une seule, tu es déjà en avance sur la plupart des gens. Mais je vais être direct : la différence entre ceux qui réussissent et ceux qui restent bloqués, ce n'est pas l'information. C'est quelqu'un qui regarde ton projet de l'extérieur et qui te dit : fais ça, ne fais pas ça, concentre-toi là-dessus.</p>
-<p ${P}>C'est ce qui a débloqué Wassim. Ses vidéos faisaient des vues mais pas de ventes, et c'est en regardant ses statistiques de l'extérieur qu'on a vu pourquoi : la moitié de son public avait moins de 17 ans. Deux semaines après avoir corrigé ça, il avait fait 7 300 dollars.</p>
+<p ${P}>C'est ce qui a débloqué Wassim. Ses vidéos faisaient des vues mais pas de ventes, et c'est en regardant ses statistiques de l'extérieur qu'on a vu pourquoi : la moitié de son public avait moins de 17 ans. Deux semaines après avoir corrigé ça, il avait fait 7 269 dollars.</p>
 <p ${P}>C'est ce que je fais dans l'accompagnement, qui a trois parties.</p>
 <ol style="margin:0 0 18px;padding-left:22px">
 <li ${LI}><b>Tu rejoins la communauté et les cours.</b> Tu as accès à vie à plus d'une centaine de vidéos.</li>

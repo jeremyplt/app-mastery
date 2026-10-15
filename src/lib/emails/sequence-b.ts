@@ -100,8 +100,8 @@ ${ps(ctx.rescheduleUrl, "Si tu sais déjà que tu ne pourras pas être là, déc
 <p ${P}>Avant ton appel de demain, je voulais te parler de Wassim, parce qu'il était exactement à ta place il y a deux mois.</p>
 <p ${P}>Wassim a vingt-deux ans. Il est arrivé à son appel avec une application déjà sur l'App Store, qui ne faisait presque aucune vente, et beaucoup de doutes. Il se demandait si les applications pouvaient vraiment marcher, et si j'étais la bonne personne pour l'aider.</p>
 <p ${P}>On a vu que son profil collait et on a posé son plan d'action. On a commencé par un audit complet de son app, puis il s'est mis au contenu tous les jours. À chaque blocage, on cherchait ensemble ce qui coinçait : l'appel à l'action caché à la fin de ses carrousels, une étape de l'onboarding qui faisait partir 15 % des gens, et surtout un contenu qui attirait des moins de 17 ans qui ne pouvaient pas payer.</p>
-${image(`${SITE}/emails/wassim-revenuecat-7269-v1.jpg`, "Tableau de bord RevenueCat de Wassim : 7 269 $ de revenus sur 28 jours, 251 abonnements actifs, 232 essais en cours", "Voilà le tableau de bord de Wassim, deux mois après son appel.")}
-<p ${P}>Résultat : 7 300 dollars en 14 jours, dont 1 700 dollars en une seule journée, sans dépenser un seul euro en publicité.</p>
+${image(`${SITE}/emails/wassim-revenuecat-7269-v1.jpg`, "Tableau de bord RevenueCat de Wassim : 7 269 $ de revenus, 251 abonnements actifs, 232 essais en cours", "Voilà le tableau de bord de Wassim, deux mois après son appel.")}
+<p ${P}>Résultat : 7 269 dollars en 14 jours, dont 1 700 dollars en une seule journée, sans dépenser un seul euro en publicité.</p>
 <p ${P}>Ce que je retiens de son histoire, c'est sa façon de travailler. Chaque conseil que je lui donnais était appliqué le lendemain. C'est ce qui fait la différence entre ceux qui avancent et ceux qui restent bloqués.</p>
 <p ${P}>Il raconte tout ça dans un podcast, avec ses vrais chiffres à l'écran. Si tu veux savoir à quoi ressemble la suite de ton appel de demain, c'est le meilleur endroit pour le voir.</p>
 ${button("Voir le témoignage de Wassim", wassimUrl)}

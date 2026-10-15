@@ -144,7 +144,7 @@ PAGE = """<!doctype html>
   <div class="step"><div class="n">4</div><div><div class="t">Envoie ta première inspiration</div><div class="d">Le lien d'un post de ta niche qui a fait beaucoup de vues, avec des vidéos et des captures de ton app. L'IA te montre d'abord son analyse, puis elle crée le post.</div></div></div>
 
   <div class="callout"><b>Pourquoi copier au lieu d'inventer ?</b> Un post qui a fait des millions de vues a déjà prouvé qu'il marche. Tu changes le contenu (ton app, tes textes, ta réaction), pas la recette. Chaque idée « originale » est un pari, une inspiration éprouvée ne l'est pas.</div>
-  <div class="proof"><div class="big">7 300 $<small>en 14 jours</small></div><div><b>C'est exactement la méthode de Wassim</b>, 22 ans, un de mes élèves. Il reprend les vidéos des apps qui explosent, demande à Claude de les adapter à son app, puis se filme avec son iPhone. Résultat : 7 300 $ en 14 jours, dont 1 700 $ en une seule journée, sans un euro de publicité.</div></div>
+  <div class="proof"><div class="big">7 269 $<small>en 14 jours</small></div><div><b>C'est exactement la méthode de Wassim</b>, 22 ans, un de mes élèves. Il reprend les vidéos des apps qui explosent, demande à Claude de les adapter à son app, puis se filme avec son iPhone. Résultat : 7 269 $ en 14 jours, dont 1 700 $ en une seule journée, sans un euro de publicité.</div></div>
   <div class="callout"><b>Où trouver tes inspirations ?</b> Tape le sujet de ton app dans la recherche TikTok et Instagram (« apprendre l'anglais », « réviser le bac », « perdre du poids »). Garde les posts qui ont fait beaucoup plus de vues que les autres posts du même compte : c'est le format qui a marché, pas le compte.</div>
 
   <div class="footer"><span>Le prompt contenu viral</span><span>jeremypitault.com</span></div>
@@ -163,7 +163,7 @@ __PROMPT__
   <div class="kicker">Et maintenant ?</div>
   <h2>Tu veux qu'on fasse<br>décoller ton app <span>ensemble ?</span></h2>
   <p>Ce prompt, c'est une partie de la méthode que j'applique avec les élèves que j'accompagne : une niche précise, une app construite avec l'IA, et du contenu tous les jours pour la faire connaître.</p>
-  <p>C'est comme ça que Wassim, 22 ans, a fait <b>7 300 $ en 14 jours</b> avec son app, dont <b>1 700 $ en une seule journée</b>. Seul, <b>sans dépenser un euro en publicité</b>, avec 3 à 4 heures de contenu par jour. Avant, il n'avait jamais fait de marketing.</p>
+  <p>C'est comme ça que Wassim, 22 ans, a fait <b>7 269 $ en 14 jours</b> avec son app, dont <b>1 700 $ en une seule journée</b>. Seul, <b>sans dépenser un euro en publicité</b>, avec 3 à 4 heures de contenu par jour. Avant, il n'avait jamais fait de marketing.</p>
   <p>Sur un appel de 30 minutes, on regarde où tu en es et on pose ton plan d'action.</p>
   <a class="btn" href="__CALL__">Réserver mon appel</a>
   <div class="url">jeremypitault.com/appel</div>

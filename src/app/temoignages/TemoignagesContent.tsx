@@ -161,7 +161,7 @@ export default function TemoignagesContent() {
               t={WASSIM}
               title={
                 <>
-                  {WASSIM.firstName}, {WASSIM.age} ans : <span className="mac-accent">7 300 $ en 14 jours</span>
+                  {WASSIM.firstName}, {WASSIM.age} ans : <span className="mac-accent">7 269 $ en 14 jours</span>
                 </>
               }
               body="Son app ne vendait presque rien quand il nous a rejoints. Deux mois plus tard, il fait 1 700 $ en une seule journée, seul, sans un euro de pub. Il raconte tout dans le podcast, chiffres à l'écran."

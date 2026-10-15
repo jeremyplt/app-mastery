@@ -35,7 +35,7 @@ const TIMELINE = [
   {
     when: "24 septembre au 12 octobre",
     title: "Ça décolle",
-    body: "Une vidéo dépasse 700 000 vues, 500 nouveaux utilisateurs arrivent chaque jour. 7 300 $ en 14 jours, dont 1 700 $ en une seule journée, et 232 essais gratuits en cours. Sans un euro de pub.",
+    body: "Une vidéo dépasse 700 000 vues, 500 nouveaux utilisateurs arrivent chaque jour. 7 269 $ en 14 jours, dont 1 700 $ en une seule journée, et 232 essais gratuits en cours. Sans un euro de pub.",
   },
 ];
 
@@ -88,7 +88,7 @@ export default function WassimContent() {
       t={WASSIM}
       title={
         <>
-          De 0 à <span className="mac-accent whitespace-nowrap">7 300 $</span> en 14 jours,
+          De 0 à <span className="mac-accent whitespace-nowrap">7 269 $</span> en 14 jours,
           <br className="hidden sm:block" /> sans une seule pub.
         </>
       }
@@ -99,7 +99,7 @@ export default function WassimContent() {
           src: "/emails/wassim-revenuecat-7269-v1.jpg",
           width: 900,
           height: 272,
-          alt: "Tableau de bord RevenueCat de Wassim : 232 essais en cours, 251 abonnements actifs, 1 585 $ de revenus récurrents mensuels, 7 269 $ de revenus sur 28 jours, 24 662 nouveaux clients",
+          alt: "Tableau de bord RevenueCat de Wassim : 232 essais en cours, 251 abonnements actifs, 1 585 $ de revenus récurrents mensuels, 7 269 $ de revenus, 24 662 nouveaux clients",
           caption: "Son tableau de bord le jour du podcast : 7 269 $ de revenus, 251 abonnés payants et 232 essais en cours.",
         },
         {

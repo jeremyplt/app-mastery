@@ -45,7 +45,7 @@ export const FLORIAN: Temoignage = {
 
 // Podcast du 12 octobre 2026, chiffres montrés à l'écran sur RevenueCat
 // (7 269 $ sur 28 jours, gagnés en deux semaines et demie, pic à 1 691 $ le
-// 7 octobre). Jeremy affiche « 7 300 $ en 14 jours » et « 1 700 $ en un jour ».
+// 7 octobre). Jeremy affiche « 7 269 $ en 14 jours » et « 1 700 $ en un jour ».
 // Ne jamais nommer son application : le nom n'apparaît que dans la vidéo.
 export const WASSIM: Temoignage = {
   slug: "wassim",
@@ -55,11 +55,11 @@ export const WASSIM: Temoignage = {
   photo: "/wassim.jpg",
   videoId: "",
   youtubeId: "XlCzXq5Do6M",
-  poster: "/wassim-poster-v2.jpg",
+  poster: "/wassim-poster-v5.jpg",
   recordedOn: "12 octobre 2026",
-  headline: "7 300 $ en 14 jours, sans une seule pub",
+  headline: "7 269 $ en 14 jours, sans une seule pub",
   stats: [
-    { value: "7 300 $", label: "de revenus en 14 jours", detail: "251 abonnés payants, 232 essais en cours" },
+    { value: "7 269 $", label: "de revenus en 14 jours", detail: "251 abonnés payants, 232 essais en cours" },
     { value: "1 700 $", label: "en une seule journée", detail: "portée par une vidéo à plus de 700 000 vues" },
     { value: "1 585 $", label: "de revenus récurrents par mois", detail: "des abonnements qui se renouvellent tout seuls" },
     { value: "0 €", label: "de publicité", detail: "100 % de contenu organique, seul, 3 à 4 heures par jour" },

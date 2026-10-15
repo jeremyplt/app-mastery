@@ -259,7 +259,7 @@ function PlanActionVideoContent() {
               <div className="rounded-[18px] border-[0.5px] border-[var(--sep)] bg-[var(--card)] p-4">
                 <Image
                   src="/emails/wassim-revenuecat-7269-v1.jpg"
-                  alt="Tableau de bord RevenueCat de Wassim : 7 269 $ de revenus sur 28 jours, 251 abonnements actifs, 232 essais en cours"
+                  alt="Tableau de bord RevenueCat de Wassim : 7 269 $ de revenus, 251 abonnements actifs, 232 essais en cours"
                   width={900}
                   height={272}
                   className="w-full rounded-[12px]"
@@ -267,7 +267,7 @@ function PlanActionVideoContent() {
                 <div className="mt-4 flex items-center gap-3">
                   <Image src="/wassim.jpg" alt="Wassim" width={56} height={56} className="h-14 w-14 shrink-0 rounded-full object-cover" />
                   <p className="text-[22px] font-bold tracking-[-0.02em] leading-tight">
-                    Wassim : <span className="mac-accent">7 300 $ en 14 jours</span>
+                    Wassim : <span className="mac-accent">7 269 $ en 14 jours</span>
                   </p>
                 </div>
                 <p className="mt-2 text-[15px] font-medium leading-relaxed">
