@@ -164,13 +164,24 @@ export default function QuestionnairePage() {
                         ))}
                       </div>
                     )}
-                    {(q.type === "long" || q.type === "list") && (
+                    {(q.type === "long" || q.type === "list") && answers[q.id] !== q.none && (
                       <textarea
                         className={`mac-field ${q.type === "list" ? "min-h-[96px]" : "min-h-[130px]"}`}
                         placeholder={q.placeholder}
                         value={answers[q.id] ?? ""}
                         onChange={(e) => setAnswers({ ...answers, [q.id]: e.target.value })}
                       />
+                    )}
+                    {q.none && (
+                      <label className="mt-2 flex cursor-pointer items-center gap-3 rounded-[12px] bg-[var(--field)] px-4 py-3">
+                        <input
+                          type="checkbox"
+                          className="h-5 w-5 accent-[var(--accent)]"
+                          checked={answers[q.id] === q.none}
+                          onChange={(e) => setAnswers({ ...answers, [q.id]: e.target.checked ? q.none! : "" })}
+                        />
+                        <span className="text-[15px] font-bold">{q.none}</span>
+                      </label>
                     )}
                   </div>
                 </div>

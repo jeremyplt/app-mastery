@@ -18,6 +18,9 @@ export type Question = {
   fields?: QuestionField[];
   required?: boolean;
   placeholder?: string;
+  // Case à cocher qui remplit la réponse avec ce texte (ex. « aucun concurrent »),
+  // pour qu'une question obligatoire puisse quand même rester sans liste.
+  none?: string;
 };
 
 export const QUESTIONS: Question[] = [
@@ -72,8 +75,22 @@ export const QUESTIONS: Question[] = [
     type: "list",
     placeholder: "Une collaboration par ligne, avec son lien",
   },
-  { id: "competitors", label: "À ta connaissance, qui sont tes principaux concurrents ?", type: "list", placeholder: "Un concurrent par ligne" },
-  { id: "inspirations", label: "Quelles sont les applications qui t'ont inspiré ?", type: "list", placeholder: "Une application par ligne" },
+  {
+    id: "competitors",
+    label: "À ta connaissance, qui sont tes principaux concurrents ?",
+    type: "list",
+    placeholder: "Un concurrent par ligne",
+    required: true,
+    none: "Je n'ai analysé aucun concurrent",
+  },
+  {
+    id: "inspirations",
+    label: "Quelles sont les applications qui t'ont inspiré ?",
+    type: "list",
+    placeholder: "Une application par ligne",
+    required: true,
+    none: "Aucune application ne m'a inspiré",
+  },
   {
     id: "other",
     label:
