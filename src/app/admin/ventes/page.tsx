@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import AdminNav from "@/components/admin/AdminNav";
+import { BILLING_FIELDS, type Billing } from "@/lib/docuseal";
 
 type ContractStatus = "none" | "sent" | "delivered" | "completed" | "declined" | "voided";
 
@@ -42,6 +43,7 @@ type Sale = {
   origin: string | null;
   utm: Record<string, string>;
   archived: boolean;
+  billing: Billing;
   sale_payments: Payment[];
 };
 
@@ -194,7 +196,6 @@ const EMPTY_FORM = {
   notes: "",
   closer: "",
   commissionRate: String(DEFAULT_COMMISSION_RATE),
-  company: { name: "", legalForm: "", registration: "", address: "", signerRole: "" },
   offsets: DEFAULT_OFFSETS,
   sendContract: true,
 };
@@ -217,7 +218,6 @@ export default function VentesPage() {
   const [closers, setClosers] = useState<Closer[]>([]);
   const [me, setMe] = useState<{ email: string | null; role: string | null }>({ email: null, role: null });
   const [schedule, setSchedule] = useState<{ amount: string; due_date: string }[]>([]);
-  const [companyOpen, setCompanyOpen] = useState(false);
   const [saving, setSaving] = useState(false);
 
   const [bankOpen, setBankOpen] = useState(false);
@@ -337,7 +337,6 @@ export default function VentesPage() {
           notes: form.notes,
           closer_email: form.closer || null,
           commission_rate: Number(form.commissionRate.replace(",", ".")),
-          company: Object.fromEntries(Object.entries(form.company).filter(([, v]) => v.trim())),
           reminder_offsets: form.offsets,
           payments: schedule.map((p) => ({ amount: Number(p.amount.replace(",", ".")), due_date: p.due_date })),
         }),
@@ -482,18 +481,9 @@ export default function VentesPage() {
               <input className="mac-field" required placeholder="Téléphone (obligatoire dans le contrat)" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} />
             </div>
 
-            <button type="button" onClick={() => setCompanyOpen((o) => !o)} className="mt-3 text-sm font-bold text-[var(--accent2)]">
-              {companyOpen ? "− Masquer la société" : "+ Le client signe au nom d'une société"}
-            </button>
-            {companyOpen && (
-              <div className="mt-3 grid gap-3 sm:grid-cols-2">
-                <input className="mac-field" placeholder="Nom de la société" value={form.company.name} onChange={(e) => setForm({ ...form, company: { ...form.company, name: e.target.value } })} />
-                <input className="mac-field" placeholder="Forme juridique (SAS, SARL...)" value={form.company.legalForm} onChange={(e) => setForm({ ...form, company: { ...form.company, legalForm: e.target.value } })} />
-                <input className="mac-field" placeholder="Numéro d'immatriculation (SIREN...)" value={form.company.registration} onChange={(e) => setForm({ ...form, company: { ...form.company, registration: e.target.value } })} />
-                <input className="mac-field" placeholder="Adresse du siège" value={form.company.address} onChange={(e) => setForm({ ...form, company: { ...form.company, address: e.target.value } })} />
-                <input className="mac-field" placeholder="Qualité du signataire (Président...)" value={form.company.signerRole} onChange={(e) => setForm({ ...form, company: { ...form.company, signerRole: e.target.value } })} />
-              </div>
-            )}
+            <p className="mt-3 text-sm font-semibold text-[var(--fg2)]">
+              Adresse, particulier ou société : le client remplit lui-même ses infos de facturation dans le contrat.
+            </p>
 
             <p className="mac-grouplabel mt-5">Paiement</p>
             <div className="grid gap-3 sm:grid-cols-4">
@@ -702,6 +692,16 @@ export default function VentesPage() {
                       {sale.email}
                       {sale.phone ? ` · ${sale.phone}` : ""} · vendu le {shortDate(sale.created_at)}
                     </p>
+                    {Object.keys(sale.billing ?? {}).length > 0 && (
+                      <div className="mt-2 rounded-lg bg-[var(--field)] px-3 py-2 text-[13px]">
+                        <p className="font-bold">🧾 Facturation (remplie dans le contrat)</p>
+                        {BILLING_FIELDS.filter((f) => sale.billing[f]).map((f) => (
+                          <p key={f} className="font-medium">
+                            <span className="text-[var(--fg2)]">{f} :</span> <span className="select-all font-semibold">{sale.billing[f]}</span>
+                          </p>
+                        ))}
+                      </div>
+                    )}
                   </div>
                   <div className="flex gap-1.5">
                     <button

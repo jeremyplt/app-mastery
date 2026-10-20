@@ -27,7 +27,6 @@ export async function POST(req: NextRequest) {
       fullName: [sale.first_name, sale.last_name].filter(Boolean).join(" "),
       phone: sale.phone,
       startDate: sale.start_date,
-      company: sale.company,
     });
 
     await getAdminClient()

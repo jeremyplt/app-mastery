@@ -105,7 +105,6 @@ export async function POST(req: NextRequest) {
         commission_amount: closerEmail ? commissionFor(payments.reduce((s, p) => s + Number(p.amount), 0), commissionRate) : null,
         installments: payments.length,
         start_date: ISO_DATE.test(b.start_date ?? "") ? b.start_date : null,
-        company: typeof b.company === "object" && b.company ? b.company : {},
         reminder_offsets: offsets,
         notes: String(b.notes ?? "").trim() || null,
       })

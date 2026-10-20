@@ -15,7 +15,8 @@ create table public.sales (
   currency text not null default 'EUR',
   installments int not null check (installments between 1 and 12),
   start_date date,
-  company jsonb not null default '{}'::jsonb,
+  company jsonb not null default '{}'::jsonb, -- saisi à la main avant le 2026-10-20
+  billing jsonb not null default '{}'::jsonb, -- facturation remplie par le client dans le contrat (migration "sales_billing")
   reminder_offsets int[] not null default '{3,1,0}',
   notes text,
   contract_status text not null default 'none'

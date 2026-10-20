@@ -2,7 +2,8 @@ import { getAdminClient, withRetry } from "@/lib/supabase";
 import { parisDay, parisHour } from "@/lib/call-reminders";
 import { sendBuiltEmail } from "@/lib/emails/send";
 import { adminAlert, contractReminder, formatDueDate, formatMoney, paymentReminder, amountTag, type BankDetails } from "@/lib/emails/ventes";
-import { contractsConfigured, contractStatus } from "@/lib/docuseal";
+import { BILLING_FIELDS, contractsConfigured, contractStatus, type Billing } from "@/lib/docuseal";
+import { esc } from "@/lib/emails/layout";
 import { inviteToSkool } from "@/lib/skool";
 import { sendMetaEvent } from "@/lib/meta-capi";
 import { addMonths, type StudentPayment } from "@/lib/students";
@@ -51,6 +52,8 @@ export type Sale = {
   installments: number;
   start_date: string | null;
   company: Record<string, string>;
+  // Infos de facturation remplies par le client dans le contrat DocuSeal.
+  billing: Billing;
   reminder_offsets: number[];
   notes: string | null;
   contract_status: ContractStatus;
@@ -119,6 +122,12 @@ export function originLabel(origin: string | null): string {
 
 function fullName(sale: Pick<Sale, "first_name" | "last_name">): string {
   return [sale.first_name, sale.last_name].filter(Boolean).join(" ");
+}
+
+// Bloc « facturation » des alertes : ce que le client a rempli dans le contrat.
+export function billingLines(sale: Sale): string[] {
+  const rows = BILLING_FIELDS.filter((f) => sale.billing?.[f]).map((f) => `${f} : <b>${esc(sale.billing[f]!)}</b>`);
+  return rows.length ? [`<b>🧾 Facturation</b><br>${rows.join("<br>")}`] : [];
 }
 
 async function alertJeremy(subject: string, lines: string[], tag?: string, cta?: { label: string; href: string }) {
@@ -226,6 +235,7 @@ export async function onConfirmed(sale: Sale): Promise<{ invited: boolean; error
         ? "L'invitation Skool est partie."
         : `⚠️ L'invitation Skool n'a pas pu partir${result.error ? ` (${result.error})` : ""}. Relance-la depuis la page ventes.`,
       `Origine : ${originLabel(sale.origin)}. ${sale.meta_purchase_sent_at ? "Vente envoyée à Meta." : "Vente pas envoyée à Meta (test en local)."}`,
+      ...billingLines(sale),
     ]);
     await markAlert(sale, "client");
   }
@@ -306,10 +316,16 @@ export function contractPending(sale: Sale): boolean {
 // Applique un nouveau statut de contrat : enregistrement, alertes à Jeremy,
 // et client confirmé si le 1er paiement est déjà coché. Appelée par le
 // webhook DocuSeal, l'ouverture de la page ventes et le cron.
-export async function applyContractStatus(sale: Sale, next: ContractStatus, completedAt?: string): Promise<boolean> {
+export async function applyContractStatus(
+  sale: Sale,
+  next: ContractStatus,
+  completedAt?: string,
+  billing?: Billing,
+): Promise<boolean> {
   if (next === sale.contract_status) return false;
   const update: Partial<Sale> = { contract_status: next };
   if (next === "completed") update.contract_signed_at = completedAt ?? new Date().toISOString();
+  if (billing && Object.keys(billing).length) update.billing = billing;
   await getAdminClient().from("sales").update(update).eq("id", sale.id);
   Object.assign(sale, update);
 
@@ -320,6 +336,7 @@ export async function applyContractStatus(sale: Sale, next: ContractStatus, comp
       first
         ? `Dès que le virement de ${amountTag(formatMoney(first.amount, sale.currency))} arrive, coche « Reçu » : l'invitation Skool partira toute seule.`
         : "",
+      ...billingLines(sale),
     ]);
     await markAlert(sale, "signed");
   }
@@ -337,8 +354,8 @@ export async function applyContractStatus(sale: Sale, next: ContractStatus, comp
 // Va lire le statut chez DocuSeal et l'applique. Retourne le nouveau statut
 // s'il a changé.
 export async function syncContract(sale: Sale): Promise<ContractStatus | null> {
-  const { status, completedAt } = await contractStatus(sale.contract_submission_id!);
-  return (await applyContractStatus(sale, status, completedAt)) ? status : null;
+  const { status, completedAt, billing } = await contractStatus(sale.contract_submission_id!);
+  return (await applyContractStatus(sale, status, completedAt, billing)) ? status : null;
 }
 
 // Un passage du cron : met à jour les contrats DocuSeal, invite sur le

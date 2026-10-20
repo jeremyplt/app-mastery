@@ -2,7 +2,9 @@
 //
 // Trois modèles (paiement 1x, 2x, 3x), créés depuis les DOCX du Drive avec des
 // balises {{...}}. Un seul signataire, le rôle "Client". Le site pré-remplit
-// le nom, l'email, le téléphone, la date de début et les infos société.
+// le nom, l'email, le téléphone et la date de début. Le client remplit
+// lui-même ses infos de facturation (adresse, particulier ou société, infos
+// société), que le site relit une fois le contrat signé.
 // DocuSeal envoie lui-même l'email de signature au client.
 
 const ROLE = "Client";
@@ -13,13 +15,23 @@ function templateId(installments: number): number | null {
   return raw ? Number(raw) : null;
 }
 
-export type ContractCompany = {
-  name?: string;
-  legalForm?: string;
-  registration?: string;
-  address?: string;
-  signerRole?: string;
-};
+// Champs du contrat remplis par le client pour la facture, dans l'ordre du
+// contrat. Les noms sont ceux des balises des modèles DocuSeal.
+export const BILLING_FIELDS = [
+  "Statut", // Particulier ou Société
+  "Adresse postale",
+  "Code postal",
+  "Ville",
+  "Pays",
+  "Dénomination sociale",
+  "Forme juridique",
+  "Immatriculation",
+  "Adresse du siège",
+  "N° de TVA",
+  "Qualité du signataire",
+] as const;
+
+export type Billing = Partial<Record<(typeof BILLING_FIELDS)[number], string>>;
 
 export type ContractInput = {
   installments: number;
@@ -27,7 +39,6 @@ export type ContractInput = {
   fullName: string;
   phone: string;
   startDate?: string | null; // "2026-10-09"
-  company?: ContractCompany;
 };
 
 export function contractsConfigured(): boolean {
@@ -71,18 +82,12 @@ export async function sendContract(input: ContractInput): Promise<{ id: string; 
   const id = templateId(input.installments);
   if (!id) throw new Error(`Pas de modèle de contrat pour un paiement en ${input.installments} fois`);
 
-  const c = input.company ?? {};
   const values: Record<string, string> = {
     "Nom et prénom": input.fullName,
     Email: input.email,
     Téléphone: input.phone,
   };
   if (input.startDate) values["Date de début"] = frDate(input.startDate);
-  if (c.name) values["Dénomination sociale"] = c.name;
-  if (c.legalForm) values["Forme juridique"] = c.legalForm;
-  if (c.registration) values["Immatriculation"] = c.registration;
-  if (c.address) values["Adresse du siège"] = c.address;
-  if (c.signerRole) values["Qualité du signataire"] = c.signerRole;
 
   const submitters = await api<{ submission_id: number; slug: string }[]>("/submissions", {
     method: "POST",
@@ -106,12 +111,28 @@ export type ContractStatus = "sent" | "delivered" | "completed" | "declined" | "
 type Submission = {
   status: "pending" | "completed" | "declined" | "expired";
   completed_at?: string | null;
-  submitters: { status: "awaiting" | "sent" | "opened" | "completed" | "declined" }[];
+  submitters: {
+    status: "awaiting" | "sent" | "opened" | "completed" | "declined";
+    values?: { field: string; value: unknown }[];
+  }[];
 };
 
-export async function contractStatus(submissionId: string): Promise<{ status: ContractStatus; completedAt?: string }> {
+// Infos de facturation saisies par le client (champs vides ignorés).
+function billingFrom(s: Submission): Billing {
+  const billing: Billing = {};
+  for (const v of s.submitters[0]?.values ?? []) {
+    const field = BILLING_FIELDS.find((f) => f === v.field);
+    const value = typeof v.value === "string" ? v.value.trim() : "";
+    if (field && value) billing[field] = value;
+  }
+  return billing;
+}
+
+export async function contractStatus(
+  submissionId: string,
+): Promise<{ status: ContractStatus; completedAt?: string; billing?: Billing }> {
   const s = await api<Submission>(`/submissions/${submissionId}`);
-  if (s.status === "completed") return { status: "completed", completedAt: s.completed_at ?? undefined };
+  if (s.status === "completed") return { status: "completed", completedAt: s.completed_at ?? undefined, billing: billingFrom(s) };
   if (s.status === "declined") return { status: "declined" };
   if (s.status === "expired") return { status: "voided" };
   return { status: s.submitters.some((x) => x.status === "opened") ? "delivered" : "sent" };
