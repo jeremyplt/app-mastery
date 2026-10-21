@@ -7,6 +7,7 @@ import AdminNav from "@/components/admin/AdminNav";
 import {
   LINK_PRESETS,
   MILESTONES,
+  SOCIAL_PRESETS,
   TONE_CLASSES,
   lastContactLabel,
   avatarColor,
@@ -19,6 +20,7 @@ import {
   money,
   paymentsOf,
   relative,
+  socialHandle,
   statusOf,
   today,
   type Student,
@@ -75,6 +77,7 @@ export default function StudentPage() {
   const [saving, setSaving] = useState(false);
   const [newPayment, setNewPayment] = useState<{ date: string; amount: string } | null>(null);
   const [newLink, setNewLink] = useState<{ label: string; url: string } | null>(null);
+  const [newSocial, setNewSocial] = useState<{ label: string; url: string; note: string } | null>(null);
   const [sendingQuestionnaire, setSendingQuestionnaire] = useState(false);
   const [invitingSkool, setInvitingSkool] = useState(false);
 
@@ -232,6 +235,19 @@ export default function StudentPage() {
   function removeLink(index: number) {
     if (!student || !confirm("Supprimer ce lien ?")) return;
     patch({ links: student.links.filter((_, i) => i !== index) }, "Lien supprimé");
+  }
+
+  async function addSocial() {
+    if (!student || !newSocial) return;
+    const raw = newSocial.url.trim();
+    const url = !raw || /^https?:\/\//.test(raw) ? raw : `https://${raw}`;
+    const social = { label: newSocial.label.trim() || "Lien", url, ...(newSocial.note.trim() ? { note: newSocial.note.trim() } : {}) };
+    if (await patch({ socials: [...student.socials, social] }, "Compte ajouté")) setNewSocial(null);
+  }
+
+  function removeSocial(index: number) {
+    if (!student || !confirm("Supprimer ce compte ?")) return;
+    patch({ socials: student.socials.filter((_, i) => i !== index) }, "Compte supprimé");
   }
 
   async function remove() {
@@ -417,6 +433,78 @@ export default function StudentPage() {
               </div>
 
               <div className="space-y-5">
+                {/* Réseaux sociaux de l'app */}
+                <Card
+                  title="Réseaux sociaux"
+                  action={
+                    !newSocial && (
+                      <button type="button" onClick={() => setNewSocial({ label: SOCIAL_PRESETS[0], url: "", note: "" })} className="text-sm font-bold text-[var(--accent2)]">
+                        + Ajouter
+                      </button>
+                    )
+                  }
+                >
+                  {s.socials.length === 0 && !newSocial && (
+                    <p className="text-sm font-semibold text-[var(--fg2)]">Les comptes de l&apos;app (Instagram, TikTok...). Ils arrivent tout seuls avec le questionnaire.</p>
+                  )}
+                  <ul className="divide-y divide-[var(--sep)]">
+                    {s.socials.map((l, i) => (
+                      <li key={i} className="flex items-center gap-3 py-2.5">
+                        {l.url ? (
+                          <a href={l.url} target="_blank" rel="noreferrer" className="group min-w-0 flex-1">
+                            <p className="truncate text-[15px] font-bold text-[var(--fg)] group-hover:text-[var(--accent2)]">
+                              {l.label} <span className="text-[var(--fg2)] group-hover:text-[var(--accent2)]">{socialHandle(l.url)}</span> ↗
+                            </p>
+                            {l.note && <p className="text-[12.5px] font-semibold text-[var(--fg2)]">{l.note}</p>}
+                          </a>
+                        ) : (
+                          <div className="min-w-0 flex-1">
+                            <p className="text-[15px] font-bold text-[var(--fg)]">{l.label}</p>
+                            {l.note && <p className="text-[12.5px] font-semibold text-[var(--fg2)]">{l.note}</p>}
+                          </div>
+                        )}
+                        {l.url && (
+                          <button type="button" onClick={() => copy(l.url, "Lien copié")} className="text-xs font-bold text-[var(--fg2)] hover:text-[var(--fg)]">
+                            Copier
+                          </button>
+                        )}
+                        <button type="button" onClick={() => removeSocial(i)} className="px-1 text-sm font-bold text-[var(--fg3)] hover:text-[var(--red)]" aria-label={`Supprimer le compte ${l.label}`}>
+                          ✕
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                  {newSocial && (
+                    <div className="mt-2 space-y-3 rounded-xl bg-[var(--field)] p-3">
+                      <div className="flex flex-wrap gap-1.5">
+                        {SOCIAL_PRESETS.map((label) => (
+                          <button
+                            key={label}
+                            type="button"
+                            onClick={() => setNewSocial({ ...newSocial, label })}
+                            className={`rounded-md px-2 py-1 text-xs font-bold ring-1 ${
+                              newSocial.label === label ? `${TONE_CLASSES.blue} ring-[color-mix(in_srgb,var(--accent)_45%,transparent)]` : "text-[var(--fg2)] ring-[var(--sep)]"
+                            }`}
+                          >
+                            {label}
+                          </button>
+                        ))}
+                      </div>
+                      <input className="mac-field !py-2" placeholder="Réseau" value={newSocial.label} onChange={(e) => setNewSocial({ ...newSocial, label: e.target.value })} />
+                      <input className="mac-field !py-2" placeholder="https://..." value={newSocial.url} onChange={(e) => setNewSocial({ ...newSocial, url: e.target.value })} />
+                      <input className="mac-field !py-2" placeholder="Précision (facultatif), ex. compte facecam" value={newSocial.note} onChange={(e) => setNewSocial({ ...newSocial, note: e.target.value })} />
+                      <div className="flex gap-2">
+                        <button type="button" onClick={addSocial} disabled={!newSocial.url.trim() && !newSocial.note.trim()} className="mac-btn mac-btn-primary mac-btn-sm disabled:opacity-50">
+                          Ajouter le compte
+                        </button>
+                        <button type="button" onClick={() => setNewSocial(null)} className="mac-btn mac-btn-def mac-btn-sm">
+                          Annuler
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </Card>
+
                 {/* Informations */}
                 <Card title="Informations">
                   <form onSubmit={saveInfo} className="space-y-3">

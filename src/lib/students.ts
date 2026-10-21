@@ -34,6 +34,7 @@ export type Student = {
   payments: StudentPayment[];
   notes: string | null;
   links: { label: string; url: string }[];
+  socials: { label: string; url: string; note?: string }[];
   last_contact_at: string | null;
   archived: boolean;
 } & Record<Milestone, boolean>;

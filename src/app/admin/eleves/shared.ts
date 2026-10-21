@@ -2,9 +2,28 @@
 
 export type Payment = { date: string; amount: number | null; paid: boolean; paid_at?: string | null };
 export type StudentLink = { label: string; url: string };
+// Compte de réseau social de l'app (url vide si l'élève a seulement donné le nom).
+export type StudentSocial = { label: string; url: string; note?: string };
 
 // Libellés proposés pour les liens de la fiche.
 export const LINK_PRESETS = ["Audit", "Réponses au questionnaire", "Dossier Drive", "App Store", "Google Play", "Enregistrement d'appel"];
+
+// Réseaux proposés pour les comptes de l'app.
+export const SOCIAL_PRESETS = ["Instagram", "TikTok", "YouTube", "Facebook", "X", "Reddit", "Threads", "LinkedIn", "Site web"];
+
+// "https://www.instagram.com/sentinelle_app/" -> "@sentinelle_app",
+// "https://www.sentinelleapp.tech" -> "sentinelleapp.tech".
+export function socialHandle(url: string): string {
+  try {
+    const u = new URL(url);
+    const host = u.hostname.replace(/^www\./, "");
+    const first = u.pathname.split("/").filter(Boolean)[0];
+    if (/^(instagram\.com|tiktok\.com|x\.com|twitter\.com|threads\.net|youtube\.com)$/.test(host) && first) return `@${first.replace(/^@/, "")}`;
+    return `${host}${u.pathname.replace(/\/$/, "")}`;
+  } catch {
+    return url;
+  }
+}
 
 // "aujourd'hui", "hier", "il y a 12 jours" à partir d'un horodatage.
 export function lastContactLabel(iso: string | null): string {
@@ -37,6 +56,7 @@ export type Student = {
   payments: Payment[];
   notes: string | null;
   links: StudentLink[];
+  socials: StudentSocial[];
   last_contact_at: string | null;
   skool_invited_at: string | null;
   questionnaire_token: string;

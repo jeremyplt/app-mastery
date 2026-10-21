@@ -14,7 +14,7 @@ async function findStudent(token: string | null) {
   if (!token || !UUID.test(token)) return null;
   const { data } = await getAdminClient()
     .from("students")
-    .select("id, name, app, links, questionnaire, questionnaire_answered_at")
+    .select("id, name, app, links, socials, questionnaire, questionnaire_answered_at")
     .eq("questionnaire_token", token)
     .maybeSingle();
   return data;
@@ -52,11 +52,12 @@ export async function POST(req: NextRequest) {
   }
   if (b.answers?.[ACCESS_ANSWER_ID] === "Oui") answers[ACCESS_ANSWER_ID] = "Oui";
 
-  // Les réponses complètent la fiche : nom de l'app s'il manque, et les liens
-  // (stores, réseaux sociaux) ajoutés à « Liens et documents ».
+  // Les réponses complètent la fiche : nom de l'app s'il manque, liens des
+  // stores dans « Liens et documents », comptes sociaux dans « Réseaux sociaux ».
   const update: Record<string, unknown> = { questionnaire: answers, questionnaire_answered_at: new Date().toISOString() };
   if (answers.app && !s.app) update.app = answers.app;
   const links = [...((s.links ?? []) as { label: string; url: string }[])];
+  const socials = [...((s.socials ?? []) as { label: string; url: string }[])];
   const linkLabels: Record<string, string> = { "app_links.ios": "App Store", "app_links.android": "Google Play" };
   for (const q of QUESTIONS.filter((x) => x.type === "fields")) {
     for (const f of q.fields ?? []) {
@@ -64,10 +65,12 @@ export async function POST(req: NextRequest) {
       const v = answers[key];
       if (!f.url || !v) continue;
       const url = /^https?:\/\//.test(v) ? v : /^[\w-]+(\.[\w-]+)+/.test(v) ? `https://${v}` : null;
-      if (url && !links.some((l) => l.url === url)) links.push({ label: linkLabels[key] ?? f.label, url });
+      const list = q.id === "socials" ? socials : links;
+      if (url && !list.some((l) => l.url === url)) list.push({ label: linkLabels[key] ?? f.label, url });
     }
   }
   if (links.length !== (s.links ?? []).length) update.links = links;
+  if (socials.length !== (s.socials ?? []).length) update.socials = socials;
   const { error } = await getAdminClient().from("students").update(update).eq("id", s.id);
   if (error) return NextResponse.json({ error: "Enregistrement impossible, réessaie" }, { status: 500 });
 

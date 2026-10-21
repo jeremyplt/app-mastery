@@ -95,6 +95,17 @@ export async function PATCH(req: NextRequest) {
         .filter((l: { label?: unknown; url?: unknown }) => typeof l?.url === "string" && /^https?:\/\//.test(l.url))
         .map((l: { label?: unknown; url: string }) => ({ label: String(l.label ?? "").trim() || "Lien", url: l.url.trim() }));
     }
+    // Comptes de réseaux sociaux de l'app : [{ label, url, note }], url vide
+    // si l'élève a seulement donné le nom du compte.
+    if (Array.isArray(b.socials)) {
+      update.socials = b.socials
+        .filter((l: { url?: unknown; note?: unknown }) => typeof l?.url === "string" && (/^https?:\/\//.test(l.url) || (!l.url && typeof l.note === "string" && l.note.trim())))
+        .map((l: { label?: unknown; url: string; note?: unknown }) => ({
+          label: String(l.label ?? "").trim() || "Lien",
+          url: l.url.trim(),
+          ...(typeof l.note === "string" && l.note.trim() ? { note: l.note.trim() } : {}),
+        }));
+    }
     // Dernier échange : "now" (bouton ou clic sur WhatsApp) ou null pour effacer.
     if (b.last_contact_at === "now") update.last_contact_at = new Date().toISOString();
     else if (b.last_contact_at === null) update.last_contact_at = null;
