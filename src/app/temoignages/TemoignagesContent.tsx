@@ -193,51 +193,64 @@ export default function TemoignagesContent() {
             </div>
 
             <div className="space-y-4">
-              {MESSAGES_ELEVES.map((m) => (
-                <Card key={m.firstName} className="md:flex md:items-center md:gap-6">
-                  <Image
-                    src={m.image.src}
-                    alt={m.image.alt}
-                    width={m.image.width}
-                    height={m.image.height}
-                    className={`w-full shrink-0 rounded-[12px] ${m.image.height > m.image.width ? "max-w-[360px] mx-auto md:mx-0 md:w-[36%]" : "md:w-[56%]"}`}
-                  />
-                  <div className="mt-4 md:mt-0">
-                    <div className="flex items-center gap-3">
-                      <Image src={m.photo} alt={m.firstName} width={48} height={48} className="h-12 w-12 shrink-0 rounded-full object-cover" />
-                      <div>
-                        <p className="text-[19px] font-bold tracking-[-0.02em] leading-tight">{m.firstName}</p>
-                        <p className="text-[14px] font-semibold text-[var(--accent2)] leading-snug">{m.status}</p>
-                      </div>
-                    </div>
-                    <p className="mt-3 text-[15.5px] font-medium leading-relaxed">{m.context}</p>
-                    {m.result && (
-                      <div className="mt-4">
-                        <Image
-                          src={m.result.src}
-                          alt={m.result.alt}
-                          width={m.result.width}
-                          height={m.result.height}
-                          className={`w-full rounded-[12px] ${m.result.height > m.result.width ? "max-w-[300px]" : ""}`}
-                        />
-                        <p className="mt-2 text-[13.5px] font-medium text-[var(--fg2)]">{m.result.caption}</p>
-                      </div>
-                    )}
-                    {m.earlier && (
-                      <div className="mt-4">
-                        <Image
-                          src={m.earlier.src}
-                          alt={m.earlier.alt}
-                          width={m.earlier.width}
-                          height={m.earlier.height}
-                          className="w-full max-w-[220px] rounded-[12px]"
-                        />
-                        <p className="mt-2 text-[13.5px] font-medium text-[var(--fg2)]">{m.earlier.caption}</p>
-                      </div>
-                    )}
+              {MESSAGES_ELEVES.map((m) => {
+                // Message et tableau de bord tous deux en largeur (Elouan) : le
+                // tableau de bord passe sous le message, à gauche, pour équilibrer
+                // les deux colonnes.
+                const resultLeft =
+                  m.result && m.image.width > m.image.height && m.result.width > m.result.height;
+                const result = m.result && (
+                  <div className="mt-4">
+                    <Image
+                      src={m.result.src}
+                      alt={m.result.alt}
+                      width={m.result.width}
+                      height={m.result.height}
+                      className={`w-full rounded-[12px] ${m.result.height > m.result.width ? "max-w-[300px]" : ""}`}
+                    />
+                    <p className="mt-2 text-[13.5px] font-medium text-[var(--fg2)]">{m.result.caption}</p>
                   </div>
-                </Card>
-              ))}
+                );
+                return (
+                  <Card key={m.firstName} className="md:flex md:items-center md:gap-6">
+                    <div
+                      className={`w-full shrink-0 ${m.image.height > m.image.width ? "max-w-[360px] mx-auto md:mx-0 md:w-[36%]" : "md:w-[56%]"}`}
+                    >
+                      <Image
+                        src={m.image.src}
+                        alt={m.image.alt}
+                        width={m.image.width}
+                        height={m.image.height}
+                        className="w-full rounded-[12px]"
+                      />
+                      {resultLeft && <div className="hidden md:block">{result}</div>}
+                    </div>
+                    <div className="mt-4 md:mt-0">
+                      <div className="flex items-center gap-3">
+                        <Image src={m.photo} alt={m.firstName} width={48} height={48} className="h-12 w-12 shrink-0 rounded-full object-cover" />
+                        <div>
+                          <p className="text-[19px] font-bold tracking-[-0.02em] leading-tight">{m.firstName}</p>
+                          <p className="text-[14px] font-semibold text-[var(--accent2)] leading-snug">{m.status}</p>
+                        </div>
+                      </div>
+                      <p className="mt-3 text-[15.5px] font-medium leading-relaxed">{m.context}</p>
+                      {resultLeft ? <div className="md:hidden">{result}</div> : result}
+                      {m.earlier && (
+                        <div className="mt-4">
+                          <Image
+                            src={m.earlier.src}
+                            alt={m.earlier.alt}
+                            width={m.earlier.width}
+                            height={m.earlier.height}
+                            className="w-full max-w-[220px] rounded-[12px]"
+                          />
+                          <p className="mt-2 text-[13.5px] font-medium text-[var(--fg2)]">{m.earlier.caption}</p>
+                        </div>
+                      )}
+                    </div>
+                  </Card>
+                );
+              })}
             </div>
           </section>
 

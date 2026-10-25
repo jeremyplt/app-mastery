@@ -119,7 +119,14 @@ export const MESSAGES_ELEVES: MessageEleve[] = [
       height: 2430,
       alt: "Conversation WhatsApp avec Wassim : son tableau de bord RevenueCat à 990 € sur 28 jours, « Bientôt les 1k !!! », « Je suis trop content tu m'as régalé avec tes conseils », puis le même soir 1 110 € sur 28 jours, 51 abonnements actifs, 336 € de revenus mensuels récurrents et 206 essais en cours",
     },
-    status: "1 110 € sur 28 jours, 51 abonnés payants et 206 essais en cours",
+    status: "9 495 $ sur 28 jours aujourd'hui, bientôt 10 000 $ par mois en 100 % organique",
+    result: {
+      src: "/emails/wassim-dashboard-9495-v1.jpg",
+      width: 1600,
+      height: 492,
+      alt: "Tableau de bord RevenueCat de Wassim au 25 octobre 2026 : 9 495 $ de revenus sur 28 jours, 328 abonnements actifs, 675 essais en cours, 1 955 $ de revenus récurrents par mois et 33 663 nouveaux clients",
+      caption: "Les chiffres de Wassim aujourd'hui : 9 495 $ sur 28 jours, sans une seule pub.",
+    },
     earlier: {
       src: "/emails/wassim-message-v2.jpg",
       width: 840,
@@ -128,19 +135,33 @@ export const MESSAGES_ELEVES: MessageEleve[] = [
       caption: "Au début, il fêtait ses 129 $ sur 28 jours.",
     },
     context:
-      "Au début, Wassim m'envoyait ses premiers abonnés payants et ses 129 $ sur 28 jours. Un soir, il m'a écrit « Bientôt les 1k !!! » avec 990 € sur 28 jours, puis il a passé les 1 110 € quelques heures plus tard, avec 51 abonnés payants et 206 essais gratuits en cours. Sa question suivante : à partir de combien on fait le podcast.",
+      "Au début, Wassim m'envoyait ses premiers abonnés payants et ses 129 $ sur 28 jours. Un soir, il m'a écrit « Bientôt les 1k !!! » avec 990 € sur 28 jours, puis il a passé les 1 110 € quelques heures plus tard, avec 51 abonnés payants et 206 essais gratuits en cours. Sa question suivante : à partir de combien on fait le podcast. Aujourd'hui, il est à 9 495 $ sur 28 jours, avec 328 abonnés payants et 675 essais gratuits en cours. Il approche des 10 000 $ par mois, toujours en 100 % organique, sans un euro de publicité.",
   },
   {
     firstName: "Elouan",
     photo: "/elouan.jpg",
     image: {
+      src: "/emails/elouan-message-v2.jpg",
+      width: 840,
+      height: 733,
+      alt: "Message WhatsApp d'Elouan : son tableau de bord RevenueCat avec 1 384 $ de revenus sur 28 jours, 1 015 $ de revenus récurrents par mois, 51 abonnements actifs et 20 essais en cours, « En 1 mois de marketing ». Le nom de son application est flouté.",
+    },
+    status: "1 384 $ sur 28 jours et 1 015 $ de revenus récurrents par mois, après un mois de marketing",
+    result: {
+      src: "/emails/elouan-dashboard-1384-v1.jpg",
+      width: 1600,
+      height: 804,
+      alt: "Tableau de bord RevenueCat d'Elouan : 20 essais en cours, 51 abonnements actifs, 1 015 $ de revenus récurrents par mois, 1 384 $ sur 28 jours, 2 629 nouveaux clients et 5 180 clients actifs. Le nom et le logo de son application sont floutés.",
+      caption: "Le tableau de bord d'Elouan en grand, 100 % organique.",
+    },
+    earlier: {
       src: "/emails/elouan-message-v1.jpg",
       width: 840,
       height: 1531,
-      alt: "Conversation WhatsApp avec Elouan : son tableau de bord RevenueCat (13 essais en cours, 849 nouveaux utilisateurs sur 28 jours), le classement des téléchargements Éducation en France, « Top 57 France j'ai du mal à y croire c'est un rêve qui se réalise petit à petit », puis la liste de ses nouveaux essais gratuits. Le nom et la fiche de son application sont floutés.",
+      alt: "Conversation WhatsApp avec Elouan un mois plus tôt : 0 $ sur 28 jours, 13 essais en cours, le classement des téléchargements Éducation en France, « Top 57 France j'ai du mal à y croire c'est un rêve qui se réalise petit à petit ». Le nom et la fiche de son application sont floutés.",
+      caption: "Un mois plus tôt : 0 $, mais déjà dans le top 57 Éducation en France.",
     },
-    status: "Top 57 des téléchargements Éducation en France et 849 nouveaux utilisateurs en 28 jours",
     context:
-      "Elouan m'a envoyé ce message le soir où son application est entrée dans le top 57 des téléchargements Éducation en France. Derrière, les essais gratuits s'enchaînent : treize en cours, et 849 nouveaux utilisateurs sur 28 jours. Le nom et la fiche de son application sont floutés pour ne pas la dévoiler.",
+      "Il y a un mois, Elouan m'écrivait le soir où son application entrait dans le top 57 des téléchargements Éducation en France. Ses revenus sur 28 jours étaient encore à 0 $. Un mois de marketing plus tard, il est à 1 384 $ sur 28 jours, avec 51 abonnés payants, 20 essais gratuits en cours et 1 015 $ de revenus récurrents par mois. Tout ça en 100 % organique : pas un euro de publicité pour le moment. Le nom de son application est flouté pour ne pas la dévoiler.",
   },
 ];
