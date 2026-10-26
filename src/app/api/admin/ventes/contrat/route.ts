@@ -1,10 +1,29 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/admin";
 import { getAdminClient } from "@/lib/supabase";
-import { sendContract } from "@/lib/docuseal";
+import { sendContract, signedDocumentUrl } from "@/lib/docuseal";
 import { getSale } from "@/lib/ventes";
 
 export const maxDuration = 60;
+
+// Contrat signé du client : redirige vers le PDF DocuSeal (?id=<vente>).
+export async function GET(req: NextRequest) {
+  try {
+    await requireAdmin();
+    const id = req.nextUrl.searchParams.get("id");
+    if (!id) return NextResponse.json({ error: "id manquant" }, { status: 400 });
+
+    const sale = await getSale(id);
+    if (!sale.contract_submission_id) return NextResponse.json({ error: "Aucun contrat envoyé pour cette vente" }, { status: 404 });
+    const url = await signedDocumentUrl(sale.contract_submission_id);
+    if (!url) return NextResponse.json({ error: "Le PDF du contrat n'est pas encore disponible" }, { status: 404 });
+    return NextResponse.redirect(url);
+  } catch (err) {
+    const message = err instanceof Error ? err.message : "Erreur";
+    if (message === "Accès non autorisé") return NextResponse.json({ error: "Non autorisé" }, { status: 401 });
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
+}
 
 // Envoie le contrat DocuSeal du client (modèle 1x, 2x ou 3x selon l'échéancier).
 export async function POST(req: NextRequest) {

@@ -26,6 +26,7 @@ import {
   type Student,
 } from "../shared";
 import { answerEntries } from "@/lib/questionnaire-questions";
+import { BILLING_FIELDS } from "@/lib/docuseal";
 
 // Fiche élève : informations, parcours, paiements et notes. Les infos se
 // modifient dans un formulaire avec un bouton Enregistrer ; les étapes et les
@@ -504,6 +505,49 @@ export default function StudentPage() {
                     </div>
                   )}
                 </Card>
+
+                {/* Contrat et adresse de facturation (remplie par l'élève dans le contrat) */}
+                {s.sales && (
+                  <Card
+                    title="Contrat et adresse"
+                    action={
+                      <span className={`rounded-md px-2 py-0.5 text-xs font-bold ${TONE_CLASSES[s.sales.contract_status === "completed" ? "green" : "orange"]}`}>
+                        {s.sales.contract_status === "completed"
+                          ? `Signé${s.sales.contract_signed_at ? ` le ${frDate(s.sales.contract_signed_at.slice(0, 10))}` : ""}`
+                          : s.sales.contract_submission_id
+                            ? "Pas encore signé"
+                            : "Pas encore envoyé"}
+                      </span>
+                    }
+                  >
+                    {Object.keys(s.sales.billing ?? {}).length > 0 ? (
+                      <dl className="space-y-1.5">
+                        {BILLING_FIELDS.filter((f) => s.sales?.billing?.[f]).map((f) => (
+                          <div key={f} className="flex flex-wrap gap-x-2 text-[14.5px]">
+                            <dt className="font-semibold text-[var(--fg2)]">{f} :</dt>
+                            <dd className="select-all font-bold">{s.sales?.billing?.[f]}</dd>
+                          </div>
+                        ))}
+                      </dl>
+                    ) : (
+                      <p className="text-sm font-semibold text-[var(--fg2)]">
+                        {s.sales.contract_status === "completed"
+                          ? "Adresse absente : ce contrat a été signé avant que le client remplisse ses infos de facturation. Regarde dans le PDF, sinon demande-la."
+                          : "L'adresse apparaîtra ici dès que le contrat sera signé."}
+                      </p>
+                    )}
+                    {s.sales.contract_status === "completed" && (
+                      <a
+                        href={`/api/admin/ventes/contrat?id=${s.sales.id}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="mac-btn mac-btn-def mac-btn-sm mt-4 inline-flex"
+                      >
+                        📄 Télécharger le contrat signé
+                      </a>
+                    )}
+                  </Card>
+                )}
 
                 {/* Informations */}
                 <Card title="Informations">

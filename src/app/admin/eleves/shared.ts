@@ -66,7 +66,15 @@ export type Student = {
   kickoff_call_at: string | null;
   closing_call_at: string | null;
   archived: boolean;
-  sales: { id: string; contract_status: string; skool_invited_at: string | null; sale_payments: SalePayment[] } | null;
+  sales: {
+    id: string;
+    contract_status: string;
+    contract_signed_at: string | null;
+    contract_submission_id: string | null;
+    billing: Billing | null;
+    skool_invited_at: string | null;
+    sale_payments: SalePayment[];
+  } | null;
 } & Record<Milestone, boolean>;
 
 // Paiement affiché : celui de la vente liée (saleId) ou saisi à la main.
@@ -77,6 +85,7 @@ export function today(): string {
 }
 
 import { addMonths } from "@/lib/students";
+import type { Billing } from "@/lib/docuseal";
 export { addMonths };
 
 export function endDate(s: Student): string | null {

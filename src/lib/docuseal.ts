@@ -137,3 +137,9 @@ export async function contractStatus(
   if (s.status === "expired") return { status: "voided" };
   return { status: s.submitters.some((x) => x.status === "opened") ? "delivered" : "sent" };
 }
+
+// Lien du PDF signé (temporaire côté DocuSeal, à redemander à chaque fois).
+export async function signedDocumentUrl(submissionId: string): Promise<string | null> {
+  const res = await api<{ documents?: { name: string; url: string }[] }>(`/submissions/${submissionId}/documents?merge=true`);
+  return res.documents?.[0]?.url ?? null;
+}
