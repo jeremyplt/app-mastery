@@ -19,6 +19,13 @@ Quand un audit touche un de ces types d'écran, intégrer les images corresponda
 
 Meilleurs modèles "un seul écran" (timeline + annuel + prix/semaine + Start trial) : buddy, drops, vocabulary.
 
+## paywall-soft-sans-essai/  , soft paywall sans essai gratuit (tableau Gratuit / Premium, l'utilisateur peut fermer)
+- perplexity.png , "Get the most accurate answers", tableau Free / Pro, Yearly (prix au mois) + Monthly, bouton "Get Pro"
+- sweatcoin.png , "Get more from every step with Premium", tableau Free / Premium, plan annuel "Best offer" au mois + mensuel, "Continue"
+- tolan.png , mascotte + "Give Sam super intelligence", tableau FREE / Plus, un seul bouton "Continue"
+
+À utiliser quand l'app reste en freemium (pas d'essai gratuit). Timeline d'essai interdite dans ce cas.
+
 ## permission-screentime/  , écrans de permission Screen Time (à garder ultra simples)
 - opal-categories-list.png , "Select 3 apps that distract you" + liste de catégories + Continue
 - opal-dialogue-highlighted.png , dialogue système mis en avant (halo vert + flèche) + "100% sur ton téléphone"
