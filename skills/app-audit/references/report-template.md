@@ -20,6 +20,8 @@ Le rapport doit sembler écrit par Jeremy, pour son élève. Pas de mentions mé
 
 Quand on livre l'audit comme page/lien partageable, utiliser le **design system macOS d'App Mastery** (tokens dans `src/app/globals.css`) : fonts SF système (`-apple-system, "SF Pro Text"...`), fond `#eceef2` clair / `#09090b` sombre, accent bleu Apple `#007aff` / `#0a84ff`, cartes glass (`.5px` border, radius 14-16px), fond `dot-pattern`, eyebrow bleu à pastille, icônes carrées en dégradé, badges (orange = Maintenant, vert = Ferme), barres popularité verte / compétitivité orange. Supporter clair + sombre. Chaque donnée garde son screenshot source à côté.
 
+**Toutes les captures s'agrandissent au clic (obligatoire sur tous les audits).** Chaque `figure img` ouvre une lightbox plein écran (`<dialog>` + `showModal()`, fond sombre, légende reprise de la `figcaption`, fermeture au clic ou Échap, curseur zoom-in, accessible au clavier avec Entrée). Une capture qu'on ne peut pas agrandir est illisible sur mobile et sur les tableaux AppFigures.
+
 ## Structure du rapport
 
 ```

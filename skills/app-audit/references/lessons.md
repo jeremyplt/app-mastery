@@ -5,6 +5,12 @@ Ce fichier grossit à chaque fois que Jeremy corrige un audit rendu. Les leçons
 Format d'une entrée :
 
 ```
+## 2026-10-27 , Vintapp : captures cliquables
+- **Contexte :** premier jet ASO de Vintapp (Ayoub) en page HTML.
+- **Ce qui était faux :** les screenshots n'étaient pas cliquables, impossible de les voir en grand.
+- **Règle à appliquer désormais :** sur TOUS les audits HTML, chaque capture s'ouvre en grand au clic (lightbox, voir `report-template.md` § Version HTML partageable).
+- **Pas de section « Texte promotionnel »** dans l'ASO : Jeremy la juge inutile (non indexé, aucun levier pour l'élève). Ne pas en faire une section.
+
 ## AAAA-MM-JJ , <titre court>
 - **Contexte :** (quelle app, quelle section)
 - **Ce qui était faux / manquant :**
