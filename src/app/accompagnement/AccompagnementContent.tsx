@@ -9,7 +9,7 @@ import ThemeToggle from "@/components/ThemeToggle";
 import { WASSIM } from "@/lib/temoignages";
 
 // Vidéo Bunny (lib 613852) : présentation de l'accompagnement, 6 minutes.
-const VIDEO_ID = "a8334af7-09b2-464e-bcf8-6d4b07e10413";
+const VIDEO_ID = "189f1054-cb29-455c-a6a6-db36c99154ae";
 
 // Les trois parties de l'accompagnement, telles que Jeremy les présente
 // dans la vidéo.

@@ -13,7 +13,7 @@ import { TEMOIGNAGE_VEDETTE as T } from "@/lib/temoignages";
 // Vidéos Bunny (lib 613852). Placeholders : laisser "" tant que la vidéo
 // n'est pas prête → un bloc "Vidéo en cours de préparation" s'affiche.
 const MAIN_VIDEO_ID = "ce2619f3-8b5e-425d-b60c-91efaa35f778"; // vidéo principale : préparation de l'appel
-const ACCOMPAGNEMENT_VIDEO_ID = "a8334af7-09b2-464e-bcf8-6d4b07e10413"; // présentation de l'accompagnement (6 min)
+const ACCOMPAGNEMENT_VIDEO_ID = "189f1054-cb29-455c-a6a6-db36c99154ae"; // présentation de l'accompagnement (6 min)
 
 // Vidéo YouTube "Pour en savoir plus"
 const YOUTUBE_ID = "--Q8sMT656Y";
