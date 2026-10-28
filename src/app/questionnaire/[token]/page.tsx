@@ -164,7 +164,7 @@ export default function QuestionnairePage() {
                         ))}
                       </div>
                     )}
-                    {(q.type === "long" || q.type === "list") && answers[q.id] !== q.none && (
+                    {(q.type === "long" || q.type === "list") && (!q.none || answers[q.id] !== q.none) && (
                       <textarea
                         className={`mac-field ${q.type === "list" ? "min-h-[96px]" : "min-h-[130px]"}`}
                         placeholder={q.placeholder}
