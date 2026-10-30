@@ -97,7 +97,7 @@ export async function sendContract(input: ContractInput): Promise<{ id: string; 
       message: {
         subject: "App Mastery : ton contrat à signer",
         body:
-          "Salut {{submitter.name}},\n\nVoici ton contrat d'accompagnement App Mastery. Tu peux le lire et le signer en ligne ici :\n\n{{submitter.link}}\n\nÀ très vite,\nJeremy",
+          "Salut {{submitter.name}},\n\nVoici ton contrat App Mastery. Tu peux le lire et le signer en ligne ici :\n\n{{submitter.link}}\n\nÀ très vite,\nJeremy",
       },
       submitters: [{ role: ROLE, email: input.email, name: input.fullName, values }],
     },

@@ -2,6 +2,8 @@
 # d'origine du Drive, sans balises). Usage : python3 scripts/docuseal-contrats.py
 # 1x.docx 2x.docx 3x.docx -> écrit 1x-v4.docx, etc. Puis POST /templates/docx
 # avec external_id app-mastery-<n>x-v3 pour mettre à jour le modèle existant.
+# Les DOCX du Drive ont déjà le texte conseil et audit (contrats-conseil.py,
+# passé le 30 oct. 2026 sur les anciennes versions).
 import copy, sys, docx, docx.shared, docx.enum.text
 
 R = "role=Client"
@@ -54,7 +56,7 @@ def build(src, dst):
     imma = find(P, "Numéro d'immatriculation")
     siege = find(P, "Adresse du siège social")
     qual = find(P, "Qualité du signataire")
-    debut = find(P, "Date de Début de l'accompagnement : ....")
+    debut = find(P, "Date de Début de la mission : ....")
     case = find(P, "☐ En cochant cette case")
     fait = find(P, "Fait en deux exemplaires originaux")
 
@@ -85,7 +87,7 @@ def build(src, dst):
     clone_after(siege, "Numéro de TVA intracommunautaire : {{N° de TVA;" + O + ";required=false}}")
     set_text(qual, "Qualité du signataire : {{Qualité du signataire;" + O + "}}")
 
-    set_text(debut, f"Date de Début de l'accompagnement : {{{{Date de début;{R};readonly=true}}}}")
+    set_text(debut, f"Date de Début de la mission : {{{{Date de début;{R};readonly=true}}}}")
     # Case à cocher seule sur sa ligne, juste au-dessus de la phrase.
     set_text(case, case.text.replace("☐ ", "", 1))
     box = clone_after(case, f"{{{{Exécution immédiate;{R};type=checkbox;required=true;width=12;height=12}}}}")

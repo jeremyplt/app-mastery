@@ -24,110 +24,77 @@ export default function PolitiqueRemboursementPage() {
           Politique de Remboursement
         </h1>
         <p className="text-[var(--fg3)] mb-12">
-          Dernière mise à jour : 12 mars 2026
+          Dernière mise à jour : 30 octobre 2026
         </p>
 
-        <Section title="Double garantie App Mastery">
+        <Section title="Principe">
           <p>
-            Chez App Mastery, nous croyons en la qualité de notre formation.
-            C&apos;est pourquoi nous proposons une <strong>double garantie</strong> à
-            tous nos clients.
+            Le prix de la prestation de conseil et d&apos;audit App Mastery
+            (3 000 €) est ferme et non remboursable. Il existe deux exceptions :
+            le droit de rétractation et la garantie commerciale « 10 000 € de
+            chiffre d&apos;affaires en 6 mois ».
+          </p>
+          <p>
+            L&apos;abandon de la prestation, l&apos;inactivité ou la
+            non-utilisation des sessions et des ressources ne donnent droit à
+            aucun remboursement.
           </p>
         </Section>
 
-        <Section title="Garantie 1 : Satisfait ou remboursé (30 jours)">
+        <Section title="Droit de rétractation (14 jours)">
           <p>
-            Vous disposez de <strong>30 jours calendaires</strong> à compter de
-            la date d&apos;achat pour demander un remboursement intégral, sans
-            condition et sans justification.
+            Si vous êtes un particulier et que vous signez le contrat à
+            distance, vous disposez en principe de{" "}
+            <strong>14 jours</strong> pour vous rétracter à compter de la
+            signature.
           </p>
-          <p>Ce délai inclut et dépasse le droit de rétractation légal de 14 jours.</p>
+          <p>
+            Comme la prestation commence tout de suite à votre demande, vous
+            payez le prix des services déjà fournis jusqu&apos;à votre
+            rétractation. Le droit de rétractation prend fin pour les contenus
+            numériques auxquels vous avez déjà accédé.
+          </p>
+          <p>
+            Si vous signez pour les besoins de votre activité professionnelle,
+            le droit de rétractation ne s&apos;applique pas.
+          </p>
+          <p>
+            Pour vous rétracter, envoyez un email à{" "}
+            <strong>contact@jeremypitault.com</strong>.
+          </p>
+        </Section>
 
-          <h3 className="text-[17px] font-semibold text-[var(--fg)] mt-6 mb-3">
-            Comment demander un remboursement ?
-          </h3>
+        <Section title="Garantie « 10 000 € de chiffre d'affaires en 6 mois »">
+          <p>
+            Si votre application n&apos;a pas réalisé au moins{" "}
+            <strong>10 000 € de chiffre d&apos;affaires brut</strong> dans les 6
+            mois suivant le début de la prestation, et que vous avez respecté
+            toutes les conditions prévues au contrat :
+          </p>
           <ol className="list-decimal pl-6 space-y-2">
             <li>
-              Envoyez un email à{" "}
-              <strong>contact@jeremypitault.com</strong> dans les 30 jours
-              suivant votre achat.
-            </li>
-            <li>Aucune justification n&apos;est requise.</li>
-            <li>
-              Le remboursement intégral est effectué sous 14 jours ouvrés sur
-              le moyen de paiement utilisé lors de l&apos;achat.
+              La prestation est prolongée gratuitement de{" "}
+              <strong>3 mois</strong>.
             </li>
             <li>
-              Votre accès à la formation est révoqué dès le traitement du
-              remboursement.
+              Si l&apos;objectif n&apos;est toujours pas atteint à la fin de
+              cette prolongation, <strong>le montant payé vous est
+              remboursé</strong>, sous 60 jours.
             </li>
           </ol>
-
-          <h3 className="text-[17px] font-semibold text-[var(--fg)] mt-6 mb-3">
-            En cas de paiement en 3 mensualités
-          </h3>
           <p>
-            Le remboursement porte sur l&apos;intégralité des sommes déjà
-            prélevées, et les prélèvements restants sont annulés.
+            La demande se fait par email à{" "}
+            <strong>contact@jeremypitault.com</strong>, avec toutes les preuves
+            demandées, dans les 7 jours qui suivent la fin des 6 mois.
           </p>
-        </Section>
-
-        <Section title="Garantie 2 : Premiers revenus ou coaching offert (90 jours)">
           <p>
-            Si vous n&apos;avez pas généré vos premiers revenus avec votre
-            application mobile dans les 90 jours suivant votre achat, nous vous
-            offrons <strong>3 sessions de coaching individuel gratuites</strong>{" "}
-            pour vous aider à débloquer votre monétisation.
+            Les conditions complètes, les exclusions et la liste des preuves à
+            fournir sont dans la Partie II de votre contrat, qui fait seule foi.
           </p>
-
-          <h3 className="text-[17px] font-semibold text-[var(--fg)] mt-6 mb-3">
-            Conditions d&apos;éligibilité
-          </h3>
-          <p>
-            Pour bénéficier de cette garantie, vous devez avoir :
-          </p>
-          <ul className="list-disc pl-6 space-y-2">
-            <li>
-              Complété 100% des 5 modules essentiels de la formation.
-            </li>
-            <li>
-              Publié votre application sur l&apos;App Store ou Google Play.
-            </li>
-            <li>
-              Implémenté un système de monétisation fonctionnel dans votre app.
-            </li>
-            <li>
-              Appliqué les stratégies marketing enseignées : soit 30 contenus
-              organiques + 100 interactions, soit 500€ de publicité payante.
-            </li>
-            <li>
-              Posé au moins 5 questions au support ou dans la communauté.
-            </li>
-            <li>
-              Publié votre app et commencé le marketing avant le 60e jour.
-            </li>
-          </ul>
-
-          <h3 className="text-[17px] font-semibold text-[var(--fg)] mt-6 mb-3">
-            Ce que comprend le coaching
-          </h3>
-          <ul className="list-disc pl-6 space-y-1">
-            <li>
-              3 sessions individuelles de 30 à 60 minutes (audio ou vidéo).
-            </li>
-            <li>Diagnostic personnalisé de vos blocages.</li>
-            <li>
-              Plan d&apos;action concret pour générer vos premiers revenus.
-            </li>
-          </ul>
         </Section>
 
         <Section title="Important">
           <ul className="list-disc pl-6 space-y-2">
-            <li>
-              Les deux garanties ne sont <strong>pas cumulables</strong>. Vous
-              choisissez l&apos;une ou l&apos;autre.
-            </li>
             <li>
               Pour les détails complets, consultez nos{" "}
               <a
@@ -136,7 +103,7 @@ export default function PolitiqueRemboursementPage() {
               >
                 Conditions Générales de Vente
               </a>{" "}
-              (Articles 5 et 6).
+              (articles 5 à 7) et votre contrat.
             </li>
             <li>
               Pour toute question, contactez-nous à{" "}

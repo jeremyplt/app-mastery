@@ -33,421 +33,253 @@ export default function CGVPage() {
           Conditions Générales de Vente
         </h1>
         <p className="text-[var(--fg3)] mb-12">
-          Dernière mise à jour : 11 mars 2026
+          Dernière mise à jour : 30 octobre 2026
         </p>
 
         {/* ── Article 1 : Objet ── */}
-        <Section title="Article 1 - Objet">
+        <Section title="Article 1 - Objet et champ d'application">
           <p>
             Les présentes Conditions Générales de Vente (ci-après « CGV »)
-            régissent la vente de la formation en ligne « App Mastery » (ci-après
-            « la Formation ») proposée par Shinobi LLC, représentée par Jeremy
-            Pitault, ci-après « le Formateur ».
+            régissent la vente de la prestation de conseil et d&apos;audit
+            « App Mastery » (Incubateur App Mastery, ci-après « la
+            Prestation ») par PITAULT MEDIA SARL-S, société à responsabilité
+            limitée simplifiée de droit luxembourgeois, RCS Luxembourg B310735,
+            siège social 44 Rue de l&apos;Industrie, L-8069 Strassen,
+            Luxembourg, représentée par Jeremy Pitault, gérant (ci-après « le
+            Prestataire »).
           </p>
           <p>
-            La Formation est un programme de formation numérique accessible en
-            ligne, dont l&apos;objectif est d&apos;enseigner la création, la
-            publication et la monétisation d&apos;applications mobiles.
-          </p>
-          <p>
-            Toute commande implique l&apos;acceptation sans réserve des
-            présentes CGV par l&apos;acheteur (ci-après « le Client »).
+            Chaque vente fait l&apos;objet d&apos;un contrat signé entre le
+            Prestataire et l&apos;acheteur (ci-après « le Client »). En cas de
+            contradiction entre les présentes CGV et ce contrat, le contrat
+            prévaut.
           </p>
         </Section>
 
-        {/* ── Article 2 : Contenu de la Formation ── */}
-        <Section title="Article 2 - Contenu de la Formation">
-          <p>La Formation comprend, selon l&apos;offre choisie :</p>
+        {/* ── Article 2 : Nature de la Prestation ── */}
+        <Section title="Article 2 - Nature de la Prestation">
+          <p>
+            La Prestation est une mission de conseil et d&apos;audit
+            personnalisés portant sur le projet d&apos;application mobile du
+            Client.
+          </p>
           <ul className="list-disc pl-6 space-y-1">
             <li>
-              <strong>Offre Essentiel (497€)</strong> : 5 modules principaux
-              (55+ leçons vidéo), support par email, double garantie.
+              <strong>Si le Client a déjà une application</strong> : le
+              Prestataire en réalise l&apos;audit (fiche store, parcours
+              d&apos;inscription, paywall, monétisation, acquisition) et lui
+              remet des recommandations et un plan d&apos;action pour
+              l&apos;améliorer et la développer.
             </li>
             <li>
-              <strong>Offre Complet (997€ ou 3x 347€)</strong> : tout de
-              l&apos;offre Essentiel + Masterclass Marketing, Masterclass Claude
-              Code, Masterclass Git/GitHub, lives Q&A 2x/mois, communauté
-              privée à vie, Case Study, mises à jour à vie.
-            </li>
-            <li>
-              <strong>Offre VIP (2 997€ ou 3x 1 097€)</strong> : tout de
-              l&apos;offre Complet + accompagnement individuel 1-on-1 pendant 3
-              mois via WhatsApp, aide à la validation d&apos;idée, stratégie
-              marketing, audit complet de l&apos;app.
+              <strong>Si le Client n&apos;a pas encore d&apos;application</strong>{" "}
+              : le Prestataire le conseille sur la création de son projet (étude
+              de marché, choix et validation de l&apos;idée, analyse de la
+              concurrence, positionnement, direction à prendre, modèle de
+              monétisation, stratégie de lancement), lui remet un plan
+              d&apos;action, puis audite l&apos;application au fil de sa
+              construction et de sa publication.
             </li>
           </ul>
           <p>
-            Le contenu exact des modules, leçons et bonus est décrit sur la page
-            de présentation de la Formation. Le Formateur se réserve le droit de
-            mettre à jour le contenu pour l&apos;améliorer, sans en réduire la
-            valeur globale.
+            Les ressources en ligne mises à la disposition du Client (vidéos,
+            modèles, documents de référence et communauté) sont un support
+            accessoire de cette prestation de conseil. Elles n&apos;en
+            constituent pas l&apos;objet principal.
+          </p>
+          <p>
+            Le Client reste seul maître d&apos;œuvre et seul responsable de son
+            projet, de son application et de ses décisions.
           </p>
         </Section>
 
-        {/* ── Article 3 : Prix et paiement ── */}
-        <Section title="Article 3 - Prix et paiement">
-          <p>
-            Les prix sont indiqués en euros (€), toutes taxes comprises (TVA non
-            applicable, article 293 B du CGI).
-          </p>
-          <p>Le paiement s&apos;effectue par carte bancaire via Lemon Squeezy.</p>
-          <p>
-            Pour les offres en 3 mensualités, le Client autorise le prélèvement
-            automatique de 3 paiements mensuels consécutifs. L&apos;abonnement
-            s&apos;arrête automatiquement après le 3e paiement. Aucun paiement
-            supplémentaire ne sera prélevé.
-          </p>
-          <p>
-            L&apos;accès à la Formation est délivré immédiatement après
-            confirmation du premier paiement.
-          </p>
-        </Section>
-
-        {/* ── Article 4 : Accès à la Formation ── */}
-        <Section title="Article 4 - Accès à la Formation">
-          <p>
-            L&apos;accès à la Formation est personnel et non transférable. Le
-            Client s&apos;engage à ne pas partager, revendre, diffuser ou
-            reproduire tout ou partie du contenu de la Formation.
-          </p>
-          <p>
-            Tout partage non autorisé entraînera la suspension immédiate de
-            l&apos;accès sans remboursement, et pourra donner lieu à des
-            poursuites.
-          </p>
-          <p>
-            L&apos;accès au contenu est garanti à vie, sous réserve de
-            l&apos;existence de la plateforme d&apos;hébergement.
-          </p>
-        </Section>
-
-        {/* ── Article 5 : Droit de rétractation - Garantie 30 jours ── */}
-        <Section title="Article 5 - Droit de rétractation et Garantie « Satisfait ou Remboursé » (30 jours)">
-          <p>
-            Conformément aux articles L221-18 et suivants du Code de la
-            consommation, le Client dispose d&apos;un délai de 14 jours à
-            compter de la date d&apos;achat pour exercer son droit de
-            rétractation.
-          </p>
-          <p>
-            Au-delà de ce délai légal, le Formateur étend volontairement cette
-            garantie à <strong>30 jours calendaires</strong> à compter de la
-            date d&apos;achat (la « Garantie 30 jours »).
-          </p>
-          <p>Pour exercer cette garantie :</p>
+        {/* ── Article 3 : Contenu ── */}
+        <Section title="Article 3 - Contenu de la Prestation">
+          <p>La Prestation comprend, pendant sa durée :</p>
           <ul className="list-disc pl-6 space-y-1">
             <li>
-              Le Client envoie un email à{" "}
-              <strong>contact@jeremypitault.com</strong> dans les 30 jours suivant
-              l&apos;achat.
-            </li>
-            <li>Aucune justification n&apos;est requise.</li>
-            <li>
-              Le remboursement intégral est effectué sous 14 jours ouvrés sur le
-              moyen de paiement utilisé lors de l&apos;achat.
+              Un audit personnalisé de l&apos;application du Client ou, s&apos;il
+              n&apos;a pas encore d&apos;application, une étude de son marché et
+              de son projet ;
             </li>
             <li>
-              L&apos;accès à la Formation est révoqué dès le traitement du
-              remboursement.
+              Un plan d&apos;action personnalisé, mis à jour au fil de
+              l&apos;avancement du projet ;
+            </li>
+            <li>
+              Des sessions de conseil individuelles (appel visio ou audio, vidéo,
+              message vocal ou réponse écrite), dont au minimum un appel de
+              démarrage et un appel de clôture ;
+            </li>
+            <li>
+              Un suivi de conseil individuel par messagerie (WhatsApp ou canal
+              équivalent), six jours sur sept ;
+            </li>
+            <li>
+              Des recommandations personnalisées sur la création, le
+              développement, la publication, la monétisation et la promotion de
+              l&apos;application du Client ;
+            </li>
+            <li>
+              À titre accessoire, un accès aux ressources en ligne du
+              Prestataire et à la communauté privée.
             </li>
           </ul>
           <p>
-            En cas de paiement en 3 mensualités, le remboursement porte sur
-            l&apos;intégralité des sommes déjà prélevées, et les prélèvements
-            restants sont annulés.
+            Ne sont pas compris : le développement de l&apos;application à la
+            place du Client, la création de ses contenus, la gestion de ses
+            campagnes publicitaires, son budget publicitaire et ses frais
+            d&apos;outils, ainsi que tout conseil juridique, comptable ou
+            fiscal.
           </p>
         </Section>
 
-        {/* ── Article 6 : Garantie 90 jours ── */}
-        <Section title='Article 6 - Garantie « Premiers Revenus ou je te Coache » (90 jours)'>
+        {/* ── Article 4 : Durée ── */}
+        <Section title="Article 4 - Durée">
           <p>
-            Le Formateur propose une garantie de résultat de 90 jours
-            calendaires à compter de la date d&apos;achat (la « Garantie 90
-            jours »). Si le Client n&apos;a pas généré ses premiers revenus avec
-            son application mobile dans ce délai, le Formateur s&apos;engage à
-            fournir 3 sessions de coaching individuel gratuites pour aider le
-            Client à débloquer sa monétisation.
-          </p>
-
-          <h4 className="text-[17px] font-semibold text-[var(--fg)] mt-6 mb-3">
-            6.1 - Conditions d&apos;éligibilité
-          </h4>
-          <p>
-            Pour bénéficier de la Garantie 90 jours, le Client doit
-            impérativement remplir <strong>toutes</strong> les conditions
-            suivantes, prouvant qu&apos;il a appliqué la méthode enseignée de
-            bonne foi :
-          </p>
-
-          <ol className="list-decimal pl-6 space-y-3 mt-3">
-            <li>
-              <strong>
-                Avoir complété 100% des 5 modules essentiels de la Formation
-              </strong>{" "}
-              (modules 1 à 5), y compris le visionnage de toutes les leçons
-              vidéo. La progression est vérifiable sur la plateforme de
-              formation.
-            </li>
-            <li>
-              <strong>
-                Avoir une application publiée et accessible au public
-              </strong>{" "}
-              sur au moins un store (Apple App Store ou Google Play Store). Le
-              Client doit fournir le lien public vers son app.
-            </li>
-            <li>
-              <strong>
-                Avoir implémenté un système de monétisation fonctionnel
-              </strong>{" "}
-              dans son application (abonnements, achats intégrés, ou autre
-              modèle de revenus enseigné dans la Formation). L&apos;app doit
-              permettre techniquement à un utilisateur de payer.
-            </li>
-            <li>
-              <strong>
-                Avoir appliqué les stratégies marketing enseignées dans le
-                Module 5
-              </strong>
-
-              . Le Client doit démontrer avoir rempli{" "}
-              <strong>au moins une</strong> des deux options suivantes :
-              <ul className="list-disc pl-6 space-y-1 mt-2">
-                <li>
-                  <strong>Option A - Marketing organique :</strong> avoir
-                  publié au moins <strong>30 contenus organiques</strong>{" "}
-                  (vidéos, posts, reels) sur au moins une plateforme (TikTok,
-                  Instagram, YouTube) en lien avec son application,{" "}
-                  <strong>ET</strong> avoir réalisé au moins{" "}
-                  <strong>100 interactions</strong> (commentaires sous des
-                  posts pertinents dans sa niche) pour se rendre visible
-                  auprès de sa cible.
-                </li>
-                <li>
-                  <strong>Option B - Marketing payant :</strong> avoir dépensé
-                  au moins <strong>500€ en publicité</strong> (Meta Ads,
-                  TikTok Ads, Apple Search Ads ou autre régie publicitaire)
-                  pour promouvoir son application, avec captures d&apos;écran
-                  du tableau de bord publicitaire comme preuve.
-                </li>
-              </ul>
-              <p className="mt-2">
-                Dans les deux cas, le Client doit également avoir optimisé sa
-                fiche store (ASO) conformément aux enseignements du Module 4 :
-                titre, sous-titre, mots-clés, captures d&apos;écran et
-                description.
-              </p>
-            </li>
-            <li>
-              <strong>
-                Avoir posé au moins 5 questions au support ou dans la communauté
-              </strong>{" "}
-              pendant la période de 90 jours, démontrant un engagement actif
-              dans le suivi de la Formation. Le Client doit montrer
-              qu&apos;il a cherché de l&apos;aide quand il était bloqué,
-              plutôt que d&apos;abandonner en silence.
-            </li>
-            <li>
-              <strong>
-                Ne pas avoir attendu les derniers jours pour tout faire
-              </strong>
-              . La publication de l&apos;app et le début des efforts marketing
-              doivent avoir eu lieu au plus tard au <strong>60e jour</strong>{" "}
-              suivant l&apos;achat, laissant au minimum 30 jours d&apos;efforts
-              marketing actifs avant la fin de la période de garantie.
-            </li>
-          </ol>
-
-          <h4 className="text-[17px] font-semibold text-[var(--fg)] mt-6 mb-3">
-            6.2 - Preuves à fournir
-          </h4>
-          <p>
-            Pour activer la Garantie 90 jours, le Client doit envoyer un email à{" "}
-            <strong>contact@jeremypitault.com</strong> avant l&apos;expiration du
-            délai de 90 jours, contenant :
-          </p>
-          <ul className="list-disc pl-6 space-y-1 mt-2">
-            <li>
-              Le lien public de son application sur l&apos;App Store et/ou
-              Google Play.
-            </li>
-            <li>
-              Des captures d&apos;écran prouvant que la monétisation est en
-              place (page d&apos;abonnement, achats intégrés configurés, etc.).
-            </li>
-            <li>
-              <strong>Si Option A (organique) :</strong> captures d&apos;écran
-              de ses 30 contenus publiés + captures d&apos;écran d&apos;au
-              moins 100 commentaires/interactions réalisés sous des posts
-              pertinents.
-            </li>
-            <li>
-              <strong>Si Option B (payant) :</strong> captures d&apos;écran du
-              tableau de bord publicitaire montrant au moins 500€ de dépenses.
-            </li>
-            <li>
-              Une capture d&apos;écran de sa fiche store optimisée (titre,
-              sous-titre, captures, description).
-            </li>
-            <li>
-              Des preuves d&apos;interaction avec le support ou la communauté
-              (au moins 5 échanges).
-            </li>
-            <li>
-              Les dates de publication de l&apos;app et de début des efforts
-              marketing, démontrant le respect du délai de 60 jours.
-            </li>
-          </ul>
-
-          <h4 className="text-[17px] font-semibold text-[var(--fg)] mt-6 mb-3">
-            6.3 - Ce que comprend le coaching garanti
-          </h4>
-          <p>
-            Si toutes les conditions sont remplies et que le Client n&apos;a pas
-            encore généré de revenus, le Formateur s&apos;engage à fournir :
-          </p>
-          <ul className="list-disc pl-6 space-y-1 mt-2">
-            <li>
-              3 sessions de coaching individuel (audio ou vidéo) d&apos;une
-              durée de 30 à 60 minutes chacune.
-            </li>
-            <li>
-              Un diagnostic personnalisé des blocages (technique, marketing,
-              positionnement).
-            </li>
-            <li>
-              Un plan d&apos;action concret pour générer les premiers revenus.
-            </li>
-          </ul>
-          <p>
-            Les sessions sont à planifier dans les 30 jours suivant
-            l&apos;activation de la garantie. Au-delà de ce délai, la garantie
-            est considérée comme remplie.
-          </p>
-
-          <h4 className="text-[17px] font-semibold text-[var(--fg)] mt-6 mb-3">
-            6.4 - Exclusions
-          </h4>
-          <p>La Garantie 90 jours ne s&apos;applique pas si :</p>
-          <ul className="list-disc pl-6 space-y-1 mt-2">
-            <li>
-              Le Client n&apos;a pas complété l&apos;intégralité des 5 modules
-              essentiels.
-            </li>
-            <li>
-              L&apos;application n&apos;a pas été publiée sur un store public.
-            </li>
-            <li>
-              Aucun système de monétisation n&apos;est implémenté dans
-              l&apos;app.
-            </li>
-            <li>
-              Les efforts marketing minimaux n&apos;ont pas été réalisés
-              (ni 30 contenus + 100 interactions, ni 500€ de publicité).
-            </li>
-            <li>
-              L&apos;app a été publiée après le 60e jour suivant l&apos;achat.
-            </li>
-            <li>
-              Le Client n&apos;a jamais sollicité le support ou la communauté
-              pendant la période.
-            </li>
-            <li>
-              Le Client a déjà exercé la Garantie 30 jours (les deux garanties
-              ne sont pas cumulables : le Client choisit l&apos;une ou
-              l&apos;autre).
-            </li>
-            <li>
-              L&apos;application publiée n&apos;a aucun rapport avec le contenu
-              enseigné dans la Formation.
-            </li>
-            <li>
-              Le Client a partagé ou revendu son accès à la Formation (violation
-              de l&apos;Article 4).
-            </li>
-          </ul>
-        </Section>
-
-        {/* ── Article 7 : Obligation de moyens ── */}
-        <Section title="Article 7 - Obligation de moyens">
-          <p>
-            La Formation constitue une obligation de moyens et non de résultat.
-            Le Formateur s&apos;engage à fournir un contenu pédagogique de
-            qualité et un accompagnement selon l&apos;offre choisie. Les
-            résultats dépendent de l&apos;implication, du travail et de la
-            situation individuelle de chaque Client.
+            La Prestation dure trois (3) mois consécutifs à compter de la date
+            de début indiquée dans le contrat. Cette durée ne peut être ni
+            suspendue, ni reportée, ni prolongée pour un motif propre au Client.
           </p>
           <p>
-            Les exemples de revenus ou de résultats mentionnés sur la page de
-            présentation sont des exemples réels mais ne constituent en aucun cas
-            une promesse de résultats identiques.
+            L&apos;accès aux ressources en ligne est consenti sans limitation de
+            durée, tant que le Prestataire exploite la plateforme qui les
+            héberge.
           </p>
         </Section>
 
-        {/* ── Article 8 : Propriété intellectuelle ── */}
-        <Section title="Article 8 - Propriété intellectuelle">
+        {/* ── Article 5 : Prix et paiement ── */}
+        <Section title="Article 5 - Prix et paiement">
           <p>
-            L&apos;ensemble du contenu de la Formation (vidéos, textes,
-            supports, code source fourni, ressources) est protégé par le droit
-            d&apos;auteur et reste la propriété exclusive du Formateur.
+            Le prix de la Prestation est de <strong>3 000 €</strong> toutes
+            taxes comprises. La TVA éventuellement due, selon le statut
+            (particulier ou entreprise) et le pays du Client, est incluse dans
+            ce montant et appliquée conformément à la réglementation
+            luxembourgeoise.
           </p>
           <p>
-            Le Client bénéficie d&apos;un droit d&apos;utilisation personnel et
-            non cessible. Toute reproduction, diffusion ou exploitation
-            commerciale du contenu de la Formation est strictement interdite.
+            Le prix est payable par virement bancaire, au choix du Client : en
+            une fois à la signature, en deux échéances (1 000 € puis 2 000 €) ou
+            en trois échéances de 1 000 €, selon l&apos;échéancier prévu au
+            contrat. Le paiement en plusieurs fois n&apos;entraîne aucun
+            surcoût.
+          </p>
+          <p>
+            Le prix est ferme et non remboursable, sous les seules réserves du
+            droit de rétractation (article 6) et de la garantie commerciale
+            (article 7). L&apos;abandon de la Prestation par le Client ne donne
+            droit à aucun remboursement.
           </p>
         </Section>
 
-        {/* ── Article 9 : Données personnelles ── */}
-        <Section title="Article 9 - Données personnelles">
+        {/* ── Article 6 : Droit de rétractation ── */}
+        <Section title="Article 6 - Droit de rétractation">
           <p>
-            Les données personnelles collectées lors de l&apos;achat (nom,
-            email, données de paiement) sont traitées conformément au RGPD.
-            Elles sont utilisées uniquement pour la gestion de la commande,
-            l&apos;accès à la Formation et la communication liée au service.
+            Le Client consommateur qui conclut le contrat à distance dispose en
+            principe d&apos;un délai de rétractation de quatorze (14) jours à
+            compter de sa signature.
           </p>
           <p>
-            Le Client peut exercer ses droits d&apos;accès, de rectification et
-            de suppression en envoyant un email à{" "}
+            En signant le contrat, le Client demande que la Prestation commence
+            immédiatement. Il reconnaît que son droit de rétractation prend fin
+            pour les contenus numériques auxquels il a accédé, et que, s&apos;il
+            se rétracte, il devra payer le prix des services déjà fournis
+            jusqu&apos;à sa rétractation.
+          </p>
+          <p>
+            Le Client qui contracte pour les besoins de son activité
+            professionnelle ne bénéficie pas du droit de rétractation.
+          </p>
+        </Section>
+
+        {/* ── Article 7 : Garantie commerciale ── */}
+        <Section title="Article 7 - Garantie commerciale « 10 000 € de chiffre d'affaires en 6 mois »">
+          <p>
+            Si l&apos;application du Client n&apos;a pas réalisé au moins
+            10 000 € de chiffre d&apos;affaires brut dans les six (6) mois
+            suivant le début de la Prestation, et sous réserve du respect de
+            toutes les conditions prévues au contrat, le Prestataire prolonge
+            gratuitement la Prestation de trois (3) mois. Si l&apos;objectif
+            n&apos;est toujours pas atteint à l&apos;issue de cette
+            prolongation, le Prestataire rembourse le montant payé par le
+            Client.
+          </p>
+          <p>
+            Les conditions, exclusions, preuves à fournir et délais de demande
+            sont définis dans la Partie II du contrat, qui fait seule foi.
+          </p>
+        </Section>
+
+        {/* ── Article 8 : Obligation de moyens ── */}
+        <Section title="Article 8 - Obligation de moyens">
+          <p>
+            Le Prestataire est tenu à une obligation de moyens et non de
+            résultat. Il ne garantit aucun niveau de revenus, de
+            téléchargements ou de rentabilité, en dehors de la garantie
+            commerciale de l&apos;article 7.
+          </p>
+          <p>
+            Les résultats présentés dans la communication du Prestataire
+            (études de cas, témoignages, revenus d&apos;applications) sont réels
+            mais ne constituent pas une promesse de résultats identiques.
+          </p>
+        </Section>
+
+        {/* ── Article 9 : Propriété intellectuelle ── */}
+        <Section title="Article 9 - Propriété intellectuelle">
+          <p>
+            Les ressources, documents, méthodes et enregistrements fournis dans
+            le cadre de la Prestation restent la propriété exclusive du
+            Prestataire. Le Client bénéficie d&apos;un droit d&apos;utilisation
+            personnel et non cessible. Tout partage, revente ou diffusion est
+            interdit.
+          </p>
+          <p>
+            L&apos;application du Client, son code, sa marque et ses contenus
+            restent sa propriété exclusive.
+          </p>
+        </Section>
+
+        {/* ── Article 10 : Données personnelles ── */}
+        <Section title="Article 10 - Données personnelles">
+          <p>
+            Les données personnelles du Client (identité, coordonnées,
+            échanges, enregistrements d&apos;appels) sont traitées
+            conformément au RGPD, pour l&apos;exécution du contrat, la
+            facturation et la relation client.
+          </p>
+          <p>
+            Le Client peut exercer ses droits d&apos;accès, de rectification,
+            d&apos;effacement, d&apos;opposition et de portabilité en écrivant à{" "}
             <strong>contact@jeremypitault.com</strong>.
           </p>
         </Section>
 
-        {/* ── Article 10 : Responsabilité ── */}
-        <Section title="Article 10 - Responsabilité">
+        {/* ── Article 11 : Responsabilité ── */}
+        <Section title="Article 11 - Responsabilité">
           <p>
-            Le Formateur ne saurait être tenu responsable de tout dommage
-            indirect résultant de l&apos;utilisation de la Formation, notamment
-            les pertes de revenus, de données ou d&apos;opportunités
-            commerciales.
-          </p>
-          <p>
-            Le Formateur ne garantit pas la disponibilité ininterrompue de la
-            plateforme et ne saurait être tenu responsable des interruptions
-            temporaires liées à la maintenance ou à des problèmes techniques
-            indépendants de sa volonté.
+            La responsabilité du Prestataire est limitée au montant payé par le
+            Client. Le Prestataire n&apos;est pas responsable des décisions
+            prises par le Client, du refus ou du retrait de son application par
+            les stores, des pertes de revenus ou préjudices indirects, ni des
+            dépenses engagées par le Client (publicité, outils, matériel).
           </p>
         </Section>
 
-        {/* ── Article 11 : Droit applicable ── */}
-        <Section title="Article 11 - Droit applicable et litiges">
+        {/* ── Article 12 : Droit applicable ── */}
+        <Section title="Article 12 - Droit applicable et litiges">
           <p>
-            Les présentes CGV sont soumises au droit français. En cas de litige,
-            les parties s&apos;engagent à rechercher une solution amiable avant
-            toute action judiciaire. À défaut, les tribunaux compétents seront
-            ceux du ressort du domicile du Formateur.
-          </p>
-          <p>
-            Conformément à l&apos;article L612-1 du Code de la consommation, le
-            Client peut recourir gratuitement à un médiateur de la consommation
-            en cas de litige non résolu.
+            Les présentes CGV sont soumises au droit luxembourgeois. En cas de
+            litige, les parties recherchent d&apos;abord une solution amiable.
+            À défaut, les juridictions du Grand-Duché de Luxembourg sont
+            compétentes, sous réserve des règles protectrices du consommateur
+            applicables dans le pays de résidence du Client.
           </p>
         </Section>
 
-        {/* ── Article 12 : Contact ── */}
-        <Section title="Article 12 - Contact">
-          <p>
-            Pour toute question relative aux présentes CGV ou à la Formation :
-          </p>
+        {/* ── Article 13 : Contact ── */}
+        <Section title="Article 13 - Contact">
+          <p>Pour toute question relative aux présentes CGV ou à la Prestation :</p>
           <p className="mt-2">
             <strong>Email</strong> : contact@jeremypitault.com
           </p>
