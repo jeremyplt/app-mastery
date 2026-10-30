@@ -45,6 +45,12 @@ const nextConfig: NextConfig = {
   skipTrailingSlashRedirect: true,
   async redirects() {
     return [
+      // Anciennes pages de vente de la formation (plus vendue) -> accueil
+      { source: "/formation", destination: "/", permanent: true },
+      { source: "/formation/:path*", destination: "/", permanent: true },
+      { source: "/v3", destination: "/", permanent: true },
+      { source: "/v4", destination: "/", permanent: true },
+      { source: "/membres/merci", destination: "/", permanent: true },
       // Anciennes URLs systeme.io -> nouvelles URLs
       {
         source: "/piscine-epitech",

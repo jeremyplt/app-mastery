@@ -81,7 +81,7 @@ ${hostParagraph}
 <li ${LI}>Tu rejoins la communauté et tu as accès à toutes nos ressources dès le soir même.</li>
 </ol>
 ${image(`${SITE}/jeremy-bureau.jpg`, "Jeremy à son bureau", ctx.host === "Nolan" ? "Pendant que Nolan prend les appels, je passe mes journées sur les applications des élèves." : "Le reste du temps, je passe mes journées sur les applications des élèves.")}
-<p ${P}>Pour que ça se passe comme ça, prends six minutes d'ici là pour regarder la vidéo de présentation de l'accompagnement. J'y montre ce qu'il y a dedans : l'espace de formation et la communauté, les coachings de groupe, et le suivi personnel avec moi. Note les questions qui te viennent en la regardant, l'appel est fait pour y répondre.</p>
+<p ${P}>Pour que ça se passe comme ça, prends six minutes d'ici là pour regarder la vidéo de présentation de l'accompagnement. J'y montre ce qu'il y a dedans : l'espace de ressources et la communauté, les appels de groupe, et le suivi personnel avec moi. Note les questions qui te viennent en la regardant, l'appel est fait pour y répondre.</p>
 <p ${P}>Et si quelqu'un d'autre fait partie du projet, ou gère les finances avec toi, il faut que cette personne soit présente à l'appel. Sinon vous devrez en refaire un, et les créneaux sont limités.</p>
 <p ${P}>Sur la même page, tu verras Wassim. Son application ne vendait presque rien quand il nous a rejoints. Deux mois plus tard, elle lui a rapporté 1 700 dollars en une seule journée, sans un euro de pub.</p>
 ${button("Regarder la vidéo de 6 minutes", confirmUrl)}

@@ -102,7 +102,7 @@ export default function QuestionnairePage() {
             <p className="text-[13px] font-bold uppercase tracking-widest text-[var(--accent2)]">Kick-start App Mastery</p>
             <h1 className="mt-2 text-[30px] font-bold leading-tight tracking-tight">Bienvenue {firstName} 👋</h1>
             <p className="mt-3 text-[16px] font-medium leading-relaxed text-[var(--fg2)]">
-              Quelques questions sur ton application pour bien démarrer l&apos;accompagnement. Je lis tes réponses avant notre appel de démarrage.
+              Quelques questions sur ton application pour bien démarrer notre travail ensemble. Je lis tes réponses avant notre appel de démarrage.
             </p>
             {/* En-tête du document : Nom et App, puis les questions numérotées */}
             <div id="q-app" className="mac-group mt-6 grid gap-4 p-5 sm:grid-cols-2">

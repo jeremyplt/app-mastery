@@ -24,13 +24,13 @@ export default function PolitiqueConfidentialitePage() {
           Politique de Confidentialité
         </h1>
         <p className="text-[var(--fg3)] mb-12">
-          Dernière mise à jour : 12 mars 2026
+          Dernière mise à jour : 30 octobre 2026
         </p>
 
         <Section title="1 - Responsable du traitement">
           <p>
-            Le responsable du traitement des données personnelles est Shinobi
-            LLC, représentée par Jeremy Pitault.
+            Le responsable du traitement des données personnelles est
+            PITAULT MEDIA SARL-S, société de droit luxembourgeois (RCS Luxembourg B310735), 44 Rue de l&apos;Industrie, L-8069 Strassen, Luxembourg, représentée par Jeremy Pitault.
           </p>
           <p>
             Email de contact : <strong>contact@jeremypitault.com</strong>
@@ -40,18 +40,19 @@ export default function PolitiqueConfidentialitePage() {
         <Section title="2 - Données collectées">
           <p>
             Nous collectons les données suivantes dans le cadre de
-            l&apos;utilisation de notre site et de la vente de la formation App
-            Mastery :
+            l&apos;utilisation de notre site et de la prestation de conseil et
+            d&apos;audit App Mastery :
           </p>
           <ul className="list-disc pl-6 space-y-1">
             <li>
-              <strong>Données d&apos;identification</strong> : nom, prénom,
-              adresse email.
+              <strong>Données d&apos;identification et de facturation</strong>{" "}
+              : nom, prénom, adresse email, téléphone, adresse postale et, le
+              cas échéant, informations de la société.
             </li>
             <li>
-              <strong>Données de paiement</strong> : les informations de
-              paiement sont traitées directement par notre prestataire de
-              paiement (Lemon Squeezy). Nous ne stockons aucune donnée bancaire.
+              <strong>Données de paiement</strong> : les paiements se font par
+              virement bancaire. Nous ne conservons que les informations
+              nécessaires au suivi des paiements et à la facturation.
             </li>
             <li>
               <strong>Données de navigation</strong> : adresse IP, type de
@@ -59,8 +60,8 @@ export default function PolitiqueConfidentialitePage() {
             </li>
             <li>
               <strong>Données de communication</strong> : emails échangés avec
-              le support, messages WhatsApp dans le cadre de
-              l&apos;accompagnement VIP.
+              le support, messages WhatsApp et enregistrements des appels
+              réalisés dans le cadre de la prestation de conseil.
             </li>
           </ul>
         </Section>
@@ -69,11 +70,12 @@ export default function PolitiqueConfidentialitePage() {
           <p>Vos données sont utilisées pour :</p>
           <ul className="list-disc pl-6 space-y-1">
             <li>
-              La gestion de votre commande et l&apos;accès à la formation.
+              L&apos;exécution du contrat de conseil et d&apos;audit, la
+              facturation et l&apos;accès aux ressources en ligne.
             </li>
             <li>
               L&apos;envoi d&apos;emails transactionnels (confirmation de
-              commande, accès à la formation).
+              rendez-vous, contrat, rappels de paiement, accès aux ressources).
             </li>
             <li>
               L&apos;envoi d&apos;emails marketing (uniquement si vous avez
@@ -82,7 +84,7 @@ export default function PolitiqueConfidentialitePage() {
             <li>
               L&apos;amélioration de notre site et de notre offre (analytics).
             </li>
-            <li>Le support client et l&apos;accompagnement.</li>
+            <li>Le support client et le suivi de la prestation de conseil.</li>
           </ul>
         </Section>
 
@@ -90,7 +92,7 @@ export default function PolitiqueConfidentialitePage() {
           <ul className="list-disc pl-6 space-y-1">
             <li>
               <strong>Exécution du contrat</strong> : traitement nécessaire à la
-              fourniture de la formation achetée.
+              fourniture de la prestation de conseil et d&apos;audit.
             </li>
             <li>
               <strong>Consentement</strong> : pour l&apos;envoi
@@ -110,17 +112,25 @@ export default function PolitiqueConfidentialitePage() {
           </p>
           <ul className="list-disc pl-6 space-y-1">
             <li>
-              <strong>Lemon Squeezy</strong> : traitement des paiements.
+              <strong>DocuSeal</strong> : signature électronique des contrats.
+            </li>
+            <li>
+              <strong>Calendly</strong> : prise de rendez-vous.
             </li>
             <li>
               <strong>Brevo</strong> : envoi d&apos;emails transactionnels et
               marketing.
             </li>
             <li>
-              <strong>Skool</strong> : accès à la communauté et à la formation.
+              <strong>Skool</strong> : accès à la communauté et aux ressources
+              en ligne.
             </li>
             <li>
               <strong>PostHog</strong> : analytics de navigation.
+            </li>
+            <li>
+              <strong>Meta</strong> : mesure de l&apos;efficacité de nos
+              publicités (pixel Meta).
             </li>
             <li>
               <strong>Vercel</strong> : hébergement du site.
@@ -193,8 +203,9 @@ export default function PolitiqueConfidentialitePage() {
             délai de 30 jours.
           </p>
           <p>
-            En cas de réclamation, vous pouvez contacter la CNIL
-            (www.cnil.fr).
+            En cas de réclamation, vous pouvez contacter la Commission nationale
+            pour la protection des données du Luxembourg (cnpd.public.lu) ou
+            l&apos;autorité de votre pays de résidence (en France, la CNIL).
           </p>
         </Section>
 
@@ -210,6 +221,10 @@ export default function PolitiqueConfidentialitePage() {
               l&apos;audience et améliorer le site. Ces cookies sont déposés
               uniquement avec votre consentement.
             </li>
+            <li>
+              <strong>Cookies publicitaires</strong> : pixel Meta, pour mesurer
+              l&apos;efficacité de nos publicités.
+            </li>
           </ul>
           <p>
             Vous pouvez désactiver les cookies dans les paramètres de votre
@@ -221,8 +236,7 @@ export default function PolitiqueConfidentialitePage() {
           <p>
             Nous mettons en place des mesures techniques et organisationnelles
             appropriées pour protéger vos données personnelles contre tout accès
-            non autorisé, perte ou altération. Les paiements sont sécurisés par
-            notre prestataire Lemon Squeezy (certification PCI DSS).
+            non autorisé, perte ou altération.
           </p>
         </Section>
 

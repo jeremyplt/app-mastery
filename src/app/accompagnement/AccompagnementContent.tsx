@@ -19,8 +19,8 @@ const PARTS = [
     body: "Plus d'une centaine de vidéos pour apprendre à créer une application mobile avec l'IA, même si tu pars de zéro, et surtout pour la faire convertir et la faire connaître. Des modules bonus sur le marketing, des contenus à copier, une masterclass sur l'acquisition, et la rediffusion de tous les lives. Une communauté où chacun partage ses résultats. Accès à vie.",
   },
   {
-    title: "Les coachings de groupe",
-    body: "Environ deux par mois, le jeudi à 20 h. Jeremy répond à toutes les questions, on échange, on apprend de chacun. Tu as accès à tous les coachings à venir et à la rediffusion de tous les précédents, à vie.",
+    title: "Les appels de groupe",
+    body: "Environ deux par mois, le jeudi à 20 h. Jeremy répond à toutes les questions, on échange, on apprend de chacun. Tu as accès à tous les appels à venir et à la rediffusion de tous les précédents, à vie.",
   },
   {
     title: "Le suivi personnel",
@@ -77,7 +77,7 @@ export default function AccompagnementContent() {
               Ce qu&apos;il y a dedans, <span className="mac-accent">expliqué en 6 minutes</span>
             </h1>
             <p className="mt-6 text-[17px] sm:text-[19px] leading-relaxed text-[var(--fg2)] font-medium max-w-2xl mx-auto">
-              Jeremy te montre l&apos;espace de formation, les coachings de groupe et comment se passe le suivi personnel. Regarde-la avant ton appel, tu sauras exactement de quoi on parle.
+              Jeremy te montre l&apos;espace de ressources, les appels de groupe et comment se passe le suivi personnel. Regarde-la avant ton appel, tu sauras exactement de quoi on parle.
             </p>
           </div>
 

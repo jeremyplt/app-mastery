@@ -238,7 +238,7 @@ ${footnote(foot(ctx))}
 <p ${P}>C'est ce que je fais dans l'accompagnement, qui a trois parties.</p>
 <ol style="margin:0 0 18px;padding-left:22px">
 <li ${LI}><b>Tu rejoins la communauté et les cours.</b> Tu as accès à vie à plus d'une centaine de vidéos.</li>
-<li ${LI}><b>Tu participes aux coachings de groupe.</b> Deux fois par mois, j'analyse des applications en direct et je réponds à toutes les questions.</li>
+<li ${LI}><b>Tu participes aux appels de groupe.</b> Deux fois par mois, j'analyse des applications en direct et je réponds à toutes les questions.</li>
 <li ${LI}><b>Tu as un suivi personnel avec moi.</b> Je te suis moi-même pendant plusieurs mois, avec des corrections directement sur ton application.</li>
 </ol>
 <p ${P}>Je te montre tout ça de l'intérieur dans une vidéo de six minutes : <a href="${accompagnementUrl}" style="color:#0060df">voir ce qu'il y a dans l'accompagnement</a>.</p>

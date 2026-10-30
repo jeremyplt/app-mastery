@@ -66,7 +66,7 @@ export function paymentReminder(input: ReminderInput): BuiltEmail {
   const shortDate = date.replace(/^\S+ /, "");
   const amount = formatMoney(input.amount, input.currency);
   const ordinal = input.position === 1 ? "1re" : `${input.position}e`;
-  const what = `la ${ordinal} échéance de ton accompagnement App Mastery`;
+  const what = `la ${ordinal} échéance de ta mission de conseil App Mastery`;
   const late = input.offset < 0;
   const last = input.offset <= -7;
   const showAmount = (t: string) => amountTag(t, late);
@@ -124,14 +124,14 @@ export function contractReminder(firstName: string, link: string, step: 1 | 3): 
     step === 1
       ? `
 <p ${P}>Salut ${esc(firstName)},</p>
-<p ${P}>Je t'ai envoyé hier ton contrat d'accompagnement App Mastery. Il te reste juste à le signer pour qu'on puisse démarrer.</p>
+<p ${P}>Je t'ai envoyé hier ton contrat App Mastery. Il te reste juste à le signer pour qu'on puisse démarrer.</p>
 <p ${P}>Ça prend deux minutes, directement en ligne :</p>
 ${button("Signer mon contrat", link)}
 <p ${P}>Si tu as une question sur un point du contrat, réponds simplement à cet email.</p>
 ${signature("À très vite")}`
       : `
 <p ${P}>Salut ${esc(firstName)},</p>
-<p ${P}>Ton contrat App Mastery n'est pas encore signé. Tant qu'il ne l'est pas, je ne peux pas t'ouvrir l'accès à la communauté ni lancer ton accompagnement.</p>
+<p ${P}>Ton contrat App Mastery n'est pas encore signé. Tant qu'il ne l'est pas, je ne peux pas t'ouvrir l'accès à la communauté ni lancer ta mission de conseil.</p>
 ${button("Signer mon contrat", link)}
 <p ${P}>Si quelque chose te bloque, dis-le-moi en répondant à cet email, on règle ça ensemble.</p>
 ${signature("À très vite")}`;

@@ -24,22 +24,28 @@ export default function MentionsLegalesPage() {
           Mentions Légales
         </h1>
         <p className="text-[var(--fg3)] mb-12">
-          Dernière mise à jour : 11 mars 2026
+          Dernière mise à jour : 30 octobre 2026
         </p>
 
         {/* ── Éditeur du site ── */}
         <Section title="1 - Éditeur du site">
-          <p>Le site app-mastery.fr est édité par :</p>
+          <p>Le site jeremypitault.com est édité par :</p>
           <ul className="list-none space-y-1 mt-2">
             <li>
-              <strong>Raison sociale</strong> : Shinobi LLC
+              <strong>Raison sociale</strong> : PITAULT MEDIA SARL-S, société à
+              responsabilité limitée simplifiée de droit luxembourgeois, au
+              capital de 3 000 euros
             </li>
             <li>
-              <strong>Représentant légal</strong> : Jeremy Pitault
+              <strong>Immatriculation</strong> : RCS Luxembourg B310735,
+              autorisation d&apos;établissement n° 10198095
             </li>
             <li>
-              <strong>Adresse</strong> : 1209 Mountain Road Pl NE, Ste H,
-              Albuquerque, NM 87110, États-Unis
+              <strong>Siège social</strong> : 44 Rue de l&apos;Industrie,
+              L-8069 Strassen, Luxembourg
+            </li>
+            <li>
+              <strong>Représentant légal</strong> : Jeremy Pitault, gérant
             </li>
             <li>
               <strong>Email</strong> : contact@jeremypitault.com
@@ -72,7 +78,7 @@ export default function MentionsLegalesPage() {
         {/* ── Propriété intellectuelle ── */}
         <Section title="4 - Propriété intellectuelle">
           <p>
-            L&apos;ensemble du contenu du site app-mastery.fr (textes, images,
+            L&apos;ensemble du contenu du site jeremypitault.com (textes, images,
             vidéos, graphismes, logo, icônes, code source) est la propriété
             exclusive de Jeremy Pitault, sauf mention contraire.
           </p>
@@ -88,13 +94,14 @@ export default function MentionsLegalesPage() {
         <Section title="5 - Protection des données personnelles">
           <p>
             Conformément au Règlement Général sur la Protection des Données
-            (RGPD) et à la loi Informatique et Libertés, le site collecte des
+            (RGPD), le site collecte des
             données personnelles uniquement dans le cadre de :
           </p>
           <ul className="list-disc pl-6 space-y-1 mt-2">
             <li>
-              L&apos;inscription à la formation (nom, adresse email, données de
-              paiement).
+              La prise de rendez-vous et la souscription à la prestation de
+              conseil et d&apos;audit (nom, adresse email, téléphone, données de
+              facturation).
             </li>
             <li>
               L&apos;inscription à la liste d&apos;attente ou newsletter
@@ -106,9 +113,11 @@ export default function MentionsLegalesPage() {
             </li>
           </ul>
           <p>
-            Les données de paiement sont traitées directement par{" "}
-            <strong>Stripe</strong> (stripe.com) et ne sont jamais stockées sur
-            nos serveurs.
+            Le détail des traitements figure dans notre{" "}
+            <a href="/politique-confidentialite" className="text-[var(--accent2)] underline">
+              politique de confidentialité
+            </a>
+            .
           </p>
           <p>
             Vous disposez d&apos;un droit d&apos;accès, de rectification, de
@@ -131,12 +140,13 @@ export default function MentionsLegalesPage() {
             </li>
             <li>
               <strong>Cookies analytiques</strong> : mesure d&apos;audience via
-              PostHog (hébergé en Europe).
+              PostHog.
+            </li>
+            <li>
+              <strong>Cookies publicitaires</strong> : pixel Meta, pour mesurer
+              l&apos;efficacité de nos publicités.
             </li>
           </ul>
-          <p>
-            Aucun cookie publicitaire ou de pistage tiers n&apos;est utilisé.
-          </p>
         </Section>
 
         {/* ── Responsabilité ── */}
@@ -168,9 +178,11 @@ export default function MentionsLegalesPage() {
         {/* ── Droit applicable ── */}
         <Section title="9 - Droit applicable">
           <p>
-            Les présentes mentions légales sont soumises au droit français. En
-            cas de litige, et après tentative de résolution amiable, les
-            tribunaux français seront seuls compétents.
+            Les présentes mentions légales sont soumises au droit
+            luxembourgeois. En cas de litige, et après tentative de résolution
+            amiable, les juridictions du Grand-Duché de Luxembourg sont
+            compétentes, sous réserve des règles protectrices du consommateur
+            applicables dans le pays de résidence de l&apos;utilisateur.
           </p>
         </Section>
 
