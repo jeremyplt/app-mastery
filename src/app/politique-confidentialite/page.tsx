@@ -30,7 +30,7 @@ export default function PolitiqueConfidentialitePage() {
         <Section title="1 - Responsable du traitement">
           <p>
             Le responsable du traitement des données personnelles est
-            PITAULT MEDIA SARL-S, société de droit luxembourgeois (RCS Luxembourg B310735), 44 Rue de l&apos;Industrie, L-8069 Strassen, Luxembourg, représentée par Jeremy Pitault.
+            SDG STUDIO SARL-S, société de droit luxembourgeois (RCS Luxembourg B310735), 44 Rue de l&apos;Industrie, L-8069 Strassen, Luxembourg, représentée par Jeremy Pitault.
           </p>
           <p>
             Email de contact : <strong>contact@jeremypitault.com</strong>

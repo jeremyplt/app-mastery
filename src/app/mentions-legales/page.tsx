@@ -32,7 +32,7 @@ export default function MentionsLegalesPage() {
           <p>Le site jeremypitault.com est édité par :</p>
           <ul className="list-none space-y-1 mt-2">
             <li>
-              <strong>Raison sociale</strong> : PITAULT MEDIA SARL-S, société à
+              <strong>Raison sociale</strong> : SDG STUDIO SARL-S, société à
               responsabilité limitée simplifiée de droit luxembourgeois, au
               capital de 3 000 euros
             </li>

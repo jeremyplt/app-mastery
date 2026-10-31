@@ -42,7 +42,7 @@ export default function CGVPage() {
             Les présentes Conditions Générales de Vente (ci-après « CGV »)
             régissent la vente de la prestation de conseil et d&apos;audit
             « App Mastery » (Incubateur App Mastery, ci-après « la
-            Prestation ») par PITAULT MEDIA SARL-S, société à responsabilité
+            Prestation ») par SDG STUDIO SARL-S, société à responsabilité
             limitée simplifiée de droit luxembourgeois, RCS Luxembourg B310735,
             siège social 44 Rue de l&apos;Industrie, L-8069 Strassen,
             Luxembourg, représentée par Jeremy Pitault, gérant (ci-après « le
