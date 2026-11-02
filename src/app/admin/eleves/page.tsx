@@ -111,14 +111,31 @@ export default function ElevesPage() {
 
   useEffect(() => {
     if (!authorized) return;
-    fetch("/api/admin/eleves")
-      .then((r) => r.json())
-      .catch(() => ({ error: "réseau" }))
-      .then((d: { students?: Student[]; error?: string }) => {
-        if (d.students) setStudents(d.students);
-        else setFlash(`Erreur : ${d.error}`);
-        setLoading(false);
-      });
+    const load = () =>
+      fetch("/api/admin/eleves", { cache: "no-store" })
+        .then((r) => r.json())
+        .catch(() => ({ error: "réseau" }))
+        .then((d: { students?: Student[]; error?: string }) => {
+          if (d.students) setStudents(d.students);
+          else setFlash(`Erreur : ${d.error}`);
+          setLoading(false);
+        });
+    load();
+    // Liste rechargée quand on revient sur l'onglet ou que le navigateur
+    // réaffiche la page depuis son cache : sinon elle peut pointer vers une
+    // fiche supprimée entre-temps (« Élève introuvable »).
+    const onVisible = () => {
+      if (document.visibilityState === "visible") load();
+    };
+    const onPageShow = (e: PageTransitionEvent) => {
+      if (e.persisted) load();
+    };
+    document.addEventListener("visibilitychange", onVisible);
+    window.addEventListener("pageshow", onPageShow);
+    return () => {
+      document.removeEventListener("visibilitychange", onVisible);
+      window.removeEventListener("pageshow", onPageShow);
+    };
   }, [authorized]);
 
   async function submit(e: React.FormEvent) {
