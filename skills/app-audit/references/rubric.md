@@ -42,7 +42,7 @@ Si l'app n'est pas encore publiée : reporter l'ASO à plus tard (une fois publi
 **Principe niche temps d'écran :** plus d'écrans = mieux. Un onboarding court qui balance le paywall/l'avis/l'ATT trop tôt convertit mal. Enchaîner beaucoup de questions diagnostic pour faire investir l'utilisateur, puis réaffirmation + preuve + Paradis + engagement AVANT la conversion. Livrer une section **"Proposition d'onboarding"** (la liste complète des étapes, existe / à ajouter) à affiner avec l'analyse concurrents.
 
 
-- **Premier écran / carrousel** : axé **proposition de valeur et bénéfices**, pas le process ni le nom de l'app. Reco par défaut = remplacer une landing pauvre par un **carrousel de 3 ou 4 slides**, une slide par bénéfice, racontant une progression. Fournir titres + copy + illustration slide par slide.
+- **Premier écran / carrousel** : axé **proposition de valeur et bénéfices**, pas le process ni le nom de l'app. Reco par défaut = remplacer une landing pauvre par un **carrousel de 3 ou 4 slides**, une slide par bénéfice, racontant une progression. Fournir titres + copy + illustration slide par slide. Les maquettes de carrousel MONTRENT l'app en action (animation en boucle de la boucle principale, pas une image décorative de l'élève), parlent à celui qui paie, et remplissent l'écran avec peu d'éléments (voir `lessons.md` 2026-10-29).
 - **Animation** : slides animées (2-3 s en boucle), montrer les interactions automatiquement (drag and drop) pour l'effet wow et faire comprendre un concept sans lire.
 - **Démontrer, ne pas mettre l'app dans l'app** : bannir les mockups de téléphone en in-app (ça relève du marketing store).
 - **Ordre des questions logique**, récolte toutes les infos nécessaires.

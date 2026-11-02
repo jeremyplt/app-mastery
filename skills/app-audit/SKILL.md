@@ -48,6 +48,11 @@ Si le screen recording manque, donner le `capture-protocol.md` et demander la vi
 
 6. **Sauvegarder** le rapport en `.md` dans le scratchpad, l'envoyer à Jeremy (SendUserFile). Jeremy relit, corrige, puis décide de l'envoyer à l'élève. **Ne jamais envoyer directement à l'élève.**
 
+7. **Archiver en PDF sur le Drive (OBLIGATOIRE, à chaque version).** Les audits servent de preuve que SDG STUDIO fait vraiment du conseil/audit. Pour chaque audit livré (et chaque nouvelle version) :
+   - exporter le rendu final en PDF (artifact : `read_file` avec `paths` pour récupérer les fichiers sur le disque, puis Chrome headless `--print-to-pdf --no-pdf-header-footer --virtual-time-budget=15000`) ;
+   - le déposer dans Drive `ACCOMPAGNEMENT/<ÉLÈVE>/Audits` (id ACCOMPAGNEMENT `1QdUnA9KXGAh6Wz1tT44SkyP2xouMAxDD`), nommé `AAAA-MM-JJ - <Titre>.pdf`, en créant le dossier de l'élève s'il n'existe pas ;
+   - ne jamais remplacer une ancienne version : on ajoute le nouveau PDF à côté.
+
 ## Workflow FEEDBACK (boucle d'amélioration)
 
 Quand Jeremy corrige un audit ("t'as raté X", "ce critère compte plus", "le verdict paywall est faux", "reformule comme ça") :

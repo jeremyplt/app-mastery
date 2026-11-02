@@ -10,6 +10,16 @@ Format d'une entrée :
 - **Ce qui était faux :** les screenshots n'étaient pas cliquables, impossible de les voir en grand.
 - **Règle à appliquer désormais :** sur TOUS les audits HTML, chaque capture s'ouvre en grand au clic (lightbox, voir `report-template.md` § Version HTML partageable).
 - **Pas de section « Texte promotionnel »** dans l'ASO : Jeremy la juge inutile (non indexé, aucun levier pour l'élève). Ne pas en faire une section.
+- **La synthèse couvre TOUT l'audit.** Quand on ajoute des sections (onboarding, paywall, in-app, chiffres) à un audit commencé par l'ASO, réécrire le paragraphe d'intro de la synthèse pour qu'il parle de toute l'app, et ranger les points dans l'ordre du parcours (ASO, onboarding, paywall, in-app, chiffres). Jeremy a trouvé « trop bizarre » une synthèse dont l'intro ne parlait que de l'ASO.
+- **Écrans encombrés ≠ trop montrer.** Ne pas écrire qu'un onboarding « en montre trop » : montrer beaucoup de choses sur l'app, c'est bien. Le problème, c'est l'encombrement de chaque écran (trop d'éléments, trop de texte, tout en petit). Formuler « écrans trop encombrés ».
+- **Maquettes de démonstration : montrer le produit en action, en grand.** Un simple fondu entre deux photos ne suffit pas : animer la vraie séquence (scan de la photo, photo pro, puis titre, prix et description qui apparaissent). Les photos d'une comparaison doivent être grandes et lisibles, avec le prix posé dessus. Proposer 2 versions quand c'est pertinent (photos en grand, ou graphique en barres). La preuve sociale (note, nombre d'annonces) se met en avant en gros, avec des lauriers, pas en petit texte gris.
+- **Une démo animée doit se comprendre même à l'arrêt.** L'état final montre la transformation (photo d'origine en vignette, flèche, résultat, annonce prête). Ne pas couper l'animation des maquettes avec `prefers-reduced-motion` : Jeremy l'a vue figée et n'a « rien compris ». Vérifier chaque étape en rendu (le Chrome headless est en mouvement réduit : neutraliser la règle pour tester).
+- **Photos nettes pour les maquettes : générer avec l'API OpenAI** (clé `OPENAI_API_KEY` dans `~/Projects/shinobi-admin/.env.local`, modèle `gpt-image-2`, ne jamais afficher la clé). Pour un avant/après cohérent : générer l'« avant », puis l'« après » via `/v1/images/edits` à partir de l'avant (même article). Les recadrages de vidéo sont trop flous en grand.
+- **Bouton d'action principal à cheval sur la barre d'onglets** (Vintapp, 27/10) : Jeremy le veut plus gros et qui dépasse en haut de la barre pour le mettre en valeur, centré, avec les libellés des autres onglets bien alignés. Ça précise la leçon Binôme : ce qui gênait, c'était un bouton mal placé, pas le fait qu'il dépasse.
+- **Garder les infos importantes de l'écran d'origine dans la maquette** (ex. « 100 scans left » sur l'accueil). Simplifier, ce n'est pas tout enlever.
+- **Préfixer aussi les classes d'icônes des maquettes** : une icône `.chart` a hérité du style du graphique `.chart`, et une icône `.tag` du badge `.tag` du paywall (icône invisible). Vérifier en rendu que chaque icône s'affiche.
+- **Achats lancés mais pas aboutis : pas un problème à remonter.** Que plus de la moitié des gens qui appuient sur « S'abonner » abandonnent sur la fenêtre de paiement Apple ne choque pas Jeremy (195 lancés, 87 aboutis chez Vintapp). Ne pas en faire un point d'audit.
+- **Une feuille (bottom sheet) s'affiche par-dessus le vrai écran** : mettre l'écran d'origine complet, assombri, en arrière-plan, jamais un fond vide.
 
 ## AAAA-MM-JJ , <titre court>
 - **Contexte :** (quelle app, quelle section)
@@ -20,6 +30,43 @@ Format d'une entrée :
 Quand une leçon se généralise (elle vaut pour toutes les apps, pas juste un cas), la remonter aussi dans `rubric.md`.
 
 ---
+
+## 2026-10-31 , Binôme V3 : que ce qu'il faut faire, rouge réservé au grave, étiquettes hors de la courbe
+- **Contexte :** audit V3 de Binôme (Fatoumata), après une V2 dont la plupart des recos étaient appliquées.
+- **Ce qui était faux :** (1) des cartes « à garder » / « très bien » (écran avec et sans, paywall et compte) et une intro qui listait tout ce qui était fait : Jeremy, « ça rajoute du bruit pour rien ». (2) Deux petits bugs (initiale « J » / « B », boutons de test) dans des cartes à bordure et titre rouges : « c'est pas très grave ». (3) L'étiquette « 99 % » posée sur la courbe du graphique.
+- **Règles à appliquer désormais :**
+  - L'audit ne parle QUE de ce qu'il faut faire. Pas de section, carte ou paragraphe sur ce qui est bien. Un compliment d'une phrase en intro suffit, sans lister ce qui a été fait.
+  - Le style rouge (`.bug`) est réservé à ce qui casse vraiment l'app (crash, achat impossible, écran vide). Les petits bugs vont dans une carte normale, sans « Bug : » dans le titre.
+  - **Une animation d'écriture (streaming, machine à écrire) se fait en JavaScript** : bulle vide, trois points, puis les mots ajoutés un par un, puis on recommence en boucle. Un fondu CSS mot par mot ne marche pas : Jeremy voyait déjà tout le texte (« c'est un peu bizarre »). Pour le PDF, un attribut `data-print` coupe le script et la réponse complète s'affiche.
+  - Sur un graphique de maquette, aucune étiquette ne chevauche une courbe : la placer dans l'espace vide au-dessus et la relier au point avec une flèche. Vérifier en rendu zoomé.
+
+## 2026-10-29 , Family Quest : carrousel explicite et animé, écrans remplis
+- **Contexte :** audit onboarding de Family Quest (app de tâches pour enfants, payée par le parent). Ma maquette de carrousel reprenait l'image du monde mise par l'élève, avec une phrase.
+- **Ce qui était faux :** (1) l'image de l'élève « ne veut rien dire, ne montre rien » : une maquette de carrousel doit être explicite. (2) Pas assez de maquettes. (3) Des écrans à moitié vides.
+- **Règles à appliquer désormais :**
+  - **Carrousel = une slide par étape de la boucle de l'app, animée** : on MONTRE l'action en boucle (ex. le parent tape la tâche et l'envoie / l'enfant coche, la notif arrive, le parent valide / le héros prend un niveau, le dragon grandit). Animations propres, l'état final affiché au chargement (`animation-delay` négatif) pour qu'elle se comprenne à l'arrêt.
+  - **Parler à celui qui paie.** Dans une app enfant, le carrousel parle d'abord au parent (créer les tâches, valider), le jeu vient après comme résultat.
+  - **Écran rempli avec peu de choses** : jamais de grand vide en bas. Agrandir l'élément principal (illustration, monde, mascotte), ajouter le clavier ou le pavé numérique quand il y a une saisie, une carte récap au milieu, plutôt que d'ajouter des éléments.
+  - **Une maquette pour chaque étape de la Proposition d'onboarding** (galerie dans l'ordre des étapes), en plus des maquettes sous chaque remarque.
+  - **Une maquette sous chaque correction qui décrit un écran** (screenshots App Store, création de compte, première tâche, message de fin de temps, réglages…), pour que l'élève voie ce qu'il faut faire.
+  - **Des maquettes qui racontent l'app, pas des listes génériques** (2e retour de Jeremy : « tu peux mieux faire ») :
+    - les options montrent ce qu'elles font (avatars de la famille + « Ajouter », un code à 6 chiffres), pas des personnages décoratifs ;
+    - l'accueil enfant montre la progression (niveau, XP, « encore 1 tâche pour le niveau 6 »), le temps gagné et l'état de chaque tâche (à faire, le parent doit valider, validée) ;
+    - un écran de jeu montre où on en est (chemin du chapitre) et la mission du jour avec sa récompense ;
+    - un réglage anticipe les questions du parent (plus ou moins d'heures avec − / +, « Pas de limite le week-end », « modifiable dans l'espace parent »).
+  - **Questions sur la douleur, reprises jusqu'au paywall** (3e retour : « pas axé sur la douleur de l'utilisateur ») :
+    - plusieurs questions qui appuient sur la douleur, avec un sous-titre émotionnel par réponse (« J'ai l'impression de parler dans le vide », « Cris, larmes, porte qui claque ») ;
+    - un écran qui chiffre ce que ça coûte (« plus de 5 fois par jour = 1 800 fois par an »), puis « sans / avec l'app » ;
+    - un chargement « On prépare le plan de X » qui reprend ses réponses, puis « Le plan de X est prêt » qui reprend chaque douleur avec la solution en face ;
+    - le titre du paywall reprend la douleur en 3 mots (« Fini de répéter. »), pas une phrase jolie sur le produit ;
+    - **presque pas de texte sur les maquettes** (4e retour : « trop de texte, tu sais bien que j'aime pas ça ») : un grand visuel (mascotte), un titre court, une timeline d'essai horizontale en un mot par étape (Gratuit / Rappel / prix), le prix, un bouton. Pas de liste de bénéfices en phrases ;
+    - jamais de statistique inventée (« la réponse la plus fréquente des parents ») sans source.
+  - **Jamais une image décorative à la place d'une preuve** (5e retour : « image vide de sens ») : sur le paywall, la mascotte seule ne dit rien. Montrer ce que le parent achète (les notifs « Quentin a rangé sa chambre ✓ » empilées). Écran de plan = un graphique avant/après (« fois où tu répètes » de 5+ à 0 en 2 semaines) + 3 tuiles chiffrées, pas des cartes de texte.
+  - **Écrans validés par Jeremy pour une app enfant/parent** (après 3 propositions par écran sur une page à part) :
+    - plan personnalisé = **une quête à signer ensemble** (parchemin avec les tâches tirées des réponses, minutes gagnées, récompense finale, deux lignes de signature enfant/parent, CTA « Signer la quête ensemble »). Rejetés : cartes de texte, graphique avant/après, calendrier 14 jours, boucle en 4 étapes ;
+    - paywall = **l'écran verrouillé du parent ce soir** (heure en grand, notifs « Quentin a… ✓ » empilées) + feuille du bas avec la timeline d'essai horizontale (Gratuit / Rappel / prix), le prix à la semaine, un bouton.
+  - **Quand Jeremy n'aime pas un écran deux fois de suite**, proposer 3 pistes vraiment différentes sur une page à part, plutôt que de retoucher la même idée.
+  - **Après chaque publication, vérifier que toutes les images utilisées sont bien publiées** (`action: list, scope: files`) : `img/mk/egg.jpg` manquait et la carte Mission s'affichait vide.
 
 ## 2026-10-09 , Ember (Malika) : app pas encore sortie, screenshots, clarté
 - **Contexte :** audit Ember (app de focus avec pauses actives), app pas encore publiée.
@@ -116,3 +163,15 @@ Quand une leçon se généralise (elle vaut pour toutes les apps, pas juste un c
 - **Direction artistique unique, pas « app vibecodée ».** Éviter le look générique (cartes blanches arrondies + une couleur d'accent + police système partout). Partir de l'objet réel du sujet pour trouver 3 ou 4 signatures (Pharma Stock : papier crème du carton, une couleur par médicament comme le bandeau des boîtes, infos EXP/LOT en police mono, stock en plaquette de comprimés, « + » en croix de pharmacie). Polices avec du caractère (ex. Bricolage Grotesque + Instrument Sans + JetBrains Mono), pas d'excentricité.
 - **Ne pas redemander ce qui existe déjà.** Avant d'écrire une correction, vérifier sur la capture que ce n'est pas déjà en place (Pharma Stock : l'orange et le rouge des stocks existaient déjà, j'avais demandé « un vrai code couleur »).
 - **Typo française dans les maquettes :** espace insécable avant « ? » et « : », pour ne jamais avoir un « ? » seul en début de ligne.
+
+## 2026-10-27 , Binôme V2 : maquettes « AI slop », échelle réelle, 3 directions artistiques
+- **Contexte :** audit V2 de Binôme (Fatoumata). Jeremy : « full AI slop, très générique, pas neat », dimensions fausses, étiquette posée sur la courbe, éléments qui sortent du cadre, « + » qui sort de la barre d'onglets.
+- **Ce qui était faux :** maquettes dessinées directement en petit (proportions fausses), étiquettes en police mono majuscules partout, pastilles et badges décoratifs, icônes sur chaque option, mascotte redessinée en SVG au lieu du vrai visuel de l'app, classes CSS en conflit avec la page (contenu qui déborde).
+- **Règles à appliquer désormais :**
+  - Dessiner chaque maquette à l'échelle réelle d'un iPhone (393 x 852 pt) puis la réduire avec `transform: scale()`. Métriques iOS : marges de 20 pt, bouton de 56 pt, options de 60 pt, grand titre de 34 pt.
+  - Préfixer toutes les classes des maquettes (`.s ...`) pour éviter les conflits avec le CSS de la page, et vérifier en rendu qu'aucun élément ne sort du cadre.
+  - Sobre et propre : une seule idée visuelle forte par écran, pas d'étiquette mono, pas de badge décoratif, pas d'icône sur les options de réponse.
+  - Réutiliser les vrais visuels de l'app (mascotte découpée dans la vidéo), jamais un dessin de remplacement.
+  - Les graphiques : légende hors de la courbe, dégradé sous la courbe principale, courbe « sans » en pointillé gris.
+  - Quand le branding est à revoir, proposer 3 directions artistiques (polices + couleurs) avec un sélecteur en haut de la page qui change toutes les maquettes (variables CSS par thème).
+- **Écrans d'affirmation (Jeremy) :** dans un onboarding de révision, ajouter un écran « Les élèves qui ont une bonne méthodologie et les bons outils réussissent leurs examens dans 99 % des cas » et un écran « Avec et sans [app] » avec deux barres.
