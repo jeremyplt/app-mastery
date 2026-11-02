@@ -158,11 +158,8 @@ export default function CGVPage() {
             luxembourgeoise.
           </p>
           <p>
-            Le prix est payable par virement bancaire, au choix du Client : en
-            une fois à la signature, en deux échéances (1 000 € puis 2 000 €) ou
-            en trois échéances de 1 000 €, selon l&apos;échéancier prévu au
-            contrat. Le paiement en plusieurs fois n&apos;entraîne aucun
-            surcoût.
+            Le prix est payable par virement bancaire, selon les modalités de
+            paiement prévues au contrat signé par le Client.
           </p>
           <p>
             Le prix est ferme et non remboursable, sous les seules réserves du

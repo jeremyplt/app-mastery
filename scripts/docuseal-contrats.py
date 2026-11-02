@@ -3,7 +3,8 @@
 # 1x.docx 2x.docx 3x.docx -> écrit 1x-v4.docx, etc. Puis POST /templates/docx
 # avec external_id app-mastery-<n>x-v3 pour mettre à jour le modèle existant.
 # Les DOCX du Drive ont déjà le texte conseil et audit (contrats-conseil.py,
-# passé le 30 oct. 2026 sur les anciennes versions).
+# passé le 30 oct. 2026 sur les anciennes versions) et chaque contrat ne parle
+# que de sa modalité de paiement (contrats-agnostiques.py, 1er nov. 2026).
 import copy, sys, docx, docx.shared, docx.enum.text
 
 R = "role=Client"
