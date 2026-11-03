@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireOwner } from "@/lib/admin";
 import { getAdminClient } from "@/lib/supabase";
+import { closerSummaries } from "@/lib/commissions";
 
 // Registre des commissions (propriétaire seulement) : ajout à la main,
 // annulation avec trace, réactivation, suppression.
@@ -39,13 +40,16 @@ export async function POST(req: NextRequest) {
 }
 
 // { kind, id, action: "cancel" | "restore", reason? }
+// { kind, id, action: "pay", paid_on? } : crée le versement lié (commission payée)
+// { kind, id, action: "unpay" } : supprime ce versement
 export async function PATCH(req: NextRequest) {
   try {
     await requireOwner();
-    const { kind, id, action, reason } = await req.json();
-    if (typeof id !== "string" || (kind !== "sale" && kind !== "manual") || (action !== "cancel" && action !== "restore")) {
+    const { kind, id, action, reason, paid_on } = await req.json();
+    if (typeof id !== "string" || (kind !== "sale" && kind !== "manual") || !["cancel", "restore", "pay", "unpay"].includes(action)) {
       return NextResponse.json({ error: "Requête invalide" }, { status: 400 });
     }
+    if (action === "pay" || action === "unpay") return setPaid(kind, id, action === "pay", paid_on);
     const cancel = action === "cancel";
     const cancelReason = cancel ? String(reason ?? "").trim() || null : null;
     const supabase = getAdminClient();
@@ -87,4 +91,28 @@ export async function DELETE(req: NextRequest) {
   } catch (err) {
     return fail(err);
   }
+}
+
+// Marquer une commission payée = un versement du montant de la commission,
+// lié à elle. « Déjà payé » et « Reste à payer » suivent automatiquement.
+async function setPaid(kind: "sale" | "manual", id: string, pay: boolean, paidOn: unknown) {
+  const supabase = getAdminClient();
+  const col = kind === "sale" ? "sale_id" : "manual_commission_id";
+  if (!pay) {
+    const { error } = await supabase.from("closer_payouts").delete().eq(col, id);
+    if (error) throw new Error(error.message);
+    return NextResponse.json({ ok: true });
+  }
+  const entry = (await closerSummaries()).flatMap((c) => c.entries.map((e) => ({ ...e, closer: c.email }))).find((e) => e.kind === kind && e.id === id);
+  if (!entry) return NextResponse.json({ error: "Commission introuvable" }, { status: 404 });
+  if (entry.state === "paid") return NextResponse.json({ ok: true });
+  if (entry.state !== "ready") return NextResponse.json({ error: "Cette commission n'est pas encore débloquée" }, { status: 400 });
+  const { error } = await supabase.from("closer_payouts").insert({
+    closer_email: entry.closer,
+    amount: entry.commission_amount,
+    paid_on: typeof paidOn === "string" && /^\d{4}-\d{2}-\d{2}$/.test(paidOn) ? paidOn : undefined,
+    [col]: id,
+  });
+  if (error) throw new Error(error.message);
+  return NextResponse.json({ ok: true });
 }

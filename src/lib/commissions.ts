@@ -22,7 +22,7 @@ export function commissionFor(ttc: number, rate: number): number {
   return Math.round(htAmount(ttc) * rate) / 100;
 }
 
-export type CommissionState = "ready" | "pending" | "cancelled";
+export type CommissionState = "ready" | "pending" | "paid" | "cancelled";
 
 export type CommissionEntry = {
   kind: "sale" | "manual";
@@ -45,9 +45,21 @@ export type CommissionEntry = {
   unlocked_on: string | null; // date effective (commission prête)
   unlocks_on: string | null; // date prévue du dernier paiement (en attente)
   unlock_notified: boolean; // alerte « commission débloquée » déjà envoyée
+  // Versement lié (bouton « Marquer payée ») : la commission est réglée.
+  paid_on: string | null;
+  payout_id: string | null;
 };
 
-export type Payout = { id: string; closer_email: string; amount: number; paid_on: string; note: string | null };
+export type Payout = {
+  id: string;
+  closer_email: string;
+  amount: number;
+  paid_on: string;
+  note: string | null;
+  sale_id: string | null;
+  manual_commission_id: string | null;
+  label: string | null; // commission réglée par ce versement, s'il y en a une
+};
 
 export type CloserSummary = {
   email: string;
@@ -55,7 +67,7 @@ export type CloserSummary = {
   entries: CommissionEntry[];
   payouts: Payout[];
   totalSold: number; // TTC des ventes non annulées
-  earned: number; // commissions prêtes à payer
+  earned: number; // commissions débloquées (prêtes ou déjà payées)
   pending: number; // commissions en attente des paiements de l'élève
   paid: number; // déjà versé
   due: number; // earned - paid (négatif = avance)
@@ -121,7 +133,7 @@ export async function closerSummaries(only?: string): Promise<CloserSummary[]> {
   let manualQuery = supabase
     .from("manual_commissions")
     .select("id, created_at, closer_email, label, amount, student_id, note, cancelled_at, cancel_reason, unlock_notified_at, students(payments, sales(sale_payments(paid, paid_at, due_date)))");
-  let payoutsQuery = supabase.from("closer_payouts").select("id, closer_email, amount, paid_on, note").order("paid_on", { ascending: false });
+  let payoutsQuery = supabase.from("closer_payouts").select("id, closer_email, amount, paid_on, note, sale_id, manual_commission_id").order("paid_on", { ascending: false });
   if (only) {
     closersQuery = closersQuery.eq("email", only);
     salesQuery = salesQuery.eq("closer_email", only);
@@ -134,6 +146,17 @@ export async function closerSummaries(only?: string): Promise<CloserSummary[]> {
     manualQuery,
     payoutsQuery,
   ]);
+
+  // Versement lié à une commission précise = commission payée.
+  const linked = new Map<string, { id: string; paid_on: string }>();
+  for (const p of payouts ?? []) {
+    const key = p.sale_id ? `sale:${p.sale_id}` : p.manual_commission_id ? `manual:${p.manual_commission_id}` : null;
+    if (key) linked.set(key, { id: p.id, paid_on: p.paid_on });
+  }
+  const paidInfo = (kind: "sale" | "manual", id: string) => {
+    const l = linked.get(`${kind}:${id}`);
+    return { paid_on: l?.paid_on ?? null, payout_id: l?.id ?? null };
+  };
 
   const byEmail = new Map<string, CloserSummary>();
   const ensure = (email: string, name: string | null = null) => {
@@ -149,7 +172,7 @@ export async function closerSummaries(only?: string): Promise<CloserSummary[]> {
     c.entries.push(e);
     if (e.state === "cancelled") return;
     if (e.total_amount) c.totalSold += e.total_amount;
-    if (e.state === "ready") c.earned += e.commission_amount;
+    if (e.state === "ready" || e.state === "paid") c.earned += e.commission_amount;
     else c.pending += e.commission_amount;
   };
 
@@ -170,7 +193,7 @@ export async function closerSummaries(only?: string): Promise<CloserSummary[]> {
       commission_amount: s.commission_amount === null ? commissionFor(total, rate) : Number(s.commission_amount),
       paid_count: paidCount,
       payment_count: s.sale_payments.length,
-      state: cancelled ? "cancelled" : ready ? "ready" : "pending",
+      state: cancelled ? "cancelled" : ready ? (linked.has(`sale:${s.id}`) ? "paid" : "ready") : "pending",
       contract_cancelled: contractCancelled,
       cancelled_at: s.commission_cancelled_at,
       cancel_reason: contractCancelled ? "Contrat refusé ou expiré" : s.commission_cancel_reason,
@@ -178,6 +201,7 @@ export async function closerSummaries(only?: string): Promise<CloserSummary[]> {
       student_id: null,
       unlock_notified: Boolean(s.commission_unlock_notified_at),
       ...unlockDates(s.sale_payments),
+      ...paidInfo("sale", s.id),
     });
   }
 
@@ -197,7 +221,7 @@ export async function closerSummaries(only?: string): Promise<CloserSummary[]> {
       commission_amount: Number(m.amount),
       paid_count: paidCount,
       payment_count: payments.length,
-      state: m.cancelled_at ? "cancelled" : ready ? "ready" : "pending",
+      state: m.cancelled_at ? "cancelled" : ready ? (linked.has(`manual:${m.id}`) ? "paid" : "ready") : "pending",
       contract_cancelled: false,
       cancelled_at: m.cancelled_at,
       cancel_reason: m.cancel_reason,
@@ -205,12 +229,16 @@ export async function closerSummaries(only?: string): Promise<CloserSummary[]> {
       student_id: m.student_id,
       unlock_notified: Boolean(m.unlock_notified_at),
       ...(m.student_id ? unlockDates(payments) : { unlocked_on: m.created_at, unlocks_on: null }),
+      ...paidInfo("manual", m.id),
     });
   }
 
+  const labels = new Map<string, string>();
+  for (const c of byEmail.values()) for (const e of c.entries) labels.set(`${e.kind}:${e.id}`, e.label);
   for (const p of payouts ?? []) {
     const c = ensure(p.closer_email);
-    c.payouts.push({ ...p, amount: Number(p.amount) });
+    const key = p.sale_id ? `sale:${p.sale_id}` : p.manual_commission_id ? `manual:${p.manual_commission_id}` : "";
+    c.payouts.push({ ...p, amount: Number(p.amount), label: labels.get(key) ?? null });
     c.paid += Number(p.amount);
   }
   for (const c of byEmail.values()) {

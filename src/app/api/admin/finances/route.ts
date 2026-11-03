@@ -56,7 +56,7 @@ export async function GET() {
     for (const c of closers) {
       for (const e of c.entries) {
         if (e.state === "cancelled") continue;
-        const when = e.state === "ready" ? e.unlocked_on : e.unlocks_on;
+        const when = e.state === "ready" || e.state === "paid" ? e.unlocked_on : e.unlocks_on;
         if (when) at(monthOf(when)).commissions += e.commission_amount;
       }
       for (const p of c.payouts) at(monthOf(p.paid_on)).payouts += p.amount;

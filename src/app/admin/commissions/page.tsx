@@ -19,7 +19,7 @@ type Entry = {
   commission_amount: number;
   paid_count: number;
   payment_count: number;
-  state: "ready" | "pending" | "cancelled";
+  state: "ready" | "pending" | "paid" | "cancelled";
   contract_cancelled: boolean;
   cancelled_at: string | null;
   cancel_reason: string | null;
@@ -27,8 +27,9 @@ type Entry = {
   student_id: string | null;
   unlocked_on: string | null;
   unlocks_on: string | null;
+  paid_on: string | null;
 };
-type Payout = { id: string; amount: number; paid_on: string; note: string | null };
+type Payout = { id: string; amount: number; paid_on: string; note: string | null; label: string | null };
 type Closer = {
   email: string;
   name: string | null;
@@ -94,6 +95,7 @@ function CalcDetail({ ttc, rate }: { ttc: number; rate: number }) {
 
 function stateBadge(e: Entry): { label: string; cls: string } {
   if (e.state === "cancelled") return { label: "Annulée", cls: "bg-[var(--field)] text-[var(--fg2)]" };
+  if (e.state === "paid") return { label: "✓ Payée", cls: "bg-[color-mix(in_srgb,var(--accent)_16%,transparent)] text-[var(--accent2)]" };
   if (e.state === "ready") return { label: "Prête à payer", cls: "bg-[color-mix(in_srgb,var(--green)_15%,transparent)] text-[var(--green)]" };
   return {
     label: `En attente (${e.paid_count}/${e.payment_count} paiements reçus)`,
@@ -233,6 +235,15 @@ export default function CommissionsPage() {
     await send("/api/admin/commissions/entries", "PATCH", { kind: e.kind, id: e.id, action: "cancel", reason });
   }
 
+  async function payEntry(e: Entry) {
+    await send("/api/admin/commissions/entries", "PATCH", { kind: e.kind, id: e.id, action: "pay", paid_on: today() });
+  }
+
+  async function unpayEntry(e: Entry) {
+    if (!confirm(`Remettre la commission de ${e.label} en « prête à payer » ? Le versement de ${money(e.commission_amount)} sera supprimé.`)) return;
+    await send("/api/admin/commissions/entries", "PATCH", { kind: e.kind, id: e.id, action: "unpay" });
+  }
+
   async function restoreEntry(e: Entry) {
     await send("/api/admin/commissions/entries", "PATCH", { kind: e.kind, id: e.id, action: "restore" });
   }
@@ -257,7 +268,7 @@ export default function CommissionsPage() {
         <header>
           <h1 className="text-[28px] font-bold tracking-tight">{isOwner ? "Commissions des closers" : "Mes commissions"}</h1>
           <p className="mt-1 text-[14px] font-medium text-[var(--fg2)]">
-            Commission = taux × montant HT. Le HT se calcule toujours en retirant la TVA luxembourgeoise de 17 % : TTC ÷ 1,17 (ex. 3 000 € TTC = 2 564,10 € HT, à 20 % = 512,82 €). Elle devient « prête à payer » seulement quand le dernier paiement de l&apos;élève est reçu.
+            Commission = taux × montant HT. Le HT se calcule toujours en retirant la TVA luxembourgeoise de 17 % : TTC ÷ 1,17 (ex. 3 000 € TTC = 2 564,10 € HT, à 20 % = 512,82 €). Elle devient « prête à payer » seulement quand le dernier paiement de l&apos;élève est reçu. Une fois le virement fait, clique sur « Marquer payée ».
           </p>
         </header>
 
@@ -473,6 +484,12 @@ export default function CommissionsPage() {
                             {!off && e.state === "ready" && e.unlocked_on && (
                               <p className="text-[12.5px] font-semibold text-[var(--green)]">🔓 Débloquée le {frDate(e.unlocked_on)}</p>
                             )}
+                            {!off && e.state === "paid" && (
+                              <p className="text-[12.5px] font-semibold text-[var(--accent2)]">
+                                ✓ Payée{e.paid_on ? ` le ${frDate(e.paid_on)}` : ""}
+                                {e.unlocked_on ? ` · débloquée le ${frDate(e.unlocked_on)}` : ""}
+                              </p>
+                            )}
                             {!off && e.state === "pending" && (
                               <p className="text-[12.5px] font-semibold text-[var(--orange)]">
                                 🔒 Se débloque à réception du dernier virement{e.unlocks_on ? `, prévu le ${frDate(e.unlocks_on)}` : ""}
@@ -496,6 +513,16 @@ export default function CommissionsPage() {
                           </p>
                           {isOwner && (
                             <div className="flex w-full justify-end gap-1 sm:w-auto">
+                              {e.state === "ready" && (
+                                <button onClick={() => payEntry(e)} className="mac-btn mac-btn-primary mac-btn-sm">
+                                  Marquer payée
+                                </button>
+                              )}
+                              {e.state === "paid" && (
+                                <button onClick={() => unpayEntry(e)} className="rounded-md px-2 py-1 text-xs font-bold text-[var(--fg2)] hover:bg-[var(--field)] hover:text-[var(--fg)]">
+                                  Pas encore payée
+                                </button>
+                              )}
                               {off ? (
                                 !e.contract_cancelled && (
                                   <button onClick={() => restoreEntry(e)} className="rounded-md px-2 py-1 text-xs font-bold text-[var(--accent2)] hover:bg-[var(--field)]">
@@ -529,6 +556,7 @@ export default function CommissionsPage() {
                           <p className="text-[15px] font-bold text-[var(--green)]">{money(p.amount)}</p>
                           <p className="text-[12.5px] font-medium text-[var(--fg2)]">
                             Versé le {frDate(p.paid_on)}
+                            {p.label ? ` · commission ${p.label}` : ""}
                             {p.note ? ` · ${p.note}` : ""}
                           </p>
                         </div>
