@@ -20,7 +20,7 @@ function questionnaireEmail(firstName: string, link: string): BuiltEmail {
   const body = `
 <p ${P}>Salut ${esc(firstName)},</p>
 <p ${P}>Bienvenue dans App Mastery ! Pour qu'on démarre du bon pied, j'ai besoin de mieux connaître ton application.</p>
-<p ${P}>Ça prend quelques minutes : tes liens, tes outils, tes régies publicitaires, tes réseaux sociaux, tes concurrents. À la fin, je te demande aussi de m'envoyer quelques accès en lecture seule. Je lis tout avant notre appel de démarrage, pour qu'on aille droit à l'essentiel.</p>
+<p ${P}>Ça prend quelques minutes : tes liens, tes outils, tes régies publicitaires, tes réseaux sociaux, tes concurrents. À la fin, je te demande aussi de m'envoyer quelques accès. Je lis tout avant notre appel de démarrage, pour qu'on aille droit à l'essentiel.</p>
 ${button("Répondre au questionnaire", link)}
 <p ${P}>Si tu as la moindre question, réponds simplement à cet email.</p>
 ${signature("À très vite")}`;

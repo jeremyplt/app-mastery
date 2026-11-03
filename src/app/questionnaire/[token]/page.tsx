@@ -3,7 +3,7 @@
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import ThemeToggle from "@/components/ThemeToggle";
-import { ACCESS_ANSWER_ID, ACCESS_EMAIL, ACCESS_TODO, type Question } from "@/lib/questionnaire-questions";
+import { ACCESS_ANSWER_ID, ACCESS_ASC, ACCESS_EMAIL, ACCESS_TODO, type Question } from "@/lib/questionnaire-questions";
 
 // Questionnaire de démarrage d'un nouvel élève (« Kick-start App Mastery »).
 // Le lien envoyé par email contient son jeton unique : pas besoin de compte.
@@ -188,9 +188,9 @@ export default function QuestionnairePage() {
               ))}
             </div>
 
-            {/* À faire : accès en lecture seule */}
+            {/* À faire : accès (lecture seule, sauf App Store Connect) */}
             <div className="mac-group mt-4 border-[var(--accent)] p-5">
-              <p className="text-[16px] font-bold">À faire : envoie-moi un accès en lecture seule</p>
+              <p className="text-[16px] font-bold">À faire : envoie-moi tes accès</p>
               <p className="mt-1 text-[14.5px] font-medium text-[var(--fg2)]">
                 À l&apos;adresse <b className="text-[var(--fg)]">{ACCESS_EMAIL}</b>, en « read-only » :
               </p>
@@ -201,6 +201,7 @@ export default function QuestionnairePage() {
                   </li>
                 ))}
               </ul>
+              <p className="mt-3 rounded-[12px] border border-[var(--accent)] px-4 py-3 text-[14.5px] font-bold">{ACCESS_ASC}</p>
               <label className="mt-4 flex cursor-pointer items-center gap-3 rounded-[12px] bg-[var(--field)] px-4 py-3">
                 <input
                   type="checkbox"

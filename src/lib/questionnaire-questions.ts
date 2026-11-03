@@ -99,13 +99,16 @@ export const QUESTIONS: Question[] = [
   },
 ];
 
-// Accès à envoyer en lecture seule (partie « À faire » du document).
+// Accès à envoyer (partie « À faire » du document) : tout en lecture seule,
+// sauf App Store Connect qui demande le rôle Développeur.
 export const ACCESS_EMAIL = "jeremypltpro@gmail.com";
 export const ACCESS_TODO = [
   "Tous les outils de monitoring et d'analytics (PostHog, Sentry, RevenueCat, etc.)",
   "Les régies publicitaires utilisées (TikTok Ads, Meta Ads, etc.)",
-  "App Store Connect et Google Play Console",
+  "Google Play Console",
 ];
+export const ACCESS_ASC =
+  "App Store Connect : invite-moi avec le rôle « Développeur » (« Developer »), pas en lecture seule. Sans ce rôle, je ne peux pas tester ton app.";
 // Réponse « accès envoyés » (case à cocher en fin de questionnaire).
 export const ACCESS_ANSWER_ID = "access_sent";
 
@@ -121,6 +124,6 @@ export function answerEntries(answers: Record<string, string>): { label: string;
       out.push({ label: q.label, value: answers[q.id] });
     }
   }
-  if (answers[ACCESS_ANSWER_ID]) out.push({ label: `Accès en lecture seule envoyés à ${ACCESS_EMAIL}`, value: answers[ACCESS_ANSWER_ID] });
+  if (answers[ACCESS_ANSWER_ID]) out.push({ label: `Accès envoyés à ${ACCESS_EMAIL}`, value: answers[ACCESS_ANSWER_ID] });
   return out;
 }
