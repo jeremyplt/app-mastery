@@ -477,7 +477,7 @@ export default function FacturesPage() {
                           {p.ai.status === "pending" && p.status === "pending" && <span className="rounded-md bg-[var(--field)] px-2 py-0.5 text-xs font-bold text-[var(--fg2)]">IA : lecture en cours</span>}
                           {p.ai.status === "error" && <span className="rounded-md bg-[var(--field)] px-2 py-0.5 text-xs font-bold text-[var(--fg2)]">IA : lecture impossible</span>}
                           <span className={`rounded-md px-2 py-0.5 text-xs font-bold ${p.status === "accepted" ? CHIP.green : p.status === "rejected" ? "bg-[color-mix(in_srgb,var(--red)_14%,transparent)] text-[var(--red)]" : CHIP.orange}`}>
-                            {p.status === "accepted" ? (p.synced ? "Validé et rangé" : "Validé") : p.status === "rejected" ? "Refusé" : "À vérifier"}
+                            {p.status === "accepted" ? (p.synced ? "Validé et rangé" : "Validé") : p.status === "rejected" ? "Refusé" : "À traiter"}
                           </span>
                         </span>
                       </div>
