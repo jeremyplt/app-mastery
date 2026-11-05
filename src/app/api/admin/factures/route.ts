@@ -19,9 +19,12 @@ export async function GET() {
   try {
     await requireOwner();
     const db = getAdminClient();
-    const [rows, students] = await Promise.all([
+    const [rows, students, lines, stuck, setting] = await Promise.all([
       withRetry(() => db.from("invoices").select("*").order("invoice_date", { ascending: false }).order("number", { ascending: false }).limit(500)),
       withRetry(() => db.from("students").select("id, name, email, archived, sale:sales(email)").order("name")),
+      withRetry(() => db.from("invoice_bank_lines").select("bank_line_id, bank_date, amount, label, reason").eq("decision", "handoff").order("bank_date", { ascending: false })),
+      withRetry(() => db.from("invoice_automation").select("invoice_key, number, plan, handoff_reason, updated_at").eq("state", "handoff").order("updated_at", { ascending: false })),
+      withRetry(() => db.from("site_settings").select("value").eq("key", "invoices_auto_send").maybeSingle()),
     ]);
     const invoices = (rows ?? []) as Invoice[];
 
@@ -33,6 +36,14 @@ export async function GET() {
     }
 
     return NextResponse.json({
+      autoSend: (setting?.value as { enabled?: boolean } | undefined)?.enabled === true,
+      toCheck: [
+        ...(lines ?? []).map((l) => ({ key: `v-${l.bank_line_id}`, date: l.bank_date, amount: Number(l.amount), label: l.label ?? "Virement", reason: l.reason ?? "" })),
+        ...(stuck ?? []).map((r) => {
+          const plan = r.plan as { date: string; amount: number; label: string };
+          return { key: r.invoice_key, date: plan.date, amount: Number(plan.amount), label: plan.label, reason: r.handoff_reason ?? "" };
+        }),
+      ],
       invoices: invoices.map((i) => ({ ...i, amount: Number(i.amount), pdf_url: urls.get(i.pdf_path) ?? null })),
       students: (students ?? [])
         .filter((s) => !s.archived)
@@ -41,6 +52,20 @@ export async function GET() {
           return { id: s.id, name: s.name, email: s.email ?? sale?.email ?? null };
         }),
     });
+  } catch (err) {
+    return fail(err);
+  }
+}
+
+// Interrupteur de l'envoi automatique par le job de facturation.
+export async function PUT(req: NextRequest) {
+  try {
+    await requireOwner();
+    const { autoSend } = await req.json();
+    if (typeof autoSend !== "boolean") return NextResponse.json({ error: "Valeur invalide" }, { status: 400 });
+    const { error } = await getAdminClient().from("site_settings").upsert({ key: "invoices_auto_send", value: { enabled: autoSend }, updated_at: new Date().toISOString() });
+    if (error) throw new Error(error.message);
+    return NextResponse.json({ autoSend });
   } catch (err) {
     return fail(err);
   }

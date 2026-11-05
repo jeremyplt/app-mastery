@@ -24,6 +24,7 @@ type Invoice = {
   pdf_url?: string | null;
 };
 type Student = { id: string; name: string; email: string | null };
+type ToCheck = { key: string; date: string; amount: number; label: string; reason: string };
 type Tab = "todo" | "sent" | "no_send";
 type Edit = { client_email: string; email_subject: string; email_body: string };
 
@@ -57,6 +58,8 @@ const EMPTY_FORM = { student_id: "", client_name: "", client_email: "", number: 
 export default function FacturesPage() {
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [students, setStudents] = useState<Student[]>([]);
+  const [toCheck, setToCheck] = useState<ToCheck[]>([]);
+  const [autoSend, setAutoSend] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
@@ -75,6 +78,8 @@ export default function FacturesPage() {
     if (!res.ok) throw new Error(data.error ?? "Erreur de chargement");
     setInvoices(data.invoices);
     setStudents(data.students);
+    setToCheck(data.toCheck ?? []);
+    setAutoSend(Boolean(data.autoSend));
   }, []);
 
   useEffect(() => {
@@ -192,6 +197,21 @@ export default function FacturesPage() {
     });
   };
 
+  const toggleAutoSend = () => {
+    const next = !autoSend;
+    const question = next
+      ? "Activer l'envoi automatique ? Chaque facture créée par le job partira au client sans ton clic."
+      : "Désactiver l'envoi automatique ? Les factures attendront ton clic.";
+    if (!confirm(question)) return;
+    return run("auto", async () => {
+      const res = await fetch("/api/admin/factures", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ autoSend: next }) });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Modification impossible");
+      setAutoSend(data.autoSend);
+      setNotice(data.autoSend ? "Envoi automatique activé." : "Envoi automatique désactivé.");
+    });
+  };
+
   function pickStudent(id: string) {
     const s = students.find((x) => x.id === id);
     setForm((f) => ({ ...f, student_id: id, client_name: s?.name ?? f.client_name, client_email: s?.email ?? f.client_email }));
@@ -306,6 +326,37 @@ export default function FacturesPage() {
               {busy === "add" ? "Ajout..." : "Ajouter"}
             </button>
           </form>
+        )}
+
+        {!loading && (
+          <section className="mac-group mt-5 flex flex-wrap items-center justify-between gap-3 px-4 py-3" aria-label="Envoi automatique">
+            <div>
+              <p className="text-[14px] font-bold">Envoi automatique : {autoSend ? "activé" : "désactivé"}</p>
+              <p className="text-[13px] font-medium text-[var(--fg2)]">
+                {autoSend ? "Les factures créées par le job partent toutes seules au client." : "Le job crée les factures, puis elles attendent ton clic ici."}
+              </p>
+            </div>
+            <button onClick={toggleAutoSend} disabled={busy !== null} className="mac-btn mac-btn-def disabled:opacity-50">
+              {autoSend ? "Désactiver" : "Activer"}
+            </button>
+          </section>
+        )}
+
+        {toCheck.length > 0 && (
+          <section className="mac-group mt-5 px-4 py-3" aria-label="Virements à vérifier">
+            <h2 className="text-[15px] font-bold text-[var(--orange)]">À vérifier ({toCheck.length})</h2>
+            <p className="text-[13px] font-medium text-[var(--fg2)]">Le job s&apos;est arrêté sur ces cas plutôt que de deviner.</p>
+            <ul className="mt-2 divide-y divide-[var(--sep)]">
+              {toCheck.map((c) => (
+                <li key={c.key} className="py-2">
+                  <p className="text-[14px] font-bold">
+                    {c.label} · {money(c.amount, "EUR")} · {shortDate(c.date)}
+                  </p>
+                  <p className="text-[13px] font-medium text-[var(--fg2)]">{c.reason}</p>
+                </li>
+              ))}
+            </ul>
+          </section>
         )}
 
         <div className="mt-6 flex items-center gap-2">

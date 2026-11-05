@@ -31,3 +31,9 @@ create index invoices_status_date_idx on public.invoices (status, invoice_date d
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
 values ('invoices', 'invoices', false, 5242880, array['application/pdf'])
 on conflict (id) do nothing;
+
+-- 2026-11-05, migration "invoice_automation" : job de facturation sur Harness Maxxing.
+-- invoice_automation : une ligne par facture, clé unique, état de chaque étape.
+-- invoice_bank_lines : un virement ne peut appartenir qu'à une seule facture.
+-- Voir la migration Supabase pour les colonnes. Ajoute aussi students.odoo_partner_id
+-- et le réglage site_settings "invoices_auto_send" (désactivé par défaut).
