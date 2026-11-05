@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tes vidéos Family Quest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600&family=Patrick+Hand&family=Permanent+Marker&family=TikTok+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Même langage que l'audit Family Quest : colonne de lecture, fond pointillé façon macOS, accent bleu. Les images d'écran restent sombres dans les deux thèmes. */
+:root{
+  --bg:#eceef2; --dot:rgba(0,0,0,.07); --card:#fff; --line:rgba(0,0,0,.12); --fg:#1d1d1f; --muted:#4a4c52;
+  --accent:#0066d6; --accent-soft:rgba(0,122,255,.1); --good:#1a8a3c; --good-bg:rgba(52,199,89,.12); --good-line:rgba(52,199,89,.5);
+  --warn:#b35c00; --warn-bg:rgba(255,149,0,.12);
+  --tile:#17181d; --tile-fg:#f5f5f7;
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#09090b; --dot:rgba(255,255,255,.06); --card:#1c1c20; --line:rgba(255,255,255,.14); --fg:#f5f5f7; --muted:#b9b9c0;
+  --accent:#4da3ff; --accent-soft:rgba(10,132,255,.18); --good:#30d158; --good-bg:rgba(48,209,88,.12); --good-line:rgba(48,209,88,.45);
+  --warn:#ff9f0a; --warn-bg:rgba(255,159,10,.13); --tile:#2a2b31; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#09090b; --dot:rgba(255,255,255,.06); --card:#1c1c20; --line:rgba(255,255,255,.14); --fg:#f5f5f7; --muted:#b9b9c0;
+  --accent:#4da3ff; --accent-soft:rgba(10,132,255,.18); --good:#30d158; --good-bg:rgba(48,209,88,.12); --good-line:rgba(48,209,88,.45);
+  --warn:#ff9f0a; --warn-bg:rgba(255,159,10,.13); --tile:#2a2b31; color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);background-image:radial-gradient(var(--dot) 1px,transparent 1px);background-size:18px 18px;color:var(--fg);font:17px/1.55 var(--font)}
+.wrap{max-width:860px;margin:0 auto;padding:44px 16px 80px}
+h1{font-size:clamp(34px,6vw,46px);line-height:1.08;letter-spacing:-.02em;margin:0 0 14px;text-wrap:balance}
+h2{font-size:clamp(25px,4vw,31px);line-height:1.15;letter-spacing:-.015em;margin:56px 0 12px;text-wrap:balance}
+h3{font-size:21px;line-height:1.25;margin:0;text-wrap:balance}
+h4{font-size:15px;margin:18px 0 6px}
+p{margin:0 0 12px;max-width:68ch}
+a{color:var(--accent);font-weight:600}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.lead{font-size:19px}
+.summary{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:22px 0 0}
+.summary b{display:block;margin-bottom:6px}
+.summary ol{margin:0;padding-left:22px}
+.summary li{margin:5px 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;margin:16px 0}
+.card h3{margin-bottom:8px}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:14px 0}
+.grid img{width:100%;aspect-ratio:9/16;object-fit:cover;border-radius:10px;display:block;background:var(--tile)}
+.fix{background:var(--good-bg);border:1px solid var(--good-line);border-radius:10px;padding:12px 14px;margin:12px 0 0}
+.fix b{color:var(--good)}
+.stat{font-weight:700;color:var(--warn)}
+.bars{display:grid;gap:6px;margin:14px 0}
+.bars div{display:grid;grid-template-columns:178px 1fr;align-items:center;gap:10px;font-size:15px}
+.bars i{display:flex;align-items:center;height:26px;border-radius:6px;background:var(--accent);color:#fff;font-style:normal;font-weight:700;padding-left:9px;min-width:30px}
+.bars .bad i{background:var(--warn);color:#000}
+.quotes{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;padding:0;list-style:none}
+.quotes li{background:var(--warn-bg);border-radius:8px;padding:5px 10px;font-size:15px}
+table{width:100%;border-collapse:collapse;background:var(--card);border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top;font-size:16px}
+th{font-size:14px}
+tr:last-child td{border-bottom:0}
+td:last-child{font-weight:650}
+.tablewrap{overflow-x:auto;margin:14px 0}
+.sub{margin:30px 0 8px}
+.recipe{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;margin:18px 0;scroll-margin-top:16px}
+.recipe header{display:flex;gap:14px;align-items:flex-start;margin-bottom:14px}
+.recipe header p{margin:6px 0 0}
+.num{flex:none;width:36px;height:36px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font-weight:700}
+:root[data-theme="dark"] .num{color:#000}
+.tag{display:inline-block;margin-left:8px;padding:2px 9px;border-radius:99px;background:var(--good-bg);color:var(--good);font-size:13px;font-weight:700;vertical-align:2px}
+.shots{display:grid;grid-template-columns:repeat(auto-fill,minmax(136px,1fr));gap:10px}
+.shot{margin:0}
+.screen{position:relative;aspect-ratio:9/16;border-radius:12px;overflow:hidden;background:var(--tile);color:var(--tile-fg)}
+.screen img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.cap{position:absolute;left:8px;right:8px;top:9%;text-align:center;font-size:13px;line-height:1.25;font-weight:700;color:#000;background:#fff;border-radius:6px;padding:4px 5px}
+.todo{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;gap:5px;padding:10px;font-size:13px;line-height:1.3}
+.todo b{font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:#7fc1ff}
+figcaption{font-size:14px;line-height:1.3;margin-top:6px;font-weight:600}
+.note{margin:14px 0 0}
+.todo.over{top:auto;bottom:0;left:0;right:0;padding:26px 8px 8px;background:linear-gradient(transparent,rgba(0,0,0,.88));color:#fff}
+.stack div{text-shadow:0 1px 2px #000}
+.shots.wide{grid-template-columns:repeat(auto-fill,minmax(190px,1fr))}.shots.large{grid-template-columns:repeat(auto-fill,minmax(250px,1fr))}.shots.tall{grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}
+.screen.slide{container-type:inline-size;border-radius:8px;background:#000}.slide.r34{aspect-ratio:3/4}.slide.r43{aspect-ratio:4/3}.slide.r45{aspect-ratio:4/5}.slide.r916{aspect-ratio:9/16}
+.slide .sl{position:absolute;font-family:"TikTok Sans","Helvetica Neue",Arial,sans-serif;text-align:center;color:#fff;font-weight:500}
+.slide .ser{left:10%;right:10%;font-family:"EB Garamond",Georgia,serif;font-weight:600;color:#111;font-size:clamp(10px,6.2cqw,17px);line-height:1.12}.slide .ser.top{top:14%}.slide .ser.bot{bottom:12%}.slide .ser.ww{color:#fff}
+.slide .le{left:9%;right:9%;top:50%;transform:translateY(-50%);font-size:clamp(10px,6.1cqw,18px);line-height:1.2;text-shadow:0 1px 2px rgba(0,0,0,.7),0 0 10px rgba(0,0,0,.5)}.slide .le i{display:block;font-style:normal;margin-bottom:9%}
+.slide .tip{left:8%;right:8%;bottom:12%;text-align:left;font-size:clamp(9px,4.4cqw,13px);line-height:1.22;text-shadow:0 1px 2px rgba(0,0,0,.8),0 0 8px rgba(0,0,0,.6)}.slide .tip b{display:block;font-weight:500;font-size:clamp(11px,6cqw,18px);margin-bottom:5px}
+.slide .blk{left:6%;right:22%;top:9%;text-align:left;font-size:clamp(9px,4.6cqw,14px);line-height:1.28}.slide .blk span{background:#000;color:#fff;padding:.12em .35em;border-radius:3px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.slide .lb{left:6%;right:6%;line-height:1.5;color:#000}.slide .lb span{background:#fff;padding:.14em .42em;border-radius:.35em;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.slide .lb.mid{top:40%;font-size:clamp(11px,6.6cqw,19px);font-weight:600}.slide .lb.midsub{top:66%;font-size:clamp(8px,3.8cqw,11px)}
+.slide .lb.topc{top:5%;font-size:clamp(10px,5.4cqw,15px);font-weight:600}
+.slide .lb.note{font-size:clamp(9px,4.3cqw,13px);text-align:left;width:auto;right:auto;line-height:1.5}.slide .lb.nl{left:7%;bottom:12%}.slide .lb.nr{left:auto;right:7%;bottom:12%;text-align:right}
+.slide .lb.jt{top:30%;font-size:clamp(11px,6.4cqw,19px);font-weight:600}.slide .lb.js{top:66%;font-size:clamp(8px,3.8cqw,12px)}
+.slide .neon{left:6%;right:6%;top:17%;font-weight:600;color:var(--c);font-size:clamp(10px,6.6cqw,16px);line-height:1.18;-webkit-text-stroke:3px #fff;paint-order:stroke fill}.slide .neon b{display:block;font-weight:700;font-size:clamp(11px,8cqw,19px);margin-bottom:12%}.slide .neon p{margin:0 0 11%;max-width:none}.slide .neon.one{top:40%}.slide .neon.one b{margin:0}
+.shot figcaption a{font-weight:600}
+.screen.slide.catt{background:#fff}.catt img{top:38%;height:58%;object-fit:contain}
+.slide .ser{text-shadow:0 0 4px rgba(255,255,255,.95),0 0 9px rgba(255,255,255,.85)}.slide .ser.ww{text-shadow:0 1px 3px #000,0 0 8px rgba(0,0,0,.8)}
+.slide:has(.wt) img,.slide:has(.neon) img{filter:brightness(.6)}
+.slide .wt{text-shadow:0 1px 2px #000,0 0 8px rgba(0,0,0,.85)}.slide .wt.pv{top:38%;font-size:clamp(11px,7.4cqw,19px);line-height:1.15}.slide .wt.pvend{top:76%;font-size:clamp(9px,5.2cqw,14px)}
+.slide .kc{color:#fff;-webkit-text-stroke:2px #222}
+.duo{position:absolute;inset:0;display:grid;grid-template-rows:1fr 1fr}.duo img{position:static;width:100%;height:100%;min-height:0;object-fit:cover}
+.slide img.mini{position:absolute;left:5%;top:29%;width:36%;height:42%;inset-inline-start:5%;object-fit:cover;border-radius:4px;z-index:1}
+.slide .dl{z-index:2;right:4%;left:auto;font-weight:800;color:#fff;font-size:clamp(8px,5cqw,13px);text-shadow:0 1px 3px rgba(0,0,0,.85)}.slide .dl.a{top:44%}.slide .dl.b{top:52%}
+.slide .dl{text-shadow:0 1px 2px #000,0 0 7px #000,0 0 12px rgba(0,0,0,.8)}.slide .dl.c{left:0;right:0;text-align:center}.slide .dl.c.a{top:43%}.slide .dl.c.b{top:52%}
+.slide .lb.n1{top:27%;font-size:clamp(10px,5.6cqw,16px)}.slide .lb.n2{top:48%;font-size:clamp(9px,4.4cqw,13px)}.slide .lb.n3{top:60%;font-size:clamp(10px,5.6cqw,16px)}
+.slide .lb.tl{left:6%;right:10%;top:8%;text-align:left;font-size:clamp(10px,5.8cqw,17px)}.slide .lb.br2{left:14%;right:6%;bottom:12%;text-align:right;font-size:clamp(10px,5.4cqw,16px)}.slide .lb.bl2{left:6%;right:14%;bottom:8%;text-align:left;font-size:clamp(10px,5cqw,15px)}.slide .lb.sm2{left:auto;right:6%;bottom:5%;font-size:clamp(8px,3.6cqw,11px);text-align:right}
+.hint{display:block;font-weight:400;font-size:14px;line-height:1.3;margin-top:3px;color:var(--muted)}
+.slide.r43 img{filter:brightness(.6)}
+.slide .ser.tip{top:4%}.slide .ser.low{bottom:4%}
+.slide .wt{left:7%;right:7%;top:45%;font-size:clamp(10px,6.6cqw,17px);line-height:1.2;text-shadow:0 1px 3px rgba(0,0,0,.85)}
+.split{position:absolute;inset:0;background:#000;display:flex;flex-direction:column;justify-content:center}.split .ims{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#fff;padding:1px}.split .ims img{position:static;width:100%;aspect-ratio:1/2;height:auto;object-fit:cover}
+.split .lbs{display:grid;grid-template-columns:1fr 1fr;color:#fff;text-align:center;font:500 clamp(9px,5.6cqw,15px)/1.2 "TikTok Sans",Arial,sans-serif;padding-top:6px}
+.slide .kc{left:0;right:0;top:22%;display:grid;grid-template-columns:1fr 1fr;font-weight:400;font-size:clamp(11px,7cqw,17px);color:#e8e8e8;-webkit-text-stroke:2px #555;paint-order:stroke fill}.dash{position:absolute;left:50%;top:0;bottom:0;border-left:2px dashed #fff;opacity:.9}
+.slide .wd{left:5%;right:5%;top:70%;font-family:"Patrick Hand","Comic Sans MS",cursive;font-size:clamp(12px,9cqw,22px);color:#000;-webkit-text-stroke:3px #fff;paint-order:stroke fill}
+.slide .ttl{left:6%;right:6%;top:11%;font-family:"Permanent Marker",Impact,sans-serif;color:#000;font-size:clamp(14px,11cqw,28px);line-height:1.05;font-weight:400}.slide .ttl em{font-style:normal;color:#e10600;text-shadow:0 0 6px rgba(225,6,0,.6)}.slide .ttl.mid{top:45%}.slide:has(.ttl.mid){background:#fff}
+.rows{position:absolute;inset:0;display:grid;grid-template-rows:repeat(3,1fr);gap:2px;background:#000}.rows div{background-size:cover;background-position:center;display:flex;flex-direction:column;justify-content:center;padding:0 7%;font:700 clamp(9px,6.8cqw,15px)/1.25 "TikTok Sans",Arial,sans-serif;-webkit-text-stroke:3px #000;paint-order:stroke fill}.rows span{color:#fff;padding-left:3%}
+.slide .blk.mdl{left:6%;right:20%;top:50%;font-size:clamp(9px,5cqw,13px);line-height:1.5}
+.slide .lb.je{top:84%;left:auto;right:5%;width:auto;text-align:right;font-size:clamp(8px,3.8cqw,11px)}
+.model{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:16px;background:var(--accent-soft);border-radius:12px;padding:12px;margin:0 0 6px}
+.model h4{margin:0 0 6px}.model p{font-size:16px;margin:0 0 8px}
+.strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;align-self:start}
+.strip img{width:100%;aspect-ratio:9/16;object-fit:cover;border-radius:8px;display:block;background:var(--tile)}
+.stats{position:absolute;inset:0;background:#000;color:#fff;display:flex;flex-direction:column;padding:74px 8px 8px;gap:4px}
+.stats .nums{display:grid;grid-template-columns:1fr 1fr;gap:2px 6px;font-size:10px;line-height:1.2}.stats i{display:block;font-style:normal;font-weight:700;font-size:14px}
+.stats svg{width:100%;margin-top:auto}
+.stack{position:absolute;inset:0;display:grid;grid-template-rows:repeat(3,1fr);gap:2px;background:#000}
+.stack div{background:#2a2b31;color:#fff;padding:8px;display:flex;flex-direction:column;gap:2px;font-size:12px;line-height:1.2;justify-content:center}
+.stack b{color:#ffd60a}.stack span{font-weight:700;font-size:15px}.stack i{font-style:normal}
+.ideas li{margin:14px 0}.ideas span{display:inline;font-weight:600;color:var(--fg)}
+.script{margin:14px 0 0;padding:14px 16px;background:var(--accent-soft);border-radius:10px;max-width:none}
+.script b{display:block;margin-bottom:4px}
+.refs{margin:0;padding:0;list-style:none}
+.refs li{margin:6px 0;line-height:1.35}
+.refs span{display:block;font-size:15px;color:var(--muted)}
+.check{list-style:none;padding:0;margin:14px 0;display:grid;gap:8px}
+.check li{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px 10px 42px;position:relative}
+.check li::before{content:"";position:absolute;left:14px;top:13px;width:17px;height:17px;border:2px solid var(--accent);border-radius:5px}
+@media (max-width:560px){body{font-size:16px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.shots{grid-template-columns:repeat(2,minmax(0,1fr))}.bars div{grid-template-columns:128px 1fr}.tag{margin-left:0;display:table;margin-top:6px}.model{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<main class="wrap">
+<h1>Tes vidéos Family Quest : comment les rendre plus rythmées</h1>
+<p class="lead">Voici ce qui ressort de l'analyse de tes 20 vidéos. Pour les améliorer, tout tient en une phrase : <b>parle du problème du parent dès le début, puis montre en une seule scène que ton app le règle, sans expliquer comment elle marche.</b></p>
+<div class="summary"><b>Ce que je changerais, dans l'ordre</b>
+<ol>
+<li>Une seule scène qui donne envie de l'app, sans expliquer son fonctionnement.</li>
+<li>Une première phrase qui parle du problème du parent, pas de l'app ni du jeu.</li>
+<li>Des vidéos de 8 à 15 secondes, au lieu de 14 à 32.</li>
+<li>Du vrai : tes mains, ta voix, ta maison. Aucun parent généré par IA.</li>
+<li>Le téléphone filmé net et bien cadré, au lieu d'être en biais.</li>
+</ol></div>
+
+<h2>Ce qui est déjà bon, et que je garderais</h2>
+<p>Ces quatre idées sont les meilleures de la série. Il faut juste les pousser plus loin.</p>
+%%G2%%
+<ul>
+<li><b>Le compteur des 35 rappels.</b> Le parent voit combien de fois il répète la même chose, pour une seule tâche.</li>
+<li><b>« Maman, je peux jouer à Roblox ? »</b> C'est ta meilleure accroche : tout parent entend cette phrase, et Roblox, tout le monde connaît.</li>
+<li><b>« Encore 5 minutes ! »</b> La vraie dispute du soir, en trois mots. L'idée est bonne, c'est l'image qu'il faut changer (voir plus bas).</li>
+<li><b>« Tannés de tout répéter ? »</b> Tu parles directement au parent, avec ses mots. Toutes tes vidéos pourraient commencer comme ça.</li>
+</ul>
+
+<h2>Les 5 choses qui ralentissent tes vidéos</h2>
+
+<section class="card"><h3>1. Tes vidéos expliquent l'app au lieu de montrer le besoin</h3>
+<p>Dans <span class="stat">19 vidéos sur 20</span>, on explique le fonctionnement de l'app : tu crées la mission, il la termine, tu vérifies, tu valides, il gagne du temps de jeu. Tu parles beaucoup du comment et pas assez du pourquoi. Voici ce moment d'explication, pris dans 8 vidéos différentes :</p>
+%%G1%%
+<p>Ce type de vidéo n'est pas mauvais en soi, il peut marcher de temps en temps. Mais il devient rarement viral, et tu ne peux pas faire que ça.</p>
+<div class="fix"><b>À faire :</b> fais surtout des vidéos pensées pour devenir virales. En une seule scène, le parent doit comprendre qu'il a besoin de ton app : il a mis la table, le coffre s'ouvre. Il découvrira comment s'en servir une fois dans l'app. Tu peux réutiliser un bon plan dans plusieurs vidéos en changeant l'accroche ou la musique, ça ne pose aucun problème. Garde les vidéos qui expliquent l'app pour le compte principal, mais rends-les plus longues et plus travaillées, en racontant ton histoire de créateur (voir plus bas).</div>
+</section>
+
+<section class="card"><h3>2. La première phrase doit parler du problème du parent</h3>
+<p>C'est le parent qui télécharge et qui paie, et le jeu est fait pour l'enfant. Un parent s'arrête parce qu'il se reconnaît, pas parce qu'il voit un héros ou une mission. Tes meilleures accroches le font déjà, mais <span class="stat">9 vidéos sur 20</span> commencent par une phrase qui ne parle d'aucun problème. Les deux premières images ci-dessous parlent au parent, pas les deux suivantes :</p>
+%%G6%%
+<p>Le jeu reste très important, mais il arrive après, comme réponse : c'est lui qui montre pourquoi l'enfant va enfin le faire. Aujourd'hui, 8 vidéos sur 20 ne le montrent jamais en action, et dans celle des 35 rappels, il arrive à la 22<sup>e</sup> seconde sur 30.</p>
+<div class="fix"><b>À faire :</b> d'abord le problème, dit de façon naturelle. Ensuite le geste, puis le jeu, avant la moitié de la vidéo.</div>
+</section>
+
+<section class="card"><h3>3. Le téléphone filmé se voit mal</h3>
+<p>Le téléphone est en biais, il bouge, il y a des reflets, et le pouce cache souvent ce qu'il faudrait voir. Ici, on ne lit presque rien, et le doigt est sur le bouton jaune :</p>
+%%G3%%
+<div class="fix"><b>À faire :</b> garde le format du téléphone en main, mais filme-le droit et de près, avec un deuxième téléphone bien stable. Mets-toi près d'une fenêtre sans que la lumière se reflète sur l'écran, et monte la luminosité au maximum. Nettoie l'écran avant, les traces se voient sur la vidéo. Quand tu appuies, retire vite ton doigt pour qu'on voie le résultat.</div>
+</section>
+
+<section class="card"><h3>4. Ça sent l'IA, et les gens le voient</h3>
+<p>Ces parents n'existent pas. Ensuite le texte dit « j'ai créé Family Quest », alors que ce n'est pas toi à l'image. Les parents viennent chercher la confiance, et c'est justement ce que ces images abîment. Tu as bien fait d'écrire « mise en scène » sur certaines vidéos, c'est honnête, mais ça rappelle que rien n'est vrai.</p>
+%%G4%%
+<p>Les phrases aussi sonnent IA : elles sont jolies et ne disent rien. Personne ne parle comme ça à la maison :</p>
+<ul class="quotes"><li>« Votre calendrier ouvre une aventure. »</li><li>« Un cadre partagé par la famille. »</li><li>« Le rendez-vous de toute la famille. »</li><li>« Le quotidien devient une mission. »</li><li>« Un moment choisi ensemble. »</li><li>« Les règles sont posées dès le départ. »</li></ul>
+<div class="fix"><b>À faire :</b> n'utilise aucun humain généré par IA. TikTok demande en plus de signaler ce type d'image. L'IA reste très utile pour ce qui est déjà de la fiction, comme ta mascotte. Un dragon qui parle est imaginaire de toute façon : personne ne se sent trompé, et les parents ne remarqueront même pas qu'il vient de l'IA. Tu n'as pas à montrer ta tête : tes mains, ta table et ta cuisine suffisent. Et tu enregistres déjà ta voix, c'est vraiment bien, garde ça. Mets-la sur toutes tes vidéos : 10 sur 20 n'ont encore que de la musique.</div>
+</section>
+
+<section class="card"><h3>5. Les diapos sont lentes et trop chargées</h3>
+<p>Dans les vidéos en diapositives, l'image reste presque figée pendant <span class="stat">plus de la moitié du temps</span> : 69 % sur celle du calendrier, 61 % sur « La table est mise », 56 % sur « 18 heures ». Sur TikTok, ça ressemble tout de suite à une publicité.</p>
+%%G5%%
+<ul>
+<li><b>« 01 / 08 »</b> annonce au spectateur qu'il lui reste 7 écrans : il part.</li>
+<li><b>Les petits textes du bas</b> (à 92 % de la hauteur) passent sous la légende de TikTok, et personne ne peut les lire.</li>
+<li><b>« C'est fait ! »</b> déborde de son cercle, et le fond et le texte se contredisent : on voit une table mise, puis on lit « Ranger ta chambre ».</li>
+<li><b>Les écrans redessinés</b> (Quentin, Léa) ne sont pas ton app. On voit bien que c'est refait, et on se demande à quoi ressemble la vraie.</li>
+</ul>
+<div class="fix"><b>À faire :</b> en vidéo, l'image doit changer toutes les 2 à 3 secondes, et il faut montrer ta vraie app. Si tu aimes ce style d'images, publie plutôt de vrais carrousels photo sur TikTok : c'est le spectateur qui tourne les images, à son rythme (voir plus bas).</div>
+</section>
+
+<h2>Tes accroches, réécrites</h2>
+<p>La première phrase décide de tout. La règle : le problème du parent, dit de façon naturelle, pas un slogan. Garde seulement ce qui est vrai chez toi, et change les mots s'il le faut.</p>
+<div class="tablewrap"><table>
+<thead><tr><th>Aujourd'hui</th><th>À la place</th></tr></thead>
+<tbody>
+<tr><td>Une mission à la fois.</td><td>Il est 18 h et tu répètes encore de mettre la table.</td></tr>
+<tr><td>Votre calendrier ouvre une aventure.</td><td>J'ai créé un jeu vidéo pour que mon fils range sa chambre.</td></tr>
+<tr><td>Son héros. Son envie d'avancer.</td><td>Le lave-vaisselle n'est pas vidé, et il te demande déjà de jouer.</td></tr>
+<tr><td>Le rendez-vous de toute la famille.</td><td>« C'est pas mon tour ! » Tous les soirs, pour la table.</td></tr>
+<tr><td>Et si la récompense se choisissait ensemble ?</td><td>Il fait ses tâches seulement si tu lui promets quelque chose ?</td></tr>
+<tr><td>5 rappels × 7 jours. 35 rappels par semaine.</td><td>« Mets la table. » 1 825 fois par an.</td></tr>
+<tr><td>TDAH et routines. Et si on rendait le but visible ?</td><td>Ton enfant TDAH oublie la table, mais jamais son jeu ?</td></tr>
+<tr><td>« Maman, je peux jouer à Roblox ? »</td><td>Garde-la telle quelle, et enchaîne sur : « Oui. Après la table. »</td></tr>
+</tbody></table></div>
+
+<h3 class="sub">Et n'hésite pas à faire plus jeune</h3>
+<p>Ces formats de phrases reviennent partout sur TikTok et Instagram, y compris dans des vidéos à plusieurs centaines de milliers de vues. Ton ton actuel est trop sage. Tu les écris en gros sur l'image, sans explication, et tu peux reprendre le même plan en changeant juste la phrase.</p>
+<div class="tablewrap"><table>
+<thead><tr><th>Le format, avec une vraie vidéo</th><th>Pour Family Quest</th></tr></thead>
+<tbody>
+<tr><td><a href="https://www.instagram.com/reel/DSAtXLkEfv_/">« POV : ton podcast devient humain »</a><br>Studley AI, 10,8 M de vues</td><td>POV : ton fils te demande de jouer alors qu'il n'a pas rangé la vaisselle.</td></tr>
+<tr><td><a href="https://www.tiktok.com/@vicandjayfinds/video/7677733579345972510">« POV : tu as trouvé comment faire VOULOIR à tes enfants faire leurs tâches »</a><br>59 500 vues, dans ta niche</td><td>POV : tu as trouvé comment lui donner ENVIE de mettre la table.</td></tr>
+<tr><td><a href="https://www.tiktok.com/@andreacuentacuentos/video/7573513914735021367">« Pardon !!! Ça existait et PERSONNE ne me l'a dit ?! »</a><br>Readmio, 444 200 vues, pour les parents</td><td>Comment ça, il existe une application où les enfants jouent seulement s'ils ont rangé la vaisselle ?</td></tr>
+<tr><td><a href="https://www.tiktok.com/@teho_champion/video/7423417728817466657">« Pourquoi personne ne m'en a parlé plus tôt ? »</a><br>206 800 vues</td><td>Pourquoi personne ne t'a parlé de cette application avant qu'il négocie ses « 5 minutes » ?</td></tr>
+<tr><td><a href="https://www.tiktok.com/@melaniemrdn/video/7632671883736993046">« Ne me remerciez pas »</a><br>1 489 likes, en français</td><td>Parents, ne me remerciez pas : la table se met toute seule maintenant.</td></tr>
+</tbody></table></div>
+<p>Une seule précaution : le jeu dont on parle, c'est celui de Family Quest. Ne laisse pas croire que l'app bloque Roblox ou les autres jeux du téléphone.</p>
+
+<h2>6 vidéos à copier, sans montrer ta tête</h2>
+<p>Ces formats viennent de ce qui a le mieux marché, surtout dans d'autres niches. Les vidéos Cal AI, CalScan, Kitty, « 3 types d'étudiants » et Hearth totalisent 91 millions de vues, et 6 de ces 7 vidéos durent moins de 18 secondes. Pour chacune : ce qu'elle fait, puis comment l'appliquer à Family Quest. Regarde les vraies vidéos en entier, tu verras tout de suite le rythme. Les images sont des exemples pour situer chaque plan, tu filmes ensuite les tiens.</p>
+%%RECIPES%%
+
+<h2>5 carrousels à copier</h2>
+<p>Un carrousel, c'est une série de photos qu'on fait défiler sur TikTok. Il suffit de quelques photos et de ton téléphone. Les chiffres viennent de TikTok, relevés le 4 novembre 2026. Chaque exemple reprend le style de texte du carrousel d'origine : même type de police, même taille et même place sur l'image. Les photos sont des exemples trouvés sur Pinterest, pour montrer le style à viser : des images qui font vraies, pas des images de publicité. Pour publier, prends tes propres photos.</p>
+%%CAROUSELS%%
+
+%%FOUNDER%%
+
+<section class="card"><h3>Bonus : si tu es prêt à filmer ton enfant</h3>
+<p>Aucune obligation, toutes les fiches marchent sans. Mais si tu es d'accord pour le filmer de dos, ou juste ses mains d'enfant sur l'application, ça rend la vidéo encore plus vraie :</p>
+<ul>
+<li>Ses petites mains qui appuient sur « J'ai fini ».</li>
+<li>Ses mains qui posent les assiettes sur la table.</li>
+<li>Lui de dos, en train de jouer, pour finir la vidéo.</li>
+</ul>
+</section>
+
+<h2>Ta liste avant de publier une vidéo courte</h2>
+<p>Si tu ne peux pas cocher tout ça, la vidéo n'est pas prête :</p>
+<ul class="check">
+<li>Son coupé, on comprend la situation en 2 secondes.</li>
+<li>Une seule scène suffit pour comprendre qu'on a besoin de l'app, sans explication. La vidéo dure moins de 15 secondes.</li>
+<li>La première phrase parle du problème du parent, et le jeu arrive avant la moitié de la vidéo.</li>
+<li>L'image change toutes les 2 à 3 secondes.</li>
+<li>Aucun humain généré par IA, et ce qu'on voit à l'écran est la vraie app.</li>
+<li>La première phrase est naturelle, comme on parle vraiment.</li>
+<li>Aucun texte important dans le bas de l'image.</li>
+<li>Le nom Family Quest est dit une fois, et il est dans le commentaire épinglé. Pas de « abonne-toi », ni de « tape Family Quest sur l'App Store ».</li>
+</ul>
+
+<h2>Ta semaine</h2>
+<ol>
+<li><b>Une heure de tournage, une seule fois.</b> Tu filmes les fiches 1, 2 et 3 avec tes mains, sur 3 tâches différentes. La fiche 4 se monte sans tournage.</li>
+<li><b>Tu montes 6 vidéos</b> avec ces images, en changeant la première phrase. Chaque vidéo doit se comprendre seule, sans avoir vu les autres.</li>
+<li><b>Tu publies une vidéo par jour</b> sur TikTok et Instagram.</li>
+<li><b>Tu ajoutes 2 carrousels</b> dans la semaine, avec des photos prises pendant le tournage.</li>
+<li><b>Au bout de 6 jours, tu regardes</b> quelle vidéo a amené le plus de téléchargements, pas seulement le plus de vues. Tu refais celle-là, avec une autre tâche.</li>
+</ol>
+</main>
+</body>
+</html>
