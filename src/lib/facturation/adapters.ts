@@ -1,5 +1,5 @@
 import { execFile } from "node:child_process";
-import { mkdtemp, rm, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { promisify } from "node:util";
@@ -294,6 +294,12 @@ export function storePort(): StorePort {
       }
     },
     async storeInvoice(row, number, pdf) {
+      // Copie sur le serveur : le job regarde le PDF en image avant de valider.
+      const localDir = process.env.FACTURES_PDF_DIR;
+      if (localDir) {
+        await mkdir(localDir, { recursive: true });
+        await writeFile(join(localDir, `${invoiceSlug(number)}.pdf`), pdf);
+      }
       const existing = check(await db.from("invoices").select("id, status").eq("number", number).maybeSingle());
       if (existing) return existing;
       const path = `${invoiceSlug(number)}.pdf`;

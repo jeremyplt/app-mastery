@@ -12,6 +12,7 @@ if ! flock -w 300 9; then
 fi
 
 export ODOO_URL=https://pitault-media.odoo.com ODOO_DB=pitault-media ODOO_LOGIN=jeremypltpro@gmail.com
+export FACTURES_PDF_DIR=/root/factures-pdf
 for name in ODOO_API_KEY NEXT_PUBLIC_SUPABASE_URL NEXT_PUBLIC_SUPABASE_ANON_KEY SUPABASE_SERVICE_ROLE_KEY BREVO_API_KEY; do
   value=$(maxxing keys get "$name")
   export "$name=$value"
