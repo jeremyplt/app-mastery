@@ -19,7 +19,7 @@ function doGet() {
 }
 
 function clean_(s) {
-  return String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').toUpperCase();
+  return String(s).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toUpperCase();
 }
 
 function child_(parent, name) {

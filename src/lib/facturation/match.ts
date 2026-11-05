@@ -43,7 +43,7 @@ const STOP = new Set(["payment", "from", "app", "mastery", "appmastery", "envoye
 export function tokens(s: string | null | undefined): string[] {
   return (s ?? "")
     .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
+    .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase()
     .split(/[^a-z0-9]+/)
     .filter((t) => t.length >= 2 && !STOP.has(t));
