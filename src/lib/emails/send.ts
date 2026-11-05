@@ -8,9 +8,17 @@ const BREVO_SMTP = "https://api.brevo.com/v3/smtp/email";
 
 export type SendResult = { ok: boolean; messageId?: string; error?: string };
 
+// Pièces jointes en base64 et copie cachée, pour les emails qui en ont besoin
+// (les factures).
+export type SendOptions = {
+  attachments?: { name: string; content: string }[];
+  bcc?: { email: string }[];
+};
+
 export async function sendBuiltEmail(
   to: { email: string; name?: string },
   built: BuiltEmail,
+  options: SendOptions = {},
 ): Promise<SendResult> {
   const apiKey = process.env.BREVO_API_KEY;
   if (!apiKey) return { ok: false, error: "BREVO_API_KEY manquante" };
@@ -25,6 +33,8 @@ export async function sendBuiltEmail(
       subject: built.subject,
       htmlContent: built.html,
       tags: [built.tag],
+      ...(options.attachments?.length ? { attachment: options.attachments } : {}),
+      ...(options.bcc?.length ? { bcc: options.bcc } : {}),
     }),
   });
   const body = await res.text();

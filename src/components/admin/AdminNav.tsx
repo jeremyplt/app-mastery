@@ -7,6 +7,7 @@ import ThemeToggle from "@/components/ThemeToggle";
 export type AdminSection =
   | "crm"
   | "ventes"
+  | "factures"
   | "eleves"
   | "commissions"
   | "chiffre-affaires"
@@ -36,6 +37,7 @@ const GROUPS: Group[] = [
     label: "Ventes",
     items: [
       { id: "ventes", label: "Ventes", href: "/admin/ventes" },
+      { id: "factures", label: "Factures", href: "/admin/factures", ownerOnly: true },
       { id: "commissions", label: "Commissions", href: "/admin/commissions", ownerOnly: true, closerToo: true },
       { id: "chiffre-affaires", label: "Chiffre d'affaires", href: "/admin/chiffre-affaires", ownerOnly: true },
     ],
