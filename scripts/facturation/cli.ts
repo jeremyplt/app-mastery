@@ -20,6 +20,7 @@ async function replay() {
   const invoices = await kw<{ id: number; name: string; partner_id: [number, string]; narration: string | false; fiscal_position_id: [number, string] | false; invoice_line_ids: number[]; currency_id: [number, string] }[]>("account.move", "search_read", [[["move_type", "=", "out_invoice"], ["state", "=", "posted"]]], { fields: ["name", "partner_id", "narration", "fiscal_position_id", "invoice_line_ids", "currency_id"], order: "name" });
   const port = odooClient().port;
   const diffs: unknown[] = [];
+  const cases: Record<string, number> = {};
   let same = 0;
   for (const inv of invoices) {
     const f = await port.partnerFacts(inv.partner_id[0]);
@@ -32,10 +33,12 @@ async function replay() {
       diffs.push({ facture: inv.name, client: inv.partner_id[1], regle: d.reason, reel: { taxe: actualTax, mention: actualMention?.slice(0, 30) ?? null } });
       continue;
     }
+    const label = `position ${d.positionId}, taxe ${d.taxId}, ${d.mention ? d.mention.slice(0, 24) : "sans mention"}`;
+    cases[label] = (cases[label] ?? 0) + 1;
     if (d.taxId === actualTax && (d.mention ?? null) === actualMention) same += 1;
     else diffs.push({ facture: inv.name, client: inv.partner_id[1], pays: f.countryCode, societe: f.isCompany, regle: { taxe: d.taxId, mention: d.mention?.slice(0, 30) ?? null }, reel: { taxe: actualTax, mention: actualMention?.slice(0, 30) ?? null } });
   }
-  print({ total: invoices.length, identiques: same, differences: diffs });
+  print({ total: invoices.length, identiques: same, repartition: cases, differences: diffs });
 }
 
 async function main() {
