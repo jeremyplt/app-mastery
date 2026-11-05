@@ -7,11 +7,15 @@
 //   assign <virement> <élève> rattache un virement à un élève, contrôles compris
 //   retry <clé>               relance une facture après correction
 //   smoke <fiches> [--garder] essai de création dans Odoo avec des brouillons
+//   justificatifs             fait relire par l'IA les justificatifs reçus
+import { readFile } from "node:fs/promises";
 import { createClient } from "@supabase/supabase-js";
 import { odooClient, realDeps } from "@/lib/facturation/adapters";
 import { classifyLine, matchStudents, type BankLine } from "@/lib/facturation/match";
 import { run, scan, type Plan } from "@/lib/facturation/pipeline";
-import { fileInvoices, syncProofs } from "@/lib/facturation/sweeps";
+import { fileInvoices, reviewProofs, syncProofs } from "@/lib/facturation/sweeps";
+import { readProof } from "@/lib/facturation/proof-ai";
+import { proofVerdict } from "@/lib/residence-rules";
 import { notifyPort } from "@/lib/facturation/adapters";
 import { decideTax, htFromTtc, MENTION_AUTOLIQUIDATION, MENTION_PARTICULIER_HORS_UE, MENTION_SOCIETE_HORS_UE, PRODUCT } from "@/lib/facturation/rules";
 
@@ -109,6 +113,15 @@ async function main() {
       return replay();
     case "replay-virements":
       return replayLines();
+    case "justificatifs":
+      return print(await reviewProofs(new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Luxembourg" }).format(new Date())));
+    // Essai sur un fichier, sans rien enregistrer : proof-essai <fichier> <mime> <nom> <adresse> <date du jour>
+    case "proof-essai": {
+      const [file, mime, name, address, today] = args;
+      const x = await readProof(await readFile(file), mime, { name, address: address || null, today });
+      const r = proofVerdict(x, today, Boolean(address));
+      return print({ verdict: r.verdict, nom: r.checks.name, adresse: r.checks.address, document: r.checks.document, recent: r.checks.recent, note: r.note, suspect: x.suspicious_content });
+    }
     case "smoke":
       return smoke(args.filter((a) => /^\d+$/.test(a)).map(Number), args.includes("--garder"));
     case "supprimer-brouillon":

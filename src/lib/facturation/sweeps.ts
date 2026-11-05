@@ -1,6 +1,8 @@
 import { createClient } from "@supabase/supabase-js";
 import { INVOICE_BUCKET } from "@/lib/invoices";
 import { PROOF_BUCKET } from "@/lib/residence-proofs";
+import { proofVerdict } from "@/lib/residence-rules";
+import { readProof } from "./proof-ai";
 import { odooClient } from "./adapters";
 import type { NotifyPort } from "./pipeline";
 import { POSITION } from "./rules";
@@ -97,4 +99,50 @@ export async function syncProofs(notify: NotifyPort, out: Sweep): Promise<void> 
       await notify.post({ title: "Justificatif validé, rangement à reprendre", body: message, level: "warning", dedupe: `justificatif-${p.id}-${message.slice(0, 30)}` });
     }
   }
+}
+
+const MAX_AI_ATTEMPTS = 3;
+
+// Fait relire par l'IA les justificatifs reçus et pas encore traités par Jeremy.
+// Le résultat ne sert qu'à l'affichage dans le CRM : rien n'est validé, rien
+// n'est envoyé à l'élève.
+export async function reviewProofs(today: string): Promise<{ lus: number; erreurs: string[] }> {
+  const client = db();
+  const out = { lus: 0, erreurs: [] as string[] };
+  const { data: rows, error } = await client.from("residence_proofs").select("id, file_path, mime_type, ai_attempts, student_id, students(name, odoo_partner_id, sale:sales(first_name, last_name, billing))").eq("status", "pending").eq("ai_status", "pending").order("created_at").limit(5);
+  if (error) throw new Error(error.message);
+  if (!rows?.length) return out;
+  const odoo = odooClient();
+  type Sale = { first_name?: string; last_name?: string | null; billing?: Record<string, string> | null };
+  type St = { name: string; odoo_partner_id: number | null; sale: Sale | Sale[] | null };
+  for (const p of rows) {
+    const attempts = (p.ai_attempts ?? 0) + 1;
+    await client.from("residence_proofs").update({ ai_attempts: attempts }).eq("id", p.id);
+    try {
+      const st = (Array.isArray(p.students) ? p.students[0] : p.students) as unknown as St | null;
+      const sale = Array.isArray(st?.sale) ? st?.sale[0] : st?.sale;
+      const b = sale?.billing ?? {};
+      let name = [sale?.first_name, sale?.last_name].filter(Boolean).join(" ") || (st?.name ?? "");
+      let address = [b["Adresse postale"], b["Code postal"], b["Ville"], b["Pays"]].filter(Boolean).join(", ") || null;
+      // Sans contrat dans le CRM, on reprend la fiche Odoo de l'élève.
+      if (st?.odoo_partner_id && (!sale || !address)) {
+        const [partner] = await odoo.kw<{ name: string; is_company: boolean; street: string | false; zip: string | false; city: string | false; country_id: [number, string] | false }[]>("res.partner", "read", [[st.odoo_partner_id], ["name", "is_company", "street", "zip", "city", "country_id"]]);
+        if (partner && !partner.is_company) {
+          if (!sale) name = partner.name;
+          address = address ?? ([partner.street, partner.zip, partner.city, partner.country_id ? partner.country_id[1] : null].filter(Boolean).join(", ") || null);
+        }
+      }
+      const { data: blob, error: dlError } = await client.storage.from(PROOF_BUCKET).download(p.file_path);
+      if (dlError || !blob) throw new Error("Document introuvable");
+      const extract = await readProof(Buffer.from(await blob.arrayBuffer()), p.mime_type, { name, address, today });
+      const review = proofVerdict(extract, today, Boolean(address));
+      await client.from("residence_proofs").update({ ai_status: "done", ai_verdict: review.verdict, ai_result: { ...review, expected: { name, address } }, ai_checked_at: new Date().toISOString(), ai_error: null }).eq("id", p.id);
+      out.lus += 1;
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      out.erreurs.push(`${p.id} : ${message}`);
+      await client.from("residence_proofs").update({ ai_error: message.slice(0, 300), ...(attempts >= MAX_AI_ATTEMPTS ? { ai_status: "error" } : {}) }).eq("id", p.id);
+    }
+  }
+  return out;
 }
