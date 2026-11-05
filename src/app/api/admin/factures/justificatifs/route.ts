@@ -34,11 +34,14 @@ export async function GET() {
         const address = [b["Adresse postale"], b["Code postal"], b["Ville"], b["Pays"]].filter(Boolean).join(", ");
         return { id: s.id, name: s.name, email: s.email ?? sale?.email ?? null, link: proofUrl(s.proof_token), requestedAt: s.proof_requested_at, address: address || null };
       });
+    // Le nom reste affiché même si l'élève a été archivé entre-temps.
+    const names = new Map((students ?? []).map((s) => [s.id, s.name]));
     return NextResponse.json({
       students: list,
       proofs: proofs.map((p) => ({
         id: p.id,
         studentId: p.student_id,
+        studentName: names.get(p.student_id) ?? "Élève",
         createdAt: p.created_at,
         fileName: p.file_name,
         mimeType: p.mime_type,

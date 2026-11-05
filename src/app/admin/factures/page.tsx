@@ -26,7 +26,7 @@ type Invoice = {
 type Student = { id: string; name: string; email: string | null };
 type ToCheck = { key: string; date: string; amount: number; label: string; reason: string };
 type ProofStudent = { id: string; name: string; email: string | null; link: string; requestedAt: string | null; address: string | null };
-type Proof = { id: string; studentId: string; createdAt: string; fileName: string; status: "pending" | "accepted" | "rejected"; rejectReason: string | null; synced: boolean; syncError: string | null; url: string | null };
+type Proof = { id: string; studentId: string; studentName: string; createdAt: string; fileName: string; status: "pending" | "accepted" | "rejected"; rejectReason: string | null; synced: boolean; syncError: string | null; url: string | null };
 type Tab = "todo" | "sent" | "no_send";
 type Edit = { client_email: string; email_subject: string; email_body: string };
 
@@ -418,7 +418,7 @@ export default function FacturesPage() {
                     <li key={p.id} className="py-3">
                       <div className="flex flex-wrap items-center justify-between gap-2">
                         <p className="text-[14px] font-bold">
-                          {st?.name ?? "Élève"} · {shortDate(p.createdAt)}
+                          {p.studentName} · {shortDate(p.createdAt)}
                         </p>
                         <span className={`rounded-md px-2 py-0.5 text-xs font-bold ${p.status === "accepted" ? CHIP.green : p.status === "rejected" ? "bg-[color-mix(in_srgb,var(--red)_14%,transparent)] text-[var(--red)]" : CHIP.orange}`}>
                           {p.status === "accepted" ? (p.synced ? "Validé et rangé" : "Validé") : p.status === "rejected" ? "Refusé" : "À vérifier"}
