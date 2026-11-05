@@ -175,7 +175,7 @@ async function planForStudent(line: BankLine, student: Student, deps: Deps): Pro
     await deps.store.linkStudentPartner(student.id, partnerId);
   }
 
-  const { tax } = await facts(deps, partnerId);
+  const { partner, tax } = await facts(deps, partnerId);
   if (!tax.ok) return { handoff: `${student.name} : ${tax.reason}` };
 
   const amounts = student.schedule.map((e) => e.amount);
@@ -207,7 +207,7 @@ async function planForStudent(line: BankLine, student: Student, deps: Deps): Pro
       narration: parts.length ? parts.join("\n") : null,
       line: { productId, name: null, priceUnit: ht, taxId: tax.taxId },
       sendEmail: true,
-      clientEmail: student.email,
+      clientEmail: student.email ?? partner.email,
       reserve: { vat: round2(line.amount - ht), closer: student.commissionPerInstallment },
       kind: "new",
     },
