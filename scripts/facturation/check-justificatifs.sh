@@ -8,6 +8,7 @@ cd "$(dirname "$0")/../.."
 exec 9>/run/lock/factures-justificatifs.lock
 flock -n 9 || exit 0
 
+export PATH="/root/.local/bin:/usr/local/bin:$PATH"
 export ODOO_URL=https://pitault-media.odoo.com ODOO_DB=pitault-media ODOO_LOGIN=jeremypltpro@gmail.com
 for name in ODOO_API_KEY NEXT_PUBLIC_SUPABASE_URL NEXT_PUBLIC_SUPABASE_ANON_KEY SUPABASE_SERVICE_ROLE_KEY BREVO_API_KEY; do
   value=$(maxxing keys get "$name")

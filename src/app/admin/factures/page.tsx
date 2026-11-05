@@ -26,7 +26,9 @@ type Invoice = {
 type Student = { id: string; name: string; email: string | null };
 type ToCheck = { key: string; date: string; amount: number; label: string; reason: string };
 type ProofStudent = { id: string; name: string; email: string | null; link: string; requestedAt: string | null; address: string | null };
-type Proof = { id: string; studentId: string; studentName: string; createdAt: string; fileName: string; status: "pending" | "accepted" | "rejected"; rejectReason: string | null; synced: boolean; syncError: string | null; url: string | null };
+type AiCheck = { status: "ok" | "ko" | "unknown"; value: string | null };
+type AiReview = { status: "pending" | "done" | "error"; verdict: "valid" | "invalid" | "check" | null; result: { checks: { name: AiCheck; address: AiCheck; document: AiCheck; recent: AiCheck }; note: string; expected?: { name: string; address: string | null } } | null };
+type Proof = { id: string; studentId: string; studentName: string; createdAt: string; fileName: string; status: "pending" | "accepted" | "rejected"; rejectReason: string | null; synced: boolean; syncError: string | null; url: string | null; ai: AiReview };
 type Tab = "todo" | "sent" | "no_send";
 type Edit = { client_email: string; email_subject: string; email_body: string };
 
@@ -51,6 +53,47 @@ function tabOf(status: Status): Tab {
   if (status === "sent") return "sent";
   if (status === "no_send") return "no_send";
   return "todo";
+}
+
+const AI_VERDICT = {
+  valid: { label: "IA : valide", cls: CHIP.green },
+  invalid: { label: "IA : non valide", cls: "bg-[color-mix(in_srgb,var(--red)_14%,transparent)] text-[var(--red)]" },
+  check: { label: "IA : à vérifier", cls: CHIP.orange },
+};
+const AI_MARK = {
+  ok: { icon: "✓", label: "correct", cls: "text-[var(--green)]" },
+  ko: { icon: "✗", label: "problème", cls: "text-[var(--red)]" },
+  unknown: { icon: "?", label: "à vérifier", cls: "text-[var(--orange)]" },
+};
+
+function AiChecks({ ai }: { ai: AiReview }) {
+  if (!ai.result) return null;
+  const rows: [string, AiCheck][] = [
+    ["Nom et prénom", ai.result.checks.name],
+    ["Adresse", ai.result.checks.address],
+    ["Type de document", ai.result.checks.document],
+    ["Moins de 3 mois", ai.result.checks.recent],
+  ];
+  return (
+    <div className="mt-2 rounded-lg bg-[var(--field)] px-3 py-2">
+      <ul className="space-y-1">
+        {rows.map(([label, c]) => (
+          <li key={label} className="flex gap-2 text-[13px] font-medium">
+            <span aria-label={AI_MARK[c.status].label} className={`w-3 shrink-0 font-bold ${AI_MARK[c.status].cls}`}>
+              {AI_MARK[c.status].icon}
+            </span>
+            <span>
+              <span className="font-bold">{label}</span>
+              {c.value ? <span className="text-[var(--fg2)]"> : {c.value}</span> : null}
+            </span>
+          </li>
+        ))}
+      </ul>
+      {ai.result.note && <p className="mt-2 text-[13px] font-medium">{ai.result.note}</p>}
+      {ai.result.expected?.address && <p className="mt-1 text-[12.5px] font-medium text-[var(--fg2)]">Comparé à : {ai.result.expected.name}, {ai.result.expected.address}</p>}
+      <p className="mt-1 text-[12.5px] font-medium text-[var(--fg2)]">Avis indicatif de l&apos;IA : c&apos;est toi qui décides, rien n&apos;est envoyé à l&apos;élève.</p>
+    </div>
+  );
 }
 
 const editOf = (i: Invoice): Edit => ({ client_email: i.client_email ?? "", email_subject: i.email_subject, email_body: i.email_body });
@@ -114,6 +157,15 @@ export default function FacturesPage() {
   useEffect(() => {
     loadProofs().catch(() => undefined);
   }, [loadProofs]);
+
+  // L'avis de l'IA arrive quelques minutes après le dépôt : on le fait apparaître
+  // tout seul si la page est restée ouverte.
+  const aiPending = proofs.some((p) => p.status === "pending" && p.ai.status === "pending");
+  useEffect(() => {
+    if (!aiPending) return;
+    const timer = setInterval(() => loadProofs().catch(() => undefined), 30_000);
+    return () => clearInterval(timer);
+  }, [aiPending, loadProofs]);
 
   const counts = useMemo(() => {
     const c: Record<Tab, number> = { todo: 0, sent: 0, no_send: 0 };
@@ -420,10 +472,16 @@ export default function FacturesPage() {
                         <p className="text-[14px] font-bold">
                           {p.studentName} · {shortDate(p.createdAt)}
                         </p>
-                        <span className={`rounded-md px-2 py-0.5 text-xs font-bold ${p.status === "accepted" ? CHIP.green : p.status === "rejected" ? "bg-[color-mix(in_srgb,var(--red)_14%,transparent)] text-[var(--red)]" : CHIP.orange}`}>
-                          {p.status === "accepted" ? (p.synced ? "Validé et rangé" : "Validé") : p.status === "rejected" ? "Refusé" : "À vérifier"}
+                        <span className="flex flex-wrap items-center gap-1.5">
+                          {p.ai.status === "done" && p.ai.verdict && <span className={`rounded-md px-2 py-0.5 text-xs font-bold ${AI_VERDICT[p.ai.verdict].cls}`}>{AI_VERDICT[p.ai.verdict].label}</span>}
+                          {p.ai.status === "pending" && p.status === "pending" && <span className="rounded-md bg-[var(--field)] px-2 py-0.5 text-xs font-bold text-[var(--fg2)]">IA : lecture en cours</span>}
+                          {p.ai.status === "error" && <span className="rounded-md bg-[var(--field)] px-2 py-0.5 text-xs font-bold text-[var(--fg2)]">IA : lecture impossible</span>}
+                          <span className={`rounded-md px-2 py-0.5 text-xs font-bold ${p.status === "accepted" ? CHIP.green : p.status === "rejected" ? "bg-[color-mix(in_srgb,var(--red)_14%,transparent)] text-[var(--red)]" : CHIP.orange}`}>
+                            {p.status === "accepted" ? (p.synced ? "Validé et rangé" : "Validé") : p.status === "rejected" ? "Refusé" : "À vérifier"}
+                          </span>
                         </span>
                       </div>
+                      {p.ai.status === "done" && <AiChecks ai={p.ai} />}
                       {st?.address && <p className="text-[13px] font-medium text-[var(--fg2)]">Adresse du contrat : {st.address}</p>}
                       {p.rejectReason && <p className="text-[13px] font-medium text-[var(--fg2)]">Motif : {p.rejectReason}</p>}
                       {p.syncError && <p className="text-[13px] font-semibold text-[var(--orange)]">Rangement à reprendre : {p.syncError}</p>}

@@ -50,6 +50,7 @@ export async function GET() {
         synced: Boolean(p.synced_at),
         syncError: p.sync_error,
         url: urls.get(p.file_path) ?? null,
+        ai: { status: p.ai_status, verdict: p.ai_verdict, result: p.ai_result },
       })),
     });
   } catch (err) {
