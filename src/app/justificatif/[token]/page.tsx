@@ -13,6 +13,11 @@ type Status = "loading" | "invalid" | "none" | "pending" | "accepted" | "rejecte
 const MAX_BYTES = 10 * 1024 * 1024;
 const OK_TYPES = ["application/pdf", "image/jpeg", "image/png", "image/heic", "image/heif", "image/webp"];
 
+function fileSize(bytes: number) {
+  if (bytes < 1024 * 1024) return `${Math.max(1, Math.round(bytes / 1024))} Ko`;
+  return `${(bytes / (1024 * 1024)).toFixed(1).replace(".", ",")} Mo`;
+}
+
 export default function JustificatifPage() {
   const { token } = useParams<{ token: string }>();
   const [status, setStatus] = useState<Status>("loading");
@@ -21,7 +26,19 @@ export default function JustificatifPage() {
   const [file, setFile] = useState<File | null>(null);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [dragging, setDragging] = useState(false);
   const input = useRef<HTMLInputElement>(null);
+
+  // Un fichier lâché à côté de la zone ne doit pas faire quitter la page.
+  useEffect(() => {
+    const stop = (e: DragEvent) => e.preventDefault();
+    window.addEventListener("dragover", stop);
+    window.addEventListener("drop", stop);
+    return () => {
+      window.removeEventListener("dragover", stop);
+      window.removeEventListener("drop", stop);
+    };
+  }, []);
 
   useEffect(() => {
     fetch(`/api/justificatif?token=${token}`)
@@ -42,7 +59,8 @@ export default function JustificatifPage() {
       if (input.current) input.current.value = "";
       return setError("Ce fichier dépasse 10 Mo. Essaie une photo moins lourde ou un PDF.");
     }
-    if (f && f.type && !OK_TYPES.includes(f.type)) {
+    const typeOk = f && (f.type ? OK_TYPES.includes(f.type) : /\.hei[cf]$/i.test(f.name));
+    if (f && !typeOk) {
       setFile(null);
       if (input.current) input.current.value = "";
       return setError("Envoie un PDF ou une photo (JPG, PNG ou HEIC).");
@@ -129,9 +147,61 @@ export default function JustificatifPage() {
             </div>
 
             <form onSubmit={submit} className="mac-group mt-4 p-5">
-              <label className="block">
-                <span className="mb-2 block text-[15px] font-bold">Ton document (PDF ou photo, 10 Mo maximum)</span>
-                <input ref={input} className="mac-field" type="file" accept="application/pdf,image/*" onChange={(e) => pick(e.target.files?.[0] ?? null)} />
+              <label
+                onDragEnter={(e) => {
+                  e.preventDefault();
+                  setDragging(true);
+                }}
+                onDragOver={(e) => {
+                  e.preventDefault();
+                  e.dataTransfer.dropEffect = "copy";
+                }}
+                onDragLeave={(e) => {
+                  if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setDragging(false);
+                }}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  setDragging(false);
+                  if (input.current) input.current.value = "";
+                  pick(e.dataTransfer.files[0] ?? null);
+                }}
+                className={`flex min-h-[190px] cursor-pointer flex-col items-center justify-center gap-2 rounded-[14px] border-2 border-dashed px-5 py-8 text-center transition-colors focus-within:border-[var(--accent)] focus-within:ring-2 focus-within:ring-[var(--accent)] ${
+                  dragging
+                    ? "border-[var(--accent)] bg-[color-mix(in_srgb,var(--accent)_14%,transparent)]"
+                    : file
+                      ? "border-[var(--green)] bg-[color-mix(in_srgb,var(--green)_9%,transparent)]"
+                      : "border-[color-mix(in_srgb,var(--fg)_28%,transparent)] bg-[var(--field)] hover:border-[var(--accent)] hover:bg-[color-mix(in_srgb,var(--accent)_8%,transparent)]"
+                }`}
+              >
+                <input ref={input} className="sr-only" type="file" accept="application/pdf,image/*" onChange={(e) => pick(e.target.files?.[0] ?? null)} />
+                {file ? (
+                  <>
+                    <svg aria-hidden="true" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="text-[var(--green)]">
+                      <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" />
+                      <path d="M14 3v5h5" />
+                      <path d="m9 14 2 2 4-4" />
+                    </svg>
+                    <span className="max-w-full break-all text-[16px] font-bold" aria-live="polite">
+                      {file.name}
+                    </span>
+                    <span className="text-[14px] font-medium text-[var(--fg2)]">{fileSize(file.size)}, prêt à envoyer</span>
+                    <span className="text-[14px] font-semibold text-[var(--accent2)] underline">Choisir un autre fichier</span>
+                  </>
+                ) : (
+                  <>
+                    <svg aria-hidden="true" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className={dragging ? "text-[var(--accent2)]" : "text-[var(--fg2)]"}>
+                      <path d="M12 16V5" />
+                      <path d="m7 10 5-5 5 5" />
+                      <path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3" />
+                    </svg>
+                    <span className="text-[17px] font-bold">{dragging ? "Lâche ton document ici" : "Dépose ton document ici"}</span>
+                    <span className="text-[15px] font-medium text-[var(--fg2)]">
+                      <span className="[@media(hover:none)]:hidden">Glisse-le dans ce cadre, ou clique pour le choisir</span>
+                      <span className="hidden [@media(hover:none)]:inline">Touche ce cadre pour le choisir</span>
+                    </span>
+                    <span className="text-[13px] font-medium text-[var(--fg2)]">PDF ou photo, 10 Mo maximum</span>
+                  </>
+                )}
               </label>
               {error && (
                 <p role="alert" className="mt-3 text-sm font-semibold text-[var(--red)]">
