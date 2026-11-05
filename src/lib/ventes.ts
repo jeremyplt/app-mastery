@@ -5,6 +5,7 @@ import { adminAlert, contractReminder, formatDueDate, formatMoney, paymentRemind
 import { BILLING_FIELDS, contractsConfigured, contractStatus, type Billing } from "@/lib/docuseal";
 import { esc } from "@/lib/emails/layout";
 import { inviteToSkool } from "@/lib/skool";
+import { proofDecision, requestProofAfterSignature } from "@/lib/residence-proofs";
 import { sendMetaEvent } from "@/lib/meta-capi";
 import { addMonths, type StudentPayment } from "@/lib/students";
 import { sendQuestionnaire } from "@/lib/questionnaire";
@@ -348,7 +349,36 @@ export async function applyContractStatus(
     await markAlert(sale, next);
   }
   if (next === "completed") await onConfirmed(sale);
+  if (next === "completed") await requestProofIfNeeded(sale);
   return true;
+}
+
+// Après la signature : un particulier hors UE reçoit tout de suite le lien pour
+// déposer son justificatif de domicile. Sans ce document, pas de facture sans TVA.
+// Une panne ici ne doit jamais gêner le reste de la signature.
+async function requestProofIfNeeded(sale: Sale): Promise<void> {
+  try {
+    const decision = proofDecision(sale.billing);
+    if (decision === "skip") return;
+    const pays = sale.billing?.["Pays"] || "non renseigné";
+    const statut = sale.billing?.["Statut"] || "non renseigné";
+    if (decision === "check") {
+      await alertJeremy(`Justificatif de domicile : à vérifier pour ${fullName(sale)}`, [
+        `<b>${fullName(sale)}</b> a signé son contrat, mais je ne peux pas savoir si c'est un particulier hors UE (statut : ${esc(statut)}, pays : ${esc(pays)}).`,
+        "Si c'est le cas, envoie-lui la demande de justificatif depuis /admin/factures.",
+      ]);
+      return;
+    }
+    const r = await requestProofAfterSignature(sale.id);
+    if (r.action === "failed") {
+      await alertJeremy(`Justificatif de domicile : envoi échoué pour ${fullName(sale)}`, [
+        `La demande de justificatif de <b>${fullName(sale)}</b> (${esc(pays)}) n'est pas partie : ${esc(r.error ?? "erreur inconnue")}.`,
+        "Envoie-la depuis /admin/factures.",
+      ]);
+    }
+  } catch (err) {
+    console.error("Demande de justificatif :", err);
+  }
 }
 
 // Va lire le statut chez DocuSeal et l'applique. Retourne le nouveau statut

@@ -3,6 +3,8 @@ import { sendBuiltEmail } from "@/lib/emails/send";
 import { P, button, esc, signature, wrap } from "@/lib/emails/layout";
 import type { BuiltEmail } from "@/lib/emails/transactional";
 
+export { countryZone, matchesType, proofDecision } from "@/lib/residence-rules";
+
 // Justificatifs de domicile des élèves hors UE. Sans TVA, il faut pouvoir prouver
 // où le client réside en cas de contrôle (voir le dossier facturation). L'élève
 // dépose son document sur /justificatif/[token], Jeremy le valide dans le CRM,
@@ -24,17 +26,6 @@ const SITE = "https://www.jeremypitault.com";
 
 export function proofUrl(token: string): string {
   return `${SITE}/justificatif/${token}`;
-}
-
-// Le fichier reçu est-il bien du type annoncé ? On regarde ses premiers octets.
-export function matchesType(head: Uint8Array, type: string): boolean {
-  const ascii = (from: number, to: number) => String.fromCharCode(...head.subarray(from, to));
-  if (type === "application/pdf") return ascii(0, 5) === "%PDF-";
-  if (type === "image/jpeg") return head[0] === 0xff && head[1] === 0xd8 && head[2] === 0xff;
-  if (type === "image/png") return head[0] === 0x89 && ascii(1, 4) === "PNG";
-  if (type === "image/webp") return ascii(0, 4) === "RIFF" && ascii(8, 12) === "WEBP";
-  if (type === "image/heic" || type === "image/heif") return ascii(4, 8) === "ftyp";
-  return false;
 }
 
 function requestEmail(firstName: string, link: string): BuiltEmail {
@@ -76,6 +67,20 @@ export async function sendProofRequest(studentId: string): Promise<{ ok: boolean
   if (!r.ok) return { ok: false, error: r.error ?? "Envoi impossible" };
   await getAdminClient().from("students").update({ proof_requested_at: new Date().toISOString() }).eq("id", s.id);
   return { ok: true };
+}
+
+// Demande automatique après la signature du contrat. Le statut est réservé avant
+// l'envoi : la signature peut arriver en même temps par le webhook et le cron, et
+// l'élève ne doit recevoir qu'un seul mail. Ne bloque jamais la signature.
+export async function requestProofAfterSignature(saleId: string): Promise<{ action: "sent" | "already" | "failed"; error?: string }> {
+  const db = getAdminClient();
+  const { data: claimed } = await db.from("students").update({ proof_requested_at: new Date().toISOString() }).eq("sale_id", saleId).is("proof_requested_at", null).select("id");
+  const id = claimed?.[0]?.id as string | undefined;
+  if (!id) return { action: "already" };
+  const r = await sendProofRequest(id);
+  if (r.ok) return { action: "sent" };
+  await db.from("students").update({ proof_requested_at: null }).eq("id", id);
+  return { action: "failed", error: r.error };
 }
 
 export async function sendProofRejection(studentId: string, reason: string): Promise<{ ok: boolean; error?: string }> {
