@@ -175,3 +175,60 @@ Quand une leçon se généralise (elle vaut pour toutes les apps, pas juste un c
   - Les graphiques : légende hors de la courbe, dégradé sous la courbe principale, courbe « sans » en pointillé gris.
   - Quand le branding est à revoir, proposer 3 directions artistiques (polices + couleurs) avec un sélecteur en haut de la page qui change toutes les maquettes (variables CSS par thème).
 - **Écrans d'affirmation (Jeremy) :** dans un onboarding de révision, ajouter un écran « Les élèves qui ont une bonne méthodologie et les bons outils réussissent leurs examens dans 99 % des cas » et un écran « Avec et sans [app] » avec deux barres.
+
+## 2026-11-03 , Verseo : pas de conclusion sur trop peu d'événements, maquettes à refaire
+- **Contexte :** audit Verseo (Macéo). La synthèse disait « le hard paywall a fait monter la conversion, mais les essais sont tous annulés » (0-2 % → 5,2 %, soit 4 essais sur 77, et 4 essais annulés). Jeremy : « Pas trop pertinent ça vu le nombre d'events ».
+- **Ce qui était faux :** tirer une tendance (et la mettre en synthèse) à partir de 4 essais ou de 3 conversions sur 37.
+- **Règles à appliquer désormais :**
+  - En dessous de quelques dizaines d'événements (essais, achats, conversions par source), ne pas conclure : donner le chiffre brut et dire que c'est trop tôt. Jamais dans la synthèse.
+  - Pas de comparaison de taux entre sources quand chaque source a moins d'une dizaine de conversions.
+- **Maquettes (retours du même audit) :** grille de carrés dorés jugée moche (préférer une image qui raconte, ex. une étagère de 66 livres) ; éléments trop gros (timeline) ; un verset en haut d'un paywall doit avoir le format exact d'une notification iOS ou d'un widget, sinon ça ne ressemble à rien ; un écran « verrou prêt » doit montrer les apps verrouillées (écran d'accueil), pas une icône de cadenas seule ; dans la proposition d'onboarding, remplacer les captures concurrentes par des maquettes de l'app de l'élève ; toujours montrer la croix du paywall quand on recommande une offre réduite.
+- **Écran de blocage iOS (Screen Time) :** le shield n'accepte qu'une icône, un titre, un texte et deux boutons, qui ne peuvent pas ouvrir l'app directement (passer par une notification). Les maquettes de blocage doivent respecter ce format.
+
+## 2026-11-03 , Verseo : maquettes « trop Claude Code », plus d'écrans de projection
+- **Contexte :** directions de branding Aube, Manuscrit, Veillée. Jeremy : « ça ressemble un peu trop à du Claude Code… tu fais toujours des pilules, toujours les mêmes formes. Je veux un truc ultra professionnel, comme une entreprise à 1 milliard de dollars. »
+- **Ce qui était faux :** toujours le même vocabulaire visuel (boutons en pilule, cartes arrondies, pastilles, dégradés), quel que soit le thème.
+- **Règles à appliquer désormais :**
+  - Quand on propose des directions de design, au moins une doit casser ce vocabulaire : style éditorial (papier, encre, une seule couleur d'accent, très grands titres à empattement, filets fins au lieu de cartes, boutons rectangulaires pleine largeur avec une flèche, onglets en texte).
+  - Utiliser de vraies images fortes et libres de droits quand c'est possible (ex. gravures de Gustave Doré, domaine public, via l'API Wikimedia Commons) plutôt que des dessins CSS.
+- **Onboarding d'un nouvel angle :** ne pas se limiter aux questions. Ajouter des écrans d'affirmation, de statistiques calculées avec ses réponses (ex. « 12 min, c'est 4 % de ton temps d'écran »), un écran « on prépare ton plan », un graphique avec ou sans l'app (courbe « sans » en pointillé, sans chiffre inventé) et une projection datée par étapes.
+- **Promesse :** laisser l'utilisateur choisir son rythme (minutes par jour → durée calculée) plutôt qu'une durée imposée (« en un an »). Et toujours montrer concrètement la mécanique centrale (ici : l'app bloquée tant que la lecture n'est pas faite) en séquence d'écrans.
+- **Correction du même jour :** « sortir du style IA » ne veut pas dire inventer des composants. Jeremy a rejeté le header décoratif (« Verseo » + « Genèse 1:3 » en haut de l'accueil) et la barre noire pleine largeur avec flèche : « pourquoi on a un bouton qui n'est pas un bouton conventionnel sur les apps mobiles ? ». Garder les composants iOS standards (bouton arrondi avec marges de 20 pt, texte centré ; X ou chevron en haut ; barre d'onglets avec icônes) et jouer sur la typographie, les couleurs et les images.
+
+## 2026-11-04 , Elevate : lancer d'abord, se différencier ensuite
+- **Contexte :** audit Elevate (Rick). J'avais écrit qu'il fallait trouver ce qui distingue l'app d'un concurrent français qui vend les mêmes rangs.
+- **Ce qui était faux :** ce concurrent n'a que 3 avis. Jeremy : pour le moment, il faut juste lancer, la différenciation peut venir dans un second temps.
+- **Règle à appliquer désormais :** tant que l'app n'a pas de ventes, ne pas demander de trouver un angle différent à cause d'un petit concurrent. Regarder sa traction réelle (avis, revenus) avant d'en faire un sujet.
+- **Synthèse :** pas de point sur les formats vidéo. Relire le rendu de la synthèse après chaque ajout pour éviter les points en double.
+- **Pas de revenu par téléchargement (même audit) :** Jeremy trouve ce calcul « complètement fucked up ». Ne pas diviser des revenus estimés par des téléchargements estimés, ni en déduire un nombre d'installations à atteindre.
+- **Revenus AppFigures interdits (même audit) :** Jeremy : « c'est de la merde ». Test : Shinobi affiché à moins de 5 K$ pour plus de 40 000 $ réels par mois. Ne pas citer ces revenus ni ces téléchargements dans un audit. AppFigures sert aux mots-clés ; pour le marché, utiliser le classement Apple, les notes par pays et les chiffres vérifiés.
+- **Pas de recommandations marché ou contenus à ce stade (même audit) :** avant le lancement, l'audit parle surtout de l'app. Jeremy a retiré le bloc de conclusions sur l'international et les vidéos.
+
+## 2026-11-04 , Elevate : carrousel, captures App Store et directions de design
+- **Contexte :** Jeremy a rejeté mes maquettes : « trop de la merde le carrousel », captures « pas ouf », branding « pas ouf ».
+- **Ce qui était faux :** (1) un carrousel qui montre la séance et des exercices cochés, alors que l'utilisateur vient chercher un rang, de la force et un physique. (2) Des captures store faites d'images agrandies et floues dans un cadre de téléphone. (3) 3 « directions » qui ne changeaient que les couleurs.
+- **Règles à appliquer désormais :**
+  - Le carrousel vend le résultat recherché, pas la mécanique de l'app. Se demander : pourquoi cette personne télécharge-t-elle l'app ?
+  - Captures store : redessiner en net, grand titre, un seul visuel fort, plein cadre. Jamais une capture existante agrandie.
+  - Directions de design : tout doit changer (formes, polices, couleurs, images, composants), avec 4 pistes vraiment différentes. Les comparer sur les mêmes écrans. Le style « Édition » (papier, gravure, grand titre à empattement avec italique, bouton standard) plaît à Jeremy.
+  - Images générées `gpt-image-2` : une image par direction, avec le fond prévu pour se fondre dans l'écran.
+  - Rendre chaque direction et la regarder avant de publier.
+- **Retours sur les directions (même audit) :** style Arcade rejeté (« il pue la merde »). Édition trop vide et trop molle au départ : garder la DA, mais noir profond, une couleur vive, des écrans noirs inversés, des gravures très contrastées et une image sur chaque écran vide. Affiche : apprécié, à pousser par petites touches (rayons, encre plus dense, grain léger).
+- **Édition et Affiche v2 validées (même audit) :** « beaucoup mieux, j'aime beaucoup ». Quand une direction plaît, en proposer aussi une autre vraiment différente plutôt que de s'arrêter (Chrome ajoutée sur demande).
+- **Captures store = l'app en grand (même audit) :** Jeremy : « on montre pas trop l'application ». Chaque capture a un titre court et un grand téléphone avec un vrai écran. Pas de capture faite d'une image seule ou d'un graphique seul.
+- **Carrousel = des images, pas du texte (même audit) :** Jeremy : « les gens ne lisent pas », pas de « trucs dans des carrés ». Accroche imagée (« Deviens une légende ») plutôt qu'une description (« Découvre ton vrai rang »). Laisser de l'espace au-dessus du bouton.
+- **Graphiques de maquette (même audit) :** poser les points par le calcul sur la courbe, jamais à la main (Jeremy : « le graphique est cassé »). Pour une progression de rangs, préférer un escalier qui montre où on est et ce qu'il reste, compréhensible sans lire.
+- **Captures store, éléments qui sortent (même audit) :** Jeremy n'aime pas « juste des screenshots ». Sur chaque capture, sortir du téléphone l'élément à mettre en avant : carte agrandie plus large que l'écran, chiffre en sticker, loupe. Même règle partout : une seule idée par capture.
+- **Timeline d'essai en grand (même audit) :** Jeremy la veut grosse, pas une petite ligne horizontale. Utiliser une timeline verticale avec de grosses icônes, comme élément principal du paywall. Ça remplace la leçon Family Quest sur la timeline horizontale.
+- **Notifications de maquette (même audit) :** toujours sur un écran verrouillé, en blanc avec texte noir, indépendamment du thème. Vérifier que le texte se lit.
+- **Accroche de carrousel (même audit) :** « Deviens une légende » avec des badges alignés : on ne comprend pas ce que c'est. Préférer une phrase concrète qui montre la mécanique et se comprend seule (« 12 tractions ? Tu es Platine. ») avec un seul visuel.
+- **Contraste (même audit) :** Jeremy a refusé le texte noir sur fond rouge. Sur un fond coloré vif, le texte doit rester très lisible. Affiche v3 : fond noir, rouge en aplat sur les images et les boutons, texte crème. Toujours vérifier la lisibilité des titres en petit.
+- **Première slide rejetée plusieurs fois (même audit) :** appliquer la règle des 3 pistes vraiment différentes. Montrer d'abord le résultat recherché en image : même personne avant et après (Bronze et Légende).
+- **Graphique de force :** pas de chiffre géant mal proportionné ni d'animation qui laisse la courbe à moitié tracée. Préférer des barres qui montent, lisibles à l'arrêt.
+- **Proposition d'onboarding complète (même audit) :** une maquette par question, jamais une seule qui en résume plusieurs (Jeremy : « il faut vraiment tout demander »). Vérifier que chaque donnée qui sert au calcul de l'app est demandée, et que les écrans existants conservés figurent bien dans la liste.
+- **Écrans d'affirmation espacés (même audit) :** jamais plusieurs à la suite. Leur but est d'aérer l'onboarding : en glisser un entre plusieurs blocs de questions.
+- **Ne jamais couper la fin de l'onboarding (même audit) :** test gratuit, rappel et paywall s'enchaînent sans aucune question entre eux. Les questions pratiques (heure de séance, etc.) viennent bien avant.
+- **Concept expliqué avant de demander (même audit) :** dans une app de rangs, présenter un rang par exercice, la montée avec les répétitions et le lest, et le rang des muscles qui monte avec les séances. Aucune barre d'onglets pendant l'onboarding : toujours un bouton « Continuer ».
+- **Agrandir les maquettes (même audit) :** chaque maquette d'écran s'ouvre en grand au clic, comme les captures. Le fichier de génération doit le prévoir dès le départ.
+- **Intérieur de l'app (même audit) :** ne pas se limiter à corriger l'existant. Proposer plus d'actions à faire chaque jour (quêtes, figures à débloquer, tester son max, défis, fil d'amis, photo de progrès), chacune avec sa maquette.
+- **Maquettes in-app = un plan cohérent (même audit) :** Jeremy ne comprenait pas d'où venaient les écrans (« D'où est-ce que ça vient, les quêtes du jour ? »). Chaque onglet a un seul écran principal, les autres vues passent par un sélecteur en haut ou une fiche avec flèche de retour. Montrer le parcours : écran, zone touchée, écran suivant.
