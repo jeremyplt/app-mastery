@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { requireOwner } from "@/lib/admin";
 import { getAdminClient, withRetry } from "@/lib/supabase";
 import { getBankDetails } from "@/lib/ventes";
-import { EMAIL_RE, INVOICE_BUCKET, defaultDraft, invoiceSlug, type Invoice } from "@/lib/invoices";
+import { EMAIL_RE, INVOICE_BUCKET, defaultDraft, invoiceSlug, needsRenameNote, type Invoice } from "@/lib/invoices";
 
 // Factures du CRM : liste et ajout d'un PDF. Propriétaire seulement.
 
@@ -80,7 +80,8 @@ export async function POST(req: NextRequest) {
     const { error: uploadError } = await db.storage.from(INVOICE_BUCKET).upload(path, buffer, { contentType: "application/pdf", upsert: false });
     if (uploadError) throw new Error(uploadError.message);
 
-    const draft = defaultDraft({ clientName, number, amount, currency, kind, invoiceDate, isStudent: Boolean(studentId) }, await getBankDetails());
+    const renameNote = studentId ? await needsRenameNote(studentId) : false;
+    const draft = defaultDraft({ clientName, number, amount, currency, kind, invoiceDate, isStudent: Boolean(studentId), renameNote }, await getBankDetails());
     const { data, error } = await db
       .from("invoices")
       .insert({

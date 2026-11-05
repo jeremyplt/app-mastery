@@ -51,10 +51,34 @@ export function invoiceSlug(number: string): string {
   return number.trim().replace(/[^A-Za-z0-9]+/g, "-");
 }
 
+const RENAME_NOTE =
+  "Tu verras que le nom de ma société a changé sur la facture : PITAULT MEDIA s'appelle maintenant SDG STUDIO. C'est la même société et le même compte bancaire qu'avant.";
+// La société s'appelle SDG STUDIO depuis fin octobre 2026 : un élève qui a
+// commencé à payer à partir de cette date n'a jamais connu l'ancien nom.
+const RENAME_CUTOFF = "2026-11-01";
+
+// Vrai si la 1re mensualité de l'élève date d'avant le changement de nom et
+// qu'aucune facture ne lui a encore été envoyée : on ne le dit qu'une fois.
+export async function needsRenameNote(studentId: string): Promise<boolean> {
+  const db = getAdminClient();
+  const [{ data: student }, { count }] = await Promise.all([
+    db.from("students").select("payments, sale:sales(sale_payments(due_date))").eq("id", studentId).maybeSingle(),
+    db.from("invoices").select("id", { count: "exact", head: true }).eq("student_id", studentId).eq("status", "sent"),
+  ]);
+  if (!student || count) return false;
+  const row = student as unknown as {
+    payments: { date?: string }[] | null;
+    sale: { sale_payments: { due_date: string }[] } | { sale_payments: { due_date: string }[] }[] | null;
+  };
+  const sale = Array.isArray(row.sale) ? row.sale[0] : row.sale;
+  const dates = [...(sale?.sale_payments ?? []).map((p) => p.due_date), ...(row.payments ?? []).map((p) => p.date ?? "")].filter(Boolean).sort();
+  return dates.length > 0 && dates[0] < RENAME_CUTOFF;
+}
+
 // Le mail proposé par défaut : tutoiement pour un élève, vouvoiement sinon.
 // L'IBAN n'apparaît que si la facture reste à régler.
 export function defaultDraft(
-  input: { clientName: string; number: string; amount: number; currency: string; kind: InvoiceKind; invoiceDate: string; isStudent: boolean },
+  input: { clientName: string; number: string; amount: number; currency: string; kind: InvoiceKind; invoiceDate: string; isStudent: boolean; renameNote?: boolean },
   bank: BankDetails,
 ): { subject: string; body: string } {
   const money = formatMoney(input.amount, input.currency);
@@ -85,6 +109,7 @@ export function defaultDraft(
   } else {
     paragraphs.push(`Je t'envoie en pièce jointe la facture ${input.number}, d'un montant de ${money}. Elle correspond au virement que j'ai bien reçu, merci à toi. Tu n'as rien d'autre à faire.`);
   }
+  if (input.renameNote) paragraphs.push(RENAME_NOTE);
   paragraphs.push("À très vite,\nJeremy");
   return { subject: `Ta facture ${input.number}`, body: paragraphs.join("\n\n") };
 }
