@@ -110,7 +110,7 @@ export default function JustificatifPage() {
           <>
             <h1 className="text-[28px] font-bold tracking-tight">{firstName}, dépose ton justificatif de domicile</h1>
             <p className="mt-3 text-[15px] font-medium leading-relaxed text-[var(--fg2)]">
-              Comme tu habites hors de l&apos;Union européenne, je ne te facture pas la TVA luxembourgeoise. En échange, je dois pouvoir prouver où tu résides en cas de contrôle.
+              Comme tu habites hors de l&apos;Union européenne, je ne te facture pas la TVA. En échange, je dois pouvoir prouver où tu résides en cas de contrôle.
             </p>
 
             {status === "rejected" && (

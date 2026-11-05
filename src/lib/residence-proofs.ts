@@ -31,7 +31,7 @@ export function proofUrl(token: string): string {
 function requestEmail(firstName: string, link: string): BuiltEmail {
   const body = `
 <p ${P}>Salut ${esc(firstName)},</p>
-<p ${P}>Comme tu habites hors de l'Union européenne, je ne te facture pas la TVA luxembourgeoise. En échange, je dois pouvoir prouver où tu résides en cas de contrôle.</p>
+<p ${P}>Comme tu habites hors de l'Union européenne, je ne te facture pas la TVA. En échange, je dois pouvoir prouver où tu résides en cas de contrôle.</p>
 <p ${P}>J'ai donc besoin d'un justificatif de domicile récent, à ton nom et à l'adresse de ton contrat : une facture d'électricité, d'eau ou d'internet, un relevé bancaire ou ton bail. Un PDF ou une photo nette, ça me va très bien.</p>
 ${button("Déposer mon justificatif", link)}
 <p ${P}>Si tu as la moindre question, réponds simplement à cet email.</p>
