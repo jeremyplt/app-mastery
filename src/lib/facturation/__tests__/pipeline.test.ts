@@ -19,6 +19,7 @@ function world(opts: { lines?: BankLine[]; students?: Student[]; invoices?: Odoo
   const known = new Map<number, { decision: string; invoice_key: string | null; assigned_student_id: string | null }>();
   const crm = new Map<string, { id: string; number: string; status: string }>();
   const posts: string[] = [];
+  const paid = new Set<number>();
   let seq = 100;
   let num = 26;
   const c = { creates: 0, posts: 0, sends: 0, mails: 0, reconciles: 0, pdfStores: 0 };
@@ -96,6 +97,7 @@ function world(opts: { lines?: BankLine[]; students?: Student[]; invoices?: Odoo
     updateRow: (k, patch) => step(() => void rows.set(k, { ...(rows.get(k) as AutomationRow), ...patch })),
     openRows: () => step(() => [...rows.values()].filter((r) => r.state !== "done" && r.state !== "handoff")),
     linkStudentPartner: () => step(() => undefined),
+    markPaid: (_s, position) => step(() => void paid.add(position)),
     storeInvoice: (_row, number) =>
       step(() => {
         const found = [...crm.values()].find((x) => x.number === number);
@@ -131,7 +133,7 @@ function world(opts: { lines?: BankLine[]; students?: Student[]; invoices?: Odoo
     },
     today: () => "2026-11-05",
   };
-  return { deps, c, invoices, rows, crm, posts, known, reconciled, setMode: (m: Mode) => { mode = m; calls = 0; dead = false; }, calls: () => calls };
+  return { deps, c, paid, invoices, rows, crm, posts, known, reconciled, setMode: (m: Mode) => { mode = m; calls = 0; dead = false; }, calls: () => calls };
 }
 
 const status0 = (w: { crm: Map<string, { status: string }> }) => [...w.crm.values()][0]?.status;
@@ -142,6 +144,15 @@ test("cas normal : une facture, un mail, un rapprochement", async () => {
   assert.deepEqual(r.errors, []);
   assert.deepEqual([w.c.creates, w.c.posts, w.c.reconciles, w.c.mails], [1, 1, 1, 1]);
   assert.equal([...w.crm.values()][0].status, "sent");
+});
+
+test("mensualité suivante cochée, mais pas la 1re qui déclenche le Skool", async () => {
+  const first = world();
+  await run(first.deps);
+  assert.equal(first.paid.size, 0);
+  const second = world({ lines: [{ id: 11, date: "2026-12-01", amount: 1000, payment_ref: "", partner_name: "ALICE MARTINEZ" }] });
+  await run(second.deps);
+  assert.deepEqual([...second.paid], [2]);
 });
 
 test("relancer le job ne refait rien", async () => {

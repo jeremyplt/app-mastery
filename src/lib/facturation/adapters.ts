@@ -277,6 +277,22 @@ export function storePort(): StorePort {
     async linkStudentPartner(studentId, partnerId) {
       check(await db.from("students").update({ odoo_partner_id: partnerId }).eq("id", studentId));
     },
+    async markPaid(studentId, position, date) {
+      const student = check(await db.from("students").select("sale_id, payments").eq("id", studentId).maybeSingle());
+      if (!student) return;
+      const paidAt = `${date}T12:00:00Z`;
+      if (student.sale_id) {
+        check(await db.from("sale_payments").update({ paid: true, paid_at: paidAt }).eq("sale_id", student.sale_id).eq("position", position).eq("paid", false));
+        return;
+      }
+      const payments = (student.payments ?? []) as { paid: boolean; paid_at?: string }[];
+      const entry = payments[position - 1];
+      if (entry && !entry.paid) {
+        entry.paid = true;
+        entry.paid_at = paidAt;
+        check(await db.from("students").update({ payments }).eq("id", studentId));
+      }
+    },
     async storeInvoice(row, number, pdf) {
       const existing = check(await db.from("invoices").select("id, status").eq("number", number).maybeSingle());
       if (existing) return existing;

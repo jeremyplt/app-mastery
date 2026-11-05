@@ -84,6 +84,8 @@ export interface StorePort {
   updateRow(key: string, patch: Partial<AutomationRow> & { last_error?: string | null }): Promise<void>;
   openRows(): Promise<AutomationRow[]>;
   linkStudentPartner(studentId: string, partnerId: number): Promise<void>;
+  // Coche la mensualité comme reçue, pour que l'élève ne reçoive pas de relance.
+  markPaid(studentId: string, position: number, date: string): Promise<void>;
   // Enregistre le PDF et crée la ligne du CRM si elle n'existe pas encore.
   storeInvoice(row: AutomationRow, number: string, pdf: Buffer): Promise<{ id: string; status: string }>;
   invoiceStatus(id: string): Promise<string | null>;
@@ -396,6 +398,8 @@ export async function advance(key: string, deps: Deps, report: Report): Promise<
     if (open.length) await deps.odoo.reconcile(open, row.odoo_invoice_id as number);
     const after = await deps.odoo.getInvoice(row.odoo_invoice_id as number);
     if (after.amountResidual !== 0) return handoff(row, `${row.number} : il reste ${money(after.amountResidual)} à rapprocher après le virement`, deps, report);
+    // La 1re mensualité reste cochée par Jeremy : elle déclenche l'accès au Skool.
+    if (plan.studentId && plan.schedulePosition && plan.schedulePosition > 1) await deps.store.markPaid(plan.studentId, plan.schedulePosition, plan.date);
     await set({ state: "reconciled" });
   }
 

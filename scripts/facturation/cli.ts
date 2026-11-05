@@ -6,11 +6,12 @@
 //   status                    factures en cours et cas à traiter
 //   assign <virement> <élève> rattache un virement à un élève, contrôles compris
 //   retry <clé>               relance une facture après correction
+//   smoke <fiches> [--garder] essai de création dans Odoo avec des brouillons
 import { createClient } from "@supabase/supabase-js";
 import { odooClient, realDeps } from "@/lib/facturation/adapters";
 import { classifyLine, matchStudents, type BankLine } from "@/lib/facturation/match";
-import { run, scan } from "@/lib/facturation/pipeline";
-import { decideTax, MENTION_AUTOLIQUIDATION, MENTION_PARTICULIER_HORS_UE, MENTION_SOCIETE_HORS_UE } from "@/lib/facturation/rules";
+import { run, scan, type Plan } from "@/lib/facturation/pipeline";
+import { decideTax, htFromTtc, MENTION_AUTOLIQUIDATION, MENTION_PARTICULIER_HORS_UE, MENTION_SOCIETE_HORS_UE, PRODUCT } from "@/lib/facturation/rules";
 
 const [cmd, ...args] = process.argv.slice(2);
 const print = (x: unknown) => console.log(JSON.stringify(x, null, 2));
@@ -66,6 +67,30 @@ async function replayLines() {
   print(out);
 }
 
+// Vérifie la création de factures dans Odoo avec des brouillons : un brouillon ne
+// consomme aucun numéro. Il est contrôlé puis supprimé (sauf avec --garder).
+async function smoke(ids: number[], keep: boolean) {
+  const { port } = odooClient();
+  const today = new Date().toISOString().slice(0, 10);
+  const out: unknown[] = [];
+  for (const partnerId of ids) {
+    const f = await port.partnerFacts(partnerId);
+    const d = decideTax({ isCompany: f.isCompany, countryCode: f.countryCode, vat: f.vat, hasResidenceProof: f.positionId === 6 && f.hasProofAttachment });
+    if (!d.ok) {
+      out.push({ fiche: partnerId, regle: d.reason });
+      continue;
+    }
+    const ht = htFromTtc(1000, d.rate);
+    const plan = { key: "smoke", bankLineIds: [], label: "essai", partnerId, studentId: null, schedulePosition: null, date: today, amount: 1000, expectedTax: Math.round((1000 - ht) * 100) / 100, rate: d.rate, positionId: d.positionId, mention: d.mention, narration: d.mentionFromPosition ? null : d.mention, line: { productId: PRODUCT.ACOMPTE, name: null, priceUnit: ht, taxId: d.taxId }, sendEmail: false, clientEmail: null, reserve: { vat: 0, closer: 0 }, kind: "new" } satisfies Plan;
+    const id = await port.createInvoice(plan);
+    const inv = await port.getInvoice(id);
+    const conforme = inv.state === "draft" && !inv.name && inv.amountTotal === 1000 && inv.amountTax === plan.expectedTax && inv.positionId === d.positionId;
+    out.push({ fiche: partnerId, brouillon: keep ? id : "supprimé", etat: inv.state, numero: inv.name, total: inv.amountTotal, tva: inv.amountTax, position: inv.positionId, conforme });
+    if (!keep) await port.deleteDraft(id);
+  }
+  print(out);
+}
+
 async function main() {
   switch (cmd) {
     case "scan":
@@ -76,6 +101,10 @@ async function main() {
       return replay();
     case "replay-virements":
       return replayLines();
+    case "smoke":
+      return smoke(args.filter((a) => /^\d+$/.test(a)).map(Number), args.includes("--garder"));
+    case "supprimer-brouillon":
+      return odooClient().port.deleteDraft(Number(args[0])).then(() => print({ ok: true }));
     case "status": {
       const [{ data: rows }, { data: lines }, { data: auto }] = await Promise.all([
         db().from("invoice_automation").select("invoice_key, state, number, handoff_reason, last_error, updated_at").neq("state", "done"),
