@@ -93,8 +93,10 @@ export function odooClient() {
         countryCode = c.code;
       }
       const moves = await kw<number[]>("account.move", "search", [[["partner_id", "=", partnerId], ["move_type", "=", "out_invoice"]]]);
-      const proofs = moves.length ? await kw<number>("ir.attachment", "search_count", [[["res_model", "=", "account.move"], ["res_id", "in", moves]]]) : 0;
-      const facts: PartnerFacts = { id: partnerId, name: p.name, email: p.email || null, isCompany: p.is_company, countryCode, vat: p.vat || null, positionId: p.property_account_position_id ? p.property_account_position_id[0] : null, hasProofAttachment: proofs > 0 };
+      const onInvoices = moves.length ? await kw<number>("ir.attachment", "search_count", [[["res_model", "=", "account.move"], ["res_id", "in", moves]]]) : 0;
+      // Un justificatif validé dans le CRM arrive sur la fiche client.
+      const onPartner = await kw<number>("ir.attachment", "search_count", [[["res_model", "=", "res.partner"], ["res_id", "=", partnerId]]]);
+      const facts: PartnerFacts = { id: partnerId, name: p.name, email: p.email || null, isCompany: p.is_company, countryCode, vat: p.vat || null, positionId: p.property_account_position_id ? p.property_account_position_id[0] : null, hasProofAttachment: onInvoices + onPartner > 0 };
       return facts;
     },
     async findInvoices({ partnerId, dateFrom, dateTo }) {

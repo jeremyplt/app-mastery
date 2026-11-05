@@ -37,3 +37,6 @@ on conflict (id) do nothing;
 -- invoice_bank_lines : un virement ne peut appartenir qu'à une seule facture.
 -- Voir la migration Supabase pour les colonnes. Ajoute aussi students.odoo_partner_id
 -- et le réglage site_settings "invoices_auto_send" (désactivé par défaut).
+
+-- 2026-11-05, migration "residence_proofs_and_drive" : table residence_proofs, bucket
+-- privé residence-proofs, students.proof_token et proof_requested_at, invoices.drive_file_id.

@@ -17,5 +17,9 @@ for name in ODOO_API_KEY NEXT_PUBLIC_SUPABASE_URL NEXT_PUBLIC_SUPABASE_ANON_KEY 
   value=$(maxxing keys get "$name")
   export "$name=$value"
 done
+# Rangement Drive : facultatif tant que le script Google n'est pas déployé.
+for name in DRIVE_SCRIPT_URL DRIVE_SCRIPT_SECRET; do
+  if value=$(maxxing keys get "$name" 2>/dev/null); then export "$name=$value"; fi
+done
 
 exec node_modules/.bin/tsx scripts/facturation/cli.ts "$@"

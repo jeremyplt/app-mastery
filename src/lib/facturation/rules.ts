@@ -48,7 +48,7 @@ export function decideTax(c: ClientFacts): TaxDecision {
     return { ok: true, positionId: POSITION.NON_EU_COMPANY, taxId: TAX.EC0, rate: 0, mention: MENTION_SOCIETE_HORS_UE, mentionFromPosition: false };
   }
   if (inEu) return { ok: true, positionId: POSITION.EU_PRIVATE, taxId: TAX.S17, rate: 0.17, mention: null, mentionFromPosition: false };
-  if (!c.hasResidenceProof) return { ok: false, reason: "Particulier hors UE sans preuve de résidence : la TVA dépend de cette preuve" };
+  if (!c.hasResidenceProof) return { ok: false, reason: "Particulier hors UE sans justificatif de domicile validé : demande-le depuis /admin/factures" };
   return { ok: true, positionId: POSITION.NON_EU_PRIVATE, taxId: TAX.EC0, rate: 0, mention: MENTION_PARTICULIER_HORS_UE, mentionFromPosition: true };
 }
 

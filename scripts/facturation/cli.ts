@@ -11,6 +11,8 @@ import { createClient } from "@supabase/supabase-js";
 import { odooClient, realDeps } from "@/lib/facturation/adapters";
 import { classifyLine, matchStudents, type BankLine } from "@/lib/facturation/match";
 import { run, scan, type Plan } from "@/lib/facturation/pipeline";
+import { fileInvoices, syncProofs } from "@/lib/facturation/sweeps";
+import { notifyPort } from "@/lib/facturation/adapters";
 import { decideTax, htFromTtc, MENTION_AUTOLIQUIDATION, MENTION_PARTICULIER_HORS_UE, MENTION_SOCIETE_HORS_UE, PRODUCT } from "@/lib/facturation/rules";
 
 const [cmd, ...args] = process.argv.slice(2);
@@ -95,8 +97,14 @@ async function main() {
   switch (cmd) {
     case "scan":
       return print((await scan(realDeps())).map(({ line, decision }) => ({ virement: line.id, date: line.date, montant: line.amount, payeur: line.partner_name || line.payment_ref, decision })));
-    case "run":
-      return print(await run(realDeps()));
+    case "run": {
+      const rangement = { factures_rangees: 0, justificatifs_ranges: 0, erreurs: [] as string[] };
+      // Justificatifs d'abord : un élève validé peut être facturé dès ce passage.
+      await syncProofs(notifyPort, rangement).catch((e) => rangement.erreurs.push(String(e)));
+      const report = await run(realDeps());
+      await fileInvoices(notifyPort, rangement).catch((e) => rangement.erreurs.push(String(e)));
+      return print({ ...report, rangement });
+    }
     case "replay":
       return replay();
     case "replay-virements":

@@ -25,6 +25,8 @@ type Invoice = {
 };
 type Student = { id: string; name: string; email: string | null };
 type ToCheck = { key: string; date: string; amount: number; label: string; reason: string };
+type ProofStudent = { id: string; name: string; email: string | null; link: string; requestedAt: string | null; address: string | null };
+type Proof = { id: string; studentId: string; createdAt: string; fileName: string; status: "pending" | "accepted" | "rejected"; rejectReason: string | null; synced: boolean; syncError: string | null; url: string | null };
 type Tab = "todo" | "sent" | "no_send";
 type Edit = { client_email: string; email_subject: string; email_body: string };
 
@@ -60,6 +62,11 @@ export default function FacturesPage() {
   const [students, setStudents] = useState<Student[]>([]);
   const [toCheck, setToCheck] = useState<ToCheck[]>([]);
   const [autoSend, setAutoSend] = useState(false);
+  const [proofs, setProofs] = useState<Proof[]>([]);
+  const [proofStudents, setProofStudents] = useState<ProofStudent[]>([]);
+  const [askFor, setAskFor] = useState("");
+  const [refusing, setRefusing] = useState<string | null>(null);
+  const [refuseReason, setRefuseReason] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
@@ -95,6 +102,18 @@ export default function FacturesPage() {
       .catch((e) => setError(e instanceof Error ? e.message : "Erreur réseau"))
       .finally(() => setLoading(false));
   }, [load]);
+
+  const loadProofs = useCallback(async () => {
+    const res = await fetch("/api/admin/factures/justificatifs");
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error ?? "Erreur de chargement");
+    setProofs(data.proofs);
+    setProofStudents(data.students);
+  }, []);
+
+  useEffect(() => {
+    loadProofs().catch(() => undefined);
+  }, [loadProofs]);
 
   const counts = useMemo(() => {
     const c: Record<Tab, number> = { todo: 0, sent: 0, no_send: 0 };
@@ -196,6 +215,33 @@ export default function FacturesPage() {
       setEdit(null);
     });
   };
+
+  const requestProof = () =>
+    run("proof-ask", async () => {
+      const res = await fetch("/api/admin/factures/justificatifs", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ studentId: askFor }) });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Envoi impossible");
+      setNotice(`Demande envoyée à ${proofStudents.find((s) => s.id === askFor)?.name}.`);
+      setAskFor("");
+      await loadProofs();
+    });
+
+  const copyProofLink = () =>
+    run("proof-copy", async () => {
+      await navigator.clipboard.writeText(proofStudents.find((s) => s.id === askFor)?.link ?? "");
+      setNotice("Lien copié.");
+    });
+
+  const reviewProof = (id: string, status: "accepted" | "rejected", reason?: string) =>
+    run(`proof-${id}`, async () => {
+      const res = await fetch(`/api/admin/factures/justificatifs/${id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ status, reason }) });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Modification impossible");
+      setRefusing(null);
+      setRefuseReason("");
+      setNotice(data.warning ?? (status === "accepted" ? "Justificatif validé. Il sera rangé dans Odoo et sur le Drive au prochain passage du job." : "Refus enregistré, l'élève a reçu le motif."));
+      await loadProofs();
+    });
 
   const toggleAutoSend = () => {
     const next = !autoSend;
@@ -356,6 +402,85 @@ export default function FacturesPage() {
                 </li>
               ))}
             </ul>
+          </section>
+        )}
+
+        {!loading && (
+          <section className="mac-group mt-5 px-4 py-3" aria-label="Justificatifs de domicile">
+            <h2 className="text-[15px] font-bold">Justificatifs de domicile (hors UE)</h2>
+            <p className="text-[13px] font-medium text-[var(--fg2)]">Sans justificatif validé, le job ne facture pas un particulier hors UE sans TVA : il s&apos;arrête et te prévient.</p>
+
+            {proofs.length > 0 && (
+              <ul className="mt-2 divide-y divide-[var(--sep)]">
+                {proofs.map((p) => {
+                  const st = proofStudents.find((s) => s.id === p.studentId);
+                  return (
+                    <li key={p.id} className="py-3">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <p className="text-[14px] font-bold">
+                          {st?.name ?? "Élève"} · {shortDate(p.createdAt)}
+                        </p>
+                        <span className={`rounded-md px-2 py-0.5 text-xs font-bold ${p.status === "accepted" ? CHIP.green : p.status === "rejected" ? "bg-[color-mix(in_srgb,var(--red)_14%,transparent)] text-[var(--red)]" : CHIP.orange}`}>
+                          {p.status === "accepted" ? (p.synced ? "Validé et rangé" : "Validé") : p.status === "rejected" ? "Refusé" : "À vérifier"}
+                        </span>
+                      </div>
+                      {st?.address && <p className="text-[13px] font-medium text-[var(--fg2)]">Adresse du contrat : {st.address}</p>}
+                      {p.rejectReason && <p className="text-[13px] font-medium text-[var(--fg2)]">Motif : {p.rejectReason}</p>}
+                      {p.syncError && <p className="text-[13px] font-semibold text-[var(--orange)]">Rangement à reprendre : {p.syncError}</p>}
+                      <div className="mt-2 flex flex-wrap items-center gap-2">
+                        {p.url && (
+                          <a href={p.url} target="_blank" rel="noreferrer" className="mac-btn mac-btn-def">
+                            Voir le document
+                          </a>
+                        )}
+                        {p.status === "pending" && (
+                          <>
+                            <button onClick={() => reviewProof(p.id, "accepted")} disabled={busy !== null} className="mac-btn mac-btn-primary disabled:opacity-50">
+                              Valider
+                            </button>
+                            <button onClick={() => setRefusing(refusing === p.id ? null : p.id)} disabled={busy !== null} aria-expanded={refusing === p.id} className="mac-btn mac-btn-def disabled:opacity-50">
+                              Refuser
+                            </button>
+                          </>
+                        )}
+                      </div>
+                      {refusing === p.id && (
+                        <div className="mt-2 flex flex-wrap items-end gap-2">
+                          <label className="min-w-[240px] flex-1">
+                            <span className={LABEL}>Motif, envoyé à l&apos;élève</span>
+                            <input className="mac-field" placeholder="Le document a plus de 3 mois." value={refuseReason} onChange={(e) => setRefuseReason(e.target.value)} />
+                          </label>
+                          <button onClick={() => reviewProof(p.id, "rejected", refuseReason)} disabled={busy !== null || !refuseReason.trim()} className="mac-btn mac-btn-def disabled:opacity-50">
+                            Envoyer le refus
+                          </button>
+                        </div>
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+
+            <div className="mt-3 flex flex-wrap items-end gap-2">
+              <label className="min-w-[220px] flex-1">
+                <span className={LABEL}>Demander un justificatif à</span>
+                <select className="mac-field" value={askFor} onChange={(e) => setAskFor(e.target.value)}>
+                  <option value="">Choisir un élève</option>
+                  {proofStudents.map((s) => (
+                    <option key={s.id} value={s.id}>
+                      {s.name}
+                      {s.requestedAt ? " (déjà demandé)" : ""}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <button onClick={requestProof} disabled={busy !== null || !askFor} className="mac-btn mac-btn-primary disabled:opacity-50">
+                {busy === "proof-ask" ? "Envoi..." : "Envoyer la demande"}
+              </button>
+              <button onClick={copyProofLink} disabled={busy !== null || !askFor} className="mac-btn mac-btn-def disabled:opacity-50">
+                Copier le lien
+              </button>
+            </div>
           </section>
         )}
 
