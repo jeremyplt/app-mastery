@@ -1,6 +1,8 @@
 // Commande du job WhatsApp (lecture seule, rien n'est jamais envoyé) :
 //   run              copie les messages, transcrit les vocaux, résume les fils
 //   sync             copie seulement les nouveaux messages depuis Kapso
+//   sync-complet     relit tout l'historique chez Kapso (messages manquants,
+//                    pièces jointes arrivées après coup)
 //   status           fils qui attendent une réponse
 //   essai <numéro>   résume un fil et affiche le résultat, sans rien enregistrer
 import { createClient } from "@supabase/supabase-js";
@@ -24,13 +26,20 @@ async function main() {
     case "run": {
       const e = env();
       const copie = await syncMessages(e);
+      // Les fichiers de l'historique arrivent après coup : on repasse sur les
+      // messages avec fichier à chaque fois (quelques pages seulement).
+      const medias = await syncMessages(e, { media: true, full: true, maxPages: 20 });
       const vocaux = await transcribeVoiceNotes(e);
       const resumes = await summarizeThreads(e);
-      return print({ copie: { nouveaux: copie.nouveaux, contacts: copie.contacts.length }, vocaux, resumes });
+      return print({ copie: { nouveaux: copie.nouveaux + medias.nouveaux, completes: medias.completes }, vocaux, resumes });
     }
     case "sync": {
       const r = await syncMessages(env());
-      return print({ nouveaux: r.nouveaux, contacts: r.contacts.length });
+      return print({ nouveaux: r.nouveaux, completes: r.completes, contacts: r.contacts.length });
+    }
+    case "sync-complet": {
+      const r = await syncMessages(env(), { full: true, maxPages: 300 });
+      return print({ nouveaux: r.nouveaux, completes: r.completes, contacts: r.contacts.length });
     }
     case "status": {
       const { data, error } = await env().db.from("whatsapp_threads").select("contact, contact_name, last_inbound_at, last_outbound_at, summarized_through, handled_at, summary, error");
@@ -48,7 +57,7 @@ async function main() {
       return print(await summarize(messages, { who: `Interlocuteur : ${t?.contact_name ?? "contact"}.`, now: new Date(), newSince: t?.last_outbound_at ?? null }));
     }
     default:
-      throw new Error("Commandes : run, sync, status, essai <numéro>");
+      throw new Error("Commandes : run, sync, sync-complet, status, essai <numéro>");
   }
 }
 

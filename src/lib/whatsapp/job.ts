@@ -26,36 +26,53 @@ async function kapso<T>(env: JobEnv, path: string): Promise<T> {
 
 type Page = { data: KapsoMessage[]; paging?: { next?: string | null } };
 
-// 1. Synchronisation. Kapso renvoie les messages les plus récents d'abord. On
-// s'arrête à la première page déjà entièrement connue : l'ordre suit l'arrivée
-// chez Kapso, pas la date du message (l'historique importé arrive en vrac).
-export async function syncMessages(env: JobEnv, maxPages = 30): Promise<{ nouveaux: number; contacts: string[] }> {
+// 1. Synchronisation. Kapso renvoie les messages les plus récents d'abord (dans
+// l'ordre d'arrivée chez Kapso, pas la date du message : l'historique importé
+// arrive en vrac, par paquets). Par défaut, on s'arrête à la première page où il
+// n'y a plus rien de neuf. `full` parcourt tout, `media` seulement les messages
+// avec fichier : c'est là que Meta complète après coup les pièces jointes de
+// l'historique (« [Media - pending] » devient un vrai vocal, même identifiant).
+export async function syncMessages(env: JobEnv, opts: { full?: boolean; media?: boolean; maxPages?: number } = {}): Promise<{ nouveaux: number; completes: number; contacts: string[] }> {
   const contacts = new Set<string>();
   let saved = 0;
+  let completed = 0;
   let after: string | null | undefined;
-  for (let page = 0; page < maxPages; page++) {
+  for (let page = 0; page < (opts.maxPages ?? 30); page++) {
     const q = new URLSearchParams({ phone_number_id: env.phoneNumberId, limit: "100" });
+    if (opts.media) q.set("has_media", "true");
     if (after) q.set("after", after);
     const res = await kapso<Page>(env, `/platform/v1/whatsapp/messages?${q}`);
     const rows = res.data.map(toRow).filter((r): r is MessageRow => r !== null);
+    let changed = 0;
     if (rows.length) {
-      const { data: known, error } = await env.db.from("whatsapp_messages").select("id").in("id", rows.map((r) => r.id));
+      const { data: known, error } = await env.db.from("whatsapp_messages").select("id, type").in("id", rows.map((r) => r.id));
       if (error) throw new Error(error.message);
-      const knownIds = new Set((known ?? []).map((k) => k.id as string));
-      const fresh = rows.filter((r) => !knownIds.has(r.id));
+      const stored = new Map((known ?? []).map((k) => [k.id as string, k.type as string]));
+      const fresh = rows.filter((r) => !stored.has(r.id));
       if (fresh.length) {
         const { error: insertError } = await env.db.from("whatsapp_messages").upsert(fresh, { onConflict: "id", ignoreDuplicates: true });
         if (insertError) throw new Error(insertError.message);
         saved += fresh.length;
         for (const r of fresh) contacts.add(r.contact);
       }
-      if (!fresh.length) break;
+      // Pièce jointe de l'historique arrivée depuis : on complète la ligne.
+      const upgrades = rows.filter((r) => stored.get(r.id) === "media_placeholder" && r.type !== "media_placeholder");
+      for (const r of upgrades) {
+        const { error: updateError } = await env.db
+          .from("whatsapp_messages")
+          .update({ type: r.type, body: r.body, media_url: r.media_url, media_type: r.media_type, transcript: r.transcript })
+          .eq("id", r.id);
+        if (updateError) throw new Error(updateError.message);
+        contacts.add(r.contact);
+      }
+      completed += upgrades.length;
+      changed = fresh.length + upgrades.length;
     }
     after = res.paging?.next;
-    if (!after || !res.data.length) break;
+    if (!after || !res.data.length || (!opts.full && rows.length && !changed)) break;
   }
   if (contacts.size) await refreshThreads(env.db, [...contacts]);
-  return { nouveaux: saved, contacts: [...contacts] };
+  return { nouveaux: saved, completes: completed, contacts: [...contacts] };
 }
 
 // Dates des fils, puis rattachement à un élève par son numéro (sans jamais
@@ -74,20 +91,18 @@ async function refreshThreads(db: SupabaseClient, contacts: string[]) {
   }
 }
 
-// 2. Transcription des vocaux. Les plus récents d'abord, dans la limite du
-// temps donné : les autres attendent le passage suivant.
-export async function transcribeVoiceNotes(env: JobEnv, budgetMs = 240_000): Promise<{ transcrits: number; erreurs: number }> {
-  const now = env.now?.() ?? new Date();
-  const since = new Date(now.getTime() - 7 * 86_400_000).toISOString();
-  const { data, error } = await env.db
+// 2. Transcription des vocaux, reçus comme envoyés. Les plus récents d'abord,
+// dans la limite du temps donné : les autres (dont les anciens vocaux de
+// l'historique) attendent le passage suivant.
+export async function transcribeVoiceNotes(env: JobEnv, budgetMs = 200_000): Promise<{ transcrits: number; erreurs: number; restants: number }> {
+  const { data, error, count } = await env.db
     .from("whatsapp_messages")
-    .select("id, media_url, media_type")
+    .select("id, media_url, media_type", { count: "exact" })
     .eq("type", "audio")
     .is("transcript", null)
     .is("transcript_error", null)
-    .gte("sent_at", since)
     .order("sent_at", { ascending: false })
-    .limit(10);
+    .limit(40);
   if (error) throw new Error(error.message);
   const start = Date.now();
   let ok = 0;
@@ -103,7 +118,7 @@ export async function transcribeVoiceNotes(env: JobEnv, budgetMs = 240_000): Pro
       ko++;
     }
   }
-  return { transcrits: ok, erreurs: ko };
+  return { transcrits: ok, erreurs: ko, restants: Math.max(0, (count ?? 0) - ok - ko) };
 }
 
 async function transcribe(env: JobEnv, url: string | null, mime: string | null): Promise<string> {
