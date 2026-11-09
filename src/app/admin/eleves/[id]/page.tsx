@@ -17,6 +17,7 @@ import {
   frDate,
   initials,
   isLate,
+  lastReminder,
   money,
   paymentsOf,
   relative,
@@ -377,12 +378,14 @@ export default function StudentPage() {
                   <ul className="divide-y divide-[var(--sep)]">
                     {payments.map((p, i) => {
                       const late = isLate(p);
+                      const reminder = !s.sales ? lastReminder(s, p) : null;
                       return (
                         <li key={i} className="flex items-center gap-3 py-2.5">
                           <div className="min-w-0 flex-1">
                             <p className="text-[15px] font-bold">{p.amount ? money(p.amount) : "Montant non précisé"}</p>
                             <p className={`text-[13px] font-medium ${late ? "text-[var(--red)]" : "text-[var(--fg2)]"}`}>
                               {frDate(p.date)} · {p.paid ? "payé" : late ? `en retard (${relative(p.date)})` : relative(p.date)}
+                              {reminder && ` · ${reminder}`}
                             </p>
                           </div>
                           <button
@@ -425,9 +428,19 @@ export default function StudentPage() {
                       </button>
                     </div>
                   )}
-                  {s.sales && (
+                  {s.sales ? (
                     <p className="mt-3 text-[13px] font-medium text-[var(--fg2)]">
                       Paiements de la vente : les rappels par email et l&apos;invitation Skool suivent ces cases.
+                    </p>
+                  ) : s.email?.trim() ? (
+                    payments.some((p) => !p.paid) && (
+                      <p className="mt-3 text-[13px] font-medium text-[var(--fg2)]">
+                        Rappels par email à J-3, J-1, le jour J, puis J+3 et J+7 tant que le paiement n&apos;est pas coché. Coche « Payé » dès que le virement arrive.
+                      </p>
+                    )
+                  ) : (
+                    <p className="mt-3 text-[13px] font-semibold text-[var(--orange)]">
+                      Pas d&apos;email sur la fiche : cet élève ne reçoit aucun rappel de paiement. Ajoute son email pour les activer.
                     </p>
                   )}
                 </Card>

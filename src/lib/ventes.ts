@@ -8,8 +8,11 @@ import { inviteToSkool } from "@/lib/skool";
 import { proofDecision, requestProofAfterSignature } from "@/lib/residence-proofs";
 import { sendMetaEvent } from "@/lib/meta-capi";
 import { addMonths, type StudentPayment } from "@/lib/students";
+import { reminderDue, studentReminderDue, studentReminderKey, type StudentReminderRow } from "@/lib/payment-reminders";
 import { sendQuestionnaire } from "@/lib/questionnaire";
 import { sendMonthlyRecap, sendUnlockAlerts } from "@/lib/commissions";
+
+export { reminderDue };
 
 // Ventes déclarées dans l'admin (/admin/ventes) : contrat DocuSeal,
 // échéancier payé par virement, invitation Skool.
@@ -25,6 +28,9 @@ import { sendMonthlyRecap, sendUnlockAlerts } from "@/lib/commissions";
 //   coupure de l'accès et ne partent que si le contrat est signé : il faut
 //   donc cocher « Payé » dès qu'un virement arrive. Une échéance due le jour
 //   même de la vente (l'acompte) n'a pas de rappel avant l'échéance.
+// - Les élèves sans vente (arrivés avant cette page, paiements saisis dans
+//   /admin/eleves) reçoivent les mêmes rappels, retards compris, s'ils ont un
+//   email sur leur fiche. Calculs dans lib/payment-reminders.
 
 export type ContractStatus = "none" | "sent" | "delivered" | "completed" | "declined" | "voided";
 
@@ -262,34 +268,45 @@ export function contractReminderDue(sale: Sale, now = new Date()): 1 | 3 | null 
   return null;
 }
 
-function daysUntil(today: string, due: string): number {
-  return Math.round((Date.parse(`${due}T00:00:00Z`) - Date.parse(`${today}T00:00:00Z`)) / 86_400_000);
-}
-
-// Rappel à envoyer maintenant pour une échéance : le plus proche de
-// l'échéance parmi ceux déjà atteints, s'il n'est pas encore parti. Les
-// rappels plus anciens ratés (vente déclarée tard, cron en panne) sont sautés.
-export function reminderDue(sale: Sale, payment: SalePayment, now = new Date()): number | null {
-  if (payment.paid || sale.archived) return null;
-  if (sale.contract_status === "declined" || sale.contract_status === "voided") return null;
-  const today = parisDay(now);
-  const left = daysUntil(today, payment.due_date);
-  if (left < -30) return null;
-  // Avant l'échéance : pas de rappel pour un paiement dû le jour de la vente.
-  // Après : seulement si le contrat est signé (on ne menace pas de couper un
-  // accès qui n'a jamais été ouvert).
-  const offsets = sale.reminder_offsets.filter((o) =>
-    o < 0 ? sale.contract_status === "completed" : payment.due_date > parisDay(new Date(sale.created_at)),
+// Rappels d'échéance des élèves sans vente. Un email par rappel dû, noté dans
+// students.payment_reminders pour ne jamais partir deux fois.
+async function runStudentReminders(now: Date, bank: BankDetails, reminders: Record<string, string>, errors: Record<string, string>) {
+  const supabase = getAdminClient();
+  const rows = await withRetry(() =>
+    supabase.from("students").select("id, name, email, archived, payments, payment_reminders").is("sale_id", null).eq("archived", false),
   );
-  // Une fois l'échéance passée, seuls les rappels de retard comptent.
-  const reached = offsets.filter((o) => o >= left && (o < 0 || left >= 0)).sort((a, b) => a - b);
-  if (reached.length === 0) return null;
-  const offset = reached[0];
-  if (payment.reminders_sent[String(offset)]) return null;
-  // Déjà relancé pour un rappel plus proche de l'échéance : rien à faire.
-  if (Object.keys(payment.reminders_sent).some((k) => Number(k) < offset)) return null;
-  if (parisHour(now) < 9 || parisHour(now) >= 21) return null;
-  return offset;
+  for (const student of (rows ?? []) as StudentReminderRow[]) {
+    const list = [...(student.payments ?? [])].sort((a, b) => a.date.localeCompare(b.date));
+    for (const [i, payment] of list.entries()) {
+      const offset = studentReminderDue(student, payment, now);
+      if (offset === null) continue;
+      if (!bankReady(bank)) {
+        errors[`${student.email} rappel`] = "Coordonnées bancaires manquantes (/admin/ventes)";
+        continue;
+      }
+      const [firstName, ...rest] = student.name.trim().split(/\s+/);
+      const built = paymentReminder({
+        firstName,
+        lastName: rest.join(" ") || null,
+        amount: payment.amount!,
+        currency: "EUR",
+        dueDate: payment.date,
+        position: i + 1,
+        installments: list.length,
+        offset,
+        bank,
+      });
+      const r = await sendBuiltEmail({ email: student.email!.trim(), name: firstName }, built);
+      if (!r.ok) {
+        errors[`${student.email} rappel ${i + 1}`] = r.error ?? "envoi impossible";
+        continue;
+      }
+      student.payment_reminders = { ...(student.payment_reminders ?? {}), [studentReminderKey(payment, offset)]: now.toISOString() };
+      const { error } = await supabase.from("students").update({ payment_reminders: student.payment_reminders }).eq("id", student.id);
+      if (error) errors[`${student.email} rappel ${i + 1} noté`] = error.message;
+      reminders[`${student.email} ${i + 1}/${list.length}`] = built.tag;
+    }
+  }
 }
 
 export function buildReminder(sale: Sale, payment: SalePayment, offset: number, bank: BankDetails) {
@@ -455,6 +472,11 @@ export async function runVentes(now = new Date()) {
     }
   }
 
+  // 4. Rappels d'échéance des élèves sans vente.
+  await runStudentReminders(now, bank, reminders, errors).catch((err) => {
+    errors.eleves = err instanceof Error ? err.message : String(err);
+  });
+
   // Commissions : alerte au déblocage, récap du 1er du mois.
   const commissionMail = async (to: { email: string; name?: string }, subject: string, lines: string[], tag: string) => {
     const r = await sendBuiltEmail(to, adminAlert(subject, lines, tag, { label: "Voir les commissions", href: `${SITE}/admin/commissions` }));
@@ -494,6 +516,7 @@ function inDays(n: number): string {
 type StudentRow = {
   id: string;
   name: string;
+  email: string | null;
   app: string | null;
   start_date: string | null;
   sale_id: string | null;
@@ -508,7 +531,7 @@ type StudentRow = {
 export async function studentDeadlines(today: string, isMonday: boolean) {
   const { data } = await getAdminClient()
     .from("students")
-    .select("id, name, app, start_date, sale_id, payments, bilan_done")
+    .select("id, name, email, app, start_date, sale_id, payments, bilan_done")
     .eq("archived", false);
   const ends: string[] = [];
   const bilans: string[] = [];
@@ -536,7 +559,10 @@ export async function studentDeadlines(today: string, isMonday: boolean) {
       for (const p of s.payments) {
         if (p.paid || p.date > today) continue;
         const amount = p.amount ? amountTag(formatMoney(p.amount), p.date < today) : "montant non précisé";
-        (p.date === today ? due : late).push(`${who} : ${amount} (${formatDueDate(p.date)})`);
+        // Sans email ou sans montant, l'élève ne reçoit aucun rappel : à
+        // relancer à la main.
+        const silent = !s.email?.trim() || !p.amount ? " · <b>aucun rappel automatique</b> (pas d'email ou de montant sur la fiche)" : "";
+        (p.date === today ? due : late).push(`${who} : ${amount} (${formatDueDate(p.date)})${silent}`);
       }
     }
   }

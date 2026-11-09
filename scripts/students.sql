@@ -80,3 +80,9 @@ alter table public.manual_commissions add column unlock_notified_at timestamptz;
 -- 2026-10-15, migration "students_skool_invited_at" : invitation Skool envoyée
 -- depuis la fiche élève (élèves sans vente liée).
 alter table public.students add column skool_invited_at timestamptz;
+
+-- 2026-11-09, migration "students_payment_reminders" : rappels d'échéance des
+-- élèves sans vente (arrivés avant /admin/ventes). Clé "date/montant/décalage",
+-- par exemple "2026-11-07/1000/-3" pour le rappel J+3 d'une échéance de 1 000 €
+-- due le 7 novembre ; valeur = date d'envoi.
+alter table public.students add column payment_reminders jsonb not null default '{}'::jsonb;

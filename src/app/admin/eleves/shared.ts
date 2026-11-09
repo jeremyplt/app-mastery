@@ -65,6 +65,8 @@ export type Student = {
   questionnaire: Record<string, string> | null;
   kickoff_call_at: string | null;
   closing_call_at: string | null;
+  // Rappels d'échéance envoyés (élèves sans vente) : "2026-11-07/1000/-3" -> date d'envoi.
+  payment_reminders?: Record<string, string> | null;
   archived: boolean;
   sales: {
     id: string;
@@ -79,6 +81,21 @@ export type Student = {
 
 // Paiement affiché : celui de la vente liée (saleId) ou saisi à la main.
 export type ShownPayment = Payment & { saleId?: string };
+
+// Dernier rappel d'échéance envoyé pour un paiement saisi à la main :
+// "rappel J+3 le 10 nov." (mêmes clés que studentReminderKey dans lib/payment-reminders).
+export function lastReminder(s: Student, p: Payment): string | null {
+  const prefix = `${p.date}/${p.amount ?? 0}/`;
+  const sent = Object.entries(s.payment_reminders ?? {})
+    .filter(([k]) => k.startsWith(prefix))
+    .sort((a, b) => a[1].localeCompare(b[1]));
+  const last = sent.at(-1);
+  if (!last || Number.isNaN(Date.parse(last[1]))) return null;
+  const offset = Number(last[0].slice(prefix.length));
+  const label = offset === 0 ? "jour J" : offset > 0 ? `J-${offset}` : `J+${-offset}`;
+  const day = new Intl.DateTimeFormat("fr-FR", { day: "numeric", month: "short", timeZone: "Europe/Paris" }).format(new Date(last[1]));
+  return `rappel ${label} le ${day}`;
+}
 
 export function today(): string {
   return new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Paris" }).format(new Date());
