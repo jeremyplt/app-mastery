@@ -62,7 +62,16 @@ function contentOf(m: PromptMessage): string {
     if (m.transcript) return `(vocal, transcription automatique) ${m.transcript}`;
     return m.transcript_error ? "(vocal impossible à transcrire)" : "(vocal pas encore transcrit)";
   }
-  const kinds: Record<string, string> = { image: "photo", video: "vidéo", document: "document", sticker: "autocollant", reaction: "réaction" };
+  const kinds: Record<string, string> = {
+    image: "photo",
+    video: "vidéo",
+    document: "document",
+    sticker: "autocollant",
+    reaction: "réaction",
+    edit: "message modifié",
+    media_placeholder: "pièce jointe de l'historique, contenu non récupéré",
+    errors: "message illisible",
+  };
   const kind = kinds[m.type];
   if (kind) return m.body ? `(${kind}) ${m.body}` : `(${kind})`;
   return m.body ?? `(${m.type})`;

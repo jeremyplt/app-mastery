@@ -59,6 +59,12 @@ test("légendes, réactions et identifiants sans numéro", () => {
   assert.equal(toRow(msg({ from: null, from_user_id: "FR.1234" }))!.contact, "FR.1234");
 });
 
+test("textes techniques de Kapso écartés", () => {
+  assert.equal(toRow(msg({ type: "media_placeholder", text: undefined, kapso: { direction: "inbound", content: "[Media - pending]" } }))!.body, null);
+  assert.equal(toRow(msg({ type: "errors", text: undefined, kapso: { direction: "inbound", content: "[Errors message]" } }))!.body, null);
+  assert.equal(toRow(msg({ type: "edit", text: { body: "Corrigé" } }))!.body, "Corrigé");
+});
+
 test("messages ignorés : sans sens, sans contact, ou du numéro pro lui-même", () => {
   assert.equal(toRow(msg({ kapso: {} })), null);
   assert.equal(toRow(msg({ from: null })), null);

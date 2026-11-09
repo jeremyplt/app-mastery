@@ -67,8 +67,10 @@ function bodyOf(m: KapsoMessage): string | null {
     m.reaction?.emoji ??
     (m.location ? ["Position partagée", m.location.name, m.location.address].filter(Boolean).join(" : ") : undefined);
   if (text?.trim()) return text.trim();
-  // Types rares (boutons, contacts...) : le texte que Kapso en tire, sans les médias.
-  if (["text", "image", "video", "audio", "document", "sticker"].includes(m.type)) return null;
+  // Types rares (boutons, contacts...) : le texte que Kapso en tire, sans les médias
+  // ni ses textes techniques (« [Media - pending] » pour une pièce jointe de
+  // l'historique, « [Errors message] » pour un message illisible).
+  if (["text", "image", "video", "audio", "document", "sticker", "media_placeholder", "errors"].includes(m.type)) return null;
   return m.kapso?.content?.trim() || null;
 }
 
