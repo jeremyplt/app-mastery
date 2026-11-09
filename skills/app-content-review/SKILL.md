@@ -51,7 +51,7 @@ Quand Jeremy corrige :
 
 ## Règles
 
-- Français normal, tous les accents, **jamais de tiret cadratin**, zéro jargon.
+- Français normal, tous les accents, **jamais de tiret cadratin**, zéro jargon. De vraies phrases comme on parle, jamais de suite de fragments.
 - Ne pas commencer par le prénom de l'élève, pas de « on » : « Voici ce qui ressort de l'analyse de tes 20 vidéos ».
 - Pas de note sur 100. Commencer par ce qui est bon, sans flatter.
 - Jamais « un élève a fait… » ni le nom d'un autre élève.

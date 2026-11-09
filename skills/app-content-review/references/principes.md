@@ -20,10 +20,10 @@ Moins de 15 secondes pour une vidéo virale. Sur les 8 grosses vidéos regardée
 
 ### 5. Du vrai
 - Vrais lieux, vraies mains, vraie voix, vraie app.
-- **Jamais de faux humains en IA.** Oui à l'IA pour ce qui est déjà de la fiction, comme une mascotte : personne ne se sent trompé. TikTok demande aussi de signaler ces images.
+- **Jamais de faux humains en IA, ni de réactions en IA, même quelques secondes :** ça ne marche pas. Oui à l'IA pour ce qui est déjà de la fiction, comme une mascotte animée : personne ne se sent trompé, et c'est à proposer à l'élève comme essai s'il en a envie. TikTok demande aussi de signaler ces images.
 - Les écrans redessinés se voient : montrer la vraie app.
 - Phrases d'IA à repérer : jolies et vides (« Votre calendrier ouvre une aventure », « Un cadre partagé par la famille »). Test : est-ce que quelqu'un dit ça chez lui ?
-- Pas de voix IA : musique et une phrase à l'écran, ou la vraie voix de l'élève. Sans voix, ça marche très bien (9 vidéos sur 13 dans la recherche Pharma Stock).
+- La voix, trois solutions : l'élève enregistre sa propre voix pour garder le contrôle sur la diction, puis la transforme (par exemple en voix féminine) ; ou il clone une voix à partir de quelques phrases enregistrées par quelqu'un de son entourage ou par quelqu'un qui fait de l'ASMR, avec l'accord de la personne ; ou il met une musique calme et les phrases à l'écran, à tester et à bien soigner. Sans voix, ça marche très bien (9 vidéos sur 13 dans la recherche Pharma Stock).
 
 ### 6. Le téléphone se filme bien
 On parle de **rushs du téléphone**, pas de captures d'écran. Garder le téléphone en main, filmé droit et de près, avec un deuxième téléphone stable. Près d'une fenêtre sans reflet, luminosité au maximum, écran nettoyé, doigt retiré vite pour voir le résultat.
@@ -35,7 +35,7 @@ Pas de série à suivre, pas de « abonne-toi ». Un format répétable sert à 
 Beaucoup d'élèves ne veulent pas se montrer. Mains, lieu, voix, écran suffisent. Vérifier les références sur toute la vidéo : le moindre visage, et ce n'est plus sans visage (le signaler quand un modèle en montre un, comme Cal AI ou Juno).
 
 ### 9. Ton plus jeune
-Les élèves sont souvent trop sages. Ne pas hésiter à reprendre les phrases très communes de TikTok (voir `accroches.md`).
+Les élèves sont souvent trop sages. Ne pas hésiter à reprendre les phrases très communes de TikTok (voir `accroches.md`). Les phrases façon punchline marchent bien à l'écran (« Relax. Même Google n'a pas toutes les réponses », « Ce n'est pas un rejet. C'est un filtre. ») tant qu'on les comprend du premier coup (pas « Je suis en édition limitée »).
 
 ### 10. Dire concrètement ce que fait l'app
 Quand l'app est citée, écrire ce qu'elle donne : « elle te donne ton stock, te dit quand en racheter et quand c'est périmé ». Pas de formule floue comme « l'app me prévient avant la prochaine date » ou « tu vois tout d'un coup d'œil ». Test : quelqu'un qui ne connaît pas l'app comprend-il ce qu'il va obtenir ?
@@ -77,4 +77,5 @@ Avant de proposer un format venu d'ailleurs :
    - La fonction doit exister (Family Quest ne bloque pas Roblox ni les autres jeux).
    - Pas de « j'ai trouvé cette app » dans la bouche de son créateur : passer à la 2e personne.
    - Domaine sensible : ne jamais dire qu'un médicament est dangereux, même si les références font peur sur la nourriture.
-5. **L'enfant de l'élève n'est jamais une consigne.** Le filmer de dos ou ses mains, c'est un bonus facultatif. Sur les plans du jeu : « (Éventuellement, filme ton enfant en train de jouer, ou prends une photo, sans montrer sa tête.) »
+5. **La phrase de l'inspiration d'abord.** Traduire sa phrase et garder sa forme : si c'est un ordre de deux mots (CONTROL YOURSELF), la version de l'élève reste un ordre de deux mots (CONTRÔLE-TOI). Ne pas la remplacer par une phrase sur le problème de l'app, sauf si elle sonne faux. La règle 3 sert aux accroches qu'on écrit soi-même, pas à réécrire celles d'un format qui a marché.
+6. **L'enfant de l'élève n'est jamais une consigne.** Le filmer de dos ou ses mains, c'est un bonus facultatif. Sur les plans du jeu : « (Éventuellement, filme ton enfant en train de jouer, ou prends une photo, sans montrer sa tête.) »

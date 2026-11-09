@@ -33,10 +33,23 @@ Vidéos regardées image par image le 4 nov. 2026. Chiffres relevés dans la rec
 - **Références :** Hearth, [29,9 M, 269 164 likes, 10 s](https://www.instagram.com/reel/DESc1ZGOzxU/) ; Skylight, [2,1 M, 42 600 likes](https://www.tiktok.com/@myskylight/video/7356736324960816426).
 - **Mécanique :** petit texte blanc « Out with the OLD », on arrache le vieux tableau, « In with the NEW », l'écran arrive, liste en boîtes noires à la fin. Avant et après compris en une seconde. Il faut avoir l'ancienne méthode sous la main : papier, post-it, carnet.
 
+## Formats sans aucun visage, très simples à refaire (Phil'O, 5 nov. 2026)
+Vérifiés sur toute la vidéo (14 images par vidéo). Son non écouté : les transcriptions ne montrent aucune voix off.
+| Format | Référence | Forme |
+|---|---|---|
+| Le combo, une seule image | [Rise, 3,2 M, 125 588 likes, 6 s](https://www.instagram.com/reel/C_uyHqKySaz/) | Bandeau blanc avec une phrase, 4 cases collées dont la page App Store, fondu depuis le noir. Aucun tournage. |
+| Le widget dans le noir | [Shimmer, 1,4 M, 273 500 likes, 7 s](https://www.tiktok.com/@shimmer.manifest/video/7578567983329561869) | Écran d'accueil sombre, un message arrive, zoom sur le widget. Phrase dans la légende. |
+| Le mot en gros | [Focus Tree, 7,6 M, 982 900 likes, 7 s](https://www.tiktok.com/@studyv.tok/video/7450726520777084165) | Une main fait défiler des vidéos et un ordre de deux mots s'écrit petit à petit : CONTROL YOURSELF, repris à l'identique dans [une 2e vidéo, 1,4 M, 241 900 likes, 7 s](https://www.tiktok.com/@studyv.tok/video/7462087900323138822). Puis le téléphone sur un cahier et un doigt qui ouvre l'app. Garder un ordre court (CONTRÔLE-TOI), pas une phrase sur le problème. |
+| Photos puis écran | [Ura, 924 900, 161 100 likes, 16 s](https://www.tiktok.com/@ura_app/video/7658067540157025543) | 7 photos de câbles emmêlés avec une petite phrase, puis l'enregistrement d'écran de l'app. |
+| Avant / Après | [Biaura, 5,4 M, 147 473 likes, 20 s](https://www.instagram.com/reel/DezeN0FugUR/) | Fond noir, une phrase, deux images Before / After, 4 cartes, puis le téléphone sur les genoux. |
+| L'app sur fond blanc | [Hypelist, 2,8 M, 232 400 likes, 23 s](https://www.tiktok.com/@mo0nlunar/video/7458227325751037189) ; [Widgetable, 1 M, 84 900 likes, 17 s](https://www.tiktok.com/@abjyy/video/7505077544610221319) | Enregistrements d'écran sur fond blanc, une phrase colorée au-dessus, ligne App Store à la fin. Explique l'app : à garder pour de temps en temps. |
+| La mascotte qui a besoin de toi (validé par Jeremy) | [Finch, 63,4 M, 410 100 likes, 11 s](https://www.tiktok.com/@finchcare/video/7457035886274907438), avec un visage dans l'original, vues sans doute aidées par de la pub | Une phrase blanche, le lit, le téléphone en main, la mission qui se coche, la mascotte à la fin. |
+
 ## Autres formats à tester
 | Format | Référence | Forme |
 |---|---|---|
 | POV mascotte | Drifty « POV : ce chat ne te laisse pas scroller », 4,7 M, 12 s | POV : ce dragon ne laisse pas ton fils jouer tant que la table n'est pas mise. |
+| Mascotte animée, même en IA (demandé par Jeremy) | Aucune vidéo modèle vérifiée pour l'instant | À proposer comme essai facultatif, avec la même mascotte que dans l'app. |
 | Routine en étapes | [Moshi, 13,3 M](https://www.tiktok.com/@playmoshikids/video/6882642977194249474) | Une promesse, 4 étapes, l'app est l'étape 3. |
 | Commente pour le lien | [Stella, 8,9 M](https://www.instagram.com/reel/DekAPTxoHgJ/) | « Commente MISSION et je t'envoie le lien » (ManyChat). |
 | Recommandation d'un proche | [StudyFetch, 11,9 M, 10 s](https://www.instagram.com/reel/DH7MA6ZT20U/) | « Ma collègue m'a montré ce qu'elle utilise pour… » |

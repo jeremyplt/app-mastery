@@ -19,6 +19,9 @@ Pièges :
 - Dans la recherche TikTok, le nombre sur la vignette = les likes, pas les vues.
 - Exigence de niche : la règle « rester dans la niche » vaut pour les **banques de contenu**. Dans un retour élève, un format venu d'une autre niche est bienvenu (demande de Jeremy, 4 nov. 2026).
 
+## Trier les vidéos sans visage en masse
+Télécharger le haut du classement avec `yt-dlp --write-info-json` (8 en parallèle), extraire 14 images par vidéo, puis lancer un petit script Swift avec `VNDetectFaceRectanglesRequest` (Vision, sans dépendance) pour garder celles à 0 visage. Regarder ensuite la planche de chacune : le détecteur rate les visages de profil, et compte les visages dans les photos de l'app.
+
 ## Chercher une accroche, pas seulement une niche
 Pour une app de scan, chercher aussi les apps de scan d'autres domaines (pièces, pierres, plantes, pellicules) et le sujet sans app (« expired », « grandma's pantry », « périmé grand-mère ») : c'est là que j'ai trouvé les accroches qui ne reposent pas sur le scan.
 
