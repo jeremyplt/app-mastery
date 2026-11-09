@@ -9,6 +9,7 @@ export type AdminSection =
   | "ventes"
   | "factures"
   | "eleves"
+  | "whatsapp"
   | "commissions"
   | "chiffre-affaires"
   | "candidatures"
@@ -42,7 +43,13 @@ const GROUPS: Group[] = [
       { id: "chiffre-affaires", label: "Chiffre d'affaires", href: "/admin/chiffre-affaires", ownerOnly: true },
     ],
   },
-  { label: "Élèves", items: [{ id: "eleves", label: "Élèves", href: "/admin/eleves" }] },
+  {
+    label: "Élèves",
+    items: [
+      { id: "eleves", label: "Élèves", href: "/admin/eleves" },
+      { id: "whatsapp", label: "WhatsApp", href: "/admin/whatsapp", ownerOnly: true },
+    ],
+  },
   {
     label: "Marketing",
     items: [
