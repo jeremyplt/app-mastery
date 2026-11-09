@@ -86,11 +86,12 @@ export type ShownPayment = Payment & { saleId?: string };
 // "rappel J+3 le 10 nov." (mêmes clés que studentReminderKey dans lib/payment-reminders).
 export function lastReminder(s: Student, p: Payment): string | null {
   const prefix = `${p.date}/${p.amount ?? 0}/`;
+  // Une valeur qui n'est pas une date = rappel annulé à la main : on ne l'affiche pas.
   const sent = Object.entries(s.payment_reminders ?? {})
-    .filter(([k]) => k.startsWith(prefix))
+    .filter(([k, v]) => k.startsWith(prefix) && !Number.isNaN(Date.parse(v)))
     .sort((a, b) => a[1].localeCompare(b[1]));
   const last = sent.at(-1);
-  if (!last || Number.isNaN(Date.parse(last[1]))) return null;
+  if (!last) return null;
   const offset = Number(last[0].slice(prefix.length));
   const label = offset === 0 ? "jour J" : offset > 0 ? `J-${offset}` : `J+${-offset}`;
   const day = new Intl.DateTimeFormat("fr-FR", { day: "numeric", month: "short", timeZone: "Europe/Paris" }).format(new Date(last[1]));

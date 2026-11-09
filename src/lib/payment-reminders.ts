@@ -69,7 +69,9 @@ export type StudentReminderRow = {
 
 // Clé d'un rappel dans students.payment_reminders : "2026-11-07/1000/-3".
 // Le montant évite de confondre deux échéances le même jour. La fiche élève
-// relit ces clés (lastReminder dans app/admin/eleves/shared).
+// relit ces clés (lastReminder dans app/admin/eleves/shared). Pour annuler un
+// rappel à la main, poser sa clé avec un texte au lieu d'une date
+// ("annulé à la main...") : la clé suffit à bloquer l'envoi.
 function studentReminderPrefix(payment: StudentPayment): string {
   return `${payment.date}/${payment.amount ?? 0}/`;
 }

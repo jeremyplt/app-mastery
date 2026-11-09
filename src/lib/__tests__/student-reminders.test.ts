@@ -46,6 +46,17 @@ test("élève sans vente : un rappel déjà parti ne repart pas", () => {
   assert.equal(studentReminderDue(other, due, at("2026-11-10")), -3);
 });
 
+test("élève sans vente : un rappel annulé à la main ne part pas, les autres échéances si", () => {
+  const cancelled = student({
+    payment_reminders: {
+      [studentReminderKey(due, -3)]: "2026-11-09T07:27:15.523Z",
+      [studentReminderKey(due, -7)]: "annulé à la main le 2026-11-09",
+    },
+  });
+  for (const day of ["2026-11-14", "2026-11-20", "2026-12-06"]) assert.equal(studentReminderDue(cancelled, due, at(day)), null, day);
+  assert.equal(studentReminderDue(cancelled, { ...due, date: "2026-12-07" }, at("2026-12-04")), 3);
+});
+
 test("élève sans vente : activés après coup, les rappels ratés sont sautés", () => {
   // Activation le 9 nov. pour une échéance du 7 : pas de rafale J-3, J-1, J.
   assert.equal(studentReminderDue(student(), due, at("2026-11-09")), null);
