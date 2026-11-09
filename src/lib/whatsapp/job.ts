@@ -121,13 +121,26 @@ export async function transcribeVoiceNotes(env: JobEnv, budgetMs = 200_000): Pro
   return { transcrits: ok, erreurs: ko, restants: Math.max(0, (count ?? 0) - ok - ko) };
 }
 
+// Fichier d'un vocal. Kapso le sert depuis son API (clé requise) ou, pour
+// l'historique, depuis un lien app.kapso.ai qui redirige vers un lien signé de
+// son stockage. La clé ne part que vers api.kapso.ai, jamais vers le stockage
+// vers lequel on est redirigé.
+export async function downloadMedia(url: string, apiKey: string, get: typeof fetch = fetch): Promise<Buffer> {
+  const host = new URL(url).hostname;
+  if (host !== "api.kapso.ai" && host !== "app.kapso.ai") throw new Error("Lien audio inattendu");
+  let res = await get(url, { headers: host === "api.kapso.ai" ? { "X-API-Key": apiKey } : {}, redirect: "manual" });
+  for (let hop = 0; hop < 3 && res.status >= 300 && res.status < 400; hop++) {
+    const next = res.headers.get("location");
+    if (!next) break;
+    res = await get(new URL(next, url).toString(), { redirect: "manual" });
+  }
+  if (!res.ok) throw new Error(`Téléchargement impossible (${res.status})`);
+  return Buffer.from(await res.arrayBuffer());
+}
+
 async function transcribe(env: JobEnv, url: string | null, mime: string | null): Promise<string> {
   if (!url) throw new Error("Pas de fichier audio");
-  // La clé Kapso ne part que vers Kapso.
-  if (new URL(url).hostname !== "api.kapso.ai") throw new Error("Lien audio inattendu");
-  const res = await fetch(url, { headers: { "X-API-Key": env.apiKey } });
-  if (!res.ok) throw new Error(`Téléchargement impossible (${res.status})`);
-  const audio = Buffer.from(await res.arrayBuffer());
+  const audio = await downloadMedia(url, env.apiKey);
   if (audio.length > 25 * 1024 * 1024) throw new Error("Vocal trop lourd");
   const dir = await mkdtemp(join(tmpdir(), "whatsapp-vocal-"));
   try {

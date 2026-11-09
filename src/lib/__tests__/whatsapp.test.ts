@@ -130,3 +130,26 @@ test("réponse de l'IA nettoyée : pas de tiret cadratin, pas de brouillon si ri
   assert.equal(parseSummary({ summary: "Merci", points: [], needs_reply: false, draft: "De rien", suspicious_content: false }).draft, "");
   assert.equal(parseSummary(null).needs_reply, false);
 });
+
+test("vocaux : la clé Kapso ne part que vers api.kapso.ai, jamais vers le stockage", async () => {
+  const { downloadMedia } = await import("../whatsapp/job");
+  const calls: { url: string; key: string | null }[] = [];
+  const fake = (async (url: string, init?: RequestInit) => {
+    const headers = (init?.headers ?? {}) as Record<string, string>;
+    calls.push({ url, key: headers["X-API-Key"] ?? null });
+    if (url.includes("storage.example")) return new Response("audio", { status: 200 });
+    return new Response(null, { status: 302, headers: { location: "https://storage.example/fichier.ogg?signature=x" } });
+  }) as unknown as typeof fetch;
+
+  assert.equal((await downloadMedia("https://api.kapso.ai/media/1", "CLE", fake)).toString(), "audio");
+  assert.deepEqual(calls, [
+    { url: "https://api.kapso.ai/media/1", key: "CLE" },
+    { url: "https://storage.example/fichier.ogg?signature=x", key: null },
+  ]);
+
+  calls.length = 0;
+  await downloadMedia("https://app.kapso.ai/rails/active_storage/blobs/redirect/x/audio.ogg", "CLE", fake);
+  assert.equal(calls.every((c) => c.key === null), true);
+
+  await assert.rejects(downloadMedia("https://autre.example/audio.ogg", "CLE", fake), /Lien audio inattendu/);
+});
