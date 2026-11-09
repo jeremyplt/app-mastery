@@ -63,6 +63,7 @@ test("textes techniques de Kapso écartés", () => {
   assert.equal(toRow(msg({ type: "media_placeholder", text: undefined, kapso: { direction: "inbound", content: "[Media - pending]" } }))!.body, null);
   assert.equal(toRow(msg({ type: "errors", text: undefined, kapso: { direction: "inbound", content: "[Errors message]" } }))!.body, null);
   assert.equal(toRow(msg({ type: "edit", text: { body: "Corrigé" } }))!.body, "Corrigé");
+  assert.equal(toRow(msg({ type: "edit", text: undefined, kapso: { direction: "inbound", content: "[Edit message]" } }))!.body, null);
 });
 
 test("messages ignorés : sans sens, sans contact, ou du numéro pro lui-même", () => {
