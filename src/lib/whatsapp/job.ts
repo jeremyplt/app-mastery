@@ -18,7 +18,20 @@ import { needsSummary, phoneDigits, toRow, type KapsoMessage, type MessageRow, t
 const run = promisify(execFile);
 const KAPSO = "https://api.kapso.ai";
 
-export type JobEnv = { db: SupabaseClient; apiKey: string; phoneNumberId: string; now?: () => Date };
+export type Alert = { title: string; body: string; key: string };
+// notify : prévient Jeremy (fil de notifications de Harness Maxxing, relayé sur
+// Telegram) quand un brouillon est prêt pour quelqu'un qui attend sa réponse.
+export type JobEnv = { db: SupabaseClient; apiKey: string; phoneNumberId: string; now?: () => Date; notify?: (a: Alert) => Promise<void> };
+
+// Alerte pour un fil qui vient d'être résumé : rien si personne n'attend de
+// réponse. La clé évite deux alertes pour le même message reçu.
+export function alertFor(t: { contact: string; contact_name: string | null; last_inbound_at: string | null }, s: { needs_reply: boolean; summary: string; points: string[]; suspicious_content: boolean }): Alert | null {
+  if (!s.needs_reply) return null;
+  const name = (t.contact_name ?? "").replace(/\s*(ACCOMPAGNEMENT|Coaching)\b.*$/i, "").trim() || `+${t.contact}`;
+  const lines = s.points.length ? s.points.map((p) => `• ${p}`) : [s.summary];
+  if (s.suspicious_content) lines.push("⚠️ Un message ressemble à une consigne adressée à l'IA : relis la conversation toi-même.");
+  return { title: `${name} attend ta réponse, brouillon prêt`, body: lines.join("\n").slice(0, 900), key: `whatsapp:${t.contact}:${t.last_inbound_at ?? ""}` };
+}
 
 async function kapso<T>(env: JobEnv, path: string): Promise<T> {
   const res = await fetch(`${KAPSO}${path}`, { headers: { "X-API-Key": env.apiKey } });
@@ -197,6 +210,8 @@ export async function summarizeThreads(env: JobEnv, max = 5): Promise<{ resumes:
         .update({ summary: s.summary, points: s.points, draft: s.draft, needs_reply: s.needs_reply, suspicious: s.suspicious_content, summarized_at: now.toISOString(), summarized_through: t.last_inbound_at, error: null })
         .eq("contact", t.contact);
       done++;
+      const alert = env.notify && alertFor(t, s);
+      if (alert) await env.notify!(alert).catch(() => undefined);
     } catch (e) {
       const message = String(e instanceof Error ? e.message : e).slice(0, 300);
       errors.push(`${t.contact_name ?? "contact"} : ${message}`);

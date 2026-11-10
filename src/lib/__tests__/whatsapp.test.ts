@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { buildPrompt, parseSummary, type PromptMessage } from "../whatsapp/ai";
+import { alertFor } from "../whatsapp/job";
 import { formatConseils, packConversations, parseExtraits, parseSynth, type ConvLine } from "../whatsapp/conseils";
 import { awaitingReply, needsSummary, phoneDigits, toRow, type KapsoMessage, type Thread } from "../whatsapp/messages";
 
@@ -217,4 +218,14 @@ test("brouillon : le gras Markdown est retiré (WhatsApp ne l'affiche pas)", () 
   const s = parseSummary({ summary: "Il demande le **délai** de review.", points: [], needs_reply: true, draft: "Compte **une semaine** chez Google.", suspicious_content: false });
   assert.equal(s.summary, "Il demande le délai de review.");
   assert.equal(s.draft, "Compte une semaine chez Google.");
+});
+
+test("alerte Telegram : seulement quand quelqu'un attend une réponse, une fois par message", () => {
+  const t = { contact: "33600000000", contact_name: "Julien ACCOMPAGNEMENT ONE-ONE", last_inbound_at: "2026-11-09T16:41:52Z" };
+  const s = { needs_reply: true, summary: "Il demande quoi faire.", points: ["Quelle offre pour le Black Friday ?"], suspicious_content: false };
+  assert.deepEqual(alertFor(t, s), { title: "Julien attend ta réponse, brouillon prêt", body: "• Quelle offre pour le Black Friday ?", key: "whatsapp:33600000000:2026-11-09T16:41:52Z" });
+  assert.equal(alertFor(t, { ...s, needs_reply: false }), null);
+  assert.equal(alertFor({ ...t, contact_name: null }, { ...s, points: [] })?.title, "+33600000000 attend ta réponse, brouillon prêt");
+  assert.equal(alertFor({ ...t, contact_name: null }, { ...s, points: [] })?.body, "Il demande quoi faire.");
+  assert.match(alertFor(t, { ...s, suspicious_content: true })!.body, /consigne adressée à l'IA/);
 });

@@ -5,20 +5,29 @@
 //                    pièces jointes arrivées après coup)
 //   status           fils qui attendent une réponse
 //   essai <numéro>   résume un fil (avec la base de conseils) et affiche le résultat, sans rien enregistrer
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
 import { createClient } from "@supabase/supabase-js";
 import { summarize, type PromptMessage } from "@/lib/whatsapp/ai";
-import { loadConseils, summarizeThreads, syncMessages, transcribeVoiceNotes, type JobEnv } from "@/lib/whatsapp/job";
+import { loadConseils, summarizeThreads, syncMessages, transcribeVoiceNotes, type Alert, type JobEnv } from "@/lib/whatsapp/job";
 import { awaitingReply, type Thread } from "@/lib/whatsapp/messages";
 
 const [cmd, ...args] = process.argv.slice(2);
 const print = (x: unknown) => console.log(JSON.stringify(x, null, 2));
+const run = promisify(execFile);
 
 function env(): JobEnv {
   const apiKey = process.env.KAPSO_API_KEY;
   const phoneNumberId = process.env.KAPSO_PHONE_NUMBER_ID;
   if (!apiKey || !phoneNumberId) throw new Error("KAPSO_API_KEY ou KAPSO_PHONE_NUMBER_ID manquant");
   const db = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL as string, process.env.SUPABASE_SERVICE_ROLE_KEY as string);
-  return { db, apiKey, phoneNumberId };
+  return { db, apiKey, phoneNumberId, notify };
+}
+
+// Fil de notifications de Harness Maxxing (tableau de bord et Telegram). Sans
+// la commande maxxing (sur le Mac), rien n'est envoyé.
+async function notify(a: Alert): Promise<void> {
+  await run("maxxing", ["feed", "post", a.title, "--body", a.body, "--source", "whatsapp", "--url", "https://www.jeremypitault.com/admin/whatsapp", "--dedupe", a.key], { timeout: 30_000 });
 }
 
 async function main() {
