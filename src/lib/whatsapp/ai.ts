@@ -126,12 +126,15 @@ export function parseSummary(raw: unknown): Summary {
 // session Claude Code déjà ouverte.
 // `web` : autorise la seule recherche sur le web (WebSearch), sans lecture de
 // page ni aucun autre outil : un message piégé ne peut rien envoyer ailleurs.
-export function runClaude(opts: { system: string; schema: object; prompt: string; cwd: string; model?: string; timeoutMs?: number; localLogin?: boolean; web?: boolean }): Promise<unknown> {
+export function runClaude(opts: { system: string; schema: object; prompt: string; cwd: string; model?: string; timeoutMs?: number; localLogin?: boolean; web?: boolean; images?: string[] }): Promise<unknown> {
   const token = process.env.CLAUDE_CODE_OAUTH_TOKEN;
   if (!token && !opts.localLogin) throw new Error("Accès à Claude manquant sur le serveur");
   const tools = opts.web ? "WebSearch" : "";
   const args = ["-p", "--output-format", "stream-json", "--verbose", "--tools", tools, "--no-session-persistence", "--strict-mcp-config", "--disable-slash-commands", "--system-prompt", opts.system, "--json-schema", JSON.stringify(opts.schema)];
   if (opts.web) args.push("--allowedTools", "WebSearch");
+  // `images` (JPEG en base64) : envoyées avec le texte dans le message, Claude
+  // les regarde sans aucun outil (vérifier qu'une vidéo montre bien une app).
+  if (opts.images?.length) args.push("--input-format", "stream-json");
   if (opts.model) args.push("--model", opts.model);
   // Environnement minimal : aucune autre clé n'est transmise à ce processus.
   const env: Record<string, string> = { PATH: process.env.PATH ?? "", HOME: process.env.HOME ?? "" };
@@ -161,7 +164,13 @@ export function runClaude(opts: { system: string; schema: object; prompt: string
       }
       reject(new Error("Réponse de Claude illisible"));
     });
-    child.stdin.end(opts.prompt);
+    if (opts.images?.length) {
+      const content = [
+        ...opts.images.map((data) => ({ type: "image", source: { type: "base64", media_type: "image/jpeg", data } })),
+        { type: "text", text: opts.prompt },
+      ];
+      child.stdin.end(`${JSON.stringify({ type: "user", message: { role: "user", content } })}\n`);
+    } else child.stdin.end(opts.prompt);
   });
 }
 
