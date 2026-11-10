@@ -221,7 +221,7 @@ export async function loadConseils(db: SupabaseClient): Promise<string> {
   return [base, ready].filter(Boolean).join("\n\n");
 }
 
-async function whoLine(db: SupabaseClient, t: ThreadRow, now: Date): Promise<string> {
+export async function whoLine(db: SupabaseClient, t: Pick<ThreadRow, "student_id" | "contact_name">, now: Date): Promise<string> {
   if (t.student_id) {
     const { data: s } = await db.from("students").select("name, app, start_date, sale_id, payments").eq("id", t.student_id).maybeSingle();
     if (s) {
