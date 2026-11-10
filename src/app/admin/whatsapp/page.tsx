@@ -341,9 +341,11 @@ function ConseilCard({ c, onSaved }: { c: Conseil; onSaved: (c: Conseil) => void
         </span>
       </div>
 
-      {!valide && c.a_verifier.length > 0 && (
+      {c.a_verifier.length > 0 && (
         <div className="mt-3 rounded-lg bg-[color-mix(in_srgb,var(--orange)_14%,transparent)] px-3 py-2">
-          <p className="text-[13px] font-bold text-[var(--orange)]">À trancher avant de valider :</p>
+          <p className="text-[13px] font-bold text-[var(--orange)]">
+            {valide ? "À trancher (la fiche sert déjà aux brouillons, ces points n'y sont pas encore) :" : "À trancher avant de valider :"}
+          </p>
           <ul className="mt-1 list-disc space-y-1 pl-5 text-[13.5px] font-semibold">
             {c.a_verifier.map((q) => (
               <li key={q}>{q}</li>
