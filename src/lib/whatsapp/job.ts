@@ -244,7 +244,7 @@ export async function loadConseils(db: SupabaseClient): Promise<string> {
 
 export async function whoLine(db: SupabaseClient, t: Pick<ThreadRow, "student_id" | "contact_name">, now: Date): Promise<string> {
   if (t.student_id) {
-    const { data: s } = await db.from("students").select("name, app, start_date, sale_id, payments").eq("id", t.student_id).maybeSingle();
+    const { data: s } = await db.from("students").select("name, app, start_date, sale_id, payments, consignes_ia").eq("id", t.student_id).maybeSingle();
     if (s) {
       // Échéancier : celui de la vente quand il y en a une, sinon celui saisi sur la fiche.
       let payments: PaymentInfo[] = Array.isArray(s.payments) ? (s.payments as PaymentInfo[]) : [];
@@ -268,7 +268,8 @@ export async function whoLine(db: SupabaseClient, t: Pick<ThreadRow, "student_id
           : insp.statut === "erreur"
             ? "Contenus d'inspiration : la recherche a échoué, ne promets pas de lien."
             : "Contenus d'inspiration : recherche en cours.";
-      return [`Interlocuteur : ${s.name}, élève accompagné par Jeremy${s.app ? `, app ${s.app}` : ""}${s.start_date ? `, accompagnement commencé le ${s.start_date}` : ""}.`, pay, contenus].filter(Boolean).join("\n");
+      const consignes = typeof s.consignes_ia === "string" && s.consignes_ia.trim() ? `À savoir sur cet élève (noté par Jeremy, à respecter) : ${s.consignes_ia.trim().slice(0, 800)}` : "";
+      return [`Interlocuteur : ${s.name}, élève accompagné par Jeremy${s.app ? `, app ${s.app}` : ""}${s.start_date ? `, accompagnement commencé le ${s.start_date}` : ""}.`, consignes, pay, contenus].filter(Boolean).join("\n");
     }
   }
   return `Interlocuteur : ${t.contact_name ?? "contact"} (pas relié à un élève dans le CRM : peut-être un prospect ou un élève dont le numéro n'est pas noté).`;

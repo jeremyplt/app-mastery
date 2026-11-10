@@ -75,6 +75,7 @@ export default function StudentPage() {
   const [student, setStudent] = useState<Student | null>(null);
   const [info, setInfo] = useState<Info | null>(null);
   const [notes, setNotes] = useState("");
+  const [consignes, setConsignes] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [saved, setSaved] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -112,6 +113,7 @@ export default function StudentPage() {
         setStudent(d.student);
         setInfo(infoOf(d.student));
         setNotes(d.student.notes ?? "");
+        setConsignes(d.student.consignes_ia ?? "");
       });
   }, [authorized, id]);
 
@@ -780,6 +782,26 @@ export default function StudentPage() {
                     placeholder="Avancement, points à revoir, prochaine étape..."
                     value={notes}
                     onChange={(e) => setNotes(e.target.value)}
+                  />
+                </Card>
+
+                {/* À savoir pour les brouillons WhatsApp */}
+                <Card
+                  title="À savoir pour les brouillons"
+                  action={
+                    consignes !== (s.consignes_ia ?? "") && (
+                      <button type="button" onClick={() => patch({ consignes_ia: consignes }, "Enregistré : les prochains brouillons en tiennent compte")} className="mac-btn mac-btn-primary mac-btn-sm">
+                        Enregistrer
+                      </button>
+                    )
+                  }
+                >
+                  <p className="mb-2 text-[12.5px] font-medium text-[var(--fg2)]">L&apos;IA lit ce texte avant chaque brouillon pour cet élève.</p>
+                  <textarea
+                    className="mac-field min-h-[90px]"
+                    placeholder="Ex. : ne veut pas montrer son visage dans ses vidéos ; préfère des réponses courtes…"
+                    value={consignes}
+                    onChange={(e) => setConsignes(e.target.value)}
                   />
                 </Card>
 

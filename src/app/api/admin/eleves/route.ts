@@ -10,7 +10,7 @@ function fail(err: unknown) {
 }
 
 const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
-const TEXT_FIELDS = ["name", "email", "phone", "app", "payment_label", "notes"] as const;
+const TEXT_FIELDS = ["name", "email", "phone", "app", "payment_label", "notes", "consignes_ia"] as const;
 
 function cleanPayments(raw: unknown): StudentPayment[] {
   if (!Array.isArray(raw)) return [];

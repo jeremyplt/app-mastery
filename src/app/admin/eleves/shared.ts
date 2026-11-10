@@ -56,6 +56,7 @@ export type Student = {
   payment_label: string | null;
   payments: Payment[];
   notes: string | null;
+  consignes_ia?: string | null; // à savoir pour les brouillons WhatsApp
   links: StudentLink[];
   socials: StudentSocial[];
   last_contact_at: string | null;
