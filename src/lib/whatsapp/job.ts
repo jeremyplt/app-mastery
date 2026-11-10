@@ -258,11 +258,13 @@ export async function whoLine(db: SupabaseClient, t: Pick<ThreadRow, "student_id
       }
       const today = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Paris" }).format(now);
       const pay = paymentsLine(payments, today, currency);
-      const { data: insp } = await db.from("inspiration_requests").select("statut, lien, nb_liens").eq("student_id", t.student_id).order("created_at", { ascending: false }).limit(1).maybeSingle();
+      const { data: insp } = await db.from("inspiration_requests").select("statut, lien, nb_liens, section_titre").eq("student_id", t.student_id).order("created_at", { ascending: false }).limit(1).maybeSingle();
       const contenus = !insp
         ? ""
         : insp.statut === "fait" && insp.lien
-          ? `Contenus d'inspiration : ${insp.nb_liens ?? ""} vidéos de sa niche trouvées et ajoutées à la GIGA BANQUE, lien de sa section : ${insp.lien}`
+          ? insp.section_titre
+            ? `Contenus d'inspiration : sa niche a déjà sa section dans la GIGA BANQUE (« ${insp.section_titre} »), lien : ${insp.lien}`
+            : `Contenus d'inspiration : ${insp.nb_liens ?? ""} vidéos de sa niche trouvées et ajoutées à la GIGA BANQUE, lien de sa section : ${insp.lien}`
           : insp.statut === "erreur"
             ? "Contenus d'inspiration : la recherche a échoué, ne promets pas de lien."
             : "Contenus d'inspiration : recherche en cours.";

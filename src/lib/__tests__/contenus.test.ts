@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { bankLine, formatVues, mentionsAny, parseScrapeCreators, selectCandidates, tiktokId } from "../contenus/search";
 import { sectionTitle, stepsAt } from "../contenus/pipeline";
+import { parseSections, sectionLink } from "../contenus/bank";
 
 const item = (id: string, user: string, desc: string, views: number, likes: number) => ({ aweme_info: { aweme_id: id, desc, author: { unique_id: user }, statistics: { play_count: views, digg_count: likes } } });
 
@@ -42,7 +43,17 @@ test("contenus : ligne de la GIGA BANQUE, titre de section, étapes", () => {
   assert.equal(sectionTitle("apps pour vendre sur Vinted."), "Apps pour vendre sur Vinted");
   assert.deepEqual(
     stepsAt("verification", "en_cours", "5 sur 30").map((s) => `${s.cle}:${s.statut}`),
-    ["recherche:fait", "verification:en_cours", "drive:a_venir"],
+    ["banque:fait", "recherche:fait", "verification:en_cours", "drive:a_venir"],
   );
   assert.equal(stepsAt("fini").every((s) => s.statut === "fait"), true);
+});
+
+test("contenus : sections de la GIGA BANQUE lues dans l'export", () => {
+  const html = `<p>x</p><h1 class="c1" id="h.ia4ba4wv44py"><span class="c3">Apps de concentration : minuteurs de focus</span></h1><h2 id="h.zz">TikTok</h2><h1 id="h.m5tutpqenhp3"><span>Apps de scan (aliments, ingr&eacute;dients, m&eacute;dicaments)</span></h1><h1 id="h.vide"><span> </span></h1>`;
+  const sections = parseSections(html.replace(/&eacute;/g, "é"));
+  assert.deepEqual(sections, [
+    { titre: "Apps de concentration : minuteurs de focus", id: "h.ia4ba4wv44py" },
+    { titre: "Apps de scan (aliments, ingrédients, médicaments)", id: "h.m5tutpqenhp3" },
+  ]);
+  assert.equal(sectionLink("h.m5tutpqenhp3"), "https://docs.google.com/document/d/1j_5Hru4rpGmoQ4gMNuQ_03IeZ_YXBpOfgqcWvxirLw8/edit#heading=h.m5tutpqenhp3");
 });
