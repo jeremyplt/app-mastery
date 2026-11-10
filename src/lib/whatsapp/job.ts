@@ -5,7 +5,7 @@ import { join } from "node:path";
 import { promisify } from "node:util";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { summarize, type PromptMessage } from "./ai";
-import { formatConseils, type ConseilRow } from "./conseils";
+import { formatConseils, formatSkoolLessons, type ConseilRow, type SkoolLesson } from "./conseils";
 import { formatSupports } from "../student-questions";
 import { needsSummary, paymentsLine, phoneDigits, toRow, type KapsoMessage, type MessageRow, type PaymentInfo, type Thread } from "./messages";
 
@@ -212,13 +212,15 @@ export async function summarizeThreads(env: JobEnv, max = 5): Promise<{ resumes:
 // S'y ajoutent les supports faits avec un lien dans /admin/questions, pour que
 // le brouillon donne le lien quand la question revient.
 export async function loadConseils(db: SupabaseClient): Promise<string> {
-  const [{ data, error }, { data: supports }] = await Promise.all([
+  const [{ data, error }, { data: supports }, { data: lessons }] = await Promise.all([
     db.from("whatsapp_conseils").select("theme, titre, contenu, statut").eq("statut", "valide").order("ordre"),
     db.from("student_questions").select("intitule, statut, lien, note, support_titre").eq("statut", "fait").not("lien", "is", null),
+    db.from("skool_lessons").select("cours, module, titre, url").eq("pour_brouillons", true).order("ordre"),
   ]);
   const base = error ? "" : formatConseils((data ?? []) as ConseilRow[]);
   const ready = formatSupports((supports ?? []) as Parameters<typeof formatSupports>[0]);
-  return [base, ready].filter(Boolean).join("\n\n");
+  const skool = formatSkoolLessons((lessons ?? []) as SkoolLesson[]);
+  return [base, ready, skool].filter(Boolean).join("\n\n");
 }
 
 export async function whoLine(db: SupabaseClient, t: Pick<ThreadRow, "student_id" | "contact_name">, now: Date): Promise<string> {

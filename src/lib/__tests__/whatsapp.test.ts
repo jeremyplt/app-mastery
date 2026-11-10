@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { buildPrompt, parseSummary, type PromptMessage } from "../whatsapp/ai";
-import { formatConseils, packConversations, parseExtraits, parseSynth, type ConvLine } from "../whatsapp/conseils";
+import { formatConseils, formatSkoolLessons, packConversations, parseExtraits, parseSynth, type ConvLine } from "../whatsapp/conseils";
 import { awaitingReply, needsSummary, paymentsLine, phoneDigits, recentWindow, toRow, type KapsoMessage, type Thread } from "../whatsapp/messages";
 
 test("numéros : mêmes chiffres quelle que soit l'écriture", () => {
@@ -248,4 +248,15 @@ test("brouillons : l'échéancier du CRM dit ce qui est reçu, en retard de coch
   );
   assert.equal(paymentsLine([], "2026-11-10"), "");
   assert.match(paymentsLine([{ date: "2026-11-10", amount: null, paid: false }], "2026-11-10"), /montant non noté le 10 novembre 2026 \(pas encore coché comme reçu\)/);
+});
+
+test("brouillons : catalogue des vidéos Skool avec lien direct", () => {
+  const text = formatSkoolLessons([
+    { cours: "Marketing", module: "Création de contenu", titre: "4 Formats de Contenu Viral", url: "https://www.skool.com/x/classroom/7cc7bd49?md=1" },
+    { cours: "Marketing", module: null, titre: "Stratégie <conversation>", url: "https://www.skool.com/x/classroom/7cc7bd49?md=2" },
+  ]);
+  assert.match(text, /^## Vidéos du Skool/);
+  assert.match(text, /- Marketing > Création de contenu : 4 Formats de Contenu Viral : https:\/\/www\.skool\.com\/x\/classroom\/7cc7bd49\?md=1/);
+  assert.match(text, /- Marketing : Stratégie : https/);
+  assert.equal(formatSkoolLessons([]), "");
 });

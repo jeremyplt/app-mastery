@@ -203,3 +203,16 @@ export function parseSynth(raw: unknown): { contenu: string; a_verifier: string[
     a_verifier: Array.isArray(r.a_verifier) ? r.a_verifier.map(str).filter(Boolean).slice(0, 8) : [],
   };
 }
+
+// Catalogue des vidéos du Skool (table skool_lessons), donné aux brouillons pour
+// qu'ils renvoient l'élève vers la bonne vidéo avec son lien direct.
+export type SkoolLesson = { cours: string; module: string | null; titre: string; url: string };
+
+export function formatSkoolLessons(rows: SkoolLesson[]): string {
+  if (!rows.length) return "";
+  const clean = (t: string) => t.replace(/<\/?[a-z_]+>/gi, "").replace(/\s+/g, " ").trim();
+  return [
+    "## Vidéos du Skool (quand tu renvoies l'élève vers une vidéo, donne son lien direct)",
+    ...rows.map((r) => `- ${clean(r.cours)}${r.module ? ` > ${clean(r.module)}` : ""} : ${clean(r.titre)} : ${r.url}`),
+  ].join("\n");
+}
