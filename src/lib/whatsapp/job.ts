@@ -5,12 +5,14 @@ import { join } from "node:path";
 import { promisify } from "node:util";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { summarize, type PromptMessage } from "./ai";
+import { formatConseils, type ConseilRow } from "./conseils";
 import { needsSummary, phoneDigits, toRow, type KapsoMessage, type MessageRow, type Thread } from "./messages";
 
 // Passage du job WhatsApp sur Harness Maxxing (toutes les 5 minutes) :
 // 1. copie les nouveaux messages depuis Kapso ;
 // 2. transcrit les vocaux avec Whisper, sur le serveur ;
-// 3. résume les fils qui attendent une réponse et prépare un brouillon.
+// 3. résume les fils qui attendent une réponse et prépare un brouillon, en
+//    s'appuyant sur la base de conseils validée par Jeremy.
 // Lecture seule : ce code n'envoie jamais rien sur WhatsApp.
 
 const run = promisify(execFile);
@@ -168,6 +170,7 @@ export async function summarizeThreads(env: JobEnv, max = 5): Promise<{ resumes:
     .order("last_inbound_at", { ascending: true });
   if (error) throw new Error(error.message);
   const todo = ((data ?? []) as ThreadRow[]).filter((t) => needsSummary(t, now));
+  const conseils = todo.length ? await loadConseils(env.db) : "";
   let done = 0;
   let waiting = 0;
   const errors: string[] = [];
@@ -188,7 +191,7 @@ export async function summarizeThreads(env: JobEnv, max = 5): Promise<{ resumes:
       continue;
     }
     try {
-      const s = await summarize(messages, { who: await whoLine(env.db, t), now, newSince });
+      const s = await summarize(messages, { who: await whoLine(env.db, t), now, newSince, conseils });
       await env.db
         .from("whatsapp_threads")
         .update({ summary: s.summary, points: s.points, draft: s.draft, needs_reply: s.needs_reply, suspicious: s.suspicious_content, summarized_at: now.toISOString(), summarized_through: t.last_inbound_at, error: null })
@@ -201,6 +204,14 @@ export async function summarizeThreads(env: JobEnv, max = 5): Promise<{ resumes:
     }
   }
   return { resumes: done, en_attente: waiting + Math.max(0, todo.length - max), erreurs: errors };
+}
+
+// Les thèmes validés par Jeremy dans /admin/whatsapp. Sans base (ou en cas de
+// souci de lecture), les brouillons se font comme avant.
+async function loadConseils(db: SupabaseClient): Promise<string> {
+  const { data, error } = await db.from("whatsapp_conseils").select("theme, titre, contenu, statut").eq("statut", "valide").order("ordre");
+  if (error) return "";
+  return formatConseils((data ?? []) as ConseilRow[]);
 }
 
 async function whoLine(db: SupabaseClient, t: ThreadRow): Promise<string> {

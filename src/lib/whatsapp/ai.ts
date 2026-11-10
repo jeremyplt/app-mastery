@@ -23,6 +23,8 @@ needs_reply : faux si les nouveaux messages n'appellent pas de réponse (un merc
 
 draft : la réponse que Jeremy pourrait envoyer, dans sa voix. Tutoiement, phrases complètes et naturelles comme à l'oral, ton direct et bienveillant, courte (en général trois à huit phrases). Imite la façon dont Jeremy écrit dans ses propres messages de la conversation s'il y en a. Réponds à chaque point. N'invente jamais un fait, une date, un prix, un chiffre ou un avis sur une app que tu ne connais pas : mets plutôt un passage entre crochets à compléter par Jeremy, par exemple [ton avis sur l'écran 3]. Ne propose jamais d'appel ni de rendez-vous de toi-même. Pas de tiret cadratin, pas de liste à puces, pas de formule d'IA (« N'hésite pas à revenir vers moi »). Ne parle jamais de « la formation ». Chaîne vide si needs_reply est faux.
 
+Base de conseils : quand elle est fournie (balise conseils_de_jeremy), c'est ce que Jeremy conseille d'habitude à ses élèves, relu et validé par lui. Appuie-toi dessus pour le fond du brouillon : mêmes règles, mêmes chiffres repères, même façon de voir. Ne t'en sers que quand elle répond vraiment à la question, et adapte-la à la situation de l'interlocuteur. Si la conversation dit autre chose, la conversation l'emporte. Ne dis jamais qu'un autre élève a fait quelque chose.
+
 Écris en français correct, avec tous les accents.`;
 
 const SCHEMA = {
@@ -52,12 +54,13 @@ export type PromptContext = {
   who: string; // "Élève : Maceo Basse, app Verseo, accompagnement commencé le 2026-10-01" ou "Contact : Paul"
   now: Date;
   newSince: string | null; // les messages reçus après cette date sont NOUVEAUX
+  conseils?: string; // base de conseils validée par Jeremy (formatConseils)
 };
 
 const paris = (iso: string) =>
   new Intl.DateTimeFormat("fr-FR", { timeZone: "Europe/Paris", day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }).format(new Date(iso));
 
-function contentOf(m: PromptMessage): string {
+export function contentOf(m: PromptMessage): string {
   if (m.type === "audio") {
     if (m.transcript) return `(vocal, transcription automatique) ${m.transcript}`;
     return m.transcript_error ? "(vocal impossible à transcrire)" : "(vocal pas encore transcrit)";
@@ -82,13 +85,15 @@ export function buildPrompt(messages: PromptMessage[], ctx: PromptContext): stri
   const lines = messages.map((m) => {
     const isNew = m.direction === "inbound" && (!ctx.newSince || Date.parse(m.sent_at) > Date.parse(ctx.newSince));
     const who = m.direction === "outbound" ? "Jeremy" : "Interlocuteur";
-    const text = contentOf(m).replace(/<\/?conversation>/gi, "").replace(/\s*\n\s*/g, " / ");
+    const text = contentOf(m).replace(/<\/?(conversation|conseils_de_jeremy)>/gi, "").replace(/\s*\n\s*/g, " / ");
     return `${isNew ? "[NOUVEAU] " : ""}[${paris(m.sent_at)}] ${who} : ${text}`;
   });
+  const conseils = ctx.conseils?.replace(/<\/?(conseils_de_jeremy|conversation)>/gi, "").trim();
   return [
     ctx.who,
     `Maintenant : ${paris(ctx.now.toISOString())} (heure de Paris).`,
     "",
+    ...(conseils ? ["Base de conseils de Jeremy, validée par lui :", "<conseils_de_jeremy>", conseils, "</conseils_de_jeremy>", ""] : []),
     "Conversation, du plus ancien au plus récent :",
     "<conversation>",
     ...lines,
@@ -111,14 +116,21 @@ export function parseSummary(raw: unknown): Summary {
   };
 }
 
-function askClaude(prompt: string, cwd: string): Promise<unknown> {
+// Claude Code sans aucun outil, dans un dossier vide. Sur le serveur, l'accès passe
+// par CLAUDE_CODE_OAUTH_TOKEN ; sur le Mac (scripts lancés à la main), par la
+// session Claude Code déjà ouverte.
+export function runClaude(opts: { system: string; schema: object; prompt: string; cwd: string; model?: string; timeoutMs?: number; localLogin?: boolean }): Promise<unknown> {
   const token = process.env.CLAUDE_CODE_OAUTH_TOKEN;
-  if (!token) throw new Error("Accès à Claude manquant sur le serveur");
-  const args = ["-p", "--output-format", "stream-json", "--verbose", "--tools", "", "--no-session-persistence", "--strict-mcp-config", "--disable-slash-commands", "--system-prompt", SYSTEM, "--json-schema", JSON.stringify(SCHEMA)];
+  if (!token && !opts.localLogin) throw new Error("Accès à Claude manquant sur le serveur");
+  const args = ["-p", "--output-format", "stream-json", "--verbose", "--tools", "", "--no-session-persistence", "--strict-mcp-config", "--disable-slash-commands", "--system-prompt", opts.system, "--json-schema", JSON.stringify(opts.schema)];
+  if (opts.model) args.push("--model", opts.model);
+  // Environnement minimal : aucune autre clé n'est transmise à ce processus.
+  const env: Record<string, string> = { PATH: process.env.PATH ?? "", HOME: process.env.HOME ?? "" };
+  if (token) env.CLAUDE_CODE_OAUTH_TOKEN = token;
+  if (opts.localLogin && process.env.USER) env.USER = process.env.USER;
   return new Promise((resolve, reject) => {
-    // Environnement minimal : aucune autre clé n'est transmise à ce processus.
-    const child = spawn("claude", args, { cwd, env: { PATH: process.env.PATH ?? "", HOME: process.env.HOME ?? "", CLAUDE_CODE_OAUTH_TOKEN: token } as unknown as NodeJS.ProcessEnv, stdio: ["pipe", "pipe", "pipe"] });
-    const timer = setTimeout(() => child.kill("SIGKILL"), 240_000);
+    const child = spawn("claude", args, { cwd: opts.cwd, env: env as unknown as NodeJS.ProcessEnv, stdio: ["pipe", "pipe", "pipe"] });
+    const timer = setTimeout(() => child.kill("SIGKILL"), opts.timeoutMs ?? 240_000);
     let out = "";
     child.stdout.on("data", (d) => (out += d));
     child.stderr.on("data", () => undefined);
@@ -140,14 +152,14 @@ function askClaude(prompt: string, cwd: string): Promise<unknown> {
       }
       reject(new Error("Réponse de Claude illisible"));
     });
-    child.stdin.end(prompt);
+    child.stdin.end(opts.prompt);
   });
 }
 
 export async function summarize(messages: PromptMessage[], ctx: PromptContext): Promise<Summary> {
   const empty = await mkdtemp(join(tmpdir(), "whatsapp-vide-"));
   try {
-    return parseSummary(await askClaude(buildPrompt(messages, ctx), empty));
+    return parseSummary(await runClaude({ system: SYSTEM, schema: SCHEMA, prompt: buildPrompt(messages, ctx), cwd: empty }));
   } finally {
     await rm(empty, { recursive: true, force: true });
   }

@@ -8,6 +8,9 @@ import { awaitingReply } from "@/lib/whatsapp/messages";
 // WhatsApp pro : résumés, brouillons et vocaux transcrits, préparés toutes les
 // 5 minutes par le job WhatsApp de Harness Maxxing. Rien n'est envoyé d'ici :
 // Jeremy répond lui-même dans WhatsApp Web. Propriétaire seulement.
+// L'onglet « Base de conseils » sert à relire et valider, thème par thème, les
+// conseils tirés de ses anciennes réponses : seuls les thèmes validés servent
+// aux brouillons.
 
 type Thread = {
   contact: string;
@@ -28,7 +31,17 @@ type Thread = {
 };
 type Message = { id: string; direction: "inbound" | "outbound"; type: string; body: string | null; transcript: string | null; transcript_error: string | null; sent_at: string };
 type StudentOption = { id: string; name: string; phone: string | null };
-type Tab = "todo" | "all";
+type Conseil = {
+  theme: string;
+  titre: string;
+  contenu: string;
+  a_verifier: string[];
+  sources: number;
+  statut: "a_relire" | "valide";
+  validated_at: string | null;
+  updated_at: string;
+};
+type Tab = "todo" | "all" | "conseils";
 
 const SMALL = "text-[12.5px] font-medium text-[var(--fg2)]";
 
@@ -275,6 +288,155 @@ function ThreadCard({ t, students, onChange }: { t: Thread; students: StudentOpt
   );
 }
 
+// Hauteur du champ selon la longueur du texte (environ 85 caractères par ligne).
+const rowsFor = (text: string) => Math.min(40, Math.max(6, text.split("\n").reduce((n, l) => n + Math.max(1, Math.ceil(l.length / 85)), 0)));
+
+function ConseilCard({ c, onSaved }: { c: Conseil; onSaved: (c: Conseil) => void }) {
+  const [text, setText] = useState(c.contenu);
+  const [busy, setBusy] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const valide = c.statut === "valide";
+  const dirty = text.trim() !== c.contenu.trim();
+
+  useEffect(() => setText(c.contenu), [c.contenu]);
+
+  async function save(statut?: Conseil["statut"]) {
+    setBusy(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/admin/whatsapp/conseils", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ theme: c.theme, contenu: text, ...(statut ? { statut } : {}) }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Enregistrement impossible");
+      onSaved(data.conseil);
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Erreur réseau");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  return (
+    <article className="mac-group p-5">
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div className="min-w-0">
+          <h2 className="text-[16px] font-bold">{c.titre}</h2>
+          <p className={SMALL}>
+            Tiré de {c.sources} conseil{c.sources > 1 ? "s" : ""} relevé{c.sources > 1 ? "s" : ""} dans tes conversations
+            {valide && c.validated_at ? ` · validé ${ago(c.validated_at)}` : ""}
+          </p>
+        </div>
+        <span
+          className={`rounded-full px-2.5 py-1 text-[12px] font-bold ${
+            valide ? "bg-[color-mix(in_srgb,var(--green)_16%,transparent)] text-[var(--green)]" : "bg-[color-mix(in_srgb,var(--orange)_16%,transparent)] text-[var(--orange)]"
+          }`}
+        >
+          {valide ? "Validé" : "À relire"}
+        </span>
+      </div>
+
+      {!valide && c.a_verifier.length > 0 && (
+        <div className="mt-3 rounded-lg bg-[color-mix(in_srgb,var(--orange)_14%,transparent)] px-3 py-2">
+          <p className="text-[13px] font-bold text-[var(--orange)]">À trancher avant de valider :</p>
+          <ul className="mt-1 list-disc space-y-1 pl-5 text-[13.5px] font-semibold">
+            {c.a_verifier.map((q) => (
+              <li key={q}>{q}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      <label htmlFor={`conseil-${c.theme}`} className="sr-only">
+        Texte du thème {c.titre}
+      </label>
+      <textarea id={`conseil-${c.theme}`} className="mac-field mt-3 text-[14px] leading-relaxed" rows={rowsFor(text)} value={text} onChange={(e) => setText(e.target.value)} />
+
+      <div className="mt-2 flex flex-wrap items-center gap-2">
+        {!valide && (
+          <button className="mac-btn mac-btn-primary mac-btn-sm" disabled={busy || !text.trim()} onClick={() => save("valide")}>
+            {dirty ? "Enregistrer et valider" : "Valider"}
+          </button>
+        )}
+        {dirty && (
+          <button className="mac-btn mac-btn-def mac-btn-sm" disabled={busy} onClick={() => save()}>
+            Enregistrer
+          </button>
+        )}
+        {dirty && (
+          <button className="mac-btn mac-btn-def mac-btn-sm" disabled={busy} onClick={() => setText(c.contenu)}>
+            Annuler
+          </button>
+        )}
+        {valide && !dirty && (
+          <button className="mac-btn mac-btn-def mac-btn-sm" disabled={busy} onClick={() => save("a_relire")}>
+            Ne plus utiliser pour les brouillons
+          </button>
+        )}
+        {saved && <span className={SMALL}>Enregistré</span>}
+      </div>
+
+      {error && (
+        <p role="alert" className="mt-2 text-[13px] font-semibold text-[var(--red)]">
+          {error}
+        </p>
+      )}
+    </article>
+  );
+}
+
+function ConseilsPanel() {
+  const [list, setList] = useState<Conseil[] | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch("/api/admin/whatsapp/conseils")
+      .then(async (res) => {
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error ?? "Chargement impossible");
+        setList(data.conseils);
+      })
+      .catch((e) => setError(e instanceof Error ? e.message : "Erreur réseau"));
+  }, []);
+
+  if (error)
+    return (
+      <p role="alert" className="text-sm font-semibold text-[var(--red)]">
+        {error}
+      </p>
+    );
+  if (!list) return <p className={SMALL}>Chargement…</p>;
+  const valides = list.filter((c) => c.statut === "valide").length;
+
+  return (
+    <>
+      <div className="mac-group p-5">
+        <p className="text-[14.5px] font-medium leading-relaxed">
+          Tes conseils, relevés dans tes vocaux et tes messages aux élèves, puis rangés par thème. Relis chaque thème, corrige ce qui ne va pas et valide-le. Seuls les thèmes validés servent à préparer les brouillons.
+        </p>
+        {list.length > 0 && (
+          <p className="mt-2 text-[14px] font-bold">
+            {valides} {valides > 1 ? "thèmes validés" : "thème validé"} sur {list.length}
+          </p>
+        )}
+      </div>
+      {list.length === 0 ? (
+        <div className="mac-group p-6 text-center">
+          <p className="text-[15px] font-bold">La base de conseils n&apos;est pas encore prête.</p>
+          <p className={`mt-1 ${SMALL}`}>Les thèmes apparaîtront ici dès qu&apos;ils seront rédigés.</p>
+        </div>
+      ) : (
+        list.map((c) => <ConseilCard key={c.theme} c={c} onSaved={(n) => setList((l) => (l ?? []).map((x) => (x.theme === n.theme ? n : x)))} />)
+      )}
+    </>
+  );
+}
+
 export default function WhatsAppPage() {
   const [threads, setThreads] = useState<Thread[]>([]);
   const [students, setStudents] = useState<StudentOption[]>([]);
@@ -334,7 +496,12 @@ export default function WhatsAppPage() {
             À répondre ({todo.length})
           </button>
           <button className={tab === "all" ? "on" : ""} onClick={() => setTab("all")}>
-            30 derniers jours ({all.length})
+            <span className="sm:hidden">30 jours</span>
+            <span className="hidden sm:inline">30 derniers jours</span> ({all.length})
+          </button>
+          <button className={tab === "conseils" ? "on" : ""} onClick={() => setTab("conseils")}>
+            <span className="sm:hidden">Conseils</span>
+            <span className="hidden sm:inline">Base de conseils</span>
           </button>
         </div>
 
@@ -345,7 +512,9 @@ export default function WhatsAppPage() {
         )}
 
         <div className="mt-5 space-y-4">
-          {loading ? (
+          {tab === "conseils" ? (
+            <ConseilsPanel />
+          ) : loading ? (
             <p className={SMALL}>Chargement…</p>
           ) : visible.length === 0 ? (
             <div className="mac-group p-6 text-center">
