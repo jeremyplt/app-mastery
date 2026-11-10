@@ -27,13 +27,23 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ messages: (rows ?? []).reverse() });
     }
     const since = new Date(Date.now() - 30 * 86_400_000).toISOString();
-    const [threads, students] = await Promise.all([
+    const day = new Date(Date.now() - 86_400_000).toISOString();
+    const [threads, students, live] = await Promise.all([
       withRetry(() =>
         db.from("whatsapp_threads").select("*, student:students(id, name, app)").or(`last_inbound_at.gte.${since},last_outbound_at.gte.${since}`).order("last_inbound_at", { ascending: false, nullsFirst: false }).limit(150),
       ),
       withRetry(() => db.from("students").select("id, name, phone").eq("archived", false).order("name")),
+      // Messages vraiment reçus ces dernières 24 h (pas l'historique importé) :
+      // seuls eux ouvrent la fenêtre d'envoi de WhatsApp.
+      withRetry(() => db.from("whatsapp_messages").select("contact, sent_at").eq("direction", "inbound").neq("origin", "history_sync").gte("sent_at", day)),
     ]);
-    return NextResponse.json({ threads: threads ?? [], students: students ?? [] });
+    const lastLive = new Map<string, string>();
+    for (const m of (live ?? []) as { contact: string; sent_at: string }[]) {
+      const cur = lastLive.get(m.contact);
+      if (!cur || Date.parse(m.sent_at) > Date.parse(cur)) lastLive.set(m.contact, m.sent_at);
+    }
+    const withWindow = ((threads ?? []) as { contact: string }[]).map((t) => ({ ...t, last_live_inbound_at: lastLive.get(t.contact) ?? null }));
+    return NextResponse.json({ threads: withWindow, students: students ?? [] });
   } catch (err) {
     return fail(err);
   }

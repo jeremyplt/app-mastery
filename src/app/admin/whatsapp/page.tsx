@@ -20,6 +20,7 @@ type Thread = {
   student: { id: string; name: string; app: string | null } | null;
   last_inbound_at: string | null;
   last_outbound_at: string | null;
+  last_live_inbound_at?: string | null; // dernier vrai message reçu (pas l'historique importé) : ouvre la fenêtre d'envoi
   summary: string | null;
   points: string[] | null;
   draft: string | null;
@@ -125,7 +126,7 @@ function ThreadCard({ t, students, onChange }: { t: Thread; students: StudentOpt
   const [error, setError] = useState<string | null>(null);
   const scroller = useRef<HTMLDivElement>(null);
   const field = useRef<HTMLTextAreaElement>(null);
-  const windowEnd = sendWindowEnd(t.last_inbound_at, new Date());
+  const windowEnd = sendWindowEnd(t.last_live_inbound_at ?? null, new Date());
   const canSend = isPhone(t.contact) && windowEnd !== null;
 
   // Un nouveau brouillon remplace le texte, sauf si tu as commencé à l'écrire.
@@ -343,7 +344,7 @@ function ThreadCard({ t, students, onChange }: { t: Thread; students: StudentOpt
             className="mac-btn mac-btn-sm !bg-[var(--wa-send)] !text-white disabled:opacity-50"
             disabled={busy !== null || !canSend || !draft.trim() || /\[[^\]]+\]/.test(draft)}
             onClick={() => act("envoyer", { text: draft })}
-            title={!canSend ? "Plus de 24 h depuis son dernier message : WhatsApp n'autorise l'envoi que depuis l'app." : /\[[^\]]+\]/.test(draft) ? "Complète d'abord les passages entre crochets." : undefined}
+            title={!canSend ? "WhatsApp n'autorise pas l'envoi d'ici pour ce message : utilise WhatsApp Web." : /\[[^\]]+\]/.test(draft) ? "Complète d'abord les passages entre crochets." : undefined}
           >
             {busy === "envoyer" ? "Envoi…" : "Envoyer"}
           </button>
@@ -389,7 +390,9 @@ function ThreadCard({ t, students, onChange }: { t: Thread; students: StudentOpt
           )}
         </div>
         {!canSend && isPhone(t.contact) && waiting && (
-          <p className={`mt-2 px-1 ${SMALL}`}>Plus de 24 h depuis son dernier message : WhatsApp n&apos;autorise l&apos;envoi que depuis l&apos;app. Utilise « WhatsApp Web ».</p>
+          <p className={`mt-2 px-1 ${SMALL}`}>
+            Envoi d&apos;ici impossible : WhatsApp ne l&apos;autorise que dans les 24 h qui suivent un message reçu depuis le branchement de l&apos;outil (9 novembre, 20 h 48). Utilise « WhatsApp Web ».
+          </p>
         )}
         {canSend && windowEnd && <p className={`mt-2 px-1 ${SMALL}`}>Envoi possible d&apos;ici jusqu&apos;à {hourOf(windowEnd.toISOString())} {dayOf(windowEnd.toISOString()) !== dayOf(new Date().toISOString()) ? dayOf(windowEnd.toISOString()) : "aujourd'hui"}.</p>}
         {error && (
