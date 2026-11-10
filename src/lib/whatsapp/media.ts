@@ -54,10 +54,10 @@ async function video(dir: string, url: string, n: number): Promise<{ image: stri
   const file = join(dir, `v${n}.mp4`);
   await run("yt-dlp", ["-q", "--no-warnings", "--no-playlist", "-f", "worst[ext=mp4]/worst", "--max-filesize", "80M", "-o", file, url], { timeout: 150_000 });
   const duration = Math.max(1, Number(meta.duration) || parseFloat((await run("ffprobe", ["-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", file])).stdout) || 10);
-  // Planche de 8 images, à lire de gauche à droite puis de haut en bas.
+  // Planche de 12 images, à lire de gauche à droite puis de haut en bas.
   const sheet = join(dir, `v${n}.jpg`);
-  const step = duration / 8;
-  await run("ffmpeg", ["-v", "error", "-y", "-i", file, "-vf", `fps=1/${step.toFixed(3)},scale=320:-2,tile=4x2`, "-frames:v", "1", "-q:v", "4", sheet], { timeout: 90_000 });
+  const step = duration / 12;
+  await run("ffmpeg", ["-v", "error", "-y", "-i", file, "-vf", `fps=1/${step.toFixed(3)},scale=300:-2,tile=4x3`, "-frames:v", "1", "-q:v", "4", sheet], { timeout: 90_000 });
   let voix = "";
   try {
     const wav = join(dir, `v${n}.wav`);
@@ -74,7 +74,7 @@ async function video(dir: string, url: string, n: number): Promise<{ image: stri
     `durée ${Math.round(duration)} s`,
     meta.upload_date ? `publiée le ${String(meta.upload_date).replace(/(\d{4})(\d{2})(\d{2})/, "$3/$2/$1")}` : "",
   ].filter(Boolean);
-  const note = `Vidéo ${url} (compte ${clip(meta.uploader ?? meta.channel, 40)}) : ${stats.join(", ")}. Légende : « ${clip(meta.description, 300)} ». Voix : ${voix ? `« ${voix} »` : "aucune voix (musique ou texte à l'écran seulement)"}. Planche de 8 images de la vidéo, une toutes les ${step.toFixed(1)} s.`;
+  const note = `Vidéo ${url} (compte ${clip(meta.uploader ?? meta.channel, 40)}) : ${stats.join(", ")}. Légende : « ${clip(meta.description, 300)} ». Voix : ${voix ? `« ${voix} »` : "aucune voix (musique ou texte à l'écran seulement)"}. Planche de 12 images de la vidéo, une toutes les ${step.toFixed(1)} s, de gauche à droite puis de haut en bas.`;
   return { image: (await readFile(sheet)).toString("base64"), note };
 }
 

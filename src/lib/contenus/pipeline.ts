@@ -168,18 +168,44 @@ export async function processRequest(env: ContenusEnv, req: InspirationRequest):
       env.log?.(`recherche « ${kw} » : ${e instanceof Error ? e.message : e}`);
     }
   }
-  const candidates = selectCandidates(found, { exclude, max: 45 });
+  // Vidéos déjà ajoutées pour cette niche : jamais deux fois le même lien.
+  const { data: previous } = await env.db.from("inspiration_requests").select("liens").eq("niche", req.niche).neq("id", req.id);
+  const dejaVus = new Set<string>(((previous ?? []).flatMap((p) => (p.liens ?? []) as { id?: string }[])).map((l) => String(l.id ?? "")).filter(Boolean));
+  const candidates = selectCandidates(found, { exclude, max: 45, dejaVus });
   if (!candidates.length) throw new Error("Aucune vidéo assez vue trouvée pour ces mots-clés");
 
+  const checkAll = async (list: Candidate[], label: string) => {
+    let done = 0;
+    return pool(list, 3, async (c) => {
+      const v = await verifyVideo(c, req.niche, exclude);
+      done++;
+      if (done % 5 === 0) await progress(env, req, "verification", "en_cours", `${label}${done} sur ${list.length} vidéos regardées`);
+      return v;
+    });
+  };
   await progress(env, req, "verification", "en_cours", `${candidates.length} vidéos à regarder`);
-  let done = 0;
-  const checked = await pool(candidates, 3, async (c) => {
-    const v = await verifyVideo(c, req.niche, exclude);
-    done++;
-    if (done % 5 === 0) await progress(env, req, "verification", "en_cours", `${done} sur ${candidates.length} vidéos regardées`);
-    return v;
-  });
-  const videos = checked.filter((v): v is Verified => v !== null).sort((a, b) => b.vues - a.vues);
+  let videos = (await checkAll(candidates, "")).filter((v): v is Verified => v !== null);
+
+  // 2e passe : les apps trouvées font les meilleures recherches (« vendly app »).
+  const found2 = [...new Set(videos.map((v) => v.app).filter((a) => a && !mentionsAny(a, exclude)))].slice(0, 4);
+  if (found2.length) {
+    await progress(env, req, "recherche", "en_cours", `apps trouvées : ${found2.join(", ")}`);
+    const more: Candidate[] = [];
+    for (const a of found2) {
+      try {
+        more.push(...(await searchTikTok(env.scrapeKey, `${a} app`)));
+      } catch (e) {
+        env.log?.(`recherche « ${a} app » : ${e instanceof Error ? e.message : e}`);
+      }
+    }
+    const seen = new Set<string>([...dejaVus, ...candidates.map((c) => c.id)]);
+    const extra = selectCandidates(more, { exclude, max: 30, dejaVus: seen });
+    if (extra.length) {
+      await progress(env, req, "verification", "en_cours", `${extra.length} vidéos de plus à regarder`);
+      videos = videos.concat((await checkAll(extra, "2e passe : ")).filter((v): v is Verified => v !== null));
+    }
+  }
+  videos.sort((a, b) => b.vues - a.vues);
   if (!videos.length) throw new Error("Aucune vidéo ne montre vraiment une app de cette niche");
 
   if (env.dryRun) return { lien: null, videos };
