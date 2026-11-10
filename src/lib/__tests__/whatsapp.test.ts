@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { buildPrompt, parseSummary, type PromptMessage } from "../whatsapp/ai";
-import { canSendFreeForm, cleanOutgoing, sendText } from "../whatsapp/send";
+import { canSendFreeForm, cleanOutgoing, markRead, sendText } from "../whatsapp/send";
 import { formatConseils, formatSkoolLessons, packConversations, parseExtraits, parseSynth, type ConvLine } from "../whatsapp/conseils";
 import { awaitingReply, needsSummary, paymentsLine, phoneDigits, recentWindow, toRow, type KapsoMessage, type Thread } from "../whatsapp/messages";
 
@@ -290,4 +290,14 @@ test("envoi : seulement dans les 24 h après un vrai message reçu, texte non vi
   await assert.rejects(sendText({ apiKey: "k", phoneNumberId: "123", to: "abc", text: "x", fetchImpl: fake }), /Numéro invalide/);
   const refuse = (async () => new Response(JSON.stringify({ error: { message: "Re-engagement message" } }), { status: 400 })) as unknown as typeof fetch;
   await assert.rejects(sendText({ apiKey: "k", phoneNumberId: "123", to: "33600000000", text: "x", fetchImpl: refuse }), /WhatsApp a refusé l'envoi : Re-engagement message/);
+});
+
+test("envoi : la conversation est marquée comme lue chez WhatsApp", async () => {
+  let body: unknown = null;
+  const fake = (async (_url: string, init: RequestInit) => {
+    body = JSON.parse(String(init.body));
+    return new Response(JSON.stringify({ success: true }), { status: 200 });
+  }) as unknown as typeof fetch;
+  await markRead({ apiKey: "k", phoneNumberId: "123", messageId: "wamid.X", fetchImpl: fake });
+  assert.deepEqual(body, { messaging_product: "whatsapp", status: "read", message_id: "wamid.X" });
 });

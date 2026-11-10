@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireOwner } from "@/lib/admin";
 import { getAdminClient, withRetry } from "@/lib/supabase";
-import { canSendFreeForm, cleanOutgoing, sendText } from "@/lib/whatsapp/send";
+import { canSendFreeForm, cleanOutgoing, markRead, sendText } from "@/lib/whatsapp/send";
 
 // WhatsApp pro dans le CRM : résumés, brouillons et vocaux transcrits par le job
 // WhatsApp de Harness Maxxing. Propriétaire seulement : conversations privées.
@@ -64,6 +64,24 @@ export async function POST(req: NextRequest) {
     const contact = typeof b.contact === "string" ? b.contact : "";
     if (!contact) return NextResponse.json({ error: "Contact manquant" }, { status: 400 });
     const db = getAdminClient();
+    // Dernier vrai message reçu (pas l'historique importé) : marqué comme lu chez
+    // WhatsApp quand Jeremy répond ou classe la conversation, pour que la
+    // pastille « non lu » disparaisse aussi de son téléphone. Jamais bloquant.
+    const markLastRead = async () => {
+      const apiKey = process.env.KAPSO_API_KEY;
+      const phoneNumberId = process.env.KAPSO_PHONE_NUMBER_ID;
+      if (!apiKey || !phoneNumberId) return;
+      const { data: last } = await db
+        .from("whatsapp_messages")
+        .select("id")
+        .eq("contact", contact)
+        .eq("direction", "inbound")
+        .neq("origin", "history_sync")
+        .order("sent_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (last?.id) await markRead({ apiKey, phoneNumberId, messageId: last.id }).catch(() => undefined);
+    };
     const update = async (fields: Record<string, unknown>) => {
       const { data, error } = await db.from("whatsapp_threads").update({ ...fields, updated_at: new Date().toISOString() }).eq("contact", contact).select("contact");
       if (error) throw new Error(error.message);
@@ -72,6 +90,7 @@ export async function POST(req: NextRequest) {
     switch (b.action) {
       case "traite":
         await update({ handled_at: new Date().toISOString() });
+        await markLastRead();
         break;
       case "reprendre":
         await update({ handled_at: null });
@@ -114,6 +133,7 @@ export async function POST(req: NextRequest) {
         const { error: insertError } = await db.from("whatsapp_messages").upsert(message, { onConflict: "id", ignoreDuplicates: true });
         if (insertError) throw new Error(`Message envoyé, mais pas enregistré : ${insertError.message}`);
         await update({ last_outbound_at: sentAt });
+        await markLastRead();
         return NextResponse.json({ ok: true, message: { id, direction: "outbound", type: "text", body: text, transcript: null, transcript_error: null, sent_at: sentAt } });
       }
       default:

@@ -46,3 +46,16 @@ export async function sendText(opts: { apiKey: string; phoneNumberId: string; to
   if (!id) throw new Error("WhatsApp n'a pas renvoyé d'identifiant de message");
   return id;
 }
+
+// Marque la conversation comme lue chez WhatsApp (coches bleues pour l'élève),
+// pour que la pastille « non lu » disparaisse aussi de l'app après une réponse
+// envoyée depuis le CRM. Il suffit de marquer le dernier message reçu.
+export async function markRead(opts: { apiKey: string; phoneNumberId: string; messageId: string; fetchImpl?: typeof fetch }): Promise<void> {
+  const res = await (opts.fetchImpl ?? fetch)(`https://api.kapso.ai/meta/whatsapp/v24.0/${opts.phoneNumberId}/messages`, {
+    method: "POST",
+    headers: { "X-API-Key": opts.apiKey, "Content-Type": "application/json" },
+    body: JSON.stringify({ messaging_product: "whatsapp", status: "read", message_id: opts.messageId }),
+    signal: AbortSignal.timeout(15_000),
+  });
+  if (!res.ok) throw new Error(`Lecture non marquée (${res.status})`);
+}
