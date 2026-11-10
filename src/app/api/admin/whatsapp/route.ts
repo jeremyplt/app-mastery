@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireOwner } from "@/lib/admin";
 import { getAdminClient, withRetry } from "@/lib/supabase";
+import { canSendFreeForm, cleanOutgoing, sendText } from "@/lib/whatsapp/send";
 
 // WhatsApp pro dans le CRM : résumés, brouillons et vocaux transcrits par le job
 // WhatsApp de Harness Maxxing. Propriétaire seulement : conversations privées.
-// Rien n'est envoyé d'ici, Jeremy répond lui-même dans WhatsApp Web.
+// Un message ne part que quand Jeremy clique sur « Envoyer » (action envoyer).
 
 function fail(err: unknown) {
   const message = err instanceof Error ? err.message : "Erreur";
@@ -44,6 +45,8 @@ export async function GET(req: NextRequest) {
 //   resumer   refait le résumé au prochain passage du job (après une erreur)
 //   relier    rattache le fil à student_id (null pour détacher) ; note le
 //             numéro sur la fiche de l'élève s'il n'en a pas
+//   envoyer   envoie { text } par Kapso, dans les 24 h qui suivent le dernier
+//             message reçu (règle de WhatsApp), et l'ajoute à la conversation
 export async function POST(req: NextRequest) {
   try {
     await requireOwner();
@@ -73,6 +76,35 @@ export async function POST(req: NextRequest) {
           await db.from("students").update({ phone: `+${contact}` }).eq("id", studentId).is("phone", null);
         }
         break;
+      }
+      case "envoyer": {
+        const text = cleanOutgoing(b.text);
+        if (!text) return NextResponse.json({ error: "Message vide ou trop long (4 096 caractères au plus)" }, { status: 400 });
+        if (!/^\d{8,15}$/.test(contact)) return NextResponse.json({ error: "Numéro masqué par WhatsApp : réponds depuis l'app" }, { status: 400 });
+        const apiKey = process.env.KAPSO_API_KEY;
+        const phoneNumberId = process.env.KAPSO_PHONE_NUMBER_ID;
+        if (!apiKey || !phoneNumberId) return NextResponse.json({ error: "L'envoi n'est pas encore configuré sur le site" }, { status: 503 });
+        // La fenêtre de 24 h ne s'ouvre qu'avec un vrai message reçu, pas avec l'historique importé.
+        const { data: last } = await db
+          .from("whatsapp_messages")
+          .select("sent_at")
+          .eq("contact", contact)
+          .eq("direction", "inbound")
+          .neq("origin", "history_sync")
+          .order("sent_at", { ascending: false })
+          .limit(1)
+          .maybeSingle();
+        const now = new Date();
+        if (!canSendFreeForm(last?.sent_at ?? null, now)) {
+          return NextResponse.json({ error: "Plus de 24 h depuis son dernier message : WhatsApp n'autorise l'envoi que depuis l'app. Utilise « Ouvrir dans WhatsApp Web »." }, { status: 409 });
+        }
+        const id = await sendText({ apiKey, phoneNumberId, to: contact, text });
+        const sentAt = now.toISOString();
+        const message = { id, contact, direction: "outbound", origin: "cloud_api", type: "text", body: text, sent_at: sentAt };
+        const { error: insertError } = await db.from("whatsapp_messages").upsert(message, { onConflict: "id", ignoreDuplicates: true });
+        if (insertError) throw new Error(`Message envoyé, mais pas enregistré : ${insertError.message}`);
+        await update({ last_outbound_at: sentAt });
+        return NextResponse.json({ ok: true, message: { id, direction: "outbound", type: "text", body: text, transcript: null, transcript_error: null, sent_at: sentAt } });
       }
       default:
         return NextResponse.json({ error: "Action inconnue" }, { status: 400 });

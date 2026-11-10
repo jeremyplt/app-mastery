@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import AdminNav from "@/components/admin/AdminNav";
 import { awaitingReply, recentWindow } from "@/lib/whatsapp/messages";
+import { sendWindowEnd } from "@/lib/whatsapp/send";
 
 // WhatsApp pro : résumés, brouillons et vocaux transcrits, préparés toutes les
 // 5 minutes par le job WhatsApp de Harness Maxxing. Rien n'est envoyé d'ici :
@@ -56,13 +57,23 @@ function ago(iso: string | null): string {
   return d === 1 ? "hier" : `il y a ${d} jours`;
 }
 
-const time = (iso: string) =>
-  new Intl.DateTimeFormat("fr-FR", { timeZone: "Europe/Paris", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }).format(new Date(iso));
 
 const nameOf = (t: Thread) => t.student?.name ?? t.contact_name ?? `+${t.contact}`;
 const isPhone = (contact: string) => /^\d{8,15}$/.test(contact);
 
-function MessageLine({ m }: { m: Message }) {
+const initials = (name: string) =>
+  name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((w) => w[0]?.toUpperCase() ?? "")
+    .join("") || "?";
+
+const hourOf = (iso: string) => new Intl.DateTimeFormat("fr-FR", { timeZone: "Europe/Paris", hour: "2-digit", minute: "2-digit" }).format(new Date(iso));
+const dayOf = (iso: string) => new Intl.DateTimeFormat("fr-FR", { timeZone: "Europe/Paris", weekday: "long", day: "numeric", month: "long" }).format(new Date(iso));
+
+// Une bulle, comme dans WhatsApp : l'élève à gauche, toi à droite en vert.
+function Bubble({ m }: { m: Message }) {
   const mine = m.direction === "outbound";
   const label: Record<string, string> = {
     image: "Photo",
@@ -76,36 +87,80 @@ function MessageLine({ m }: { m: Message }) {
   };
   return (
     <li className={`flex ${mine ? "justify-end" : "justify-start"}`}>
-      <div className={`max-w-[85%] rounded-2xl px-3.5 py-2 text-[14px] font-medium ${mine ? "bg-[color-mix(in_srgb,var(--accent)_16%,transparent)]" : "bg-[var(--field)]"}`}>
+      <div
+        className={`max-w-[82%] rounded-[14px] px-3 py-1.5 text-[14.5px] leading-snug shadow-[0_1px_0.5px_rgba(0,0,0,0.13)] ${
+          mine ? "rounded-tr-[4px] bg-[var(--wa-out)]" : "rounded-tl-[4px] bg-[var(--wa-in)]"
+        }`}
+      >
         {m.type === "audio" ? (
           <>
-            <span className="mb-0.5 block text-[12px] font-bold text-[var(--fg2)]">🎙️ Vocal transcrit</span>
+            <span className="block text-[12px] font-bold text-[var(--fg2)]">🎙️ Vocal transcrit</span>
             <span className="whitespace-pre-wrap">{m.transcript ?? (m.transcript_error ? `Transcription impossible : ${m.transcript_error}` : "Transcription en cours…")}</span>
           </>
         ) : (
           <>
-            {label[m.type] && <span className="mb-0.5 block text-[12px] font-bold text-[var(--fg2)]">{label[m.type]}</span>}
-            <span className="whitespace-pre-wrap">{m.body ?? (label[m.type] ? "" : `(${m.type})`)}</span>
+            {label[m.type] && <span className="block text-[12px] font-bold text-[var(--fg2)]">{label[m.type]}</span>}
+            <span className="whitespace-pre-wrap break-words">{m.body ?? (label[m.type] ? "" : `(${m.type})`)}</span>
           </>
         )}
-        <span className="mt-1 block text-right text-[11px] font-semibold text-[var(--fg2)]">{time(m.sent_at)}</span>
+        <span className="float-right ml-3 mt-1.5 text-[11px] font-medium text-[var(--fg2)]">{hourOf(m.sent_at)}</span>
       </div>
     </li>
   );
 }
 
+// Une conversation, présentée comme dans WhatsApp : les derniers messages en
+// haut, la réponse à envoyer en bas, déjà remplie avec le brouillon de l'IA.
 function ThreadCard({ t, students, onChange }: { t: Thread; students: StudentOption[]; onChange: () => Promise<void> }) {
   const waiting = awaitingReply(t);
   const fresh = Boolean(t.summarized_through && t.last_inbound_at && Date.parse(t.summarized_through) >= Date.parse(t.last_inbound_at));
   const [draft, setDraft] = useState(t.draft ?? "");
-  const [open, setOpen] = useState(false);
+  const [edited, setEdited] = useState(false);
+  const [open, setOpen] = useState(waiting);
   const [messages, setMessages] = useState<Message[] | null>(null);
   const [showAll, setShowAll] = useState(false);
   const [busy, setBusy] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [sent, setSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const scroller = useRef<HTMLDivElement>(null);
+  const field = useRef<HTMLTextAreaElement>(null);
+  const windowEnd = sendWindowEnd(t.last_inbound_at, new Date());
+  const canSend = isPhone(t.contact) && windowEnd !== null;
 
-  useEffect(() => setDraft(t.draft ?? ""), [t.draft]);
+  // Un nouveau brouillon remplace le texte, sauf si tu as commencé à l'écrire.
+  useEffect(() => {
+    if (!edited) setDraft(t.draft ?? "");
+  }, [t.draft, edited]);
+
+  // Le champ grandit avec le texte, comme dans WhatsApp.
+  useEffect(() => {
+    const el = field.current;
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = `${Math.min(el.scrollHeight, 320)}px`;
+  }, [draft, open]);
+
+  useEffect(() => {
+    if (!open || messages) return;
+    let cancelled = false;
+    fetch(`/api/admin/whatsapp?contact=${encodeURIComponent(t.contact)}`)
+      .then(async (res) => {
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error ?? "Chargement impossible");
+        if (!cancelled) setMessages(data.messages);
+      })
+      .catch((e) => !cancelled && setError(e instanceof Error ? e.message : "Erreur réseau"));
+    return () => {
+      cancelled = true;
+    };
+  }, [open, messages, t.contact]);
+
+  // On arrive en bas de la conversation, sur les derniers messages.
+  useEffect(() => {
+    const el = scroller.current;
+    if (el && messages && !showAll) el.scrollTop = el.scrollHeight;
+  }, [messages, showAll]);
 
   async function act(action: string, extra: Record<string, unknown> = {}) {
     setBusy(action);
@@ -114,25 +169,19 @@ function ThreadCard({ t, students, onChange }: { t: Thread; students: StudentOpt
       const res = await fetch("/api/admin/whatsapp", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ contact: t.contact, action, ...extra }) });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error ?? "Action impossible");
+      if (action === "envoyer" && data.message) {
+        setMessages((l) => [...(l ?? []), data.message]);
+        setDraft("");
+        setEdited(true);
+        setSent(true);
+        setTimeout(() => onChange().catch(() => undefined), 2500);
+        return;
+      }
       await onChange();
     } catch (e) {
       setError(e instanceof Error ? e.message : "Erreur réseau");
     } finally {
       setBusy(null);
-    }
-  }
-
-  async function toggleConversation() {
-    if (open) return setOpen(false);
-    setOpen(true);
-    if (messages) return;
-    try {
-      const res = await fetch(`/api/admin/whatsapp?contact=${encodeURIComponent(t.contact)}`);
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? "Chargement impossible");
-      setMessages(data.messages);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Erreur réseau");
     }
   }
 
@@ -146,168 +195,209 @@ function ThreadCard({ t, students, onChange }: { t: Thread; students: StudentOpt
     }
   }
 
+  const since = [t.last_outbound_at, t.handled_at].filter(Boolean).sort().at(-1) ?? null;
+  const win = messages ? recentWindow(messages, since) : null;
+  const from = !win || showAll ? 0 : win.start;
+  const shown = messages ? messages.slice(from) : [];
+  const name = nameOf(t);
+
   return (
-    <article className="mac-group p-5">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div className="min-w-0">
-          <h2 className="text-[16px] font-bold">
+    <article className="mac-group overflow-hidden !p-0">
+      {/* En-tête, comme celui d'une discussion WhatsApp */}
+      <header className="flex items-center gap-3 border-b-[0.5px] border-[var(--sep)] px-4 py-3">
+        <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[var(--wa-head)] text-[14px] font-bold text-white" aria-hidden>
+          {initials(name)}
+        </span>
+        <div className="min-w-0 flex-1">
+          <h2 className="truncate text-[16px] font-bold">
             {t.student ? (
               <Link href={`/admin/eleves/${t.student.id}`} className="hover:underline">
                 {t.student.name}
               </Link>
             ) : (
-              nameOf(t)
+              name
             )}
           </h2>
-          <p className={SMALL}>
+          <p className={`truncate ${SMALL}`}>
             {isPhone(t.contact) ? `+${t.contact}` : "Numéro masqué par WhatsApp"}
             {t.student?.app ? ` · ${t.student.app}` : ""}
-            {t.last_inbound_at ? ` · dernier message reçu ${ago(t.last_inbound_at)}` : ""}
+            {t.last_inbound_at ? ` · reçu ${ago(t.last_inbound_at)}` : ""}
           </p>
         </div>
         <span
-          className={`rounded-full px-2.5 py-1 text-[12px] font-bold ${
+          className={`shrink-0 rounded-full px-2.5 py-1 text-[12px] font-bold ${
             waiting ? "bg-[color-mix(in_srgb,var(--orange)_16%,transparent)] text-[var(--orange)]" : "bg-[var(--field)] text-[var(--fg2)]"
           }`}
         >
           {waiting ? "À répondre" : t.handled_at && (!t.last_outbound_at || t.handled_at > t.last_outbound_at) ? "Traité" : "Répondu"}
         </span>
-      </div>
+      </header>
 
-      {t.suspicious && (
-        <p className="mt-3 rounded-lg bg-[color-mix(in_srgb,var(--orange)_14%,transparent)] px-3 py-2 text-[13px] font-semibold text-[var(--orange)]">
-          Un message contient ce qui ressemble à une consigne adressée à l&apos;IA. Relis la conversation toi-même avant de te fier au résumé.
-        </p>
-      )}
-
-      {waiting && t.error && fresh && (
-        <div className="mt-3 flex flex-wrap items-center gap-3 rounded-lg bg-[color-mix(in_srgb,var(--red)_12%,transparent)] px-3 py-2">
-          <p className="text-[13px] font-semibold text-[var(--red)]">Le résumé a échoué : {t.error}</p>
-          <button className="mac-btn mac-btn-def mac-btn-sm" disabled={busy !== null} onClick={() => act("resumer")}>
-            Réessayer
-          </button>
-        </div>
-      )}
-
-      {waiting && !fresh && <p className={`mt-3 ${SMALL}`}>Résumé en préparation : il arrive dans les 5 minutes après le dernier message (un peu plus pour un long vocal).</p>}
-
-      {t.summary && (
-        <div className="mt-3">
-          {!fresh && <p className={`mb-1 ${SMALL}`}>Résumé précédent, avant les derniers messages :</p>}
-          <p className="text-[14.5px] font-medium leading-relaxed">{t.summary}</p>
-          {(t.points ?? []).length > 0 && (
-            <ul className="mt-2 list-disc space-y-1 pl-5 text-[14px] font-semibold">
-              {(t.points ?? []).map((p) => (
-                <li key={p}>{p}</li>
-              ))}
-            </ul>
+      {/* Résumé de l'IA, court, au-dessus de la conversation */}
+      {(t.summary || t.suspicious || (waiting && !fresh) || (waiting && t.error && fresh)) && (
+        <div className="space-y-2 border-b-[0.5px] border-[var(--sep)] px-4 py-3">
+          {t.suspicious && (
+            <p className="rounded-lg bg-[color-mix(in_srgb,var(--orange)_14%,transparent)] px-3 py-2 text-[13px] font-semibold text-[var(--orange)]">
+              Un message contient ce qui ressemble à une consigne adressée à l&apos;IA. Relis la conversation toi-même avant de te fier au résumé.
+            </p>
           )}
+          {waiting && t.error && fresh && (
+            <div className="flex flex-wrap items-center gap-3 rounded-lg bg-[color-mix(in_srgb,var(--red)_12%,transparent)] px-3 py-2">
+              <p className="text-[13px] font-semibold text-[var(--red)]">Le résumé a échoué : {t.error}</p>
+              <button className="mac-btn mac-btn-def mac-btn-sm" disabled={busy !== null} onClick={() => act("resumer")}>
+                Réessayer
+              </button>
+            </div>
+          )}
+          {waiting && !fresh && <p className={SMALL}>Résumé en préparation : il arrive dans les 5 minutes après le dernier message.</p>}
+          {t.summary && (
+            <div>
+              <p className="text-[12px] font-bold uppercase tracking-wide text-[var(--fg2)]">{fresh ? "Résumé" : "Résumé précédent"}</p>
+              <p className="mt-0.5 text-[14px] font-medium leading-relaxed">{t.summary}</p>
+              {(t.points ?? []).length > 0 && (
+                <ul className="mt-1.5 list-disc space-y-0.5 pl-5 text-[13.5px] font-semibold">
+                  {(t.points ?? []).map((p) => (
+                    <li key={p}>{p}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          )}
+          {waiting && fresh && t.needs_reply === false && <p className={SMALL}>D&apos;après l&apos;IA, rien n&apos;appelle de réponse. Clique sur « Traité » si c&apos;est bon.</p>}
         </div>
       )}
 
-      {waiting && fresh && t.needs_reply === false && <p className={`mt-3 ${SMALL}`}>D&apos;après l&apos;IA, rien n&apos;appelle de réponse. Clique sur « Traité » si c&apos;est bon.</p>}
-
-      {waiting && fresh && t.draft && (
-        <div className="mt-4">
-          <label htmlFor={`draft-${t.contact}`} className="mb-1 block text-[12.5px] font-bold text-[var(--fg2)]">
-            Brouillon de réponse (complète les passages entre crochets)
-          </label>
-          <textarea id={`draft-${t.contact}`} className="mac-field min-h-[140px] text-[14px] leading-relaxed" value={draft} onChange={(e) => setDraft(e.target.value)} />
-          <div className="mt-2 flex flex-wrap gap-2">
-            <button className="mac-btn mac-btn-primary mac-btn-sm" onClick={copy}>
-              {copied ? "Copié" : "Copier"}
-            </button>
-            {isPhone(t.contact) && (
-              <a className="mac-btn mac-btn-def mac-btn-sm" href={`https://web.whatsapp.com/send?phone=${t.contact}&text=${encodeURIComponent(draft)}`} target="_blank" rel="noreferrer">
-                Ouvrir dans WhatsApp Web
-              </a>
-            )}
-          </div>
-        </div>
-      )}
-
-      <div className="mt-4 flex flex-wrap items-center gap-2">
-        {waiting ? (
-          <button className="mac-btn mac-btn-def mac-btn-sm" disabled={busy !== null} onClick={() => act("traite")}>
-            Traité
-          </button>
-        ) : (
-          t.handled_at && (
-            <button className="mac-btn mac-btn-def mac-btn-sm" disabled={busy !== null} onClick={() => act("reprendre")}>
-              Remettre à répondre
-            </button>
-          )
-        )}
-        <button className="mac-btn mac-btn-def mac-btn-sm" aria-expanded={open} onClick={toggleConversation}>
-          {open ? "Masquer la conversation" : "Voir la conversation"}
-        </button>
-        {!t.student && (
-          <select
-            className="mac-field !w-auto !py-[7px] !text-[13px]"
-            aria-label="Relier à un élève"
-            value=""
-            disabled={busy !== null}
-            onChange={(e) => e.target.value && act("relier", { student_id: e.target.value })}
-          >
-            <option value="">Relier à un élève…</option>
-            {students.map((s) => (
-              <option key={s.id} value={s.id}>
-                {s.name}
-              </option>
-            ))}
-          </select>
-        )}
-        {t.student && (
-          <button className="text-[12.5px] font-semibold text-[var(--fg2)] hover:underline" disabled={busy !== null} onClick={() => act("relier", { student_id: null })}>
-            Ce n&apos;est pas {t.student.name.split(" ")[0]}
-          </button>
-        )}
-      </div>
-
-      {error && (
-        <p role="alert" className="mt-2 text-[13px] font-semibold text-[var(--red)]">
-          {error}
-        </p>
-      )}
-
-      {open && (
-        <div className="mt-4 border-t-[0.5px] border-[var(--field-brd)] pt-4">
+      {/* La conversation */}
+      {open ? (
+        <div ref={scroller} className="max-h-[460px] overflow-y-auto bg-[var(--wa-bg)] px-3 py-3" aria-label={`Conversation avec ${name}`}>
           {!messages ? (
-            <p className={SMALL}>Chargement…</p>
+            <p className={`text-center ${SMALL}`}>Chargement…</p>
           ) : messages.length === 0 ? (
-            <p className={SMALL}>Aucun message enregistré.</p>
+            <p className={`text-center ${SMALL}`}>Aucun message enregistré.</p>
           ) : (
-            (() => {
-              const since = [t.last_outbound_at, t.handled_at].filter(Boolean).sort().at(-1) ?? null;
-              const { start, firstNew } = recentWindow(messages, since);
-              const from = showAll ? 0 : start;
-              return (
-                <>
-                  {from > 0 && (
-                    <button className="mb-3 text-[13px] font-bold text-[var(--accent2)] hover:underline" onClick={() => setShowAll(true)}>
-                      Voir les {from} messages plus anciens
-                    </button>
-                  )}
-                  <ul className="space-y-2">
-                    {messages.slice(from).map((m, i) => (
-                      <Fragment key={m.id}>
-                        {from + i === firstNew && (
-                          <li className="flex items-center gap-2 py-1 text-[12px] font-bold text-[var(--orange)]" aria-label="Nouveaux messages">
-                            <span className="h-px flex-1 bg-[color-mix(in_srgb,var(--orange)_45%,transparent)]" />
+            <>
+              {from > 0 && (
+                <div className="mb-2 text-center">
+                  <button className="rounded-full bg-[var(--wa-in)] px-3 py-1 text-[12.5px] font-bold text-[var(--accent2)] shadow-sm hover:underline" onClick={() => setShowAll(true)}>
+                    Voir les {from} messages plus anciens
+                  </button>
+                </div>
+              )}
+              <ul className="space-y-1.5">
+                {shown.map((m, i) => {
+                  const idx = from + i;
+                  const prev = idx > 0 ? messages[idx - 1] : null;
+                  const newDay = !prev || dayOf(prev.sent_at) !== dayOf(m.sent_at);
+                  return (
+                    <Fragment key={m.id}>
+                      {newDay && (
+                        <li className="flex justify-center py-1">
+                          <span className="rounded-md bg-[var(--wa-in)] px-2.5 py-0.5 text-[12px] font-semibold text-[var(--fg2)] shadow-sm">{dayOf(m.sent_at)}</span>
+                        </li>
+                      )}
+                      {win && idx === win.firstNew && (
+                        <li className="flex justify-center py-1" aria-label="Nouveaux messages">
+                          <span className="rounded-md bg-[color-mix(in_srgb,var(--orange)_18%,var(--wa-in))] px-2.5 py-0.5 text-[12px] font-bold text-[var(--orange)]">
                             {since ? "Nouveaux depuis ta dernière réponse" : "Nouveaux messages"}
-                            <span className="h-px flex-1 bg-[color-mix(in_srgb,var(--orange)_45%,transparent)]" />
-                          </li>
-                        )}
-                        <MessageLine m={m} />
-                      </Fragment>
-                    ))}
-                  </ul>
-                </>
-              );
-            })()
+                          </span>
+                        </li>
+                      )}
+                      <Bubble m={m} />
+                    </Fragment>
+                  );
+                })}
+              </ul>
+            </>
           )}
         </div>
+      ) : (
+        <div className="px-4 py-2.5">
+          <button className="text-[13px] font-bold text-[var(--accent2)] hover:underline" aria-expanded={open} onClick={() => setOpen(true)}>
+            Voir la conversation
+          </button>
+        </div>
       )}
+
+      {/* La réponse, comme la barre d'écriture de WhatsApp */}
+      <footer className="border-t-[0.5px] border-[var(--sep)] bg-[var(--wa-bar)] px-3 py-3">
+        {sent && <p className="mb-2 text-[13px] font-bold text-[var(--green)]">Envoyé. Il apparaît aussi dans ton WhatsApp.</p>}
+        <label htmlFor={`draft-${t.contact}`} className="sr-only">
+          Ta réponse à {name}
+        </label>
+        <textarea
+          id={`draft-${t.contact}`}
+          ref={field}
+          rows={1}
+          className="mac-field min-h-[44px] resize-none rounded-[22px] !px-4 !py-2.5 text-[14.5px] leading-relaxed"
+          placeholder={waiting && fresh && t.needs_reply !== false ? "Écris ta réponse…" : "Écris un message…"}
+          value={draft}
+          onChange={(e) => {
+            setDraft(e.target.value);
+            setEdited(true);
+            setSent(false);
+          }}
+        />
+        {waiting && fresh && t.draft && !edited && <p className={`mt-1 px-2 ${SMALL}`}>Brouillon de l&apos;IA : relis-le et complète les passages entre crochets avant d&apos;envoyer.</p>}
+        <div className="mt-2 flex flex-wrap items-center gap-2">
+          <button
+            className="mac-btn mac-btn-sm !bg-[var(--wa-send)] !text-white disabled:opacity-50"
+            disabled={busy !== null || !canSend || !draft.trim() || /\[[^\]]+\]/.test(draft)}
+            onClick={() => act("envoyer", { text: draft })}
+            title={!canSend ? "Plus de 24 h depuis son dernier message : WhatsApp n'autorise l'envoi que depuis l'app." : /\[[^\]]+\]/.test(draft) ? "Complète d'abord les passages entre crochets." : undefined}
+          >
+            {busy === "envoyer" ? "Envoi…" : "Envoyer"}
+          </button>
+          <button className="mac-btn mac-btn-def mac-btn-sm" disabled={!draft.trim()} onClick={copy}>
+            {copied ? "Copié" : "Copier"}
+          </button>
+          {isPhone(t.contact) && (
+            <a className="mac-btn mac-btn-def mac-btn-sm" href={`https://web.whatsapp.com/send?phone=${t.contact}&text=${encodeURIComponent(draft)}`} target="_blank" rel="noreferrer">
+              WhatsApp Web
+            </a>
+          )}
+          {waiting ? (
+            <button className="mac-btn mac-btn-def mac-btn-sm" disabled={busy !== null} onClick={() => act("traite")}>
+              Traité
+            </button>
+          ) : (
+            t.handled_at && (
+              <button className="mac-btn mac-btn-def mac-btn-sm" disabled={busy !== null} onClick={() => act("reprendre")}>
+                Remettre à répondre
+              </button>
+            )
+          )}
+          {!t.student && (
+            <select
+              className="mac-field !w-auto !py-[7px] !text-[13px]"
+              aria-label="Relier à un élève"
+              value=""
+              disabled={busy !== null}
+              onChange={(e) => e.target.value && act("relier", { student_id: e.target.value })}
+            >
+              <option value="">Relier à un élève…</option>
+              {students.map((s) => (
+                <option key={s.id} value={s.id}>
+                  {s.name}
+                </option>
+              ))}
+            </select>
+          )}
+          {t.student && (
+            <button className="ml-auto text-[12.5px] font-semibold text-[var(--fg2)] hover:underline" disabled={busy !== null} onClick={() => act("relier", { student_id: null })}>
+              Ce n&apos;est pas {t.student.name.split(" ")[0]}
+            </button>
+          )}
+        </div>
+        {!canSend && isPhone(t.contact) && waiting && (
+          <p className={`mt-2 px-1 ${SMALL}`}>Plus de 24 h depuis son dernier message : WhatsApp n&apos;autorise l&apos;envoi que depuis l&apos;app. Utilise « WhatsApp Web ».</p>
+        )}
+        {canSend && windowEnd && <p className={`mt-2 px-1 ${SMALL}`}>Envoi possible d&apos;ici jusqu&apos;à {hourOf(windowEnd.toISOString())} {dayOf(windowEnd.toISOString()) !== dayOf(new Date().toISOString()) ? dayOf(windowEnd.toISOString()) : "aujourd'hui"}.</p>}
+        {error && (
+          <p role="alert" className="mt-2 px-1 text-[13px] font-semibold text-[var(--red)]">
+            {error}
+          </p>
+        )}
+      </footer>
     </article>
   );
 }
@@ -513,7 +603,7 @@ export default function WhatsAppPage() {
         <header>
           <h1 className="text-[28px] font-bold tracking-tight">WhatsApp</h1>
           <p className="mt-1 text-[14px] font-medium text-[var(--fg2)]">
-            L&apos;IA lit ton WhatsApp pro toutes les 5 minutes, transcrit les vocaux et prépare un résumé et un brouillon. Rien n&apos;est envoyé : tu réponds toi-même dans WhatsApp Web.
+            L&apos;IA lit ton WhatsApp pro toutes les 5 minutes, transcrit les vocaux et prépare un résumé et un brouillon. Rien ne part sans toi : tu relis, puis tu cliques sur « Envoyer ».
           </p>
         </header>
 

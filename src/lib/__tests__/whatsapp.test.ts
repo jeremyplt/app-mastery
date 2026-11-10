@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { buildPrompt, parseSummary, type PromptMessage } from "../whatsapp/ai";
+import { canSendFreeForm, cleanOutgoing, sendText } from "../whatsapp/send";
 import { formatConseils, formatSkoolLessons, packConversations, parseExtraits, parseSynth, type ConvLine } from "../whatsapp/conseils";
 import { awaitingReply, needsSummary, paymentsLine, phoneDigits, recentWindow, toRow, type KapsoMessage, type Thread } from "../whatsapp/messages";
 
@@ -259,4 +260,34 @@ test("brouillons : catalogue des vidéos Skool avec lien direct", () => {
   assert.match(text, /- Marketing > Création de contenu : 4 Formats de Contenu Viral : https:\/\/www\.skool\.com\/x\/classroom\/7cc7bd49\?md=1/);
   assert.match(text, /- Marketing : Stratégie : https/);
   assert.equal(formatSkoolLessons([]), "");
+});
+
+test("envoi : seulement dans les 24 h après un vrai message reçu, texte non vide", async () => {
+  const now = new Date("2026-11-10T12:00:00Z");
+  assert.equal(canSendFreeForm("2026-11-10T11:00:00Z", now), true);
+  assert.equal(canSendFreeForm("2026-11-09T12:10:00Z", now), true);
+  // Moins de 5 minutes avant la fin de la fenêtre : on n'essaie plus.
+  assert.equal(canSendFreeForm("2026-11-09T12:03:00Z", now), false);
+  assert.equal(canSendFreeForm("2026-11-08T12:00:00Z", now), false);
+  assert.equal(canSendFreeForm(null, now), false);
+  assert.equal(canSendFreeForm("2026-11-10T13:00:00Z", now), false);
+  assert.equal(cleanOutgoing("  Salut  \r\n"), "Salut");
+  assert.equal(cleanOutgoing("   "), null);
+  assert.equal(cleanOutgoing("x".repeat(4097)), null);
+  // Appel à Kapso : bon endpoint, bon corps, identifiant renvoyé.
+  let seen: { url: string; body: unknown; key: string | null } | null = null;
+  const fake = (async (url: string, init: RequestInit) => {
+    seen = { url, body: JSON.parse(String(init.body)), key: new Headers(init.headers).get("X-API-Key") };
+    return new Response(JSON.stringify({ messages: [{ id: "wamid.TEST" }] }), { status: 200 });
+  }) as unknown as typeof fetch;
+  const id = await sendText({ apiKey: "k", phoneNumberId: "123", to: "33600000000", text: "Bonjour", fetchImpl: fake });
+  assert.equal(id, "wamid.TEST");
+  assert.deepEqual(seen, {
+    url: "https://api.kapso.ai/meta/whatsapp/v24.0/123/messages",
+    body: { messaging_product: "whatsapp", recipient_type: "individual", to: "33600000000", type: "text", text: { body: "Bonjour", preview_url: true } },
+    key: "k",
+  });
+  await assert.rejects(sendText({ apiKey: "k", phoneNumberId: "123", to: "abc", text: "x", fetchImpl: fake }), /Numéro invalide/);
+  const refuse = (async () => new Response(JSON.stringify({ error: { message: "Re-engagement message" } }), { status: 400 })) as unknown as typeof fetch;
+  await assert.rejects(sendText({ apiKey: "k", phoneNumberId: "123", to: "33600000000", text: "x", fetchImpl: refuse }), /WhatsApp a refusé l'envoi : Re-engagement message/);
 });

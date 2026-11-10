@@ -72,6 +72,14 @@ button:disabled {
   --sel: rgba(0, 122, 255, 0.14);
   --accent-glow: rgba(0, 122, 255, 0.25);
 
+  /* Conversations façon WhatsApp (/admin/whatsapp) */
+  --wa-bg: #efeae2;
+  --wa-in: #ffffff;
+  --wa-out: #d9fdd3;
+  --wa-bar: #f0f2f5;
+  --wa-head: #00a884;
+  --wa-send: #00a884;
+
   /* Motion (Emil / Apple: strong custom curves, never ease-in) */
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
@@ -106,6 +114,13 @@ button:disabled {
   --tile: rgba(120, 120, 128, 0.22);
   --sel: rgba(10, 132, 255, 0.28);
   --accent-glow: rgba(10, 132, 255, 0.28);
+
+  --wa-bg: #0b141a;
+  --wa-in: #202c33;
+  --wa-out: #005c4b;
+  --wa-bar: #1f2c34;
+  --wa-head: #00a884;
+  --wa-send: #00a884;
 }
 
 html {
