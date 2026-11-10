@@ -6,6 +6,7 @@ import { promisify } from "node:util";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { summarize, type PromptMessage } from "./ai";
 import { formatConseils, type ConseilRow } from "./conseils";
+import { formatSupports } from "../student-questions";
 import { needsSummary, phoneDigits, toRow, type KapsoMessage, type MessageRow, type Thread } from "./messages";
 
 // Passage du job WhatsApp sur Harness Maxxing (toutes les 5 minutes) :
@@ -208,10 +209,16 @@ export async function summarizeThreads(env: JobEnv, max = 5): Promise<{ resumes:
 
 // Les thèmes validés par Jeremy dans /admin/whatsapp. Sans base (ou en cas de
 // souci de lecture), les brouillons se font comme avant.
+// S'y ajoutent les supports faits avec un lien dans /admin/questions, pour que
+// le brouillon donne le lien quand la question revient.
 export async function loadConseils(db: SupabaseClient): Promise<string> {
-  const { data, error } = await db.from("whatsapp_conseils").select("theme, titre, contenu, statut").eq("statut", "valide").order("ordre");
-  if (error) return "";
-  return formatConseils((data ?? []) as ConseilRow[]);
+  const [{ data, error }, { data: supports }] = await Promise.all([
+    db.from("whatsapp_conseils").select("theme, titre, contenu, statut").eq("statut", "valide").order("ordre"),
+    db.from("student_questions").select("intitule, statut, lien, note, support_titre").eq("statut", "fait").not("lien", "is", null),
+  ]);
+  const base = error ? "" : formatConseils((data ?? []) as ConseilRow[]);
+  const ready = formatSupports((supports ?? []) as Parameters<typeof formatSupports>[0]);
+  return [base, ready].filter(Boolean).join("\n\n");
 }
 
 async function whoLine(db: SupabaseClient, t: ThreadRow): Promise<string> {
