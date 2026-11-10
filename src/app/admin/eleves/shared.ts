@@ -1,4 +1,5 @@
 // Types et calculs partagés entre la liste des élèves et la fiche élève.
+import type { ThreadDates } from "@/lib/student-silence";
 
 export type Payment = { date: string; amount: number | null; paid: boolean; paid_at?: string | null };
 export type StudentLink = { label: string; url: string };
@@ -58,6 +59,7 @@ export type Student = {
   links: StudentLink[];
   socials: StudentSocial[];
   last_contact_at: string | null;
+  whatsapp_threads?: ThreadDates[] | null;
   skool_invited_at: string | null;
   questionnaire_token: string;
   questionnaire_sent_at: string | null;

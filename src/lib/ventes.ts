@@ -8,6 +8,7 @@ import { inviteToSkool } from "@/lib/skool";
 import { proofDecision, requestProofAfterSignature } from "@/lib/residence-proofs";
 import { sendMetaEvent } from "@/lib/meta-capi";
 import { addMonths, type StudentPayment } from "@/lib/students";
+import { silentDays, type ThreadDates } from "@/lib/student-silence";
 import { reminderDue, studentReminderDue, studentReminderKey, type StudentReminderRow } from "@/lib/payment-reminders";
 import { sendQuestionnaire } from "@/lib/questionnaire";
 import { sendMonthlyRecap, sendUnlockAlerts } from "@/lib/commissions";
@@ -522,18 +523,22 @@ type StudentRow = {
   sale_id: string | null;
   payments: StudentPayment[];
   bilan_done: boolean;
+  whatsapp_threads: ThreadDates[] | null;
 };
 
 // Échéances des élèves (/admin/eleves) pour le point du jour : fin de
 // l'accompagnement (J-7, veille, jour J), bilan (J-14, J-7, jour J, puis
 // chaque lundi tant qu'il n'est pas coché) et paiements saisis à la main pour
-// les élèves sans vente (les autres sont déjà comptés avec les ventes).
-export async function studentDeadlines(today: string, isMonday: boolean) {
+// les élèves sans vente (les autres sont déjà comptés avec les ventes). Le
+// lundi, aussi les élèves en cours d'accompagnement qui n'ont rien écrit sur
+// WhatsApp depuis au moins SILENT_DAYS jours.
+export async function studentDeadlines(today: string, isMonday: boolean, now = new Date()) {
   const { data } = await getAdminClient()
     .from("students")
-    .select("id, name, email, app, start_date, sale_id, payments, bilan_done")
+    .select("id, name, email, app, start_date, sale_id, payments, bilan_done, whatsapp_threads(last_inbound_at)")
     .eq("archived", false);
   const ends: string[] = [];
+  const silent: string[] = [];
   const bilans: string[] = [];
   const due: string[] = [];
   const late: string[] = [];
@@ -555,18 +560,20 @@ export async function studentDeadlines(today: string, isMonday: boolean) {
         );
       }
     }
+    const quiet = isMonday ? silentDays(s, now) : null;
+    if (quiet !== null) silent.push(`${who} : aucun message depuis ${quiet} jours.`);
     if (!s.sale_id) {
       for (const p of s.payments) {
         if (p.paid || p.date > today) continue;
         const amount = p.amount ? amountTag(formatMoney(p.amount), p.date < today) : "montant non précisé";
         // Sans email ou sans montant, l'élève ne reçoit aucun rappel : à
         // relancer à la main.
-        const silent = !s.email?.trim() || !p.amount ? " · <b>aucun rappel automatique</b> (pas d'email ou de montant sur la fiche)" : "";
-        (p.date === today ? due : late).push(`${who} : ${amount} (${formatDueDate(p.date)})${silent}`);
+        const noReminder = !s.email?.trim() || !p.amount ? " · <b>aucun rappel automatique</b> (pas d'email ou de montant sur la fiche)" : "";
+        (p.date === today ? due : late).push(`${who} : ${amount} (${formatDueDate(p.date)})${noReminder}`);
       }
     }
   }
-  return { ends, bilans, due, late };
+  return { ends, bilans, due, late, silent };
 }
 
 // Point du jour envoyé à Jeremy à 9 h (heure de Paris) s'il y a quelque chose
@@ -600,12 +607,12 @@ async function sendDailyDigest(sales: Sale[], now: Date): Promise<boolean> {
   }
 
   const isMonday = new Intl.DateTimeFormat("en-US", { timeZone: "Europe/Paris", weekday: "short" }).format(now) === "Mon";
-  const students = await studentDeadlines(today, isMonday);
+  const students = await studentDeadlines(today, isMonday, now);
   due.push(...students.due);
   late.push(...students.late);
 
   await supabase.from("site_settings").upsert({ key: "ventes_digest", value: { day: today }, updated_at: now.toISOString() });
-  if (!due.length && !late.length && !unsigned.length && !students.ends.length && !students.bilans.length) return false;
+  if (!due.length && !late.length && !unsigned.length && !students.ends.length && !students.bilans.length && !students.silent.length) return false;
 
   const list = (items: string[]) => items.map((i) => `• ${i}`).join("<br>");
   const lines: string[] = [];
@@ -614,6 +621,7 @@ async function sendDailyDigest(sales: Sale[], now: Date): Promise<boolean> {
   if (unsigned.length) lines.push(`<b>✍️ Contrats pas encore signés</b><br>${list(unsigned)}`);
   if (students.ends.length) lines.push(`<b>🏁 Fins d'accompagnement</b><br>${list(students.ends)}`);
   if (students.bilans.length) lines.push(`<b>📋 Bilans (fin de garantie)</b><br>${list(students.bilans)}`);
+  if (students.silent.length) lines.push(`<b>🔕 Sans nouvelles depuis une semaine</b> (d'après WhatsApp : un petit message de ta part peut les relancer)<br>${list(students.silent)}`);
   const count = due.length + late.length;
   const onlyStudents = !count && !unsigned.length;
   await alertJeremy(

@@ -28,6 +28,7 @@ import {
 } from "../shared";
 import { answerEntries } from "@/lib/questionnaire-questions";
 import { BILLING_FIELDS } from "@/lib/docuseal";
+import { lastExchange, silentDays } from "@/lib/student-silence";
 
 // Fiche élève : informations, parcours, paiements et notes. Les infos se
 // modifient dans un formulaire avec un bouton Enregistrer ; les étapes et les
@@ -302,7 +303,8 @@ export default function StudentPage() {
                     )}
                   </div>
                   <p className="mt-1.5 text-[13.5px] font-semibold text-[var(--fg2)]">
-                    Dernier échange : <span className="text-[var(--fg)]">{lastContactLabel(s.last_contact_at)}</span>
+                    Dernier échange : <span className="text-[var(--fg)]">{lastContactLabel(lastExchange(s.last_contact_at, s.whatsapp_threads))}</span>
+                    {silentDays(s) !== null && <span className="font-semibold text-[var(--orange)]"> · sans message de sa part depuis {silentDays(s)} jours</span>}
                     <button onClick={markContact} className="ml-2 text-[var(--accent2)] hover:underline">
                       J&apos;ai échangé aujourd&apos;hui
                     </button>

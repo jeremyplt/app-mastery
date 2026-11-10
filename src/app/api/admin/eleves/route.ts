@@ -24,7 +24,9 @@ function cleanPayments(raw: unknown): StudentPayment[] {
     }));
 }
 
-const SELECT = "*, sales(id, contract_status, contract_signed_at, contract_submission_id, billing, skool_invited_at, sale_payments(id, position, amount, due_date, paid))";
+// whatsapp_threads : seulement les dates des derniers messages du fil relié
+// (jamais leur contenu), pour le dernier échange et les élèves sans nouvelles.
+const SELECT = "*, sales(id, contract_status, contract_signed_at, contract_submission_id, billing, skool_invited_at, sale_payments(id, position, amount, due_date, paid)), whatsapp_threads(last_inbound_at, last_outbound_at)";
 
 // Élèves + paiements de la vente liée (source de vérité quand il y en a une).
 // ?id=... : un seul élève (fiche).

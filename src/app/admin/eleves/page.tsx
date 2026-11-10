@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { lastExchange, silentDays } from "@/lib/student-silence";
 import { useEffect, useMemo, useState } from "react";
 import AdminNav from "@/components/admin/AdminNav";
 import {
@@ -315,7 +316,8 @@ export default function ElevesPage() {
                         <span className={`rounded-md px-1.5 py-0.5 text-[11px] font-bold ${TONE_CLASSES[status.tone]}`}>{status.label}</span>
                       </div>
                       <p className="mt-0.5 text-[12px] font-medium text-[var(--fg3)]">
-                        Dernier échange : {lastContactLabel(s.last_contact_at)} ·{" "}
+                        Dernier échange : {lastContactLabel(lastExchange(s.last_contact_at, s.whatsapp_threads))} ·{" "}
+                        {silentDays(s) !== null && <span className="font-semibold text-[var(--orange)]">Sans nouvelles depuis {silentDays(s)} jours · </span>}
                         {s.questionnaire_answered_at ? (
                           <span className="font-semibold text-[var(--green)]">Kick-start reçu</span>
                         ) : s.questionnaire_sent_at ? (
