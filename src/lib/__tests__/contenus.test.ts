@@ -50,7 +50,7 @@ test("contenus : ligne de la GIGA BANQUE, titre de section, étapes", () => {
 
 test("contenus : sections de la GIGA BANQUE lues dans l'export", () => {
   const html = `<p>x</p><h1 class="c1" id="h.ia4ba4wv44py"><span class="c3">Apps de concentration : minuteurs de focus</span></h1><h2 id="h.zz">TikTok</h2><h1 id="h.m5tutpqenhp3"><span>Apps de scan (aliments, ingr&eacute;dients, m&eacute;dicaments)</span></h1><h1 id="h.vide"><span> </span></h1>`;
-  const sections = parseSections(html.replace(/&eacute;/g, "é"));
+  const sections = parseSections(html);
   assert.deepEqual(sections, [
     { titre: "Apps de concentration : minuteurs de focus", id: "h.ia4ba4wv44py" },
     { titre: "Apps de scan (aliments, ingrédients, médicaments)", id: "h.m5tutpqenhp3" },

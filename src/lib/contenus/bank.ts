@@ -5,16 +5,19 @@ export const BANK_DOC = "1j_5Hru4rpGmoQ4gMNuQ_03IeZ_YXBpOfgqcWvxirLw8";
 
 export type BankSection = { titre: string; id: string };
 
+// Entités HTML de l'export Google Docs (accents français compris).
+const NAMED: Record<string, string> = {
+  nbsp: " ", amp: "&", quot: '"', lt: "<", gt: ">", apos: "'", rsquo: "'", lsquo: "'", ldquo: "“", rdquo: "”", laquo: "«", raquo: "»", hellip: "…", ndash: "-", mdash: "-",
+  agrave: "à", acirc: "â", auml: "ä", aelig: "æ", ccedil: "ç", eacute: "é", egrave: "è", ecirc: "ê", euml: "ë", icirc: "î", iuml: "ï", ocirc: "ô", ouml: "ö", oelig: "œ", ugrave: "ù", ucirc: "û", uuml: "ü", yuml: "ÿ",
+  Agrave: "À", Acirc: "Â", Ccedil: "Ç", Eacute: "É", Egrave: "È", Ecirc: "Ê", Icirc: "Î", Ocirc: "Ô", Ugrave: "Ù", Ucirc: "Û", OElig: "Œ",
+};
+
 const decode = (s: string) =>
   s
     .replace(/<[^>]+>/g, "")
-    .replace(/&nbsp;/g, " ")
-    .replace(/&amp;/g, "&")
-    .replace(/&#39;|&rsquo;|&lsquo;/g, "'")
-    .replace(/&quot;/g, '"')
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
-    .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(Number(n)))
+    .replace(/&#x([0-9a-f]+);/gi, (_, h) => String.fromCodePoint(parseInt(h, 16)))
+    .replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(Number(n)))
+    .replace(/&([a-z]+);/gi, (m, name) => NAMED[name] ?? m)
     .replace(/\s+/g, " ")
     .trim();
 
