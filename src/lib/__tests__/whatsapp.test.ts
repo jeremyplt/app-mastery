@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { buildPrompt, parseSummary, type PromptMessage } from "../whatsapp/ai";
 import { formatConseils, packConversations, parseExtraits, parseSynth, type ConvLine } from "../whatsapp/conseils";
-import { awaitingReply, needsSummary, phoneDigits, recentWindow, toRow, type KapsoMessage, type Thread } from "../whatsapp/messages";
+import { awaitingReply, needsSummary, paymentsLine, phoneDigits, recentWindow, toRow, type KapsoMessage, type Thread } from "../whatsapp/messages";
 
 test("numéros : mêmes chiffres quelle que soit l'écriture", () => {
   assert.equal(phoneDigits("+33 6 44 70 59 92"), "33644705992");
@@ -230,4 +230,22 @@ test("conversation : on ouvre sur la fin, à partir des nouveaux messages", () =
   assert.deepEqual(recentWindow(conv, at(3)), { start: 0, firstNew: 4 });
   // Conversation courte : tout.
   assert.deepEqual(recentWindow(conv.slice(0, 5), null), { start: 0, firstNew: 0 });
+});
+
+test("brouillons : l'échéancier du CRM dit ce qui est reçu, en retard de coche ou à venir", () => {
+  const line = paymentsLine(
+    [
+      { date: "2026-12-07", amount: 1000, paid: false },
+      { date: "2026-10-07", amount: 1000, paid: true },
+      { date: "2026-11-07", amount: 1000, paid: false },
+    ],
+    "2026-11-10",
+    "USD",
+  );
+  assert.equal(
+    line,
+    "Paiements notés dans le CRM de Jeremy : 1\u202f000 $ le 7 octobre 2026 (reçu), 1\u202f000 $ le 7 novembre 2026 (pas encore coché comme reçu), 1\u202f000 $ le 7 décembre 2026 (à venir).",
+  );
+  assert.equal(paymentsLine([], "2026-11-10"), "");
+  assert.match(paymentsLine([{ date: "2026-11-10", amount: null, paid: false }], "2026-11-10"), /montant non noté le 10 novembre 2026 \(pas encore coché comme reçu\)/);
 });

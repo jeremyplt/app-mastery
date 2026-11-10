@@ -7,7 +7,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { summarize, type PromptMessage } from "./ai";
 import { formatConseils, type ConseilRow } from "./conseils";
 import { formatSupports } from "../student-questions";
-import { needsSummary, phoneDigits, toRow, type KapsoMessage, type MessageRow, type Thread } from "./messages";
+import { needsSummary, paymentsLine, phoneDigits, toRow, type KapsoMessage, type MessageRow, type PaymentInfo, type Thread } from "./messages";
 
 // Passage du job WhatsApp sur Harness Maxxing (toutes les 5 minutes) :
 // 1. copie les nouveaux messages depuis Kapso ;
@@ -192,7 +192,7 @@ export async function summarizeThreads(env: JobEnv, max = 5): Promise<{ resumes:
       continue;
     }
     try {
-      const s = await summarize(messages, { who: await whoLine(env.db, t), now, newSince, conseils });
+      const s = await summarize(messages, { who: await whoLine(env.db, t, now), now, newSince, conseils });
       await env.db
         .from("whatsapp_threads")
         .update({ summary: s.summary, points: s.points, draft: s.draft, needs_reply: s.needs_reply, suspicious: s.suspicious_content, summarized_at: now.toISOString(), summarized_through: t.last_inbound_at, error: null })
@@ -221,10 +221,24 @@ export async function loadConseils(db: SupabaseClient): Promise<string> {
   return [base, ready].filter(Boolean).join("\n\n");
 }
 
-async function whoLine(db: SupabaseClient, t: ThreadRow): Promise<string> {
+async function whoLine(db: SupabaseClient, t: ThreadRow, now: Date): Promise<string> {
   if (t.student_id) {
-    const { data: s } = await db.from("students").select("name, app, start_date").eq("id", t.student_id).maybeSingle();
-    if (s) return `Interlocuteur : ${s.name}, élève accompagné par Jeremy${s.app ? `, app ${s.app}` : ""}${s.start_date ? `, accompagnement commencé le ${s.start_date}` : ""}.`;
+    const { data: s } = await db.from("students").select("name, app, start_date, sale_id, payments").eq("id", t.student_id).maybeSingle();
+    if (s) {
+      // Échéancier : celui de la vente quand il y en a une, sinon celui saisi sur la fiche.
+      let payments: PaymentInfo[] = Array.isArray(s.payments) ? (s.payments as PaymentInfo[]) : [];
+      let currency: string | null = null;
+      if (s.sale_id) {
+        const { data: sale } = await db.from("sales").select("currency, sale_payments(amount, due_date, paid)").eq("id", s.sale_id).maybeSingle();
+        if (sale) {
+          currency = sale.currency ?? null;
+          payments = ((sale.sale_payments ?? []) as { amount: number; due_date: string; paid: boolean }[]).map((p) => ({ date: p.due_date, amount: Number(p.amount), paid: p.paid }));
+        }
+      }
+      const today = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Paris" }).format(now);
+      const pay = paymentsLine(payments, today, currency);
+      return `Interlocuteur : ${s.name}, élève accompagné par Jeremy${s.app ? `, app ${s.app}` : ""}${s.start_date ? `, accompagnement commencé le ${s.start_date}` : ""}.${pay ? `\n${pay}` : ""}`;
+    }
   }
   return `Interlocuteur : ${t.contact_name ?? "contact"} (pas relié à un élève dans le CRM : peut-être un prospect ou un élève dont le numéro n'est pas noté).`;
 }

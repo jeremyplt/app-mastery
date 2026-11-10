@@ -136,3 +136,17 @@ export function recentWindow(messages: { direction: string; sent_at: string }[],
   const fromNew = firstNew === -1 ? messages.length : firstNew - CONTEXT_BEFORE;
   return { start: Math.max(0, Math.min(fromNew, messages.length - MIN_RECENT)), firstNew };
 }
+
+// Échéancier de l'élève tel qu'il est noté dans le CRM, pour que le brouillon
+// confirme un virement seulement s'il est coché comme reçu.
+export type PaymentInfo = { date: string; amount: number | null; paid: boolean };
+
+export function paymentsLine(payments: PaymentInfo[], today: string, currency?: string | null): string {
+  if (!payments.length) return "";
+  const day = (iso: string) => new Intl.DateTimeFormat("fr-FR", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }).format(new Date(`${iso}T00:00:00Z`));
+  const money = (n: number | null) => (n == null ? "montant non noté" : `${new Intl.NumberFormat("fr-FR").format(n)}${currency ? ` ${currency === "EUR" ? "€" : currency === "USD" ? "$" : currency}` : ""}`);
+  const items = [...payments]
+    .sort((a, b) => a.date.localeCompare(b.date))
+    .map((p) => `${money(p.amount)} le ${day(p.date)} (${p.paid ? "reçu" : p.date <= today ? "pas encore coché comme reçu" : "à venir"})`);
+  return `Paiements notés dans le CRM de Jeremy : ${items.join(", ")}.`;
+}
