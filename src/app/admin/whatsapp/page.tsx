@@ -21,6 +21,7 @@ type Thread = {
   last_inbound_at: string | null;
   last_outbound_at: string | null;
   last_live_inbound_at?: string | null; // dernier vrai message reçu (pas l'historique importé) : ouvre la fenêtre d'envoi
+  progress?: Progress | null;
   summary: string | null;
   points: string[] | null;
   draft: string | null;
@@ -30,6 +31,12 @@ type Thread = {
   summarized_through: string | null;
   handled_at: string | null;
   error: string | null;
+};
+type StepStatut = "fait" | "en_cours" | "a_venir" | "erreur";
+type Step = { cle: string; label: string; statut: StepStatut; detail?: string };
+type Progress = {
+  redaction?: { statut: "en_cours" | "fait"; maj: string };
+  contenus?: { etapes: Step[]; maj: string; lien?: string | null; nb?: number };
 };
 type Message = { id: string; direction: "inbound" | "outbound"; type: string; body: string | null; transcript: string | null; transcript_error: string | null; sent_at: string };
 type StudentOption = { id: string; name: string; phone: string | null };
@@ -107,6 +114,70 @@ function Bubble({ m }: { m: Message }) {
         <span className="float-right ml-3 mt-1.5 text-[11px] font-medium text-[var(--fg2)]">{hourOf(m.sent_at)}</span>
       </div>
     </li>
+  );
+}
+
+// Où en est la réponse : message reçu, vocal transcrit, brouillon écrit par
+// l'IA (toutes les 5 minutes), et pour les contenus d'inspiration : recherche
+// TikTok, vérification des vidéos, ajout à la GIGA BANQUE, brouillon refait.
+function preparationSteps(t: Thread, fresh: boolean, messages: Message[] | null, now: number): Step[] {
+  const since = [t.last_outbound_at, t.handled_at].filter(Boolean).sort().at(-1) ?? null;
+  const fresh_ = (m: Message) => m.direction === "inbound" && (!since || Date.parse(m.sent_at) > Date.parse(since));
+  const steps: Step[] = [{ cle: "recu", label: "Message reçu", statut: "fait", detail: t.last_inbound_at ? ago(t.last_inbound_at) : undefined }];
+  const vocal = (messages ?? []).filter((m) => fresh_(m) && m.type === "audio");
+  if (vocal.length) {
+    const pending = vocal.some((m) => !m.transcript && !m.transcript_error);
+    steps.push({ cle: "vocal", label: pending ? "Transcription du vocal" : "Vocal transcrit", statut: pending ? "en_cours" : "fait" });
+  }
+  const quiet = t.last_inbound_at ? now - Date.parse(t.last_inbound_at) < 4 * 60_000 : false;
+  if (!fresh && quiet) steps.push({ cle: "attente", label: "J'attends que l'élève ait fini d'écrire", statut: "en_cours", detail: "4 minutes sans nouveau message" });
+  const writing = t.progress?.redaction?.statut === "en_cours" && now - Date.parse(t.progress.redaction.maj) < 10 * 60_000;
+  steps.push({
+    cle: "redaction",
+    label: "Rédaction du brouillon",
+    statut: fresh ? "fait" : writing ? "en_cours" : "a_venir",
+    detail: fresh ? undefined : writing ? "l'IA lit la conversation et ta base de conseils" : "au prochain passage, toutes les 5 minutes",
+  });
+  const c = t.progress?.contenus;
+  if (c) {
+    steps.push(...c.etapes);
+    const done = c.etapes.every((e) => e.statut === "fait");
+    if (done) steps.push({ cle: "refait", label: "Brouillon refait avec le lien du Drive", statut: fresh ? "fait" : writing ? "en_cours" : "a_venir" });
+  }
+  return steps;
+}
+
+function Preparation({ steps, lien }: { steps: Step[]; lien?: string | null }) {
+  const icon: Record<StepStatut, string> = { fait: "✓", en_cours: "", a_venir: "○", erreur: "!" };
+  const tone: Record<StepStatut, string> = {
+    fait: "text-[var(--green)]",
+    en_cours: "text-[var(--accent2)]",
+    a_venir: "text-[var(--fg3)]",
+    erreur: "text-[var(--red)]",
+  };
+  return (
+    <div className="rounded-lg bg-[var(--field)] px-3 py-2.5" aria-live="polite">
+      <p className="text-[12px] font-bold uppercase tracking-wide text-[var(--fg2)]">Préparation de la réponse</p>
+      <ol className="mt-1.5 space-y-1">
+        {steps.map((s) => (
+          <li key={s.cle} className={`flex items-start gap-2 text-[13.5px] font-semibold ${s.statut === "a_venir" ? "text-[var(--fg2)]" : "text-[var(--fg)]"}`}>
+            <span className={`mt-[1px] grid h-4 w-4 shrink-0 place-items-center text-[12px] font-bold ${tone[s.statut]}`} aria-hidden>
+              {s.statut === "en_cours" ? <span className="h-3 w-3 animate-spin rounded-full border-2 border-current border-t-transparent" /> : icon[s.statut]}
+            </span>
+            <span>
+              {s.label}
+              {s.detail && <span className="font-medium text-[var(--fg2)]"> · {s.detail}</span>}
+              <span className="sr-only"> ({s.statut === "fait" ? "terminé" : s.statut === "en_cours" ? "en cours" : s.statut === "erreur" ? "erreur" : "à venir"})</span>
+            </span>
+          </li>
+        ))}
+      </ol>
+      {lien && (
+        <a href={lien} target="_blank" rel="noreferrer" className="mt-1.5 inline-block text-[13px] font-bold text-[var(--accent2)] hover:underline">
+          Voir la section dans la GIGA BANQUE
+        </a>
+      )}
+    </div>
   );
 }
 
@@ -201,6 +272,9 @@ function ThreadCard({ t, students, onChange }: { t: Thread; students: StudentOpt
   const from = !win || showAll ? 0 : win.start;
   const shown = messages ? messages.slice(from) : [];
   const name = nameOf(t);
+  const steps = preparationSteps(t, fresh, messages, Date.now());
+  const contenusEnCours = Boolean(t.progress?.contenus && !t.progress.contenus.etapes.every((e) => e.statut === "fait"));
+  const showSteps = waiting && (!fresh || contenusEnCours || steps.some((s) => s.statut !== "fait"));
 
   return (
     <article className="mac-group overflow-hidden !p-0">
@@ -235,8 +309,9 @@ function ThreadCard({ t, students, onChange }: { t: Thread; students: StudentOpt
       </header>
 
       {/* Résumé de l'IA, court, au-dessus de la conversation */}
-      {(t.summary || t.suspicious || (waiting && !fresh) || (waiting && t.error && fresh)) && (
+      {(t.summary || t.suspicious || showSteps || (waiting && t.error && fresh)) && (
         <div className="space-y-2 border-b-[0.5px] border-[var(--sep)] px-4 py-3">
+          {showSteps && <Preparation steps={steps} lien={t.progress?.contenus?.lien} />}
           {t.suspicious && (
             <p className="rounded-lg bg-[color-mix(in_srgb,var(--orange)_14%,transparent)] px-3 py-2 text-[13px] font-semibold text-[var(--orange)]">
               Un message contient ce qui ressemble à une consigne adressée à l&apos;IA. Relis la conversation toi-même avant de te fier au résumé.
@@ -250,7 +325,6 @@ function ThreadCard({ t, students, onChange }: { t: Thread; students: StudentOpt
               </button>
             </div>
           )}
-          {waiting && !fresh && <p className={SMALL}>Résumé en préparation : il arrive dans les 5 minutes après le dernier message.</p>}
           {t.summary && (
             <div>
               <p className="text-[12px] font-bold uppercase tracking-wide text-[var(--fg2)]">{fresh ? "Résumé" : "Résumé précédent"}</p>

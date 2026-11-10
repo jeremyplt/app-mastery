@@ -7,6 +7,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { summarize, type PromptMessage } from "./ai";
 import { formatConseils, formatSkoolLessons, type ConseilRow, type SkoolLesson } from "./conseils";
 import { formatSupports } from "../student-questions";
+import { queuedSteps } from "../contenus/pipeline";
 import { needsSummary, paymentsLine, phoneDigits, toRow, type KapsoMessage, type MessageRow, type PaymentInfo, type Thread } from "./messages";
 
 // Passage du job WhatsApp sur Harness Maxxing (toutes les 5 minutes) :
@@ -192,10 +193,24 @@ export async function summarizeThreads(env: JobEnv, max = 5): Promise<{ resumes:
       continue;
     }
     try {
+      // Avancement affiché dans le CRM : le brouillon est en cours d'écriture.
+      const { data: cur } = await env.db.from("whatsapp_threads").select("progress").eq("contact", t.contact).maybeSingle();
+      const progress = (cur?.progress ?? {}) as Record<string, unknown>;
+      await env.db.from("whatsapp_threads").update({ progress: { ...progress, redaction: { statut: "en_cours", maj: new Date().toISOString() } } }).eq("contact", t.contact);
       const s = await summarize(messages, { who: await whoLine(env.db, t, now), now, newSince, conseils });
+      const next: Record<string, unknown> = { ...progress, redaction: { statut: "fait", maj: new Date().toISOString() } };
+      // Contenus d'inspiration à chercher : une demande par élève, traitée par
+      // le job « contenus » ; le brouillon sera refait avec le lien du Drive.
+      if (s.besoin_contenus && t.student_id) {
+        const { data: existing } = await env.db.from("inspiration_requests").select("id").eq("student_id", t.student_id).neq("statut", "erreur").limit(1);
+        if (!existing?.length) {
+          await env.db.from("inspiration_requests").insert({ student_id: t.student_id, contact: t.contact, niche: s.niche, mots_cles: s.mots_cles });
+          next.contenus = { etapes: queuedSteps(), maj: new Date().toISOString() };
+        }
+      }
       await env.db
         .from("whatsapp_threads")
-        .update({ summary: s.summary, points: s.points, draft: s.draft, needs_reply: s.needs_reply, suspicious: s.suspicious_content, summarized_at: now.toISOString(), summarized_through: t.last_inbound_at, error: null })
+        .update({ summary: s.summary, points: s.points, draft: s.draft, needs_reply: s.needs_reply, suspicious: s.suspicious_content, summarized_at: now.toISOString(), summarized_through: t.last_inbound_at, error: null, progress: next })
         .eq("contact", t.contact);
       done++;
     } catch (e) {
@@ -239,7 +254,15 @@ export async function whoLine(db: SupabaseClient, t: Pick<ThreadRow, "student_id
       }
       const today = new Intl.DateTimeFormat("en-CA", { timeZone: "Europe/Paris" }).format(now);
       const pay = paymentsLine(payments, today, currency);
-      return `Interlocuteur : ${s.name}, élève accompagné par Jeremy${s.app ? `, app ${s.app}` : ""}${s.start_date ? `, accompagnement commencé le ${s.start_date}` : ""}.${pay ? `\n${pay}` : ""}`;
+      const { data: insp } = await db.from("inspiration_requests").select("statut, lien, nb_liens").eq("student_id", t.student_id).order("created_at", { ascending: false }).limit(1).maybeSingle();
+      const contenus = !insp
+        ? ""
+        : insp.statut === "fait" && insp.lien
+          ? `Contenus d'inspiration : ${insp.nb_liens ?? ""} vidéos de sa niche trouvées et ajoutées à la GIGA BANQUE, lien de sa section : ${insp.lien}`
+          : insp.statut === "erreur"
+            ? "Contenus d'inspiration : la recherche a échoué, ne promets pas de lien."
+            : "Contenus d'inspiration : recherche en cours.";
+      return [`Interlocuteur : ${s.name}, élève accompagné par Jeremy${s.app ? `, app ${s.app}` : ""}${s.start_date ? `, accompagnement commencé le ${s.start_date}` : ""}.`, pay, contenus].filter(Boolean).join("\n");
     }
   }
   return `Interlocuteur : ${t.contact_name ?? "contact"} (pas relié à un élève dans le CRM : peut-être un prospect ou un élève dont le numéro n'est pas noté).`;

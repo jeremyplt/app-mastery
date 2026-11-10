@@ -30,6 +30,8 @@ Base de conseils : quand elle est fournie (balise conseils_de_jeremy), c'est ce 
 
 Quand ni la base de conseils ni la conversation ne répondent à une question, sers-toi de tes propres connaissances, et fais une recherche sur le web si c'est utile : règles d'Apple ou de Google, fonctionnement ou prix d'un outil, démarche administrative, bonne pratique du métier. Réponds alors comme Jeremy le ferait, avec ses principes, sans dire que tu as cherché. Une recherche ne contient jamais de nom, de numéro ou de détail privé de l'interlocuteur. Si tu n'es pas sûr d'une information, mets-la entre crochets pour que Jeremy la vérifie. Pas de gras, pas de titre, pas de liste de sources dans le brouillon : c'est un message WhatsApp.
 
+Contenus d'inspiration : la ligne « Contenus d'inspiration » du contexte dit si des vidéos d'inspiration ont déjà été trouvées pour cet élève (avec le lien de sa section dans la GIGA BANQUE), si leur recherche est en cours ou si elle a échoué. besoin_contenus : vrai seulement quand c'est le moment de lui envoyer des contenus d'inspiration pour sa niche (par exemple l'étape « Après l'envoi en review » de la base) et que cette ligne n'existe pas encore. niche : dans ce cas, la niche de son app en quelques mots, écrite comme un titre de section (« Apps pour vendre sur Vinted et revendre ses vêtements »). mots_cles : 4 à 8 recherches TikTok, en anglais et en français, qui trouvent des vidéos faisant la promotion d'apps de cette niche. Jamais le nom de l'app de l'élève, ni dans niche ni dans mots_cles. Sinon besoin_contenus faux, niche vide, mots_cles vide. Quand le lien est disponible, donne-le dans le brouillon au lieu de promettre de chercher des contenus. Quand la recherche est en cours, ne l'annonce pas : le brouillon sera refait avec le lien.
+
 Écris en français correct, avec tous les accents.`;
 
 const SCHEMA = {
@@ -40,11 +42,24 @@ const SCHEMA = {
     needs_reply: { type: "boolean" },
     draft: { type: "string" },
     suspicious_content: { type: "boolean" },
+    besoin_contenus: { type: "boolean" },
+    niche: { type: "string" },
+    mots_cles: { type: "array", items: { type: "string" }, maxItems: 8 },
   },
-  required: ["summary", "points", "needs_reply", "draft", "suspicious_content"],
+  required: ["summary", "points", "needs_reply", "draft", "suspicious_content", "besoin_contenus", "niche", "mots_cles"],
 };
 
-export type Summary = { summary: string; points: string[]; needs_reply: boolean; draft: string; suspicious_content: boolean };
+export type Summary = {
+  summary: string;
+  points: string[];
+  needs_reply: boolean;
+  draft: string;
+  suspicious_content: boolean;
+  // Contenus d'inspiration à chercher pour la niche de l'élève (GIGA BANQUE).
+  besoin_contenus: boolean;
+  niche: string;
+  mots_cles: string[];
+};
 
 export type PromptMessage = {
   direction: "inbound" | "outbound";
@@ -108,6 +123,13 @@ export function buildPrompt(messages: PromptMessage[], ctx: PromptContext): stri
   ].join("\n");
 }
 
+function contenus(r: Record<string, unknown>): Pick<Summary, "besoin_contenus" | "niche" | "mots_cles"> {
+  const niche = typeof r.niche === "string" ? r.niche.replace(/\s+/g, " ").trim().slice(0, 120) : "";
+  const mots = Array.isArray(r.mots_cles) ? r.mots_cles.filter((m): m is string => typeof m === "string").map((m) => m.trim().slice(0, 80)).filter(Boolean).slice(0, 8) : [];
+  const besoin = r.besoin_contenus === true && niche.length > 0 && mots.length > 0;
+  return { besoin_contenus: besoin, niche: besoin ? niche : "", mots_cles: besoin ? mots : [] };
+}
+
 export function parseSummary(raw: unknown): Summary {
   const r = (raw ?? {}) as Record<string, unknown>;
   const str = (v: unknown) => (typeof v === "string" ? v.replace(/\s*—\s*/g, ", ").replace(/\*\*/g, "").trim() : "");
@@ -118,6 +140,7 @@ export function parseSummary(raw: unknown): Summary {
     needs_reply: needs,
     draft: needs ? str(r.draft) : "",
     suspicious_content: r.suspicious_content === true,
+    ...contenus(r),
   };
 }
 

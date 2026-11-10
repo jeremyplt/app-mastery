@@ -43,6 +43,11 @@ export function stepsAt(current: StepKey | "fini", statut: "en_cours" | "erreur"
   }));
 }
 
+// Demande créée, pas encore prise par le job « contenus » (toutes les 5 minutes).
+export function queuedSteps(): StepState[] {
+  return STEPS.map(([cle, label], i) => ({ cle, label, statut: "a_venir" as const, ...(i === 0 ? { detail: "Démarre dans les 5 minutes" } : {}) }));
+}
+
 async function progress(env: ContenusEnv, req: InspirationRequest, current: StepKey | "fini", statut: "en_cours" | "erreur" = "en_cours", detail?: string) {
   env.log?.(`${current} ${statut}${detail ? ` : ${detail}` : ""}`);
   if (env.dryRun) return;
