@@ -47,3 +47,17 @@ export async function requireOwner(): Promise<void> {
   const role = await getAdminRole();
   if (role !== "owner") throw new Error("Accès non autorisé");
 }
+
+// Une vente : le propriétaire a accès à toutes, le reste de l'équipe (closers)
+// seulement aux siennes. Les montants des autres ventes, c'est le chiffre
+// d'affaires : réservé au propriétaire.
+export async function requireSaleAccess(saleId: string): Promise<AdminRole> {
+  const role = await getAdminRole();
+  if (!role) throw new Error("Accès non autorisé");
+  if (role !== "owner") {
+    const me = (await getSessionEmail())?.trim().toLowerCase() ?? "";
+    const { data } = await getAdminClient().from("sales").select("id").eq("id", saleId).eq("closer_email", me).maybeSingle();
+    if (!me || !data) throw new Error("Accès non autorisé");
+  }
+  return role;
+}

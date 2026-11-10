@@ -47,7 +47,7 @@ const GROUPS: Group[] = [
   {
     label: "Élèves",
     items: [
-      { id: "eleves", label: "Élèves", href: "/admin/eleves" },
+      { id: "eleves", label: "Élèves", href: "/admin/eleves", ownerOnly: true },
       { id: "whatsapp", label: "WhatsApp", href: "/admin/whatsapp", ownerOnly: true },
       { id: "questions", label: "Questions des élèves", href: "/admin/questions", ownerOnly: true },
     ],

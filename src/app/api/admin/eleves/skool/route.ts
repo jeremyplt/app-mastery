@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireAdmin } from "@/lib/admin";
+import { requireOwner } from "@/lib/admin";
 import { getAdminClient } from "@/lib/supabase";
 import { inviteToSkool } from "@/lib/skool";
 import { getSale, inviteSkoolNow } from "@/lib/ventes";
@@ -10,7 +10,7 @@ import { sendQuestionnaire } from "@/lib/questionnaire";
 // la date sur l'élève. Le questionnaire part avec, s'il n'est pas encore parti.
 export async function POST(req: NextRequest) {
   try {
-    await requireAdmin();
+    await requireOwner();
     const { id } = await req.json();
     if (typeof id !== "string") return NextResponse.json({ error: "id manquant" }, { status: 400 });
     const supabase = getAdminClient();

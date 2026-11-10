@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireAdmin } from "@/lib/admin";
+import { requireOwner } from "@/lib/admin";
 import { getAdminClient, withRetry } from "@/lib/supabase";
 import { MILESTONES, type StudentPayment } from "@/lib/students";
 
@@ -32,7 +32,7 @@ const SELECT = "*, sales(id, contract_status, contract_signed_at, contract_submi
 // ?id=... : un seul élève (fiche).
 export async function GET(req: NextRequest) {
   try {
-    await requireAdmin();
+    await requireOwner();
     const id = req.nextUrl.searchParams.get("id");
     if (id) {
       const { data, error } = await getAdminClient().from("students").select(SELECT).eq("id", id).maybeSingle();
@@ -52,7 +52,7 @@ export async function GET(req: NextRequest) {
 // Ajouter un élève à la main (sans passer par la page Ventes).
 export async function POST(req: NextRequest) {
   try {
-    await requireAdmin();
+    await requireOwner();
     const b = await req.json();
     const name = String(b.name ?? "").trim();
     if (!name) return NextResponse.json({ error: "Nom manquant" }, { status: 400 });
@@ -82,7 +82,7 @@ export async function POST(req: NextRequest) {
 
 export async function PATCH(req: NextRequest) {
   try {
-    await requireAdmin();
+    await requireOwner();
     const b = await req.json();
     if (typeof b.id !== "string") return NextResponse.json({ error: "id manquant" }, { status: 400 });
     const update: Record<string, unknown> = {};
@@ -123,7 +123,7 @@ export async function PATCH(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   try {
-    await requireAdmin();
+    await requireOwner();
     const id = req.nextUrl.searchParams.get("id");
     if (!id) return NextResponse.json({ error: "id manquant" }, { status: 400 });
     const { error } = await getAdminClient().from("students").delete().eq("id", id);

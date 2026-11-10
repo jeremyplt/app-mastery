@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireAdmin } from "@/lib/admin";
+import { requireAdmin, requireSaleAccess } from "@/lib/admin";
 import { getAdminClient } from "@/lib/supabase";
 import { EMPTY_BANK, buildReminder, getBankDetails, getSale } from "@/lib/ventes";
 
@@ -13,6 +13,7 @@ export async function GET(req: NextRequest) {
 
     const { data, error } = await getAdminClient().from("sale_payments").select("sale_id").eq("id", paymentId).single();
     if (error) throw new Error(error.message);
+    await requireSaleAccess(data.sale_id);
     const sale = await getSale(data.sale_id);
     const payment = sale.sale_payments.find((p) => p.id === paymentId)!;
     const bank = await getBankDetails();

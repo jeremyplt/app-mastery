@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getAdminRole } from "@/lib/admin";
+import { getAdminRole, requireSaleAccess } from "@/lib/admin";
 import { getSessionEmail } from "@/lib/auth";
 import { getAdminClient, withRetry } from "@/lib/supabase";
 import { contractsConfigured, hasTemplate } from "@/lib/docuseal";
@@ -24,11 +24,11 @@ const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 export async function GET() {
   try {
     const role = await requireRole();
-    // Un closer ne voit que ses propres ventes.
+    // Seul le propriétaire voit toutes les ventes ; un closer ne voit que les siennes.
     const me = (await getSessionEmail())?.trim().toLowerCase() ?? "";
     const rows = await withRetry(() => {
       const q = getAdminClient().from("sales").select(SALE_SELECT).order("created_at", { ascending: false }).limit(500);
-      return role === "closer" ? q.eq("closer_email", me) : q;
+      return role === "owner" ? q : q.eq("closer_email", me);
     });
     const sales = ((rows ?? []) as Sale[]).map(normalize);
     // Contrats en attente : on relit leur statut chez DocuSeal à l'ouverture de
@@ -137,6 +137,9 @@ export async function PATCH(req: NextRequest) {
     const supabase = getAdminClient();
 
     if (typeof b.payment_id === "string") {
+      const { data: owner } = await supabase.from("sale_payments").select("sale_id").eq("id", b.payment_id).maybeSingle();
+      if (!owner) return NextResponse.json({ error: "Échéance introuvable" }, { status: 404 });
+      await requireSaleAccess(owner.sale_id);
       const update: Record<string, unknown> = {};
       if (typeof b.paid === "boolean") {
         update.paid = b.paid;
@@ -164,6 +167,7 @@ export async function PATCH(req: NextRequest) {
     }
 
     if (typeof b.id !== "string") return NextResponse.json({ error: "id manquant" }, { status: 400 });
+    await requireSaleAccess(b.id);
     const update: Record<string, unknown> = {};
     if (typeof b.notes === "string") update.notes = b.notes.trim() || null;
     if (typeof b.archived === "boolean") update.archived = b.archived;
@@ -198,14 +202,9 @@ export async function PATCH(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   try {
-    const role = await requireRole();
     const id = req.nextUrl.searchParams.get("id");
     if (!id) return NextResponse.json({ error: "id manquant" }, { status: 400 });
-    if (role === "closer") {
-      const me = (await getSessionEmail())?.trim().toLowerCase();
-      const { data: own } = await getAdminClient().from("sales").select("id").eq("id", id).eq("closer_email", me ?? "").maybeSingle();
-      if (!own) throw new Error("Accès non autorisé");
-    }
+    await requireSaleAccess(id);
     // L'élève créé par cette vente part avec elle (vente de test, erreur de saisie).
     await getAdminClient().from("students").delete().eq("sale_id", id);
     const { data: deleted, error } = await getAdminClient().from("sales").delete().eq("id", id).select("email").single();

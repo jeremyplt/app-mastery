@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { requireAdmin } from "@/lib/admin";
+import { requireSaleAccess } from "@/lib/admin";
 import { getSale, inviteSkoolNow } from "@/lib/ventes";
 
 // Invitation Skool forcée à la main (renvoi, ou cas particulier).
 export async function POST(req: NextRequest) {
   try {
-    await requireAdmin();
     const { id } = await req.json();
     if (typeof id !== "string") return NextResponse.json({ error: "id manquant" }, { status: 400 });
+    await requireSaleAccess(id);
     const r = await inviteSkoolNow(await getSale(id));
     if (!r.invited) return NextResponse.json({ error: r.error ?? "Invitation impossible" }, { status: 500 });
     return NextResponse.json({ sale: await getSale(id) });

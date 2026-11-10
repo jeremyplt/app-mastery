@@ -100,10 +100,11 @@ export default function ElevesPage() {
     fetch("/api/admin/check")
       .then((r) => r.json())
       .then((d) => {
-        if (d.admin) {
+        // Élèves, paiements et conversations : propriétaire seulement.
+        if (d.role === "owner") {
           setAuthorized(true);
-          setIsOwner(d.role === "owner");
-        } else window.location.href = "/membres";
+          setIsOwner(true);
+        } else window.location.href = d.admin ? "/admin/crm" : "/membres";
       })
       .catch(() => {
         window.location.href = "/membres";
