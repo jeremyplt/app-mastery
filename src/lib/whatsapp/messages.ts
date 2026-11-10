@@ -122,3 +122,17 @@ export function needsSummary(t: Thread, now: Date, quietMinutes = 4, maxAgeDays 
   const age = now.getTime() - Date.parse(t.last_inbound_at!);
   return age >= quietMinutes * 60_000 && age <= maxAgeDays * 86_400_000;
 }
+
+// Conversation ouverte dans /admin/whatsapp : on n'affiche que la fin, à
+// partir des messages reçus depuis la dernière réponse de Jeremy (ou depuis
+// « Traité »), avec quelques messages avant pour le contexte, et au moins les
+// 10 derniers. `firstNew` : premier message reçu après `since` (-1 si aucun).
+const CONTEXT_BEFORE = 4;
+const MIN_RECENT = 10;
+
+export function recentWindow(messages: { direction: string; sent_at: string }[], since: string | null): { start: number; firstNew: number } {
+  const sinceMs = since ? Date.parse(since) : -Infinity;
+  const firstNew = messages.findIndex((m) => m.direction === "inbound" && Date.parse(m.sent_at) > sinceMs);
+  const fromNew = firstNew === -1 ? messages.length : firstNew - CONTEXT_BEFORE;
+  return { start: Math.max(0, Math.min(fromNew, messages.length - MIN_RECENT)), firstNew };
+}

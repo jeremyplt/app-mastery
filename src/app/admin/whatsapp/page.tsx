@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import AdminNav from "@/components/admin/AdminNav";
-import { awaitingReply } from "@/lib/whatsapp/messages";
+import { awaitingReply, recentWindow } from "@/lib/whatsapp/messages";
 
 // WhatsApp pro : résumés, brouillons et vocaux transcrits, préparés toutes les
 // 5 minutes par le job WhatsApp de Harness Maxxing. Rien n'est envoyé d'ici :
@@ -100,6 +100,7 @@ function ThreadCard({ t, students, onChange }: { t: Thread; students: StudentOpt
   const [draft, setDraft] = useState(t.draft ?? "");
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Message[] | null>(null);
+  const [showAll, setShowAll] = useState(false);
   const [busy, setBusy] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -276,11 +277,34 @@ function ThreadCard({ t, students, onChange }: { t: Thread; students: StudentOpt
           ) : messages.length === 0 ? (
             <p className={SMALL}>Aucun message enregistré.</p>
           ) : (
-            <ul className="space-y-2">
-              {messages.map((m) => (
-                <MessageLine key={m.id} m={m} />
-              ))}
-            </ul>
+            (() => {
+              const since = [t.last_outbound_at, t.handled_at].filter(Boolean).sort().at(-1) ?? null;
+              const { start, firstNew } = recentWindow(messages, since);
+              const from = showAll ? 0 : start;
+              return (
+                <>
+                  {from > 0 && (
+                    <button className="mb-3 text-[13px] font-bold text-[var(--accent2)] hover:underline" onClick={() => setShowAll(true)}>
+                      Voir les {from} messages plus anciens
+                    </button>
+                  )}
+                  <ul className="space-y-2">
+                    {messages.slice(from).map((m, i) => (
+                      <Fragment key={m.id}>
+                        {from + i === firstNew && (
+                          <li className="flex items-center gap-2 py-1 text-[12px] font-bold text-[var(--orange)]" aria-label="Nouveaux messages">
+                            <span className="h-px flex-1 bg-[color-mix(in_srgb,var(--orange)_45%,transparent)]" />
+                            {since ? "Nouveaux depuis ta dernière réponse" : "Nouveaux messages"}
+                            <span className="h-px flex-1 bg-[color-mix(in_srgb,var(--orange)_45%,transparent)]" />
+                          </li>
+                        )}
+                        <MessageLine m={m} />
+                      </Fragment>
+                    ))}
+                  </ul>
+                </>
+              );
+            })()
           )}
         </div>
       )}

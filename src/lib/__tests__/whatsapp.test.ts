@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { buildPrompt, parseSummary, type PromptMessage } from "../whatsapp/ai";
 import { formatConseils, packConversations, parseExtraits, parseSynth, type ConvLine } from "../whatsapp/conseils";
-import { awaitingReply, needsSummary, phoneDigits, toRow, type KapsoMessage, type Thread } from "../whatsapp/messages";
+import { awaitingReply, needsSummary, phoneDigits, recentWindow, toRow, type KapsoMessage, type Thread } from "../whatsapp/messages";
 
 test("numéros : mêmes chiffres quelle que soit l'écriture", () => {
   assert.equal(phoneDigits("+33 6 44 70 59 92"), "33644705992");
@@ -217,4 +217,17 @@ test("brouillon : le gras Markdown est retiré (WhatsApp ne l'affiche pas)", () 
   const s = parseSummary({ summary: "Il demande le **délai** de review.", points: [], needs_reply: true, draft: "Compte **une semaine** chez Google.", suspicious_content: false });
   assert.equal(s.summary, "Il demande le délai de review.");
   assert.equal(s.draft, "Compte une semaine chez Google.");
+});
+
+test("conversation : on ouvre sur la fin, à partir des nouveaux messages", () => {
+  const at = (h: number) => new Date(Date.UTC(2026, 10, 10, 0, h)).toISOString();
+  const conv = Array.from({ length: 40 }, (_, i) => ({ direction: i >= 30 ? "inbound" : i % 2 ? "outbound" : "inbound", sent_at: at(i) }));
+  // Dernière réponse de Jeremy au message 29 : nouveaux à partir de 30, 4 messages de contexte avant.
+  assert.deepEqual(recentWindow(conv, at(29)), { start: 26, firstNew: 30 });
+  // Rien de nouveau : les 10 derniers.
+  assert.deepEqual(recentWindow(conv.slice(0, 30), at(29)), { start: 20, firstNew: -1 });
+  // Beaucoup de nouveaux : on les montre tous, plus le contexte.
+  assert.deepEqual(recentWindow(conv, at(3)), { start: 0, firstNew: 4 });
+  // Conversation courte : tout.
+  assert.deepEqual(recentWindow(conv.slice(0, 5), null), { start: 0, firstNew: 0 });
 });
