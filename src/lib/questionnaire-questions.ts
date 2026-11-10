@@ -100,7 +100,8 @@ export const QUESTIONS: Question[] = [
 ];
 
 // Accès à envoyer (partie « À faire » du document) : tout en lecture seule,
-// sauf App Store Connect qui demande le rôle Développeur.
+// sauf App Store Connect qui demande deux rôles : Développeur (TestFlight) et
+// Ventes (App Analytics, réservé chez Apple aux rôles Ventes, Finances et Admin).
 export const ACCESS_EMAIL = "jeremypltpro@gmail.com";
 export const ACCESS_TODO = [
   "Tous les outils de monitoring et d'analytics (PostHog, Sentry, RevenueCat, etc.)",
@@ -108,7 +109,7 @@ export const ACCESS_TODO = [
   "Google Play Console",
 ];
 export const ACCESS_ASC =
-  "App Store Connect : invite-moi avec le rôle « Développeur » (« Developer »), pas en lecture seule. Sans ce rôle, je ne peux pas tester ton app.";
+  "App Store Connect : invite-moi avec deux rôles, « Développeur » (« Developer ») et « Ventes » (« Sales »), pas en lecture seule. Développeur me donne accès à TestFlight pour tester ton app, Ventes me donne accès aux analytics.";
 // Réponse « accès envoyés » (case à cocher en fin de questionnaire).
 export const ACCESS_ANSWER_ID = "access_sent";
 
