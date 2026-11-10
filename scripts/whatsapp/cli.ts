@@ -4,10 +4,10 @@
 //   sync-complet     relit tout l'historique chez Kapso (messages manquants,
 //                    pièces jointes arrivées après coup)
 //   status           fils qui attendent une réponse
-//   essai <numéro>   résume un fil et affiche le résultat, sans rien enregistrer
+//   essai <numéro>   résume un fil (avec la base de conseils) et affiche le résultat, sans rien enregistrer
 import { createClient } from "@supabase/supabase-js";
 import { summarize, type PromptMessage } from "@/lib/whatsapp/ai";
-import { summarizeThreads, syncMessages, transcribeVoiceNotes, type JobEnv } from "@/lib/whatsapp/job";
+import { loadConseils, summarizeThreads, syncMessages, transcribeVoiceNotes, type JobEnv } from "@/lib/whatsapp/job";
 import { awaitingReply, type Thread } from "@/lib/whatsapp/messages";
 
 const [cmd, ...args] = process.argv.slice(2);
@@ -54,7 +54,8 @@ async function main() {
       const { data } = await db.from("whatsapp_messages").select("direction, type, body, transcript, transcript_error, sent_at").eq("contact", contact).order("sent_at", { ascending: false }).limit(40);
       const { data: t } = await db.from("whatsapp_threads").select("contact_name, last_outbound_at").eq("contact", contact).maybeSingle();
       const messages = ((data ?? []) as PromptMessage[]).reverse();
-      return print(await summarize(messages, { who: `Interlocuteur : ${t?.contact_name ?? "contact"}.`, now: new Date(), newSince: t?.last_outbound_at ?? null }));
+      const conseils = await loadConseils(db);
+      return print(await summarize(messages, { who: `Interlocuteur : ${t?.contact_name ?? "contact"}.`, now: new Date(), newSince: t?.last_outbound_at ?? null, conseils }));
     }
     default:
       throw new Error("Commandes : run, sync, sync-complet, status, essai <numéro>");

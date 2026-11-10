@@ -208,7 +208,7 @@ export async function summarizeThreads(env: JobEnv, max = 5): Promise<{ resumes:
 
 // Les thèmes validés par Jeremy dans /admin/whatsapp. Sans base (ou en cas de
 // souci de lecture), les brouillons se font comme avant.
-async function loadConseils(db: SupabaseClient): Promise<string> {
+export async function loadConseils(db: SupabaseClient): Promise<string> {
   const { data, error } = await db.from("whatsapp_conseils").select("theme, titre, contenu, statut").eq("statut", "valide").order("ordre");
   if (error) return "";
   return formatConseils((data ?? []) as ConseilRow[]);

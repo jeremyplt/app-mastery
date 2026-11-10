@@ -212,3 +212,9 @@ test("base de conseils : relevé nettoyé (thème inconnu, tiret cadratin, date)
   assert.equal(suspicious, true);
   assert.deepEqual(parseSynth({ contenu: " Fiche — courte. ", a_verifier: ["Lequel garder ?", 3] }), { contenu: "Fiche, courte.", a_verifier: ["Lequel garder ?"] });
 });
+
+test("brouillon : le gras Markdown est retiré (WhatsApp ne l'affiche pas)", () => {
+  const s = parseSummary({ summary: "Il demande le **délai** de review.", points: [], needs_reply: true, draft: "Compte **une semaine** chez Google.", suspicious_content: false });
+  assert.equal(s.summary, "Il demande le délai de review.");
+  assert.equal(s.draft, "Compte une semaine chez Google.");
+});
