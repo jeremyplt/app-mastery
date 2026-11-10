@@ -5,6 +5,7 @@ import { join } from "node:path";
 import { promisify } from "node:util";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { summarize, type PromptMessage } from "./ai";
+import { collectMedia, type MediaMessage } from "./media";
 import { formatConseils, formatSkoolLessons, type ConseilRow, type SkoolLesson } from "./conseils";
 import { formatSupports } from "../student-questions";
 import { queuedSteps } from "../contenus/pipeline";
@@ -179,7 +180,7 @@ export async function summarizeThreads(env: JobEnv, max = 5): Promise<{ resumes:
   for (const t of todo.slice(0, max)) {
     const { data: rows, error: msgError } = await env.db
       .from("whatsapp_messages")
-      .select("direction, type, body, transcript, transcript_error, sent_at")
+      .select("direction, type, body, transcript, transcript_error, sent_at, media_url")
       .eq("contact", t.contact)
       .gte("sent_at", new Date(now.getTime() - 45 * 86_400_000).toISOString())
       .order("sent_at", { ascending: false })
@@ -197,7 +198,10 @@ export async function summarizeThreads(env: JobEnv, max = 5): Promise<{ resumes:
       const { data: cur } = await env.db.from("whatsapp_threads").select("progress").eq("contact", t.contact).maybeSingle();
       const progress = (cur?.progress ?? {}) as Record<string, unknown>;
       await env.db.from("whatsapp_threads").update({ progress: { ...progress, redaction: { statut: "en_cours", maj: new Date().toISOString() } } }).eq("contact", t.contact);
-      const s = await summarize(messages, { who: await whoLine(env.db, t, now), now, newSince, conseils });
+      // Photos, captures et vidéos envoyées : l'IA les voit (planche d'images,
+      // voix transcrite, vues) au lieu d'écrire « [ton avis sur la capture] ».
+      const medias = await collectMedia(messages as unknown as MediaMessage[], newSince, (url) => downloadMedia(url, env.apiKey)).catch(() => ({ images: [] as string[], notes: "" }));
+      const s = await summarize(messages, { who: await whoLine(env.db, t, now), now, newSince, conseils, medias: medias.notes }, medias.images);
       const next: Record<string, unknown> = { ...progress, redaction: { statut: "fait", maj: new Date().toISOString() } };
       // Contenus d'inspiration à chercher : une demande par élève, traitée par
       // le job « contenus » ; le brouillon sera refait avec le lien du Drive.

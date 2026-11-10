@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { buildPrompt, parseSummary, type PromptMessage } from "../whatsapp/ai";
 import { canSendFreeForm, cleanOutgoing, markRead, sendText } from "../whatsapp/send";
+import { cleanTranscript, videoLinks } from "../whatsapp/media";
 import { formatConseils, formatSkoolLessons, packConversations, parseExtraits, parseSynth, type ConvLine } from "../whatsapp/conseils";
 import { awaitingReply, needsSummary, paymentsLine, phoneDigits, recentWindow, toRow, type KapsoMessage, type Thread } from "../whatsapp/messages";
 
@@ -300,4 +301,15 @@ test("envoi : la conversation est marquée comme lue chez WhatsApp", async () =>
   }) as unknown as typeof fetch;
   await markRead({ apiKey: "k", phoneNumberId: "123", messageId: "wamid.X", fetchImpl: fake });
   assert.deepEqual(body, { messaging_product: "whatsapp", status: "read", message_id: "wamid.X" });
+});
+
+test("pièces jointes : liens de vidéos repérés, voix vide ignorée", () => {
+  assert.deepEqual(
+    videoLinks(["Voici : https://vm.tiktok.com/ZGdXySTaV/ et https://www.instagram.com/reel/DfiOfMsMoIH/?vrfl=x.", "https://vm.tiktok.com/ZGdXySTaV/", "https://youtube.com/shorts/abc"]),
+    ["https://vm.tiktok.com/ZGdXySTaV/", "https://www.instagram.com/reel/DfiOfMsMoIH/?vrfl=x"],
+  );
+  assert.deepEqual(videoLinks(["https://www.tiktok.com/@a/video/1)"], 5), ["https://www.tiktok.com/@a/video/1"]);
+  assert.deepEqual(videoLinks([null, "pas de lien"]), []);
+  assert.equal(cleanTranscript("Sous-titrage ST' 501"), "");
+  assert.equal(cleanTranscript("  J'ai scanné toutes mes boîtes de médicaments  "), "J'ai scanné toutes mes boîtes de médicaments");
 });
