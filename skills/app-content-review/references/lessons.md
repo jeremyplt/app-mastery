@@ -53,4 +53,5 @@ Les plus récentes en haut. Elles priment sur le reste.
 ## 2026-11-10 , Pharma Stock (Kevin), retour sur une vidéo dans un brouillon WhatsApp
 - **Visage :** j'ai proposé de finir sur « ta tête » alors que Kevin ne montre jamais son visage (déjà noté le 4 nov.). Avant tout retour, vérifier si l'élève est « sans visage » ; si oui, la réaction finale passe par les mains, un objet ou un texte à l'écran. Noté sur sa fiche (« À savoir pour les brouillons »).
 - **Enregistrement d'écran :** conseiller de filmer la main avec un deuxième téléphone reste juste, mais Jeremy ajoute que l'enregistrement d'écran « marche très bien sur certains contenus » : le proposer comme une option, pas comme une erreur.
-- **Validé tel quel :** hook en curiosité, compteur de boîtes périmées qui monte, couper les scans en double, accélérer les fiches détaillées, écran de fin d'une seconde.
+- **Validé tel quel :** hook en curiosité, compteur de boîtes périmées qui monte, couper les scans en double, accélérer les fiches détaillées.
+- **Écran de fin :** j'avais demandé une seconde au lieu de trois ; Jeremy : « pas grave si c'est 2 secondes ». Ne pas chipoter en dessous de 2 à 3 secondes.
