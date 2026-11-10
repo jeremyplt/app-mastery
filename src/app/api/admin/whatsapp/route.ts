@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireOwner } from "@/lib/admin";
 import { getAdminClient, withRetry } from "@/lib/supabase";
-import { canSendFreeForm, cleanOutgoing, markRead, sendText } from "@/lib/whatsapp/send";
+import { canSendFreeForm, cleanOutgoing, markRead, sendReaction, sendText } from "@/lib/whatsapp/send";
 
 // WhatsApp pro dans le CRM : résumés, brouillons et vocaux transcrits par le job
 // WhatsApp de Harness Maxxing. Propriétaire seulement : conversations privées.
@@ -57,6 +57,8 @@ export async function GET(req: NextRequest) {
 //             numéro sur la fiche de l'élève s'il n'en a pas
 //   envoyer   envoie { text } par Kapso, dans les 24 h qui suivent le dernier
 //             message reçu (règle de WhatsApp), et l'ajoute à la conversation
+//   reagir    réagit { emoji } au dernier message reçu (même règle des 24 h),
+//             le marque comme lu et classe la conversation en « traité »
 export async function POST(req: NextRequest) {
   try {
     await requireOwner();
@@ -135,6 +137,31 @@ export async function POST(req: NextRequest) {
         await update({ last_outbound_at: sentAt });
         await markLastRead();
         return NextResponse.json({ ok: true, message: { id, direction: "outbound", type: "text", body: text, transcript: null, transcript_error: null, sent_at: sentAt } });
+      }
+      case "reagir": {
+        const emoji = typeof b.emoji === "string" ? b.emoji : "";
+        if (!/^\d{8,15}$/.test(contact)) return NextResponse.json({ error: "Numéro masqué par WhatsApp : réagis depuis l'app" }, { status: 400 });
+        const apiKey = process.env.KAPSO_API_KEY;
+        const phoneNumberId = process.env.KAPSO_PHONE_NUMBER_ID;
+        if (!apiKey || !phoneNumberId) return NextResponse.json({ error: "L'envoi n'est pas encore configuré sur le site" }, { status: 503 });
+        const { data: last } = await db
+          .from("whatsapp_messages")
+          .select("id, sent_at")
+          .eq("contact", contact)
+          .eq("direction", "inbound")
+          .neq("origin", "history_sync")
+          .order("sent_at", { ascending: false })
+          .limit(1)
+          .maybeSingle();
+        const now = new Date();
+        if (!last || !canSendFreeForm(last.sent_at, now)) {
+          return NextResponse.json({ error: "Plus de 24 h depuis son dernier message : WhatsApp n'autorise pas la réaction d'ici. Utilise « WhatsApp Web »." }, { status: 409 });
+        }
+        const id = await sendReaction({ apiKey, phoneNumberId, to: contact, messageId: last.id, emoji });
+        await db.from("whatsapp_messages").upsert({ id, contact, direction: "outbound", origin: "cloud_api", type: "reaction", body: emoji, sent_at: now.toISOString() }, { onConflict: "id", ignoreDuplicates: true });
+        await markRead({ apiKey, phoneNumberId, messageId: last.id }).catch(() => undefined);
+        await update({ handled_at: now.toISOString() });
+        break;
       }
       default:
         return NextResponse.json({ error: "Action inconnue" }, { status: 400 });

@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { buildPrompt, parseSummary, type PromptMessage } from "../whatsapp/ai";
-import { canSendFreeForm, cleanOutgoing, markRead, sendText } from "../whatsapp/send";
+import { canSendFreeForm, cleanOutgoing, markRead, sendReaction, sendText } from "../whatsapp/send";
 import { cleanTranscript, videoLinks } from "../whatsapp/media";
 import { formatConseils, formatSkoolLessons, packConversations, parseExtraits, parseSynth, type ConvLine } from "../whatsapp/conseils";
 import { awaitingReply, needsSummary, paymentsLine, phoneDigits, recentWindow, toRow, type KapsoMessage, type Thread } from "../whatsapp/messages";
@@ -312,4 +312,15 @@ test("pièces jointes : liens de vidéos repérés, voix vide ignorée", () => {
   assert.deepEqual(videoLinks([null, "pas de lien"]), []);
   assert.equal(cleanTranscript("Sous-titrage ST' 501"), "");
   assert.equal(cleanTranscript("  J'ai scanné toutes mes boîtes de médicaments  "), "J'ai scanné toutes mes boîtes de médicaments");
+});
+
+test("réaction : envoyée sur le dernier message reçu, emoji de la liste seulement", async () => {
+  let body: unknown = null;
+  const fake = (async (_url: string, init: RequestInit) => {
+    body = JSON.parse(String(init.body));
+    return new Response(JSON.stringify({ messages: [{ id: "wamid.R" }] }), { status: 200 });
+  }) as unknown as typeof fetch;
+  assert.equal(await sendReaction({ apiKey: "k", phoneNumberId: "1", to: "33600000000", messageId: "wamid.IN", emoji: "👍", fetchImpl: fake }), "wamid.R");
+  assert.deepEqual(body, { messaging_product: "whatsapp", recipient_type: "individual", to: "33600000000", type: "reaction", reaction: { message_id: "wamid.IN", emoji: "👍" } });
+  await assert.rejects(sendReaction({ apiKey: "k", phoneNumberId: "1", to: "33600000000", messageId: "x", emoji: "💩", fetchImpl: fake }), /Réaction inconnue/);
 });

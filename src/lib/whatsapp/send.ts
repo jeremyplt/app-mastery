@@ -59,3 +59,20 @@ export async function markRead(opts: { apiKey: string; phoneNumberId: string; me
   });
   if (!res.ok) throw new Error(`Lecture non marquée (${res.status})`);
 }
+
+// Réaction (👍, ❤️…) sur un message reçu : même règle des 24 h que les messages.
+export const REACTIONS = ["👍", "❤️", "🙏", "🔥", "😂"] as const;
+
+export async function sendReaction(opts: { apiKey: string; phoneNumberId: string; to: string; messageId: string; emoji: string; fetchImpl?: typeof fetch }): Promise<string> {
+  if (!/^\d{8,15}$/.test(opts.to)) throw new Error("Numéro invalide");
+  if (!(REACTIONS as readonly string[]).includes(opts.emoji)) throw new Error("Réaction inconnue");
+  const res = await (opts.fetchImpl ?? fetch)(`https://api.kapso.ai/meta/whatsapp/v24.0/${opts.phoneNumberId}/messages`, {
+    method: "POST",
+    headers: { "X-API-Key": opts.apiKey, "Content-Type": "application/json" },
+    body: JSON.stringify({ messaging_product: "whatsapp", recipient_type: "individual", to: opts.to, type: "reaction", reaction: { message_id: opts.messageId, emoji: opts.emoji } }),
+    signal: AbortSignal.timeout(20_000),
+  });
+  const data = (await res.json().catch(() => ({}))) as { messages?: { id?: string }[]; error?: { message?: string; error_user_msg?: string } };
+  if (!res.ok) throw new Error(`WhatsApp a refusé la réaction : ${data.error?.error_user_msg ?? data.error?.message ?? res.status}`.slice(0, 300));
+  return data.messages?.[0]?.id ?? `reaction-${Date.now()}`;
+}

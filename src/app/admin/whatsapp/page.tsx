@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import AdminNav from "@/components/admin/AdminNav";
 import { awaitingReply, recentWindow } from "@/lib/whatsapp/messages";
-import { sendWindowEnd } from "@/lib/whatsapp/send";
+import { REACTIONS, sendWindowEnd } from "@/lib/whatsapp/send";
 
 // WhatsApp pro : résumés, brouillons et vocaux transcrits, préparés toutes les
 // 5 minutes par le job WhatsApp de Harness Maxxing. Rien n'est envoyé d'ici :
@@ -429,6 +429,22 @@ function ThreadCard({ t, students, onChange }: { t: Thread; students: StudentOpt
             <a className="mac-btn mac-btn-def mac-btn-sm" href={`https://web.whatsapp.com/send?phone=${t.contact}&text=${encodeURIComponent(draft)}`} target="_blank" rel="noreferrer">
               WhatsApp Web
             </a>
+          )}
+          {waiting && canSend && (
+            <span className="flex items-center gap-1" role="group" aria-label="Réagir à son dernier message">
+              {REACTIONS.slice(0, 3).map((e) => (
+                <button
+                  key={e}
+                  className="grid h-9 w-9 place-items-center rounded-full bg-[var(--wa-in)] text-[18px] shadow-sm transition hover:scale-110 disabled:opacity-50"
+                  disabled={busy !== null}
+                  onClick={() => act("reagir", { emoji: e })}
+                  title={`Réagir ${e} à son dernier message et marquer traité`}
+                  aria-label={`Réagir ${e} et marquer traité`}
+                >
+                  {busy === "reagir" ? "…" : e}
+                </button>
+              ))}
+            </span>
           )}
           {waiting ? (
             <button className="mac-btn mac-btn-def mac-btn-sm" disabled={busy !== null} onClick={() => act("traite")}>
