@@ -8,6 +8,7 @@ import { summarize, type PromptMessage } from "./ai";
 import { collectMedia, type MediaMessage } from "./media";
 import { formatConseils, formatSkoolLessons, type ConseilRow, type SkoolLesson } from "./conseils";
 import { formatSupports } from "../student-questions";
+import { applyMilestones, pendingLine } from "./jalons";
 import { queuedSteps } from "../contenus/pipeline";
 import { needsSummary, paymentsLine, phoneDigits, toRow, type KapsoMessage, type MessageRow, type PaymentInfo, type Thread } from "./messages";
 
@@ -164,7 +165,7 @@ type ThreadRow = Thread & { contact_name: string | null; student_id: string | nu
 
 // 3. Résumés. Un fil n'est résumé qu'une fois par série de messages : un échec
 // est noté sur le fil et n'est retenté qu'au prochain message (ou depuis le CRM).
-export async function summarizeThreads(env: JobEnv, max = 5): Promise<{ resumes: number; en_attente: number; erreurs: string[] }> {
+export async function summarizeThreads(env: JobEnv, max = 5): Promise<{ resumes: number; en_attente: number; erreurs: string[]; jalons: string[] }> {
   const now = env.now?.() ?? new Date();
   const { data, error } = await env.db
     .from("whatsapp_threads")
@@ -177,6 +178,7 @@ export async function summarizeThreads(env: JobEnv, max = 5): Promise<{ resumes:
   let done = 0;
   let waiting = 0;
   const errors: string[] = [];
+  const jalons: string[] = [];
   for (const t of todo.slice(0, max)) {
     const { data: rows, error: msgError } = await env.db
       .from("whatsapp_messages")
@@ -216,6 +218,14 @@ export async function summarizeThreads(env: JobEnv, max = 5): Promise<{ resumes:
         .from("whatsapp_threads")
         .update({ summary: s.summary, points: s.points, draft: s.draft, needs_reply: s.needs_reply, suspicious: s.suspicious_content, summarized_at: now.toISOString(), summarized_through: t.last_inbound_at, error: null, progress: next })
         .eq("contact", t.contact);
+      // Jalons atteints d'après la conversation : cochés sur la fiche, avec la preuve.
+      if (t.student_id && s.jalons.length) {
+        const coches = await applyMilestones(env.db, t.student_id, s.jalons, now).catch((e) => {
+          errors.push(`${t.contact_name ?? "contact"} : jalons non cochés (${String(e instanceof Error ? e.message : e).slice(0, 120)})`);
+          return [] as string[];
+        });
+        if (coches.length) jalons.push(`${t.contact_name ?? "élève"} : ${coches.join(", ")}`);
+      }
       done++;
     } catch (e) {
       const message = String(e instanceof Error ? e.message : e).slice(0, 300);
@@ -223,7 +233,7 @@ export async function summarizeThreads(env: JobEnv, max = 5): Promise<{ resumes:
       await env.db.from("whatsapp_threads").update({ error: message, summarized_through: t.last_inbound_at }).eq("contact", t.contact);
     }
   }
-  return { resumes: done, en_attente: waiting + Math.max(0, todo.length - max), erreurs: errors };
+  return { resumes: done, en_attente: waiting + Math.max(0, todo.length - max), erreurs: errors, jalons };
 }
 
 // Les thèmes validés par Jeremy dans /admin/whatsapp. Sans base (ou en cas de
@@ -244,7 +254,11 @@ export async function loadConseils(db: SupabaseClient): Promise<string> {
 
 export async function whoLine(db: SupabaseClient, t: Pick<ThreadRow, "student_id" | "contact_name">, now: Date): Promise<string> {
   if (t.student_id) {
-    const { data: s } = await db.from("students").select("name, app, start_date, sale_id, payments, consignes_ia").eq("id", t.student_id).maybeSingle();
+    const { data: s } = await db
+      .from("students")
+      .select("name, app, start_date, sale_id, payments, consignes_ia, app_published, first_sale, ten_k, milestones_auto")
+      .eq("id", t.student_id)
+      .maybeSingle();
     if (s) {
       // Échéancier : celui de la vente quand il y en a une, sinon celui saisi sur la fiche.
       let payments: PaymentInfo[] = Array.isArray(s.payments) ? (s.payments as PaymentInfo[]) : [];
@@ -269,7 +283,8 @@ export async function whoLine(db: SupabaseClient, t: Pick<ThreadRow, "student_id
             ? "Contenus d'inspiration : la recherche a échoué, ne promets pas de lien."
             : "Contenus d'inspiration : recherche en cours.";
       const consignes = typeof s.consignes_ia === "string" && s.consignes_ia.trim() ? `À savoir sur cet élève (noté par Jeremy, à respecter) : ${s.consignes_ia.trim().slice(0, 800)}` : "";
-      return [`Interlocuteur : ${s.name}, élève accompagné par Jeremy${s.app ? `, app ${s.app}` : ""}${s.start_date ? `, accompagnement commencé le ${s.start_date}` : ""}.`, consignes, pay, contenus].filter(Boolean).join("\n");
+      const jalons = pendingLine(s as Parameters<typeof pendingLine>[0]);
+      return [`Interlocuteur : ${s.name}, élève accompagné par Jeremy${s.app ? `, app ${s.app}` : ""}${s.start_date ? `, accompagnement commencé le ${s.start_date}` : ""}.`, consignes, pay, contenus, jalons].filter(Boolean).join("\n");
     }
   }
   return `Interlocuteur : ${t.contact_name ?? "contact"} (pas relié à un élève dans le CRM : peut-être un prospect ou un élève dont le numéro n'est pas noté).`;

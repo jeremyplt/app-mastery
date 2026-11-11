@@ -86,3 +86,9 @@ alter table public.students add column skool_invited_at timestamptz;
 -- par exemple "2026-11-07/1000/-3" pour le rappel J+3 d'une échéance de 1 000 €
 -- due le 7 novembre ; valeur = date d'envoi.
 alter table public.students add column payment_reminders jsonb not null default '{}'::jsonb;
+
+-- 2026-11-11, migration "students_milestones_auto" : jalons cochés d'après
+-- WhatsApp (lib/whatsapp/jalons.ts). Clé = jalon (app_published, first_sale,
+-- ten_k), valeur = { date, preuve, source, at }. Un jalon présent ici n'est
+-- plus jamais recoché tout seul, même si Jeremy l'a décoché.
+alter table public.students add column milestones_auto jsonb not null default '{}'::jsonb;

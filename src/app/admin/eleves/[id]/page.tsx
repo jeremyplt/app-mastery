@@ -361,7 +361,15 @@ export default function StudentPage() {
                           >
                             {s[k] ? "✓" : i + 1}
                           </span>
-                          <span className={`text-[15px] font-semibold ${s[k] ? "text-[var(--fg)]" : "text-[var(--fg2)]"}`}>{label}</span>
+                          <span className="min-w-0">
+                            <span className={`block text-[15px] font-semibold ${s[k] ? "text-[var(--fg)]" : "text-[var(--fg2)]"}`}>{label}</span>
+                            {s[k] && s.milestones_auto?.[k] && (
+                              <span className="block text-[13.5px] font-semibold text-[var(--fg2)]">
+                                D&apos;après {s.milestones_auto[k]!.source === "audit" ? "l'audit" : "WhatsApp"}
+                                {s.milestones_auto[k]!.date ? `, le ${frDate(s.milestones_auto[k]!.date!, false)}` : ""} : {s.milestones_auto[k]!.preuve}
+                              </span>
+                            )}
+                          </span>
                         </button>
                       </li>
                     ))}

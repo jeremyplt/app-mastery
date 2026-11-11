@@ -70,6 +70,8 @@ export type Student = {
   closing_call_at: string | null;
   // Rappels d'échéance envoyés (élèves sans vente) : "2026-11-07/1000/-3" -> date d'envoi.
   payment_reminders?: Record<string, string> | null;
+  // Jalons cochés d'après WhatsApp (lib/whatsapp/jalons) : la preuve affichée sur la fiche.
+  milestones_auto?: Partial<Record<Milestone, { date: string | null; preuve: string; source: string; at: string }>> | null;
   archived: boolean;
   sales: {
     id: string;

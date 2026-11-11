@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { buildPrompt, parseSummary, type PromptMessage } from "../whatsapp/ai";
+import { isoFromDayMonth, milestoneUpdate, parseJalons, pendingLine } from "../whatsapp/jalons";
 import { canSendFreeForm, cleanOutgoing, markRead, sendReaction, sendText } from "../whatsapp/send";
 import { cleanTranscript, videoLinks } from "../whatsapp/media";
 import { formatConseils, formatSkoolLessons, packConversations, parseExtraits, parseSynth, type ConvLine } from "../whatsapp/conseils";
@@ -323,4 +324,52 @@ test("réaction : envoyée sur le dernier message reçu, emoji de la liste seule
   assert.equal(await sendReaction({ apiKey: "k", phoneNumberId: "1", to: "33600000000", messageId: "wamid.IN", emoji: "👍", fetchImpl: fake }), "wamid.R");
   assert.deepEqual(body, { messaging_product: "whatsapp", recipient_type: "individual", to: "33600000000", type: "reaction", reaction: { message_id: "wamid.IN", emoji: "👍" } });
   await assert.rejects(sendReaction({ apiKey: "k", phoneNumberId: "1", to: "33600000000", messageId: "x", emoji: "💩", fetchImpl: fake }), /Réaction inconnue/);
+});
+
+test("jalons : seuls les jalons connus, avec une preuve, sans doublon", () => {
+  const j = parseJalons([
+    { jalon: "app_published", date: "13/10", preuve: "app acceptée — sur Google Play" },
+    { jalon: "app_published", date: "14/10", preuve: "doublon" },
+    { jalon: "guarantee", date: "13/10", preuve: "jamais coché tout seul" },
+    { jalon: "first_sale", date: "04/11", preuve: "  " },
+  ]);
+  assert.deepEqual(j, [{ jalon: "app_published", date: "13/10", preuve: "app acceptée, sur Google Play" }]);
+  assert.deepEqual(parseJalons(null), []);
+});
+
+test("jalons : une conversation suspecte ne coche rien", () => {
+  const base = { summary: "", points: [], needs_reply: false, draft: "", besoin_contenus: false, niche: "", mots_cles: [], jalons: [{ jalon: "ten_k", date: "28/10", preuve: "10 000 $" }] };
+  assert.equal(parseSummary({ ...base, suspicious_content: false }).jalons.length, 1);
+  assert.equal(parseSummary({ ...base, suspicious_content: true }).jalons.length, 0);
+  assert.deepEqual(parseSummary({ summary: "Merci" }).jalons, []);
+});
+
+test("jalons : la date JJ/MM de la conversation devient une date complète", () => {
+  const now = new Date("2026-11-11T10:00:00Z");
+  assert.equal(isoFromDayMonth("13/10", now), "2026-10-13");
+  assert.equal(isoFromDayMonth("3/11", now), "2026-11-03");
+  assert.equal(isoFromDayMonth("20/12", now), "2025-12-20");
+  assert.equal(isoFromDayMonth("2026-10-13", now), "2026-10-13");
+  assert.equal(isoFromDayMonth("hier", now), null);
+  assert.equal(isoFromDayMonth("40/10", now), null);
+});
+
+test("jalons : on ne coche que ce qui n'est pas coché, et jamais deux fois tout seul", () => {
+  const now = new Date("2026-11-11T10:00:00Z");
+  const jalons = [
+    { jalon: "app_published" as const, date: "13/10", preuve: "acceptée sur Google Play" },
+    { jalon: "first_sale" as const, date: "04/11", preuve: "un abonnement venu d'Apple Ads" },
+  ];
+  const fresh = { app_published: false, first_sale: false, ten_k: false, milestones_auto: {} };
+  const up = milestoneUpdate(fresh, jalons, now)!;
+  assert.equal(up.app_published, true);
+  assert.equal(up.first_sale, true);
+  assert.deepEqual((up.milestones_auto as Record<string, { date: string }>).app_published.date, "2026-10-13");
+  // Déjà coché à la main : rien à faire.
+  assert.equal(milestoneUpdate({ ...fresh, app_published: true, first_sale: true }, jalons, now), null);
+  // Coché tout seul puis décoché par Jeremy : on ne le recoche pas.
+  const unchecked = { ...fresh, first_sale: true, milestones_auto: { app_published: { date: "2026-10-13", preuve: "x", source: "whatsapp" as const, at: "2026-11-01T00:00:00Z" } } };
+  assert.equal(milestoneUpdate(unchecked, jalons, now), null);
+  assert.equal(pendingLine(unchecked), "Jalons pas encore cochés dans le CRM : ten_k (10K).");
+  assert.equal(pendingLine({ app_published: true, first_sale: true, ten_k: true }), "");
 });
