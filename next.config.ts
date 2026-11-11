@@ -6,8 +6,26 @@ const nextConfig: NextConfig = {
     // et donc le flash de page sans styles sur connexions lentes.
     inlineCss: true,
   },
+  async headers() {
+    return [
+      // Pages pour les élèves, liées seulement depuis Skool : jamais dans Google
+      {
+        source: "/exemples-onboarding/:path*",
+        headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
+      },
+      {
+        source: "/exemples-onboarding",
+        headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }],
+      },
+    ];
+  },
   async rewrites() {
     return [
+      // Page statique (public/exemples-onboarding/index.html), liée depuis Skool
+      {
+        source: "/exemples-onboarding",
+        destination: "/exemples-onboarding/index.html",
+      },
       {
         source: "/ingest/static/:path*",
         destination: "https://us-assets.i.posthog.com/static/:path*",
