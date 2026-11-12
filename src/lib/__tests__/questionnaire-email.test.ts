@@ -20,6 +20,6 @@ test("email de bienvenue : questionnaire puis réservation du kick-off, dans cet
   const q = built.html.indexOf('href="https://www.jeremypitault.com/questionnaire/abc"');
   const k = built.html.indexOf('href="https://calendly.com/jeremypltpro/kick-off-app-mastery?name=Marie"');
   assert.ok(q > 0 && k > q, "le bouton questionnaire vient avant le bouton kick-off");
-  assert.match(built.html, /Il dure une heure, le mardi ou le jeudi après-midi/);
+  assert.match(built.html, /Il dure 30 minutes, le mardi ou le jeudi après-midi/);
   assert.doesNotMatch(built.html, /—/, "pas de tiret cadratin");
 });

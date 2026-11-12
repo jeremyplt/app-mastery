@@ -3,12 +3,12 @@
 
 const ET = "https://api.calendly.com/event_types/";
 
-// « Kick-off App Mastery » (secret, 1 h, mardi et jeudi 14 h-17 h) : l'appel
+// « Kick-off App Mastery » (secret, 30 min + 30 min de marge, mardi et jeudi à 14, 15 ou 16 h) : l'appel
 // de démarrage, réservé depuis l'email « Avant de démarrer ».
 export const KICKOFF_EVENT_TYPE = `${ET}45ccec75-520e-434c-b55e-204522bf934e`;
 export const KICKOFF_CALL_URL = "https://calendly.com/jeremypltpro/kick-off-app-mastery";
 
-// « Appel élève App Mastery » (1 h, mardi et jeudi 14 h-17 h) : appel de
+// « Appel élève App Mastery » (30 min + 30 min de marge, mardi et jeudi à 14, 15 ou 16 h) : appel de
 // suivi, pour régler un problème, ou de clôture.
 export const STUDENT_CALL_EVENT_TYPE = `${ET}c5000937-650b-453a-ab00-809aa89cc409`;
 export const STUDENT_CALL_URL = "https://calendly.com/jeremypltpro/appel-eleve-app-mastery";
