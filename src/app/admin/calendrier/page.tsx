@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import AdminNav from "@/components/admin/AdminNav";
+import CallPrepPanel from "@/components/admin/CallPrep";
 
 type CalendarRoute = {
   slug: string;
@@ -122,7 +123,18 @@ export default function CalendrierAdmin() {
     <div className="min-h-screen bg-[var(--bg)] text-[var(--fg)] antialiased">
       <div className="mx-auto max-w-6xl px-5 py-6 sm:py-8">
         <AdminNav current="calendrier" isOwner={isOwner} />
-        <h1 className="text-[28px] font-bold tracking-tight">Répartition des appels</h1>
+        {/* Appels avec les élèves et leur fiche de préparation (propriétaire seulement) */}
+        {isOwner && (
+          <section className="mac-group mb-8 p-5">
+            <h1 className="text-[28px] font-bold tracking-tight">Appels avec tes élèves</h1>
+            <p className="mb-4 mt-2 text-[var(--fg2)]">
+              Les 14 prochains jours. Les appels du jour sont préparés tout seuls le matin ; pour les autres, clique sur « Préparer l&apos;appel ».
+            </p>
+            <CallPrepPanel />
+          </section>
+        )}
+
+        <h2 className="text-[28px] font-bold tracking-tight">Répartition des appels</h2>
         <p className="mt-2 text-[var(--fg2)]">
           Répartit les prises de rendez-vous entre les calendriers Calendly selon
           le pourcentage choisi. Le total doit faire 100%. Enregistrer remet les

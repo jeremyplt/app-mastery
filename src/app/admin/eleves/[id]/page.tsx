@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import AdminNav from "@/components/admin/AdminNav";
+import CallPrepPanel from "@/components/admin/CallPrep";
 import {
   LINK_PRESETS,
   MILESTONES,
@@ -336,6 +337,13 @@ export default function StudentPage() {
                   {sub && <p className="text-[12.5px] font-medium text-[var(--fg3)]">{sub}</p>}
                 </div>
               ))}
+            </div>
+
+            {/* Préparation d'appel : fiche écrite par Claude avant chaque appel */}
+            <div className="mt-5">
+              <Card title="Préparation d'appel">
+                <CallPrepPanel studentId={s.id} studentName={s.name} onMilestone={(k) => setStudent((cur) => (cur ? { ...cur, [k]: true } : cur))} />
+              </Card>
             </div>
 
             <div className="mt-5 grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
