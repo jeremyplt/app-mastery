@@ -19,6 +19,13 @@ export const OLD_STUDENT_EVENT_TYPE = `${ET}d87fb821-a1fa-47ad-aa84-95c27cb38b26
 
 export const STUDENT_EVENT_TYPES: ReadonlySet<string> = new Set([KICKOFF_EVENT_TYPE, STUDENT_CALL_EVENT_TYPE, OLD_STUDENT_EVENT_TYPE]);
 
+// Chemin suivi par le webhook Calendly : « eleve » met seulement la fiche élève
+// à jour ; « vente » passe par le CRM, Brevo et la séquence B (emails de
+// confirmation et de rappel d'appel de vente).
+export function webhookPath(eventTypeUri: string | undefined): "eleve" | "vente" {
+  return eventTypeUri && STUDENT_EVENT_TYPES.has(eventTypeUri) ? "eleve" : "vente";
+}
+
 // Kick-off ou clôture d'après le type d'événement et le lien de réservation.
 // « Kick-off App Mastery » : toujours le kick-off. Sinon, le lien envoyé depuis
 // la fiche porte utm_content=kickoff ou cloture ; sans lui, une première

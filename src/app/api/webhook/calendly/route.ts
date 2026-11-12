@@ -8,7 +8,7 @@ import {
   sendConfirmation,
   type CallLead,
 } from "@/lib/call-reminders";
-import { STUDENT_EVENT_TYPES, studentCallKind } from "@/lib/calendly-events";
+import { studentCallKind, webhookPath } from "@/lib/calendly-events";
 
 // Appels avec les élèves (« Kick-off App Mastery », « Appel élève App Mastery »
 // et l'ancien « Appel App Mastery ») : à ne surtout pas traiter comme un appel
@@ -81,7 +81,7 @@ export async function POST(req: NextRequest) {
 
     const normalizedEmail = email.toLowerCase();
 
-    if (eventTypeUri && STUDENT_EVENT_TYPES.has(eventTypeUri)) {
+    if (webhookPath(eventTypeUri) === "eleve") {
       try {
         await handleStudentCall(normalizedEmail, event === "invitee.created", startTime, invitee.tracking?.utm_content ?? undefined, eventTypeUri);
       } catch (err) {

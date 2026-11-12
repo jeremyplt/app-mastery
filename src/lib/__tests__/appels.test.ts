@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { callKind, fetchCalendlyCalls, isSalesEvent, matchStudent, mergeCalls, nameTokens, parisDay, parisHour, type StudentLite } from "../appels/calls";
 import { buildPrepPrompt, clip, parsePrep, proposesExtraCall } from "../appels/prep";
-import { KICKOFF_EVENT_TYPE, OLD_STUDENT_EVENT_TYPE, STUDENT_CALL_EVENT_TYPE, studentCallKind } from "../calendly-events";
+import { KICKOFF_EVENT_TYPE, NOLAN_EVENT_TYPE, OLD_STUDENT_EVENT_TYPE, STUDENT_CALL_EVENT_TYPE, studentCallKind, webhookPath } from "../calendly-events";
 
 const students: StudentLite[] = [
   { id: "s1", name: "Soraya Erriahi", email: null, app: null },
@@ -238,6 +238,24 @@ test("nouveaux types Calendly : « Kick-off App Mastery » donne le kick-off, «
   );
   // Le job relit le type d'événement enregistré avec la demande.
   assert.equal(callKind({ start_date: "2026-07-01", kickoff: true }, { key: "x", starts_at: "2026-11-17T13:00:00Z", title: "Autre", event_type: KICKOFF_EVENT_TYPE }), "kickoff");
+});
+
+test("webhook Calendly : les 3 types élèves ne passent jamais par le chemin vente", () => {
+  assert.equal(webhookPath(OLD_STUDENT_EVENT_TYPE), "eleve");
+  assert.equal(webhookPath(KICKOFF_EVENT_TYPE), "eleve");
+  assert.equal(webhookPath(STUDENT_CALL_EVENT_TYPE), "eleve");
+  assert.equal(webhookPath("https://api.calendly.com/event_types/45ccec75-520e-434c-b55e-204522bf934e"), "eleve");
+  assert.equal(webhookPath("https://api.calendly.com/event_types/c5000937-650b-453a-ab00-809aa89cc409"), "eleve");
+});
+
+test("webhook Calendly : un RDV de vente reste sur le chemin vente (CRM, Brevo, séquence B)", () => {
+  // « 🚀 Appel Stratégique Gratuit », seul ou en Round Robin avec Nolan, et le calendrier de Nolan.
+  assert.equal(webhookPath("https://api.calendly.com/event_types/8f8ca758-0ffd-44a5-83a2-f4eb4a708f6d"), "vente");
+  assert.equal(webhookPath("https://api.calendly.com/event_types/67b15962-8ecd-4e6f-8e9a-95158e04b840"), "vente");
+  assert.equal(webhookPath(NOLAN_EVENT_TYPE), "vente");
+  // Type inconnu ou absent : comme avant, le chemin vente.
+  assert.equal(webhookPath("https://api.calendly.com/event_types/inconnu"), "vente");
+  assert.equal(webhookPath(undefined), "vente");
 });
 
 test("webhook Calendly : kick-off ou clôture selon le type d'événement et le lien", () => {
