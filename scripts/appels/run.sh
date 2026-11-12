@@ -11,7 +11,8 @@ exec 9>/run/lock/appels.lock
 flock -n 9 || exit 0
 
 export PATH="/root/.local/bin:/usr/local/bin:$PATH"
-for name in NEXT_PUBLIC_SUPABASE_URL SUPABASE_SERVICE_ROLE_KEY; do
+# La clé publique (anon) est lue au chargement de src/lib/supabase.ts.
+for name in NEXT_PUBLIC_SUPABASE_URL NEXT_PUBLIC_SUPABASE_ANON_KEY SUPABASE_SERVICE_ROLE_KEY; do
   value=$(maxxing keys get "$name")
   export "$name=$value"
 done
