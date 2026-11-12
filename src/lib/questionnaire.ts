@@ -16,7 +16,7 @@ export function questionnaireUrl(token: string): string {
   return `${SITE}/questionnaire/${token}`;
 }
 
-// Lien Calendly secret du kick-off (30 min, mardi et jeudi 14 h-17 h, 24 h de
+// Lien Calendly secret du kick-off (1 h, mardi et jeudi 14 h-17 h, 24 h de
 // préavis). Il n'est donné que dans cet email. Nom et email sont pré-remplis :
 // l'élève n'a rien à retaper et le RDV se rattache à sa fiche par l'email.
 const KICKOFF_URL = "https://calendly.com/jeremypltpro/kick-off-app-mastery";
@@ -34,7 +34,7 @@ export function questionnaireEmail(firstName: string, link: string, kickoff: str
 <p ${P}>Bienvenue dans App Mastery ! Pour qu'on démarre du bon pied, il y a deux étapes.</p>
 <p ${P}><strong>1. Réponds au questionnaire.</strong> Ça prend quelques minutes : tes liens, tes outils, tes régies publicitaires, tes réseaux sociaux, tes concurrents. À la fin, je te demande aussi de m'envoyer quelques accès. Je lis tout avant notre appel de démarrage, pour qu'on aille droit à l'essentiel.</p>
 ${button("Répondre au questionnaire", link)}
-<p ${P}><strong>2. Réserve notre appel de démarrage.</strong> Il dure 30 minutes, le mardi ou le jeudi après-midi. Prends le premier créneau qui te convient.</p>
+<p ${P}><strong>2. Réserve notre appel de démarrage.</strong> Il dure une heure, le mardi ou le jeudi après-midi. Prends le premier créneau qui te convient.</p>
 ${button("Réserver mon appel de démarrage", kickoff)}
 <p ${P}>Pour la suite, la première leçon sur Skool t'explique comment me joindre et quand on s'appelle.</p>
 <p ${P}>Si tu as la moindre question, réponds simplement à cet email.</p>
