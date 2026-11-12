@@ -19,6 +19,7 @@ export type AdminSection =
   | "emails"
   | "youtube"
   | "content-creation"
+  | "scripts"
   | "equipe";
 
 // ownerOnly : propriétaire seulement ; closerToo : aussi visible des closers.
@@ -60,6 +61,7 @@ const GROUPS: Group[] = [
       { id: "emails", label: "Emails", href: "/admin/crm/emails" },
       { id: "youtube", label: "YouTube", href: "/admin/youtube" },
       { id: "content-creation", label: "Contenus", href: "/admin/content-creation", ownerOnly: true },
+      { id: "scripts", label: "Scripts vidéo", href: "/admin/scripts", ownerOnly: true },
     ],
   },
 ];
