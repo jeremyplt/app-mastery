@@ -1,6 +1,5 @@
 -- Préparation d'appel (/admin/eleves/[id] et /admin/calendrier), 12 nov. 2026.
--- PAS ENCORE APPLIQUÉE. À appliquer une fois (migration Supabase "call_preps")
--- avant de mettre la fonctionnalité en production.
+-- Appliquée le 12/11/2026 (migration Supabase "call_preps").
 --
 -- Une ligne par appel avec un élève : la fiche que Claude prépare à partir de
 -- la fiche élève, de WhatsApp et de la base de conseils validée. Le CRM crée la
@@ -18,6 +17,8 @@ create table public.call_preps (
   student_id uuid not null references public.students(id) on delete cascade,
   starts_at timestamptz not null,
   title text,
+  -- Type d'événement Calendly (« Kick-off App Mastery » => fiche kick-off).
+  event_type text,
   -- demande -> en_cours -> fait (ou erreur). Régénérer repasse en demande en
   -- gardant l'ancienne fiche affichée en attendant la nouvelle.
   statut text not null default 'demande' check (statut in ('demande', 'en_cours', 'fait', 'erreur')),

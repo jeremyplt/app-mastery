@@ -14,7 +14,7 @@ function fail(err: unknown) {
   return NextResponse.json({ error: message }, { status: 500 });
 }
 
-const PREP_COLUMNS = "id, event_key, student_id, starts_at, title, statut, fiche, checked, error, auto, requested_at, generated_at";
+const PREP_COLUMNS = "id, event_key, student_id, starts_at, title, event_type, statut, fiche, checked, error, auto, requested_at, generated_at";
 const MILESTONE_COLUMNS = "id, kickoff, app_published, first_sale, bilan_done, ten_k";
 
 // ?student_id=... : les appels à venir de l'élève (30 jours) et ses dernières
@@ -45,7 +45,7 @@ export async function GET(req: NextRequest) {
   }
 }
 
-// { action: "preparer", student_id, event_key?, starts_at?, title? } : demande
+// { action: "preparer", student_id, event_key?, starts_at?, title?, event_type? } : demande
 //   (ou redemande) la fiche. Sans event_key : fiche sans rendez-vous précis.
 //   L'ancienne fiche reste affichée jusqu'à la nouvelle.
 // { action: "cocher", id, index, done } : coche une action de clôture.
@@ -59,11 +59,12 @@ export async function POST(req: NextRequest) {
       if (!studentId) return NextResponse.json({ error: "Élève manquant" }, { status: 400 });
       const key = typeof b.event_key === "string" && b.event_key ? b.event_key : `manuel:${studentId}`;
       const startsAt = typeof b.starts_at === "string" && !Number.isNaN(Date.parse(b.starts_at)) ? new Date(b.starts_at).toISOString() : new Date().toISOString();
+      const eventType = typeof b.event_type === "string" && b.event_type.startsWith("https://api.calendly.com/event_types/") ? b.event_type.slice(0, 200) : null;
       const now = new Date().toISOString();
       const { data, error } = await db
         .from("call_preps")
         .upsert(
-          { event_key: key, student_id: studentId, starts_at: startsAt, title: typeof b.title === "string" ? b.title.slice(0, 200) : null, statut: "demande", error: null, auto: false, requested_at: now, updated_at: now },
+          { event_key: key, student_id: studentId, starts_at: startsAt, title: typeof b.title === "string" ? b.title.slice(0, 200) : null, event_type: eventType, statut: "demande", error: null, auto: false, requested_at: now, updated_at: now },
           { onConflict: "event_key" },
         )
         .select(PREP_COLUMNS)

@@ -35,7 +35,7 @@ async function main() {
       const days = Number(args[0]) || 7;
       const now = new Date();
       const r = await upcomingStudentCalls(e.db, { pat: e.calendlyPat, from: new Date(now.getTime() - 2 * 3_600_000), to: new Date(now.getTime() + days * 86_400_000) });
-      return print({ calendly: r.calendly, appels: r.calls.map((c) => ({ quand: c.starts_at, eleve: c.student_name, titre: c.title, type: c.kind, relie_par: c.match })) });
+      return print({ calendly: r.calendly, appels: r.calls.map((c) => ({ quand: c.starts_at, eleve: c.student_name, titre: c.title, type: c.kind, relie_par: c.match, source: c.source })) });
     }
     case "essai": {
       const who = args.filter((a) => !a.startsWith("--")).join(" ").trim();
@@ -51,7 +51,7 @@ async function main() {
       const { calls } = await upcomingStudentCalls(e.db, { pat: e.calendlyPat, from: new Date(now.getTime() - 2 * 3_600_000), to: new Date(now.getTime() + 30 * 86_400_000), studentId: student.id });
       const call = calls[0];
       const row = call
-        ? { student_id: student.id, starts_at: call.starts_at, title: call.title, event_key: call.key }
+        ? { student_id: student.id, starts_at: call.starts_at, title: call.title, event_key: call.key, event_type: call.event_type }
         : { student_id: student.id, starts_at: now.toISOString(), title: null, event_key: `manuel:${student.id}` };
       const parts = await prepParts(e.db, row, now, await loadConseils(e.db));
       // --type=kickoff ou --type=probleme : forcer le type pour un essai.

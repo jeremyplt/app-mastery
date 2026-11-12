@@ -20,6 +20,7 @@ export type CallPrepRow = {
   student_id: string;
   starts_at: string;
   title: string | null;
+  event_type: string | null;
   statut: "demande" | "en_cours" | "fait" | "erreur";
 };
 
@@ -38,7 +39,7 @@ export async function queueTodayCalls(env: PrepJobEnv): Promise<{ demandes: numb
   const fresh = today.filter((c) => !have.has(c.key));
   if (fresh.length) {
     const { error: insertError } = await env.db.from("call_preps").upsert(
-      fresh.map((c) => ({ event_key: c.key, student_id: c.student_id, starts_at: c.starts_at, title: c.title, statut: "demande", auto: true })),
+      fresh.map((c) => ({ event_key: c.key, student_id: c.student_id, starts_at: c.starts_at, title: c.title, event_type: c.event_type, statut: "demande", auto: true })),
       { onConflict: "event_key", ignoreDuplicates: true },
     );
     if (insertError) throw new Error(insertError.message);
@@ -53,7 +54,7 @@ export async function processPreps(env: PrepJobEnv, max = 3): Promise<{ faites: 
   const stale = new Date(now.getTime() - 20 * 60_000).toISOString();
   const { data, error } = await env.db
     .from("call_preps")
-    .select("id, event_key, student_id, starts_at, title, statut")
+    .select("id, event_key, student_id, starts_at, title, event_type, statut")
     .or(`statut.eq.demande,and(statut.eq.en_cours,updated_at.lt.${stale})`)
     .order("starts_at", { ascending: true })
     .limit(max);
@@ -143,7 +144,12 @@ export function whatsappText(threads: { summary: string | null; points: string[]
   return [...head, ...lines].join("\n");
 }
 
-export async function prepParts(db: SupabaseClient, row: Pick<CallPrepRow, "student_id" | "starts_at" | "title" | "event_key">, now: Date, conseils: string): Promise<PrepPromptParts> {
+export async function prepParts(
+  db: SupabaseClient,
+  row: Pick<CallPrepRow, "student_id" | "starts_at" | "title" | "event_key"> & { event_type?: string | null },
+  now: Date,
+  conseils: string,
+): Promise<PrepPromptParts> {
   const { data: s, error } = await db
     .from("students")
     .select("name, app, start_date, notes, consignes_ia, questionnaire, kickoff_call_at, closing_call_at, milestones_auto, kickoff, app_published, first_sale, bilan_done, ten_k")
@@ -167,7 +173,7 @@ export async function prepParts(db: SupabaseClient, row: Pick<CallPrepRow, "stud
   }
   const answers = s.questionnaire && typeof s.questionnaire === "object" ? answerEntries(s.questionnaire as Record<string, string>) : [];
   const manual = row.event_key.startsWith("manuel:");
-  const kind = callKind(s as { start_date: string | null; kickoff: boolean; kickoff_call_at: string | null }, { key: row.event_key, starts_at: row.starts_at, title: row.title });
+  const kind = callKind(s as { start_date: string | null; kickoff: boolean; kickoff_call_at: string | null }, { key: row.event_key, starts_at: row.starts_at, title: row.title, event_type: row.event_type });
   return {
     kind,
     call: manual ? "pas de rendez-vous précis dans l'agenda, Jeremy prépare un échange à venir." : `${frWhen(row.starts_at)}${row.title ? `, rendez-vous « ${row.title} »` : ""}.`,

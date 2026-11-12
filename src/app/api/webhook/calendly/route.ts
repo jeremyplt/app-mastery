@@ -8,15 +8,14 @@ import {
   sendConfirmation,
   type CallLead,
 } from "@/lib/call-reminders";
+import { STUDENT_EVENT_TYPES, studentCallKind } from "@/lib/calendly-events";
 
-// Événement « Appel App Mastery » de Jeremy : appels avec les élèves (kick-off,
-// clôture), à ne surtout pas traiter comme un appel découverte.
-const STUDENT_EVENT_TYPE_URI = "https://api.calendly.com/event_types/d87fb821-a1fa-47ad-aa84-95c27cb38b26";
+// Appels avec les élèves (« Kick-off App Mastery », « Appel élève App Mastery »
+// et l'ancien « Appel App Mastery ») : à ne surtout pas traiter comme un appel
+// de vente (pas de fiche CRM, pas de séquence B).
 
-// Appel élève réservé ou annulé : met à jour la fiche (/admin/eleves). Le lien
-// envoyé depuis la fiche porte utm_content=kickoff ou cloture ; sans lui, une
-// première réservation est considérée comme le kick-off.
-async function handleStudentCall(email: string, isBooking: boolean, startTime: string | undefined, utmContent: string | undefined) {
+// Appel élève réservé ou annulé : met à jour la fiche (/admin/eleves).
+async function handleStudentCall(email: string, isBooking: boolean, startTime: string | undefined, utmContent: string | undefined, eventTypeUri: string | undefined) {
   const supabase = getAdminClient();
   const { data: student } = await supabase
     .from("students")
@@ -27,7 +26,7 @@ async function handleStudentCall(email: string, isBooking: boolean, startTime: s
     console.log(`Calendly appel élève : aucun élève avec l'email ${email}`);
     return;
   }
-  const kind = utmContent === "cloture" ? "cloture" : utmContent === "kickoff" || !student.kickoff_call_at ? "kickoff" : null;
+  const kind = studentCallKind(eventTypeUri, utmContent, Boolean(student.kickoff_call_at));
   const update: Record<string, unknown> = {};
   if (isBooking) {
     update.last_contact_at = new Date().toISOString();
@@ -82,9 +81,9 @@ export async function POST(req: NextRequest) {
 
     const normalizedEmail = email.toLowerCase();
 
-    if (eventTypeUri === STUDENT_EVENT_TYPE_URI) {
+    if (eventTypeUri && STUDENT_EVENT_TYPES.has(eventTypeUri)) {
       try {
-        await handleStudentCall(normalizedEmail, event === "invitee.created", startTime, invitee.tracking?.utm_content ?? undefined);
+        await handleStudentCall(normalizedEmail, event === "invitee.created", startTime, invitee.tracking?.utm_content ?? undefined, eventTypeUri);
       } catch (err) {
         console.error("Calendly appel élève :", err);
       }

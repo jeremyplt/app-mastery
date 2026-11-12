@@ -50,6 +50,7 @@ type Call = {
   app: string | null;
   starts_at: string;
   title: string;
+  event_type: string | null;
   join_url: string | null;
   source: "calendly" | "fiche";
   kind: CallKind;
@@ -333,7 +334,7 @@ export default function CallPrepPanel({ studentId, studentName, onMilestone }: {
     const d = await fetch("/api/admin/appels", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ action: "preparer", student_id: sid, event_key: call?.key, starts_at: call?.starts_at, title: call?.title }),
+      body: JSON.stringify({ action: "preparer", student_id: sid, event_key: call?.key, starts_at: call?.starts_at, title: call?.title, event_type: call?.event_type }),
     }).then((r) => r.json());
     if (d.error) return setError(d.error);
     setPreps((list) => [d.prep as CallPrep, ...list.filter((p) => p.event_key !== d.prep.event_key)]);

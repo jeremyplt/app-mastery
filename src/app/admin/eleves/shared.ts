@@ -1,4 +1,5 @@
 // Types et calculs partagés entre la liste des élèves et la fiche élève.
+import { KICKOFF_CALL_URL, STUDENT_CALL_URL } from "@/lib/calendly-events";
 import type { ThreadDates } from "@/lib/student-silence";
 
 export type Payment = { date: string; amount: number | null; paid: boolean; paid_at?: string | null };
@@ -192,12 +193,11 @@ export function avatarColor(name: string): string {
   return AVATAR_COLORS[h % AVATAR_COLORS.length];
 }
 
-// Appels élève : événement Calendly « Appel App Mastery » de Jeremy. Le
-// paramètre utm_content dit au webhook s'il s'agit du kick-off ou de la clôture.
-export const STUDENT_CALL_URL = "https://calendly.com/jeremypltpro/appel-app-mastery";
-
+// Appels élève : « Kick-off App Mastery » pour le démarrage, « Appel élève App
+// Mastery » pour la clôture. Le paramètre utm_content dit au webhook s'il
+// s'agit du kick-off ou de la clôture.
 export function callLink(s: { name: string; email: string | null }, kind: "kickoff" | "cloture"): string {
   const q = new URLSearchParams({ name: s.name, utm_source: "admin", utm_content: kind });
   if (s.email) q.set("email", s.email);
-  return `${STUDENT_CALL_URL}?${q}`;
+  return `${kind === "kickoff" ? KICKOFF_CALL_URL : STUDENT_CALL_URL}?${q}`;
 }

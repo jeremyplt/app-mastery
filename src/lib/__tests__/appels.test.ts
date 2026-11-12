@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { callKind, fetchCalendlyCalls, isSalesEvent, matchStudent, mergeCalls, nameTokens, parisDay, parisHour, type StudentLite } from "../appels/calls";
 import { buildPrepPrompt, clip, parsePrep, proposesExtraCall } from "../appels/prep";
+import { KICKOFF_EVENT_TYPE, OLD_STUDENT_EVENT_TYPE, STUDENT_CALL_EVENT_TYPE, studentCallKind } from "../calendly-events";
 
 const students: StudentLite[] = [
   { id: "s1", name: "Soraya Erriahi", email: null, app: null },
@@ -195,7 +196,63 @@ test("rendez-vous de vente : jamais de fiche", () => {
   assert.ok(isSalesEvent({ name: "Appel", eventType: "https://api.calendly.com/event_types/8dada1ac-c858-4c5f-84c8-b16f68fd51ca" }));
   assert.ok(isSalesEvent({ name: "Appel découverte", eventType: null }));
   assert.ok(!isSalesEvent({ name: "Appel App Mastery", eventType: "https://api.calendly.com/event_types/d87fb821-a1fa-47ad-aa84-95c27cb38b26" }));
+  // Nouveaux types élèves : jamais de la vente, même avec un titre qui y ressemble.
+  assert.ok(!isSalesEvent({ name: "Kick-off App Mastery", eventType: KICKOFF_EVENT_TYPE }));
+  assert.ok(!isSalesEvent({ name: "Appel élève App Mastery", eventType: STUDENT_CALL_EVENT_TYPE }));
+  assert.ok(!isSalesEvent({ name: "Appel découverte élève", eventType: STUDENT_CALL_EVENT_TYPE }));
+  // Appel stratégique, seul ou en Round Robin avec Nolan, même renommé.
+  assert.ok(isSalesEvent({ name: "Appel", eventType: "https://api.calendly.com/event_types/8f8ca758-0ffd-44a5-83a2-f4eb4a708f6d" }));
+  assert.ok(isSalesEvent({ name: "Appel", eventType: "https://api.calendly.com/event_types/67b15962-8ecd-4e6f-8e9a-95158e04b840" }));
 });
+
+test("nouveaux types Calendly : « Kick-off App Mastery » donne le kick-off, « Appel élève » un problème", () => {
+  const from = new Date("2026-11-16T00:00:00Z");
+  const to = new Date("2026-11-30T00:00:00Z");
+  const roster: StudentLite[] = [
+    // Kick-off coché depuis longtemps : le type d'événement l'emporte quand même.
+    { id: "a", name: "Anna Kick", email: "anna@example.com", app: null, kickoff: true, start_date: "2026-07-01" },
+    { id: "b", name: "Bruno Suivi", email: "bruno@example.com", app: null, kickoff: true, start_date: "2026-08-01", kickoff_call_at: "2026-08-04T12:00:00+00:00" },
+    // Vient de démarrer sans kick-off : le CRM dit kick-off, même sur « Appel élève ».
+    { id: "c", name: "Chloé Neuve", email: "chloe@example.com", app: null, kickoff: false, start_date: "2026-11-10" },
+  ];
+  const ev = (id: string, name: string, eventType: string, start: string, email: string) => ({ uri: `https://api.calendly.com/scheduled_events/${id}`, name, eventType, start, joinUrl: null, invitees: [{ name: "", email }] });
+  const calls = mergeCalls(
+    [
+      ev("1", "Rendez-vous renommé", KICKOFF_EVENT_TYPE, "2026-11-17T13:00:00Z", "anna@example.com"),
+      ev("2", "Appel élève App Mastery", STUDENT_CALL_EVENT_TYPE, "2026-11-17T13:30:00Z", "bruno@example.com"),
+      ev("3", "Appel élève App Mastery", STUDENT_CALL_EVENT_TYPE, "2026-11-19T13:00:00Z", "chloe@example.com"),
+      ev("4", "Appel App Mastery", OLD_STUDENT_EVENT_TYPE, "2026-11-19T14:00:00Z", "bruno@example.com"),
+    ],
+    roster,
+    from,
+    to,
+  );
+  assert.deepEqual(
+    calls.map((c) => [c.student_id, c.kind, c.event_type]),
+    [
+      ["a", "kickoff", KICKOFF_EVENT_TYPE],
+      ["b", "probleme", STUDENT_CALL_EVENT_TYPE],
+      ["c", "kickoff", STUDENT_CALL_EVENT_TYPE],
+      ["b", "probleme", OLD_STUDENT_EVENT_TYPE],
+    ],
+  );
+  // Le job relit le type d'événement enregistré avec la demande.
+  assert.equal(callKind({ start_date: "2026-07-01", kickoff: true }, { key: "x", starts_at: "2026-11-17T13:00:00Z", title: "Autre", event_type: KICKOFF_EVENT_TYPE }), "kickoff");
+});
+
+test("webhook Calendly : kick-off ou clôture selon le type d'événement et le lien", () => {
+  // Lien de l'email de bienvenue, sans utm_content.
+  assert.equal(studentCallKind(KICKOFF_EVENT_TYPE, undefined, false), "kickoff");
+  assert.equal(studentCallKind(KICKOFF_EVENT_TYPE, undefined, true), "kickoff");
+  // Appel élève : ni kick-off ni clôture, sauf lien de clôture copié depuis la fiche.
+  assert.equal(studentCallKind(STUDENT_CALL_EVENT_TYPE, undefined, false), null);
+  assert.equal(studentCallKind(STUDENT_CALL_EVENT_TYPE, "cloture", true), "cloture");
+  // Ancien « Appel App Mastery » : la première réservation était le kick-off.
+  assert.equal(studentCallKind(OLD_STUDENT_EVENT_TYPE, undefined, false), "kickoff");
+  assert.equal(studentCallKind(OLD_STUDENT_EVENT_TYPE, undefined, true), null);
+  assert.equal(studentCallKind(OLD_STUDENT_EVENT_TYPE, "cloture", false), "cloture");
+});
+
 
 test("demande à Claude : balises impossibles à imiter depuis les données", () => {
   const prompt = buildPrepPrompt({

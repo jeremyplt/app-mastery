@@ -1,4 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { KICKOFF_EVENT_TYPE, SALES_EVENT_TYPES, STUDENT_EVENT_TYPES } from "../calendly-events";
 
 // Appels à venir avec les élèves, pour la préparation d'appel (fiche élève et
 // /admin/calendrier). Source principale : l'agenda Calendly de Jeremy (jeton
@@ -17,12 +18,14 @@ export type CalendlyCall = { uri: string; name: string; eventType: string | null
 // démarrage, et l'appel pour régler un problème (bilan de fin compris).
 export type CallKind = "kickoff" | "probleme";
 
-// Rendez-vous de vente : événement de Nolan, ou appel stratégique gratuit,
-// découverte, closing. Jamais de fiche pour eux, même si l'invité a une fiche.
-const SALES_EVENT_TYPES = new Set(["https://api.calendly.com/event_types/8dada1ac-c858-4c5f-84c8-b16f68fd51ca"]);
+// Rendez-vous de vente : événement de Nolan, appel stratégique gratuit (seul
+// ou en Round Robin), ou un titre de vente (découverte, closing). Jamais de
+// fiche pour eux, même si l'invité a une fiche. Les types d'événements élèves
+// (kick-off, appel élève, ancien « Appel App Mastery ») n'en sont jamais.
 const SALES_NAME = /strat[ée]gique|d[ée]couverte|closing|\bvente\b|gratuit|incubateur/i;
 
 export function isSalesEvent(c: Pick<CalendlyCall, "name" | "eventType">): boolean {
+  if (c.eventType !== null && STUDENT_EVENT_TYPES.has(c.eventType)) return false;
   return (c.eventType !== null && SALES_EVENT_TYPES.has(c.eventType)) || SALES_NAME.test(c.name);
 }
 
@@ -45,20 +48,27 @@ export type UpcomingCall = {
   app: string | null;
   starts_at: string;
   title: string;
+  // Type d'événement Calendly (null pour un créneau noté sur la fiche).
+  event_type: string | null;
   join_url: string | null;
   source: "calendly" | "fiche";
   match: "email" | "nom" | "fiche";
   kind: CallKind;
 };
 
-// Type d'appel : kick-off quand le titre ou le créneau le disent (titre
-// « kick-off » ou « démarrage », créneau de démarrage noté sur la fiche), ou
-// quand l'élève vient de démarrer sans kick-off coché ; sinon un problème à
-// régler, dont le sujet vient des derniers messages WhatsApp.
+// Type d'appel : kick-off pour l'événement « Kick-off App Mastery », ou quand
+// le titre ou le créneau le disent (titre « kick-off » ou « démarrage », créneau
+// de démarrage noté sur la fiche), ou quand l'élève vient de démarrer sans
+// kick-off coché ; sinon un problème à régler (« Appel élève App Mastery »),
+// dont le sujet vient des derniers messages WhatsApp.
 const KICKOFF_TITLE = /kick[\s-]?off|d[ée]marrage/i;
 
-export function callKind(s: Pick<StudentLite, "start_date" | "kickoff" | "kickoff_call_at">, call: { key: string; starts_at: string; title?: string | null }): CallKind {
+export function callKind(
+  s: Pick<StudentLite, "start_date" | "kickoff" | "kickoff_call_at">,
+  call: { key: string; starts_at: string; title?: string | null; event_type?: string | null },
+): CallKind {
   if (call.key.startsWith("manuel:")) return s.kickoff ? "probleme" : "kickoff";
+  if (call.event_type === KICKOFF_EVENT_TYPE) return "kickoff";
   if (call.key.endsWith(":kickoff") || (call.title && KICKOFF_TITLE.test(call.title))) return "kickoff";
   const at = Date.parse(call.starts_at);
   if (s.kickoff_call_at && Math.abs(Date.parse(s.kickoff_call_at) - at) < 30 * 60_000) return "kickoff";
@@ -163,10 +173,11 @@ export function mergeCalls(calendlyCalls: CalendlyCall[], students: StudentLite[
         app: m.student.app,
         starts_at: startsAt,
         title: c.name,
+        event_type: c.eventType,
         join_url: c.joinUrl,
         source: "calendly",
         match: m.by,
-        kind: callKind(m.student, { key: c.uri, starts_at: startsAt, title: c.name }),
+        kind: callKind(m.student, { key: c.uri, starts_at: startsAt, title: c.name, event_type: c.eventType }),
       });
       break;
     }
@@ -183,7 +194,7 @@ export function mergeCalls(calendlyCalls: CalendlyCall[], students: StudentLite[
       if (Number.isNaN(t) || t < from.getTime() || t > to.getTime() || near(s.id, at)) continue;
       const key = `fiche:${s.id}:${kind}`;
       const startsAt = new Date(t).toISOString();
-      out.push({ key, student_id: s.id, student_name: s.name, app: s.app, starts_at: startsAt, title, join_url: null, source: "fiche", match: "fiche", kind: callKind(s, { key, starts_at: startsAt }) });
+      out.push({ key, student_id: s.id, student_name: s.name, app: s.app, starts_at: startsAt, title, event_type: null, join_url: null, source: "fiche", match: "fiche", kind: callKind(s, { key, starts_at: startsAt }) });
     }
   }
   return out.sort((a, b) => a.starts_at.localeCompare(b.starts_at));
