@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import AdminNav from "@/components/admin/AdminNav";
 import CallPrepPanel from "@/components/admin/CallPrep";
@@ -128,7 +129,11 @@ export default function CalendrierAdmin() {
           <section className="mac-group mb-8 p-5">
             <h1 className="text-[28px] font-bold tracking-tight">Appels avec tes élèves</h1>
             <p className="mb-4 mt-2 text-[var(--fg2)]">
-              Les 14 prochains jours. Les appels du jour sont préparés tout seuls le matin ; pour les autres, clique sur « Préparer l&apos;appel ».
+              Les 14 prochains jours. Les appels du jour sont préparés tout seuls le matin ; pour les autres, clique sur « Préparer l&apos;appel ». Avant et après chaque appel, note ton « Ressenti » : le bilan est sur la page{" "}
+              <Link href="/admin/ressentis" className="text-[var(--accent2)] hover:underline">
+                Ressentis d&apos;appels
+              </Link>
+              .
             </p>
             <CallPrepPanel />
           </section>

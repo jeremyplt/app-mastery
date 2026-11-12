@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
+import { previousEntry, type JournalEntry } from "@/lib/appels/journal";
+import { CallJournalBlock, type JournalSave } from "./CallJournal";
 
 // Préparation d'appel : la fiche que Claude écrit avant un appel avec un élève.
 // Deux sortes d'appels : le kick-off (questionnaire, objectifs, points à
@@ -9,7 +11,8 @@ import { useCallback, useEffect, useState } from "react";
 // été conseillé, trois pistes de solution), chacun avec une checklist de
 // clôture. Affichée sur la fiche élève et sur /admin/calendrier. Les fiches
 // sont écrites par le job « App Mastery · appels » (toutes les 5 minutes) :
-// le bouton les demande.
+// le bouton les demande. Chaque appel a aussi son « Ressenti » (avant et
+// après l'appel, voir CallJournal.tsx et /admin/ressentis).
 
 type ClosingItem = { texte: string; jalon: string | null };
 type CallKind = "kickoff" | "probleme";
@@ -216,9 +219,11 @@ function PrepItem({
   showStudent,
   milestones,
   defaultOpen,
+  journal,
   onRequest,
   onToggle,
   onMilestone,
+  onSaveJournal,
 }: {
   call: Call | null;
   prep: CallPrep | undefined;
@@ -227,11 +232,16 @@ function PrepItem({
   showStudent: boolean;
   milestones: Milestones | undefined;
   defaultOpen: boolean;
+  journal: JournalEntry[];
   onRequest: () => void;
   onToggle: (prep: CallPrep, index: number, done: boolean) => void;
   onMilestone: (studentId: string, jalon: string) => void;
+  onSaveJournal: (call: Call, save: JournalSave) => Promise<boolean>;
 }) {
   const [open, setOpen] = useState(defaultOpen);
+  const [journalOpen, setJournalOpen] = useState(false);
+  const entry = call ? journal.find((e) => e.event_key === call.key) : undefined;
+  const previous = call ? previousEntry(journal, studentId, call.starts_at, call.key) : null;
   const busy = prep?.statut === "demande" || prep?.statut === "en_cours";
   const hasFiche = Boolean(prep?.fiche);
   return (
@@ -256,6 +266,11 @@ function PrepItem({
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
+          {call && (
+            <button type="button" onClick={() => setJournalOpen(!journalOpen)} aria-expanded={journalOpen} className="mac-btn mac-btn-def mac-btn-sm">
+              {journalOpen ? "Masquer le ressenti" : "Ressenti"}
+            </button>
+          )}
           {hasFiche && (
             <button type="button" onClick={() => setOpen(!open)} className="mac-btn mac-btn-def mac-btn-sm">
               {open ? "Masquer la fiche" : "Voir la fiche"}
@@ -277,6 +292,16 @@ function PrepItem({
           )}
         </div>
       </div>
+      {call && (
+        <CallJournalBlock
+          callAt={call.starts_at}
+          entry={entry}
+          previous={previous}
+          open={journalOpen}
+          onClose={() => setJournalOpen(false)}
+          onSave={(save) => onSaveJournal(call, save)}
+        />
+      )}
       {busy && <p className="mt-2 text-[13px] font-medium text-[var(--fg2)]">La fiche sera prête dans quelques minutes, tu peux rester sur la page ou revenir plus tard.</p>}
       {prep?.statut === "erreur" && <p className="mt-2 text-[13px] font-semibold text-[var(--red)]">La fiche n&apos;a pas pu être préparée : {prep.error ?? "erreur inconnue"}.</p>}
       {open && prep && (
@@ -298,6 +323,7 @@ export default function CallPrepPanel({ studentId, studentName, onMilestone }: {
   const [calls, setCalls] = useState<Call[]>([]);
   const [preps, setPreps] = useState<CallPrep[]>([]);
   const [milestones, setMilestones] = useState<Milestones[]>([]);
+  const [journal, setJournal] = useState<JournalEntry[]>([]);
   const [calendly, setCalendly] = useState<string>("ok");
   const [loaded, setLoaded] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -309,6 +335,7 @@ export default function CallPrepPanel({ studentId, studentName, onMilestone }: {
       setCalls(d.calls ?? []);
       setPreps(d.preps ?? []);
       setMilestones(d.milestones ?? []);
+      setJournal(d.journal ?? []);
       setCalendly(d.calendly ?? "ok");
       setError(null);
     } catch (e) {
@@ -351,6 +378,23 @@ export default function CallPrepPanel({ studentId, studentName, onMilestone }: {
     if (d.error) setError(d.error);
   }
 
+  async function saveJournal(call: Call, save: JournalSave): Promise<boolean> {
+    try {
+      const d = await fetch("/api/admin/ressentis", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action: "enregistrer", event_key: call.key, student_id: call.student_id, call_at: call.starts_at, label: call.title, ...save }),
+      }).then((r) => r.json());
+      if (d.error) throw new Error(d.error);
+      const e = d.entry as JournalEntry;
+      setJournal((list) => [e, ...list.filter((x) => x.id !== e.id)]);
+      return true;
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Enregistrement impossible");
+      return false;
+    }
+  }
+
   async function markMilestone(sid: string, jalon: string) {
     setMilestones((list) => list.map((m) => (m.id === sid ? { ...m, [jalon]: true } : m)));
     const d = await fetch("/api/admin/eleves", {
@@ -391,9 +435,11 @@ export default function CallPrepPanel({ studentId, studentName, onMilestone }: {
             showStudent={!studentId}
             milestones={msOf(c.student_id)}
             defaultOpen={parisDay(c.starts_at) === today || Boolean(studentId)}
+            journal={journal}
             onRequest={() => request(c.student_id, c)}
             onToggle={toggle}
             onMilestone={markMilestone}
+            onSaveJournal={saveJournal}
           />
         ))}
         {studentId && manual && (
@@ -405,9 +451,11 @@ export default function CallPrepPanel({ studentId, studentName, onMilestone }: {
             showStudent={false}
             milestones={msOf(studentId)}
             defaultOpen={calls.length === 0}
+            journal={journal}
             onRequest={() => request(studentId, null)}
             onToggle={toggle}
             onMilestone={markMilestone}
+            onSaveJournal={saveJournal}
           />
         )}
       </ul>

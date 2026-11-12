@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { requireOwner } from "@/lib/admin";
 import { getAdminClient, withRetry } from "@/lib/supabase";
 import { upcomingStudentCalls } from "@/lib/appels/calls";
+import { JOURNAL_COLUMNS } from "@/lib/appels/journal";
 
 // Préparation d'appel (fiche élève et /admin/calendrier). Les fiches sont
 // écrites par le job « App Mastery · appels » sur Harness Maxxing (toutes les
@@ -18,7 +19,9 @@ const PREP_COLUMNS = "id, event_key, student_id, starts_at, title, event_type, s
 const MILESTONE_COLUMNS = "id, kickoff, app_published, first_sale, bilan_done, ten_k";
 
 // ?student_id=... : les appels à venir de l'élève (30 jours) et ses dernières
-// fiches. Sans paramètre : les appels élèves des 14 prochains jours.
+// fiches. Sans paramètre : les appels élèves des 14 prochains jours. Les appels
+// commencés depuis moins de 12 heures restent affichés, pour noter le ressenti
+// d'après l'appel. journal : les ressentis des élèves concernés.
 export async function GET(req: NextRequest) {
   try {
     await requireOwner();
@@ -27,7 +30,7 @@ export async function GET(req: NextRequest) {
     const now = Date.now();
     const { calls, calendly } = await upcomingStudentCalls(db, {
       pat: process.env.CALENDLY_PAT,
-      from: new Date(now - 2 * 3_600_000),
+      from: new Date(now - 12 * 3_600_000),
       to: new Date(now + (studentId ? 30 : 14) * 86_400_000),
       studentId,
     });
@@ -38,8 +41,13 @@ export async function GET(req: NextRequest) {
         ? await withRetry(() => db.from("call_preps").select(PREP_COLUMNS).in("event_key", keys))
         : [];
     const ids = [...new Set(calls.map((c) => c.student_id).concat(studentId ? [studentId] : []))];
-    const milestones = ids.length ? await withRetry(() => db.from("students").select(MILESTONE_COLUMNS).in("id", ids)) : [];
-    return NextResponse.json({ calls, preps: preps ?? [], milestones: milestones ?? [], calendly });
+    const [milestones, journal] = ids.length
+      ? await Promise.all([
+          withRetry(() => db.from("students").select(MILESTONE_COLUMNS).in("id", ids)),
+          withRetry(() => db.from("call_journal").select(JOURNAL_COLUMNS).in("student_id", ids).order("call_at", { ascending: false }).limit(200)),
+        ])
+      : [[], []];
+    return NextResponse.json({ calls, preps: preps ?? [], milestones: milestones ?? [], journal: journal ?? [], calendly });
   } catch (err) {
     return fail(err);
   }

@@ -15,6 +15,7 @@ export type AdminSection =
   | "chiffre-affaires"
   | "candidatures"
   | "calendrier"
+  | "ressentis"
   | "emails"
   | "youtube"
   | "content-creation"
@@ -33,6 +34,7 @@ const GROUPS: Group[] = [
       { id: "crm", label: "CRM", href: "/admin/crm" },
       { id: "candidatures", label: "Candidatures", href: "/admin/candidatures" },
       { id: "calendrier", label: "Calendrier", href: "/admin/calendrier" },
+      { id: "ressentis", label: "Ressentis d'appels", href: "/admin/ressentis", ownerOnly: true },
     ],
   },
   {
