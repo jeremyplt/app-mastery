@@ -166,7 +166,7 @@ export default function GuidemerciPage() {
                     </p>
                   </div>
                   <p className="mt-2 text-[15px] font-medium leading-relaxed">
-                    Il a vingt ans et il a lancé une application de productivité. Elle a fait un million de vues sur Instagram en 30 jours, uniquement avec du contenu filmé depuis son téléphone, sans un euro de pub.
+                    Il a vingt ans et il a lancé une application de productivité. Elle a fait un million de vues sur Instagram en 30 jours, uniquement avec du contenu organique posté depuis son téléphone, sans un euro de pub.
                   </p>
                   <Link
                     href={`/temoignage/florian?utm_source=guide-merci&utm_medium=cta&utm_campaign=${encodeURIComponent(slug)}`}
