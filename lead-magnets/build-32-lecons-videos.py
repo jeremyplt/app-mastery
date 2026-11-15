@@ -307,7 +307,7 @@ def build_html() -> str:
   <div class="part-kicker">Et maintenant</div>
   <h2>Tu veux qu'on trouve ensemble <span>les vidéos qui feront vendre ton app</span> ?</h2>
   <p>Ces 32 leçons, c'est la base. Le plus dur, c'est de trouver le format qui marche pour ta niche à toi, puis de tenir le rythme jusqu'à ce qu'une vidéo décolle. C'est ce qu'on fait avec les personnes que j'accompagne pendant trois mois.</p>
-  <div class="proof"><b>De 0 à 1 793 $ en 28 jours, sans une seule pub</b><span>Florian, 20 ans, est un des élèves que j'accompagne. Son application de productivité a fait un million de vues sur Instagram en 30 jours, uniquement avec du contenu filmé depuis son téléphone.</span></div>
+  <div class="proof"><b>De 0 à 1 793 $ en 28 jours, sans une seule pub</b><span>Florian, 20 ans, est un des élèves que j'accompagne. Son application de productivité a fait un million de vues sur Instagram en 30 jours, uniquement avec du contenu organique posté depuis son téléphone.</span></div>
   <p>Tout commence par un appel de 30 minutes avec mon associé Nolan ou avec moi. On regarde ton projet et le temps que tu peux y consacrer, et on te dit franchement si l'accompagnement est fait pour toi.</p>
   <a class="btn" href="{CALL_URL}">Réserver mon appel</a>
   <div class="url">{CALL_URL}</div>

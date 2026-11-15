@@ -214,7 +214,7 @@ export function guide32LeconsVideos(firstName?: string): BuiltEmail {
 
 <p>Ne cherche pas à tout appliquer d'un coup. Choisis trois leçons que tes vidéos ne respectent pas encore, ouvre leur exemple, et refais-le à l'identique avec ton app. Puis poste le même format au moins dix fois avant de juger : le même script peut faire 1 701 vues chez l'un et 428 500 chez l'autre.</p>
 
-<p>C'est exactement comme ça que Florian, un des élèves que j'accompagne, a fait un million de vues sur Instagram en 30 jours avec son application de productivité. Il est passé de 0 à 1 793 $ en 28 jours, sans dépenser un euro en publicité. Si tu veux qu'on cherche ensemble les vidéos qui feront vendre ton app, le premier pas, c'est un appel de 30 minutes :</p>
+<p>Florian, un des élèves que j'accompagne, a fait un million de vues sur Instagram en 30 jours avec son application de productivité, uniquement avec du contenu organique posté depuis son téléphone. Il est passé de 0 à 1 793 $ en 28 jours, sans dépenser un euro en publicité. Si tu veux qu'on cherche ensemble les vidéos qui feront vendre ton app, le premier pas, c'est un appel de 30 minutes :</p>
 
 <p><a href="https://www.jeremypitault.com/appel?utm_source=email&utm_medium=email&utm_campaign=32-lecons-videos">Réserver mon appel</a></p>
 
