@@ -194,6 +194,39 @@ export function promptContenuViral(firstName?: string): BuiltEmail {
   return { subject: "Ton prompt est prêt", html, tag: "prompt-contenu-viral" };
 }
 
+// Livraison de la checklist des 32 leçons (lead magnet de la vidéo
+// « J'ai analysé 1 633 vidéos qui font télécharger des apps »).
+export function guide32LeconsVideos(firstName?: string): BuiltEmail {
+  const html = `
+<p>${greeting(firstName)}</p>
+
+<p>Merci d'avoir demandé la checklist. Voici ton PDF :</p>
+
+<p><a href="https://www.jeremypitault.com/downloads/32-lecons-videos-v6m2q8.pdf">Télécharger les 32 leçons</a></p>
+
+<p>Dedans, tu trouveras les 32 leçons qu'on a tirées de 1 633 vidéos TikTok et Instagram qui font télécharger des apps, avec pour chacune le lien vers une vraie vidéo d'exemple :</p>
+
+<ul>
+  <li>Comment filmer ton app pour qu'elle ait l'air recommandée et pas vendue</li>
+  <li>Les accroches et les formats qui ont fait des millions de vues</li>
+  <li>Comment donner le nom de l'app, et pourquoi il faut poster le même format plusieurs fois</li>
+</ul>
+
+<p>Ne cherche pas à tout appliquer d'un coup. Choisis trois leçons que tes vidéos ne respectent pas encore, ouvre leur exemple, et refais-le à l'identique avec ton app. Puis poste le même format au moins dix fois avant de juger : le même script peut faire 1 701 vues chez l'un et 428 500 chez l'autre.</p>
+
+<p>C'est exactement comme ça que Florian, un des élèves que j'accompagne, a fait un million de vues sur Instagram en 30 jours avec son application de productivité. Il est passé de 0 à 1 793 $ en 28 jours, sans dépenser un euro en publicité. Si tu veux qu'on cherche ensemble les vidéos qui feront vendre ton app, le premier pas, c'est un appel de 30 minutes :</p>
+
+<p><a href="https://www.jeremypitault.com/appel?utm_source=email&utm_medium=email&utm_campaign=32-lecons-videos">Réserver mon appel</a></p>
+
+<p>Demain, je te raconte d'où vient Shinobi Japanese, et pourquoi elle a rapporté de l'argent dès le premier mois alors que des centaines d'apps aussi bien codées dorment sur l'App Store.</p>
+
+<p>À demain,<br>Jeremy</p>
+
+<p>P.S. Si une leçon n'est pas claire, réponds directement à cet email. Je lis tout.</p>
+`;
+  return { subject: "Tes 32 leçons sont prêtes", html, tag: "32-lecons-videos" };
+}
+
 // Candidature : réponse au prospect selon la qualification.
 export function candidatureProspect(firstName: string, email: string, qualified: boolean): BuiltEmail {
   const html = qualified

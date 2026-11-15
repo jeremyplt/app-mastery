@@ -72,6 +72,30 @@ export const guides: Record<string, Guide> = {
     crm: true,
     shortLabel: "Prompt contenu viral",
   },
+  "32-lecons-videos": {
+    slug: "32-lecons-videos",
+    title: "Récupère la checklist des",
+    highlight: "32 leçons des vidéos qui font télécharger des apps",
+    subtitle:
+      "On a passé au crible environ 12 500 vidéos TikTok et Instagram pour garder les 1 633 qui font vraiment télécharger une app. Voici les 32 leçons qu'on en a tirées, avec une vraie vidéo d'exemple pour chacune.",
+    bullets: [
+      "Comment filmer ton app pour qu'elle ait l'air recommandée, pas vendue",
+      "Les accroches et les formats qui ont fait des millions de vues, à refaire pour ton app",
+      "Un lien vers une vraie vidéo d'exemple pour chacune des 32 leçons",
+    ],
+    ctaText: "Recevoir la checklist PDF",
+    merciTitle: "Ta checklist est",
+    merciHighlight: "en route.",
+    merciDescription:
+      "Télécharge la checklist, choisis trois leçons et refais leur vidéo d'exemple avec ton app.",
+    downloadLabel: "Télécharger la checklist",
+    downloadUrl: "/downloads/32-lecons-videos-v6m2q8.pdf",
+    brevoListId: 23,
+    previewImage: "/proof/32-lecons-videos-preview.jpg",
+    previewBadge: "PDF · 9 pages",
+    crm: true,
+    shortLabel: "Checklist 32 leçons vidéos",
+  },
   "piscine-epitech": {
     slug: "piscine-epitech",
     title: "Récupère la",
