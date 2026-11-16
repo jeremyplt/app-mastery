@@ -1,4 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { addMonths } from "../add-months";
 import { KICKOFF_EVENT_TYPE, SALES_EVENT_TYPES, STUDENT_EVENT_TYPES } from "../calendly-events";
 
 // Appels à venir avec les élèves, pour la préparation d'appel (fiche élève et
@@ -14,9 +15,13 @@ const CALENDLY = "https://api.calendly.com";
 export type CalendlyInvitee = { name: string; email: string };
 export type CalendlyCall = { uri: string; name: string; eventType: string | null; start: string; joinUrl: string | null; invitees: CalendlyInvitee[] };
 
-// Jeremy ne fait que deux sortes d'appels avec ses élèves : le kick-off au
-// démarrage, et l'appel pour régler un problème (bilan de fin compris).
-export type CallKind = "kickoff" | "probleme";
+// Jeremy fait quatre sortes d'appels avec ses élèves : le kick-off au
+// démarrage, l'appel pour régler un problème, l'appel de clôture à la fin des
+// trois mois et l'appel de bilan à la date du jalon Bilan (fin de la période
+// de garantie).
+export const CALL_KINDS = ["kickoff", "probleme", "cloture", "bilan"] as const;
+export type CallKind = (typeof CALL_KINDS)[number];
+export const isCallKind = (v: unknown): v is CallKind => typeof v === "string" && (CALL_KINDS as readonly string[]).includes(v);
 
 // Rendez-vous de vente : événement de Nolan, appel stratégique gratuit (seul
 // ou en Round Robin), ou un titre de vente (découverte, closing). Jamais de
@@ -37,6 +42,7 @@ export type StudentLite = {
   archived?: boolean | null;
   start_date?: string | null;
   kickoff?: boolean | null;
+  bilan_done?: boolean | null;
   kickoff_call_at?: string | null;
   closing_call_at?: string | null;
 };
@@ -56,28 +62,59 @@ export type UpcomingCall = {
   kind: CallKind;
 };
 
-// Type d'appel : kick-off pour l'événement « Kick-off App Mastery », ou quand
-// le titre ou le créneau le disent (titre « kick-off » ou « démarrage », créneau
-// de démarrage noté sur la fiche), ou quand l'élève vient de démarrer sans
-// kick-off coché ; sinon un problème à régler (« Appel élève App Mastery »),
-// dont le sujet vient des derniers messages WhatsApp.
+// Type d'appel, dans l'ordre :
+// - kick-off pour l'événement « Kick-off App Mastery », un titre « kick-off »
+//   ou « démarrage », le créneau de démarrage noté sur la fiche, ou un élève
+//   qui vient de démarrer sans kick-off coché ;
+// - clôture pour le créneau de clôture noté sur la fiche (lien de clôture) ou
+//   un titre « clôture » ; bilan pour un titre « bilan » ;
+// - sinon d'après la date, tant que le jalon Bilan n'est pas coché : bilan à
+//   partir de 30 jours avant sa date, clôture de 14 jours avant la fin des
+//   trois mois à 30 jours après (si l'appel de clôture n'a pas déjà eu lieu) ;
+// - sinon un problème à régler (« Appel élève App Mastery »), dont le sujet
+//   vient des derniers messages WhatsApp.
+// Claude peut corriger le type quand le titre ou la conversation disent
+// clairement l'inverse.
 const KICKOFF_TITLE = /kick[\s-]?off|d[ée]marrage/i;
+const CLOSING_TITLE = /cl[oô]ture|fin (?:de l'|d')accompagnement/i;
+const BILAN_TITLE = /\bbilan\b/i;
 
-export function callKind(
-  s: Pick<StudentLite, "start_date" | "kickoff" | "kickoff_call_at">,
-  call: { key: string; starts_at: string; title?: string | null; event_type?: string | null },
-): CallKind {
-  if (call.key.startsWith("manuel:")) return s.kickoff ? "probleme" : "kickoff";
+const DAY = 86_400_000;
+const NEAR = 30 * 60_000;
+export const CLOSING_WINDOW = { before: 14, after: 30 };
+export const BILAN_WINDOW_BEFORE = 30;
+
+type KindStudent = Pick<StudentLite, "start_date" | "kickoff" | "kickoff_call_at" | "closing_call_at" | "bilan_done">;
+
+// Clôture ou bilan d'après la date de l'appel et les dates de la fiche. Bilan
+// déjà coché : la fin d'accompagnement est faite (Jeremy le coche parfois dès
+// la clôture), les appels suivants sont des problèmes à régler.
+function kindByDate(s: KindStudent, at: number): CallKind {
+  if (!s.start_date || s.bilan_done) return "probleme";
+  const day = (iso: string) => Date.parse(`${iso}T00:00:00Z`);
+  const end = day(addMonths(s.start_date, 3));
+  const bilan = day(addMonths(s.start_date, 6));
+  if (!s.bilan_done && at >= bilan - BILAN_WINDOW_BEFORE * DAY) return "bilan";
+  const closedAlready = s.closing_call_at ? Date.parse(s.closing_call_at) < at - NEAR : false;
+  if (!closedAlready && at >= end - CLOSING_WINDOW.before * DAY && at < end + (CLOSING_WINDOW.after + 1) * DAY) return "cloture";
+  return "probleme";
+}
+
+export function callKind(s: KindStudent, call: { key: string; starts_at: string; title?: string | null; event_type?: string | null }): CallKind {
+  const at = Date.parse(call.starts_at);
+  if (call.key.startsWith("manuel:")) return s.kickoff ? kindByDate(s, at) : "kickoff";
   if (call.event_type === KICKOFF_EVENT_TYPE) return "kickoff";
   if (call.key.endsWith(":kickoff") || (call.title && KICKOFF_TITLE.test(call.title))) return "kickoff";
-  const at = Date.parse(call.starts_at);
-  if (s.kickoff_call_at && Math.abs(Date.parse(s.kickoff_call_at) - at) < 30 * 60_000) return "kickoff";
+  if (call.key.endsWith(":cloture") || (call.title && CLOSING_TITLE.test(call.title))) return "cloture";
+  if (call.title && BILAN_TITLE.test(call.title)) return "bilan";
+  if (s.kickoff_call_at && Math.abs(Date.parse(s.kickoff_call_at) - at) < NEAR) return "kickoff";
+  if (s.closing_call_at && Math.abs(Date.parse(s.closing_call_at) - at) < NEAR) return "cloture";
   if (!s.kickoff) {
     if (!s.start_date) return "kickoff";
-    const days = (at - Date.parse(`${s.start_date}T00:00:00Z`)) / 86_400_000;
+    const days = (at - Date.parse(`${s.start_date}T00:00:00Z`)) / DAY;
     if (days < 45) return "kickoff";
   }
-  return "probleme";
+  return kindByDate(s, at);
 }
 
 export type CalendlyState = "ok" | "absent" | "erreur";
@@ -206,7 +243,7 @@ export async function upcomingStudentCalls(
   db: SupabaseClient,
   opts: { pat?: string | null; from: Date; to: Date; studentId?: string | null; get?: typeof fetch },
 ): Promise<{ calls: UpcomingCall[]; calendly: CalendlyState }> {
-  const { data, error } = await db.from("students").select("id, name, email, app, archived, start_date, kickoff, kickoff_call_at, closing_call_at");
+  const { data, error } = await db.from("students").select("id, name, email, app, archived, start_date, kickoff, bilan_done, kickoff_call_at, closing_call_at");
   if (error) throw new Error(error.message);
   const students = (data ?? []) as StudentLite[];
   let fromCalendly: CalendlyCall[] = [];

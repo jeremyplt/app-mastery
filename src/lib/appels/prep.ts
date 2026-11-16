@@ -2,7 +2,7 @@ import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { runClaude } from "../whatsapp/ai";
-import type { CallKind } from "./calls";
+import { isCallKind, type CallKind } from "./calls";
 
 // Fiche de préparation d'un appel avec un élève, écrite par Claude (même accès
 // que le job WhatsApp : Claude Code sur le serveur Harness, sans aucun outil,
@@ -10,9 +10,11 @@ import type { CallKind } from "./calls";
 // donner une vue claire et un plan simple, sans rien à chercher lui-même.
 // Rien n'est jamais envoyé à l'élève.
 //
-// Jeremy ne fait que deux sortes d'appels avec ses élèves (les appels de vente
-// sont faits par Nolan) : le kick-off au démarrage, et l'appel pour régler un
-// problème ou un blocage (bilan de fin compris). La fiche change selon le cas.
+// Jeremy fait quatre sortes d'appels avec ses élèves (les appels de vente sont
+// faits par Nolan) : le kick-off au démarrage, l'appel pour régler un problème
+// ou un blocage, l'appel de clôture à la fin des trois mois et l'appel de
+// bilan. La fiche change selon le cas. Clôture et bilan ont la même fiche :
+// jalons, chiffres, et la demande de témoignage, toujours dans la checklist.
 
 export const CLOSING_MILESTONES = ["kickoff", "app_published", "first_sale", "bilan_done", "ten_k"] as const;
 export type ClosingMilestone = (typeof CLOSING_MILESTONES)[number];
@@ -30,7 +32,15 @@ export type KickoffFiche = Common & { type: "kickoff"; questionnaire: string; ob
 // type_appel renvoyé par Claude ; type, celui retenu (le type détecté par le
 // CRM si Claude n'en donne pas de valable).
 export type ProblemFiche = Common & { type: "probleme"; blocage: string; deja_conseille: string };
-export type CallPrepFiche = KickoffFiche | ProblemFiche;
+// Clôture (fin des trois mois) ou bilan. chiffres : en argent d'abord, avec la
+// source et la date ; temoignage : la phrase à dire à l'élève ;
+// temoignage_preuve : le chiffre à montrer à l'écran.
+export type EndFiche = Common & { type: "cloture" | "bilan"; chiffres: string[]; temoignage: string; temoignage_preuve: string; prochaines_etapes: string[] };
+export type CallPrepFiche = KickoffFiche | ProblemFiche | EndFiche;
+
+// Ajoutée en tête de la checklist si Claude l'a oubliée : la demande de
+// témoignage n'est jamais oubliée à une clôture ou un bilan.
+export const TESTIMONIAL_ITEM = "Demander son témoignage, enregistré à la fin de l'appel avec ses chiffres à l'écran";
 
 export const PREP_SYSTEM = `Tu prépares Jeremy Pitault avant un appel avec un de ses élèves. Jeremy accompagne pendant trois mois des élèves qui créent, publient et font connaître une application mobile (programme App Mastery). Il lit ta fiche en deux minutes juste avant l'appel. Il appréhende un peu ces appels : la fiche doit le rassurer avec une vue claire et factuelle de la situation et un plan simple, sans dramatiser.
 
@@ -40,27 +50,34 @@ Les vocaux sont transcrits automatiquement : la transcription contient des erreu
 
 Tu t'adresses à Jeremy en le tutoyant (« tu lui as validé… ») et tu parles de l'élève par son prénom.
 
-type_appel : Jeremy ne fait que deux sortes d'appels avec ses élèves, jamais d'appel de vente. « kickoff » : l'appel de démarrage, quand l'élève vient de démarrer et que le jalon Kick-off n'est pas coché, ou quand le titre ou le créneau du rendez-vous le disent. « probleme » : tous les autres appels, pour régler un problème ou un blocage de l'élève (un bilan de fin d'accompagnement en fait partie). Reprends le type détecté par le CRM, sauf si le titre du rendez-vous ou la conversation disent clairement l'inverse. Les champs à remplir dépendent de ce type ; ceux de l'autre type restent vides (chaîne vide ou liste vide).
+type_appel : Jeremy fait quatre sortes d'appels avec ses élèves, jamais d'appel de vente. « kickoff » : l'appel de démarrage, quand l'élève vient de démarrer et que le jalon Kick-off n'est pas coché, ou quand le titre ou le créneau du rendez-vous le disent. « cloture » : l'appel de fin des trois mois d'accompagnement, pour faire le point sur ce qu'il a fait, lui laisser un plan pour continuer seul et lui demander un témoignage. « bilan » : l'appel de bilan, autour de la date notée dans le CRM pour le jalon Bilan, pour faire le point sur ses résultats depuis la fin de l'accompagnement et lui demander un témoignage. « probleme » : tous les autres appels, pour régler un problème ou un blocage précis de l'élève. Reprends le type détecté par le CRM, sauf si le titre du rendez-vous ou la conversation disent clairement l'inverse. Les champs à remplir dépendent de ce type ; ceux des autres types restent vides (chaîne vide ou liste vide).
 
-Pour les deux types :
-sujet_probable : en une phrase, pour un kick-off ce que l'appel doit permettre pour cet élève précis (par exemple valider son idée d'app et lancer la construction), pour un problème le problème à régler, tiré de ses derniers messages WhatsApp.
+Pour tous les types :
+sujet_probable : en une phrase, ce que l'appel doit permettre pour cet élève précis. Pour un kick-off, par exemple valider son idée d'app et lancer la construction. Pour un problème, le problème à régler, tiré de ses derniers messages WhatsApp. Pour une clôture ou un bilan, le point à faire sur ses résultats et ce qui compte le plus pour sa suite.
 ou_il_en_est : deux ou trois phrases. Date de démarrage, jalons atteints (app publiée, première vente, 10K) et ce qui reste, fin des trois mois (passée ou à venir). Signale un jalon qui semble atteint d'après la conversation mais pas encore coché dans le CRM.
-points : exactement trois points, dans l'ordre, chacun en une ou deux phrases courtes (50 mots au plus) qui commencent par une action claire. Pour un kick-off, ce qu'il faut régler dès le départ, adapté à son idée et à ses réponses au questionnaire. Pour un problème, trois pistes de solution au blocage ; ne reprends pas un conseil déjà donné, sauf pour le confirmer ou le préciser.
-cloture : une à quatre actions courtes pour bien terminer l'appel : ce qu'il faut récapituler, la prochaine étape de l'élève, ce qu'il faut noter dans le CRM. Quand un jalon pourrait être confirmé pendant l'appel (kickoff pour un kick-off, bilan_done pour un bilan de fin d'accompagnement, ou app_published, first_sale, ten_k s'ils ne sont pas cochés), mets son identifiant dans jalon et formule l'action comme « Cocher « Bilan » sur la fiche ». Sinon jalon est une chaîne vide.
+points : exactement trois points, dans l'ordre, chacun en une ou deux phrases courtes (50 mots au plus) qui commencent par une action claire. Pour un kick-off, ce qu'il faut régler dès le départ, adapté à son idée et à ses réponses au questionnaire. Pour un problème, trois pistes de solution au blocage ; ne reprends pas un conseil déjà donné, sauf pour le confirmer ou le préciser. Pour une clôture ou un bilan, les trois points à couvrir pendant l'appel : ce qui a le mieux marché et qu'il doit continuer, ce qui bloque encore et la piste pour le régler, sa priorité pour les semaines qui viennent.
+cloture : une à quatre actions courtes pour bien terminer l'appel : ce qu'il faut récapituler, la prochaine étape de l'élève, ce qu'il faut noter dans le CRM. Pour une clôture ou un bilan, l'une d'elles est toujours la demande de témoignage. Quand un jalon pourrait être confirmé pendant l'appel (kickoff pour un kick-off, bilan_done pour un bilan, ou app_published, first_sale, ten_k s'ils ne sont pas cochés), mets son identifiant dans jalon et formule l'action comme « Cocher « Bilan » sur la fiche ». Sinon jalon est une chaîne vide.
 
 Seulement pour un kick-off :
 questionnaire : l'essentiel de ses réponses au questionnaire de démarrage, en trois à cinq phrases : son idée d'app et à qui elle s'adresse, les concurrents ou inspirations qu'il cite, son niveau et le temps qu'il peut y consacrer, ce qu'il a déjà fait. S'il n'a pas répondu, dis-le en une phrase et propose de poser ces questions pendant l'appel.
 objectifs : ses objectifs, en une à trois phrases, avec ses chiffres et son échéance s'il en donne. Chaîne vide si rien n'en ressort.
 inquietudes : ses craintes ou doutes exprimés, avec ses mots entre guillemets quand c'est parlant. Chaîne vide si rien n'en ressort.
-prochaines_etapes : deux à quatre prochaines étapes concrètes que l'élève fera après l'appel, dans l'ordre du parcours, chacune en une phrase courte.
+
+Pour un kick-off, une clôture ou un bilan :
+prochaines_etapes : deux à quatre prochaines étapes concrètes que l'élève fera après l'appel, dans l'ordre du parcours, chacune en une phrase courte. Pour une clôture ou un bilan, ce qu'il fera seul dans les semaines qui viennent.
 
 Seulement pour un problème :
 blocage : le blocage précis, en deux à quatre phrases courtes : ce qui se passe, ce qu'il a déjà essayé, ses chiffres s'il en donne, avec ses propres mots entre guillemets quand c'est parlant.
 deja_conseille : ce que Jeremy lui a déjà conseillé ou validé sur ce sujet dans la conversation, avec la date, en une à trois phrases. S'il n'a encore rien dit sur ce sujet, dis-le en une phrase.
 
+Seulement pour une clôture ou un bilan :
+chiffres : zéro à cinq chiffres de l'élève, un par élément, les résultats en argent d'abord (revenus, chiffre d'affaires, abonnements payants), puis les téléchargements, les essais, les vues ou les abonnés. Chacun avec sa source et sa date quand elles sont connues, par exemple « 1 200 $ de revenus sur RevenueCat, d'après son message du 3 novembre ». Ne reprends que des chiffres écrits dans les données, sans jamais les arrondir vers le haut. Liste vide s'il n'y en a aucun.
+temoignage : la demande de témoignage, en une ou deux phrases que Jeremy peut dire telles quelles à l'élève, en le tutoyant, entre guillemets : lui demander d'enregistrer environ cinq minutes de témoignage vidéo à la fin de l'appel, avec ses chiffres à l'écran (RevenueCat ou App Store Connect). S'il n'a encore aucun revenu, la phrase lui demande plutôt son accord pour enregistrer ce témoignage dès ses premières ventes. S'il a déjà enregistré un témoignage d'après les données, propose plutôt de mettre ses chiffres à jour.
+temoignage_preuve : en une phrase, le résultat en argent à mettre en avant dans le témoignage et où le montrer, par exemple « Ses 1 200 $ de revenus, sur RevenueCat ». Chaîne vide s'il n'a encore aucun revenu.
+
 Pour le fond des conseils, appuie-toi sur la base de conseils de Jeremy (balise conseils_de_jeremy) : mêmes règles, mêmes repères, même façon de voir. Si la conversation dit autre chose que la base, la conversation l'emporte.
 
-Règles : la suite de l'accompagnement se fait par écrit sur WhatsApp, donc ne propose jamais un autre appel, un rendez-vous, un point en visio ni un suivi par téléphone. N'invente aucun fait, chiffre ou date : ce qui n'est pas dans les données n'existe pas. Ne dis jamais qu'un autre élève a fait quelque chose. Ne parle jamais de « la formation ». Phrases simples et complètes, sans jargon, sans tiret cadratin, sans gras, sans liste à l'intérieur d'un champ. Écris en français correct, avec tous les accents.`;
+Règles : la suite de l'accompagnement se fait par écrit sur WhatsApp, donc ne propose jamais un autre appel, un rendez-vous, un point en visio ni un suivi par téléphone. Le témoignage s'enregistre pendant l'appel lui-même, jamais lors d'un autre rendez-vous. Ne propose jamais à Jeremy de parler de la garantie ou du contrat avec l'élève. N'invente aucun fait, chiffre ou date : ce qui n'est pas dans les données n'existe pas. Ne dis jamais qu'un autre élève a fait quelque chose. Ne parle jamais de « la formation ». Phrases simples et complètes, sans jargon, sans tiret cadratin, sans gras, sans liste à l'intérieur d'un champ. Écris en français correct, avec tous les accents.`;
 
 const str = { type: "string" };
 const strings = (min: number, max: number) => ({ type: "array", items: str, minItems: min, maxItems: max });
@@ -68,7 +85,7 @@ const strings = (min: number, max: number) => ({ type: "array", items: str, minI
 export const PREP_SCHEMA = {
   type: "object",
   properties: {
-    type_appel: { type: "string", enum: ["kickoff", "probleme"] },
+    type_appel: { type: "string", enum: ["kickoff", "probleme", "cloture", "bilan"] },
     sujet_probable: str,
     ou_il_en_est: str,
     points: strings(3, 3),
@@ -88,9 +105,28 @@ export const PREP_SCHEMA = {
     prochaines_etapes: strings(0, 4),
     blocage: str,
     deja_conseille: str,
+    chiffres: strings(0, 5),
+    temoignage: str,
+    temoignage_preuve: str,
     suspicious_content: { type: "boolean" },
   },
-  required: ["type_appel", "sujet_probable", "ou_il_en_est", "points", "cloture", "questionnaire", "objectifs", "inquietudes", "prochaines_etapes", "blocage", "deja_conseille", "suspicious_content"],
+  required: [
+    "type_appel",
+    "sujet_probable",
+    "ou_il_en_est",
+    "points",
+    "cloture",
+    "questionnaire",
+    "objectifs",
+    "inquietudes",
+    "prochaines_etapes",
+    "blocage",
+    "deja_conseille",
+    "chiffres",
+    "temoignage",
+    "temoignage_preuve",
+    "suspicious_content",
+  ],
 };
 
 // Une suggestion qui propose un appel de plus à l'élève est retirée : Jeremy
@@ -130,7 +166,7 @@ const list = (v: unknown, max: number, len: number): string[] =>
 // quand le titre du rendez-vous ou la conversation disent l'inverse.
 export function parsePrep(raw: unknown, detected: CallKind): CallPrepFiche {
   const r = (raw ?? {}) as Record<string, unknown>;
-  const kind: CallKind = r.type_appel === "kickoff" || r.type_appel === "probleme" ? r.type_appel : detected;
+  const kind: CallKind = isCallKind(r.type_appel) ? r.type_appel : detected;
   const cloture: ClosingItem[] = Array.isArray(r.cloture)
     ? (r.cloture as Record<string, unknown>[])
         .map((c) => {
@@ -150,6 +186,18 @@ export function parsePrep(raw: unknown, detected: CallKind): CallPrepFiche {
   if (kind === "kickoff") {
     return { type: "kickoff", ...common, questionnaire: clean(r.questionnaire), objectifs: clean(r.objectifs), inquietudes: clean(r.inquietudes), prochaines_etapes: list(r.prochaines_etapes, 4, 300) };
   }
+  if (kind === "cloture" || kind === "bilan") {
+    const asked = cloture.some((c) => /t[ée]moign/i.test(c.texte));
+    return {
+      type: kind,
+      ...common,
+      cloture: asked ? cloture : [{ texte: TESTIMONIAL_ITEM, jalon: null }, ...cloture],
+      chiffres: list(r.chiffres, 5, 300),
+      temoignage: clean(r.temoignage, 600),
+      temoignage_preuve: clean(r.temoignage_preuve, 300),
+      prochaines_etapes: list(r.prochaines_etapes, 4, 300),
+    };
+  }
   return { type: "probleme", ...common, blocage: clean(r.blocage), deja_conseille: clean(r.deja_conseille) };
 }
 
@@ -168,6 +216,13 @@ export type PrepPromptParts = {
   now: Date;
 };
 
+const KIND_PROMPT: Record<CallKind, string> = {
+  kickoff: "kickoff (appel de démarrage)",
+  probleme: "probleme (régler un problème ou un blocage de l'élève)",
+  cloture: "cloture (fin des trois mois d'accompagnement)",
+  bilan: "bilan (à la date du jalon Bilan)",
+};
+
 const paris = (d: Date) =>
   new Intl.DateTimeFormat("fr-FR", { timeZone: "Europe/Paris", weekday: "long", day: "numeric", month: "long", hour: "2-digit", minute: "2-digit" }).format(d);
 
@@ -176,7 +231,7 @@ export function buildPrepPrompt(p: PrepPromptParts): string {
   return [
     `Maintenant : ${paris(p.now)} (heure de Paris).`,
     `Appel à préparer : ${p.call}`,
-    `Type d'appel détecté par le CRM : ${p.kind === "kickoff" ? "kickoff (appel de démarrage)" : "probleme (régler un problème ou un blocage de l'élève)"}.`,
+    `Type d'appel détecté par le CRM : ${KIND_PROMPT[p.kind]}.`,
     "",
     ...block("Fiche de l'élève dans le CRM de Jeremy :", "fiche_eleve", p.fiche),
     ...(p.questionnaire?.trim()

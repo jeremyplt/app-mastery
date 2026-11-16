@@ -39,15 +39,7 @@ export type Student = {
   archived: boolean;
 } & Record<Milestone, boolean>;
 
-// "2026-07-13" + 3 mois -> "2026-10-13" (fin de mois respectée).
-// Fin de l'accompagnement = début + 3 mois ; bilan = début + 6 mois.
-export function addMonths(iso: string, months: number): string {
-  const [y, m, d] = iso.split("-").map(Number);
-  const target = new Date(Date.UTC(y, m - 1 + months, 1));
-  const last = new Date(Date.UTC(target.getUTCFullYear(), target.getUTCMonth() + 1, 0)).getUTCDate();
-  target.setUTCDate(Math.min(d, last));
-  return target.toISOString().slice(0, 10);
-}
+export { addMonths } from "./add-months";
 
 // "3x1000" ou "2000 + 1000" selon l'échéancier de la vente.
 export function paymentLabel(amounts: number[]): string {

@@ -6,16 +6,18 @@ import { previousEntry, type JournalEntry } from "@/lib/appels/journal";
 import { CallJournalBlock, type JournalSave } from "./CallJournal";
 
 // Préparation d'appel : la fiche que Claude écrit avant un appel avec un élève.
-// Deux sortes d'appels : le kick-off (questionnaire, objectifs, points à
-// couvrir, prochaines étapes) et le problème à régler (blocage, ce qui a déjà
-// été conseillé, trois pistes de solution), chacun avec une checklist de
-// clôture. Affichée sur la fiche élève et sur /admin/calendrier. Les fiches
-// sont écrites par le job « App Mastery · appels » (toutes les 5 minutes) :
-// le bouton les demande. Chaque appel a aussi son « Ressenti » (avant et
-// après l'appel, voir CallJournal.tsx et /admin/ressentis).
+// Quatre sortes d'appels : le kick-off (questionnaire, objectifs, points à
+// couvrir, prochaines étapes), le problème à régler (blocage, ce qui a déjà
+// été conseillé, trois pistes de solution), la clôture à la fin des trois mois
+// et le bilan (jalons, chiffres, demande de témoignage, suite), chacun avec
+// une checklist pour terminer l'appel. Affichée sur la fiche élève et sur
+// /admin/calendrier. Les fiches sont écrites par le job « App Mastery ·
+// appels » (toutes les 5 minutes) : le bouton les demande. Chaque appel a
+// aussi son « Ressenti » (avant et après l'appel, voir CallJournal.tsx et
+// /admin/ressentis).
 
 type ClosingItem = { texte: string; jalon: string | null };
-type CallKind = "kickoff" | "probleme";
+type CallKind = "kickoff" | "probleme" | "cloture" | "bilan";
 type Fiche = {
   type: CallKind;
   sujet_probable: string;
@@ -31,6 +33,10 @@ type Fiche = {
   // problème à régler
   blocage?: string;
   deja_conseille?: string;
+  // clôture ou bilan (prochaines_etapes aussi)
+  chiffres?: string[];
+  temoignage?: string;
+  temoignage_preuve?: string;
 };
 export type CallPrep = {
   id: string;
@@ -89,17 +95,57 @@ function preparedLabel(p: CallPrep): string {
 
 const firstName = (name: string) => name.trim().split(/\s+/)[0] ?? name;
 
-const KIND_LABELS: Record<CallKind, string> = { kickoff: "Kick-off", probleme: "Problème à régler" };
+const KIND_LABELS: Record<CallKind, string> = { kickoff: "Kick-off", probleme: "Problème à régler", cloture: "Clôture", bilan: "Bilan" };
+
+const KIND_CLASSES: Record<CallKind, string> = {
+  kickoff: "bg-[color-mix(in_srgb,var(--green)_15%,transparent)] text-[var(--green)]",
+  probleme: "bg-[color-mix(in_srgb,var(--orange)_16%,transparent)] text-[var(--orange)]",
+  cloture: "bg-[color-mix(in_srgb,var(--accent)_15%,transparent)] text-[var(--accent2)]",
+  bilan: "bg-[color-mix(in_srgb,var(--purple)_15%,transparent)] text-[var(--purple)]",
+};
+
+const OBJECTIVE_LABELS: Record<CallKind, string> = {
+  kickoff: "Objectif du kick-off",
+  probleme: "Problème à régler",
+  cloture: "Objectif de la clôture",
+  bilan: "Objectif du bilan",
+};
+
+// Jalons montrés sur une fiche de clôture ou de bilan, tels qu'ils sont cochés
+// sur la fiche élève en ce moment.
+const END_JALONS = ["kickoff", "app_published", "first_sale", "ten_k", "bilan_done"] as const;
 
 function KindBadge({ kind }: { kind: CallKind }) {
+  return <span className={`ml-2 rounded-md px-2 py-0.5 align-middle text-xs font-bold ${KIND_CLASSES[kind] ?? KIND_CLASSES.probleme}`}>{KIND_LABELS[kind] ?? kind}</span>;
+}
+
+function Bullets({ items }: { items: string[] }) {
   return (
-    <span
-      className={`ml-2 rounded-md px-2 py-0.5 align-middle text-xs font-bold ${
-        kind === "kickoff" ? "bg-[color-mix(in_srgb,var(--green)_15%,transparent)] text-[var(--green)]" : "bg-[color-mix(in_srgb,var(--orange)_16%,transparent)] text-[var(--orange)]"
-      }`}
-    >
-      {KIND_LABELS[kind]}
-    </span>
+    <ul className="mt-1 list-disc space-y-1 pl-5">
+      {items.map((e, i) => (
+        <li key={i}>{e}</li>
+      ))}
+    </ul>
+  );
+}
+
+function Jalons({ milestones }: { milestones: Milestones }) {
+  return (
+    <ul className="mt-1 flex flex-wrap gap-2">
+      {END_JALONS.map((k) => {
+        const done = Boolean(milestones[k]);
+        return (
+          <li
+            key={k}
+            className={`rounded-md px-2 py-0.5 text-[13px] font-bold ${
+              done ? "bg-[color-mix(in_srgb,var(--green)_15%,transparent)] text-[var(--green)]" : "bg-[var(--card-solid)] text-[var(--fg2)]"
+            }`}
+          >
+            {done ? `✓ ${JALON_LABELS[k]}` : `${JALON_LABELS[k]} : pas encore`}
+          </li>
+        );
+      })}
+    </ul>
   );
 }
 
@@ -150,7 +196,7 @@ function PrepBody({
       <p className="text-[15px] font-bold">
         Type d&apos;appel :<KindBadge kind={f.type} />
       </p>
-      <Section label={f.type === "kickoff" ? "Objectif du kick-off" : "Problème à régler"}>{f.sujet_probable}</Section>
+      <Section label={OBJECTIVE_LABELS[f.type] ?? "Objectif de l'appel"}>{f.sujet_probable}</Section>
       <Section label={`Où en est ${who}`}>{f.ou_il_en_est}</Section>
       {f.type === "kickoff" ? (
         <>
@@ -162,11 +208,38 @@ function PrepBody({
           </Section>
           {(f.prochaines_etapes ?? []).length > 0 && (
             <Section label="Ses prochaines étapes">
-              <ul className="mt-1 list-disc space-y-1 pl-5">
-                {(f.prochaines_etapes ?? []).map((e, i) => (
-                  <li key={i}>{e}</li>
-                ))}
-              </ul>
+              <Bullets items={f.prochaines_etapes ?? []} />
+            </Section>
+          )}
+        </>
+      ) : f.type === "cloture" || f.type === "bilan" ? (
+        <>
+          {milestones && (
+            <Section label="Ses jalons">
+              <Jalons milestones={milestones} />
+            </Section>
+          )}
+          <Section label="Ses chiffres">
+            {(f.chiffres ?? []).length > 0 ? (
+              <Bullets items={f.chiffres ?? []} />
+            ) : (
+              <p>Aucun chiffre dans WhatsApp ni sur la fiche : demande-lui ses revenus sur RevenueCat pendant l&apos;appel.</p>
+            )}
+          </Section>
+          <Section label="À couvrir pendant l'appel">
+            <Numbered items={f.points} />
+          </Section>
+          {f.temoignage && (
+            <div className="rounded-lg border-l-4 border-[var(--accent)] bg-[var(--card-solid)] p-3">
+              <Section label="La demande de témoignage">
+                <p>{f.temoignage}</p>
+                {f.temoignage_preuve && <p className="mt-1 font-bold">À montrer : {f.temoignage_preuve}</p>}
+              </Section>
+            </div>
+          )}
+          {(f.prochaines_etapes ?? []).length > 0 && (
+            <Section label="Sa suite en autonomie">
+              <Bullets items={f.prochaines_etapes ?? []} />
             </Section>
           )}
         </>

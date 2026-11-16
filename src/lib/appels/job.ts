@@ -135,7 +135,9 @@ export function ficheText(s: StudentRow, now: Date): string {
 const parisShort = (iso: string) => new Intl.DateTimeFormat("fr-FR", { timeZone: "Europe/Paris", day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }).format(new Date(iso));
 
 // Conversation des 30 derniers jours (80 messages au plus, vocaux transcrits),
-// précédée du dernier résumé fait par le job WhatsApp.
+// précédée du dernier résumé fait par le job WhatsApp. Pour une clôture ou un
+// bilan, 90 jours (120 messages) : les chiffres de l'élève sont souvent plus
+// anciens que le dernier mois.
 export function whatsappText(threads: { summary: string | null; points: string[] | null }[], messages: PromptMessage[]): string {
   const head = threads
     .filter((t) => t.summary)
@@ -157,6 +159,8 @@ export async function prepParts(
     .maybeSingle();
   if (error) throw new Error(error.message);
   if (!s) throw new Error("Élève introuvable");
+  const kind = callKind(s as Parameters<typeof callKind>[0], { key: row.event_key, starts_at: row.starts_at, title: row.title, event_type: row.event_type });
+  const longView = kind === "cloture" || kind === "bilan";
   const { data: threads } = await db.from("whatsapp_threads").select("contact, summary, points").eq("student_id", row.student_id);
   const contacts = (threads ?? []).map((t) => t.contact as string);
   let messages: PromptMessage[] = [];
@@ -165,15 +169,14 @@ export async function prepParts(
       .from("whatsapp_messages")
       .select("direction, type, body, transcript, transcript_error, sent_at")
       .in("contact", contacts)
-      .gte("sent_at", new Date(now.getTime() - 30 * 86_400_000).toISOString())
+      .gte("sent_at", new Date(now.getTime() - (longView ? 90 : 30) * 86_400_000).toISOString())
       .order("sent_at", { ascending: false })
-      .limit(80);
+      .limit(longView ? 120 : 80);
     if (msgError) throw new Error(msgError.message);
     messages = ((rows ?? []) as PromptMessage[]).filter((m) => m.type !== "reaction").reverse();
   }
   const answers = s.questionnaire && typeof s.questionnaire === "object" ? answerEntries(s.questionnaire as Record<string, string>) : [];
   const manual = row.event_key.startsWith("manuel:");
-  const kind = callKind(s as { start_date: string | null; kickoff: boolean; kickoff_call_at: string | null }, { key: row.event_key, starts_at: row.starts_at, title: row.title, event_type: row.event_type });
   return {
     kind,
     call: manual ? "pas de rendez-vous précis dans l'agenda, Jeremy prépare un échange à venir." : `${frWhen(row.starts_at)}${row.title ? `, rendez-vous « ${row.title} »` : ""}.`,

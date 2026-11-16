@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { callKind, fetchCalendlyCalls, isSalesEvent, matchStudent, mergeCalls, nameTokens, parisDay, parisHour, type StudentLite } from "../appels/calls";
-import { buildPrepPrompt, clip, parsePrep, proposesExtraCall } from "../appels/prep";
+import { buildPrepPrompt, clip, parsePrep, proposesExtraCall, TESTIMONIAL_ITEM } from "../appels/prep";
 import { KICKOFF_EVENT_TYPE, NOLAN_EVENT_TYPE, OLD_STUDENT_EVENT_TYPE, STUDENT_CALL_EVENT_TYPE, studentCallKind, webhookPath } from "../calendly-events";
 
 const students: StudentLite[] = [
@@ -68,8 +68,10 @@ test("appels : Calendly d'abord, créneaux de la fiche en secours, sans doublon"
   );
   assert.equal(calls[2].key, "fiche:s7:kickoff");
   assert.equal(calls[2].kind, "kickoff");
-  // Kevin et Soraya ont fait leur kick-off depuis longtemps : problème à régler.
-  assert.equal(calls[1].kind, "probleme");
+  // Kevin : le rendez-vous Calendly est le créneau de clôture noté sur sa fiche.
+  assert.equal(calls[1].kind, "cloture");
+  // Soraya : une semaine après la fin de ses trois mois, clôture d'après la date.
+  assert.equal(calls[0].kind, "cloture");
   assert.equal(calls[0].join_url, "https://meet");
 });
 
@@ -180,15 +182,16 @@ test("type d'appel : kick-off au démarrage, sinon problème à régler", () => 
   assert.equal(callKind({ start_date: "2026-11-09", kickoff: false, kickoff_call_at: null }, cal), "kickoff");
   assert.equal(callKind({ start_date: null, kickoff: false, kickoff_call_at: null }, cal), "kickoff");
   assert.equal(callKind({ start_date: "2026-10-16", kickoff: true, kickoff_call_at: "2026-10-19T12:30:00+00:00" }, cal), "probleme");
-  // Kick-off jamais coché, mais l'élève a démarré il y a des mois : problème.
-  assert.equal(callKind({ start_date: "2026-07-13", kickoff: false, kickoff_call_at: null }, cal), "probleme");
+  // Kick-off jamais coché, mais l'élève a démarré il y a des mois (fin des trois
+  // mois passée depuis plus de 30 jours, bilan encore loin) : problème.
+  assert.equal(callKind({ start_date: "2026-07-01", kickoff: false, kickoff_call_at: null }, cal), "probleme");
   assert.equal(callKind({ start_date: "2026-07-13", kickoff: true }, { key: "fiche:s:kickoff", starts_at: at }), "kickoff");
   assert.equal(callKind({ kickoff: true }, { key: "manuel:s", starts_at: at }), "probleme");
   assert.equal(callKind({ kickoff: false }, { key: "manuel:s", starts_at: at }), "kickoff");
   // Le titre du rendez-vous le dit.
   assert.equal(callKind({ start_date: "2026-07-13", kickoff: true }, { ...cal, title: "Kick-off App Mastery" }), "kickoff");
   assert.equal(callKind({ start_date: "2026-07-13", kickoff: true }, { ...cal, title: "Appel de démarrage" }), "kickoff");
-  assert.equal(callKind({ start_date: "2026-07-13", kickoff: true }, { ...cal, title: "Appel App Mastery" }), "probleme");
+  assert.equal(callKind({ start_date: "2026-07-01", kickoff: true }, { ...cal, title: "Appel App Mastery" }), "probleme");
 });
 
 test("rendez-vous de vente : jamais de fiche", () => {
@@ -211,7 +214,7 @@ test("nouveaux types Calendly : « Kick-off App Mastery » donne le kick-off, «
   const roster: StudentLite[] = [
     // Kick-off coché depuis longtemps : le type d'événement l'emporte quand même.
     { id: "a", name: "Anna Kick", email: "anna@example.com", app: null, kickoff: true, start_date: "2026-07-01" },
-    { id: "b", name: "Bruno Suivi", email: "bruno@example.com", app: null, kickoff: true, start_date: "2026-08-01", kickoff_call_at: "2026-08-04T12:00:00+00:00" },
+    { id: "b", name: "Bruno Suivi", email: "bruno@example.com", app: null, kickoff: true, start_date: "2026-09-15", kickoff_call_at: "2026-09-16T12:00:00+00:00" },
     // Vient de démarrer sans kick-off : le CRM dit kick-off, même sur « Appel élève ».
     { id: "c", name: "Chloé Neuve", email: "chloe@example.com", app: null, kickoff: false, start_date: "2026-11-10" },
   ];
@@ -302,6 +305,103 @@ test("consigne : type_appel demandé, pas de bilan à six mois inventé", async 
   assert.ok(PREP_SYSTEM.includes("type_appel"));
   assert.ok(!/six mois/.test(PREP_SYSTEM));
   assert.ok(!PREP_SYSTEM.includes("—"));
-  assert.deepEqual(PREP_SCHEMA.properties.type_appel.enum, ["kickoff", "probleme"]);
+  assert.deepEqual(PREP_SCHEMA.properties.type_appel.enum, ["kickoff", "probleme", "cloture", "bilan"]);
+  assert.ok(PREP_SCHEMA.required.includes("temoignage") && PREP_SCHEMA.required.includes("chiffres"));
   assert.ok(PREP_SCHEMA.required.includes("type_appel"));
+});
+
+test("clôture et bilan : d'après le créneau, le titre, puis la date", () => {
+  // Fin des trois mois le 19/11/2026, date du jalon Bilan le 19/02/2027.
+  const steven = { start_date: "2026-08-19", kickoff: true, kickoff_call_at: null, closing_call_at: null, bilan_done: false };
+  const at = (starts_at: string, title?: string) => ({ key: "https://api.calendly.com/scheduled_events/x", starts_at, title });
+  // Créneau de clôture noté sur la fiche (lien de clôture), ou titre.
+  assert.equal(callKind(steven, { key: "fiche:s:cloture", starts_at: "2026-10-01T13:00:00Z" }), "cloture");
+  assert.equal(callKind(steven, at("2026-10-01T13:00:00Z", "Appel de clôture")), "cloture");
+  assert.equal(callKind(steven, at("2026-10-01T13:00:00Z", "Fin d'accompagnement")), "cloture");
+  assert.equal(callKind(steven, at("2026-10-01T13:00:00Z", "Bilan App Mastery")), "bilan");
+  assert.equal(callKind({ ...steven, closing_call_at: "2026-10-01T13:10:00+00:00" }, at("2026-10-01T13:00:00Z", "Appel élève App Mastery")), "cloture");
+  // D'après la date : de 14 jours avant la fin à 30 jours après.
+  assert.equal(callKind(steven, at("2026-11-19T13:00:00Z", "Appel élève App Mastery")), "cloture");
+  assert.equal(callKind(steven, at("2026-11-05T13:00:00Z")), "cloture");
+  assert.equal(callKind(steven, at("2026-11-04T13:00:00Z")), "probleme");
+  assert.equal(callKind(steven, at("2026-12-19T13:00:00Z")), "cloture");
+  assert.equal(callKind(steven, at("2026-12-20T13:00:00Z")), "probleme");
+  // L'appel de clôture a déjà eu lieu : le suivant est un problème à régler.
+  assert.equal(callKind({ ...steven, closing_call_at: "2026-11-19T13:00:00+00:00" }, at("2026-11-26T13:00:00Z")), "probleme");
+  // Bilan : à partir de 30 jours avant sa date, tant qu'il n'est pas coché.
+  assert.equal(callKind(steven, at("2027-01-21T13:00:00Z")), "bilan");
+  assert.equal(callKind(steven, at("2027-03-10T13:00:00Z")), "bilan");
+  assert.equal(callKind(steven, at("2027-01-19T13:00:00Z")), "probleme");
+  // Bilan déjà coché (parfois dès la clôture) : plus de clôture ni de bilan d'après la date.
+  assert.equal(callKind({ ...steven, bilan_done: true }, at("2026-11-19T13:00:00Z")), "probleme");
+  assert.equal(callKind({ ...steven, bilan_done: true }, at("2027-02-19T13:00:00Z")), "probleme");
+  // Sans rendez-vous précis : d'après la date du jour.
+  assert.equal(callKind(steven, { key: "manuel:s", starts_at: "2026-11-18T09:00:00Z" }), "cloture");
+  assert.equal(callKind(steven, { key: "manuel:s", starts_at: "2026-10-01T09:00:00Z" }), "probleme");
+  assert.equal(callKind({ ...steven, kickoff: false }, { key: "manuel:s", starts_at: "2026-11-18T09:00:00Z" }), "kickoff");
+  // Le kick-off l'emporte toujours.
+  assert.equal(callKind(steven, { ...at("2026-11-19T13:00:00Z"), event_type: KICKOFF_EVENT_TYPE }), "kickoff");
+});
+
+test("créneau de clôture noté sur la fiche sans Calendly : fiche de clôture", () => {
+  const calls = mergeCalls(
+    [],
+    [{ id: "st", name: "Steven", email: null, app: "Unfried", kickoff: true, start_date: "2026-08-19", closing_call_at: "2026-11-19T14:00:00+00:00" }],
+    new Date("2026-11-16T00:00:00Z"),
+    new Date("2026-11-30T00:00:00Z"),
+  );
+  assert.deepEqual(
+    calls.map((c) => [c.key, c.kind, c.title]),
+    [["fiche:st:cloture", "cloture", "Appel de clôture"]],
+  );
+});
+
+test("fiche de clôture : chiffres, témoignage toujours dans la checklist", () => {
+  const raw = {
+    type_appel: "cloture",
+    sujet_probable: "Faire le point sur ses trois mois et lui laisser un plan.",
+    ou_il_en_est: "App publiée le 2 octobre — première vente le 20.",
+    points: ["Lui faire dire ce qui a marché.", "Régler la conversion du paywall.", "Fixer sa priorité : une vidéo par jour."],
+    chiffres: ["**312 $** de revenus sur RevenueCat, d'après son message du 10 novembre.", "Prévoir un appel pour relever les chiffres.", "1 450 téléchargements."],
+    temoignage: "« Tu serais d'accord pour qu'on enregistre cinq minutes de témoignage à la fin de l'appel, avec RevenueCat à l'écran ? »",
+    temoignage_preuve: "Ses 312 $ de revenus, sur RevenueCat.",
+    prochaines_etapes: ["Poster une vidéo par jour.", "Caler un rendez-vous dans un mois."],
+    cloture: [
+      { texte: "Récapituler ce qu'il a fait", jalon: "" },
+      { texte: "Cocher « Première vente » sur la fiche", jalon: "first_sale" },
+    ],
+    questionnaire: "ignoré",
+    blocage: "ignoré",
+    suspicious_content: false,
+  };
+  const f = parsePrep(raw, "probleme");
+  assert.equal(f.type, "cloture");
+  assert.ok(f.type === "cloture");
+  assert.equal(f.ou_il_en_est, "App publiée le 2 octobre, première vente le 20.");
+  // Chiffres nettoyés, sans proposition d'appel.
+  assert.deepEqual(f.chiffres, ["312 $ de revenus sur RevenueCat, d'après son message du 10 novembre.", "1 450 téléchargements."]);
+  assert.equal(f.temoignage_preuve, "Ses 312 $ de revenus, sur RevenueCat.");
+  assert.deepEqual(f.prochaines_etapes, ["Poster une vidéo par jour."]);
+  assert.ok(!("blocage" in f) && !("questionnaire" in f));
+  // Claude a oublié le témoignage dans la checklist : ajouté en tête.
+  assert.deepEqual(f.cloture, [
+    { texte: TESTIMONIAL_ITEM, jalon: null },
+    { texte: "Récapituler ce qu'il a fait", jalon: null },
+    { texte: "Cocher « Première vente » sur la fiche", jalon: "first_sale" },
+  ]);
+  // Déjà dans la checklist : pas de doublon.
+  const b = parsePrep({ ...raw, type_appel: "", cloture: [{ texte: "Demander le témoignage vidéo", jalon: "" }, { texte: "Cocher « Bilan » sur la fiche", jalon: "bilan_done" }] }, "bilan");
+  assert.equal(b.type, "bilan");
+  assert.deepEqual(b.cloture.map((c) => c.texte), ["Demander le témoignage vidéo", "Cocher « Bilan » sur la fiche"]);
+  // Les autres types n'ont jamais de témoignage ajouté.
+  const p = parsePrep({ ...raw, type_appel: "probleme" }, "probleme");
+  assert.ok(p.cloture.every((c) => c.texte !== TESTIMONIAL_ITEM));
+});
+
+test("demande à Claude : type clôture ou bilan annoncé", () => {
+  const prompt = (kind: "cloture" | "bilan") => buildPrepPrompt({ kind, call: "x", fiche: "y", now: new Date("2026-11-19T08:00:00Z") });
+  assert.ok(prompt("cloture").includes("Type d'appel détecté par le CRM : cloture (fin des trois mois d'accompagnement)."));
+  assert.ok(prompt("bilan").includes("Type d'appel détecté par le CRM : bilan"));
+  // Pas de questionnaire réclamé hors kick-off.
+  assert.ok(!prompt("cloture").includes("questionnaire"));
 });

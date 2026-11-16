@@ -5,9 +5,10 @@
 //   essai <élève>       écrit la fiche du prochain appel d'un élève (id ou
 //                       début du nom) et l'affiche, sans rien enregistrer ;
 //                       `--local` pour utiliser la session Claude Code du Mac,
-//                       `--type=kickoff|probleme` pour forcer le type d'appel
+//                       `--type=kickoff|probleme|cloture|bilan` pour forcer
+//                       le type d'appel
 import { createClient } from "@supabase/supabase-js";
-import { upcomingStudentCalls } from "@/lib/appels/calls";
+import { isCallKind, upcomingStudentCalls } from "@/lib/appels/calls";
 import { processPreps, prepParts, queueTodayCalls, type PrepJobEnv } from "@/lib/appels/job";
 import { generatePrep } from "@/lib/appels/prep";
 import { loadConseils } from "@/lib/whatsapp/job";
@@ -39,7 +40,7 @@ async function main() {
     }
     case "essai": {
       const who = args.filter((a) => !a.startsWith("--")).join(" ").trim();
-      if (!who) throw new Error("Usage : essai <id ou nom de l'élève> [--local]");
+      if (!who) throw new Error("Usage : essai <id ou nom de l'élève> [--local] [--type=kickoff|probleme|cloture|bilan]");
       const e = env();
       const isId = /^[0-9a-f-]{36}$/i.test(who);
       const base = e.db.from("students").select("id, name");
@@ -54,9 +55,9 @@ async function main() {
         ? { student_id: student.id, starts_at: call.starts_at, title: call.title, event_key: call.key, event_type: call.event_type }
         : { student_id: student.id, starts_at: now.toISOString(), title: null, event_key: `manuel:${student.id}` };
       const parts = await prepParts(e.db, row, now, await loadConseils(e.db));
-      // --type=kickoff ou --type=probleme : forcer le type pour un essai.
+      // --type=kickoff, probleme, cloture ou bilan : forcer le type pour un essai.
       const forced = args.find((a) => a.startsWith("--type="))?.slice(7);
-      if (forced === "kickoff" || forced === "probleme") parts.kind = forced;
+      if (isCallKind(forced)) parts.kind = forced;
       const fiche = await generatePrep(parts, { localLogin: args.includes("--local") });
       return print({ eleve: student.name, appel: call ?? "aucun rendez-vous", type: parts.kind, fiche });
     }
