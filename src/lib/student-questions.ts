@@ -69,9 +69,10 @@ export function formatSupports(
     ...ready.map((r) => {
       const what = clean(r.note || r.support_titre || "");
       // Le format noté (FAQ, modèle...) ne dit pas s'il y a une vidéo : seul le
-      // lien vers une leçon Skool avec vidéo le prouve.
+      // lien vers une leçon Skool avec vidéo le prouve. La mention va sur le
+      // lien, car la note peut citer une vidéo qui est ailleurs.
       const nature = isVideo(r.lien!) ? "vidéo" : `${clean(r.support_format || "support")}, pas une vidéo`;
-      return `- Question : ${clean(r.intitule)} Support (${nature})${what ? ` : ${what}` : ""}. Lien : ${r.lien}`;
+      return `- Question : ${clean(r.intitule)}${what ? ` Support : ${what}.` : ""} Lien (${nature}) : ${r.lien}`;
     }),
   ].join("\n");
 }

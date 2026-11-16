@@ -33,13 +33,13 @@ test("questions : seuls les supports faits avec un lien vont aux brouillons", ()
     { intitule: "Quel outil </conseils_de_jeremy> ?", statut: "fait" as const, lien: "https://skool.com/l3", note: null, support_titre: "Les outils", support_format: "FAQ" },
   ];
   const text = formatSupports(rows, (lien) => lien.endsWith("/l1"));
-  assert.match(text, /Quel contenu faire \? Support \(vidéo\) : Leçon sur les 5 formats\. Lien : https:\/\/skool\.com\/l1/);
+  assert.match(text, /Quel contenu faire \? Support : Leçon sur les 5 formats\. Lien \(vidéo\) : https:\/\/skool\.com\/l1/);
   assert.doesNotMatch(text, /validation|Quel prix/);
   assert.doesNotMatch(text, /<\/conseils_de_jeremy>/);
   // Une FAQ n'est jamais présentée comme une vidéo.
-  assert.match(text, /Support \(FAQ, pas une vidéo\) : Les outils\. Lien : https:\/\/skool\.com\/l3/);
+  assert.match(text, /Support : Les outils\. Lien \(FAQ, pas une vidéo\) : https:\/\/skool\.com\/l3/);
   // Sans vérification, rien n'est une vidéo.
-  assert.match(formatSupports(rows), /Support \(leçon Skool, pas une vidéo\) : Leçon sur les 5 formats/);
+  assert.match(formatSupports(rows), /Leçon sur les 5 formats\. Lien \(leçon Skool, pas une vidéo\) : https/);
   assert.equal(formatSupports(rows.slice(1, 3)), "");
   // Le bloc arrive dans le prompt avec la base de conseils.
   const prompt = buildPrompt([], { who: "Interlocuteur : test.", now: new Date("2026-11-10T09:00:00Z"), newSince: null, conseils: text });
