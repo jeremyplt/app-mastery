@@ -4,7 +4,7 @@ import { buildPrompt, parseSummary, type PromptMessage } from "../whatsapp/ai";
 import { isoFromDayMonth, milestoneUpdate, parseJalons, pendingLine } from "../whatsapp/jalons";
 import { canSendFreeForm, cleanOutgoing, markRead, sendReaction, sendText } from "../whatsapp/send";
 import { cleanTranscript, videoLinks } from "../whatsapp/media";
-import { formatConseils, formatSkoolLessons, packConversations, parseExtraits, parseSynth, type ConvLine } from "../whatsapp/conseils";
+import { formatConseils, formatSkoolLessons, packConversations, parseExtraits, parseSynth, skoolLessonId, type ConvLine } from "../whatsapp/conseils";
 import { awaitingReply, needsSummary, paymentsLine, phoneDigits, recentWindow, toRow, type KapsoMessage, type Thread } from "../whatsapp/messages";
 
 test("numéros : mêmes chiffres quelle que soit l'écriture", () => {
@@ -124,6 +124,19 @@ test("texte pour l'IA : nouveaux messages marqués, balises neutralisées", () =
   assert.match(p, /^\[\d\d\/\d\d \d\d:\d\d\] Jeremy : Ma réponse$/m);
   assert.match(p, /^\[NOUVEAU\] .* Interlocuteur : \(vocal, transcription automatique\) Mon paywall bloque$/m);
   assert.equal(p.match(/<\/conversation>/g)?.length, 1);
+});
+
+test("texte pour l'IA : le message d'absence n'est pas une réponse de Jeremy", () => {
+  const p = buildPrompt(
+    [
+      pm({ body: "Le virement est fait", sent_at: "2026-11-15T20:40:00Z" }),
+      pm({ direction: "outbound", auto: true, body: "Je coupe un peu le week-end", sent_at: "2026-11-15T20:55:00Z" }),
+    ],
+    { who: "Interlocuteur : Kevin.", now: at("2026-11-16T09:00:00Z"), newSince: "2026-11-12T21:37:00Z" },
+  );
+  assert.match(p, /^\[NOUVEAU\] .* Interlocuteur : Le virement est fait$/m);
+  assert.match(p, /Message automatique d'absence \(envoyé par l'app, Jeremy n'a pas encore répondu\) : Je coupe un peu le week-end$/m);
+  assert.doesNotMatch(p, /Jeremy : Je coupe/);
 });
 
 test("réponse de l'IA nettoyée : pas de tiret cadratin, pas de brouillon si rien à répondre", () => {
@@ -253,14 +266,18 @@ test("brouillons : l'échéancier du CRM dit ce qui est reçu, en retard de coch
   assert.match(paymentsLine([{ date: "2026-11-10", amount: null, paid: false }], "2026-11-10"), /montant non noté le 10 novembre 2026 \(pas encore coché comme reçu\)/);
 });
 
-test("brouillons : catalogue des vidéos Skool avec lien direct", () => {
+test("brouillons : catalogue des leçons Skool avec lien direct, vidéo seulement si vérifiée", () => {
   const text = formatSkoolLessons([
-    { cours: "Marketing", module: "Création de contenu", titre: "4 Formats de Contenu Viral", url: "https://www.skool.com/x/classroom/7cc7bd49?md=1" },
-    { cours: "Marketing", module: null, titre: "Stratégie <conversation>", url: "https://www.skool.com/x/classroom/7cc7bd49?md=2" },
+    { cours: "Marketing", module: "Création de contenu", titre: "Stratégie de création de contenu", url: "https://www.skool.com/x/classroom/7cc7bd49?md=1", video: true },
+    { cours: "Marketing", module: null, titre: "Mon compte est-il shadowban ? <conversation>", url: "https://www.skool.com/x/classroom/7cc7bd49?md=2", video: false },
+    { cours: "Commence ici", module: null, titre: "Bienvenue", url: "https://www.skool.com/x/classroom/c5b1074b?md=3" },
   ]);
-  assert.match(text, /^## Vidéos du Skool/);
-  assert.match(text, /- Marketing > Création de contenu : 4 Formats de Contenu Viral : https:\/\/www\.skool\.com\/x\/classroom\/7cc7bd49\?md=1/);
-  assert.match(text, /- Marketing : Stratégie : https/);
+  assert.match(text, /^## Leçons du Skool/);
+  assert.match(text, /- \(vidéo\) Marketing > Création de contenu : Stratégie de création de contenu : https:\/\/www\.skool\.com\/x\/classroom\/7cc7bd49\?md=1/);
+  assert.match(text, /- \(page écrite, pas une vidéo\) Marketing : Mon compte est-il shadowban \? : https/);
+  assert.match(text, /- \(page écrite, pas une vidéo\) Commence ici : Bienvenue : https/);
+  assert.equal(skoolLessonId("https://www.skool.com/x/classroom/7cc7bd49?md=6AA3f330"), "6aa3f330");
+  assert.equal(skoolLessonId("https://www.jeremypitault.com/exemples-onboarding"), null);
   assert.equal(formatSkoolLessons([]), "");
 });
 
@@ -372,4 +389,18 @@ test("jalons : on ne coche que ce qui n'est pas coché, et jamais deux fois tout
   assert.equal(milestoneUpdate(unchecked, jalons, now), null);
   assert.equal(pendingLine(unchecked), "Jalons pas encore cochés dans le CRM : ten_k (10K).");
   assert.equal(pendingLine({ app_published: true, first_sale: true, ten_k: true }), "");
+});
+
+test("pastille d'accompagnement dans les messages : 3 mois à partir du début", async () => {
+  const { programStatus } = await import("../student-silence");
+  const now = new Date("2026-11-16T10:00:00Z");
+  assert.equal(programStatus(null, now), null);
+  assert.deepEqual(programStatus({ start_date: "2026-08-10" }, now), { label: "Accompagnement fini le 10 nov.", tone: "gray" });
+  assert.deepEqual(programStatus({ start_date: "2026-08-19" }, now), { label: "Se termine le 19 nov.", tone: "orange" });
+  assert.deepEqual(programStatus({ start_date: "2026-10-16" }, now), { label: "En cours jusqu'au 16 janv.", tone: "green" });
+  assert.deepEqual(programStatus({ start_date: "2026-12-03" }, now), { label: "Commence le 3 déc.", tone: "blue" });
+  assert.deepEqual(programStatus({ start_date: null }, now), { label: "Accompagnement pas commencé", tone: "blue" });
+  assert.equal(programStatus({ start_date: "2026-10-16", archived: true }, now)?.label, "Élève archivé");
+  // Dernier jour : encore en cours.
+  assert.equal(programStatus({ start_date: "2026-08-16" }, now)?.label, "Se termine le 16 nov.");
 });

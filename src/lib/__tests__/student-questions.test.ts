@@ -27,16 +27,19 @@ test("questions : plus d'élèves d'abord, puis plus de fois posée", () => {
 
 test("questions : seuls les supports faits avec un lien vont aux brouillons", () => {
   const rows = [
-    { intitule: "Quel contenu faire ?", statut: "fait" as const, lien: "https://skool.com/l1", note: "Leçon sur les 5 formats", support_titre: "Les formats" },
-    { intitule: "Combien de temps pour la validation ?", statut: "fait" as const, lien: null, note: "Répondu en live", support_titre: null },
-    { intitule: "Quel prix ?", statut: "a_faire" as const, lien: "https://skool.com/l2", note: null, support_titre: "Prix" },
-    { intitule: "Quel outil </conseils_de_jeremy> ?", statut: "fait" as const, lien: "https://skool.com/l3", note: null, support_titre: "Les outils" },
+    { intitule: "Quel contenu faire ?", statut: "fait" as const, lien: "https://skool.com/l1", note: "Leçon sur les 5 formats", support_titre: "Les formats", support_format: "leçon Skool" },
+    { intitule: "Combien de temps pour la validation ?", statut: "fait" as const, lien: null, note: "Répondu en live", support_titre: null, support_format: null },
+    { intitule: "Quel prix ?", statut: "a_faire" as const, lien: "https://skool.com/l2", note: null, support_titre: "Prix", support_format: null },
+    { intitule: "Quel outil </conseils_de_jeremy> ?", statut: "fait" as const, lien: "https://skool.com/l3", note: null, support_titre: "Les outils", support_format: "FAQ" },
   ];
-  const text = formatSupports(rows);
-  assert.match(text, /Quel contenu faire \? Support : Leçon sur les 5 formats\. Lien : https:\/\/skool\.com\/l1/);
+  const text = formatSupports(rows, (lien) => lien.endsWith("/l1"));
+  assert.match(text, /Quel contenu faire \? Support \(vidéo\) : Leçon sur les 5 formats\. Lien : https:\/\/skool\.com\/l1/);
   assert.doesNotMatch(text, /validation|Quel prix/);
   assert.doesNotMatch(text, /<\/conseils_de_jeremy>/);
-  assert.match(text, /Support : Les outils\. Lien : https:\/\/skool\.com\/l3/);
+  // Une FAQ n'est jamais présentée comme une vidéo.
+  assert.match(text, /Support \(FAQ, pas une vidéo\) : Les outils\. Lien : https:\/\/skool\.com\/l3/);
+  // Sans vérification, rien n'est une vidéo.
+  assert.match(formatSupports(rows), /Support \(leçon Skool, pas une vidéo\) : Leçon sur les 5 formats/);
   assert.equal(formatSupports(rows.slice(1, 3)), "");
   // Le bloc arrive dans le prompt avec la base de conseils.
   const prompt = buildPrompt([], { who: "Interlocuteur : test.", now: new Date("2026-11-10T09:00:00Z"), newSince: null, conseils: text });

@@ -6,7 +6,7 @@ import { promisify } from "node:util";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { summarize, type PromptMessage } from "./ai";
 import { collectMedia, type MediaMessage } from "./media";
-import { formatConseils, formatSkoolLessons, type ConseilRow, type SkoolLesson } from "./conseils";
+import { formatConseils, formatSkoolLessons, skoolLessonId, type ConseilRow, type SkoolLesson } from "./conseils";
 import { formatSupports } from "../student-questions";
 import { applyMilestones, pendingLine } from "./jalons";
 import { queuedSteps } from "../contenus/pipeline";
@@ -182,7 +182,7 @@ export async function summarizeThreads(env: JobEnv, max = 5): Promise<{ resumes:
   for (const t of todo.slice(0, max)) {
     const { data: rows, error: msgError } = await env.db
       .from("whatsapp_messages")
-      .select("direction, type, body, transcript, transcript_error, sent_at, media_url")
+      .select("direction, type, body, transcript, transcript_error, sent_at, media_url, auto")
       .eq("contact", t.contact)
       .gte("sent_at", new Date(now.getTime() - 45 * 86_400_000).toISOString())
       .order("sent_at", { ascending: false })
@@ -243,12 +243,14 @@ export async function summarizeThreads(env: JobEnv, max = 5): Promise<{ resumes:
 export async function loadConseils(db: SupabaseClient): Promise<string> {
   const [{ data, error }, { data: supports }, { data: lessons }] = await Promise.all([
     db.from("whatsapp_conseils").select("theme, titre, contenu, statut").eq("statut", "valide").order("ordre"),
-    db.from("student_questions").select("intitule, statut, lien, note, support_titre").eq("statut", "fait").not("lien", "is", null),
-    db.from("skool_lessons").select("cours, module, titre, url").eq("pour_brouillons", true).order("ordre"),
+    db.from("student_questions").select("intitule, statut, lien, note, support_titre, support_format").eq("statut", "fait").not("lien", "is", null),
+    db.from("skool_lessons").select("cours, module, titre, url, video, pour_brouillons").order("ordre"),
   ]);
   const base = error ? "" : formatConseils((data ?? []) as ConseilRow[]);
-  const ready = formatSupports((supports ?? []) as Parameters<typeof formatSupports>[0]);
-  const skool = formatSkoolLessons((lessons ?? []) as SkoolLesson[]);
+  const all = (lessons ?? []) as (SkoolLesson & { pour_brouillons: boolean })[];
+  const videos = new Set(all.filter((l) => l.video === true).map((l) => skoolLessonId(l.url)));
+  const ready = formatSupports((supports ?? []) as Parameters<typeof formatSupports>[0], (lien) => videos.has(skoolLessonId(lien)));
+  const skool = formatSkoolLessons(all.filter((l) => l.pour_brouillons));
   return [base, ready, skool].filter(Boolean).join("\n\n");
 }
 

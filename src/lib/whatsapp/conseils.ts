@@ -204,15 +204,23 @@ export function parseSynth(raw: unknown): { contenu: string; a_verifier: string[
   };
 }
 
-// Catalogue des vidéos du Skool (table skool_lessons), donné aux brouillons pour
-// qu'ils renvoient l'élève vers la bonne vidéo avec son lien direct.
-export type SkoolLesson = { cours: string; module: string | null; titre: string; url: string };
+// Catalogue des leçons du Skool (table skool_lessons), donné aux brouillons pour
+// qu'ils renvoient l'élève vers la bonne leçon avec son lien direct. `video` :
+// la leçon a une vidéo sur Skool (metadata.videoId, vérifié). Sinon c'est une
+// page écrite (FAQ, texte) : jamais présentée comme une vidéo.
+export type SkoolLesson = { cours: string; module: string | null; titre: string; url: string; video?: boolean | null };
+
+// Identifiant de la leçon dans un lien Skool (?md=...), pour savoir si un lien
+// de support pointe vers une leçon avec vidéo.
+export function skoolLessonId(url: string | null | undefined): string | null {
+  return url?.match(/[?&]md=([0-9a-f]+)/i)?.[1]?.toLowerCase() ?? null;
+}
 
 export function formatSkoolLessons(rows: SkoolLesson[]): string {
   if (!rows.length) return "";
   const clean = (t: string) => t.replace(/<\/?[a-z_]+>/gi, "").replace(/\s+/g, " ").trim();
   return [
-    "## Vidéos du Skool (quand tu renvoies l'élève vers une vidéo, donne son lien direct)",
-    ...rows.map((r) => `- ${clean(r.cours)}${r.module ? ` > ${clean(r.module)}` : ""} : ${clean(r.titre)} : ${r.url}`),
+    "## Leçons du Skool (quand tu renvoies l'élève vers une leçon, donne son lien direct ; seules les lignes marquées (vidéo) sont des vidéos)",
+    ...rows.map((r) => `- ${r.video ? "(vidéo)" : "(page écrite, pas une vidéo)"} ${clean(r.cours)}${r.module ? ` > ${clean(r.module)}` : ""} : ${clean(r.titre)} : ${r.url}`),
   ].join("\n");
 }

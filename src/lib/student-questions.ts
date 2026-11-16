@@ -57,15 +57,21 @@ export function sortQuestions<T extends Pick<StudentQuestion, "nb_eleves" | "nb_
 
 // Supports déjà en place (faits, avec un lien), ajoutés à la base de conseils
 // des brouillons pour que l'IA donne le lien quand la question revient.
-export function formatSupports(rows: Pick<StudentQuestion, "intitule" | "statut" | "lien" | "note" | "support_titre">[]): string {
+export function formatSupports(
+  rows: Pick<StudentQuestion, "intitule" | "statut" | "lien" | "note" | "support_titre" | "support_format">[],
+  isVideo: (lien: string) => boolean = () => false,
+): string {
   const ready = rows.filter((r) => r.statut === "fait" && r.lien);
   if (!ready.length) return "";
   const clean = (s: string) => s.replace(/<\/?[a-z_]+>/gi, "").replace(/\s+/g, " ").trim();
   return [
-    "## Supports déjà prêts (donne le lien quand la question s'en rapproche)",
+    "## Supports déjà prêts (donne le lien quand la question s'en rapproche ; ce ne sont pas des vidéos, sauf ceux marqués vidéo)",
     ...ready.map((r) => {
       const what = clean(r.note || r.support_titre || "");
-      return `- Question : ${clean(r.intitule)}${what ? ` Support : ${what}.` : ""} Lien : ${r.lien}`;
+      // Le format noté (FAQ, modèle...) ne dit pas s'il y a une vidéo : seul le
+      // lien vers une leçon Skool avec vidéo le prouve.
+      const nature = isVideo(r.lien!) ? "vidéo" : `${clean(r.support_format || "support")}, pas une vidéo`;
+      return `- Question : ${clean(r.intitule)} Support (${nature})${what ? ` : ${what}` : ""}. Lien : ${r.lien}`;
     }),
   ].join("\n");
 }

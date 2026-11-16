@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import AdminNav from "@/components/admin/AdminNav";
+import { TONE_CLASSES } from "@/app/admin/eleves/shared";
+import { programStatus } from "@/lib/student-silence";
 import { awaitingReply, recentWindow } from "@/lib/whatsapp/messages";
 import { REACTIONS, sendWindowEnd } from "@/lib/whatsapp/send";
 
@@ -17,7 +19,7 @@ type Thread = {
   contact: string;
   contact_name: string | null;
   student_id: string | null;
-  student: { id: string; name: string; app: string | null } | null;
+  student: { id: string; name: string; app: string | null; start_date: string | null; archived: boolean } | null;
   last_inbound_at: string | null;
   last_outbound_at: string | null;
   last_live_inbound_at?: string | null; // dernier vrai message reçu (pas l'historique importé) : ouvre la fenêtre d'envoi
@@ -38,7 +40,7 @@ type Progress = {
   redaction?: { statut: "en_cours" | "fait"; maj: string };
   contenus?: { etapes: Step[]; maj: string; lien?: string | null; nb?: number };
 };
-type Message = { id: string; direction: "inbound" | "outbound"; type: string; body: string | null; transcript: string | null; transcript_error: string | null; sent_at: string };
+type Message = { id: string; direction: "inbound" | "outbound"; type: string; body: string | null; transcript: string | null; transcript_error: string | null; sent_at: string; auto?: boolean | null };
 type StudentOption = { id: string; name: string; phone: string | null };
 type Conseil = {
   theme: string;
@@ -98,8 +100,9 @@ function Bubble({ m }: { m: Message }) {
       <div
         className={`max-w-[82%] rounded-[14px] px-3 py-1.5 text-[14.5px] leading-snug shadow-[0_1px_0.5px_rgba(0,0,0,0.13)] ${
           mine ? "rounded-tr-[4px] bg-[var(--wa-out)]" : "rounded-tl-[4px] bg-[var(--wa-in)]"
-        }`}
+        } ${m.auto ? "opacity-70" : ""}`}
       >
+        {m.auto && <span className="block text-[12px] font-bold text-[var(--fg2)]">🤖 Réponse automatique, ne compte pas comme ta réponse</span>}
         {m.type === "audio" ? (
           <>
             <span className="block text-[12px] font-bold text-[var(--fg2)]">🎙️ Vocal transcrit</span>
@@ -272,6 +275,7 @@ function ThreadCard({ t, students, onChange }: { t: Thread; students: StudentOpt
   const from = !win || showAll ? 0 : win.start;
   const shown = messages ? messages.slice(from) : [];
   const name = nameOf(t);
+  const program = programStatus(t.student);
   const steps = preparationSteps(t, fresh, messages, Date.now());
   const contenusEnCours = Boolean(t.progress?.contenus && !t.progress.contenus.etapes.every((e) => e.statut === "fait"));
   const showSteps = waiting && (!fresh || contenusEnCours || steps.some((s) => s.statut !== "fait"));
@@ -284,15 +288,21 @@ function ThreadCard({ t, students, onChange }: { t: Thread; students: StudentOpt
           {initials(name)}
         </span>
         <div className="min-w-0 flex-1">
-          <h2 className="truncate text-[16px] font-bold">
-            {t.student ? (
-              <Link href={`/admin/eleves/${t.student.id}`} className="hover:underline">
-                {t.student.name}
-              </Link>
-            ) : (
-              name
-            )}
-          </h2>
+          <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
+            <h2 className="min-w-0 truncate text-[16px] font-bold">
+              {t.student ? (
+                <Link href={`/admin/eleves/${t.student.id}`} className="hover:underline">
+                  {t.student.name}
+                </Link>
+              ) : (
+                name
+              )}
+            </h2>
+            {/* Où en est l'accompagnement : pour savoir tout de suite qui écrit */}
+            <span className={`shrink-0 rounded-full px-2 py-0.5 text-[12px] font-bold ${TONE_CLASSES[program?.tone ?? "gray"]}`}>
+              {program?.label ?? "Sans fiche élève"}
+            </span>
+          </div>
           <p className={`truncate ${SMALL}`}>
             {isPhone(t.contact) ? `+${t.contact}` : "Numéro masqué par WhatsApp"}
             {t.student?.app ? ` · ${t.student.app}` : ""}

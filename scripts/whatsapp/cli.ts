@@ -52,7 +52,7 @@ async function main() {
       const contact = args[0];
       if (!contact) throw new Error("Usage : essai <numéro>");
       const { db, apiKey } = env();
-      const { data } = await db.from("whatsapp_messages").select("direction, type, body, transcript, transcript_error, sent_at, media_url").eq("contact", contact).order("sent_at", { ascending: false }).limit(40);
+      const { data } = await db.from("whatsapp_messages").select("direction, type, body, transcript, transcript_error, sent_at, media_url, auto").eq("contact", contact).order("sent_at", { ascending: false }).limit(40);
       const { data: t } = await db.from("whatsapp_threads").select("contact_name, student_id, last_outbound_at").eq("contact", contact).maybeSingle();
       const messages = ((data ?? []) as PromptMessage[]).reverse();
       const conseils = await loadConseils(db);

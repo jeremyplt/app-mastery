@@ -21,6 +21,25 @@ function endOf(start: string): string {
   return target.toISOString().slice(0, 10);
 }
 
+// Où en est l'accompagnement, pour savoir d'un coup d'œil qui écrit sur
+// WhatsApp. null : contact sans fiche élève. Les couleurs sont celles des
+// statuts de la page élèves (TONE_CLASSES).
+export function programStatus(
+  s: { start_date: string | null; archived?: boolean | null } | null,
+  now: Date = new Date(),
+): { label: string; tone: "green" | "orange" | "blue" | "gray" } | null {
+  if (!s) return null;
+  if (s.archived) return { label: "Élève archivé", tone: "gray" };
+  if (!s.start_date) return { label: "Accompagnement pas commencé", tone: "blue" };
+  const today = parisDay(now);
+  const day = (iso: string) => new Intl.DateTimeFormat("fr-FR", { day: "numeric", month: "short", timeZone: "UTC" }).format(new Date(`${iso}T12:00:00Z`));
+  if (s.start_date > today) return { label: `Commence le ${day(s.start_date)}`, tone: "blue" };
+  const end = endOf(s.start_date);
+  if (end < today) return { label: `Accompagnement fini le ${day(end)}`, tone: "gray" };
+  if (dayGap(today, end) <= 14) return { label: `Se termine le ${day(end)}`, tone: "orange" };
+  return { label: `En cours jusqu'au ${day(end)}`, tone: "green" };
+}
+
 // Dernier échange connu : noté à la main sur la fiche, ou lu sur WhatsApp
 // (message de l'élève ou réponse de Jeremy).
 export function lastExchange(lastContactAt: string | null, threads: ThreadDates[] | null | undefined): string | null {

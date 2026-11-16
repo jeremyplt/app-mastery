@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
     const contact = req.nextUrl.searchParams.get("contact");
     if (contact) {
       const rows = await withRetry(() =>
-        db.from("whatsapp_messages").select("id, direction, type, body, transcript, transcript_error, sent_at").eq("contact", contact).order("sent_at", { ascending: false }).limit(60),
+        db.from("whatsapp_messages").select("id, direction, type, body, transcript, transcript_error, sent_at, auto").eq("contact", contact).order("sent_at", { ascending: false }).limit(60),
       );
       return NextResponse.json({ messages: (rows ?? []).reverse() });
     }
@@ -30,7 +30,7 @@ export async function GET(req: NextRequest) {
     const day = new Date(Date.now() - 86_400_000).toISOString();
     const [threads, students, live] = await Promise.all([
       withRetry(() =>
-        db.from("whatsapp_threads").select("*, student:students(id, name, app)").or(`last_inbound_at.gte.${since},last_outbound_at.gte.${since}`).order("last_inbound_at", { ascending: false, nullsFirst: false }).limit(150),
+        db.from("whatsapp_threads").select("*, student:students(id, name, app, start_date, archived)").or(`last_inbound_at.gte.${since},last_outbound_at.gte.${since}`).order("last_inbound_at", { ascending: false, nullsFirst: false }).limit(150),
       ),
       withRetry(() => db.from("students").select("id, name, phone").eq("archived", false).order("name")),
       // Messages vraiment reçus ces dernières 24 h (pas l'historique importé) :
