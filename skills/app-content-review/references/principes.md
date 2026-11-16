@@ -40,7 +40,10 @@ Les élèves sont souvent trop sages. Ne pas hésiter à reprendre les phrases t
 ### 10. Dire concrètement ce que fait l'app
 Quand l'app est citée, écrire ce qu'elle donne : « elle te donne ton stock, te dit quand en racheter et quand c'est périmé ». Pas de formule floue comme « l'app me prévient avant la prochaine date » ou « tu vois tout d'un coup d'œil ». Test : quelqu'un qui ne connaît pas l'app comprend-il ce qu'il va obtenir ?
 
-### 11. Mesurer le bon chiffre
+### 11. Le montage se demande à Claude
+Monter, flouter un nom, poser les phrases, ajouter la voix : l'élève donne ses rushs et son script à Claude. Ne jamais écrire « dans CapCut » ni conseiller un logiciel de montage (Jeremy, 12 nov. 2026).
+
+### 12. Mesurer le bon chiffre
 Comparer les vidéos sur les téléchargements et les abonnements, pas seulement les vues. Refaire ce qui amène des téléchargements, avec une autre situation.
 
 ## Ce qu'il ne faut PAS relever

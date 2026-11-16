@@ -2,6 +2,10 @@
 
 Les plus récentes en haut. Elles priment sur le reste.
 
+## 2026-11-12 , Pharma Stock (Kevin), vidéos sans boîte ni code
+- **Outil de montage :** j'avais écrit « Floute les noms dans CapCut » et « Tout se monte dans CapCut ». Jeremy : « On utilise pas CapCut, come on, on est en 2026, on demande à Claude de le faire ». Le montage, le floutage, les sous-titres et la pose des textes se font en demandant à Claude. Ne jamais conseiller CapCut ni un autre logiciel de montage à un élève.
+- **Pilulier rempli à la main, rejeté :** modèle à 6,7 M de vues (mains seules, gélules dans un pilulier), avec le rappel de prise de l'app en dernier plan. Jeremy : « il est pas intéressant ». Gardés : « expliqué par des chats » et le combo en une image. Ne pas le reproposer pour Pharma Stock.
+
 ## 2026-11-06 , Phil'O (Antoine), suite
 - **Accroche trop éloignée de l'inspiration :** Focus Tree dit CONTROL YOURSELF, et j'avais écrit ARRÊTE DE RUMINER. Jeremy : « c'est pas trop le genre de phrase d'accroche qui marche et qui correspond à ce que l'inspiration fait ». L'original ne nomme aucun problème, c'est un ordre de deux mots. Traduire d'abord la phrase de l'inspiration (CONTRÔLE-TOI), et ne s'en éloigner que si elle sonne faux pour l'app.
 - **Phrases robotiques :** « Phil' triste, une mission, les points qui montent, Phil' qui sourit » et « la phrase disparaît dès que le téléphone doit se lire ». Jeremy : « Évite les tournures robotiques et saccadées », « Parle normalement », « pas très naturel ». Écrire de vraies phrases partout, y compris dans les légendes des plans et la description des vidéos modèles. Test : est-ce que je le dirais comme ça à voix haute ?

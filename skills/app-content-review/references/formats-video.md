@@ -24,6 +24,8 @@ Vidéos regardées image par image le 4 nov. 2026. Chiffres relevés dans la rec
 ### « Expliqué par des chats » (Kitty)
 - **Référence :** [4,9 M, sans visage, 45 s](https://www.tiktok.com/@kittyweight/video/7567016921816714526).
 - **Mécanique :** fond blanc, titre noir écrit à la main, un mot en rouge, chat détouré. Un mème par phrase, un seul mot à l'écran, voix qui raconte. « ÉTAPE 4 : » sur fond blanc, l'app tenue par des pattes de chat. Aucun tournage. Très bon pour un élève qui a déjà sa voix.
+- **En français (vérifié le 12 nov. 2026) :** [Minou explique](https://www.tiktok.com/@minou.explique), 143 000 vues de médiane sur 60 vidéos, santé comprise (TDAH 1,5 M, caféine 1,1 M, gueule de bois 733 000) ; [Koan](https://www.tiktok.com/@koan_le_lapin/video/7571033582332923158), les règles, 1 M. Fond blanc froissé, petite phrase noire en haut, titre en grosses lettres jaunes bordées de noir, voix off qui raconte une histoire du chat, fin « AIMEZ, PARTAGEZ ». Ces comptes n'ont pas d'app : on garde leur histoire et on finit comme Kitty (l'app tenue par des pattes, puis « Minou ne garde pas le secret » et la bannière App Store).
+- **Validé par Jeremy pour Pharma Stock (12 nov. 2026)**, envoyé à Kevin : « La fièvre à 3 h du matin, expliquée par Minou ». Bon choix quand l'élève ne peut rien montrer (ni produit, ni nom, ni code, ni visage).
 
 ### Plusieurs types de personnes, à la même heure
 - **Référence :** « 3 types d'étudiants », [17,1 M, 320 715 likes, 10 s](https://www.instagram.com/reel/DU_DxeJiH8c/).

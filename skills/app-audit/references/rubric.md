@@ -46,6 +46,10 @@ Si l'app n'est pas encore publiée : reporter l'ASO à plus tard (une fois publi
 - **Animation** : slides animées (2-3 s en boucle), montrer les interactions automatiquement (drag and drop) pour l'effet wow et faire comprendre un concept sans lire.
 - **Démontrer, ne pas mettre l'app dans l'app** : bannir les mockups de téléphone en in-app (ça relève du marketing store).
 - **Ordre des questions logique**, récolte toutes les infos nécessaires.
+- **Ordre d'une vraie rencontre** : faire connaissance et laisser l'utilisateur parler de son problème AVANT de présenter l'app (démo, mascotte, choix du mode). Une démo avant les questions = onboarding à l'envers (Lazely, 2026-11-10).
+- **Barre de progression** sur tous les écrans de l'onboarding.
+- **Tout demander avant le paywall** : autorisations (Temps d'écran, notifications), réglages, première session. Plusieurs « oui » avant le paywall.
+- **Première version = onboarding classique et animé** (Duolingo, Shinobi, mascotte qui parle). Les formats originaux (conversation à choix) se testent plus tard, avec des statistiques.
 - **Prénom demandé EN PREMIER** (avant toute question diagnostic) puis réutilisé ("Quel est ton objectif, Livio ?"). Pas de prénom = trop froid. Si l'app a une mascotte, c'est ELLE qui se présente et le demande ("Salut, moi c'est... Et toi, comment tu t'appelles ?") : la mascotte porte tout l'onboarding en format dialogue (Duolingo, Brilliant, Shinobi). Pas besoin de l'animer au début, des illustrations suffisent.
 - **Annoncer un test/quiz avant de le commencer** ("On va te poser quelques questions pour définir ta personnalité, prêt ?") : donne l'objectif, permet ensuite "en fonction de ta personnalité, voici le plan recommandé".
 - **Écrans d'affirmation intercalés dans les questionnaires longs** (sinon effet interrogatoire) : aérer, appuyer sur la douleur, rassurer, positionner l'app en source d'autorité. Social proof chiffré ("80 % des gens font face au même problème", "97 % l'ont résolu en une semaine"), en visuel (graphique, illustration), pas en pavé de texte.
@@ -137,7 +141,9 @@ Si l'app n'est pas encore publiée : reporter l'ASO à plus tard (une fois publi
 - **Navigation stack** : pas d'empilement infini (retour qui re-navigue en avant → crashs mémoire Android).
 - **TTS / contenu** : qualité de prononciation, contenu erroné ("To + -ing n'existe pas").
 
-## 9. Data à instrumenter / vérifier (si applicable)
+## 9. Données à envoyer (on analyse ensemble)
+
+L'élève n'analyse pas seul : la section liste les événements exacts à envoyer (Mixpanel, PostHog, Metabase, à son choix), en tableau « événement / quand / avec quelles infos », avec le même identifiant utilisateur partout (analytics et RevenueCat). Elle demande aussi un seul endroit pour les retours « Signaler un problème » (texte, capture, version, iPhone, iOS, utilisateur) et les plantages (Sentry ou Crashlytics), et l'accès en lecture pour Jeremy. Ce point va aussi dans la synthèse. Ce qu'on doit pouvoir mesurer :
 
 - Funnel d'onboarding : % de drop entre chaque étape.
 - Taux de conversion (Trial et Paying).
