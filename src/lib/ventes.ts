@@ -13,6 +13,7 @@ import { silentDays, type ThreadDates } from "@/lib/student-silence";
 import { reminderDue, studentReminderDue, studentReminderKey, type StudentReminderRow } from "@/lib/payment-reminders";
 import { sendQuestionnaire } from "@/lib/questionnaire";
 import { sendMonthlyRecap, sendUnlockAlerts } from "@/lib/commissions";
+import { loadPipeline, pipelineLines } from "@/lib/pipeline";
 
 export { reminderDue };
 
@@ -617,9 +618,16 @@ async function sendDailyDigest(sales: Sale[], now: Date): Promise<boolean> {
   const students = await studentDeadlines(today, isMonday, now);
   due.push(...students.due);
   late.push(...students.late);
+  // Le lundi, le pipeline de la semaine (leads et RDV) ; best-effort.
+  const pipeline = isMonday
+    ? await loadPipeline(now).then(pipelineLines).catch((err) => {
+        console.error("Point du jour : pipeline non calculé", err);
+        return [] as string[];
+      })
+    : [];
 
   await supabase.from("site_settings").upsert({ key: "ventes_digest", value: { day: today }, updated_at: now.toISOString() });
-  if (!due.length && !late.length && !unsigned.length && !students.ends.length && !students.bilans.length && !students.silent.length) return false;
+  if (!due.length && !late.length && !unsigned.length && !students.ends.length && !students.bilans.length && !students.silent.length && !pipeline.length) return false;
 
   const list = (items: string[]) => items.map((i) => `• ${i}`).join("<br>");
   const lines: string[] = [];
@@ -629,17 +637,25 @@ async function sendDailyDigest(sales: Sale[], now: Date): Promise<boolean> {
   if (students.ends.length) lines.push(`<b>🏁 Fins d'accompagnement</b><br>${list(students.ends)}`);
   if (students.bilans.length) lines.push(`<b>📋 Bilans (fin de garantie)</b><br>${list(students.bilans)}`);
   if (students.silent.length) lines.push(`<b>🔕 Sans nouvelles depuis une semaine</b> (d'après WhatsApp : un petit message de ta part peut les relancer)<br>${list(students.silent)}`);
+  if (pipeline.length) lines.push(`<b>📈 Pipeline de la semaine</b><br>${list(pipeline)}`);
   const count = due.length + late.length;
   const onlyStudents = !count && !unsigned.length;
+  const studentItems = students.ends.length + students.bilans.length + students.silent.length;
   await alertJeremy(
     count
       ? `💶 ${count} virement${count > 1 ? "s" : ""} à vérifier aujourd'hui`
       : unsigned.length
         ? "✍️ Des contrats attendent une signature"
-        : "📅 Échéances élèves du jour",
+        : studentItems
+          ? "📅 Échéances élèves du jour"
+          : "📈 Pipeline de la semaine",
     lines,
     "vente-admin-jour",
-    onlyStudents ? { label: "Ouvrir les élèves", href: `${SITE}/admin/eleves` } : undefined,
+    onlyStudents
+      ? studentItems
+        ? { label: "Ouvrir les élèves", href: `${SITE}/admin/eleves` }
+        : { label: "Ouvrir le CRM", href: `${SITE}/admin/crm` }
+      : undefined,
   );
   return true;
 }
