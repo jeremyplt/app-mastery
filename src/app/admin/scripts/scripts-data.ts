@@ -600,14 +600,14 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
     ),
     lesson(
       25,
-      "Le même script, tourné par quatre créateurs, a fait de 1 701 à 428 500 vues",
-      `Même phrase, même son, même durée, pour une app d'investissement. Une version a fait 428 500 vues, une autre 1 701. Le contenu n'explique pas tout. C'est pour ça qu'il faut poster un format au moins dix fois avant de le juger.`,
-      `Les 4 vidéos Bloom côte à côte avec leurs vues (428 500, 229 100, 165 600, 1 701).`
+      "Le même script, tourné par trois créateurs, a fait de 1 701 à 428 500 vues",
+      `Même phrase à un détail près, même son, même durée, pour une app d'investissement. Une version a fait 428 500 vues, une autre 1 701. Le contenu n'explique pas tout. C'est pour ça qu'il faut poster un format au moins dix fois avant de le juger.`,
+      `Les 3 vidéos Bloom côte à côte avec leurs vues (428 500, 165 600, 1 701).`
     ),
     lesson(
       26,
       "Un compte qui répète le même format décroche un gros chiffre de temps en temps",
-      `Une app de scan, Tallow, a posté huit vidéos au même format : 2,9 millions, 2,6 millions, 1,7 million, puis entre 69 000 et 89 000 vues. SideMe ne change que l'accroche et garde toujours les mêmes plans. Tu ne cherches pas une idée par jour, tu déclines le format qui marche.`,
+      `Une app de scan, Tallow, a posté huit vidéos avec la même phrase d'appel : 2,9 millions, 2,6 millions, 1,7 million, puis entre 69 000 et 89 000 vues. SideMe ne change que l'accroche et garde toujours les mêmes plans. Tu ne cherches pas une idée par jour, tu déclines le format qui marche.`,
       `Les 8 vidéos Tallow en grille avec leurs vues.`
     ),
     {
