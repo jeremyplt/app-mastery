@@ -26,7 +26,9 @@ create table public.video_emails (
   recipients integer,
   missing integer,
   attempts integer not null default 0,
-  error text
+  error text,
+  -- Élève cité dans l'email (florian, wassim ou null) : on alterne.
+  eleve text check (eleve in ('florian', 'wassim'))
 );
 create index video_emails_statut_idx on public.video_emails (statut) where statut in ('a_faire', 'en_cours', 'erreur');
 -- Lu et écrit seulement côté serveur (clé service) : aucune politique publique.

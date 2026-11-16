@@ -11,9 +11,9 @@ export type VideoEmail = {
   bouton: string;
   // Une leçon de la vidéo, après le bouton.
   apresBouton: string[];
-  // Paragraphe sur Florian (preuve), suivi de son tableau de bord. Vide : la
+  // Paragraphe sur un élève (preuve), suivi de son tableau de bord. Null : la
   // seule image de l'email est alors la miniature de la vidéo.
-  florian: string;
+  preuve: { eleve: EleveId; texte: string } | null;
   // Phrase qui présente le cadeau, puis le texte du lien. Null sans cadeau.
   cadeau: { phrase: string; lien: string } | null;
   // Le P.S. sans « P.S. » ni lien : le lien « réserver mon appel » est ajouté.
@@ -28,12 +28,47 @@ export type RenderContext = {
   tag: string;
 };
 
-// Florian plutôt que Wassim dans les envois groupés : tous les leads reçoivent
-// déjà l'histoire de Wassim dans les séquences (décision du 16 nov. 2026).
-export const FLORIAN_FACTS =
-  "Florian, un des élèves que Jeremy accompagne, a posté ses vidéos depuis son téléphone, sans dépenser un euro en publicité, et son application de productivité est passée de 0 à 1 793 $ en 28 jours.";
-const FLORIAN_IMAGE = `${SITE}/emails/florian-revenuecat-1793-v2.jpg`;
-const FLORIAN_CAPTION = "Voilà le tableau de bord de Florian sur 28 jours, sans une seule pub.";
+// Les deux élèves qu'on peut citer dans ces emails. Jeremy (16 nov. 2026) :
+// alterner entre Florian et Wassim selon le récit qui colle à la vidéo, ce
+// qu'ils ont mis en place et les problèmes qu'ils ont eus. Faits vérifiés
+// (/temoignages, podcast de Wassim, script A) : Claude n'en utilise pas d'autres.
+export type EleveId = "florian" | "wassim";
+
+export const ELEVES: Record<EleveId, { prenom: string; faits: string[]; montants: string[]; image: string; alt: string; legende: string }> = {
+  florian: {
+    prenom: "Florian",
+    faits: [
+      "Florian, 20 ans, a une application de productivité (blocage d'apps, routines, temps d'écran, Pomodoro). On ne donne jamais le nom de son app.",
+      "Fin mai 2026, il postait deux à trois carrousels par jour. Ils faisaient 700 à 1 000 vues chacun, et son app faisait deux à cinq téléchargements par jour.",
+      "Ses carrousels faisaient des vues mais pas assez de téléchargements. Il est passé à des formats où l'app est la raison d'être de la vidéo, par exemple il se filme en train de réagir, choqué, puis on voit l'app marcher. Mi-juin, il faisait des journées à plus de 100 téléchargements, presque 200.",
+      "Dès qu'un format marchait, il en sortait un ou deux par jour, et il le postait aussi sur YouTube Shorts.",
+      "Il a mis une automatisation : chaque personne qui commente sa vidéo reçoit directement le lien de l'app.",
+      "Son erreur : en Asie, il postait avec un VPN et multipliait les comptes. Début juin, ses vues sont tombées à 10, 11 ou 30 par vidéo, et il a dû recréer des comptes propres et les chauffer avant de repartir.",
+      "Il a fait un million de vues sur Instagram en un mois, avec des reels à 100 000 et 200 000 vues.",
+      "En sept semaines environ, il est passé de deux à cinq téléchargements par jour à 1 793 $ de revenus sur 28 jours, sans un euro de publicité, en postant depuis son téléphone.",
+    ],
+    montants: ["1 793"],
+    image: `${SITE}/emails/florian-revenuecat-1793-v2.jpg`,
+    alt: "Tableau de bord RevenueCat de Florian : 1 793 $ de revenus sur 28 jours",
+    legende: "Voilà le tableau de bord de Florian sur 28 jours, sans une seule pub.",
+  },
+  wassim: {
+    prenom: "Wassim",
+    faits: [
+      "Wassim, 22 ans, a une application de style et de mode avec l'IA. On ne donne jamais le nom de son app. Il est accompagné depuis début août 2026.",
+      "Ses premiers carrousels de 12 ou 13 images, avec l'appel à l'action à la fin, faisaient des milliers de vues mais ne faisaient pas télécharger. On a déplacé l'appel à l'action au milieu du carrousel.",
+      "Il a refait pour son app des contenus qui marchaient déjà dans sa niche, puis il est passé à des démonstrations de l'app à 100 %, ce qui lui a amené un public vraiment intéressé.",
+      "Une étape photo de son onboarding faisait partir 15 % des gens. Avec le nouvel onboarding et le nouveau paywall, 80 % des gens arrivent jusqu'au paywall.",
+      "Son vrai problème : son contenu attirait des mineurs. La moitié de ses utilisateurs avaient moins de 17 ans, et seulement 2 % d'entre eux prenaient l'essai, contre dix fois plus chez les 25-34 ans. Il a orienté son contenu vers un public plus âgé, et ses revenus ont décollé.",
+      "Sa méthode de contenu : il repère des apps qui explosent, même hors de sa niche, fait adapter leur script à son app par Claude, se filme face caméra pour l'accroche puis filme l'app sur son iPhone, sans montage. 3 à 4 heures par jour, au moins 4 comptes, 3 vidéos par compte et par jour.",
+      "Résultat : 7 269 $ en 14 jours, avec une journée à 1 700 $ portée par une vidéo à plus de 700 000 vues, 100 % en organique, sans un euro de publicité, et seul.",
+    ],
+    montants: ["7 269", "1 700"],
+    image: `${SITE}/emails/wassim-revenuecat-7269-v1.jpg`,
+    alt: "Tableau de bord RevenueCat de Wassim : 7 269 $ de revenus, 251 abonnements actifs, 232 essais en cours",
+    legende: "Voilà le tableau de bord de Wassim, sans une seule pub.",
+  },
+};
 
 export const GREETING = "{% if contact.FIRSTNAME %}Salut {{ contact.FIRSTNAME }},{% else %}Salut,{% endif %}";
 
@@ -54,9 +89,12 @@ function thumbnail(videoUrl: string, src: string): string {
 
 export function renderVideoEmail(e: VideoEmail, ctx: RenderContext): string {
   const parts: string[] = [`<p ${P}>${GREETING}</p>`, ...e.avantBouton.map(para)];
-  if (!e.florian) parts.push(thumbnail(ctx.videoUrl, ctx.thumbnailUrl));
+  if (!e.preuve) parts.push(thumbnail(ctx.videoUrl, ctx.thumbnailUrl));
   parts.push(button(e.bouton, ctx.videoUrl), ...e.apresBouton.map(para));
-  if (e.florian) parts.push(para(e.florian), image(FLORIAN_IMAGE, "Tableau de bord RevenueCat de Florian : 1 793 $ de revenus sur 28 jours", FLORIAN_CAPTION));
+  if (e.preuve) {
+    const eleve = ELEVES[e.preuve.eleve];
+    parts.push(para(e.preuve.texte), image(eleve.image, eleve.alt, eleve.legende));
+  }
   if (e.cadeau && ctx.giftUrl) parts.push(`<p ${P}>${esc(e.cadeau.phrase)} : ${link(withUtm(ctx.giftUrl, ctx.tag), e.cadeau.lien)}.</p>`);
   parts.push(signature("À très vite"));
   parts.push(`<p style="margin:26px 0 0;font-size:15px;line-height:1.6;color:#55555c">P.S. ${esc(e.ps)} : ${link(withUtm(`${SITE}/appel`, ctx.tag), "réserver mon appel")}.</p>`);
@@ -79,8 +117,11 @@ export const PREWRITTEN: Record<string, { tag: string; email: VideoEmail }> = {
       apresBouton: [
         "Il y a une leçon qui m'a surpris plus que les autres. Le même script, tourné mot pour mot par quatre créateurs différents, a fait 428 500 vues chez l'un et 1 701 chez un autre. Le contenu ne fait pas tout : ceux qui gagnent sont ceux qui postent le même format assez de fois pour qu'une vidéo finisse par décoller.",
       ],
-      florian:
-        "Florian, un des élèves que j'accompagne, l'a bien compris. Il a posté ses vidéos depuis son téléphone, sans dépenser un euro en publicité, et son application de productivité est passée de 0 à 1 793 $ en 28 jours.",
+      preuve: {
+        eleve: "florian",
+        texte:
+          "Florian, un des élèves que j'accompagne, l'a bien compris. Il a posté ses vidéos depuis son téléphone, sans dépenser un euro en publicité, et son application de productivité est passée de 0 à 1 793 $ en 28 jours.",
+      },
       cadeau: {
         phrase: "Si tu veux garder les 32 leçons sous la main, avec le lien vers une vraie vidéo d'exemple pour chacune, je les ai mises dans une checklist gratuite",
         lien: "récupérer la checklist des 32 leçons",
@@ -94,12 +135,17 @@ export const PREWRITTEN: Record<string, { tag: string; email: VideoEmail }> = {
 // peut oublier. Renvoie la liste des problèmes (vide si tout va bien).
 const FORBIDDEN: [RegExp, string][] = [
   [/[—–]/, "tiret long"],
-  [/wassim|dress ?code/i, "Wassim (réservé aux séquences)"],
+  [/dress ?code/i, "nom de l'app de Wassim"],
   [/\bformation\b/i, "« formation »"],
   [/blueprint|\bcopy\b|\bvivante?s?\b|transversal|reverse trial|sans coder/i, "mot banni"],
   [/https?:|www\.|<|>|\{|\}/i, "lien ou balise dans le texte"],
   [/^p\.?\s?s\.?\s/i, "« P.S. » en double"],
 ];
+
+// Montants en dollars ou en euros d'un texte, chiffres groupés (« 7 269 »).
+export function amounts(text: string): string[] {
+  return [...text.matchAll(/(\d{1,3}(?:[\s\u00a0\u202f]\d{3})*|\d+)\s?(?:\$|€|dollars?\b|euros?\b)/g)].map((m) => m[1].replace(/[\s\u00a0\u202f]/g, " "));
+}
 
 // L'email validé de la vidéo B fait environ 330 mots, salutation comprise.
 export const MAX_WORDS = 340;
@@ -117,8 +163,23 @@ export function checkEmail(e: VideoEmail): string[] {
   if (e.apresBouton.length > 2) problems.push("2 paragraphes au plus après le bouton");
   if (!e.bouton.trim() || e.bouton.length > 40) problems.push("texte du bouton vide ou trop long");
   if (!e.ps.trim()) problems.push("P.S. vide");
-  if (e.florian && !(e.florian.includes("Florian") && e.florian.includes("1 793"))) problems.push("le paragraphe sur Florian doit reprendre ses vrais chiffres (1 793 $)");
-  const texts = [e.objet, e.apercu, e.bouton, ...e.avantBouton, ...e.apresBouton, e.florian, e.cadeau?.phrase ?? "", e.cadeau?.lien ?? "", e.ps];
+  // Les élèves ne sont cités que dans le paragraphe de preuve, avec leurs vrais
+  // montants (ceux de leur tableau de bord) et aucun autre.
+  const outside = [e.objet, e.apercu, e.bouton, ...e.avantBouton, ...e.apresBouton, e.cadeau?.phrase ?? "", e.cadeau?.lien ?? "", e.ps];
+  if (outside.some((t) => /florian|wassim/i.test(t))) problems.push("élève cité hors du paragraphe de preuve");
+  if (e.preuve) {
+    const eleve = ELEVES[e.preuve.eleve];
+    if (!eleve) problems.push("élève inconnu");
+    else {
+      if (!e.preuve.texte.includes(eleve.prenom)) problems.push(`le paragraphe de preuve doit nommer ${eleve.prenom}`);
+      const found = amounts(e.preuve.texte);
+      if (!found.some((m) => eleve.montants.includes(m))) problems.push(`le paragraphe sur ${eleve.prenom} doit reprendre un de ses vrais montants (${eleve.montants.map((m) => `${m} $`).join(" ou ")})`);
+      const wrong = found.filter((m) => !eleve.montants.includes(m));
+      if (wrong.length) problems.push(`montants inconnus pour ${eleve.prenom} : ${wrong.join(", ")}`);
+      if (/florian|wassim/i.test(e.preuve.texte.replaceAll(eleve.prenom, ""))) problems.push("un seul élève par email");
+    }
+  }
+  const texts = [...outside, e.preuve?.texte ?? ""];
   for (const [re, label] of FORBIDDEN) {
     if (label === "« P.S. » en double" ? re.test(e.ps.trim()) : texts.some((t) => re.test(t))) problems.push(label);
   }

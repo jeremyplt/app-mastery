@@ -1,9 +1,9 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { SCRIPTS } from "../../app/admin/scripts/scripts-data";
-import { PREWRITTEN, checkEmail, matchScript, renderVideoEmail, type VideoEmail } from "../video-email/content";
+import { ELEVES, PREWRITTEN, amounts, checkEmail, matchScript, renderVideoEmail, type VideoEmail } from "../video-email/content";
 import { planNewVideos, prepareEmail, selectRecipients, videoTag } from "../video-email/job";
-import { parseWritten } from "../video-email/write";
+import { WRITE_SYSTEM, buildWritePrompt, parseWritten } from "../video-email/write";
 import { findGift, isLongVideo, parseDuration, videoCampaign, type Upload } from "../video-email/youtube";
 
 const DESCRIPTION_B = `🎁 La checklist GRATUITE des 32 leçons, avec une vraie vidéo d'exemple pour chacune : https://www.jeremypitault.com/guide/32-lecons-videos?utm_source=youtube&utm_medium=video&utm_campaign=analyse-1633-videos
@@ -86,7 +86,7 @@ const written: VideoEmail = {
   avantBouton: ["Mon app a dépassé les 40 000 $ de revenus en un seul mois.", "Je te montre tout dans la vidéo."],
   bouton: "Regarder la vidéo",
   apresBouton: ["Le hard paywall a changé nos chiffres sur iOS."],
-  florian: "",
+  preuve: null,
   cadeau: null,
   ps: "Si tu veux qu'on regarde ton app ensemble, tu peux réserver un appel avec mon associé Nolan ou avec moi",
 };
@@ -102,18 +102,22 @@ test("sans Florian, la miniature cliquable est la seule image ; sans cadeau, pas
 test("les contrôles refusent ce que Jeremy ne veut pas voir", () => {
   assert.deepEqual(checkEmail(written), []);
   const bad = (over: Partial<VideoEmail>) => checkEmail({ ...written, ...over });
-  assert.ok(bad({ avantBouton: ["Wassim a fait 7 269 $ en 14 jours."] }).length);
+  assert.ok(bad({ avantBouton: ["Wassim a fait 7 269 $ en 14 jours."] }).includes("élève cité hors du paragraphe de preuve"));
   assert.ok(bad({ apresBouton: ["Une vidéo — et tout change."] }).includes("tiret long"));
   assert.ok(bad({ apresBouton: ["Va sur https://exemple.com"] }).length);
   assert.ok(bad({ avantBouton: ["Dans la formation, je montre tout."] }).length);
   assert.ok(bad({ ps: "P.S. Réserve ton appel" }).length);
   assert.ok(bad({ objet: "Le secret que personne ne te dit jamais" }).length, "objet trop long");
-  assert.ok(bad({ florian: "Florian a fait des millions." }).length, "chiffres de Florian inventés");
+  assert.ok(bad({ preuve: { eleve: "florian", texte: "Florian a fait des millions." } }).length, "sans son vrai montant");
+  assert.ok(bad({ preuve: { eleve: "wassim", texte: "Wassim a fait 7 300 $ en 14 jours." } }).some((p) => p.startsWith("montants inconnus")), "seuls les montants de son tableau de bord");
+  assert.ok(bad({ preuve: { eleve: "wassim", texte: "Wassim a fait 7 269 $, comme Florian." } }).includes("un seul élève par email"));
+  assert.ok(bad({ preuve: { eleve: "wassim", texte: "Wassim a lancé DressCode et fait 7 269 $." } }).length, "jamais le nom de son app");
+  assert.deepEqual(bad({ preuve: { eleve: "wassim", texte: "Wassim a recentré son contenu sur les 25-34 ans, et son app a fait 7 269 $ en 14 jours, dont 1 700 $ en une journée." } }), []);
   assert.deepEqual(bad({ apresBouton: ["Un survivant de l'App Store."] }), [], "« survivant » n'est pas « vivant »");
 });
 
 test("réponse de Claude nettoyée : deux-points finaux retirés, pas de cadeau sans lien", () => {
-  const raw = { objet: " 40 000 $ ", apercu: "a", avant_bouton: ["x", " "], bouton: "", apres_bouton: [], florian: "", cadeau_phrase: "Je te donne le pack :", cadeau_lien: "récupérer le pack.", ps: "Réserve ton appel :" };
+  const raw = { objet: " 40 000 $ ", apercu: "a", avant_bouton: ["x", " "], bouton: "", apres_bouton: [], eleve: "", preuve: "", cadeau_phrase: "Je te donne le pack :", cadeau_lien: "récupérer le pack.", ps: "Réserve ton appel :" };
   const withGift = parseWritten(raw, true);
   assert.equal(withGift.objet, "40 000 $");
   assert.deepEqual(withGift.avantBouton, ["x"]);
@@ -147,4 +151,27 @@ test("au premier passage, les vidéos déjà en ligne sont seulement notées", (
   const later = planNewVideos([recent, old], new Set(), false, now);
   assert.deepEqual(later.map((r) => [r.video_id, r.statut]), [["recent", "a_faire"], ["old", "ignoree"]]);
   assert.deepEqual(planNewVideos([recent], new Set(["recent"]), false, now), []);
+});
+
+test("montants relevés dans un texte, chiffres groupés", () => {
+  assert.deepEqual(amounts("7 269 $ en 14 jours, dont 1 700 dollars, et 40 000 € ; 3 vidéos"), ["7 269", "1 700", "40 000"]);
+});
+
+test("Wassim cité : son paragraphe, puis son tableau de bord comme seule image", () => {
+  const e: VideoEmail = { ...written, preuve: { eleve: "wassim", texte: "Wassim a fait 7 269 $ en 14 jours." } };
+  const html = renderVideoEmail(e, { videoUrl: "https://www.youtube.com/watch?v=x", thumbnailUrl: "https://i.ytimg.com/vi/x/maxresdefault.jpg", giftUrl: null, tag: "t" });
+  assert.ok(html.includes("wassim-revenuecat-7269-v1.jpg"));
+  assert.ok(html.includes(ELEVES.wassim.legende));
+  assert.ok(!html.includes("i.ytimg.com"));
+});
+
+test("Claude reçoit les deux parcours, et l'élève du dernier email pour alterner", () => {
+  assert.ok(WRITE_SYSTEM.includes("moitié de ses utilisateurs avaient moins de 17 ans"));
+  assert.ok(WRITE_SYSTEM.includes("VPN"));
+  assert.ok(!/dress ?code/i.test(WRITE_SYSTEM));
+  assert.match(buildWritePrompt(upload(), null, null, [], "florian"), /dernier email de sortie parlait de Florian/);
+  assert.doesNotMatch(buildWritePrompt(upload(), null, null), /dernier email/);
+  const raw = { objet: "a b", apercu: "a", avant_bouton: ["x"], bouton: "b", apres_bouton: [], eleve: "wassim", preuve: "Wassim a fait 7 269 $.", cadeau_phrase: "", cadeau_lien: "", ps: "p" };
+  assert.deepEqual(parseWritten(raw, false).preuve, { eleve: "wassim", texte: "Wassim a fait 7 269 $." });
+  assert.equal(parseWritten({ ...raw, eleve: "elouan" }, false).preuve, null);
 });

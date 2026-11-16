@@ -2,7 +2,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { SCRIPTS } from "@/app/admin/scripts/scripts-data";
 import type { VideoScript } from "@/app/admin/scripts/types";
 import { CAMPAIGNS_URL, addEmailsToList, createDraftCampaign, createList, findDraftByName } from "./brevo";
-import { PREWRITTEN, checkEmail, matchScript, renderVideoEmail, type VideoEmail } from "./content";
+import { PREWRITTEN, checkEmail, matchScript, renderVideoEmail, type EleveId, type VideoEmail } from "./content";
 import { writeVideoEmail } from "./write";
 import { fetchUploads, findGift, isLongVideo, videoCampaign, videoUrl, type Upload } from "./youtube";
 
@@ -98,7 +98,7 @@ export type PreparedEmail = { email: VideoEmail; html: string; tag: string; sour
 
 // L'email d'une vidéo, sans rien créer nulle part (sert aussi à l'essai).
 // `videoLink` : lien du bouton pour un essai avant la sortie (page de la chaîne).
-export async function prepareEmail(v: Upload, opts: { write?: typeof writeVideoEmail; localLogin?: boolean; videoLink?: string } = {}): Promise<PreparedEmail> {
+export async function prepareEmail(v: Upload, opts: { write?: typeof writeVideoEmail; localLogin?: boolean; videoLink?: string; dernierEleve?: EleveId | null } = {}): Promise<PreparedEmail> {
   // Le script de la vidéo : même utm_campaign dans la description (copiée depuis
   // /admin/scripts), sinon un titre assez proche.
   const campaign = videoCampaign(v.description);
@@ -106,11 +106,11 @@ export async function prepareEmail(v: Upload, opts: { write?: typeof writeVideoE
   const pre = script ? PREWRITTEN[script.slug] : undefined;
   const gift = findGift(v.description) ?? (script ? { url: script.gift.url.split("?")[0], line: script.gift.name } : null);
   const tag = pre?.tag ?? videoTag(v);
-  const email = pre ? pre.email : await (opts.write ?? writeVideoEmail)(v, gift, script, { localLogin: opts.localLogin });
+  const email = pre ? pre.email : await (opts.write ?? writeVideoEmail)(v, gift, script, { localLogin: opts.localLogin, dernierEleve: opts.dernierEleve });
   const problems = checkEmail(email);
   if (problems.length) throw new Error(`Email refusé par les contrôles : ${problems.join(" ; ")}`);
-  // La miniature n'est l'image de l'email que s'il ne parle pas de Florian.
-  const thumb = email.florian ? "" : await thumbnailUrl(v.id);
+  // La miniature n'est l'image de l'email que s'il ne cite aucun élève.
+  const thumb = email.preuve ? "" : await thumbnailUrl(v.id);
   const html = renderVideoEmail(email, { videoUrl: opts.videoLink ?? videoUrl(v.id), thumbnailUrl: thumb, giftUrl: gift?.url ?? null, tag });
   return { email, html, tag, source: pre ? "prérédigé" : "claude", script };
 }
@@ -121,7 +121,10 @@ async function processVideo(env: VideoEmailEnv, row: Row, v: Upload): Promise<st
   const db = env.db;
   const stamp = () => new Date().toISOString();
   await db.from("video_emails").update({ statut: "en_cours", attempts: row.attempts + 1, updated_at: stamp() }).eq("video_id", v.id);
-  const prepared = await prepareEmail(v, { write: env.write });
+  // Florian et Wassim alternent quand les deux collent aussi bien à la vidéo.
+  const { data: last } = await db.from("video_emails").select("eleve").eq("statut", "brouillon").not("eleve", "is", null).order("published_at", { ascending: false }).limit(1);
+  const dernierEleve = (last?.[0]?.eleve as EleveId | undefined) ?? null;
+  const prepared = await prepareEmail(v, { write: env.write, dernierEleve });
   const name = campaignName(v);
 
   let campaignId = await findDraftByName(env.brevoKey, name);
@@ -140,7 +143,7 @@ async function processVideo(env: VideoEmailEnv, row: Row, v: Upload): Promise<st
   }
   await db
     .from("video_emails")
-    .update({ statut: "brouillon", source: prepared.source, tag: prepared.tag, subject: prepared.email.objet, brevo_campaign_id: campaignId, recipients: added, missing, error: null, updated_at: stamp() })
+    .update({ statut: "brouillon", source: prepared.source, tag: prepared.tag, subject: prepared.email.objet, eleve: prepared.email.preuve?.eleve ?? null, brevo_campaign_id: campaignId, recipients: added, missing, error: null, updated_at: stamp() })
     .eq("video_id", v.id);
 
   await env.notify?.({
@@ -149,6 +152,7 @@ async function processVideo(env: VideoEmailEnv, row: Row, v: Upload): Promise<st
       `Vidéo : ${v.title}`,
       added !== null ? `Destinataires : ${added} leads sans RDV${missing ? ` (${missing} leads du CRM absents de Brevo)` : ""}.` : "",
       prepared.source === "prérédigé" ? "Email prérédigé, déjà validé." : "Email écrit par Claude, à relire.",
+      prepared.email.preuve ? `Élève cité : ${prepared.email.preuve.eleve === "wassim" ? "Wassim" : "Florian"}.` : "Aucun élève cité.",
       "Rien n'est envoyé : relis le brouillon dans Brevo (Campagnes), puis envoie-le.",
     ].filter(Boolean).join("\n"),
     url: CAMPAIGNS_URL,
