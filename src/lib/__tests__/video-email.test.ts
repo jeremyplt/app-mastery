@@ -49,6 +49,16 @@ test("le titre publié retrouve son script, même avec un titre de rechange", ()
   assert.equal(matchScript("Combien mon app rapporte vraiment (revenus, pubs, bénéfice)", SCRIPTS), null);
 });
 
+test("la vidéo B garde son email validé même publiée sous un tout autre titre", async () => {
+  const prepared = await prepareEmail(upload({ title: "Ce que 63 millions de vues m'ont appris" }), {
+    write: async () => {
+      throw new Error("ne doit pas être appelé");
+    },
+  });
+  assert.equal(prepared.source, "prérédigé");
+  assert.equal(prepared.script?.slug, "analyse-1633-videos");
+});
+
 test("l'email prérédigé de la vidéo B respecte les règles et pointe vers la vidéo, le cadeau et l'appel", async () => {
   const b = PREWRITTEN["analyse-1633-videos"];
   assert.deepEqual(checkEmail(b.email), []);

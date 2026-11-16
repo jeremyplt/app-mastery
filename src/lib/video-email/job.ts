@@ -99,7 +99,10 @@ export type PreparedEmail = { email: VideoEmail; html: string; tag: string; sour
 // L'email d'une vidéo, sans rien créer nulle part (sert aussi à l'essai).
 // `videoLink` : lien du bouton pour un essai avant la sortie (page de la chaîne).
 export async function prepareEmail(v: Upload, opts: { write?: typeof writeVideoEmail; localLogin?: boolean; videoLink?: string } = {}): Promise<PreparedEmail> {
-  const script = matchScript(v.title, SCRIPTS);
+  // Le script de la vidéo : même utm_campaign dans la description (copiée depuis
+  // /admin/scripts), sinon un titre assez proche.
+  const campaign = videoCampaign(v.description);
+  const script = (campaign && SCRIPTS.find((s) => videoCampaign(s.description) === campaign)) || matchScript(v.title, SCRIPTS);
   const pre = script ? PREWRITTEN[script.slug] : undefined;
   const gift = findGift(v.description) ?? (script ? { url: script.gift.url.split("?")[0], line: script.gift.name } : null);
   const tag = pre?.tag ?? videoTag(v);
