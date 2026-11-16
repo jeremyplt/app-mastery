@@ -377,9 +377,9 @@ Keep 60 px safe margins. No other text, no logos, no extra numbers.
 Negative: distorted face, changed identity, extra fingers, warped phone, unreadable numbers, cluttered layout, fake brand logos, cartoon style.`,
   },
   gift: {
-    name: "La checklist des 32 leçons, avec une vraie vidéo d'exemple par leçon (à créer)",
+    name: "La checklist des 32 leçons, avec une vraie vidéo d'exemple par leçon",
     url: `https://www.jeremypitault.com/guide/32-lecons-videos?${UTM_B}`,
-    note: "Même logique que la checklist « 27 règles » de la vidéo « 300 apps ». La page n'existe pas encore : à créer avant la publication, sinon remplacer la 1re ligne de la description par le prompt contenu viral (/guide/prompt-contenu-viral). Placée après la partie 2 (les accroches), rappelée dans le récap.",
+    note: "Même logique que la checklist « 27 règles » de la vidéo « 300 apps ». Page /guide/32-lecons-videos prête : PDF de 9 pages (lead-magnets/build-32-lecons-videos.py), email de livraison, puis séquence C comme les autres guides. Placée après la partie 2 (les accroches), rappelée dans le récap.",
   },
   plan: [
     "Le spectateur sait comment filmer son app pour qu'elle ait l'air recommandée et pas vendue (deuxième téléphone, sans visage, app dans le premier tiers, court).",
@@ -600,14 +600,14 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
     ),
     lesson(
       25,
-      "Le même script, tourné par quatre créateurs, a fait de 1 701 à 428 500 vues",
-      `Même phrase, même son, même durée, pour une app d'investissement. Une version a fait 428 500 vues, une autre 1 701. Le contenu n'explique pas tout. C'est pour ça qu'il faut poster un format au moins dix fois avant de le juger.`,
-      `Les 4 vidéos Bloom côte à côte avec leurs vues (428 500, 229 100, 165 600, 1 701).`
+      "Le même script, tourné par trois créateurs, a fait de 1 701 à 428 500 vues",
+      `Même phrase à un détail près, même son, même durée, pour une app d'investissement. Une version a fait 428 500 vues, une autre 1 701. Le contenu n'explique pas tout. C'est pour ça qu'il faut poster un format au moins dix fois avant de le juger.`,
+      `Les 3 vidéos Bloom côte à côte avec leurs vues (428 500, 165 600, 1 701).`
     ),
     lesson(
       26,
       "Un compte qui répète le même format décroche un gros chiffre de temps en temps",
-      `Une app de scan, Tallow, a posté huit vidéos au même format : 2,9 millions, 2,6 millions, 1,7 million, puis entre 69 000 et 89 000 vues. SideMe ne change que l'accroche et garde toujours les mêmes plans. Tu ne cherches pas une idée par jour, tu déclines le format qui marche.`,
+      `Une app de scan, Tallow, a posté huit vidéos avec la même phrase d'appel : 2,9 millions, 2,6 millions, 1,7 million, puis entre 69 000 et 89 000 vues. SideMe ne change que l'accroche et garde toujours les mêmes plans. Tu ne cherches pas une idée par jour, tu déclines le format qui marche.`,
       `Les 8 vidéos Tallow en grille avec leurs vues.`
     ),
     {
@@ -704,7 +704,7 @@ On a passé au crible environ 12 500 vidéos TikTok et Instagram pour en garder 
     "« 63 millions de vues en 10 secondes pour une app » (leçon 4, 30 s).",
   ],
   prepare: [
-    "Créer le cadeau : la page /guide/32-lecons-videos (checklist PDF des 32 leçons, un lien d'exemple par leçon), sur le modèle de « 27 règles ». Sinon, 1re ligne de la description remplacée par le prompt contenu viral.",
+    "Cadeau prêt : la page /guide/32-lecons-videos (checklist PDF des 32 leçons, un lien d'exemple par leçon). Ouvrir la page en ligne et demander le PDF une fois avant de publier la vidéo.",
     "Captures d'écran des exemples : chaque vidéo citée 2 à 3 secondes, avec le nom du compte visible. Tous les liens sont dans l'analyse de la banque.",
     "Montage du format « j'ai analysé N » : bandeau « LEÇON N » et titre à chaque leçon, compteur « N / 32 » permanent, carte noire à chaque partie. À l'oral, ne pas dire « leçon numéro N » à chaque point.",
     "Les vues Instagram (Unstuck AI, Jotbot, Hearth, Coconote, Oreate AI, StudyFetch, Eclipta) viennent de la banque, relevées début novembre : les relire à l'écran le jour du tournage.",

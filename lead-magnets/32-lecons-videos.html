@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Les 32 leçons des vidéos qui font télécharger des apps</title>
+<style>
+  @page { size: A4; margin: 0; }
+  * { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  html, body { margin: 0; padding: 0; }
+  body { font-family: -apple-system, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif; color: #111; background: #fff; font-size: 12.5pt; line-height: 1.42; }
+  .page { width: 210mm; height: 297mm; padding: 17mm 17mm 16mm; page-break-after: always; position: relative; overflow: hidden; }
+  .page:last-child { page-break-after: auto; }
+  a { color: #0060df; text-decoration: none; }
+
+  .cover { background: #0a0a0a; color: #fff; display: flex; flex-direction: column; justify-content: space-between; }
+  .cover .kicker { color: #0A84FF; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; font-size: 11pt; }
+  .cover h1 { font-size: 40pt; line-height: 1.06; margin: 14mm 0 8mm; font-weight: 800; letter-spacing: -0.02em; }
+  .cover h1 span { color: #0A84FF; }
+  .cover .sub { font-size: 15pt; color: #d0d0d0; max-width: 158mm; }
+  .cover .bottom { display: flex; justify-content: space-between; align-items: flex-end; gap: 8mm; }
+  .cover .author { font-size: 13pt; font-weight: 700; }
+  .cover .author small { display: block; font-weight: 400; color: #9a9a9a; font-size: 10.5pt; margin-top: 2mm; }
+  .cover .badge { background: #0A84FF; color: #fff; border-radius: 12px; padding: 5mm 7mm; font-weight: 700; font-size: 12pt; text-align: center; line-height: 1.25; }
+  .cover .badge small { display: block; font-weight: 400; font-size: 9.5pt; opacity: .9; }
+
+  h2 { font-size: 22pt; font-weight: 800; letter-spacing: -0.01em; margin: 0 0 2.5mm; }
+  .lead { font-size: 12.5pt; color: #333; margin: 0 0 5mm; }
+  .part-kicker { color: #0A84FF; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; font-size: 9.5pt; margin-bottom: 1.5mm; }
+  .rule { display: flex; gap: 4mm; padding: 3.8mm 0; border-bottom: 1px solid #e6e6e6; }
+  .rule:last-of-type { border-bottom: none; }
+  .box { flex: 0 0 auto; width: 6mm; height: 6mm; border: 2px solid #0A84FF; border-radius: 4px; margin-top: 1mm; }
+  .rule .n { flex: 0 0 9mm; font-weight: 800; color: #0A84FF; font-size: 13pt; margin-top: .2mm; }
+  .rule .t { font-weight: 700; font-size: 13pt; }
+  .rule .d { color: #333; font-size: 11.5pt; margin-top: .8mm; }
+  .rule .ex { font-size: 10.8pt; margin-top: 1.6mm; color: #333; }
+  .rule .ex b { color: #111; }
+  .rule .ex a { font-weight: 700; }
+  .rule .ex .st { white-space: nowrap; }
+  .footer { position: absolute; left: 17mm; right: 17mm; bottom: 8mm; display: flex; justify-content: space-between; font-size: 9pt; color: #888; border-top: 1px solid #e6e6e6; padding-top: 2.5mm; }
+  .callout { background: #f2f6ff; border-left: 4px solid #0A84FF; border-radius: 6px; padding: 4mm 5mm; margin: 5mm 0; font-size: 11pt; }
+  .callout b { color: #0A84FF; }
+
+  .intro p { margin: 0 0 4mm; }
+  .intro .stat { display: flex; gap: 5mm; margin: 6mm 0 8mm; }
+  .intro .stat div { flex: 1; background: #0a0a0a; color: #fff; border-radius: 12px; padding: 5mm; }
+  .intro .stat b { display: block; font-size: 21pt; color: #0A84FF; letter-spacing: -0.02em; }
+  .intro .stat span { font-size: 10pt; color: #cfcfcf; }
+  ol.how { padding-left: 6mm; margin: 0; }
+  ol.how li { margin-bottom: 2.5mm; }
+
+  .cta { background: #0a0a0a; color: #fff; display: flex; flex-direction: column; justify-content: center; }
+  .cta h2 { color: #fff; font-size: 29pt; line-height: 1.12; }
+  .cta h2 span { color: #0A84FF; }
+  .cta p { color: #d0d0d0; font-size: 13pt; max-width: 160mm; }
+  .cta .proof { background: #161618; border-radius: 12px; padding: 5mm 6mm; margin: 5mm 0 2mm; max-width: 160mm; }
+  .cta .proof b { color: #0A84FF; font-size: 17pt; display: block; margin-bottom: 1mm; }
+  .cta .proof span { color: #d0d0d0; font-size: 11.5pt; }
+  .cta .btn { display: inline-block; background: #0A84FF; color: #fff; font-weight: 800; padding: 5mm 8mm; border-radius: 12px; font-size: 14pt; margin: 6mm 0 3mm; text-decoration: none; }
+  .cta .url { color: #9a9a9a; font-size: 10.5pt; word-break: break-all; }
+</style>
+</head>
+<body>
+
+<section class="page cover">
+  <div>
+    <div class="kicker">Checklist gratuite</div>
+    <h1>Les 32 leçons des vidéos qui font <span>télécharger des apps</span></h1>
+    <div class="sub">On a passé au crible environ 12 500 vidéos TikTok et Instagram pour garder les 1 633 qui mettent vraiment une app en avant. Voici ce qu'on en a appris, avec une vraie vidéo d'exemple pour chaque leçon.</div>
+  </div>
+  <div class="bottom">
+    <div class="author">Jeremy Pitault<small>Créateur de Shinobi Japanese, plus de 30 000 $ par mois avec une seule app</small></div>
+    <div class="badge">32 leçons<small>7 parties, 1 exemple par leçon</small></div>
+  </div>
+</section>
+
+<section class="page intro">
+  <h2>Comment utiliser cette checklist</h2>
+  <p class="lead">Ces leçons ne viennent pas d'une intuition. Elles sortent de la banque de contenus qu'on construit pour les élèves que j'accompagne, niche par niche, et chaque chiffre a été vérifié vidéo par vidéo.</p>
+  <div class="stat">
+    <div><b>1 633</b><span>vidéos gardées sur environ 12 500 passées au crible</span></div>
+    <div><b>1,2 milliard</b><span>de vues cumulées, rien que sur celles dont on connaît les vues</span></div>
+    <div><b>18 s</b><span>de durée médiane pour les vidéos TikTok vérifiées</span></div>
+  </div>
+  <ol class="how">
+    <li><b>Lis les 32 leçons une fois</b> et coche celles que tes vidéos appliquent déjà vraiment aujourd'hui.</li>
+    <li><b>Choisis trois leçons que tu n'appliques pas encore</b> et ouvre leur vidéo d'exemple. Regarde-la plusieurs fois, image par image.</li>
+    <li><b>Refais l'exemple à l'identique avec ton app</b> : même durée, même accroche adaptée à ta niche, même son, mêmes plans. Copier un format qui a marché, c'est le point de départ, pas de la triche.</li>
+    <li><b>Poste le même format au moins 10 fois avant de juger.</b> La leçon 25 montre pourquoi : le même script fait de 1 701 à 428 500 vues selon le compte et le jour.</li>
+  </ol>
+  <div class="callout"><b>D'où viennent les chiffres :</b> les vues TikTok ont été relues une par une le 12 novembre 2026. Les vues Instagram ont été relevées début novembre 2026. Un « M » veut dire un million de vues.</div>
+  <div class="footer"><span>Les 32 leçons des vidéos qui font télécharger des apps</span><span>jeremypitault.com</span></div>
+</section>
+
+<section class="page">
+  <div class="part-kicker">Partie 1 · Leçons 1 à 5</div>
+  <h2>Comment filmer ton app</h2>
+  <p class="lead">Avant l'idée, il y a la forme : une vidéo qui ressemble à une recommandation, pas à une pub.</p>
+  <div class="rule"><div class="box"></div><div class="n">1</div><div><div class="t">Filme ton téléphone avec un deuxième téléphone, la main dans le cadre</div><div class="d">Un vrai téléphone posé sur un bureau et un doigt qui tape dessus, ça fait « quelqu'un me montre son truc ». 16 des 24 plus grosses vidéos qu'on a regardées image par image sont filmées comme ça.</div><div class="ex"><b>Exemple :</b> <a href="https://www.tiktok.com/@soundscape.study/video/7485770482667588866">Soundscape (@soundscape.study)</a>, <span class="st">TikTok · 40,8 M de vues · 20 s</span></div></div></div>
+  <div class="rule"><div class="box"></div><div class="n">2</div><div><div class="t">Tu n'as pas besoin de montrer ton visage</div><div class="d">Un amphi filmé de dos, des mains, un écran : 14 des 24 plus grosses vidéos ne montrent jamais le visage de la personne qui filme.</div><div class="ex"><b>Exemple :</b> <a href="https://www.instagram.com/reel/C9hepDsMoYQ/">Coconote (@coconote.app)</a>, <span class="st">Instagram · 26 M de vues · 15 s</span></div></div></div>
+  <div class="rule"><div class="box"></div><div class="n">3</div><div><div class="t">Montre l'app dans le premier tiers de la vidéo</div><div class="d">Dans 16 des 24 grosses vidéos, l'app est à l'écran dès la 2e ou la 3e seconde, juste après la phrase d'accroche. N'attends pas la fin pour la montrer.</div><div class="ex"><b>Exemple :</b> <a href="https://www.tiktok.com/@kailyn.lifts/video/7626442321860644127">Stronger (@kailyn.lifts)</a>, <span class="st">TikTok · 15,3 M de vues · 11 s</span></div></div></div>
+  <div class="rule"><div class="box"></div><div class="n">4</div><div><div class="t">Fais court : moins de 20 secondes</div><div class="d">Sur 75 vidéos TikTok vérifiées, la durée médiane est de 18 secondes. Une accroche, l'app, un résultat, et la vidéo s'arrête.</div><div class="ex"><b>Exemple :</b> <a href="https://www.tiktok.com/@formea.pilates/video/7678283526629903638">Forméa (@formea.pilates)</a>, <span class="st">TikTok · 9,2 M de vues · 5 s</span></div></div></div>
+  <div class="rule"><div class="box"></div><div class="n">5</div><div><div class="t">L'exception : le long face caméra qui explique vraiment l'app</div><div class="d">Quand tu parles à un public précis et que tu montres l'app en détail, une vidéo de près de 2 minutes peut faire des millions. Ça reste l'exception, pas la règle.</div><div class="ex"><b>Exemple :</b> <a href="https://www.tiktok.com/@thatadhdlife/video/7255360682063858990">Goblin Tools (@thatadhdlife)</a>, <span class="st">TikTok · 10,8 M de vues · 1 min 52</span></div></div></div>
+  <div class="footer"><span>Les 32 leçons des vidéos qui font télécharger des apps</span><span>jeremypitault.com</span></div>
+</section>
+
+<section class="page">
+  <div class="part-kicker">Partie 2 · Leçons 6 à 11</div>
+  <h2>Les accroches</h2>
+  <p class="lead">La première phrase décide si la personne reste. Ces accroches ont fait des millions de vues dans toutes les niches.</p>
+  <div class="rule"><div class="box"></div><div class="n">6</div><div><div class="t">« Pourquoi je découvre ça seulement maintenant »</div><div class="d">« 3 ans d'études et je trouve ça maintenant » dit au spectateur qu'il est en train de rater quelque chose. C'est l'accroche la plus copiée de la banque.</div><div class="ex"><b>Exemple :</b> <a href="https://www.instagram.com/reel/C_jtibrRhzI/">Unstuck AI (@quizard.ai)</a>, <span class="st">Instagram · 66,1 M de vues · 17 s</span></div></div></div>
+  <div class="rule"><div class="box"></div><div class="n">7</div><div><div class="t">Fais dire par quelqu'un d'autre que l'app est géniale</div><div class="d">« Ma sœur m'a montré ce qu'elle utilise pour réviser » transforme une pub en bouche-à-oreille. On le retrouve dans 3 des 18 vidéos les plus vues de la banque.</div><div class="ex"><b>Exemple :</b> <a href="https://www.instagram.com/reel/DH7MA6ZT20U/">StudyFetch</a>, <span class="st">Instagram · 11,9 M de vues · 10 s</span></div></div></div>
+  <div class="rule"><div class="box"></div><div class="n">8</div><div><div class="t">Les mots « secret » et « ça paraît illégal » donnent envie de savoir</div><div class="d">Présenter l'app comme un avantage caché (« mon secret pour avoir A+ ») crée de la curiosité. Environ 25 vidéos de la banque jouent là-dessus.</div><div class="ex"><b>Exemple :</b> <a href="https://www.tiktok.com/@studyv.tok/video/7466063517137865989">Yolk AI (@studyv.tok)</a>, <span class="st">TikTok · 3,3 M de vues · 14 s</span></div></div></div>
+  <div class="rule"><div class="box"></div><div class="n">9</div><div><div class="t">Commence par le problème, finis par l'app</div><div class="d">La vidéo pose une galère que ta cible vit (rester au lit, ne pas avoir 1 h 38 pour un cours), puis l'app arrive comme la réponse.</div><div class="ex"><b>Exemple :</b> <a href="https://www.tiktok.com/@finchcare/video/7457035886274907438">Finch (@finchcare)</a>, <span class="st">TikTok · 63,4 M de vues · 10 s</span></div></div></div>
+  <div class="rule"><div class="box"></div><div class="n">10</div><div><div class="t">Le POV met le spectateur dans la scène en une phrase</div><div class="d">« POV : dans 2 mois c'est le bac et t'as toujours pas fait tes fiches » décrit la situation du spectateur, pas la tienne. Il se projette tout de suite.</div><div class="ex"><b>Exemple :</b> <a href="https://www.tiktok.com/@studywchimene/video/7488235301383458070">Parkeur (@studywchimene), en français</a>, <span class="st">TikTok · 346 900 vues · 16 s</span></div></div></div>
+  <div class="rule"><div class="box"></div><div class="n">11</div><div><div class="t">La réaction choquée dure une seconde, puis on passe à l'app</div><div class="d">Main sur le front, bouche ouverte : c'est un hook visuel, et dès la 2e seconde l'écran prend le relais. Filme toujours ta propre réaction, jamais celle d'un autre créateur.</div><div class="ex"><b>Exemple :</b> <a href="https://www.tiktok.com/@kailyn.lifts/video/7626442321860644127">Stronger (@kailyn.lifts)</a>, <span class="st">TikTok · 15,3 M de vues · 11 s</span></div></div></div>
+  <div class="footer"><span>Les 32 leçons des vidéos qui font télécharger des apps</span><span>jeremypitault.com</span></div>
+</section>
+
+<section class="page">
+  <div class="part-kicker">Partie 3 · Leçons 12 à 16</div>
+  <h2>Les formats</h2>
+  <p class="lead">Des façons concrètes de montrer ton app, que tu peux refaire telles quelles.</p>
+  <div class="rule"><div class="box"></div><div class="n">12</div><div><div class="t">Le format roi : « je mets ça dedans, regarde ce qui sort »</div><div class="d">On voit l'entrée (un cours, une photo, un lien), on la donne à l'app, et le résultat apparaît. La transformation se comprend sans un mot d'explication.</div><div class="ex"><b>Exemple :</b> <a href="https://www.tiktok.com/@studywithtay2/video/7525296604312554766">@studywithtay2</a>, <span class="st">TikTok · 4,7 M de vues · 17 s</span></div></div></div>
+  <div class="rule"><div class="box"></div><div class="n">13</div><div><div class="t">Deux assiettes, un scan, pas un mot : « lequel tu choisis ? »</div><div class="d">Deux choix côte à côte, l'app tranche à l'écran. Aucune voix, aucun visage, et ce sont parmi les vidéos les plus vues de la banque.</div><div class="ex"><b>Exemple :</b> <a href="https://www.tiktok.com/@calscanapp/video/7508465001674624302">CalScan (@calscanapp)</a>, <span class="st">TikTok · 16,5 M de vues · 17 s</span></div></div></div>
+  <div class="rule"><div class="box"></div><div class="n">14</div><div><div class="t">L'avant/après marche aussi pour une app</div><div class="d">Le vieux calendrier papier qu'on jette, puis l'écran : on compare deux mondes, et ton app est le côté « après ».</div><div class="ex"><b>Exemple :</b> <a href="https://www.instagram.com/reel/DESc1ZGOzxU/">Hearth (compte officiel)</a>, <span class="st">Instagram · 29,9 M de vues · 10 s</span></div></div></div>
+  <div class="rule"><div class="box"></div><div class="n">15</div><div><div class="t">La liste « 3 apps que tout le monde devrait avoir » permet de glisser la tienne</div><div class="d">Le spectateur enregistre la vidéo pour plus tard, et ton app profite de la crédibilité des apps connues autour d'elle. Mets-la au milieu de la liste.</div><div class="ex"><b>Exemple :</b> <a href="https://www.tiktok.com/@etreetudiant/video/7584398508120100118">Être Étudiant (@etreetudiant), en français</a>, <span class="st">TikTok · 1,6 M de vues · 1 min 03</span></div></div></div>
+  <div class="rule"><div class="box"></div><div class="n">16</div><div><div class="t">Les carrousels font des millions, sans visage et sans montage</div><div class="d">Des images et des captures qu'on fait défiler : c'est le format le plus simple à produire, et il atteint les mêmes chiffres que les vidéos.</div><div class="ex"><b>Exemple :</b> <a href="https://www.tiktok.com/@yuka_app/photo/7468423289392647467">Yuka (@yuka_app), carrousel</a>, <span class="st">TikTok · 2 M de vues</span></div></div></div>
+  <div class="footer"><span>Les 32 leçons des vidéos qui font télécharger des apps</span><span>jeremypitault.com</span></div>
+</section>
+
+<section class="page">
+  <div class="part-kicker">Partie 3 · Leçons 17 à 20</div>
+  <h2>Les formats (suite)</h2>
+  <p class="lead">Quand ton app a un personnage, une récompense ou une ambiance, montre-les.</p>
+  <div class="rule"><div class="box"></div><div class="n">17</div><div><div class="t">Une mascotte à faire grandir rend l'app mémorable</div><div class="d">Un personnage donne un visage à l'app sans montrer le tien, et le spectateur a envie de s'en occuper.</div><div class="ex"><b>Exemple :</b> <a href="https://www.tiktok.com/@finchcare/video/7368551995138968875">Finch (@finchcare)</a>, <span class="st">TikTok · 33,2 M de vues · 11 s</span></div></div></div>
+  <div class="rule"><div class="box"></div><div class="n">18</div><div><div class="t">Montre le moment où la récompense tombe</div><div class="d">Un rang après un développé couché, un monstre battu à la pompe, un arbre qui pousse : quand l'app transforme l'effort en jeu, filme la récompense.</div><div class="ex"><b>Exemple :</b> <a href="https://www.tiktok.com/@pushuparena.app/video/7637686723069185311">Push Up Arena (@pushuparena.app)</a>, <span class="st">TikTok · 3,4 M de vues · 16 s</span></div></div></div>
+  <div class="rule"><div class="box"></div><div class="n">19</div><div><div class="t">L'ambiance vend l'app sans un mot</div><div class="d">Un bureau rangé, une lampe, l'app qui tourne sur un iPad, une musique douce : on montre le rituel, pas les fonctionnalités.</div><div class="ex"><b>Exemple :</b> <a href="https://www.tiktok.com/@idkjustrant/video/7627726704018017543">FocusFlight (@idkjustrant)</a>, <span class="st">TikTok · 12,2 M de vues · 25 s</span></div></div></div>
+  <div class="rule"><div class="box"></div><div class="n">20</div><div><div class="t">Raconte pourquoi tu as créé l'app</div><div class="d">Une phrase sur ta raison personnelle suffit (« je construis l'app que j'aurais voulu avoir »), et ça marche même avant la sortie de l'app.</div><div class="ex"><b>Exemple :</b> <a href="https://www.tiktok.com/@storiaworld/video/7662028837600906518">Storia (@storiaworld)</a>, <span class="st">TikTok · 1,6 M de vues · 7 s</span></div></div></div>
+  <div class="footer"><span>Les 32 leçons des vidéos qui font télécharger des apps</span><span>jeremypitault.com</span></div>
+</section>
+
+<section class="page">
+  <div class="part-kicker">Parties 4 et 5 · Leçons 21 à 26</div>
+  <h2>Le nom de l'app et les comptes</h2>
+  <p class="lead">Faire passer le spectateur au téléchargement, puis tenir dans la durée.</p>
+  <div class="rule"><div class="box"></div><div class="n">21</div><div><div class="t">Donne le nom de l'app comme une évidence : « au fait, elle s'appelle… »</div><div class="d">Le nom arrive en passant, à la fin ou dans la légende (« the app is called X btw »). Ça sonne comme une recommandation, pas comme une pub.</div><div class="ex"><b>Exemple :</b> <a href="https://www.tiktok.com/@lily6021023/video/7547388643988622614">FocusFlight (@lily6021023)</a>, <span class="st">TikTok · 7,1 M de vues · 23 s</span></div></div></div>
+  <div class="rule"><div class="box"></div><div class="n">22</div><div><div class="t">Sur Instagram, « commente un mot et je t'envoie l'app »</div><div class="d">Au lieu de donner le lien, on demande de commenter un mot et le lien arrive en message privé. Les commentaires font monter la portée. 29 des 32 vidéos qui le font sont sur Instagram.</div><div class="ex"><b>Exemple :</b> <a href="https://www.instagram.com/reel/DYfnXHqOo27/">Eclipta</a>, <span class="st">Instagram · 13 M de vues · 13 s</span></div></div></div>
+  <div class="rule"><div class="box"></div><div class="n">23</div><div><div class="t">Le compte officiel de l'app peut faire aussi bien qu'un créateur</div><div class="d">8 des 15 vidéos TikTok les plus vues de la banque sont postées par le compte de l'app lui-même, avec des formats simples.</div><div class="ex"><b>Exemple :</b> <a href="https://www.tiktok.com/@getturboai/video/7590870277337206030">Turbo AI (@getturboai)</a>, <span class="st">TikTok · 9,3 M de vues · 32 s</span></div></div></div>
+  <div class="rule"><div class="box"></div><div class="n">24</div><div><div class="t">Les grosses apps font poster des dizaines de créatrices tous les jours</div><div class="d">Derrière les chiffres, il y a des créatrices qui postent leur quotidien avec l'app à l'écran. 13 comptes différents de la banque portent le nom d'une seule app.</div><div class="ex"><b>Exemple :</b> <a href="https://www.tiktok.com/@peter.studyfetch/video/7597638663517785362">StudyFetch (@peter.studyfetch)</a>, <span class="st">TikTok · 3,7 M de vues · 15 s</span></div></div></div>
+  <div class="rule"><div class="box"></div><div class="n">25</div><div><div class="t">Le même script, tourné par 3 créateurs, fait de 1 701 à 428 500 vues</div><div class="d">Même texte à un détail près, même son, même durée, et des résultats qui n'ont rien à voir. Le contenu n'explique pas tout : il faut poster plusieurs fois.</div><div class="ex"><b>Exemples :</b> <a href="https://www.tiktok.com/@savingwithselma/video/7611325663475223839">Bloom chez @savingwithselma</a>, <span class="st">428 500 vues</span> · <a href="https://www.tiktok.com/@treylovesinvesting/video/7619835357634252054">presque la même chez @treylovesinvesting</a>, <span class="st">1 701 vues</span></div></div></div>
+  <div class="rule"><div class="box"></div><div class="n">26</div><div><div class="t">Répète le même format : un gros chiffre finit par tomber</div><div class="d">Les comptes qui marchent déclinent le même format chaque jour, et une vidéo sur 5 ou 8 explose. Poste un format au moins 10 fois avant de conclure.</div><div class="ex"><b>Exemple :</b> <a href="https://www.tiktok.com/@tallowapp/video/7655431387650395423">Tallow (@tallowapp), 7 vidéos sur 8 au même format</a>, <span class="st">TikTok · 2,9 M de vues · 38 s</span></div></div></div>
+  <div class="footer"><span>Les 32 leçons des vidéos qui font télécharger des apps</span><span>jeremypitault.com</span></div>
+</section>
+
+<section class="page">
+  <div class="part-kicker">Parties 6 et 7 · Leçons 27 à 32</div>
+  <h2>Les niches et les détails qui changent tout</h2>
+  <p class="lead">Où sont les vues, ce qui ne fait pas télécharger, et les trois détails à ne pas rater.</p>
+  <div class="rule"><div class="box"></div><div class="n">27</div><div><div class="t">Les étudiants sont la niche qui fait le plus de vues</div><div class="d">Révision et concentration, c'est 28 % des vidéos de la banque mais la moitié de celles qui dépassent un million de vues.</div><div class="ex"><b>Exemple :</b> <a href="https://www.tiktok.com/@duda_studies_ofc/video/7489175927327444229">Quizlet (@duda_studies_ofc)</a>, <span class="st">TikTok · 13,1 M de vues · 29 s</span></div></div></div>
+  <div class="rule"><div class="box"></div><div class="n">28</div><div><div class="t">Les parents font des millions de vues, si tu parles de leur fatigue</div><div class="d">Les vidéos qui explosent ne parlent pas de l'enfant mais du parent : « je couche mes enfants en 15 minutes », « la maman est le calendrier de la famille ».</div><div class="ex"><b>Exemple :</b> <a href="https://www.tiktok.com/@livjowen/video/7521894532103949598">Skylight (@livjowen)</a>, <span class="st">TikTok · 14,1 M de vues · 1 min 50</span></div></div></div>
+  <div class="rule"><div class="box"></div><div class="n">29</div><div><div class="t">Des millions de vues sans l'app à l'écran ne font pas forcément télécharger</div><div class="d">Quand l'app n'est que dans la légende, on fait des vues mais rien ne prouve qu'on fait des téléchargements. Mieux vaut 5 000 vues qui convertissent qu'un viral sans app.</div><div class="ex"><b>Exemple :</b> <a href="https://www.tiktok.com/@movewmil/video/7562274640857632002">Tone AI (@movewmil), le contre-exemple</a>, <span class="st">TikTok · 11,8 M de vues · 6 s</span></div></div></div>
+  <div class="rule"><div class="box"></div><div class="n">30</div><div><div class="t">Quand tu copies un format, garde exactement le même son</div><div class="d">Deux apps de musculation concurrentes ont explosé avec le même audio. Quand tu reprends un format, le son en fait partie.</div><div class="ex"><b>Exemple :</b> <a href="https://www.tiktok.com/@lyft.withnicole/video/7588999110909283592">Lyfta (@lyft.withnicole)</a>, <span class="st">TikTok · 4,2 M de vues · 14 s</span></div></div></div>
+  <div class="rule"><div class="box"></div><div class="n">31</div><div><div class="t">Écris ton accroche à l'écran, en gros, dès la première image</div><div class="d">21 des 24 grosses vidéos ont une phrase écrite sur la première image. Le texte fait le travail, même quand le son est coupé.</div><div class="ex"><b>Exemple :</b> <a href="https://www.tiktok.com/@playmoshikids/video/6882642977194249474">Moshi (@playmoshikids)</a>, <span class="st">TikTok · 13,3 M de vues · 29 s</span></div></div></div>
+  <div class="rule"><div class="box"></div><div class="n">32</div><div><div class="t">Le français a de la place, mais les plus gros chiffres sont en anglais</div><div class="d">Aucune des 18 vidéos les plus vues de la banque n'est en français. Si ton app marche en anglais, ouvre un compte séparé en anglais.</div><div class="ex"><b>Exemple :</b> <a href="https://www.tiktok.com/@priel.study/video/7290614054438079777">Nomad Education (@priel.study), en français</a>, <span class="st">TikTok · 7,2 M de vues · 38 s</span></div></div></div>
+  <div class="footer"><span>Les 32 leçons des vidéos qui font télécharger des apps</span><span>jeremypitault.com</span></div>
+</section>
+
+<section class="page cta">
+  <div class="part-kicker">Et maintenant</div>
+  <h2>Tu veux qu'on trouve ensemble <span>les vidéos qui feront vendre ton app</span> ?</h2>
+  <p>Ces 32 leçons, c'est la base. Le plus dur, c'est de trouver le format qui marche pour ta niche à toi, puis de tenir le rythme jusqu'à ce qu'une vidéo décolle. C'est ce qu'on fait avec les personnes que j'accompagne pendant trois mois.</p>
+  <div class="proof"><b>De 0 à 1 793 $ en 28 jours, sans une seule pub</b><span>Florian, 20 ans, est un des élèves que j'accompagne. Son application de productivité a fait un million de vues sur Instagram en 30 jours, uniquement avec du contenu organique posté depuis son téléphone.</span></div>
+  <p>Tout commence par un appel de 30 minutes avec mon associé Nolan ou avec moi. On regarde ton projet et le temps que tu peux y consacrer, et on te dit franchement si l'accompagnement est fait pour toi.</p>
+  <a class="btn" href="https://www.jeremypitault.com/appel?utm_source=pdf&utm_medium=lead-magnet&utm_campaign=32-lecons-videos">Réserver mon appel</a>
+  <div class="url">https://www.jeremypitault.com/appel?utm_source=pdf&utm_medium=lead-magnet&utm_campaign=32-lecons-videos</div>
+</section>
+
+</body>
+</html>
