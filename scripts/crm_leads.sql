@@ -29,6 +29,13 @@ create table if not exists crm_leads (
   -- "crm_leads_vsl_invest", appliquée le 2026-07-15)
   invest text,
   qualified boolean,
+  -- UTM du premier contact (migration "crm_leads_first_utm", appliquée le
+  -- 2026-11-16) : posées par /api/subscribe et le webhook Calendly quand la
+  -- fiche n'en a pas encore, jamais écrasées. Historique rempli par
+  -- scripts/backfill-crm-utm.mjs (événements d'optin PostHog, Calendly).
+  utm_source text,
+  utm_medium text,
+  utm_campaign text,
   unique (email, source)
 );
 

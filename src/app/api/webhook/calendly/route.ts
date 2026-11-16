@@ -9,6 +9,7 @@ import {
   type CallLead,
 } from "@/lib/call-reminders";
 import { studentCallKind, webhookPath } from "@/lib/calendly-events";
+import { cleanUtm } from "@/lib/utm";
 
 // Appels avec les élèves (« Kick-off App Mastery », « Appel élève App Mastery »
 // et l'ancien « Appel App Mastery ») : à ne surtout pas traiter comme un appel
@@ -162,13 +163,20 @@ export async function POST(req: NextRequest) {
           lead = updated as CallLead;
         } else {
           // Contact inconnu du CRM (réservé sans passer par l'optin) :
-          // fiche créée avec la source "calendly".
+          // fiche créée avec la source "calendly" et les UTM du lien de
+          // réservation (premier contact).
+          const utm = cleanUtm({
+            source: invitee.tracking?.utm_source,
+            medium: invitee.tracking?.utm_medium,
+            campaign: invitee.tracking?.utm_campaign,
+          });
           const { data: inserted, error: insertError } = await supabase
             .from("crm_leads")
             .insert({
               email: normalizedEmail,
               source: "calendly",
               first_name: firstName ?? null,
+              ...utm,
               ...bookingFields,
               call_host: host,
               call_event_uri: eventTypeUri ?? null,

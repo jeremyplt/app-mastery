@@ -5,6 +5,7 @@ import { getAdminClient } from "@/lib/supabase";
 import { appelDecouverte, guide27Regles, metabase, planAction, promptContenuViral, vslAccess, type BuiltEmail } from "@/lib/emails/transactional";
 import { startSequenceC } from "@/lib/sequence-c";
 import { CRM_GUIDE_SLUGS } from "@/lib/guides";
+import { cleanUtm } from "@/lib/utm";
 
 // Map lead-magnet sources to their Brevo transactional template ID and tag.
 // Keyed by `source` (the guide slug), not by list ID: tous les leads magnets
@@ -204,12 +205,13 @@ export async function POST(req: NextRequest) {
     if (source === "vsl" || source === "plan-action" || isCrmGuide) {
       try {
         const supabase = getAdminClient();
+        const crmSource = isCrmGuide ? "guide" : source;
         const { error: crmError } = await supabase
           .from("crm_leads")
           .upsert(
             {
               email: email.toLowerCase(),
-              source: isCrmGuide ? "guide" : source,
+              source: crmSource,
               ...(isCrmGuide && { guide_slug: source }),
               ...(firstName && { first_name: firstName }),
               ...(validatedPhone && { phone: validatedPhone }),
@@ -218,11 +220,25 @@ export async function POST(req: NextRequest) {
           );
         if (crmError) {
           console.error("CRM lead upsert error:", crmError.message);
-        } else if (source === "plan-action" || isCrmGuide) {
-          // Séquence C : démarre à la première demande du Plan d'Action ou
-          // d'un lead magnet en rapport avec les apps mobiles.
-          const started = await startSequenceC(email.toLowerCase(), isCrmGuide ? "guide" : "plan-action");
-          console.log(`Séquence C pour ${email}: ${started}`);
+        } else {
+          // UTM du premier contact : posées seulement si la fiche n'en a pas
+          // encore, une nouvelle inscription ne les écrase jamais.
+          const utm = cleanUtm({ source: utmSource, medium: utmMedium, campaign: utmCampaign });
+          if (utm) {
+            const { error: utmError } = await supabase
+              .from("crm_leads")
+              .update(utm)
+              .eq("email", email.toLowerCase())
+              .eq("source", crmSource)
+              .is("utm_source", null);
+            if (utmError) console.error("CRM lead UTM error:", utmError.message);
+          }
+          if (source === "plan-action" || isCrmGuide) {
+            // Séquence C : démarre à la première demande du Plan d'Action ou
+            // d'un lead magnet en rapport avec les apps mobiles.
+            const started = await startSequenceC(email.toLowerCase(), crmSource);
+            console.log(`Séquence C pour ${email}: ${started}`);
+          }
         }
       } catch (err) {
         console.error("CRM lead upsert error:", err);

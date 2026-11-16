@@ -264,6 +264,243 @@ function CtaCells({ g, showViews }: { g: Group; showViews: boolean }) {
   );
 }
 
+// ---- Ce que chaque vidéo rapporte (CRM) ----
+
+type CrmRow = {
+  source: string | null;
+  medium: string | null;
+  campaign: string | null;
+  leads: number;
+  rdv: number;
+  students: number;
+  signed: number;
+  cashed: number;
+};
+
+type CrmGroup = Omit<CrmRow, "source" | "medium" | "campaign"> & {
+  key: string;
+  title: string;
+  sub: string;
+  video: Video | null;
+};
+
+type CrmSortKey = "leads" | "rdv" | "rdvRate" | "students" | "signed" | "cashed" | "perLead";
+
+function euros(n: number): string {
+  return `${Math.round(n).toLocaleString("fr-FR")} €`;
+}
+
+function crmSortValue(g: CrmGroup, key: CrmSortKey): number {
+  if (key === "rdvRate") return rate(g.rdv, g.leads);
+  if (key === "perLead") return rate(g.signed, g.leads);
+  return g[key];
+}
+
+// Les pubs Meta mettent l'identifiant de la campagne dans utm_source.
+function sourceLabel(source: string): string {
+  return /^\d{8,}$/.test(source) ? "Pub Meta" : source;
+}
+
+// Une ligne par vidéo (ses utm_campaign), sinon par source/campagne, plus
+// « Sans UTM » pour les inscrits sans lien suivi.
+function groupCrm(rows: CrmRow[], videos: Video[] | null): CrmGroup[] {
+  const videoOf = new Map<string, Video>();
+  for (const v of videos ?? []) for (const c of v.campaigns) videoOf.set(c, v);
+
+  const map = new Map<string, CrmGroup>();
+  for (const r of rows) {
+    const video = r.campaign ? (videoOf.get(r.campaign) ?? null) : null;
+    const source = r.source === null ? null : sourceLabel(r.source);
+    const key = video ? video.id : source === null ? "none" : `utm:${source}|${r.campaign ?? ""}`;
+    let g = map.get(key);
+    if (!g) {
+      g = {
+        key,
+        video,
+        title: video?.title ?? (source === null ? "Sans UTM" : (r.campaign ?? source)),
+        sub: video
+          ? `${formatDate(video.publishedAt)} · ${r.campaign}`
+          : source === null
+            ? "Inscrits sans lien suivi (avant le suivi, lien direct, bouche-à-oreille)"
+            : source,
+        leads: 0,
+        rdv: 0,
+        students: 0,
+        signed: 0,
+        cashed: 0,
+      };
+      map.set(key, g);
+    }
+    g.leads += r.leads;
+    g.rdv += r.rdv;
+    g.students += r.students;
+    g.signed += r.signed;
+    g.cashed += r.cashed;
+  }
+  return [...map.values()];
+}
+
+function CrmSection({
+  rows,
+  money,
+  videos,
+  error,
+}: {
+  rows: CrmRow[] | null;
+  money: boolean;
+  videos: Video[] | null;
+  error: string | null;
+}) {
+  const [sort, setSort] = useState<{ key: CrmSortKey; desc: boolean }>({ key: "signed", desc: true });
+  const sortKey: CrmSortKey = !money && ["students", "signed", "cashed", "perLead"].includes(sort.key) ? "leads" : sort.key;
+
+  const groups = useMemo(() => {
+    const list = groupCrm(rows ?? [], videos);
+    return list.sort((a, b) => {
+      // « Sans UTM » toujours en bas : ce n'est pas une vidéo.
+      if (a.key === "none" || b.key === "none") return a.key === "none" ? 1 : -1;
+      const cmp = crmSortValue(a, sortKey) - crmSortValue(b, sortKey) || a.leads - b.leads;
+      return sort.desc ? -cmp : cmp;
+    });
+  }, [rows, videos, sortKey, sort.desc]);
+
+  const totals = useMemo(() => {
+    const t = { leads: 0, tracked: 0, youtube: 0, rdv: 0, students: 0, signed: 0, ytStudents: 0, ytSigned: 0 };
+    for (const r of rows ?? []) {
+      t.leads += r.leads;
+      t.rdv += r.rdv;
+      t.students += r.students;
+      t.signed += r.signed;
+      if (r.source !== null) t.tracked += r.leads;
+      if (r.source === "youtube") {
+        t.youtube += r.leads;
+        t.ytStudents += r.students;
+        t.ytSigned += r.signed;
+      }
+    }
+    return t;
+  }, [rows]);
+
+  const columns: { key: CrmSortKey; label: string; money?: boolean }[] = [
+    { key: "leads", label: "Leads" },
+    { key: "rdv", label: "RDV" },
+    { key: "rdvRate", label: "Lead → RDV" },
+    { key: "students", label: "Élèves", money: true },
+    { key: "signed", label: "CA signé", money: true },
+    { key: "cashed", label: "Encaissé", money: true },
+    { key: "perLead", label: "€ par lead", money: true },
+  ];
+
+  function toggle(key: CrmSortKey) {
+    setSort((s) => (s.key === key ? { key, desc: !s.desc } : { key, desc: true }));
+  }
+
+  return (
+    <section className="mt-8">
+      <h2 className="text-[20px] font-bold tracking-tight">Ce que chaque vidéo rapporte</h2>
+      <p className="mt-1 text-[var(--fg2)] font-medium">
+        Lu dans le CRM : chaque lead est rattaché à la vidéo de son premier contact (utm_campaign), puis suivi
+        jusqu&apos;au RDV{money ? ", à l'élève et aux euros" : ""}.
+      </p>
+
+      {error && <p className="mt-4 font-semibold text-[var(--red)]">{error}</p>}
+      {!error && rows === null && <p className="mt-4 text-[var(--fg2)]">Chargement...</p>}
+      {!error && rows !== null && rows.length === 0 && (
+        <p className="mt-4 text-[var(--fg2)]">Aucun lead sur cette période.</p>
+      )}
+
+      {!error && rows !== null && rows.length > 0 && (
+        <>
+          <div className={`mt-4 grid grid-cols-2 gap-3 ${money ? "lg:grid-cols-4" : "lg:grid-cols-3"}`}>
+            <Tile
+              label="Leads"
+              value={formatNumber(totals.leads)}
+              sub={`${pct(totals.tracked, totals.leads)} avec une source connue`}
+            />
+            <Tile label="Venus de YouTube" value={formatNumber(totals.youtube)} sub={`${pct(totals.youtube, totals.leads)} des leads`} />
+            {money ? (
+              <>
+                <Tile label="Élèves venus de YouTube" value={totals.ytStudents} sub={`sur ${totals.students} élèves`} />
+                <Tile label="CA signé venu de YouTube" value={euros(totals.ytSigned)} sub={`sur ${euros(totals.signed)}`} />
+              </>
+            ) : (
+              <Tile label="RDV" value={totals.rdv} sub={`${pct(totals.rdv, totals.leads)} des leads`} />
+            )}
+          </div>
+
+          <div className="mt-4 overflow-x-auto rounded-[14px] border-[0.5px] border-[var(--sep)] bg-[var(--card)]">
+            <table className={`w-full text-left ${money ? "min-w-[1000px]" : "min-w-[640px]"}`}>
+              <thead>
+                <tr className="border-b border-[var(--sep)] text-sm font-bold text-[var(--fg2)]">
+                  <th className="px-4 py-3">Vidéo</th>
+                  {columns
+                    .filter((c) => money || !c.money)
+                    .map((c) => (
+                      <th key={c.key} className="px-3 py-3 text-right">
+                        <button
+                          onClick={() => toggle(c.key)}
+                          className={`whitespace-nowrap hover:text-[var(--fg)] ${sortKey === c.key ? "text-[var(--fg)]" : ""}`}
+                        >
+                          {c.label}
+                          {sortKey === c.key ? (sort.desc ? " ↓" : " ↑") : ""}
+                        </button>
+                      </th>
+                    ))}
+                </tr>
+              </thead>
+              <tbody>
+                {groups.map((g) => (
+                  <tr key={g.key} className="border-b border-[var(--sep)] last:border-0">
+                    <td className="px-4 py-3">
+                      <div className="min-w-[260px] max-w-[400px]">
+                        <p className={`text-[15px] font-bold leading-snug ${g.key === "none" ? "text-[var(--fg2)]" : ""}`}>
+                          {g.title}
+                        </p>
+                        <p className="mt-0.5 text-[13px] font-semibold text-[var(--fg2)]">{g.sub}</p>
+                      </div>
+                    </td>
+                    <td className="px-3 py-3 text-right text-[16px] font-extrabold whitespace-nowrap">{g.leads}</td>
+                    <td className="px-3 py-3 text-right text-[16px] font-extrabold whitespace-nowrap">{g.rdv}</td>
+                    <RateCell n={g.rdv} d={g.leads} />
+                    {money && (
+                      <>
+                        <td
+                          className={`px-3 py-3 text-right text-[16px] font-extrabold whitespace-nowrap ${
+                            g.students === 0 ? "text-[var(--fg3)]" : ""
+                          }`}
+                        >
+                          {g.students}
+                        </td>
+                        <td
+                          className={`px-3 py-3 text-right text-[16px] font-extrabold whitespace-nowrap ${
+                            g.signed === 0 ? "text-[var(--fg3)]" : "text-[var(--green)]"
+                          }`}
+                        >
+                          {euros(g.signed)}
+                        </td>
+                        <td className="px-3 py-3 text-right text-[15px] font-bold whitespace-nowrap text-[var(--fg2)]">
+                          {euros(g.cashed)}
+                        </td>
+                        <td className="px-3 py-3 text-right text-[15px] font-bold whitespace-nowrap">
+                          {g.leads > 0 && g.signed > 0 ? euros(g.signed / g.leads) : <span className="text-[var(--fg3)]">–</span>}
+                        </td>
+                      </>
+                    )}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="mt-2 text-[14px] font-semibold text-[var(--fg2)]">
+            La période porte sur la date du premier contact. Une personne inscrite plusieurs fois reste sur sa
+            première vidéo. Un élève compte aussi comme RDV.
+          </p>
+        </>
+      )}
+    </section>
+  );
+}
+
 function MetricCells({ g }: { g: Totals }) {
   return (
     <>
@@ -290,6 +527,8 @@ export default function YouTubeAdmin() {
   const [error, setError] = useState<string | null>(null);
   const [sort, setSort] = useState<{ key: SortKey; desc: boolean }>({ key: "leads", desc: true });
   const [open, setOpen] = useState<string | null>(null);
+  const [crm, setCrm] = useState<{ rows: CrmRow[]; money: boolean } | null>(null);
+  const [crmError, setCrmError] = useState<string | null>(null);
 
   useEffect(() => {
     fetch("/api/admin/check")
@@ -321,6 +560,23 @@ export default function YouTubeAdmin() {
         setError("Impossible de charger les stats");
         setLoading(false);
       });
+  }, [authorized, days]);
+
+  // Le CRM se charge à part : PostHog peut être lent ou saturé.
+  useEffect(() => {
+    if (!authorized) return;
+    let cancelled = false;
+    fetch(`/api/admin/youtube/crm?days=${days}`)
+      .then((r) => r.json())
+      .then((d) => {
+        if (cancelled) return;
+        if (d.rows) setCrm({ rows: d.rows, money: Boolean(d.money) });
+        else setCrmError(d.error || "Impossible de charger le CRM");
+      })
+      .catch(() => !cancelled && setCrmError("Impossible de charger le CRM"));
+    return () => {
+      cancelled = true;
+    };
   }, [authorized, days]);
 
   const totals = useMemo(() => {
@@ -397,6 +653,8 @@ export default function YouTubeAdmin() {
     if (d === days) return;
     setLoading(true);
     setError(null);
+    setCrm(null);
+    setCrmError(null);
     setDays(d);
   }
 
@@ -438,8 +696,15 @@ export default function YouTubeAdmin() {
           ))}
         </div>
 
-        {loading && <p className="mt-8 text-[var(--fg2)]">Chargement...</p>}
-        {error && <p className="mt-8 font-semibold text-[var(--red)]">{error}</p>}
+        <CrmSection rows={crm?.rows ?? null} money={crm?.money ?? false} videos={videos} error={crmError} />
+
+        <h2 className="mt-10 text-[20px] font-bold tracking-tight">Du clic au lead</h2>
+        <p className="mt-1 text-[var(--fg2)] font-medium">
+          Lu dans PostHog : les visiteurs arrivés depuis YouTube et ce qu&apos;ils ont fait sur le site.
+        </p>
+
+        {loading && <p className="mt-6 text-[var(--fg2)]">Chargement...</p>}
+        {error && <p className="mt-6 font-semibold text-[var(--red)]">{error}</p>}
 
         {!loading && !error && stale && (
           <p className="mt-6 rounded-[10px] bg-[color-mix(in_srgb,var(--orange)_14%,transparent)] px-4 py-3 font-semibold text-[var(--orange)]">

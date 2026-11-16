@@ -8,6 +8,7 @@ import { inviteToSkool } from "@/lib/skool";
 import { proofDecision, requestProofAfterSignature } from "@/lib/residence-proofs";
 import { sendMetaEvent } from "@/lib/meta-capi";
 import { addMonths, type StudentPayment } from "@/lib/students";
+import { firstTouch } from "@/lib/utm";
 import { silentDays, type ThreadDates } from "@/lib/student-silence";
 import { reminderDue, studentReminderDue, studentReminderKey, type StudentReminderRow } from "@/lib/payment-reminders";
 import { sendQuestionnaire } from "@/lib/questionnaire";
@@ -150,12 +151,17 @@ async function markAlert(sale: Sale, key: string) {
 }
 
 // Origine d'une vente : le premier funnel CRM où le client s'est inscrit,
-// sinon une candidature, plus les UTM de sa candidature s'il y en a une.
+// sinon une candidature, plus les UTM de son premier contact (fiche CRM ou
+// candidature, la plus ancienne qui en a).
 // Marque aussi le lead comme client dans le CRM (les séquences s'arrêtent).
 export async function linkLead(email: string): Promise<{ origin: string | null; utm: Record<string, string> }> {
   const supabase = getAdminClient();
   const [{ data: leads }, { data: cands }] = await Promise.all([
-    supabase.from("crm_leads").select("id, source, created_at").eq("email", email).order("created_at", { ascending: true }),
+    supabase
+      .from("crm_leads")
+      .select("id, source, created_at, utm_source, utm_medium, utm_campaign")
+      .eq("email", email)
+      .order("created_at", { ascending: true }),
     supabase
       .from("candidatures")
       .select("utm_source, utm_medium, utm_campaign, created_at")
@@ -170,8 +176,9 @@ export async function linkLead(email: string): Promise<{ origin: string | null; 
       .in("id", leads.map((l) => l.id));
   }
   const cand = cands?.[0];
+  const first = firstTouch([...(leads ?? []), ...(cand ? [cand] : [])]);
   const utm = Object.fromEntries(
-    Object.entries({ source: cand?.utm_source, medium: cand?.utm_medium, campaign: cand?.utm_campaign }).filter(
+    Object.entries({ source: first?.utm_source, medium: first?.utm_medium, campaign: first?.utm_campaign }).filter(
       (e): e is [string, string] => Boolean(e[1]),
     ),
   );
