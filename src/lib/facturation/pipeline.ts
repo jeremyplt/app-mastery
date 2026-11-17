@@ -18,6 +18,8 @@ export type Plan = {
   studentId: string | null;
   schedulePosition: number | null;
   date: string;
+  // Date du virement, quand elle diffère de celle de la facture (facture faite avant le paiement).
+  paidOn?: string;
   amount: number;
   expectedTax: number;
   rate: number;
@@ -137,6 +139,9 @@ async function planForStudent(line: BankLine, student: Student, deps: Deps): Pro
     if ("handoff" in target) return { handoff: `${student.name} : ${target.handoff}` };
     if (target.existing) {
       const inv = target.existing;
+      // La facture est faite, mais le virement paie quand même une échéance :
+      // elle est cochée comme pour une nouvelle facture.
+      const entry = findScheduleEntry(line, student, await deps.store.takenPositions(student.id));
       return {
         plan: {
           key: baseKey(line),
@@ -144,8 +149,9 @@ async function planForStudent(line: BankLine, student: Student, deps: Deps): Pro
           label: student.name,
           partnerId: student.partnerId,
           studentId: student.id,
-          schedulePosition: null,
+          schedulePosition: entry?.position ?? null,
           date: inv.date,
+          paidOn: line.date,
           amount: line.amount,
           expectedTax: inv.amountTax,
           rate: 0,
@@ -241,15 +247,20 @@ async function decideLine(line: BankLine, students: Student[], assigned: string 
       return { handoff: `Le virement cite ${cls.number}, mais cette facture n'est pas impayée pour ce montant` };
     }
     const { partner } = await facts(deps, inv.partnerId);
+    // Un élève qui paie en citant sa facture : son échéance est cochée aussi.
+    const owners = students.filter((s) => s.partnerId === inv.partnerId);
+    const owner = owners.length === 1 ? owners[0] : null;
+    const entry = owner ? findScheduleEntry(line, owner, await deps.store.takenPositions(owner.id)) : null;
     return {
       plan: {
         key: baseKey(line),
         bankLineIds: [line.id],
         label: partner.name,
         partnerId: inv.partnerId,
-        studentId: null,
-        schedulePosition: null,
+        studentId: owner?.id ?? null,
+        schedulePosition: entry?.position ?? null,
         date: inv.date,
+        paidOn: line.date,
         amount: line.amount,
         expectedTax: inv.amountTax,
         rate: 0,
@@ -259,7 +270,7 @@ async function decideLine(line: BankLine, students: Student[], assigned: string 
         line: { productId: null, name: null, priceUnit: 0, taxId: TAX.EC0 },
         sendEmail: false,
         clientEmail: null,
-        reserve: { vat: inv.amountTax, closer: 0 },
+        reserve: { vat: inv.amountTax, closer: owner?.commissionPerInstallment ?? 0 },
         kind: "existing",
         existingInvoiceId: inv.id,
       },
@@ -399,7 +410,7 @@ export async function advance(key: string, deps: Deps, report: Report): Promise<
     const after = await deps.odoo.getInvoice(row.odoo_invoice_id as number);
     if (after.amountResidual !== 0) return handoff(row, `${row.number} : il reste ${money(after.amountResidual)} à rapprocher après le virement`, deps, report);
     // La 1re mensualité reste cochée par Jeremy : elle déclenche l'accès au Skool.
-    if (plan.studentId && plan.schedulePosition && plan.schedulePosition > 1) await deps.store.markPaid(plan.studentId, plan.schedulePosition, plan.date);
+    if (plan.studentId && plan.schedulePosition && plan.schedulePosition > 1) await deps.store.markPaid(plan.studentId, plan.schedulePosition, plan.paidOn ?? plan.date);
     await set({ state: "reconciled" });
   }
 
@@ -408,7 +419,8 @@ export async function advance(key: string, deps: Deps, report: Report): Promise<
     if (plan.kind === "existing") {
       await set({ state: "done" });
       report.handled.push({ key, state: "done", number: row.number });
-      await deps.notify.post({ title: `${row.number} payée : ${plan.label}`, body: `Virement de ${money(plan.amount)} rapproché, pas de nouvelle facture.${reserveLine(plan)}`, level: "success", dedupe: `facture-done-${key}` });
+      const unchecked = plan.studentId && !plan.schedulePosition ? "\nAucune échéance de même montant près de cette date : rien n'est coché dans le CRM, à vérifier." : "";
+      await deps.notify.post({ title: `${row.number} payée : ${plan.label}`, body: `Virement de ${money(plan.amount)} rapproché, pas de nouvelle facture.${unchecked}${reserveLine(plan)}`, level: "success", dedupe: `facture-done-${key}` });
       return;
     }
     const pdf = await deps.odoo.pdf(row.odoo_invoice_id as number);

@@ -226,6 +226,43 @@ test("facture impayée de même montant : rapprochée, sans nouvelle facture ni 
   assert.equal(w.invoices.get(50)?.paymentState, "paid");
 });
 
+test("facture faite avant le paiement : le virement la rapproche ET coche l'échéance", async () => {
+  // La facture de la 2e mensualité part le 1er décembre, le virement arrive le 3.
+  const w = world({
+    lines: [{ id: 12, date: "2026-12-03", amount: 1000, payment_ref: "Deuxieme mensualite", partner_name: "ALICE MARTINEZ" }],
+    invoices: [{ id: 51, name: "VEN/2026/00030", state: "posted", partnerId: 7, date: "2026-12-01", amountTotal: 1000, amountTax: 145.3, amountResidual: 1000, paymentState: "not_paid", positionId: 3 }],
+  });
+  await run(w.deps);
+  assert.equal(w.c.creates, 0);
+  assert.equal(w.invoices.get(51)?.paymentState, "paid");
+  assert.deepEqual([...w.paid], [2]);
+  const plan = [...w.rows.values()][0].plan;
+  assert.equal(plan.schedulePosition, 2);
+  assert.equal(plan.paidOn, "2026-12-03", "cochée à la date du virement, pas de la facture");
+  // Relancer ne coche rien de plus et ne refait rien.
+  await run(w.deps);
+  assert.deepEqual([w.c.creates, w.c.reconciles], [0, 1]);
+});
+
+test("virement qui cite le numéro de la facture : l'échéance de l'élève est cochée aussi", async () => {
+  const w = world({
+    lines: [{ id: 13, date: "2026-12-02", amount: 1000, payment_ref: "VEN/2026/00030", partner_name: "SOCIETE TIERCE" }],
+    invoices: [{ id: 51, name: "VEN/2026/00030", state: "posted", partnerId: 7, date: "2026-12-01", amountTotal: 1000, amountTax: 145.3, amountResidual: 1000, paymentState: "not_paid", positionId: 3 }],
+  });
+  await run(w.deps);
+  assert.equal(w.c.creates, 0);
+  assert.equal(w.invoices.get(51)?.paymentState, "paid");
+  assert.deepEqual([...w.paid], [2]);
+});
+
+test("facture faite avant la 1re mensualité : rapprochée, mais la 1re reste à cocher par Jeremy", async () => {
+  const w = world({ invoices: [{ id: 50, name: "VEN/2026/00026", state: "posted", partnerId: 7, date: "2026-11-01", amountTotal: 1000, amountTax: 145.3, amountResidual: 1000, paymentState: "not_paid", positionId: 3 }] });
+  await run(w.deps);
+  assert.equal(w.invoices.get(50)?.paymentState, "paid");
+  assert.equal([...w.rows.values()][0].plan.schedulePosition, 1);
+  assert.equal(w.paid.size, 0);
+});
+
 test("facture payée récente de même montant : doublon possible, on s'arrête", async () => {
   const w = world({ invoices: [{ id: 50, name: "VEN/2026/00026", state: "posted", partnerId: 7, date: "2026-10-30", amountTotal: 1000, amountTax: 145.3, amountResidual: 0, paymentState: "paid", positionId: 3 }] });
   const r = await run(w.deps);
