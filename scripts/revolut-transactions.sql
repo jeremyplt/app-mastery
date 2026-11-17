@@ -1,6 +1,6 @@
 -- Transactions Revolut Business vues par le webhook /api/webhook/revolut.
--- NON APPLIQUÉE (écrite le 2026-11-17) : à passer en migration Supabase
--- "revolut_transactions" avant de créer le webhook chez Revolut.
+-- Appliquée le 2026-11-17 en migration Supabase
+-- « revolut_transactions » (avant la création du webhook chez Revolut).
 -- Une ligne par transaction (identifiant Revolut), mise à jour à chaque
 -- événement : sert au cochage automatique des échéances et à la comptabilité.
 -- Montant, devise et compte : la jambe reçue (ou la première), le reste dans raw.
