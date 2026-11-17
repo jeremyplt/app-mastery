@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { run, scan, type AutomationRow, type Deps, type OdooInvoice, type OdooPort, type PartnerFacts, type Plan, type StorePort } from "../pipeline";
+import { run, scan, type AutomationRow, type Deps, type OdooInvoice, type OdooPort, type PartnerFacts, type Plan, type SetAsidesPort, type StorePort } from "../pipeline";
 import type { BankLine, Student } from "../match";
 
 // Un faux Odoo et un faux CRM, pour provoquer une panne à chaque appel possible,
@@ -9,7 +9,7 @@ import type { BankLine, Student } from "../match";
 class Crash extends Error {}
 type Mode = { at: number; when: "before" | "after" } | null;
 
-function world(opts: { lines?: BankLine[]; students?: Student[]; invoices?: OdooInvoice[]; autoSend?: boolean; partners?: PartnerFacts[] } = {}) {
+function world(opts: { lines?: BankLine[]; students?: Student[]; invoices?: OdooInvoice[]; autoSend?: boolean; partners?: PartnerFacts[]; asideFailures?: number } = {}) {
   const lines = opts.lines ?? [{ id: 10, date: "2026-11-02", amount: 1000, payment_ref: "Payment from Alice Martinez", partner_name: "ALICE MARTINEZ" }];
   const students = opts.students ?? [{ id: "st1", name: "Alice Martinez", email: "alice@example.com", partnerId: 7, partnerName: "Alice Martinez", companyName: null, schedule: [{ position: 1, amount: 1000, due: "2026-11-01", paid: true }, { position: 2, amount: 1000, due: "2026-12-01", paid: false }, { position: 3, amount: 1000, due: "2027-01-01", paid: false }], contractBlocked: false, billing: {}, commissionPerInstallment: 170.94 }];
   const partners = opts.partners ?? [{ id: 7, name: "Alice Martinez", email: "alice@example.com", isCompany: false, countryCode: "FR", vat: null, positionId: null, hasProofAttachment: false }];
@@ -121,9 +121,31 @@ function world(opts: { lines?: BankLine[]; students?: Student[]; invoices?: Odoo
       }),
   };
 
+  // Mises de côté : une par (mensualité, type), comme la clé unique de set_asides.
+  const asides = new Map<string, { amount: number; invoice: string | null; at: string }>();
+  let asideFailures = opts.asideFailures ?? 0;
+  const setAsides: SetAsidesPort = {
+    afterPayment: (row) =>
+      step(() => {
+        if (asideFailures > 0) {
+          asideFailures -= 1;
+          throw new Error("Supabase : délai dépassé");
+        }
+        if (!row.plan.schedulePosition) return { result: "rien", warning: "échéance inconnue, rien mis de côté" };
+        const k = `${row.plan.studentId}:${row.plan.schedulePosition}`;
+        // L'argent doit être encaissé : le virement est déjà rapproché.
+        const at = row.plan.bankLineIds.every((id) => reconciled.has(id)) ? "après rapprochement" : "AVANT rapprochement";
+        if (row.plan.expectedTax > 0 && !asides.has(`${k}|tva`)) asides.set(`${k}|tva`, { amount: row.plan.expectedTax, invoice: row.number, at });
+        if (row.plan.reserve.closer > 0 && !asides.has(`${k}|closer`)) asides.set(`${k}|closer`, { amount: row.plan.reserve.closer, invoice: row.number, at });
+        return { result: "ok", warning: null };
+      }),
+    missing: () => step(() => [...rows.values()].filter((r) => ["reconciled", "crm_ready", "waiting_send", "done"].includes(r.state) && r.plan.schedulePosition && !asides.has(`${r.plan.studentId}:${r.plan.schedulePosition}|tva`))),
+  };
+
   const deps: Deps = {
     odoo,
     store,
+    setAsides,
     pdf: { text: async (b) => `${b.toString()} SDG STUDIO SARL-S Total 1 000,00 €` },
     notify: {
       post: async (e) => {
@@ -133,7 +155,7 @@ function world(opts: { lines?: BankLine[]; students?: Student[]; invoices?: Odoo
     },
     today: () => "2026-11-05",
   };
-  return { deps, c, paid, invoices, rows, crm, posts, known, reconciled, setMode: (m: Mode) => { mode = m; calls = 0; dead = false; }, calls: () => calls };
+  return { deps, c, paid, invoices, rows, crm, posts, known, reconciled, asides, setMode: (m: Mode) => { mode = m; calls = 0; dead = false; }, calls: () => calls };
 }
 
 const status0 = (w: { crm: Map<string, { status: string }> }) => [...w.crm.values()][0]?.status;
@@ -197,6 +219,9 @@ test("panne à chaque appel, avant ou après son effet : jamais de doublon", asy
       // Soit tout est fini, soit l'envoi est incertain et Jeremy est prévenu.
       if (w.c.mails === 0 || status !== "sent") assert.equal(row.state === "done" && status === "sent", false, `${label} : état incohérent`);
       if (status === "sending") assert.equal(row.state, "handoff", `${label} : envoi incertain sans alerte`);
+      // Mises de côté : TVA et closer de la mensualité, une fois chacune, après encaissement.
+      assert.deepEqual([...w.asides.keys()].sort(), ["st1:1|closer", "st1:1|tva"], `${label} : mises de côté ${[...w.asides.keys()]}`);
+      assert.ok([...w.asides.values()].every((a) => a.at === "après rapprochement" && a.invoice), `${label} : mise de côté avant l'encaissement`);
       scenarios += 1;
     }
   }
@@ -330,6 +355,59 @@ test("virements internes et capital : ignorés sans alerte", async () => {
   assert.equal(r.ignored, 2);
   assert.equal(w.posts.length, 0);
   assert.equal(w.c.creates, 0);
+});
+
+test("mises de côté : TVA et closer de la mensualité, une fois, quand la facture existe et l'argent est encaissé", async () => {
+  const w = world();
+  for (let i = 0; i < 3; i++) await run(w.deps);
+  assert.deepEqual(Object.fromEntries([...w.asides].map(([k, v]) => [k, [v.amount, v.invoice, v.at]])), {
+    "st1:1|tva": [145.3, "VEN/2026/00027", "après rapprochement"],
+    "st1:1|closer": [170.94, "VEN/2026/00027", "après rapprochement"],
+  });
+});
+
+test("mises de côté : facture faite avant le paiement, mise de côté au virement, avec la TVA de la facture", async () => {
+  const w = world({
+    lines: [{ id: 12, date: "2026-12-03", amount: 1000, payment_ref: "Deuxieme mensualite", partner_name: "ALICE MARTINEZ" }],
+    invoices: [{ id: 51, name: "VEN/2026/00030", state: "posted", partnerId: 7, date: "2026-12-01", amountTotal: 1000, amountTax: 145.3, amountResidual: 1000, paymentState: "not_paid", positionId: 3 }],
+  });
+  await run(w.deps);
+  assert.deepEqual([...w.asides.keys()].sort(), ["st1:2|closer", "st1:2|tva"]);
+  assert.equal(w.asides.get("st1:2|tva")?.invoice, "VEN/2026/00030");
+});
+
+test("mises de côté : rien sans encaissement rattaché (montant différent, payeur inconnu)", async () => {
+  for (const w of [
+    world({ lines: [{ id: 10, date: "2026-11-02", amount: 750, payment_ref: "", partner_name: "ALICE MARTINEZ" }] }),
+    world({ lines: [{ id: 10, date: "2026-11-02", amount: 1000, payment_ref: "", partner_name: "INCONNU TOTAL" }] }),
+  ]) {
+    await run(w.deps);
+    assert.equal(w.asides.size, 0);
+  }
+});
+
+test("mises de côté : facture payée sans échéance reconnue, Jeremy prévenu de le faire à la main", async () => {
+  const w = world({
+    lines: [{ id: 14, date: "2026-11-16", amount: 1000, payment_ref: "Paiement", partner_name: "ALICE MARTINEZ" }],
+    invoices: [{ id: 52, name: "VEN/2026/00031", state: "posted", partnerId: 7, date: "2026-11-15", amountTotal: 1000, amountTax: 145.3, amountResidual: 1000, paymentState: "not_paid", positionId: 3 }],
+  });
+  await run(w.deps);
+  await run(w.deps);
+  assert.equal(w.asides.size, 0);
+  assert.equal(w.posts.filter((p) => p.startsWith("Mise de côté à faire à la main")).length, 1, "une seule alerte");
+});
+
+test("mises de côté en panne : la facture suit son cours, Jeremy prévenu, rattrapage au passage suivant", async () => {
+  const w = world({ asideFailures: 1 });
+  const r = await run(w.deps);
+  assert.equal(w.c.mails, 1, "la facture part quand même");
+  assert.equal(w.asides.size, 0);
+  assert.ok(w.posts.some((p) => p.startsWith("Mise de côté non enregistrée")));
+  assert.match(r.setAsides[0].result, /erreur/);
+  await run(w.deps);
+  assert.deepEqual([...w.asides.keys()].sort(), ["st1:1|closer", "st1:1|tva"]);
+  await run(w.deps);
+  assert.equal(w.asides.size, 2);
 });
 
 test("scan n'écrit rien", async () => {

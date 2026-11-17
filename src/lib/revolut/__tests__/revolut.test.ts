@@ -400,6 +400,49 @@ test("virement annulé après coche : Jeremy prévenu une fois, rien décoché t
   assert.equal(w.rows.get(TX_ID)?.match_status, "paid");
 });
 
+test("mise de côté depuis le webhook : demandée après la coche, une fois, avec la transaction", async () => {
+  const w = world();
+  const asked: string[] = [];
+  w.deps.setAside = async (studentId, position, id) => {
+    asked.push(`${studentId}:${position}:${id}`);
+    return "simulation : 145.30 € TVA, 170.94 € Closers";
+  };
+  await handleEvent(w.created(), w.deps);
+  await handleEvent(w.created(), w.deps);
+  await handleEvent(w.changed("pending", "completed"), w.deps);
+  assert.deepEqual(asked, [`st-kevin:2:${TX_ID}`]);
+  assert.match(w.rows.get(TX_ID)?.match_reason ?? "", /mise de côté simulation/);
+});
+
+test("mise de côté en panne : l'échéance est cochée quand même, pas de renvoi de Revolut", async () => {
+  const w = world();
+  w.deps.setAside = async () => {
+    throw new Error("relation set_asides inexistante");
+  };
+  const r = await handleEvent(w.created(), w.deps);
+  assert.match(r.result, /^paid/);
+  assert.equal(w.marks.length, 1);
+});
+
+test("mise de côté : jamais sur une alerte (1re échéance, doute, dollars)", async () => {
+  const first = kevin({ schedule: [{ position: 1, amount: 1000, due: "2026-11-16", paid: false }, { position: 2, amount: 1000, due: "2026-12-16", paid: false }, { position: 3, amount: 1000, due: "2027-01-16", paid: false }] });
+  const cases = [
+    world({ students: [first, alice()], bank: tx({ reference: "App Mastery Kevin Martin 1/3" }) }),
+    world({ bank: tx({}, { amount: 999 }) }),
+    world({ bank: tx({}, { account_id: "compte-usd", currency: "USD" }) }),
+  ];
+  for (const w of cases) {
+    let asked = 0;
+    w.deps.setAside = async () => {
+      asked += 1;
+      return null;
+    };
+    const r = await handleEvent(w.created(w.bank.get(TX_ID)), w.deps);
+    assert.match(r.result, /^alert/);
+    assert.equal(asked, 0);
+  }
+});
+
 test("événements inconnus ou incomplets : ignorés, rien d'enregistré", async () => {
   const w = world();
   for (const p of [{ event: "PayoutLinkCreated", data: { id: TX_ID } }, { event: "TransactionCreated" }, null, "texte"]) {

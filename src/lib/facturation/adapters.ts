@@ -8,6 +8,7 @@ import { EMAIL_RE, INVOICE_BUCKET, defaultDraft, invoiceSlug, needsRenameNote, s
 import type { BankDetails } from "@/lib/emails/ventes";
 import { EUR, INCOME_ACCOUNT, SALES_JOURNAL } from "./rules";
 import { loadStudents, markInstallmentPaid } from "./crm";
+import { pipelineSetAsides } from "@/lib/mises-de-cote/enregistrement";
 import type { BankLine } from "./match";
 import type { AutomationRow, Deps, NotifyPort, OdooInvoice, OdooPort, PartnerFacts, PdfPort, Plan, StorePort } from "./pipeline";
 
@@ -303,5 +304,7 @@ export function realDeps(): Deps {
       return list;
     },
   };
-  return { odoo, store: withNames, pdf: pdfPort, notify: notifyPort, today };
+  // Mises de côté TVA et closer, selon l'interrupteur set_asides_mode.
+  const setAsides = pipelineSetAsides(createClient(need("NEXT_PUBLIC_SUPABASE_URL"), need("SUPABASE_SERVICE_ROLE_KEY")));
+  return { odoo, store: withNames, pdf: pdfPort, notify: notifyPort, today, setAsides };
 }

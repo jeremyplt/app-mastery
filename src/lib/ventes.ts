@@ -14,6 +14,8 @@ import { reminderDue, studentReminderDue, studentReminderKey, type StudentRemind
 import { sendQuestionnaire } from "@/lib/questionnaire";
 import { sendMonthlyRecap, sendUnlockAlerts } from "@/lib/commissions";
 import { loadPipeline, pipelineLines } from "@/lib/pipeline";
+import { digestSection, type DigestRow } from "@/lib/mises-de-cote/calcul";
+import { markReported, unreportedSetAsides } from "@/lib/mises-de-cote/enregistrement";
 
 export { reminderDue };
 
@@ -626,8 +628,16 @@ async function sendDailyDigest(sales: Sale[], now: Date): Promise<boolean> {
       })
     : [];
 
+  // Mises de côté TVA et closer pas encore présentées (simulation, à virer ou
+  // virées) ; best-effort, la table peut ne pas exister encore.
+  const asideRows = await unreportedSetAsides(supabase).catch((err) => {
+    console.error("Point du jour : mises de côté non lues", err);
+    return [] as DigestRow[];
+  });
+  const asides = digestSection(asideRows);
+
   await supabase.from("site_settings").upsert({ key: "ventes_digest", value: { day: today }, updated_at: now.toISOString() });
-  if (!due.length && !late.length && !unsigned.length && !students.ends.length && !students.bilans.length && !students.silent.length && !pipeline.length) return false;
+  if (!due.length && !late.length && !unsigned.length && !students.ends.length && !students.bilans.length && !students.silent.length && !pipeline.length && !asides) return false;
 
   const list = (items: string[]) => items.map((i) => `• ${i}`).join("<br>");
   const lines: string[] = [];
@@ -638,6 +648,7 @@ async function sendDailyDigest(sales: Sale[], now: Date): Promise<boolean> {
   if (students.bilans.length) lines.push(`<b>📋 Bilans (fin de garantie)</b><br>${list(students.bilans)}`);
   if (students.silent.length) lines.push(`<b>🔕 Sans nouvelles depuis une semaine</b> (d'après WhatsApp : un petit message de ta part peut les relancer)<br>${list(students.silent)}`);
   if (pipeline.length) lines.push(`<b>📈 Pipeline de la semaine</b><br>${list(pipeline)}`);
+  if (asides) lines.push(`<b>🏦 ${esc(asides.headline)}</b><br>${list(asides.lines.map(esc))}`);
   const count = due.length + late.length;
   const onlyStudents = !count && !unsigned.length;
   const studentItems = students.ends.length + students.bilans.length + students.silent.length;
@@ -648,7 +659,9 @@ async function sendDailyDigest(sales: Sale[], now: Date): Promise<boolean> {
         ? "✍️ Des contrats attendent une signature"
         : studentItems
           ? "📅 Échéances élèves du jour"
-          : "📈 Pipeline de la semaine",
+          : pipeline.length
+            ? "📈 Pipeline de la semaine"
+            : "🏦 Mises de côté du jour",
     lines,
     "vente-admin-jour",
     onlyStudents
@@ -657,5 +670,8 @@ async function sendDailyDigest(sales: Sale[], now: Date): Promise<boolean> {
         : { label: "Ouvrir le CRM", href: `${SITE}/admin/crm` }
       : undefined,
   );
+  if (asides) {
+    await markReported(supabase, asideRows.map((r) => r.id), now).catch((err) => console.error("Point du jour : mises de côté non marquées", err));
+  }
   return true;
 }

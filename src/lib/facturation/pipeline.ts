@@ -103,8 +103,18 @@ export interface NotifyPort {
   post(event: { title: string; body: string; level: "info" | "success" | "warning" | "error"; dedupe: string; url?: string }): Promise<void>;
 }
 
-export type Deps = { odoo: OdooPort; store: StorePort; pdf: PdfPort; notify: NotifyPort; today: () => string };
-export type Report = { handled: { key: string; state: string; number: string | null }[]; handoffs: { bankLineIds: number[]; reason: string }[]; ignored: number; errors: { key: string; error: string }[]; warnings: string[]; pdfs: { number: string; invoiceId: string }[] };
+// Mises de côté TVA et closer (lib/mises-de-cote) : idempotentes, jamais
+// bloquantes pour la facture.
+export interface SetAsidesPort {
+  // La facture d'une mensualité payée existe et le virement est rapproché.
+  // warning : ce qui n'a pas pu être mis de côté (à faire à la main).
+  afterPayment(row: AutomationRow): Promise<{ result: string; warning: string | null } | null>;
+  // Factures encaissées dont la mise de côté manque (panne passagère).
+  missing(): Promise<AutomationRow[]>;
+}
+
+export type Deps = { odoo: OdooPort; store: StorePort; pdf: PdfPort; notify: NotifyPort; today: () => string; setAsides?: SetAsidesPort };
+export type Report = { handled: { key: string; state: string; number: string | null }[]; handoffs: { bankLineIds: number[]; reason: string }[]; ignored: number; errors: { key: string; error: string }[]; warnings: string[]; pdfs: { number: string; invoiceId: string }[]; setAsides: { key: string; result: string }[] };
 
 const round2 = (n: number) => Math.round(n * 100) / 100;
 const CRM = "https://www.jeremypitault.com/admin/factures";
@@ -411,6 +421,9 @@ export async function advance(key: string, deps: Deps, report: Report): Promise<
     if (after.amountResidual !== 0) return handoff(row, `${row.number} : il reste ${money(after.amountResidual)} à rapprocher après le virement`, deps, report);
     // La 1re mensualité reste cochée par Jeremy : elle déclenche l'accès au Skool.
     if (plan.studentId && plan.schedulePosition && plan.schedulePosition > 1) await deps.store.markPaid(plan.studentId, plan.schedulePosition, plan.paidOn ?? plan.date);
+    // Argent encaissé et facture validée : TVA et part du closer mises de côté,
+    // avant de passer l'étape (un arrêt ici est repris au passage suivant).
+    await putAside(row, deps, report);
     await set({ state: "reconciled" });
   }
 
@@ -467,6 +480,25 @@ export async function advance(key: string, deps: Deps, report: Report): Promise<
   }
 }
 
+// Jamais bloquant : une erreur prévient Jeremy et le passage suivant rattrape
+// (SetAsidesPort.missing). Un arrêt du processus remonte, comme ailleurs.
+async function putAside(row: AutomationRow, deps: Deps, report: Report) {
+  if (!deps.setAsides || !row.plan.studentId) return;
+  try {
+    const out = await deps.setAsides.afterPayment(row);
+    if (out) report.setAsides.push({ key: row.invoice_key, result: out.result });
+    if (out?.warning) {
+      await deps.notify.post({ title: `Mise de côté à faire à la main : ${row.plan.label}`, body: out.warning, level: "warning", dedupe: `mise-de-cote-note-${row.invoice_key}` });
+    }
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    report.setAsides.push({ key: row.invoice_key, result: `erreur : ${message}` });
+    await deps.notify
+      .post({ title: `Mise de côté non enregistrée : ${row.plan.label}`, body: `${row.number ?? row.invoice_key} : ${message}\nNouvel essai au prochain passage.`, level: "warning", dedupe: `mise-de-cote-${row.invoice_key}-${deps.today()}` })
+      .catch(() => undefined);
+  }
+}
+
 function reserveLine(plan: Plan): string {
   const parts: string[] = [];
   if (plan.reserve.vat > 0) parts.push(`${money(plan.reserve.vat)} vers EUR TVA`);
@@ -502,7 +534,7 @@ export async function scan(deps: Deps): Promise<{ line: BankLine; decision: stri
 }
 
 export async function run(deps: Deps): Promise<Report> {
-  const report: Report = { handled: [], handoffs: [], ignored: 0, errors: [], warnings: [], pdfs: [] };
+  const report: Report = { handled: [], handoffs: [], ignored: 0, errors: [], warnings: [], pdfs: [], setAsides: [] };
   const today = deps.today();
 
   // La connexion bancaire d'Odoo peut expirer sans prévenir.
@@ -519,6 +551,15 @@ export async function run(deps: Deps): Promise<Report> {
       await advance(row.invoice_key, deps, report);
     } catch (err) {
       await failed(row.invoice_key, err, deps, report);
+    }
+  }
+
+  // 1 bis. Mises de côté manquées (erreur passagère d'un passage précédent).
+  if (deps.setAsides) {
+    try {
+      for (const row of await deps.setAsides.missing()) await putAside(row, deps, report);
+    } catch (err) {
+      report.warnings.push(`Mises de côté : rattrapage impossible (${err instanceof Error ? err.message : String(err)})`);
     }
   }
 

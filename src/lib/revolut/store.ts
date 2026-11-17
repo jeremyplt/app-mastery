@@ -1,6 +1,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { getAdminClient } from "@/lib/supabase";
 import { loadStudents, markInstallmentPaid } from "@/lib/facturation/crm";
+import { recordFromWebhook, summarize } from "@/lib/mises-de-cote/enregistrement";
 import { sendBuiltEmail } from "@/lib/emails/send";
 import { adminAlert } from "@/lib/emails/ventes";
 import { esc } from "@/lib/emails/layout";
@@ -86,6 +87,7 @@ export function realWebhookDeps(): WebhookDeps {
     fetchTransaction,
     loadStudents: () => loadStudents(db),
     markPaid: (studentId, position, date) => markInstallmentPaid(db, studentId, position, date),
+    setAside: async (studentId, position, transactionId) => summarize(await recordFromWebhook(db, studentId, position, transactionId)),
     async alert(a) {
       // Le texte vient en partie du payeur (référence, nom) : échappé.
       const cta = a.studentId

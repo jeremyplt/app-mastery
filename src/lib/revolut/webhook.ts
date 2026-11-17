@@ -42,6 +42,9 @@ export type WebhookDeps = {
   loadStudents(): Promise<Student[]>;
   // Le même chemin que le job de factures (lib/facturation/crm.ts).
   markPaid(studentId: string, position: number, date: string): Promise<boolean>;
+  // Mises de côté TVA et closer, si la facture de l'échéance existe déjà
+  // (sinon le job de factures les fera en la créant). Jamais bloquant.
+  setAside?(studentId: string, position: number, transactionId: string): Promise<string | null>;
   alert(a: Alert): Promise<void>;
   now(): Date;
 };
@@ -121,6 +124,14 @@ export async function handleEvent(payload: unknown, deps: WebhookDeps): Promise<
       const changed = await deps.markPaid(decision.student.id, decision.position, decision.date);
       // Pas changé : cochée entre-temps (par Jeremy ou le job). Elle est payée, rien à signaler.
       outcome = { match_status: "paid", match_reason: changed ? `Cochée : ${decision.reason}` : `Déjà cochée entre-temps : ${decision.reason}`, student_id: decision.student.id, schedule_position: decision.position, alerts };
+      // Une mise de côté ratée ne doit pas faire renvoyer l'événement : le job rattrape.
+      const aside = deps.setAside
+        ? await deps.setAside(decision.student.id, decision.position, tx.id).catch((err) => {
+            console.error("Webhook Revolut : mise de côté non enregistrée", err);
+            return null;
+          })
+        : null;
+      if (aside) outcome.match_reason += ` · mise de côté ${aside}`;
     }
     await deps.store.finish(id, outcome);
     return { result: `${outcome.match_status} : ${outcome.match_reason}` };
