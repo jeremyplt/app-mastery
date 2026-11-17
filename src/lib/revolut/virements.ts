@@ -5,13 +5,13 @@ import { TARGET, type ModeSetting, type SetAsideKind, type TargetAccount } from 
 
 // Virements des mises de côté vers les sous-comptes TVA et Closers, par l'API
 // Business (POST /api/1.0/transfer : virement entre comptes du même titulaire,
-// jamais vers un bénéficiaire). Écrit mais DÉSACTIVÉ : rien ne part tant que
-// l'interrupteur set_asides_mode n'est pas sur « auto », et la clé qui en a le
-// droit (REVOLUT_TRANSFER_API_KEY / REVOLUT_TRANSFER_SIGNING_KEY) n'existe que
-// sur le serveur Harness. Garde-fous :
+// jamais vers un bénéficiaire). Actifs quand l'interrupteur set_asides_mode est
+// sur « auto » ; la clé qui en a le droit (REVOLUT_TRANSFER_API_KEY /
+// REVOLUT_TRANSFER_SIGNING_KEY) n'existe que sur le serveur Harness, filtrée sur
+// son IP. Sans elle, rien ne part et les lignes attendent. Garde-fous :
 // - source : Main EUR seulement ; cibles : TVA et Closers seulement, en liste
 //   blanche, chacune vérifiée par son identifiant ET son nom (GET accounts) ;
-// - au plus 500 € par virement et 2 000 € par jour ;
+// - au plus 600 € par virement et 2 000 € par jour ;
 // - jamais sous 1 000 € sur Main EUR ;
 // - request_id = identifiant de la ligne : Revolut ne vire pas deux fois ;
 // - au moindre écart (compte, réponse, état, montant), arrêt total enregistré
@@ -22,7 +22,7 @@ export const TARGET_ACCOUNTS: Record<TargetAccount, { id: string; name: string }
   tva: { id: "97db25ba-357c-40d0-89dc-40907a9c11fc", name: "TVA" },
   closers: { id: "8c168065-97fa-4479-8d6b-c0f9fd242fec", name: "Closers" },
 };
-export const LIMITS = { perTransfer: 500, perDay: 2000, minMainBalance: 1000 } as const;
+export const LIMITS = { perTransfer: 600, perDay: 2000, minMainBalance: 1000 } as const;
 
 const BASE = "https://b2b.revolut.com";
 const round2 = (n: number) => Math.round(n * 100) / 100;
@@ -149,10 +149,13 @@ export function assertAllowedCall(method: string, path: string): void {
   throw new Error(`Appel Revolut interdit : ${method} ${path}`);
 }
 
+// Clé de virement absente du serveur : rien ne part, les lignes attendent, sans arrêt total.
+export class MissingTransferKeyError extends Error {}
+
 export function transferApi(env: Record<string, string | undefined> = process.env, fetcher: typeof fetch = fetch): TransferApi {
   const key = env.REVOLUT_TRANSFER_API_KEY?.trim();
   const pem64 = env.REVOLUT_TRANSFER_SIGNING_KEY?.trim();
-  if (!key || !pem64) throw new Error("REVOLUT_TRANSFER_API_KEY ou REVOLUT_TRANSFER_SIGNING_KEY manquante : virements impossibles");
+  if (!key || !pem64) throw new MissingTransferKeyError("REVOLUT_TRANSFER_API_KEY ou REVOLUT_TRANSFER_SIGNING_KEY manquante : virements impossibles");
   const pem = Buffer.from(pem64, "base64").toString("utf8");
 
   async function call<T>(method: "GET" | "POST", path: string, query = "", body: TransferBody | null = null): Promise<{ status: number; data: T | null }> {
@@ -236,6 +239,11 @@ export async function runTransfers(deps: TransferDeps): Promise<TransferReport> 
   let verified: VerifiedAccounts;
   try {
     api = deps.api();
+  } catch (err) {
+    if (err instanceof MissingTransferKeyError) return { ...report, skipped: `clé de virement absente : ${rows.length} ligne${rows.length > 1 ? "s" : ""} en attente` };
+    return halt(`Clé de virement illisible : ${err instanceof Error ? err.message : String(err)}`);
+  }
+  try {
     const v = verifyAccounts(await api.accounts());
     if (!v.ok) return halt(`Comptes Revolut : ${v.reason}`);
     verified = v.accounts;

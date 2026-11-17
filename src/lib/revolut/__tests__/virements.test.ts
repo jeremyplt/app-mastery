@@ -212,13 +212,28 @@ test("ligne vers un compte hors liste (Impôts, bénéficiaire) : arrêt total, 
   }
 });
 
+test("clé de virement absente : rien ne part, les lignes attendent, pas d'arrêt total", async () => {
+  const w = world({});
+  const deps = { ...w.deps, api: () => transferApi({}) };
+  const r = await runTransfers(deps);
+  assert.match(r.skipped ?? "", /clé de virement absente : 2 lignes en attente/);
+  assert.equal(r.halted, null);
+  assert.equal(w.setting().halted, null);
+  assert.equal(w.posts.length, 0);
+  assert.deepEqual(statuses(w), ["a_faire", "a_faire"]);
+});
+
+test("vente payée en une fois : la part du closer (512,82 €) passe sous le plafond", () => {
+  assert.equal(checkTransfer(row(1, { kind: "closer", target_account: "closers", amount: 512.82 }), { setting: AUTO, mainBalance: 18_000, transferredToday: 0 }).ok, true);
+});
+
 // --- Plafonds et solde -----------------------------------------------------------
 
-test("plafond par virement (500 €) : la ligne attend Jeremy, les autres partent", async () => {
-  const w = world({ rows: [row(1, { kind: "closer", target_account: "closers", amount: 512.82, reference: "Closer Bruno P 1/1" }), row(2)] });
+test("plafond par virement (600 €) : la ligne attend Jeremy, les autres partent", async () => {
+  const w = world({ rows: [row(1, { kind: "closer", target_account: "closers", amount: 683.76, reference: "Closer Bruno P 1/1" }), row(2)] });
   const r = await runTransfers(w.deps);
   assert.equal(r.refused.length, 1);
-  assert.match(r.refused[0], /plafond de 500/);
+  assert.match(r.refused[0], /plafond de 600/);
   assert.deepEqual(statuses(w), ["a_faire", "vire"]);
   assert.equal(w.posts.length, 1);
   assert.match(w.rows.get(ID(1))?.error ?? "", /à la main/);
@@ -257,7 +272,7 @@ test("checkTransfer : montants invalides et référence douteuse arrêtent tout"
     assert.equal(c.ok, false);
     assert.equal(!c.ok && c.action, "halt", JSON.stringify(bad));
   }
-  assert.equal(LIMITS.perTransfer, 500);
+  assert.equal(LIMITS.perTransfer, 600);
   assert.equal(LIMITS.perDay, 2000);
   assert.equal(LIMITS.minMainBalance, 1000);
 });
@@ -308,12 +323,12 @@ test("reprise : le virement existe chez Revolut, la ligne passe « vire » sans 
 
 const safe: TransferBody = { request_id: ID(1), source_account_id: MAIN_EUR_ACCOUNT_ID, target_account_id: TARGET_ACCOUNTS.tva.id, amount: 145.3, currency: "EUR", reference: "TVA Alice M 1/3" };
 
-test("dernier verrou : seulement Main EUR vers TVA ou Closers, en euros, sous 500 €", () => {
+test("dernier verrou : seulement Main EUR vers TVA ou Closers, en euros, sous 600 €", () => {
   assert.doesNotThrow(() => assertSafeBody(safe));
   const refused: TransferBody[] = [
     { ...safe, target_account_id: "aba1f598-0000-4000-8000-000000000000" },
     { ...safe, source_account_id: TARGET_ACCOUNTS.closers.id },
-    { ...safe, amount: 500.01 },
+    { ...safe, amount: 600.01 },
     { ...safe, amount: 0 },
     { ...safe, currency: "USD" as "EUR" },
     { ...safe, request_id: "1" },

@@ -1,6 +1,6 @@
 -- Mises de côté sur les sous-comptes Revolut EUR « TVA » et « Closers ».
--- NON APPLIQUÉE (phase 1, simulation). À appliquer en migration Supabase
--- « set_asides » avant de déployer le code qui l'utilise.
+-- Appliquée en migration Supabase « set_asides » le 17/11/2026, directement en
+-- mode auto (Jeremy n'a pas voulu de semaine de simulation).
 --
 -- Une ligne par mensualité encaissée et par type : la TVA de sa facture (telle
 -- que facturée) vers TVA, la part du closer (commission / nombre de
@@ -70,5 +70,5 @@ create index set_asides_unreported_idx on public.set_asides (created_at) where r
 -- avec scripts/revolut/bilan-mises-de-cote.ts). halted : arrêt total posé par
 -- le script de virement au moindre écart, à lever à la main.
 insert into public.site_settings (key, value, updated_at)
-values ('set_asides_mode', jsonb_build_object('mode', 'simulation', 'since', now()), now())
+values ('set_asides_mode', jsonb_build_object('mode', 'auto', 'since', now()), now())
 on conflict (key) do nothing;
