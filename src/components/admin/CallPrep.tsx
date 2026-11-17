@@ -9,7 +9,8 @@ import { CallJournalBlock, type JournalSave } from "./CallJournal";
 // Quatre sortes d'appels : le kick-off (questionnaire, objectifs, points à
 // couvrir, prochaines étapes), le problème à régler (blocage, ce qui a déjà
 // été conseillé, trois pistes de solution), la clôture à la fin des trois mois
-// et le bilan (jalons, chiffres, demande de témoignage, suite), chacun avec
+// et le bilan (jalons, chiffres, témoignage, suite ; à la clôture, le
+// témoignage n'est qu'une suggestion pour la semaine suivante), chacun avec
 // une checklist pour terminer l'appel. Affichée sur la fiche élève et sur
 // /admin/calendrier. Les fiches sont écrites par le job « App Mastery ·
 // appels » (toutes les 5 minutes) : le bouton les demande. Chaque appel a
@@ -231,7 +232,7 @@ function PrepBody({
           </Section>
           {f.temoignage && (
             <div className="rounded-lg border-l-4 border-[var(--accent)] bg-[var(--card-solid)] p-3">
-              <Section label="La demande de témoignage">
+              <Section label={f.type === "cloture" ? "Témoignage, la semaine prochaine" : "La demande de témoignage"}>
                 <p>{f.temoignage}</p>
                 {f.temoignage_preuve && <p className="mt-1 font-bold">À montrer : {f.temoignage_preuve}</p>}
               </Section>

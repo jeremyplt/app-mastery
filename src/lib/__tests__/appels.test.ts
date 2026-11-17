@@ -356,18 +356,19 @@ test("créneau de clôture noté sur la fiche sans Calendly : fiche de clôture"
   );
 });
 
-test("fiche de clôture : chiffres, témoignage toujours dans la checklist", () => {
+test("fiche de clôture : chiffres, jamais de demande de témoignage pendant l'appel", () => {
   const raw = {
     type_appel: "cloture",
     sujet_probable: "Faire le point sur ses trois mois et lui laisser un plan.",
     ou_il_en_est: "App publiée le 2 octobre — première vente le 20.",
-    points: ["Lui faire dire ce qui a marché.", "Régler la conversion du paywall.", "Fixer sa priorité : une vidéo par jour."],
+    points: ["Lui faire dire ce qui a marché.", "Régler la conversion du paywall.", "Fixer sa priorité : une vidéo par jour.", "Lui demander son témoignage vidéo."],
     chiffres: ["**312 $** de revenus sur RevenueCat, d'après son message du 10 novembre.", "Prévoir un appel pour relever les chiffres.", "1 450 téléchargements."],
-    temoignage: "« Tu serais d'accord pour qu'on enregistre cinq minutes de témoignage à la fin de l'appel, avec RevenueCat à l'écran ? »",
+    temoignage: "Ses revenus montent chaque semaine : demande-lui un témoignage la semaine prochaine sur WhatsApp.",
     temoignage_preuve: "Ses 312 $ de revenus, sur RevenueCat.",
-    prochaines_etapes: ["Poster une vidéo par jour.", "Caler un rendez-vous dans un mois."],
+    prochaines_etapes: ["Poster une vidéo par jour.", "Caler un rendez-vous dans un mois.", "Enregistrer son témoignage."],
     cloture: [
       { texte: "Récapituler ce qu'il a fait", jalon: "" },
+      { texte: "Demander son témoignage à la fin de l'appel", jalon: "" },
       { texte: "Cocher « Première vente » sur la fiche", jalon: "first_sale" },
     ],
     questionnaire: "ignoré",
@@ -380,22 +381,41 @@ test("fiche de clôture : chiffres, témoignage toujours dans la checklist", () 
   assert.equal(f.ou_il_en_est, "App publiée le 2 octobre, première vente le 20.");
   // Chiffres nettoyés, sans proposition d'appel.
   assert.deepEqual(f.chiffres, ["312 $ de revenus sur RevenueCat, d'après son message du 10 novembre.", "1 450 téléchargements."]);
+  // Bons résultats : la suggestion pour la semaine prochaine reste.
+  assert.equal(f.temoignage, "Ses revenus montent chaque semaine : demande-lui un témoignage la semaine prochaine sur WhatsApp.");
   assert.equal(f.temoignage_preuve, "Ses 312 $ de revenus, sur RevenueCat.");
-  assert.deepEqual(f.prochaines_etapes, ["Poster une vidéo par jour."]);
   assert.ok(!("blocage" in f) && !("questionnaire" in f));
-  // Claude a oublié le témoignage dans la checklist : ajouté en tête.
+  // Aucune demande de témoignage pendant l'appel : ni checklist, ni points, ni suite.
   assert.deepEqual(f.cloture, [
-    { texte: TESTIMONIAL_ITEM, jalon: null },
     { texte: "Récapituler ce qu'il a fait", jalon: null },
     { texte: "Cocher « Première vente » sur la fiche", jalon: "first_sale" },
   ]);
+  assert.deepEqual(f.points, ["Lui faire dire ce qui a marché.", "Régler la conversion du paywall.", "Fixer sa priorité : une vidéo par jour."]);
+  assert.deepEqual(f.prochaines_etapes, ["Poster une vidéo par jour."]);
+  // Résultats pas assez bons : rien sur le témoignage, ni chiffre à montrer.
+  const sans = parsePrep({ ...raw, temoignage: "" }, "cloture");
+  assert.ok(sans.type === "cloture" && sans.temoignage === "" && sans.temoignage_preuve === "");
+  // Bilan : le témoignage est toujours dans la checklist, ajouté en tête si oublié.
+  const bilan = parsePrep({ ...raw, type_appel: "", cloture: [{ texte: "Récapituler ce qu'il a fait", jalon: "" }] }, "bilan");
+  assert.equal(bilan.type, "bilan");
+  assert.deepEqual(bilan.cloture, [
+    { texte: TESTIMONIAL_ITEM, jalon: null },
+    { texte: "Récapituler ce qu'il a fait", jalon: null },
+  ]);
   // Déjà dans la checklist : pas de doublon.
   const b = parsePrep({ ...raw, type_appel: "", cloture: [{ texte: "Demander le témoignage vidéo", jalon: "" }, { texte: "Cocher « Bilan » sur la fiche", jalon: "bilan_done" }] }, "bilan");
-  assert.equal(b.type, "bilan");
   assert.deepEqual(b.cloture.map((c) => c.texte), ["Demander le témoignage vidéo", "Cocher « Bilan » sur la fiche"]);
   // Les autres types n'ont jamais de témoignage ajouté.
   const p = parsePrep({ ...raw, type_appel: "probleme" }, "probleme");
   assert.ok(p.cloture.every((c) => c.texte !== TESTIMONIAL_ITEM));
+});
+
+test("consigne : à la clôture, témoignage la semaine suivante et seulement si les résultats sont vraiment bons", async () => {
+  const { PREP_SYSTEM } = await import("../appels/prep");
+  assert.ok(PREP_SYSTEM.includes("Jeremy ne demande jamais de témoignage pendant l'appel de clôture"));
+  assert.ok(PREP_SYSTEM.includes("la semaine prochaine"));
+  assert.ok(PREP_SYSTEM.includes("vraiment bons"));
+  assert.ok(!/l'appel de fin des trois mois[^»]*demander un témoignage/.test(PREP_SYSTEM));
 });
 
 test("demande à Claude : type clôture ou bilan annoncé", () => {
