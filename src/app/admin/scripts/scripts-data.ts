@@ -736,7 +736,7 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
     },
     lesson(
       19,
-      "Montre ce que tu donnes à ton app, puis ce qu'elle en fait",
+      "Montre ce que tu donnes à l'app, puis ce qu'elle en fait",
       `On voit ce qu'on donne à l'app, un cours, une photo, un lien, et le résultat apparaît. Environ 150 des 1 633 vidéos suivent ce schéma. Un cours qu'on dépose et qui devient des fiches et un quiz : 4,7 millions de vues.`,
       `La leçon : la transformation se comprend toute seule, pas besoin de l'expliquer.`,
       `@studywithtay2 (4,7 M).`,
