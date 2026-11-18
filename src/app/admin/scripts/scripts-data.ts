@@ -681,7 +681,7 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
       title: "Partie 4 : comment filmer ton app",
       beats: [
         partCard("PARTIE 4 · COMMENT FILMER"),
-        { say: `Quatrième partie : comment filmer ton app pour qu'elle se comprenne en une seconde.` },
+        { say: `Quatrième partie : comment filmer ton application pour qu'on la comprenne en une seconde.` },
       ],
     },
     lesson(
