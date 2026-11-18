@@ -318,7 +318,7 @@ Florian est passé de 2 à 5 téléchargements par jour à 1 793 $ en 28 jours. 
 
 // Vidéo B : tirée de l'analyse de la GIGA BANQUE DE CONTENU du 12 nov. 2026 et de
 // la recherche des flops du 18 nov. 2026 (14 comptes officiels TikTok et 7 comptes
-// Instagram, plus de 100 vidéos regardées image par image, 4 543 commentaires lus) :
+// Instagram, plus de 100 vidéos regardées image par image, plus de 4 500 commentaires lus) :
 // ~/Projects/reports/2026-11-18-flops/ (tiktok.md, instagram-et-pubs.md). Vidéo grand public : aucun élève cité.
 const UTM_B = "utm_source=youtube&utm_medium=video&utm_campaign=analyse-1633-videos";
 
@@ -347,7 +347,7 @@ const SCRIPT_B: VideoScript = {
     { label: "Montage", value: "Sans visage, sauf une partie : l'intro en montage sur ta voix, puis toi face caméra 45 secondes, puis tout le reste en voix seule sur les vidéos à l'écran (direction C)" },
     { label: "Style", value: "Voix seule lue mot à mot. Seule la partie face caméra se dit en regardant l'objectif" },
     { label: "Format", value: "« J'ai analysé N X et j'ai appris ça » : 32 leçons en 7 parties, et pour la plupart une vidéo qui a percé face à une vidéo qui a floppé" },
-    { label: "Matière", value: "1 633 vidéos qui montrent une app (GIGA BANQUE), plus la recherche des flops du 18 nov. : 14 comptes officiels d'apps sur TikTok (leurs 200 dernières vidéos) et 7 comptes Instagram, plus de 100 vidéos regardées image par image, 4 543 commentaires lus" },
+    { label: "Matière", value: "1 633 vidéos qui montrent une app (GIGA BANQUE), plus la recherche des flops du 18 nov. : 14 comptes officiels d'apps sur TikTok (leurs 200 dernières vidéos) et 7 comptes Instagram, plus de 100 vidéos regardées image par image, plus de 4 500 commentaires lus" },
     { label: "Chiffres", value: "Vues TikTok et Instagram relevées le 18/11 (le 12/11 ou début novembre pour les exemples de la banque)" },
     { label: "Captures", value: "Aucune capture de revenus" },
     { label: "UTM", value: "analyse-1633-videos" },
@@ -457,8 +457,8 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
     lesson(
       1,
       "Quand l'app parle d'elle-même, personne ne regarde",
-      `Sur les comptes officiels qu'on a épluchés, on a regardé quinze vidéos qui ressemblent à une pub : une annonce, une nouveauté, un partenariat, l'app qui se présente. Treize sur quinze font moins que ce que fait habituellement le compte, et aucune n'approche une vidéo qui a percé. Yuka, l'app qui scanne ce que tu manges, a fait 2 millions de vues avec un carrousel sur les dangers de l'aspartame. Sur le même compte, « Yuka arrive dans huit nouveaux pays » a fait 8 282 vues. Tiimo, une app de planning, a présenté ses fondatrices et sa mission : 2 485 vues. Une utilisatrice qui raconte comment elle a découvert l'app après son diagnostic d'autisme : 808 000.`,
-      `Écran partagé : le carrousel Yuka « The Dangers of Aspartame » (2 M) face à « Yuka launches in 8 new places » (8 282). Puis Tiimo « Meet our founders » (2 485) face au témoignage « Since getting my autism diagnosis… » (808 000). Le tableau des 15 vidéos « pub » défile, 13 lignes passent en rouge.`
+      `Sur les comptes officiels qu'on a épluchés, on a regardé quinze vidéos qui ressemblent à une pub : une annonce, une nouveauté, un partenariat, l'app qui se présente. Quatorze sur quinze font moins que ce que fait habituellement le compte, et aucune n'approche une vidéo qui a percé. Yuka, l'app qui scanne ce que tu manges, a fait 2 millions de vues avec un carrousel sur les dangers de l'aspartame. Sur le même compte, « Yuka arrive dans huit nouveaux pays » a fait 8 282 vues. Tiimo, une app de planning, a présenté ses fondatrices et sa mission : 2 485 vues. Une utilisatrice qui raconte comment elle a découvert l'app après son diagnostic d'autisme : 808 000.`,
+      `Écran partagé : le carrousel Yuka « The Dangers of Aspartame » (2 M) face à « Yuka launches in 8 new places » (8 282). Puis Tiimo « Meet our founders » (2 485) face au témoignage « Since getting my autism diagnosis… » (808 000). Le tableau des 15 vidéos « pub » défile, 14 lignes passent en rouge.`
     ),
     lesson(
       2,
