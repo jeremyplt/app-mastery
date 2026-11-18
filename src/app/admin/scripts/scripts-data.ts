@@ -455,7 +455,17 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
       title: "Partie 1 : ce qui floppe, tout ce qui ressemble à une pub",
       beats: [
         partCard("PARTIE 1 · CE QUI FLOPPE"),
-        { say: `Première partie, et on commence par ce qui ne marche pas, parce que c'est l'erreur que font presque tous ceux qui ont une app : faire de la pub au lieu de faire du contenu.` },
+        {
+          say: `Première partie, et on commence par ce qui ne marche pas : un contenu qui ressemble à une pub, c'est-à-dire qui parle trop directement de l'application. Pour comprendre pourquoi, il faut voir la différence entre la pub et l'organique.`,
+        },
+        {
+          show: "Écran coupé en deux. À gauche « PUB » : des billets qui deviennent des vues, une barre « l'app à l'écran » pleine du début à la fin. À droite « ORGANIQUE » : une courbe de rétention qui reste haute, et l'algorithme qui envoie la vidéo à de plus en plus de monde.",
+          say: `Une publicité n'a pas besoin de devenir virale, puisque ses vues sont payées. Son accroche sert juste à attirer l'attention sur l'app, et ce qui compte, c'est que chaque seconde payée parle de l'app. En organique, c'est l'inverse. Les vues sont gratuites, mais c'est l'algorithme qui les distribue, et il ne montre une vidéo à plus de monde que si les gens restent dessus. Tout se joue sur la rétention : il faut séduire le spectateur naturellement, pas lui vendre quelque chose.`,
+        },
+        {
+          show: "Un curseur entre « PARLER DE L'APP » et « DONNER ENVIE DE RESTER », qui se cale au milieu.",
+          say: `Mais il faut quand même parler de l'app, parce qu'une vidéo qui devient virale sans elle ne fera pas de téléchargements. Tout l'enjeu de l'organique, c'est ce juste milieu : parler de ton app, dans un contenu agréable à regarder, qui donne envie de rester jusqu'au bout.`,
+        },
       ],
     },
     lesson(
@@ -713,7 +723,7 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
       title: "Récap et fin",
       beats: [
         {
-          say: `Si tu ne retiens que cinq choses : ne fais pas de pub, commence par la personne qui regarde, montre ton app au moment où elle attend une solution sans te présenter, filme-la pour qu'on la comprenne en une seconde, et poste chaque format des dizaines de fois en changeant d'histoire. Et pour trouver ton premier format, les 100 vidéos d'apps les plus vues, rangées par niche, sont en lien dans la description.`,
+          say: `Si tu ne retiens que cinq choses : ne parle pas de ton app comme dans une pub, commence par la personne qui regarde, montre ton app au moment où elle attend une solution sans te présenter, filme-la pour qu'on la comprenne en une seconde, et poste chaque format des dizaines de fois en changeant d'histoire. Et pour trouver ton premier format, les 100 vidéos d'apps les plus vues, rangées par niche, sont en lien dans la description.`,
           show: `Les 5 points à l'écran, un par un.`,
         },
         {
