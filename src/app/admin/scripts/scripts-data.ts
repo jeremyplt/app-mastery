@@ -349,8 +349,8 @@ const SCRIPT_B: VideoScript = {
   why: `Même format que « J'ai analysé 300 apps », ta vidéo qui a fait le plus de leads (49). Version du 18 nov. : de la pure valeur, grand public. Ce qui marche, ce qui floppe et ce qui fait la différence, montré avec de vraies vidéos qui ont percé et d'autres qui ont floppé, souvent sur le même compte d'app. Aucun élève, aucune preuve en dollars, rien qui ressemble à une page de vente.`,
   facts: [
     { label: "Durée", value: "25 à 27 min de voix (environ 4 100 mots, sans compter les phrases en anglais entre parenthèses)" },
-    { label: "Montage", value: "Sans visage, sauf une partie : l'intro en montage sur ta voix, puis toi face caméra 45 secondes, puis tout le reste en voix seule sur les vidéos à l'écran (direction C)" },
-    { label: "Style", value: "Voix seule lue mot à mot. Seule la partie face caméra se dit en regardant l'objectif" },
+    { label: "Montage", value: "Sans visage, sauf deux moments face caméra : « qui je suis » juste après l'intro (45 secondes) et l'annonce du cadeau. Tout le reste en voix seule sur les vidéos à l'écran (direction C)" },
+    { label: "Style", value: "Voix seule lue mot à mot. Seules les deux parties face caméra se disent en regardant l'objectif" },
     { label: "Format", value: "« J'ai analysé N X et j'ai appris ça » : 32 leçons en 7 parties, et pour la plupart une vidéo qui a percé face à une vidéo qui a floppé" },
     { label: "Matière", value: "1 633 vidéos qui montrent une app (GIGA BANQUE), plus la recherche des flops du 18 nov. : 14 comptes officiels d'apps sur TikTok (leurs 200 dernières vidéos) et 7 comptes Instagram, plus de 100 vidéos regardées image par image, plus de 4 500 commentaires lus" },
     { label: "Chiffres", value: "Vues TikTok et Instagram relevées le 18/11 (le 12/11 ou début novembre pour les exemples de la banque)" },
@@ -388,9 +388,9 @@ Keep 60 px safe margins. No other text, no logos, no extra numbers.
 Negative: distorted face, changed identity, extra fingers, warped phone, unreadable numbers, cluttered layout, fake brand logos, cartoon style.`,
   },
   gift: {
-    name: "Les 100 vidéos d'apps les plus vues, rangées par niche, à copier pour ton app",
+    name: "Le PDF des 100 contenus viraux à copier, qui peuvent marcher pour n'importe quelle app",
     url: `https://www.jeremypitault.com/guide/100-contenus-a-copier?${UTM_B}`,
-    note: "Idée de Jeremy (18 nov.) : pas un résumé de la vidéo, mais les 100 vidéos de la GIGA BANQUE qui ont fait le plus de vues (pas toute la banque), rangées par niche, avec pour chacune le lien, les vues, la phrase d'ouverture et ce qu'il faut copier. Page à créer avant de publier. Placée après la partie 2, rappelée dans le récap.",
+    note: "Idée de Jeremy (18 nov.) : pas un résumé de la vidéo, mais un PDF de 100 contenus viraux à copier tout de suite, choisis pour pouvoir marcher avec n'importe quelle app. Ils viennent de la GIGA BANQUE (les plus vus, pas toute la banque), mais la vidéo ne parle pas de la banque. Pour chacun : le lien, les vues, la phrase d'ouverture et ce qu'il faut copier. Page à créer avant de publier. Annoncé face caméra après la partie 2, rappelé dans le récap.",
   },
   plan: [
     "Le spectateur sait reconnaître une vidéo qui ressemble à une pub, et sait qu'elle floppe, chiffres à l'appui.",
@@ -399,7 +399,7 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
     "Il sait filmer son app pour qu'elle se comprenne en une seconde.",
     "Il connaît sept formats concrets à refaire, avec un exemple pour chacun.",
     "Il a compris que la même vidéo peut faire 963 300 vues ou 5 400, et qu'un format se juge sur des dizaines de vidéos, pas sur une.",
-    "Il repart avec les 100 vidéos d'apps les plus vues, rangées par niche, pour avoir tout de suite des formats à refaire.",
+    "Il repart avec un PDF de 100 contenus viraux à copier, pour avoir tout de suite des formats à refaire.",
   ],
   sections: sansVisage([
     {
@@ -611,10 +611,11 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
     {
       time: "8:30",
       title: "Le cadeau",
+      mode: "visage",
       beats: [
         {
-          say: `Petite pause. Si tu veux des vidéos à refaire pour ton app, j'ai sorti de notre banque les 100 vidéos d'apps qui ont fait le plus de vues, rangées par niche, avec pour chacune ce qu'il faut copier. C'est gratuit, et le lien est en premier dans la description.`,
-          show: `Texte à l'écran : « Les 100 vidéos d'apps les plus vues, à copier · lien en description », sur une grille de vignettes qui défile, 4 secondes, sans couper la parole.`,
+          say: `Petite pause. J'ai préparé un PDF avec 100 contenus viraux que tu peux copier dès maintenant, et qui peuvent marcher pour n'importe quelle app. Le lien est en description. On reprend.`,
+          show: `Face caméra. Texte à l'écran : « 100 contenus viraux à copier · lien en description », 4 secondes, sans couper la parole.`,
         },
       ],
     },
@@ -915,7 +916,7 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
       title: "Récap et fin",
       beats: [
         {
-          say: `Si tu ne retiens que cinq choses : ne parle pas de ton app comme dans une pub, commence par la personne qui regarde, montre ton app au moment où celui qui regarde attend une solution, sans la présenter, filme-la pour qu'on la comprenne en une seconde, et poste chaque format des dizaines de fois en changeant d'histoire. Et pour trouver ton premier format, les 100 vidéos d'apps les plus vues, rangées par niche, sont en lien dans la description.`,
+          say: `Si tu ne retiens que cinq choses : ne parle pas de ton app comme dans une pub, commence par la personne qui regarde, montre ton app au moment où celui qui regarde attend une solution, sans la présenter, filme-la pour qu'on la comprenne en une seconde, et poste chaque format des dizaines de fois en changeant d'histoire. Et pour trouver ton premier format, le PDF des 100 contenus viraux à copier est en lien dans la description.`,
           show: `Les 5 points à l'écran, un par un.`,
         },
         {
@@ -930,7 +931,7 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
       ],
     },
   ]),
-  description: `🎁 GRATUIT : les 100 vidéos d'apps qui ont fait le plus de vues, rangées par niche, à copier pour ton app : https://www.jeremypitault.com/guide/100-contenus-a-copier?${UTM_B}
+  description: `🎁 GRATUIT : le PDF des 100 contenus viraux à copier dès maintenant, qui peuvent marcher pour n'importe quelle app : https://www.jeremypitault.com/guide/100-contenus-a-copier?${UTM_B}
 
 🎯 Mon Plan d'Action gratuit pour créer une app mobile qui génère 30K$/mois : https://www.jeremypitault.com/plan-action?${UTM_B}
 
@@ -959,11 +960,11 @@ On a passé au crible environ 12 500 vidéos TikTok et Instagram pour en garder 
     "« Le fondateur présente son app : 2 655 vues. Sans visage : 47,7 millions » (leçon 2, 30 s).",
   ],
   prepare: [
-    "Tournage, partie face caméra : la caméra ne sert que pour « Face caméra : qui je suis ». Fais-la 2 ou 3 fois en entier, en 4K, mise au point et exposition verrouillées.",
+    "Tournage, parties face caméra : la caméra ne sert que pour « Face caméra : qui je suis » et « Le cadeau ». Fais chacune 2 ou 3 fois en entier, en 4K, mise au point et exposition verrouillées.",
     "Tournage, tout le reste : ta voix seule au micro, à 20 ou 30 cm, en lisant le script. Un fichier par partie, dis le nom de la partie au début et laisse 10 secondes de silence. Si tu te trompes, tais-toi 2 secondes et reprends la phrase depuis son début.",
     "Rushs dans ~/Movies/Rushs/2026-11-1633-videos/ (hors iCloud), fichiers d'origine.",
     "Vidéos des exemples : déjà téléchargées dans broll/ (percées de la banque), flops/ (comptes TikTok, une planche par compte) et flops-insta/ (Instagram et pubs). Rapports : ~/Projects/reports/2026-11-18-flops/.",
-    "Avant de publier : créer le cadeau /guide/100-contenus-a-copier (les 100 vidéos les plus vues de la GIGA BANQUE, par niche), avec son email de livraison.",
+    "Avant de publier : créer le cadeau /guide/100-contenus-a-copier (PDF de 100 contenus viraux qui marchent pour n'importe quelle app), avec son email de livraison.",
     "Aucun élève ni app d'élève, nulle part dans la vidéo : c'est une vidéo grand public.",
     "Recaler les chapitres de la description sur le montage réel (skill youtube-description).",
   ],
