@@ -747,8 +747,8 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
     lesson(
       20,
       "Fais deviner le résultat avant de le montrer",
-      `Deux assiettes avec le même nombre de calories, des mains gantées qui les remplissent, un téléphone qui scanne, et la note s'affiche. Ni voix, ni visage. CalScan a fait 18 millions et 16,5 millions de vues avec ce format. Celui qui regarde essaie de deviner la bonne assiette avant de voir le résultat.`,
-      `La leçon : un petit jeu de devinette garde les gens jusqu'au résultat.`,
+      `Dans cette vidéo, on peut voir deux assiettes avec le même nombre de calories, et des mains gantées qui sont en train de les remplir. Ensuite, un téléphone scanne, et la note s'affiche. Il n'y a pas de voix, il n'y a pas de visage, et CalScan a fait 18 millions et 16,5 millions de vues avec ce format. Pourquoi ? Eh bien, parce que celui qui regarde essaie de deviner ce qu'il va y avoir dans chaque assiette. Ça crée de l'anticipation : on se demande combien d'aliments on va pouvoir mettre dans cette assiette pour atteindre ce nombre de calories.`,
+      `La leçon : faire deviner crée de l'anticipation, et l'anticipation augmente la rétention, donc la viralité.`,
       `CalScan « 580kcal │ 580kcal » (18 M) puis « 800kcal » (16,5 M).`,
       [
         ["CalScan, « 580kcal » (18 M)", "https://www.tiktok.com/@calscanapp/video/7536803368493206839"],
