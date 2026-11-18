@@ -86,6 +86,29 @@ function ScriptTab({ s }: { s: VideoScript }) {
         </div>
       </div>
 
+      {s.sections.some((sec) => sec.mode === "visage") && (
+        <Card title="🎥 Tous les plans face caméra, à tourner d'un coup">
+          <div className="flex flex-col gap-5">
+            {s.sections
+              .filter((sec) => sec.mode === "visage")
+              .map((sec, i) => (
+                <div key={sec.time + sec.title} className="flex flex-col gap-1.5">
+                  <p className="font-bold">
+                    {i + 1}. {sec.title} <span className="font-mono text-sm text-[var(--accent)]">({sec.time})</span>
+                  </p>
+                  {sec.beats
+                    .filter((b) => b.say)
+                    .map((b, j) => (
+                      <p key={j} className="text-[17px] font-medium leading-relaxed">
+                        {b.say}
+                      </p>
+                    ))}
+                </div>
+              ))}
+          </div>
+        </Card>
+      )}
+
       {s.sections.map((sec) => (
         <Card key={sec.time + sec.title}>
           <div className="mb-4 flex items-baseline gap-3">
