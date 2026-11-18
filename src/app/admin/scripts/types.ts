@@ -5,7 +5,9 @@
 // Un moment du script : ce que Jeremy dit, et ce qu'on voit à l'écran.
 export type Beat = { say?: string; show?: string };
 
-export type ScriptSection = { time: string; title: string; beats: Beat[] };
+// mode : « visage » si Jeremy est face caméra, « sans-visage » si c'est sa voix
+// seule sur le montage. Absent pour les scripts tournés entièrement face caméra.
+export type ScriptSection = { time: string; title: string; mode?: "visage" | "sans-visage"; beats: Beat[] };
 
 export type VideoScript = {
   slug: string;

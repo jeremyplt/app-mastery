@@ -93,6 +93,15 @@ function ScriptTab({ s }: { s: VideoScript }) {
               {sec.time}
             </span>
             <h2 className="text-lg font-bold tracking-tight">{sec.title}</h2>
+            {sec.mode && (
+              <span
+                className={`ml-auto shrink-0 rounded-full px-2.5 py-0.5 text-sm font-bold ${
+                  sec.mode === "visage" ? "bg-amber-500/15 text-amber-500" : "bg-[var(--field)] text-[var(--fg)]"
+                }`}
+              >
+                {sec.mode === "visage" ? "🎥 Face caméra" : "🎙️ Voix seule"}
+              </span>
+            )}
           </div>
           <div className="flex flex-col gap-3">
             {sec.beats.map((b, i) => {
@@ -257,7 +266,13 @@ export default function ScriptsView({ scripts }: { scripts: VideoScript[] }) {
 
             <header className="mt-6 flex flex-col gap-3">
               <div className="flex flex-wrap items-center gap-2 text-sm font-bold">
-                <span className="rounded-full bg-emerald-500/15 px-2.5 py-0.5 text-emerald-500">{current.status}</span>
+                <span
+                  className={`rounded-full px-2.5 py-0.5 ${
+                    current.status.startsWith("Prêt") ? "bg-emerald-500/15 text-emerald-500" : "bg-amber-500/15 text-amber-500"
+                  }`}
+                >
+                  {current.status}
+                </span>
                 <span className="text-[var(--fg2)]">Mis à jour le {current.updatedAt}</span>
               </div>
               <div className="flex flex-wrap items-start justify-between gap-3">
