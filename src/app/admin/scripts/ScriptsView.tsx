@@ -118,6 +118,25 @@ function ScriptTab({ s }: { s: VideoScript }) {
               );
             })}
           </div>
+          {sec.links && sec.links.length > 0 && (
+            <div className="mt-4 border-t border-[var(--sep)] pt-3">
+              <p className="mb-1.5 text-sm font-bold">🔗 Les vidéos citées</p>
+              <ul className="flex flex-col gap-1">
+                {sec.links.map((l) => (
+                  <li key={l.url + l.label}>
+                    <a
+                      href={l.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm font-semibold text-[var(--accent)] hover:underline"
+                    >
+                      {l.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </Card>
       ))}
     </div>

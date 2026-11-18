@@ -322,10 +322,15 @@ Florian est passé de 2 à 5 téléchargements par jour à 1 793 $ en 28 jours. 
 // ~/Projects/reports/2026-11-18-flops/ (tiktok.md, instagram-et-pubs.md). Vidéo grand public : aucun élève cité.
 const UTM_B = "utm_source=youtube&utm_medium=video&utm_campaign=analyse-1633-videos";
 
-const lesson = (n: number, title: string, say: string, show: string) => ({
+// Chaque leçon finit par sa morale : lue en dernier, et posée à l'écran au montage.
+const lesson = (n: number, title: string, say: string, moral: string, show: string, links: [string, string][]) => ({
   time: `Leçon ${n}`,
   title,
-  beats: [{ say: `${title}. ${say}`, show: `Bandeau « LEÇON ${n} », compteur « ${n} / 32 ». ${show}` }],
+  links: links.map(([label, url]) => ({ label, url })),
+  beats: [
+    { say: `${title}. ${say}`, show: `Bandeau « LEÇON ${n} », compteur « ${n} / 32 ». ${show}` },
+    { say: moral, show: "Carte « À retenir » avec cette phrase, le temps de la dire." },
+  ],
 });
 
 const partCard = (label: string) => ({ show: `Carte de chapitre : « ${label} ».` });
@@ -343,7 +348,7 @@ const SCRIPT_B: VideoScript = {
   title: "J'ai analysé 1 633 vidéos qui font télécharger des apps et j'ai appris ça (32 leçons)",
   why: `Même format que « J'ai analysé 300 apps », ta vidéo qui a fait le plus de leads (49). Version du 18 nov. : de la pure valeur, grand public. Ce qui marche, ce qui floppe et ce qui fait la différence, montré avec de vraies vidéos qui ont percé et d'autres qui ont floppé, souvent sur le même compte d'app. Aucun élève, aucune preuve en dollars, rien qui ressemble à une page de vente.`,
   facts: [
-    { label: "Durée", value: "21 à 23 min (3 540 mots de voix)" },
+    { label: "Durée", value: "25 à 27 min de voix (environ 4 100 mots, sans compter les phrases en anglais entre parenthèses)" },
     { label: "Montage", value: "Sans visage, sauf une partie : l'intro en montage sur ta voix, puis toi face caméra 45 secondes, puis tout le reste en voix seule sur les vidéos à l'écran (direction C)" },
     { label: "Style", value: "Voix seule lue mot à mot. Seule la partie face caméra se dit en regardant l'objectif" },
     { label: "Format", value: "« J'ai analysé N X et j'ai appris ça » : 32 leçons en 7 parties, et pour la plupart une vidéo qui a percé face à une vidéo qui a floppé" },
@@ -400,6 +405,12 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
     {
       time: "0:00",
       title: "Intro en montage : la promesse",
+      links: [
+        { label: "Quizard, l'amphi (28,5 M)", url: "https://www.tiktok.com/@quizard.ai/video/7411341221949426974" },
+        { label: "Quizard, le créateur qui explique son app (2 268)", url: "https://www.tiktok.com/@quizard.ai/video/7392362266370379039" },
+        { label: "Quizard, « the F students are inventors » (963 300)", url: "https://www.tiktok.com/@quizard.ai/video/7502540387144289567" },
+        { label: "Quizard, la même vidéo 3 jours après (5 400)", url: "https://www.tiktok.com/@quizard.ai/video/7503593343650254111" },
+      ],
       beats: [
         {
           show: "Écran noir, puis deux fenêtres côte à côte sur le fond studio. À gauche, la vidéo Quizard dans l'amphi (« 3 years of studying and I just found this… BRUH »), son compteur monte jusqu'à 28,5 M. À droite, le fondateur face caméra (« I made a website called »), son compteur s'arrête à 2 268, en rouge.",
@@ -430,7 +441,7 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
       beats: [
         { show: "Coupe nette sur toi, face caméra, plan poitrine, regard dans l'objectif. Bandeau nom « Jeremy Pitault, créateur de Shinobi ». C'est la seule partie où on te voit." },
         {
-          say: `Moi, c'est Jeremy. J'ai créé Shinobi, une app pour apprendre le japonais. Aujourd'hui, avec l'IA, créer une app est devenu facile. Le plus dur, c'est que des gens la découvrent, et la plupart des vidéos qu'on poste pour ça ne servent à rien.`,
+          say: `Moi, c'est Jeremy. J'ai créé Shinobi, une app pour apprendre le japonais. Aujourd'hui, avec l'IA, créer une app est devenu facile. Le plus dur, c'est de la faire découvrir.`,
         },
         {
           say: `Une précision honnête avant de commencer : de ces vidéos, on connaît les vues et les commentaires, pas les téléchargements. Une vidéo à des millions de vues ne fait pas forcément télécharger, et je te montrerai pourquoi.`,
@@ -470,33 +481,67 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
     },
     lesson(
       1,
-      "Une vidéo qui décrit ton app ne marche pas en organique",
-      `« Cette nouvelle app te permet de faire ci, de faire ça, et encore ça. » Ce genre de vidéo, qui ne parle que de l'app et de ce qu'elle fait, ressemble trop à une pub, et en organique, ça ne marche pas. Sur les comptes officiels qu'on a épluchés, on a regardé quinze vidéos de ce genre : une annonce, une nouveauté, un partenariat, une présentation de l'app. Quatorze sur quinze font moins que ce que fait habituellement le compte. Yuka, l'app qui scanne ce que tu manges, a fait 2 millions de vues avec un carrousel sur les dangers de l'aspartame, et 8 282 avec « Yuka arrive dans huit nouveaux pays ». Tiimo, une app de planning, a présenté ses fondatrices et sa mission : 2 485 vues. Une utilisatrice qui raconte comment elle a découvert l'app après son diagnostic d'autisme : 808 000. Elle part de ce qu'elle vivait, et l'app arrive comme la solution. C'est ça qu'il faut faire : partir de la douleur de celui qui regarde pour aller vers la solution, de façon authentique. Il y a deux exceptions. Sur un format très court, tu peux parler directement de ton app. Et si ton app a une fonctionnalité avec un énorme effet waouh, cette fonctionnalité peut faire l'accroche à elle seule, on en verra des exemples. Mais ce n'est pas le cas de la plupart des apps.`,
-      `La phrase « Cette nouvelle app te permet de… » s'écrit et se remplit de fonctions jusqu'à déborder. Puis écran partagé : le carrousel Yuka « The Dangers of Aspartame » (2 M) face à « Yuka launches in 8 new places » (8 282), puis Tiimo « Meet our founders » (2 485) face au témoignage « Since getting my autism diagnosis… » (808 000). Le tableau des 15 vidéos « pub » défile, 14 lignes passent en rouge. À la fin, deux étiquettes : « FORMAT TRÈS COURT » et « EFFET WAOUH ».`
+      "Une vidéo qui ne fait que décrire ton app ne marche pas",
+      `« Cette nouvelle app te permet de faire ci, de faire ça, et encore ça. » Ce genre de vidéo, qui ne parle que de l'app et de ce qu'elle fait, ressemble trop à une pub. Sur les comptes officiels qu'on a épluchés, on a regardé quinze vidéos de ce genre : une annonce, une nouveauté, un partenariat, une présentation de l'app. Quatorze sur quinze font moins que ce que fait habituellement le compte. Yuka, l'app qui scanne ce que tu manges, a fait 2 millions de vues avec un carrousel sur les dangers de l'aspartame, et 8 282 avec « Yuka arrive dans huit nouveaux pays » (« Yuka launches in 8 new places »). Tiimo, une app de planning, a présenté ses fondatrices et sa mission : 2 485 vues. Une utilisatrice qui raconte comment elle a découvert l'app après son diagnostic d'autisme : 808 000. Elle part de ce qu'elle vivait, et l'app arrive comme la solution. Il y a deux exceptions. Sur un format très court, tu peux parler directement de ton app. Et si ton app a une fonction avec un énorme effet waouh, cette fonction peut suffire à accrocher, on en verra des exemples. Mais ce n'est pas le cas de la plupart des apps.`,
+      `Retiens ça : pars de la douleur de celui qui regarde, et fais arriver ton app comme la solution.`,
+      `La phrase « Cette nouvelle app te permet de… » s'écrit et se remplit de fonctions jusqu'à déborder. Puis écran partagé : le carrousel Yuka « The Dangers of Aspartame » (2 M) face à « Yuka launches in 8 new places » (8 282), puis Tiimo « Meet our founders » (2 485) face au témoignage « Since getting my autism diagnosis… » (808 000). Le tableau des 15 vidéos « pub » défile, 14 lignes passent en rouge. Deux étiquettes : « FORMAT TRÈS COURT » et « EFFET WAOUH ».`,
+      [
+        ["Yuka, carrousel sur l'aspartame (2 M)", "https://www.tiktok.com/@yuka_app/video/7468423289392647467"],
+        ["Yuka, « Yuka launches in 8 new places » (8 282)", "https://www.tiktok.com/@yuka_app/video/7623780864165416206"],
+        ["Tiimo, « Meet our founders » (2 485)", "https://www.tiktok.com/@tiimoapp/video/6887762237805694209"],
+        ["Tiimo, témoignage après un diagnostic d'autisme (808 000)", "https://www.tiktok.com/@tiimoapp/video/7141113416701218053"],
+      ]
     ),
     lesson(
       2,
-      "Le fondateur qui présente son app ne fait presque pas de vues",
-      `JotBot, une app d'écriture, a posté trois vidéos la même semaine. Dans la première, pas de visage, pas de voix : un cours YouTube d'une heure trente-huit, « je n'ai pas une heure trente-huit », on colle le lien, et les notes sortent. 47,7 millions de vues. Dans les deux autres, le fondateur présente son app face caméra : 2 655 et 1 578 vues. Et chez Quizard, on l'a vu au début : 2 268. La vidéo qui perce montre ce que l'app fait pour toi, celles qui floppent expliquent ce qu'elle est.`,
-      `JotBot « i don't have 1hr and 38 minutes 😭 » (Instagram, 47,7 M) face au fondateur « I was cooking up something special » (2 655) et « hey my name is Derrick » (1 578). Rappel en petit du fondateur Quizard (2 268).`
+      "Présenter ton app face caméra, ça fait très peu de vues",
+      `JotBot, une app qui aide à écrire et à prendre des notes, a posté trois vidéos la même semaine. Dans la première, ni visage ni voix : un cours YouTube d'une heure trente-huit, la phrase « je n'ai pas une heure trente-huit » (« i don't have 1hr and 38 minutes »), on colle le lien, et les notes sortent. 47,7 millions de vues. Dans les deux autres, le créateur de l'app la présente face caméra : 2 655 et 1 578 vues. Chez Quizard, la vidéo où le créateur explique son app a fait 2 268 vues.`,
+      `La leçon : ne présente pas ton app, montre ce qu'elle fait pour la personne qui regarde.`,
+      `JotBot « i don't have 1hr and 38 minutes 😭 » (Instagram, 47,7 M) face au créateur « I was cooking up something special » (2 655) et « hey my name is Derrick » (1 578). Rappel en petit du créateur de Quizard (2 268).`,
+      [
+        ["JotBot, « i don't have 1hr and 38 minutes » (47,7 M)", "https://www.instagram.com/reel/C0cXF11POqH/"],
+        ["JotBot, le créateur face caméra (2 655)", "https://www.instagram.com/reel/C0Zfn04Rnue/"],
+        ["JotBot, « hey my name is Derrick » (1 578)", "https://www.instagram.com/reel/C0S4I8uLZeE/"],
+        ["Quizard, le créateur qui explique son app (2 268)", "https://www.tiktok.com/@quizard.ai/video/7392362266370379039"],
+      ]
     ),
     lesson(
       3,
-      "La pub léchée et la visite des fonctionnalités floppent aussi",
-      `SideMe, une app pour apprendre à coder, a payé une belle pub en 3D : un manchot qui fait du snowboard, un slogan, « Code anywhere. Anytime. », et le bouton de l'App Store à la fin. 15 700 vues. Dix jours plus tard, le même compte poste un simple enregistrement de l'écran, un exercice de code, sans voix ni visage : 9,8 millions de vues. Et ce n'est pas réservé aux grosses apps. BeThere, une petite app slovène, a fait 321 vues avec une visite guidée de ses fonctions, et 63 100 avec un sketch sur les pubs à la télé où son app arrive comme la chute.`,
-      `SideMe manchot 3D (15 700) face à l'exercice « 30 Days to learn Python » (9,8 M). Puis BeThere « Snap it. Post it. » (321) face au sketch de la télé de 2035 (63 100).`
+      "Une belle vidéo bien travaillée ne fait pas plus de vues qu'une vidéo simple",
+      `SideMe, une app pour apprendre à coder, a posté une vidéo en 3D : un manchot qui fait du snowboard, le slogan « Code anywhere. Anytime. », et le bouton de l'App Store à la fin. 15 700 vues. Dix jours plus tard, le même compte poste un simple enregistrement de l'écran, un exercice de code, sans voix ni visage : 9,8 millions de vues. BeThere, une petite app slovène, a fait 321 vues en montrant ses fonctions une par une, et 63 100 avec un sketch sur les pubs à la télé, où l'app n'arrive qu'à la fin, comme la chute de la blague.`,
+      `La leçon : ce qui fait des vues, ce n'est pas une belle production, c'est une vidéo qu'on a envie de regarder jusqu'au bout.`,
+      `SideMe, le manchot en 3D (15 700) face à l'exercice « 30 Days to learn Python » (9,8 M). Puis BeThere « Snap it. Post it. » (321) face au sketch de la télé de 2035 (63 100).`,
+      [
+        ["SideMe, le manchot en 3D (15 700)", "https://www.tiktok.com/@sideme.ai/video/7604542405416897795"],
+        ["SideMe, l'exercice de code (9,8 M)", "https://www.tiktok.com/@sideme.ai/video/7608291686581554454"],
+        ["BeThere, le tour des fonctions (321)", "https://www.tiktok.com/@try_bethere/video/7701062504679607574"],
+        ["BeThere, le sketch de la télé (63 100)", "https://www.tiktok.com/@try_bethere/video/7678755534769622294"],
+      ]
     ),
     lesson(
       4,
-      "Une voix de télé-achat ou un code promo font fuir",
-      `« Est-ce que c'est bizarre d'être jaloux d'un calendrier ? La magie, c'est la nouvelle fonction routines. » « Voilà le meilleur cadeau que j'ai jamais reçu en tant que papa. » « Laisse-moi te montrer les avantages du compte premium. » Trois vidéos de comptes officiels qui parlent comme une pub télé, et les trois font moins que ce que fait habituellement leur compte. Hearth, un écran familial, a fait 30 millions de vues avec dix secondes sans un mot. Sur le même compte, une créatrice qui parle une minute et demie et finit par « utilise mon code pour avoir 20 % de réduction » : 1 274 vues. Personne ne parle comme ça à ses amis.`,
-      `Skylight « routines feature » (30 000), Skylight « best gift I've ever received as a dad » (39 100), Yuka premium (4 976), une phrase de chaque en sous-titre. Puis Hearth « Out with the OLD » (Instagram, 29,9 M) face au code promo « Kellie20 » (1 274).`
+      "Ne parle pas comme dans une pub à la télé",
+      `« Est-ce que c'est bizarre d'être jaloux d'un calendrier ? La magie, c'est la nouvelle fonction routines. » (« Is it weird to be jealous of a calendar? The magic resides in Skylight Calendar's new routines feature. ») « Voilà le meilleur cadeau que j'ai jamais reçu en tant que papa. » (« This right here is the best gift I've ever received as a dad. ») « Laisse-moi te montrer les avantages du compte premium. » (« Let me show you the perks of having a premium account. ») Ce sont trois vidéos de comptes officiels, et les trois font moins que ce que fait habituellement leur compte. Hearth, un écran pour organiser la famille, a fait 30 millions de vues avec une vidéo de dix secondes où personne ne parle. Sur le même compte, une créatrice qui parle une minute et demie et finit par « utilise mon code pour avoir 20 % de réduction » (« Use my code Kellie20 for 20% off Hearth ») : 1 274 vues.`,
+      `La leçon : si tu mets une voix, parle comme tu parlerais à un ami, pas comme un vendeur.`,
+      `Skylight « routines feature » (30 000), Skylight « best gift I've ever received as a dad » (39 100), Yuka premium (4 976), une phrase de chaque en sous-titre. Puis Hearth « Out with the OLD » (Instagram, 29,9 M) face au code promo « Kellie20 » (1 274).`,
+      [
+        ["Skylight, « jealous of a calendar » (30 000)", "https://www.tiktok.com/@myskylight/video/7512239151358545183"],
+        ["Skylight, « best gift I've ever received as a dad » (39 100)", "https://www.tiktok.com/@myskylight/video/7515600804930260255"],
+        ["Yuka, le compte premium (4 976)", "https://www.tiktok.com/@yuka_app/video/7382974040534699306"],
+        ["Hearth, « Out with the OLD » (29,9 M)", "https://www.instagram.com/reel/DESc1ZGOzxU/"],
+        ["Hearth, le code promo Kellie20 (1 274)", "https://www.instagram.com/reel/Dba9i4Gv4T2/"],
+      ]
     ),
     lesson(
       5,
-      "Des millions de vues et presque pas de likes, c'est une pub payée : ne la copie pas",
-      `Skylight, un calendrier familial, a une vidéo à 5 millions de vues et seulement 2 849 likes. Sur les vidéos qui percent vraiment, on voit plutôt entre 3 et 14 likes pour 100 vues. Là, on est à moins d'un like pour 1 000 vues : ces vues ont presque sûrement été achetées. Avant de copier une vidéo parce qu'elle a des millions de vues, regarde ses likes.`,
-      `Skylight (5 M de vues, 2 849 likes) face à Jurney (5,2 M, 555 700 likes). Une jauge « likes pour 100 vues » : 0,06 contre 10,7.`
+      "Avant de copier une vidéo, regarde ses likes, pas seulement ses vues",
+      `Skylight, un calendrier familial, a une vidéo à 5 millions de vues et seulement 2 849 likes. Une app pour perdre du poids a fait autant de vues, 5,2 millions, avec 555 700 likes. Quand une vidéo a des millions de vues et presque pas de likes, soit elle n'a pas plu, soit ses vues ont été payées. Dans les deux cas, ce n'est pas un modèle.`,
+      `La leçon : copie les vidéos qui ont beaucoup de vues et beaucoup de likes.`,
+      `Skylight (5 M de vues, 2 849 likes) face à Jurney (5,2 M, 555 700 likes), les deux compteurs de likes côte à côte.`,
+      [
+        ["Skylight, 5 M de vues et 2 849 likes", "https://www.tiktok.com/@myskylight/video/7528133220450290975"],
+        ["Jurney, 5,2 M de vues et 555 700 likes", "https://www.tiktok.com/@kittyweight/video/7567016921816714526"],
+      ]
     ),
     {
       time: "4:45",
@@ -508,33 +553,60 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
     },
     lesson(
       6,
-      "La première phrase parle de celui qui regarde, pas de toi",
-      `Turbo AI, une app de prise de notes, a posté le même jour deux vidéos de deux créatrices, avec la même légende et la même fin. La première commence par « si tu passes cette vidéo, tu rates tes examens » : 6,8 millions de vues. La deuxième commence par « l'anglais, c'est trop dur », la créatrice parle d'elle : 6 725 vues. Sur 25 vidéos qui ont vraiment percé, 15 ouvrent sur un problème, une envie ou une peur du spectateur.`,
-      `Turbo AI « if you skip this video you're FAILING your finals » (6,8 M) face à « English is so hard vro » (6 725). La légende et la carte de fin identiques entourées sur les deux.`
+      "La première phrase de ta vidéo doit parler de la personne qui regarde, pas de toi",
+      `Turbo AI, une app de prise de notes, a posté le même jour deux vidéos de deux créatrices, avec la même légende et la même fin. La première commence par « si tu passes cette vidéo, tu rates tes examens » (« if you skip this video you're FAILING your finals ») : 6,8 millions de vues. La deuxième commence par « l'anglais, c'est trop dur » (« English is so hard vro »), et la créatrice parle d'elle : 6 725 vues. On a regardé 25 vidéos qui ont percé : 15 commencent par un problème, une envie ou une peur de celui qui regarde.`,
+      `La leçon : dès les premiers mots, parle de sa peur, de son problème ou de son envie.`,
+      `Turbo AI « if you skip this video you're FAILING your finals » (6,8 M) face à « English is so hard vro » (6 725). La légende et la fin identiques entourées sur les deux.`,
+      [
+        ["Turbo AI, « if you skip this video you're FAILING your finals » (6,8 M)", "https://www.tiktok.com/@getturboai/video/7550714243683798327"],
+        ["Turbo AI, « English is so hard vro » (6 725)", "https://www.tiktok.com/@getturboai/video/7550714786149829902"],
+      ]
     ),
     lesson(
       7,
-      "Les mêmes fonctions, seule l'ouverture change : 333 800 vues contre 1 310",
-      `Soundscape, une app de sommeil et de concentration, a posté à deux jours d'écart deux vidéos qui listent presque les mêmes fonctions : lancer une session, bloquer les applis qui distraient, mieux dormir. La première ouvre sur « moi quand je dors chaque nuit », un garçon qui bâille : 333 800 vues. La deuxième ouvre sur « ce mec est un génie », un ordinateur : 1 310 vues. L'une parle de ta fatigue, l'autre d'un inconnu.`,
-      `Soundscape « Me when sleeping every night: » (333 800) face à « Bro is a GENIUS » (1 310), la suite des deux en parallèle pour montrer qu'elle est la même.`
+      "Ta première phrase compte autant que tout le reste de la vidéo",
+      `Soundscape, une app pour mieux dormir et se concentrer, a posté deux vidéos à deux jours d'écart. Dans les deux, on voit presque la même chose : on lance une session, l'app bloque les applis qui distraient, et on dort mieux. La vraie différence, c'est la première phrase. La première vidéo commence par « moi quand je dors chaque nuit » (« Me when sleeping every night »), avec un garçon qui bâille : 333 800 vues. La deuxième commence par « ce mec est un génie » (« Bro is a GENIUS »), sur un écran d'ordinateur : 1 310 vues. La première parle de ta fatigue, la deuxième parle d'un inconnu.`,
+      `La leçon : soigne ta première phrase autant que tes images.`,
+      `Soundscape « Me when sleeping every night: » (333 800) face à « Bro is a GENIUS » (1 310), la suite des deux en parallèle pour montrer qu'elle se ressemble.`,
+      [
+        ["Soundscape, « Me when sleeping every night » (333 800)", "https://www.tiktok.com/@soundscape.study/video/7502671384787635478"],
+        ["Soundscape, « Bro is a GENIUS » (1 310)", "https://www.tiktok.com/@soundscape.study/video/7503450888179174678"],
+      ]
     ),
     lesson(
       8,
-      "Un seul mot peut tout changer",
-      `Une app de perte de poids explique avec des chats comment maigrir. « La façon paresseuse de perdre du poids » : 5,2 millions de vues. Treize jours plus tard, les mêmes chats, le même son, les mêmes étapes, mais « la façon la plus facile de perdre du poids » : 11 800 vues. « Paresseuse » parle de toi, « facile » ne parle de personne. Le commentaire le plus liké : « donc depuis tout ce temps, c'était parce que je saute le petit-déjeuner ». Le spectateur se reconnaît. Pour être honnête, la deuxième était aussi une copie de la première, et ça joue sûrement.`,
-      `Jurney « THE LAZY » (5,2 M) face à « THE » easiest (11 800), le mot « LAZY » en rouge, puis le commentaire « So all this time it was because I skip breakfast? » (25 945 likes).`
+      "Choisis des mots qui parlent de la personne qui regarde",
+      `Une app pour perdre du poids explique avec des chats comment maigrir. « La façon paresseuse de perdre du poids » (« The lazy way to lose weight ») : 5,2 millions de vues. Treize jours plus tard, mêmes chats, même musique, mêmes étapes, mais « la façon la plus facile de perdre du poids » (« The easiest way to lose weight ») : 11 800 vues. Sous la première, le commentaire le plus liké, c'est : « donc depuis tout ce temps, c'était parce que je saute le petit-déjeuner » (« So all this time it was because I skip breakfast? »). Les gens se sont reconnus. Il faut quand même le dire : la deuxième vidéo arrivait après la première, sur le même compte, donc le mot n'explique peut-être pas tout.`,
+      `La leçon : « paresseux » (« lazy ») parle de quelqu'un, « facile » (« easiest ») ne parle de personne. Choisis des mots dans lesquels les gens se reconnaissent, même un de leurs défauts.`,
+      `Jurney « THE LAZY » (5,2 M) face à « THE » easiest (11 800), le mot « LAZY » en rouge, puis le commentaire « So all this time it was because I skip breakfast? » (25 945 likes).`,
+      [
+        ["Jurney, « The lazy way to lose weight » (5,2 M)", "https://www.tiktok.com/@kittyweight/video/7567016921816714526"],
+        ["Jurney, « The easiest way to lose weight » (11 800)", "https://www.tiktok.com/@kittyweight/video/7571891209002552607"],
+      ]
     ),
     lesson(
       9,
-      "« Pourquoi je découvre ça seulement maintenant » : la phrase la plus copiée",
-      `On la trouve dans une trentaine de vidéos de la banque, dans des niches qui n'ont rien à voir entre elles. « Trois ans d'études et je découvre ça seulement maintenant » : 66 millions de vues sur Instagram, 28,5 millions sur TikTok. « Quatre ans de salle et je découvre ça » : 15 millions. Elle dit au spectateur qu'il est en train de rater quelque chose, et juste derrière, on lui montre ce qu'il rate.`,
-      `Unstuck AI (Instagram, 66,1 M), Quizard (TikTok, 28,5 M), Stronger (15,3 M), les trois premières images côte à côte.`
+      "Utilise la phrase « pourquoi je découvre ça seulement maintenant »",
+      `On la trouve dans une trentaine de vidéos de la banque, dans des niches qui n'ont rien à voir entre elles. « Trois ans d'études et je découvre ça seulement maintenant » (« 3 years of studying and I just found this… BRUH ») : 66 millions de vues sur Instagram, 28,5 millions sur TikTok. « Quatre ans de salle et je découvre ça maintenant » (« 4 years at the gym and NOW I find this?! ») : 15 millions. Elle dit à celui qui regarde qu'il est passé à côté de quelque chose, et juste après, on lui montre ce qu'il a raté.`,
+      `La leçon : si ton app règle un problème que les gens subissent depuis longtemps, cette phrase est faite pour toi.`,
+      `Unstuck AI (Instagram, 66,1 M), Quizard (TikTok, 28,5 M), Stronger (15,3 M), les trois premières images côte à côte.`,
+      [
+        ["Unstuck AI, « 3 years of studying and I just found this » (Instagram, 66 M)", "https://www.instagram.com/reel/C_jtibrRhzI/"],
+        ["Quizard, la même phrase sur TikTok (28,5 M)", "https://www.tiktok.com/@quizard.ai/video/7411341221949426974"],
+        ["Stronger, « quatre ans de salle » (15,3 M)", "https://www.tiktok.com/@kailyn.lifts/video/7626442321860644127"],
+      ]
     ),
     lesson(
       10,
-      "Quand c'est quelqu'un d'autre qui te montre l'app, ce n'est plus une pub",
-      `Une créatrice de StudyFetch a posté deux vidéos le même jour. Dans la première, « ma sœur vient de me montrer ce qu'elle utilise pour réviser », une seconde d'étonnement, puis un jeu qui transforme les cours en partie de jeu vidéo : 11,9 millions de vues. Dans la deuxième, elle explique face caméra toutes les fonctions de l'app, et le même jeu n'arrive qu'à la fin : 5 316 vues. « Ma mère m'a montré à quel point la fac peut être facile » a aussi fait 26 millions de vues pour Coconote. Ta vidéo devient du bouche-à-oreille.`,
-      `StudyFetch « my sister just showed me what she uses to study 😭😭😭 » (Instagram, 11,9 M) face à « Level up your SELF Study with this hack » (5 316), même jour. Puis Coconote « my mom showed me how easy college can be » (Instagram, 26 M).`
+      "Montre ton app comme si quelqu'un te l'avait conseillée",
+      `Une créatrice qui poste pour StudyFetch a publié deux vidéos le même jour. Dans la première, « ma sœur vient de me montrer ce qu'elle utilise pour réviser » (« my sister just showed me what she uses to study »), une seconde d'étonnement, puis un jeu qui transforme les cours en jeu vidéo : 11,9 millions de vues. Dans la deuxième, elle explique face caméra toutes les fonctions de l'app, et le même jeu n'arrive qu'à la fin : 5 316 vues. « Ma mère m'a montré à quel point la fac peut être facile » (« my mom showed me how easy college can be ») a aussi fait 26 millions de vues pour Coconote.`,
+      `La leçon : « on m'a montré ça », ça sonne comme un conseil entre amis. « Voici mon app », ça sonne comme une pub.`,
+      `StudyFetch « my sister just showed me what she uses to study 😭😭😭 » (Instagram, 11,9 M) face à « Level up your SELF Study with this hack » (5 316), même jour. Puis Coconote « my mom showed me how easy college can be » (Instagram, 26 M).`,
+      [
+        ["StudyFetch, « my sister just showed me » (11,9 M)", "https://www.instagram.com/reel/DH7MA6ZT20U/"],
+        ["StudyFetch, le même jour, les fonctions face caméra (5 316)", "https://www.instagram.com/reel/DH7k8aZzCZ3/"],
+        ["Coconote, « my mom showed me how easy college can be » (26 M)", "https://www.instagram.com/reel/C9hepDsMoYQ/"],
+      ]
     ),
     {
       time: "8:30",
@@ -551,32 +623,57 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
       title: "Partie 3 : où mettre ton app",
       beats: [
         partCard("PARTIE 3 · OÙ METTRE TON APP"),
-        { say: `Troisième partie : où mettre ton app. Jamais au début avec une présentation, mais au moment où le spectateur attend une solution, ou comme le spectacle lui-même.` },
+        { say: `Troisième partie : à quel moment montrer ton app. Pas au début pour la présenter, mais au moment où celui qui regarde attend une solution, ou tout de suite si elle fait quelque chose d'impressionnant.` },
       ],
     },
     lesson(
       11,
-      "Ton app peut être le spectacle : on la regarde faire, sans un mot",
-      `Sur les 25 vidéos qui ont vraiment percé, dix n'ouvrent pas sur un problème : elles montrent l'app en train de faire quelque chose qu'on a envie de voir. Un exercice de code où l'on glisse les bonnes pièces : 9,8 millions de vues, sans voix ni visage. Un garçon qui fait des pompes pour battre un monstre dans un jeu : 4,2 millions. Même une annonce de lancement peut marcher quand l'app est belle à regarder : Mello, une app créée par des étudiants, a fait 981 100 vues en montrant simplement ses cartes de profil se personnaliser. Ce qui compte, c'est ce qu'on voit à l'écran, pas ce qu'on en dit. C'est l'exception de la leçon 1 : ça marche quand ton app a un vrai effet waouh, et ce n'est pas le cas de la plupart des apps.`,
-      `SideMe « 30 Days to learn Python » (9,8 M), puis Push Up Arena « Skill vs spam… » (4,2 M), puis Mello « We Built… Are You Ready? » (981 100).`
+      "Si ton app fait quelque chose d'impressionnant, montre-la en action dès le début",
+      `C'est l'exception de la leçon 1. Sur les 25 vidéos qui ont percé, dix ne commencent pas par un problème : elles montrent l'app en train de faire quelque chose qu'on a envie de regarder. Un exercice de code où l'on glisse les bonnes pièces : 9,8 millions de vues, sans voix ni visage. Un garçon qui fait des pompes pour battre un monstre dans un jeu : 4,2 millions. Mello, une app créée par des étudiants, a fait 981 100 vues avec son annonce de sortie, où l'on voit simplement des cartes de profil se personnaliser. Mais la plupart des apps n'ont pas ce genre de fonction.`,
+      `La leçon : si ton app a un vrai effet waouh, montre-le dès la première seconde. Sinon, pars de la douleur.`,
+      `SideMe « 30 Days to learn Python » (9,8 M), puis Push Up Arena « Skill vs spam… » (4,2 M), puis Mello « We Built… Are You Ready? » (981 100).`,
+      [
+        ["SideMe, l'exercice de code (9,8 M)", "https://www.tiktok.com/@sideme.ai/video/7608291686581554454"],
+        ["Push Up Arena, « Skill vs spam » (4,2 M)", "https://www.tiktok.com/@pushuparena.app/video/7680736764771765535"],
+        ["Mello, « We Built… Are You Ready? » (981 100)", "https://www.tiktok.com/@mello.hq/video/7694823112851868980"],
+      ]
     ),
     lesson(
       12,
-      "Si tu ne dis pas le nom, les gens le demandent",
-      `On a lu plus de 4 500 commentaires sous seize vidéos qui ont percé. Quand le nom de l'app n'apparaît nulle part, entre 5 et 17 % des commentaires le demandent : « c'est quelle app ? », « le lien, s'il te plaît ». Un seul de ces commentaires a fait 5 475 likes. Quand le nom est écrit à l'écran, les gens ne demandent plus rien, ils taguent un ami : 46 % des commentaires chez Coconote. Tu n'as pas besoin de crier le nom de ton app : si la vidéo intéresse, les gens vont le chercher ou l'envoyer à quelqu'un. Et si personne ne fait ni l'un ni l'autre, c'est que la vidéo n'a pas intéressé.`,
-      `Les commentaires qui défilent : « Welche App ist das? » (5 475 likes), « Link please », « What is the name of the application? », « App name ». Puis le tableau : Hearth 17 %, Push Up Arena 15,9 %, SideMe 8,1 %, Quizard 4,7 % quand le nom est caché, contre 0 à 1,4 % quand il est donné. Puis les tags d'amis sous Coconote (46 %).`
+      "Pas besoin de dire le nom de ton app : si la vidéo plaît, les gens le demandent",
+      `On a lu plus de 4 500 commentaires sous seize vidéos qui ont percé. Quand le nom de l'app n'apparaît nulle part, entre 5 et 17 % des commentaires le demandent : « c'est quelle app ? » (« what app? »), « le lien, s'il te plaît » (« link please »). Un seul de ces commentaires a fait 5 475 likes. Quand le nom est écrit à l'écran, presque personne ne le demande, et les gens taguent un ami à la place : 46 % des commentaires chez Coconote.`,
+      `La leçon : si personne ne demande le nom ni ne tague un ami, c'est que la vidéo n'a pas intéressé.`,
+      `Les commentaires qui défilent : « Welche App ist das? » (5 475 likes), « Link please », « What is the name of the application? », « App name ». Puis le tableau : Hearth 17 %, Push Up Arena 15,9 %, SideMe 8,1 %, Quizard 4,7 % quand le nom est caché, contre 0 à 1,4 % quand il est donné. Puis les tags d'amis sous Coconote (46 %).`,
+      [
+        ["Quizard, « college literally isn't real anymore » et le commentaire « Welche App ist das? » (29,5 M)", "https://www.tiktok.com/@quizard.ai/video/7443184838179294495"],
+        ["Push Up Arena, 15,9 % de demandes du nom (4,2 M)", "https://www.tiktok.com/@pushuparena.app/video/7680736764771765535"],
+        ["SideMe, 8,1 % de demandes du nom (9,8 M)", "https://www.tiktok.com/@sideme.ai/video/7608291686581554454"],
+        ["Hearth, « Link please » (29,9 M)", "https://www.instagram.com/reel/DESc1ZGOzxU/"],
+        ["Coconote, 46 % de tags d'amis (26 M)", "https://www.instagram.com/reel/C9hepDsMoYQ/"],
+      ]
     ),
     lesson(
       13,
-      "Tu peux expliquer et même dire « télécharge », mais seulement après l'histoire",
-      `« Comment je couche mes enfants en quinze minutes » a fait 13,3 millions de vues, et la vidéo finit par « télécharge l'app Moshi, le lien est dans mon profil ». Chez Turbo AI, les vidéos qui ont percé et celles qui ont floppé avaient exactement la même carte de fin avec le bouton de l'App Store. Ce qui floppe, ce n'est pas l'appel à l'action, c'est une vidéo qui n'est que ça.`,
-      `Moshi « How I get my kids to bed in 15 minutes or less! » (13,3 M), sa dernière phrase en sous-titre. Puis les cartes de fin Turbo AI identiques sous 6,8 M et sous 6 725.`
+      "Tu peux dire « télécharge », mais seulement à la fin, après l'histoire",
+      `« Comment je couche mes enfants en quinze minutes » (« How I get my kids to bed in 15 minutes or less! ») a fait 13,3 millions de vues, et la vidéo finit par « télécharge l'app Moshi, le lien est dans mon profil » (« Download the FREE Moshi Sleep app at the link in my profile! »). Chez Turbo AI, les vidéos qui ont marché et celles qui n'ont pas marché finissaient toutes par le même bouton de l'App Store.`,
+      `La leçon : le « télécharge » ne fait pas flopper une vidéo. Ce qui la fait flopper, c'est quand il n'y a que ça.`,
+      `Moshi « How I get my kids to bed in 15 minutes or less! » (13,3 M), sa dernière phrase en sous-titre. Puis les fins Turbo AI identiques sous 6,8 M et sous 6 725.`,
+      [
+        ["Moshi, « How I get my kids to bed in 15 minutes or less! » (13,3 M)", "https://www.tiktok.com/@playmoshikids/video/6882642977194249474"],
+        ["Turbo AI, la fin avec le bouton de l'App Store (6,8 M)", "https://www.tiktok.com/@getturboai/video/7550714243683798327"],
+        ["Turbo AI, la même fin (6 725)", "https://www.tiktok.com/@getturboai/video/7550714786149829902"],
+      ]
     ),
     lesson(
       14,
-      "Sans l'app dans l'histoire, des millions de vues pour rien",
-      `Une app de Pilates a fait 9,4 millions de vues avec cinq secondes de ventre plat et le mot « Pilates ». L'app n'apparaît pas, et sur 203 commentaires lus, pas un seul ne la demande. Une autre a fait 11,8 millions avec une fille filmée du cou aux pieds, l'app seulement dans la légende. Des vues comme ça font plaisir, mais elles ne font pas forcément télécharger. 5 000 vues qui font télécharger valent plus qu'un million qui ne fait rien.`,
-      `Forméa « Pilates >>> » (9,4 M), compteur « 0 / 203 commentaires demandent l'app ». Puis Tone AI (11,8 M), la légende entourée.`
+      "Si ton app n'est pas dans la vidéo, les vues ne feront pas télécharger",
+      `Une app de Pilates a fait 9,4 millions de vues avec cinq secondes de ventre plat et le mot « Pilates ». L'app n'apparaît pas, et sur 203 commentaires lus, pas un seul ne la demande. Une autre a fait 11,8 millions avec une fille filmée du cou aux pieds, et l'app seulement dans la légende.`,
+      `La leçon : ton app doit faire partie de l'histoire. 5 000 vues qui font télécharger valent plus qu'un million qui ne fait rien.`,
+      `Forméa « Pilates >>> » (9,4 M), compteur « 0 / 203 commentaires demandent l'app ». Puis Tone AI (11,8 M), la légende entourée.`,
+      [
+        ["Forméa, « Pilates >>> » (9,4 M)", "https://www.tiktok.com/@formea.pilates/video/7678283526629903638"],
+        ["Tone AI, « 60kg » (11,8 M)", "https://www.tiktok.com/@movewmil/video/7562274640857632002"],
+      ]
     ),
     {
       time: "11:30",
@@ -588,27 +685,45 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
     },
     lesson(
       15,
-      "Filme ton téléphone avec un deuxième téléphone, la main dans le cadre",
-      `Sur les 24 plus grosses vidéos qu'on a regardées image par image, 16 filment l'app sur un vrai téléphone posé sur un bureau ou tenu en main, avec un doigt qui tape dessus. Une seule est un pur enregistrement d'écran. Soundscape a fait 40,8 millions de vues en 20 secondes avec un iPhone posé sur un bureau en bois et une main qui lance l'app. On a l'impression que quelqu'un te montre un truc, pas qu'on te vend quelque chose.`,
-      `Soundscape (@soundscape.study, 40,8 M).`
+      "Filme ton téléphone avec un deuxième téléphone, la main dans l'image",
+      `Sur les 24 plus grosses vidéos qu'on a regardées image par image, 16 filment l'app sur un vrai téléphone posé sur un bureau ou tenu en main, avec un doigt qui tape dessus. Une seule est un simple enregistrement d'écran. Soundscape a fait 40,8 millions de vues en 20 secondes avec un iPhone posé sur un bureau en bois et une main qui lance l'app.`,
+      `La leçon : filmé comme ça, on a l'impression que quelqu'un te montre un truc, pas qu'on te vend quelque chose.`,
+      `Soundscape (@soundscape.study, 40,8 M).`,
+      [
+        ["Soundscape, l'iPhone sur le bureau (40,8 M)", "https://www.tiktok.com/@soundscape.study/video/7485770482667588866"],
+      ]
     ),
     lesson(
       16,
       "Tu n'as pas besoin de montrer ton visage",
-      `14 des 24 grosses vidéos ne montrent jamais le visage de la personne qui filme, dont la plus vue de toute la banque : 66 millions de vues, un ordinateur sur les genoux dans un amphi. Si te montrer te bloque, ce n'est plus une excuse.`,
-      `Unstuck AI (@quizard.ai, Instagram, 66,1 M).`
+      `14 des 24 grosses vidéos ne montrent jamais le visage de la personne qui filme, dont la plus vue de toute la banque : 66 millions de vues, un ordinateur sur les genoux dans un amphi.`,
+      `La leçon : si te montrer te bloque, ce n'est pas une raison pour ne pas poster.`,
+      `Unstuck AI (@quizard.ai, Instagram, 66,1 M).`,
+      [
+        ["Unstuck AI, l'amphi sans visage (Instagram, 66 M)", "https://www.instagram.com/reel/C_jtibrRhzI/"],
+      ]
     ),
     lesson(
       17,
-      "L'action doit se lire en une seconde",
-      `Même compte, presque la même phrase, « la fac, ce n'est plus vraiment la fac ». Dans la vidéo à 29,5 millions de vues, un étudiant affalé, et son téléphone qui enregistre le cours, en gros plan. Dans celle à 2 702 vues, l'amphi filmé de loin, puis un quiz sur un ordinateur qu'on a du mal à lire. Dans 16 des 24 grosses vidéos, l'app est à l'écran dès la deuxième ou troisième seconde, et on comprend tout de suite ce qu'elle fait.`,
-      `Quizard « college literally isn't real anymore » (29,5 M) face à « college literally isn't real life » (2 702), le téléphone entouré dans la première.`
+      "Filme de près, pour qu'on comprenne tout de suite ce qui se passe",
+      `Même compte, presque la même phrase, « la fac, ce n'est plus vraiment la fac ». Dans la vidéo à 29,5 millions de vues, un étudiant affalé, et en gros plan son téléphone qui enregistre le cours. Dans celle à 2 702 vues, l'amphi filmé de loin, puis un quiz sur un ordinateur qu'on a du mal à lire. Dans 16 des 24 grosses vidéos, l'app est à l'écran dès la deuxième ou la troisième seconde.`,
+      `La leçon : ton app doit être à l'écran dans les trois premières secondes, assez près pour qu'on voie ce qu'elle fait.`,
+      `Quizard « college literally isn't real anymore » (29,5 M) face à « college literally isn't real life » (2 702), le téléphone entouré dans la première.`,
+      [
+        ["Quizard, l'étudiant et son téléphone en gros plan (29,5 M)", "https://www.tiktok.com/@quizard.ai/video/7443184838179294495"],
+        ["Quizard, l'amphi filmé de loin (2 702)", "https://www.tiktok.com/@quizard.ai/video/7435854245422763295"],
+      ]
     ),
     lesson(
       18,
-      "Fais court, et écris ta première phrase en gros, lisible en entier",
-      `La durée médiane des vidéos vérifiées est de 18 secondes, et 21 des 24 grosses vidéos ont une phrase écrite dès la première image. Tallow, une app qui scanne les ingrédients, a parlé deux jours de suite du cacao de laboratoire. Le premier jour, la phrase est écrite en gros : « des marques de chocolat commencent à utiliser du cacao de labo », puis six marques que tout le monde mange : 1,7 million de vues. Le lendemain, un bandeau à moitié caché par la tête de la présentatrice, et deux marques seulement : 16 000 vues.`,
-      `Tallow « Chocolate brands starting to use lab grown cocoa » (1,7 M) face à « CADBURY » au bandeau caché (16 000), la première image de chaque en grand.`
+      "Fais court, et écris ta première phrase en gros",
+      `La durée médiane des vidéos vérifiées est de 18 secondes, et 21 des 24 grosses vidéos ont une phrase écrite dès la première image. Tallow, une app qui scanne les ingrédients, a parlé deux jours de suite du cacao de laboratoire. Le premier jour, la phrase est écrite en gros, « des marques de chocolat commencent à utiliser du cacao de labo » (« Chocolate brands starting to use lab grown cocoa »), puis six marques que tout le monde mange : 1,7 million de vues. Le lendemain, le titre est à moitié caché par la tête de la présentatrice, et il n'y a que deux marques : 16 000 vues.`,
+      `La leçon : vise moins de 20 secondes, et une première phrase qu'on lit en entier, même sans le son.`,
+      `Tallow « Chocolate brands starting to use lab grown cocoa » (1,7 M) face à « CADBURY » au titre caché (16 000), la première image de chaque en grand.`,
+      [
+        ["Tallow, « Chocolate brands starting to use lab grown cocoa » (1,7 M)", "https://www.tiktok.com/@tallowapp/video/7650879158695873823"],
+        ["Tallow, le titre caché (16 000)", "https://www.tiktok.com/@tallowapp/video/7651259485486402847"],
+      ]
     ),
     {
       time: "14:00",
@@ -620,83 +735,149 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
     },
     lesson(
       19,
-      "« Je mets ça dedans, regarde ce qui sort »",
-      `On voit l'entrée, un cours, une photo, un lien, on la donne à l'app, et le résultat apparaît. Pas besoin d'expliquer, la transformation se comprend toute seule. Environ 150 vidéos de la banque suivent ce schéma. Un cours qu'on dépose et qui devient des fiches et un quiz : 4,7 millions de vues.`,
-      `@studywithtay2 (4,7 M).`
+      "Montre ce que tu donnes à ton app, puis ce qu'elle en fait",
+      `On voit ce qu'on donne à l'app, un cours, une photo, un lien, et le résultat apparaît. Environ 150 vidéos de la banque suivent ce schéma. Un cours qu'on dépose et qui devient des fiches et un quiz : 4,7 millions de vues.`,
+      `La leçon : la transformation se comprend toute seule, pas besoin de l'expliquer.`,
+      `@studywithtay2 (4,7 M).`,
+      [
+        ["@studywithtay2, un cours qui devient des fiches (4,7 M)", "https://www.tiktok.com/@studywithtay2/video/7525296604312554766"],
+      ]
     ),
     lesson(
       20,
-      "Deux moitiés, un scan, pas un mot",
-      `Deux assiettes avec le même nombre de calories, des mains gantées qui les remplissent, un téléphone qui scanne, et la note s'affiche. Ni voix, ni visage. CalScan a fait 18 millions et 16,5 millions de vues avec ce format. Le spectateur joue avec toi : il choisit son assiette avant de voir le résultat.`,
-      `CalScan « 580kcal │ 580kcal » (18 M) puis « 800kcal » (16,5 M).`
+      "Fais deviner le résultat avant de le montrer",
+      `Deux assiettes avec le même nombre de calories, des mains gantées qui les remplissent, un téléphone qui scanne, et la note s'affiche. Ni voix, ni visage. CalScan a fait 18 millions et 16,5 millions de vues avec ce format. Celui qui regarde essaie de deviner la bonne assiette avant de voir le résultat.`,
+      `La leçon : un petit jeu de devinette garde les gens jusqu'au résultat.`,
+      `CalScan « 580kcal │ 580kcal » (18 M) puis « 800kcal » (16,5 M).`,
+      [
+        ["CalScan, « 580kcal » (18 M)", "https://www.tiktok.com/@calscanapp/video/7536803368493206839"],
+        ["CalScan, « 800kcal » (16,5 M)", "https://www.tiktok.com/@calscanapp/video/7508465001674624302"],
+      ]
     ),
     lesson(
       21,
-      "La comparaison : le spectateur se cherche dans l'image",
-      `Le même thé glacé vendu aux États-Unis et en Europe, avec la liste des additifs de chaque côté : 892 500 vues pour Yuka. Trois étudiantes, trois façons de réviser, trois notes, A, B et C : 17 millions de vues, et 40 % des commentaires donnent leur propre note. L'app, c'est toujours le bon côté de la comparaison.`,
-      `Yuka « United States │ Europe » (892 500), puis Oreate AI « 95% Student (A+) / 80% Student (B+) / 60% Student (C+) » (Instagram, 17,1 M) et ses commentaires « I am C+😢 ».`
+      "Fais une comparaison dans laquelle les gens peuvent se reconnaître",
+      `Le même thé glacé vendu aux États-Unis et en Europe, avec la liste des additifs de chaque côté : 892 500 vues pour Yuka. Trois étudiantes, trois façons de réviser, trois notes, A, B et C : 17 millions de vues, et 40 % des commentaires donnent leur propre note.`,
+      `La leçon : ton app doit toujours être du bon côté de la comparaison.`,
+      `Yuka « United States │ Europe » (892 500), puis Oreate AI « 95% Student (A+) / 80% Student (B+) / 60% Student (C+) » (Instagram, 17,1 M) et ses commentaires « I am C+😢 ».`,
+      [
+        ["Yuka, « United States │ Europe » (892 500)", "https://www.tiktok.com/@yuka_app/video/7647995838857268511"],
+        ["Oreate AI, « 95% Student / 80% Student / 60% Student » (Instagram, 17,1 M)", "https://www.instagram.com/reel/DU_DxeJiH8c/"],
+      ]
     ),
     lesson(
       22,
-      "La liste des « 3 apps à avoir », avec la tienne au milieu",
-      `Les gens enregistrent ce genre de vidéo pour plus tard, et ton app profite des apps connues autour d'elle. « Top 3 des meilleures IA pour tes études » a fait 1,6 million de vues en français. C'est une recommandation, pas une pub.`,
-      `Être Étudiant (@etreetudiant, 1,6 M).`
+      "Mets ton app dans une liste de « 3 apps à avoir »",
+      `« Top 3 des meilleures IA pour tes études » a fait 1,6 million de vues en français. L'app qu'on veut faire connaître est au milieu d'apps que tout le monde connaît déjà.`,
+      `La leçon : au milieu d'apps connues, ton app passe pour un conseil, pas pour une pub.`,
+      `Être Étudiant (@etreetudiant, 1,6 M).`,
+      [
+        ["Être Étudiant, « Top 3 des meilleures IA pour tes études » (1,6 M)", "https://www.tiktok.com/@etreetudiant/video/7584398508120100118"],
+      ]
     ),
     lesson(
       23,
-      "Le carrousel, sans visage et sans montage",
-      `Des photos et des captures qu'on fait défiler : c'est le format le plus simple à produire, et la banque en contient plus de 80. Le carrousel de Yuka sur l'aspartame a fait 2 millions de vues. L'app arrive sur une image du milieu, comme la réponse à la question posée sur la première.`,
-      `Carrousel Yuka (@yuka_app, 2 M), on fait défiler les images.`
+      "Si tu n'as pas le temps de filmer, fais des carrousels",
+      `Des photos ou des captures qu'on fait défiler. C'est le format le plus simple à faire, et la banque en contient plus de 80. Yuka a fait 2 millions de vues avec un carrousel sur l'aspartame.`,
+      `La leçon : pas de tournage, pas de montage, et ça peut quand même faire des millions de vues.`,
+      `Carrousel Yuka (@yuka_app, 2 M), on fait défiler les images.`,
+      [
+        ["Yuka, carrousel sur l'aspartame (2 M)", "https://www.tiktok.com/@yuka_app/video/7468423289392647467"],
+      ]
     ),
     lesson(
       24,
-      "Une mascotte ou un jeu qu'on a envie de suivre",
-      `L'oiseau de Finch : 63 et 33 millions de vues. Des chats qui expliquent comment perdre du poids : 5,2 millions. Un garçon qui bat un monstre à coups de pompes : 3,4 millions. Un personnage ou un jeu donne un visage à ton app sans montrer le tien, et on a envie de voir la suite.`,
-      `Finch (33,2 M), Jurney (5,2 M), Push Up Arena « what is this app bro » (3,4 M).`
+      "Donne à ton app une mascotte ou un petit jeu",
+      `L'oiseau de Finch : 63 et 33 millions de vues. Des chats qui expliquent comment perdre du poids : 5,2 millions. Un garçon qui bat un monstre à coups de pompes : 3,4 millions.`,
+      `La leçon : un personnage ou un jeu donne un visage à ton app, sans que tu aies à montrer le tien.`,
+      `Finch (33,2 M), Jurney (5,2 M), Push Up Arena « what is this app bro » (3,4 M).`,
+      [
+        ["Finch (63,4 M)", "https://www.tiktok.com/@finchcare/video/7457035886274907438"],
+        ["Finch (33,2 M)", "https://www.tiktok.com/@finchcare/video/7368551995138968875"],
+        ["Jurney, les chats (5,2 M)", "https://www.tiktok.com/@kittyweight/video/7567016921816714526"],
+        ["Push Up Arena, « what is this app bro » (3,4 M)", "https://www.tiktok.com/@pushuparena.app/video/7637686723069185311"],
+      ]
     ),
     lesson(
       25,
-      "Raconte une info qui concerne tout le monde, et finis par l'app",
-      `Tallow a fait 2,9 millions de vues avec une vidéo façon journal télévisé sur les œufs de Dunkin', et 1,7 million avec le cacao de labo. On ne parle pas de l'app pendant 40 secondes, on parle de ce que les gens mangent, et l'app arrive à la fin comme le moyen de vérifier. Les commentaires parlent des marques, pas de l'app, et c'est bon signe : la vidéo a intéressé.`,
-      `Tallow « DUNKIN » (2,9 M), puis le commentaire « why is it so expensive if it's fake » (41 767 likes).`
+      "Parle d'une info qui touche tout le monde, et finis par ton app",
+      `Tallow a fait 2,9 millions de vues avec une vidéo façon journal télévisé sur les œufs d'une chaîne de fast-food, et 1,7 million avec le cacao de labo. Pendant 40 secondes, on parle de ce que les gens mangent, et l'app arrive à la fin comme le moyen de vérifier. Les commentaires parlent des marques, pas de l'app : la vidéo a intéressé.`,
+      `La leçon : parle de ce qui intéresse les gens, et fais arriver ton app comme le moyen d'agir.`,
+      `Tallow « DUNKIN » (2,9 M), puis le commentaire « why is it so expensive if it's fake » (41 767 likes).`,
+      [
+        ["Tallow, Dunkin' (2,9 M)", "https://www.tiktok.com/@tallowapp/video/7655431387650395423"],
+        ["Tallow, le cacao de labo (1,7 M)", "https://www.tiktok.com/@tallowapp/video/7650879158695873823"],
+      ]
     ),
     {
       time: "17:00",
       title: "Partie 6 : la même vidéo, des résultats opposés",
       beats: [
         partCard("PARTIE 6 · LA MÊME VIDÉO"),
-        { say: `Sixième partie, et c'est celle qui m'a le plus surpris : la même vidéo peut exploser une fois et faire un flop la fois suivante.` },
+        { say: `Sixième partie : la même vidéo peut exploser une fois et faire un flop la fois suivante.` },
       ],
     },
     lesson(
       26,
-      "La même vidéo, republiée trois jours plus tard : 963 300 vues, puis 5 400",
-      `Quizard a posté une vidéo, un étudiant au fond de la classe, l'IA qui répond au quiz sur son ordinateur. 963 300 vues. Trois jours plus tard, le compte a republié exactement la même, même film, même son, même texte, seul l'émoji change : 5 400 vues, 178 fois moins. Sur Instagram, même histoire : le même script sur un post-it a fait 23,3 millions de vues, puis 40 500 quatre jours plus tard. Le contenu ne garantit rien, et republier la même vidéo ne marche pas.`,
-      `Les deux Quizard « the F students are inventors » côte à côte, en même temps, puis le zoom sur l'émoji 🥀 contre 💔. Puis les deux post-it Instagram (23,3 M et 40,5 K).`
+      "Ne republie jamais la même vidéo",
+      `Quizard a posté une vidéo : un étudiant au fond de la classe, l'IA qui répond au quiz sur son ordinateur. 963 300 vues. Trois jours plus tard, le compte a republié exactement la même, même film, même son, même texte, seul l'émoji change : 5 400 vues, 178 fois moins. Sur Instagram, même chose : la même vidéo avec un post-it a fait 23,3 millions de vues, puis 40 500 quatre jours plus tard.`,
+      `La leçon : chaque vidéo doit être une nouvelle vidéo.`,
+      `Les deux Quizard « the F students are inventors » côte à côte, en même temps, puis le zoom sur l'émoji 🥀 contre 💔. Puis les deux post-it Instagram (23,3 M et 40,5 K).`,
+      [
+        ["Quizard, « the F students are inventors » (963 300)", "https://www.tiktok.com/@quizard.ai/video/7502540387144289567"],
+        ["Quizard, la même vidéo 3 jours après (5 400)", "https://www.tiktok.com/@quizard.ai/video/7503593343650254111"],
+        ["Quizard, le post-it sur Instagram (23,3 M)", "https://www.instagram.com/reel/C_Bl2y2RJni/"],
+        ["Quizard, le même post-it 4 jours après (40,5 K)", "https://www.instagram.com/reel/C_L4NvYS0G3/"],
+      ]
     ),
     lesson(
       27,
-      "Le même format, six jours plus tard : 18 millions, puis 36 700",
-      `CalScan a refait sa vidéo des deux assiettes six jours après celle à 18 millions de vues, avec d'autres plats : 36 700 vues. Et sept mois plus tard, le même format faisait 560 vues, parce que tout le compte s'était essoufflé. Une vidéo qui a marché te dit quoi refaire, pas combien elle fera.`,
-      `CalScan 580kcal (18 M), 340kcal (36 700), 1000Kcal (560), en ligne, avec la courbe des vues du compte qui s'effondre.`
+      "Une vidéo qui a marché ne garantit pas que la suivante marchera",
+      `CalScan a refait sa vidéo des deux assiettes six jours après celle à 18 millions de vues, avec d'autres plats : 36 700 vues. Sept mois plus tard, le même format faisait 560 vues, et à ce moment-là, tout le compte faisait moins de 1 000 vues par vidéo.`,
+      `La leçon : une vidéo qui a marché te dit quoi refaire, pas combien de vues tu vas faire.`,
+      `CalScan 580kcal (18 M), 340kcal (36 700), 1000Kcal (560), en ligne, avec la courbe des vues du compte qui descend.`,
+      [
+        ["CalScan, « 580kcal » (18 M)", "https://www.tiktok.com/@calscanapp/video/7536803368493206839"],
+        ["CalScan, 6 jours après (36 700)", "https://www.tiktok.com/@calscanapp/video/7539219212334583053"],
+        ["CalScan, 7 mois après (560)", "https://www.tiktok.com/@calscanapp/video/7620108340995034382"],
+      ]
     ),
     lesson(
       28,
-      "Le même texte, sur trois comptes : de 1 701 à 428 500 vues",
-      `Pour une app d'investissement, on a trouvé la même vidéo sur trois comptes différents : même phrase, même son, même durée. Une version a fait 428 500 vues, une autre 165 600, une autre 1 701. Le contenu n'explique pas tout.`,
-      `Les 3 vidéos Bloom côte à côte avec leurs vues (428 500, 165 600, 1 701).`
+      "Une part des vues, c'est de la chance, alors poste souvent",
+      `Pour une app d'investissement, on a trouvé la même vidéo sur trois comptes différents : même phrase, même son, même durée. Une version a fait 428 600 vues, une autre 165 600, et la dernière 1 701.`,
+      `La leçon : tu ne contrôles pas la chance, mais tu contrôles le nombre de vidéos que tu postes.`,
+      `Les 3 vidéos Bloom côte à côte avec leurs vues (428 600, 165 600, 1 701).`,
+      [
+        ["Bloom chez @savingwithselma (428 600)", "https://www.tiktok.com/@savingwithselma/video/7611325663475223839"],
+        ["Bloom chez @drmspam (165 600)", "https://www.tiktok.com/@drmspam/video/7610690060140170526"],
+        ["Bloom chez @treylovesinvesting (1 701)", "https://www.tiktok.com/@treylovesinvesting/video/7619835357634252054"],
+      ]
     ),
     lesson(
       29,
-      "Garde le format, change l'histoire",
-      `Puisque republier ne marche pas, les comptes qui percent gardent le même format et changent ce qu'ils racontent. Tallow garde son journal télévisé et change d'aliment à chaque fois : les œufs, le chocolat, le fast-food. Les chats de l'app de perte de poids gardent leur style, mais chaque vidéo parle d'autre chose. Un autre sujet, un autre premier plan, d'autres images au milieu : c'est une nouvelle vidéo, dans un format qui a déjà marché.`,
-      `Grille de 6 vidéos Tallow au même format, sujets différents, avec leurs vues.`
+      "Garde le format qui a marché, mais change de sujet à chaque vidéo",
+      `Puisque republier ne marche pas, il faut garder ce qui a marché et changer ce qu'on raconte. Tallow garde toujours la même forme, une présentatrice et un titre de journal, et change de sujet à chaque fois : les œufs d'une chaîne de fast-food, le chocolat, le poisson.`,
+      `La leçon : même format, autre sujet, autre première image, et tu as une nouvelle vidéo.`,
+      `Grille de 6 vidéos Tallow au même format, sujets différents, avec leurs vues.`,
+      [
+        ["Tallow, Dunkin' (2,9 M)", "https://www.tiktok.com/@tallowapp/video/7655431387650395423"],
+        ["Tallow, le chocolat (1,7 M)", "https://www.tiktok.com/@tallowapp/video/7650879158695873823"],
+        ["Tallow, le poisson (380)", "https://www.tiktok.com/@tallowapp/video/7668063263300586783"],
+        ["Le compte Tallow", "https://www.tiktok.com/@tallowapp"],
+      ]
     ),
     lesson(
       30,
-      "Un format se juge sur des dizaines de vidéos, pas sur une",
-      `Quizard a posté au moins 25 vidéos avec la même légende, de 2 683 à 29,5 millions de vues. Le créateur d'Eclipta, une app de concentration, a fait entre 100 et 500 vues par vidéo pendant trois mois, avant d'en faire 13 millions en mai. Les comptes qui percent ne trouvent pas la vidéo parfaite, ils postent le même format des dizaines de fois. Poste un format au moins dix fois avant de le juger.`,
-      `Grille des 25 vidéos Quizard « bruh » avec leurs vues, la 29,5 M qui s'allume. Puis la grille d'Eclipta : trois mois de vignettes entre 100 et 500 vues, et la 13 M.`
+      "Poste un format au moins dix fois avant de dire qu'il ne marche pas",
+      `Quizard a posté au moins 25 vidéos avec la même légende, de 2 683 à 29,5 millions de vues. Le créateur de l'app Eclipta a fait entre 100 et 500 vues par vidéo pendant trois mois, avant d'en faire 13 millions en mai.`,
+      `La leçon : un format qui fait peu de vues au début peut exploser plus tard, laisse-lui sa chance.`,
+      `Grille des 25 vidéos Quizard « bruh » avec leurs vues, la 29,5 M qui s'allume. Puis la grille d'Eclipta : trois mois de vignettes entre 100 et 500 vues, et la 13 M.`,
+      [
+        ["Le compte Quizard sur TikTok (les vidéos « bruh »)", "https://www.tiktok.com/@quizard.ai"],
+        ["Le créateur d'Eclipta, la vidéo à 13 M", "https://www.instagram.com/reel/DYfnXHqOo27/"],
+        ["Son compte Instagram", "https://www.instagram.com/journal.bingen/"],
+      ]
     ),
     {
       time: "20:00",
@@ -708,22 +889,33 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
     },
     lesson(
       31,
-      "Le son fait partie du format",
-      `Push Up Arena a posté deux fois la même partie, le même garçon, le même monstre, à trois jours d'écart. Avec un extrait d'anime en fond : 1,7 million de vues. Avec la voix du garçon à la place : 8 079. Et deux apps de musculation concurrentes ont explosé avec le même son, 15 millions et 4 millions de vues. Quand tu copies un format, garde le son.`,
-      `Push Up Arena « POV you play Solo Leveling IRL » (1,7 M) face à « Bro what is ts » (8 079), puis Stronger (15,3 M) et Lyfta (4,2 M), même son.`
+      "Quand tu refais un format, garde le même son",
+      `Push Up Arena a posté deux fois la même partie, le même garçon, le même monstre, à trois jours d'écart. Avec un extrait d'anime en fond : 1,7 million de vues. Avec la voix du garçon à la place : 8 079. Et deux apps de musculation concurrentes ont explosé avec le même son, 15 millions et 4 millions de vues.`,
+      `La leçon : le son fait partie du format, autant que les images.`,
+      `Push Up Arena « POV you play Solo Leveling IRL » (1,7 M) face à « Bro what is ts » (8 079), puis Stronger (15,3 M) et Lyfta (4,2 M), même son.`,
+      [
+        ["Push Up Arena, avec l'extrait d'anime (1,7 M)", "https://www.tiktok.com/@pushuparena.app/video/7650668508505705758"],
+        ["Push Up Arena, avec la voix du garçon (8 079)", "https://www.tiktok.com/@pushuparena.app/video/7651809418950036766"],
+        ["Stronger (15,3 M)", "https://www.tiktok.com/@kailyn.lifts/video/7626442321860644127"],
+        ["Lyfta, même son (4,2 M)", "https://www.tiktok.com/@lyft.withnicole/video/7588999110909283592"],
+      ]
     ),
     lesson(
       32,
-      "Le français a de la place, mais les plus gros chiffres sont en anglais",
-      `Aucune des 18 vidéos les plus vues de la banque n'est en français. La plus vue en français fait quand même 7,2 millions de vues, pour une app de révision. Commence dans ta langue si tu veux, mais ouvre aussi un compte en anglais : c'est là que l'audience est la plus grande.`,
-      `Nomad Education (@priel.study, 7,2 M).`
+      "Poste aussi en anglais, c'est là qu'il y a le plus de vues",
+      `Aucune des 18 vidéos les plus vues de la banque n'est en français. La plus vue en français fait quand même 7,2 millions de vues, pour une app de révision.`,
+      `La leçon : commence dans ta langue si tu veux, mais ouvre aussi un compte en anglais.`,
+      `Nomad Education (@priel.study, 7,2 M).`,
+      [
+        ["Nomad Education chez @priel.study (7,2 M)", "https://www.tiktok.com/@priel.study/video/7290614054438079777"],
+      ]
     ),
     {
       time: "21:00",
       title: "Récap et fin",
       beats: [
         {
-          say: `Si tu ne retiens que cinq choses : ne parle pas de ton app comme dans une pub, commence par la personne qui regarde, montre ton app au moment où elle attend une solution sans te présenter, filme-la pour qu'on la comprenne en une seconde, et poste chaque format des dizaines de fois en changeant d'histoire. Et pour trouver ton premier format, les 100 vidéos d'apps les plus vues, rangées par niche, sont en lien dans la description.`,
+          say: `Si tu ne retiens que cinq choses : ne parle pas de ton app comme dans une pub, commence par la personne qui regarde, montre ton app au moment où celui qui regarde attend une solution, sans la présenter, filme-la pour qu'on la comprenne en une seconde, et poste chaque format des dizaines de fois en changeant d'histoire. Et pour trouver ton premier format, les 100 vidéos d'apps les plus vues, rangées par niche, sont en lien dans la description.`,
           show: `Les 5 points à l'écran, un par un.`,
         },
         {

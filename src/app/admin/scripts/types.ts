@@ -7,7 +7,14 @@ export type Beat = { say?: string; show?: string };
 
 // mode : « visage » si Jeremy est face caméra, « sans-visage » si c'est sa voix
 // seule sur le montage. Absent pour les scripts tournés entièrement face caméra.
-export type ScriptSection = { time: string; title: string; mode?: "visage" | "sans-visage"; beats: Beat[] };
+// links : les vidéos citées dans la section, pour que Jeremy les regarde avant de tourner.
+export type ScriptSection = {
+  time: string;
+  title: string;
+  mode?: "visage" | "sans-visage";
+  beats: Beat[];
+  links?: { label: string; url: string }[];
+};
 
 export type VideoScript = {
   slug: string;
