@@ -348,7 +348,7 @@ const SCRIPT_B: VideoScript = {
   title: "J'ai analysé 1 633 vidéos qui font télécharger des apps et j'ai appris ça (32 leçons)",
   why: `Même format que « J'ai analysé 300 apps », ta vidéo qui a fait le plus de leads (49). Version du 18 nov. : de la pure valeur, grand public. Ce qui marche, ce qui floppe et ce qui fait la différence, montré avec de vraies vidéos qui ont percé et d'autres qui ont floppé, souvent sur le même compte d'app. Aucun élève, aucune preuve en dollars, rien qui ressemble à une page de vente.`,
   facts: [
-    { label: "Durée", value: "31 à 34 min de voix (environ 5 400 mots, sans compter les phrases en anglais entre parenthèses) : trop long, leçons à couper" },
+    { label: "Durée", value: "31 à 34 min de voix (environ 5 400 mots, sans compter les phrases en anglais entre parenthèses). Les 32 leçons restent, la durée n'est pas un souci (Jeremy, 18 nov.)" },
     { label: "Montage", value: "Sans visage, sauf deux moments face caméra : « qui je suis » juste après l'intro (45 secondes) et l'annonce du cadeau. Tout le reste en voix seule sur les vidéos à l'écran (direction C)" },
     { label: "Style", value: "Voix seule lue mot à mot. Seules les deux parties face caméra se disent en regardant l'objectif" },
     { label: "Format", value: "« J'ai analysé N X et j'ai appris ça » : 32 leçons en 7 parties, et pour la plupart une vidéo qui a percé face à une vidéo qui a floppé" },
