@@ -417,10 +417,14 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
           show: "« 32 LEÇONS » se construit au centre, avec deux colonnes : « CE QUI MARCHE » en vert, « CE QUI FLOPPE » en rouge.",
           say: `J'en ai tiré 32 leçons : ce qui marche, ce qui ne marche pas, et ce qui fait la différence entre les deux, avec à chaque fois de vraies vidéos.`,
         },
+        {
+          show: "Les mots « UGC » et « PUB » s'effacent l'un après l'autre, il ne reste au centre que « LE CONTENU ».",
+          say: `Avec elles, tu vas voir comment rendre une vidéo organique virale, pour attirer des utilisateurs gratuitement. Je ne vais parler ni d'UGC ni de publicité : on va se concentrer sur l'essence de la viralité, le contenu lui-même.`,
+        },
       ],
     },
     {
-      time: "0:35",
+      time: "0:45",
       title: "Face caméra : qui je suis",
       mode: "visage",
       beats: [
@@ -432,12 +436,12 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
           say: `Une précision honnête avant de commencer : de ces vidéos, on connaît les vues et les commentaires, pas les téléchargements. Une vidéo à des millions de vues ne fait pas forcément télécharger, et je te montrerai pourquoi.`,
         },
         {
-          say: `Cette vidéo est pour toi si tu as une app, ou une idée d'app, et que tu ne sais pas quoi poster pour la faire connaître. Tu n'as pas besoin d'être créateur de contenu, ni de montrer ton visage. D'ailleurs, à partir de maintenant, tu ne me verras plus : la suite, c'est uniquement ce qui se passe à l'écran.`,
+          say: `Cette vidéo est pour toi si tu as une app, ou une idée d'app, et que tu ne sais pas quoi poster pour la faire connaître. Tu n'as pas besoin d'être créateur de contenu, ni de montrer ton visage.`,
         },
       ],
     },
     {
-      time: "1:15",
+      time: "1:20",
       title: "Le plan",
       beats: [
         {
@@ -447,7 +451,7 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
       ],
     },
     {
-      time: "1:30",
+      time: "1:35",
       title: "Partie 1 : ce qui floppe, tout ce qui ressemble à une pub",
       beats: [
         partCard("PARTIE 1 · CE QUI FLOPPE"),
@@ -668,8 +672,8 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
     ),
     lesson(
       28,
-      "Le même script, chez trois créateurs : de 1 701 à 428 500 vues",
-      `Une app d'investissement a donné le même texte à plusieurs créateurs : même phrase, même son, même durée. Une version a fait 428 500 vues, une autre 165 600, une autre 1 701. Le contenu n'explique pas tout.`,
+      "Le même texte, sur trois comptes : de 1 701 à 428 500 vues",
+      `Pour une app d'investissement, on a trouvé la même vidéo sur trois comptes différents : même phrase, même son, même durée. Une version a fait 428 500 vues, une autre 165 600, une autre 1 701. Le contenu n'explique pas tout.`,
       `Les 3 vidéos Bloom côte à côte avec leurs vues (428 500, 165 600, 1 701).`
     ),
     lesson(
@@ -736,7 +740,7 @@ On a passé au crible environ 12 500 vidéos TikTok et Instagram pour en garder 
 👉 Dis-moi en commentaire laquelle de ces 32 leçons tu vas tester en premier.
 
 0:00 Introduction
-1:30 Ce qui floppe
+1:35 Ce qui floppe
 4:45 Ce qui marche
 8:45 Où mettre ton app
 11:30 Comment filmer ton app
