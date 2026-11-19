@@ -11,6 +11,7 @@ export type AdminSection =
   | "eleves"
   | "whatsapp"
   | "questions"
+  | "videos-skool"
   | "commissions"
   | "chiffre-affaires"
   | "candidatures"
@@ -53,6 +54,7 @@ const GROUPS: Group[] = [
       { id: "eleves", label: "Élèves", href: "/admin/eleves", ownerOnly: true },
       { id: "whatsapp", label: "WhatsApp", href: "/admin/whatsapp", ownerOnly: true },
       { id: "questions", label: "Questions des élèves", href: "/admin/questions", ownerOnly: true },
+      { id: "videos-skool", label: "Vidéos Skool à tourner", href: "/admin/videos-skool", ownerOnly: true },
     ],
   },
   {
