@@ -96,6 +96,30 @@ export const guides: Record<string, Guide> = {
     crm: true,
     shortLabel: "Checklist 32 leçons vidéos",
   },
+  "100-contenus-viraux": {
+    slug: "100-contenus-viraux",
+    title: "Récupère les",
+    highlight: "100 contenus viraux à copier pour ton app",
+    subtitle:
+      "Les vidéos et carrousels les plus vus parmi les 1 633 qu'on a analysés, gardés seulement quand leur format peut marcher pour n'importe quelle application. Pour chacun : le lien, les vues, la phrase d'ouverture et ce qu'il faut copier.",
+    bullets: [
+      "100 vidéos et carrousels à plusieurs millions de vues, rangés en 13 formats",
+      "La phrase d'ouverture de chacun, pour la refaire tout de suite avec ton app",
+      "En une ligne, ce qu'il faut copier, et le lien vers le contenu d'origine",
+    ],
+    ctaText: "Recevoir les 100 contenus en PDF",
+    merciTitle: "Tes 100 contenus sont",
+    merciHighlight: "en route.",
+    merciDescription:
+      "Télécharge le PDF, choisis un format qui colle à ton app, refais-le et poste-le plusieurs fois avant de juger.",
+    downloadLabel: "Télécharger les 100 contenus",
+    downloadUrl: "/downloads/100-contenus-viraux-t4n8w2.pdf",
+    brevoListId: 23,
+    previewImage: "/proof/100-contenus-viraux-preview.jpg",
+    previewBadge: "PDF · 17 pages",
+    crm: true,
+    shortLabel: "100 contenus viraux",
+  },
   "piscine-epitech": {
     slug: "piscine-epitech",
     title: "Récupère la",

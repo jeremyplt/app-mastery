@@ -227,6 +227,33 @@ export function guide32LeconsVideos(firstName?: string): BuiltEmail {
   return { subject: "Tes 32 leçons sont prêtes", html, tag: "32-lecons-videos" };
 }
 
+// Livraison des 100 contenus viraux à copier (cadeau de la vidéo
+// « J'ai analysé 1 633 vidéos d'apps et j'ai appris ça »).
+export function guide100ContenusViraux(firstName?: string): BuiltEmail {
+  const html = `
+<p>${greeting(firstName)}</p>
+
+<p>Merci d'avoir demandé les 100 contenus. Voici ton PDF :</p>
+
+<p><a href="https://www.jeremypitault.com/downloads/100-contenus-viraux-t4n8w2.pdf">Télécharger les 100 contenus viraux</a></p>
+
+<p>Dedans, tu trouveras les vidéos et les carrousels les plus vus parmi les 1 633 qu'on a analysés, rangés en 13 formats. Pour chacun, tu as le lien, les vues, la phrase d'ouverture et ce qu'il faut copier.</p>
+
+<p>Ne cherche pas à tout faire d'un coup. Choisis un seul format qui colle à ton app, regarde ses exemples plusieurs fois, puis refais-le avec ton app : même structure, même durée, même son. Ensuite, poste-le au moins dix fois avant de juger, parce que le même format peut faire des millions de vues un jour et quelques milliers le lendemain.</p>
+
+<p>Si tu veux qu'on cherche ensemble les vidéos qui feront vendre ton app, le premier pas, c'est un appel de 30 minutes :</p>
+
+<p><a href="https://www.jeremypitault.com/appel?utm_source=email&utm_medium=email&utm_campaign=100-contenus-viraux">Réserver mon appel</a></p>
+
+<p>Demain, je te raconte d'où vient Shinobi Japanese, et pourquoi elle a rapporté de l'argent dès le premier mois alors que des centaines d'apps aussi bien codées dorment sur l'App Store.</p>
+
+<p>À demain,<br>Jeremy</p>
+
+<p>P.S. Si tu ne sais pas quel format choisir pour ton app, réponds directement à cet email. Je lis tout.</p>
+`;
+  return { subject: "Tes 100 contenus sont prêts", html, tag: "100-contenus-viraux" };
+}
+
 // Candidature : réponse au prospect selon la qualification.
 export function candidatureProspect(firstName: string, email: string, qualified: boolean): BuiltEmail {
   const html = qualified

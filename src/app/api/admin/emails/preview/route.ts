@@ -13,6 +13,7 @@ import {
   planAction,
   promptContenuViral,
   guide32LeconsVideos,
+  guide100ContenusViraux,
   vslAccess,
   type BuiltEmail,
 } from "@/lib/emails/transactional";
@@ -75,6 +76,8 @@ function buildFromCode(tag: string): BuiltEmail | null {
       return promptContenuViral(SAMPLE_FIRST_NAME);
     case "32-lecons-videos":
       return guide32LeconsVideos(SAMPLE_FIRST_NAME);
+    case "100-contenus-viraux":
+      return guide100ContenusViraux(SAMPLE_FIRST_NAME);
     case "candidature-qualifie":
       return candidatureProspect(SAMPLE_FIRST_NAME, "thomas@exemple.fr", true);
     case "candidature-non-qualifie":

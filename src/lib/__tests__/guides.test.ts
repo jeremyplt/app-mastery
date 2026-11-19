@@ -3,7 +3,7 @@ import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { test } from "node:test";
 import { CRM_GUIDE_LABELS, CRM_GUIDE_SLUGS, getGuide, guides } from "../guides";
-import { guide27Regles, guide32LeconsVideos, promptContenuViral } from "../emails/transactional";
+import { guide27Regles, guide32LeconsVideos, guide100ContenusViraux, promptContenuViral } from "../emails/transactional";
 
 const PUBLIC = join(__dirname, "..", "..", "..", "public");
 
@@ -32,6 +32,7 @@ test("les emails de livraison pointent vers le même PDF que la page du guide", 
     { slug: "27-regles", email: guide27Regles("Marie") },
     { slug: "prompt-contenu-viral", email: promptContenuViral("Marie") },
     { slug: "32-lecons-videos", email: guide32LeconsVideos("Marie") },
+    { slug: "100-contenus-viraux", email: guide100ContenusViraux("Marie") },
   ];
   for (const { slug, email } of cases) {
     const guide = getGuide(slug)!;
@@ -44,6 +45,19 @@ test("email des 32 leçons : prénom, appel tracé, aucun prix, aucun tiret cadr
   const email = guide32LeconsVideos("Marie");
   assert.ok(email.html.includes("Marie"));
   assert.ok(email.html.includes("utm_campaign=32-lecons-videos"));
+  assert.ok(!email.html.includes("—"));
+  assert.ok(!/formation/i.test(email.html));
+  assert.ok(!/€/.test(email.html), "jamais de prix dans les emails du funnel");
+});
+
+test("guide 100 contenus viraux : slug de la description YouTube, CRM, email propre", () => {
+  const guide = getGuide("100-contenus-viraux");
+  assert.ok(guide, "le guide doit exister");
+  assert.equal(guide.crm, true);
+  assert.ok(CRM_GUIDE_SLUGS.includes("100-contenus-viraux"));
+  const email = guide100ContenusViraux("Marie");
+  assert.ok(email.html.includes("Marie"));
+  assert.ok(email.html.includes("utm_campaign=100-contenus-viraux"));
   assert.ok(!email.html.includes("—"));
   assert.ok(!/formation/i.test(email.html));
   assert.ok(!/€/.test(email.html), "jamais de prix dans les emails du funnel");
