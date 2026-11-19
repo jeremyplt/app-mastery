@@ -736,7 +736,7 @@ export default function CrmAdmin() {
                     </div>
 
                     {/* États + actions */}
-                    <div className="flex shrink-0 flex-wrap items-center gap-1.5">
+                    <div className="flex max-w-full flex-wrap items-center gap-1.5">
                       <Toggle on={lead.contacted} tone="gray" label="Contacté" onChange={(v) => patchLead(lead.id, lead.source, { contacted: v })} />
                       <Toggle on={lead.replied} tone="blue" label="A répondu" onChange={(v) => patchLead(lead.id, lead.source, { replied: v })} />
                       <Toggle on={lead.call_booked} tone="green" label="Call booké" onChange={(v) => patchLead(lead.id, lead.source, { call_booked: v })} />

@@ -621,9 +621,9 @@ export default function VentesPage() {
             ["À venir", totals.upcoming, "text-[var(--fg)]"],
             ["En retard", totals.late, totals.late > 0 ? "text-[var(--red)]" : "text-[var(--fg)]"],
           ].map(([label, value, cls]) => (
-            <div key={label as string} className="mac-group px-4 py-3">
+            <div key={label as string} className="mac-group min-w-0 px-3 py-3 sm:px-4">
               <p className="text-xs font-bold text-[var(--fg2)]">{label as string}</p>
-              <p className={`mt-1 text-2xl font-bold tracking-tight ${cls}`}>{money(value as number)}</p>
+              <p className={`mt-1 whitespace-nowrap text-lg font-bold tracking-tight sm:text-2xl ${cls}`}>{money(value as number)}</p>
             </div>
           ))}
         </div>

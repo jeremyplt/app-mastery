@@ -866,3 +866,48 @@ body {
 .tiptap u {
   text-decoration: underline;
 }
+
+/* ==============================
+   ADMIN SUR TÉLÉPHONE (app sur l'écran d'accueil)
+   ============================== */
+
+.admin-app {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+.admin-tabbar {
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(28px) saturate(1.8);
+  backdrop-filter: blur(28px) saturate(1.8);
+  padding-bottom: max(env(safe-area-inset-bottom), 6px);
+}
+.admin-tabbar > * { -webkit-tap-highlight-color: transparent; }
+
+.admin-sheet {
+  bottom: calc(64px + max(env(safe-area-inset-bottom), 6px));
+  animation: admin-sheet-in 220ms var(--ease-out);
+}
+.admin-sheet-backdrop { animation: admin-fade-in 180ms ease-out; }
+@keyframes admin-sheet-in {
+  from { opacity: 0; transform: translateY(12px) scale(0.98); }
+}
+@keyframes admin-fade-in { from { opacity: 0; } }
+
+@media (max-width: 767px) {
+  /* La place de la barre d'onglets en bas. */
+  .admin-app { padding-bottom: calc(72px + env(safe-area-inset-bottom)); }
+  .admin-app .admin-topnav { padding: 9px 12px; }
+  /* iOS zoome sur un champ en dessous de 16 px : on l'évite. */
+  .admin-app input:not([type="checkbox"]):not([type="radio"]),
+  .admin-app select,
+  .admin-app textarea { font-size: 16px !important; }
+  /* Rien ne doit élargir l'écran : les tableaux défilent dans leur cadre. */
+  .admin-app { overflow-x: clip; }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .admin-tabbar { background: var(--group) !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
+}

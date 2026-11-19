@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { GraduationCap, Megaphone, Users, Wallet, type LucideIcon } from "lucide-react";
 import ThemeToggle from "@/components/ThemeToggle";
 
 export type AdminSection =
@@ -25,13 +26,14 @@ export type AdminSection =
 
 // ownerOnly : propriétaire seulement ; closerToo : aussi visible des closers.
 type Item = { id: AdminSection; label: string; href: string; ownerOnly?: boolean; closerToo?: boolean };
-type Group = { label: string; items: Item[] };
+type Group = { label: string; icon: LucideIcon; items: Item[] };
 
 // Les pages regroupées par thème : un groupe d'une seule page est un lien
 // direct, sinon un menu déroulant.
 const GROUPS: Group[] = [
   {
     label: "Prospects",
+    icon: Users,
     items: [
       { id: "crm", label: "CRM", href: "/admin/crm" },
       { id: "candidatures", label: "Candidatures", href: "/admin/candidatures" },
@@ -41,6 +43,7 @@ const GROUPS: Group[] = [
   },
   {
     label: "Ventes",
+    icon: Wallet,
     items: [
       { id: "ventes", label: "Ventes", href: "/admin/ventes" },
       { id: "factures", label: "Factures", href: "/admin/factures", ownerOnly: true },
@@ -50,6 +53,7 @@ const GROUPS: Group[] = [
   },
   {
     label: "Élèves",
+    icon: GraduationCap,
     items: [
       { id: "eleves", label: "Élèves", href: "/admin/eleves", ownerOnly: true },
       { id: "whatsapp", label: "WhatsApp", href: "/admin/whatsapp", ownerOnly: true },
@@ -59,6 +63,7 @@ const GROUPS: Group[] = [
   },
   {
     label: "Marketing",
+    icon: Megaphone,
     items: [
       { id: "emails", label: "Emails", href: "/admin/crm/emails" },
       { id: "youtube", label: "YouTube", href: "/admin/youtube" },
@@ -156,40 +161,145 @@ export default function AdminNav({ current, isOwner }: { current: AdminSection; 
   const visible = (it: Item) => !it.ownerOnly || isOwner || (it.closerToo && isCloser);
   const groups = GROUPS.map((g) => ({ ...g, items: g.items.filter(visible) })).filter((g) => g.items.length > 0);
 
-  return (
-    <nav className="mac-nav relative z-40 mb-8" aria-label="Administration">
-      <Link href="/admin/crm" className="flex items-center gap-2.5 font-bold text-[15px] tracking-tight text-[var(--fg)]">
-        <span
-          className="grid place-items-center w-7 h-7 rounded-lg text-[12px] font-extrabold tracking-tight text-[var(--accent)] border-[0.5px] border-white/10"
-          style={{ background: "linear-gradient(150deg, #2b2b2e, #000)" }}
+  const currentLabel =
+    current === "equipe" ? "Équipe" : GROUPS.flatMap((g) => g.items).find((it) => it.id === current)?.label ?? "Admin";
+
+  const rightButtons = (
+    <div className="flex shrink-0 items-center gap-2">
+      {isOwner && (
+        <Link
+          href="/admin/equipe"
+          title="Équipe"
+          aria-label="Équipe"
+          aria-current={current === "equipe" ? "page" : undefined}
+          className={`grid h-9 w-9 place-items-center rounded-[10px] border-[0.5px] border-[var(--field-brd)] text-[16px] transition-colors ${
+            current === "equipe" ? "bg-[var(--group)] text-[var(--fg)]" : "bg-[var(--field)] text-[var(--fg2)] hover:text-[var(--fg)]"
+          }`}
         >
-          AM
-        </span>
-        <span className="hidden sm:inline">Admin</span>
-      </Link>
+          ⚙️
+        </Link>
+      )}
+      <ThemeToggle />
+    </div>
+  );
 
-      <div className="mac-seg">
-        {groups.map((g) => (
-          <GroupMenu key={g.label} group={g} current={current} />
-        ))}
-      </div>
+  const brand = (
+    <Link href="/admin/crm" className="flex min-w-0 items-center gap-2.5 font-bold text-[15px] tracking-tight text-[var(--fg)]">
+      <span
+        className="grid h-7 w-7 shrink-0 place-items-center rounded-lg text-[12px] font-extrabold tracking-tight text-[var(--accent)] border-[0.5px] border-white/10"
+        style={{ background: "linear-gradient(150deg, #2b2b2e, #000)" }}
+      >
+        AM
+      </span>
+      <span className="hidden lg:inline">Admin</span>
+      <span className="truncate md:hidden">{currentLabel}</span>
+    </Link>
+  );
 
-      <div className="flex items-center gap-2">
-        {isOwner && (
-          <Link
-            href="/admin/equipe"
-            title="Équipe"
-            aria-label="Équipe"
-            aria-current={current === "equipe" ? "page" : undefined}
-            className={`grid h-9 w-9 place-items-center rounded-[10px] border-[0.5px] border-[var(--field-brd)] text-[16px] transition-colors ${
-              current === "equipe" ? "bg-[var(--group)] text-[var(--fg)]" : "bg-[var(--field)] text-[var(--fg2)] hover:text-[var(--fg)]"
-            }`}
+  return (
+    <>
+      <nav className="mac-nav admin-topnav relative z-40 mb-6 md:mb-8" aria-label="Administration">
+        {brand}
+        {/* .mac-seg impose son display : le masquage se fait sur l'enveloppe. */}
+        <div className="hidden md:block">
+          <div className="mac-seg">
+            {groups.map((g) => (
+              <GroupMenu key={g.label} group={g} current={current} />
+            ))}
+          </div>
+        </div>
+        {rightButtons}
+      </nav>
+      <MobileTabBar groups={groups} current={current} />
+    </>
+  );
+}
+
+// Téléphone : barre d'onglets fixée en bas, comme une app. Un onglet à une
+// seule page y mène directement, sinon il ouvre une feuille avec ses pages.
+function MobileTabBar({ groups, current }: { groups: Group[]; current: AdminSection }) {
+  const [openGroup, setOpenGroup] = useState<string | null>(null);
+  const sheetGroup = groups.find((g) => g.label === openGroup);
+
+  useEffect(() => {
+    if (!openGroup) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpenGroup(null);
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [openGroup]);
+
+  return (
+    <div className="md:hidden">
+      {sheetGroup && (
+        <>
+          <button
+            type="button"
+            aria-label="Fermer"
+            className="admin-sheet-backdrop fixed inset-0 z-[60] bg-black/30"
+            onClick={() => setOpenGroup(null)}
+          />
+          <div
+            role="menu"
+            aria-label={sheetGroup.label}
+            className="admin-sheet fixed inset-x-3 z-[61] overflow-hidden rounded-2xl border-[0.5px] border-[var(--field-brd)] bg-[var(--group)] p-1.5 shadow-[0_10px_40px_rgba(0,0,0,0.25)]"
           >
-            ⚙️
-          </Link>
-        )}
-        <ThemeToggle />
-      </div>
-    </nav>
+            <p className="px-3 pb-1 pt-2 text-[12px] font-semibold text-[var(--fg3)]">{sheetGroup.label}</p>
+            {sheetGroup.items.map((it) => (
+              <Link
+                key={it.id}
+                href={it.href}
+                role="menuitem"
+                onClick={() => setOpenGroup(null)}
+                aria-current={it.id === current ? "page" : undefined}
+                className={`flex items-center justify-between rounded-xl px-3 py-3.5 text-[16px] font-semibold transition-colors active:bg-[var(--field)] ${
+                  it.id === current ? "bg-[color-mix(in_srgb,var(--accent)_14%,transparent)] text-[var(--accent2)]" : "text-[var(--fg)]"
+                }`}
+              >
+                {it.label}
+                <span className="text-[var(--fg3)]" aria-hidden>
+                  ›
+                </span>
+              </Link>
+            ))}
+          </div>
+        </>
+      )}
+
+      <nav aria-label="Rubriques" className="admin-tabbar fixed inset-x-0 bottom-0 z-[62] grid border-t-[0.5px] border-[var(--glass-brd)]" style={{ gridTemplateColumns: `repeat(${groups.length}, 1fr)` }}>
+        {groups.map((g) => {
+          const Icon = g.icon;
+          const active = g.items.some((it) => it.id === current);
+          const isOpen = openGroup === g.label;
+          const cls = `flex flex-col items-center gap-0.5 pt-2 pb-1 text-[10.5px] font-semibold transition-colors ${
+            active || isOpen ? "text-[var(--accent)]" : "text-[var(--fg3)]"
+          }`;
+          const content = (
+            <>
+              <Icon size={23} strokeWidth={active ? 2.3 : 1.9} aria-hidden />
+              {g.label}
+            </>
+          );
+          if (g.items.length === 1) {
+            return (
+              <Link key={g.label} href={g.items[0].href} className={cls} aria-current={active ? "page" : undefined}>
+                {content}
+              </Link>
+            );
+          }
+          return (
+            <button
+              key={g.label}
+              type="button"
+              className={cls}
+              aria-expanded={isOpen}
+              aria-haspopup="menu"
+              onClick={() => setOpenGroup(isOpen ? null : g.label)}
+            >
+              {content}
+            </button>
+          );
+        })}
+      </nav>
+    </div>
   );
 }

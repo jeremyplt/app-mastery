@@ -186,10 +186,10 @@ export default function CandidaturesAdmin() {
                             copy(c.email, `${c.id}-email`);
                           }
                         }}
-                        className="inline-flex items-center gap-1.5 rounded-md bg-[var(--field)] px-2.5 py-1 text-sm font-semibold text-[var(--fg)] transition-colors hover:bg-[color-mix(in_srgb,var(--fg)_8%,transparent)]"
+                        className="inline-flex max-w-full items-center gap-1.5 rounded-md bg-[var(--field)] px-2.5 py-1 text-sm font-semibold text-[var(--fg)] transition-colors hover:bg-[color-mix(in_srgb,var(--fg)_8%,transparent)]"
                         title="Copier l'email"
                       >
-                        <span className="truncate">{c.email}</span>
+                        <span className="min-w-0 truncate">{c.email}</span>
                         <span className="text-xs text-[var(--accent2)]">
                           {copied === `${c.id}-email` ? "Copié ✓" : "Copier"}
                         </span>
@@ -224,7 +224,7 @@ export default function CandidaturesAdmin() {
                       {c.utm_source ? ` · ${c.utm_source}` : ""}
                     </p>
                   </div>
-                  <div className="flex shrink-0 items-center gap-3">
+                  <div className="flex shrink-0 flex-col items-end gap-1 sm:flex-row sm:items-center sm:gap-3">
                     <span className="text-sm font-bold text-[var(--fg2)]">
                       {c.score} pts
                     </span>
