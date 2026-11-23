@@ -1000,8 +1000,8 @@ const SCRIPT_D: VideoScript = {
   title: "Ces apps ennuyeuses rapportent des millions (et personne n'en parle)",
   why: `C'est le cœur de ton angle : l'argent n'est pas dans les apps dont tout le monde parle, il est dans les niches oubliées. Le format « ce truc ennuyeux rapporte des millions » fait jusqu'à 984 000 vues pour les sites et les SaaS, et presque personne ne l'a fait pour les apps, encore moins en français. Toutes les preuves viennent du classement d'Apple des apps qui rapportent le plus aux États-Unis, relevé le 23 novembre. La vidéo montre aussi ce qui floppe : dans chaque niche, des dizaines d'apps n'ont presque aucun avis.`,
   facts: [
-    { label: "Durée", value: "15 à 17 min (environ 2 300 mots de voix)" },
-    { label: "Montage", value: "Sans visage (direction C), sauf trois moments face caméra : « qui je suis » juste après l'intro, le cadeau, et la fin. Tout le reste en voix seule sur les classements, les pages App Store et les captures des apps" },
+    { label: "Durée", value: "15 à 17 min (environ 2 400 mots de voix)" },
+    { label: "Montage", value: "Sans visage (direction C), sauf trois moments face caméra : « qui je suis » juste après l'intro, le cadeau suivi de l'appel avec ton équipe, et la fin. Tout le reste en voix seule sur les classements, les pages App Store et les captures des apps" },
     { label: "Style", value: "Voix lue mot à mot. Les classements et les chiffres sont posés à l'écran par le montage, jamais lus en entier" },
     { label: "Format", value: "« Ce [truc] ennuyeux rapporte des millions » : trois familles d'apps (métiers, passions, galères), puis ce qui floppe dans les mêmes niches, puis comment trouver la sienne" },
     { label: "Demande", value: "Jonathan's Jam « This Boring Website Earns $6M/Year » 984 000 vues, Niche Pursuits « How This \"BORING\" Website Makes $35,000/Month! » 425 800, Starter Story « I Make $60K/Month From the Most Boring SaaS on the Internet » 319 100, Kimberly Mitchell 245 100. Le format marche pour les sites et les SaaS, presque rien sur les apps, rien en français" },
@@ -1044,7 +1044,7 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
   gift: {
     name: "Les 50 niches ennuyeuses qui rapportent : pour chacune, l'app qui domine, son prix, son nombre d'avis, combien d'apps de la niche n'ont presque rien, et ce que ses utilisateurs lui reprochent",
     url: `https://www.jeremypitault.com/guide/niches-ennuyeuses?${UTM_D}`,
-    note: "Page à créer avant de publier, à partir des classements du 23 nov. (~/Projects/reports/2026-11-23-apps-ennuyeuses/charts) : garder les apps de métier, de passion et de galère, enlever les grandes marques, faire la recherche App Store de chaque niche (nombre d'apps, combien sous 20 avis), relever les prix et les avis à 1 et 2 étoiles de l'app qui domine. Annoncé face caméra après la partie 3 (la première grosse valeur), rappelé à la fin.",
+    note: "Page à créer avant de publier, à partir des classements du 23 nov. (~/Projects/reports/2026-11-23-apps-ennuyeuses/charts) : garder les apps de métier, de passion et de galère, enlever les grandes marques, faire la recherche App Store de chaque niche (nombre d'apps, combien sous 20 avis), relever les prix et les avis à 1 et 2 étoiles de l'app qui domine. Annoncé face caméra après la partie 3 (la première grosse valeur), juste avant l'appel avec l'équipe, rappelé à la fin.",
   },
   plan: [
     "Le spectateur a vu, preuves à l'appui, que des apps pour camionneurs, chasseurs, crocheteuses, parents séparés ou gens qui attendent leur carte verte sont parmi celles qui rapportent le plus aux États-Unis.",
@@ -1236,17 +1236,21 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
     },
     {
       time: "9:10",
-      title: "Le cadeau",
+      title: "Le cadeau, et l'appel avec ton équipe",
       mode: "visage",
       beats: [
         {
           say: `J'ai relevé ces classements catégorie par catégorie, et j'en ai sorti les 50 niches ennuyeuses qui rapportent. Pour chacune : l'app qui domine, ce qu'elle coûte, son nombre d'avis, combien d'apps de la même niche n'ont presque rien, et ce que ses utilisateurs lui reprochent. C'est gratuit, le lien est en premier dans la description.`,
           show: `À côté de toi, la couverture du guide des 50 niches, et en dessous « lien en description », 4 secondes, sans couper la parole.`,
         },
+        {
+          say: `Et d'ailleurs, avec mon équipe, on accompagne des gens qui créent leur app. Si tu en as déjà une, ou si tu aimerais qu'on t'aide à trouver ton idée, il y a aussi un lien dans la description pour réserver un appel avec nous. On regarde ensemble où tu en es, comment on peut t'aider, et si ton profil correspond aux personnes qu'on accompagne.`,
+          show: `Dans le même plan, la vraie page de réservation (jeremypitault.com/rdv) glisse à côté de toi, 4 secondes, sans couper la parole.`,
+        },
       ],
     },
     {
-      time: "9:35",
+      time: "10:00",
       title: "Pourquoi personne n'en parle",
       beats: [
         { say: `Tu te demandes peut-être pourquoi personne n'en parle. Il y a trois raisons.` },
@@ -1257,7 +1261,7 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
       ],
     },
     {
-      time: "10:15",
+      time: "10:40",
       title: "Partie 4 : ce qui floppe, la niche ne suffit pas",
       links: [
         { label: "AreaMap sur l'App Store (261 avis, 53e)", url: "https://apps.apple.com/us/app/areamap-measure-land-acres/id6816359797" },
@@ -1316,7 +1320,7 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
       ],
     },
     {
-      time: "13:35",
+      time: "14:00",
       title: "Partie 5 : trouver ta niche ennuyeuse",
       beats: [
         partCard("PARTIE 5 · TROUVER LA TIENNE"),
@@ -1344,7 +1348,7 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
       ],
     },
     {
-      time: "15:45",
+      time: "16:10",
       title: "Récap et fin",
       mode: "visage",
       beats: [
@@ -1375,10 +1379,10 @@ Un GPS pour camionneurs, une météo pour chasseurs de cerfs, une app de crochet
 2:05 Les apps des métiers
 4:30 Les apps des passions
 6:50 Les apps des galères
-9:35 Pourquoi personne n'en parle
-10:15 Ce qui floppe
-13:35 Trouver ta niche
-15:45 Récap
+10:00 Pourquoi personne n'en parle
+10:40 Ce qui floppe
+14:00 Trouver ta niche
+16:10 Récap
 
 Sources : classement des apps qui rapportent le plus sur l'App Store américain, relevé le 23/11/2026 ; TalkingParents (Practical Founders Podcast, août 2025) ; Trucker Path (FreightWaves, oct. 2020) ; apps de télécommande et de reconnaissance de pièces (estimations Appfigures, 2025).
 
@@ -1409,7 +1413,7 @@ Sources : classement des apps qui rapportent le plus sur l'App Store américain,
     { point: "Ce qui marche ET ce qui floppe", state: "OK (AreaMap contre les anciennes, rackline contre ses copies, des niches à moitié vides)" },
     { point: "Chaque chiffre en dollars a sa source, dite à l'oral", state: "OK (vérifiés le 23/11)" },
     { point: "Ouverture : promesse, preuve, plan, public, pas d'abonnement avant la valeur", state: "OK" },
-    { point: "RDV en 1 phrase, jamais « la formation »", state: "OK" },
+    { point: "Appel avec l'équipe au milieu, juste après le cadeau (demandé par Jeremy le 23/11), rappelé en 1 phrase à la fin, jamais « la formation »", state: "OK" },
     { point: "Cadeau lié au sujet, après la première grosse valeur", state: "À créer (les 50 niches)" },
     { point: "Miniature : 3 ou 4 mots, preuve visible, visage à droite, ne répète pas le titre", state: "OK" },
     { point: "Ligne dans le tableau de suivi après publication", state: "À faire" },
