@@ -998,7 +998,7 @@ const SCRIPT_D: VideoScript = {
   status: "Prêt à tourner",
   updatedAt: "23 nov. 2026",
   title: "Ces apps ennuyeuses rapportent des millions (et personne n'en parle)",
-  why: `C'est le cœur de ton angle : l'argent n'est pas dans les apps dont tout le monde parle, il est dans les niches oubliées. Le format « ce truc ennuyeux rapporte des millions » fait jusqu'à 984 000 vues pour les sites et les SaaS, et presque personne ne l'a fait pour les apps, encore moins en français. Toutes les preuves viennent du classement d'Apple des apps qui rapportent le plus aux États-Unis, relevé le 23 novembre. La vidéo montre aussi ce qui floppe : dans chaque niche, des dizaines d'apps n'ont presque aucun avis.`,
+  why: `Une piste en plus, pas à la place des autres : les apps dont tout le monde parle peuvent très bien rapporter (c'est le cas de Shinobi et de la plupart des apps que tu accompagnes), mais il y a aussi des niches auxquelles personne ne pense. Le format « ce truc ennuyeux rapporte des millions » fait jusqu'à 984 000 vues pour les sites et les SaaS, et presque personne ne l'a fait pour les apps, encore moins en français. Toutes les preuves viennent du classement d'Apple des apps qui rapportent le plus aux États-Unis, relevé le 23 novembre. La vidéo montre aussi ce qui floppe : dans chaque niche, des dizaines d'apps n'ont presque aucun avis.`,
   facts: [
     { label: "Durée", value: "15 à 17 min (environ 2 400 mots de voix)" },
     { label: "Montage", value: "Sans visage (direction C), sauf trois moments face caméra : « qui je suis » juste après l'intro, le cadeau suivi de l'appel avec ton équipe, et la fin. Tout le reste en voix seule sur les classements, les pages App Store et les captures des apps" },
@@ -1020,8 +1020,8 @@ const SCRIPT_D: VideoScript = {
       why: "Ajoute l'enquête, plus proche de ton format « j'ai analysé » qui fait des leads. Plus long.",
     },
     {
-      title: "Les apps les plus ennuyeuses de l'App Store sont celles qui rapportent le plus",
-      why: "Plus affirmatif, sans chiffre. À garder pour un test A/B.",
+      title: "Les apps auxquelles personne ne pense rapportent des millions",
+      why: "Plus doux, sans le mot « ennuyeuses ». À garder pour un test A/B.",
     },
   ],
   thumbnail: {
@@ -1048,6 +1048,7 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
   },
   plan: [
     "Le spectateur a vu, preuves à l'appui, que des apps pour camionneurs, chasseurs, crocheteuses, parents séparés ou gens qui attendent leur carte verte sont parmi celles qui rapportent le plus aux États-Unis.",
+    "Il a compris que c'est une piste en plus, pas à la place des apps dont tout le monde parle, qui peuvent très bien rapporter (Shinobi en est une).",
     "Il sait pourquoi elles rapportent : un métier (l'app fait gagner de l'argent), une passion (on dépense déjà pour elle), une galère (on paie pour qu'elle s'arrête).",
     "Il a vu des chiffres en dollars qui tiennent debout, avec leur source : plus de 10 millions par an pour TalkingParents, 3 millions pour Trucker Path dès 2019, 11 millions par mois pour les apps de télécommande.",
     "Il comprend pourquoi personne n'en parle.",
@@ -1079,7 +1080,7 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
         },
         {
           show: `Un mur d'icônes se remplit : une vingtaine d'apps ennuyeuses des classements (camion, cerf, pelote de laine, calculatrice de chantier, télécommande, puits de pétrole). Au centre : « PERSONNE N'EN PARLE ».`,
-          say: `Pendant que tout le monde essaie de créer le prochain ChatGPT, ces apps ennuyeuses rapportent des millions, et personne n'en parle. Dans cette vidéo, je vais te montrer lesquelles, pourquoi elles marchent, pourquoi la plupart des apps de la même niche n'ont presque aucun avis, et comment trouver la tienne.`,
+          say: `On pense tous aux mêmes apps : le sport, les langues, les rencontres. Elles peuvent très bien rapporter, mais elles ne sont pas les seules. Ces apps ennuyeuses rapportent des millions, et personne n'en parle. Dans cette vidéo, je vais te montrer lesquelles, pourquoi elles marchent, pourquoi la plupart des apps de la même niche n'ont presque aucun avis, et comment trouver la tienne.`,
         },
       ],
     },
@@ -1090,13 +1091,13 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
       beats: [
         { show: "Coupe nette sur toi, face caméra, plan poitrine, regard dans l'objectif. Bandeau nom « Jeremy Pitault, créateur de Shinobi »." },
         {
-          say: `Moi, c'est Jeremy. J'ai créé Shinobi, une app pour apprendre le japonais, qui fait autour de 400 000 dollars par an. Vue de l'extérieur, c'est aussi une app ennuyeuse : pas de réseau social, pas d'IA révolutionnaire, juste des gens qui veulent apprendre à lire le japonais.`,
+          say: `Moi, c'est Jeremy. J'ai créé Shinobi, une app pour apprendre le japonais, qui fait autour de 400 000 dollars par an. Les langues, c'est une catégorie dont tout le monde parle, et ça marche très bien. Mais en fouillant les classements de l'App Store, je suis tombé sur des apps auxquelles je n'aurais jamais pensé, et qui rapportent énormément.`,
         },
         {
           say: `Une précision honnête avant de commencer. Le classement que je vais te montrer, c'est celui de l'App Store américain, relevé le 23 novembre. Il dit quelles apps rapportent le plus, mais pas combien. Alors les chiffres en dollars, je ne te les donne que quand le créateur les a dits publiquement, ou quand un site sérieux les a estimés, et je te dis à chaque fois d'où ils viennent.`,
         },
         {
-          say: `Cette vidéo est pour toi si tu veux créer une app qui rapporte, et que toutes les idées qui te viennent sont déjà prises.`,
+          say: `Cette vidéo est pour toi si tu veux créer une app qui rapporte, et que tu cherches des idées auxquelles tu n'aurais pas pensé.`,
         },
       ],
     },
@@ -1353,7 +1354,7 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
       mode: "visage",
       beats: [
         {
-          say: `Si tu ne retiens qu'une chose : les apps qui rapportent le plus ne sont pas celles dont on parle. Ce sont des apps pour un métier, une passion ou une galère, qui répondent à une question précise, pour des gens qui paient déjà pour leur problème. Et dans chaque niche, celle qui gagne n'est pas la plus belle : c'est celle qui répond le mieux à cette question.`,
+          say: `Si tu ne retiens qu'une chose : les apps dont tout le monde parle peuvent très bien rapporter, la mienne en est une, mais ce ne sont pas les seules. Il y a aussi des apps pour un métier, une passion ou une galère, qui répondent à une question précise, pour des gens qui paient déjà pour leur problème. Et dans chaque niche, celle qui gagne n'est pas la plus belle : c'est celle qui répond le mieux à cette question.`,
         },
         {
           say: `La liste des 50 niches ennuyeuses est en premier dans la description. Et si tu veux qu'on regarde ensemble ton idée d'app, tu peux réserver un appel avec mon équipe, le lien est aussi dans la description.`,
