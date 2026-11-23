@@ -277,7 +277,7 @@ export default function ComptaPage() {
           </p>
           {!loading && total > 0 && (
             <p className="mt-2 text-[15px] font-bold">
-              {justifiees} dépenses justifiées sur {total} depuis l&apos;ouverture du compte.
+              {justifiees} dépenses justifiées sur {total} depuis novembre 2026 (les mois d&apos;avant sont faits).
             </p>
           )}
         </header>

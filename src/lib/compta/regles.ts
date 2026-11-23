@@ -67,6 +67,10 @@ export function classer(tx: Transaction, nosComptes: Set<string>): Depense | nul
   return { ...base, categorie: "fournisseur", statut: "manquant", note: null };
 }
 
+// Les mois d'avant ont été faits à la main par Jeremy : la compta automatique
+// commence en novembre 2026. Aucune dépense plus ancienne n'est cherchée.
+export const DEBUT = "2026-11-01";
+
 // ── Rapprochement ────────────────────────────────────────────────────────────
 
 export type Lu = {
@@ -182,9 +186,11 @@ function noter(d: DepenseOuverte, doc: Lu): { score: number; sur: boolean; raiso
   if (!montantExact) return null;
   // La facture est souvent émise avant le prélèvement (abonnement, facture du mois),
   // parfois quelques jours après (hôtel, facture envoyée en fin de mois).
+  // Au-delà de 25 jours avant, ce peut être la facture du mois d'avant d'un
+  // abonnement : Jeremy confirme.
   if (fournisseur && ecart >= -20 && ecart <= 40) {
     const score = 100 - Math.abs(ecart) + (doc.nature === "facture" ? 5 : 0);
-    return { score, sur: true, raison: `même montant, même fournisseur, ${Math.abs(ecart)} j d'écart` };
+    return ecart <= 25 ? { score, sur: true, raison: `même montant, même fournisseur, ${Math.abs(ecart)} j d'écart` } : { score, sur: false, raison: `même montant, même fournisseur, mais facture ${ecart} j avant le paiement (celle du mois d'avant ?)` };
   }
   if (!fournisseur && Math.abs(ecart) <= 3) {
     return { score: 40 - Math.abs(ecart), sur: false, raison: `même montant à ${Math.abs(ecart)} j, fournisseur à confirmer` };

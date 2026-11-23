@@ -136,3 +136,12 @@ test("pièce sans date lisible : la date du mail sert d'indice, à confirmer", (
   assert.equal(rapprocher([d], [doc({ fournisseur: "Tb Hotels21 W", total: 131.95, date_doc: null, mail_date: "2026-06-15" })]).length, 0);
   assert.equal(rapprocher([d], [doc({ fournisseur: "Autre", total: 131.95, date_doc: null, mail_date: "2026-10-15" })]).length, 0);
 });
+
+test("abonnement : la facture du mois d'avant n'est jamais rattachée d'office", () => {
+  const d = dep({ marchand: "Brevo", montant: 64, date: "2026-11-09" });
+  const [p] = rapprocher([d], [doc({ fournisseur: "Brevo", total: 64, date_doc: "2026-10-09" })]);
+  assert.equal(p?.sur, false);
+  const [q] = rapprocher([d], [doc({ fournisseur: "Brevo", total: 64, date_doc: "2026-10-09" }), doc({ id: "f2", fournisseur: "Brevo", total: 64, date_doc: "2026-11-09" })]);
+  assert.equal(q?.documentId, "f2");
+  assert.equal(q?.sur, true);
+});

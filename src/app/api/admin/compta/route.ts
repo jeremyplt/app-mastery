@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { requireOwner } from "@/lib/admin";
 import { getAdminClient, withRetry } from "@/lib/supabase";
+import { DEBUT } from "@/lib/compta/regles";
 
 // Comptabilité automatique : chaque dépense bancaire de SDG STUDIO et la pièce
 // retrouvée pour elle par le job du serveur. Propriétaire seulement.
@@ -43,6 +44,7 @@ export async function GET() {
         .from("compta_depenses")
         .select("id, date, montant, devise, marchand, libelle, categorie, statut, note, rapprochement, compta_documents!compta_depenses_document_id_fkey(id, source, nom_fichier, stockage, odoo_document_id, odoo_dossier, fournisseur, total, devise, date_doc)")
         .eq("societe", SOCIETE)
+        .gte("date", DEBUT)
         .order("date", { ascending: false })
         .limit(2000),
     )) as unknown as Row[];

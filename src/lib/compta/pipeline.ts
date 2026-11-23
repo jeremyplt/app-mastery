@@ -4,7 +4,7 @@ import { odooClient } from "@/lib/facturation/adapters";
 import { gmailBranche, mailsAvecPieces, requeteFactures, telechargerPiece } from "./gmail";
 import { lirePiece } from "./lecture";
 import { odooDocuments } from "./odoo-documents";
-import { MCC_RESTAURANT, MOIS, classer, nomDepot, rapprocher, sansAccent, type Lu } from "./regles";
+import { DEBUT, MCC_RESTAURANT, MOIS, classer, nomDepot, rapprocher, sansAccent, type Lu } from "./regles";
 import { comptes, depensesRevolut, operations, recu } from "./revolut";
 
 // Un passage de la comptabilité automatique de SDG STUDIO :
@@ -19,7 +19,6 @@ import { comptes, depensesRevolut, operations, recu } from "./revolut";
 
 const SOCIETE = "sdg";
 const BUCKET = "compta";
-export const DEBUT = "2026-08-01"; // ouverture du compte Revolut de SDG STUDIO
 const ESSAIS_MAX = 3;
 const PETITE_IMAGE = 15_000; // logos et signatures des mails
 
@@ -194,7 +193,9 @@ export async function passage(opts: { ecrire: boolean; deposer?: boolean; lectur
   const ouvertes = check(await base.from("compta_depenses").select("id, date, montant, devise, montant_facture, devise_facture, marchand, categorie, statut, document_id, expense_id, documents_refuses, raw").eq("societe", SOCIETE).eq("statut", "manquant").in("categorie", ["fournisseur", "frais_bancaires"])) as DepRow[];
   const pris = new Set((check(await base.from("compta_depenses").select("document_id").eq("societe", SOCIETE).not("document_id", "is", null)) as { document_id: string }[]).map((r) => r.document_id));
   const libres = (check(await base.from("compta_documents").select("*").eq("societe", SOCIETE).eq("statut", "lu")) as DocRow[]).filter((d) => !pris.has(d.id));
-  const lus: Lu[] = libres.map((d) => ({ id: d.id, nature: (d.nature as Lu["nature"]) ?? "autre", fournisseur: d.fournisseur, date_doc: d.date_doc, total: d.total == null ? null : Number(d.total), devise: d.devise, mail_de: d.mail_de, nom_fichier: d.nom_fichier, depense_imposee: d.depense_revolut, deposee_par_jeremy: d.source === "odoo", mois_dossier: moisDuDossier(d.odoo_dossier), mail_date: d.mail_date ? String(d.mail_date).slice(0, 10) : null }));
+  // Une pièce rangée par Jeremy dans un mois déjà fait appartient à ce mois-là.
+  const moisDebut = DEBUT.slice(0, 7);
+  const lus: Lu[] = libres.filter((d) => { const m = moisDuDossier(d.odoo_dossier); return !(d.source === "odoo" && m && m < moisDebut); }).map((d) => ({ id: d.id, nature: (d.nature as Lu["nature"]) ?? "autre", fournisseur: d.fournisseur, date_doc: d.date_doc, total: d.total == null ? null : Number(d.total), devise: d.devise, mail_de: d.mail_de, nom_fichier: d.nom_fichier, depense_imposee: d.depense_revolut, deposee_par_jeremy: d.source === "odoo", mois_dossier: moisDuDossier(d.odoo_dossier), mail_date: d.mail_date ? String(d.mail_date).slice(0, 10) : null }));
   const propositions = rapprocher(
     ouvertes.map((d) => ({ ...d, montant: Number(d.montant), montant_facture: d.montant_facture == null ? null : Number(d.montant_facture), restaurant: MCC_RESTAURANT.has(d.raw?.merchant?.category_code ?? ""), refuses: d.documents_refuses ?? [] })),
     lus,
