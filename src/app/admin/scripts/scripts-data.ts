@@ -982,4 +982,444 @@ On a passé au crible environ 12 500 vidéos TikTok et Instagram pour en garder 
 };
 
 // B en premier : c'est la prochaine à tourner, la page s'ouvre dessus.
-export const SCRIPTS: VideoScript[] = [SCRIPT_B, SCRIPT_A];
+// Vidéo D (23 nov. 2026) : les apps ennuyeuses qui rapportent des millions.
+// Sources : classement d'Apple des apps qui rapportent le plus aux États-Unis
+// (flux RSS « top grossing », 13 catégories, 100 apps chacune, relevé le 23/11/2026),
+// recherche App Store de 18 niches (nombre d'avis), prix relevés sur les pages
+// App Store le 23/11, chiffres publics : TalkingParents (Practical Founders, août 2025),
+// Trucker Path (FreightWaves, oct. 2020), Appfigures (fax 2021, télécommandes et
+// identification 2025), SnoreLab (son site). Données et planches de captures :
+// ~/Projects/reports/2026-11-23-apps-ennuyeuses/. Pure valeur, aucun élève.
+const UTM_D = "utm_source=youtube&utm_medium=video&utm_campaign=apps-ennuyeuses";
+
+const SCRIPT_D: VideoScript = {
+  slug: "apps-ennuyeuses",
+  label: "Vidéo D · Apps ennuyeuses",
+  status: "Prêt à tourner",
+  updatedAt: "23 nov. 2026",
+  title: "Ces apps ennuyeuses rapportent des millions (et personne n'en parle)",
+  why: `C'est le cœur de ton angle : l'argent n'est pas dans les apps dont tout le monde parle, il est dans les niches oubliées. Le format « ce truc ennuyeux rapporte des millions » fait jusqu'à 984 000 vues pour les sites et les SaaS, et presque personne ne l'a fait pour les apps, encore moins en français. Toutes les preuves viennent du classement d'Apple des apps qui rapportent le plus aux États-Unis, relevé le 23 novembre. La vidéo montre aussi ce qui floppe : dans chaque niche, des dizaines d'apps n'ont presque aucun avis.`,
+  facts: [
+    { label: "Durée", value: "15 à 17 min (environ 2 400 mots de voix)" },
+    { label: "Montage", value: "Sans visage (direction C), sauf trois moments face caméra : « qui je suis » juste après l'intro, le cadeau, et la fin. Tout le reste en voix seule sur les classements, les pages App Store et les captures des apps" },
+    { label: "Style", value: "Voix lue mot à mot. Les classements et les chiffres sont posés à l'écran par le montage, jamais lus en entier" },
+    { label: "Format", value: "« Ce [truc] ennuyeux rapporte des millions » : trois familles d'apps (métiers, passions, galères), puis ce qui floppe dans les mêmes niches, puis comment trouver la sienne" },
+    { label: "Demande", value: "Jonathan's Jam « This Boring Website Earns $6M/Year » 984 000 vues, Niche Pursuits « How This \"BORING\" Website Makes $35,000/Month! » 425 800, Starter Story « I Make $60K/Month From the Most Boring SaaS on the Internet » 319 100, Kimberly Mitchell 245 100. Le format marche pour les sites et les SaaS, presque rien sur les apps, rien en français" },
+    { label: "Matière", value: "Classement d'Apple des apps qui rapportent le plus aux États-Unis dans 13 catégories, relevé le 23 nov. 2026 (100 apps par catégorie). Recherche App Store de 18 niches avec le nombre d'avis de chaque app. Prix des abonnements relevés sur les pages App Store le 23/11" },
+    { label: "Chiffres", value: "En dollars, uniquement des chiffres publics avec leur source, dite à l'oral : TalkingParents (son fondateur, août 2025), Trucker Path (FreightWaves, 2020), apps de fax, de télécommande et de reconnaissance de pièces (estimations Appfigures). Le reste, ce sont des rangs, des avis et des prix, que tout le monde peut vérifier" },
+    { label: "Captures", value: "Aucune capture de revenus" },
+    { label: "UTM", value: "apps-ennuyeuses" },
+  ],
+  altTitles: [
+    {
+      title: "Ces apps ennuyeuses rapportent des millions (et personne n'en parle)",
+      why: "Recommandé. Le format « ennuyeux mais riche » des vidéos à 300 000 à 984 000 vues, appliqué aux apps. L'argent est dans le titre, et « personne n'en parle » donne l'impression d'un secret.",
+    },
+    {
+      title: "J'ai fouillé les classements de l'App Store : les apps les plus ennuyeuses rapportent des millions",
+      why: "Ajoute l'enquête, plus proche de ton format « j'ai analysé » qui fait des leads. Plus long.",
+    },
+    {
+      title: "Les apps les plus ennuyeuses de l'App Store sont celles qui rapportent le plus",
+      why: "Plus affirmatif, sans chiffre. À garder pour un test A/B.",
+    },
+  ],
+  thumbnail: {
+    text: "UNE APP DE FAX",
+    layout: `Bloc rouge en haut à gauche avec « UNE APP DE FAX » en blanc, très gros. En dessous, sur le bureau, un vieux fax beige des années 90, et devant lui un iPhone tenu en main qui affiche une app de fax générique (un document en aperçu et un gros bouton « Send Fax »). Une flèche jaune du bloc vers le téléphone. Toi à droite en gros plan, sourire en coin, un sourcil levé. Bureau sombre flou. La miniature pose la question (une app de fax, en 2026 ?), le titre y répond (les apps ennuyeuses rapportent des millions) sans la répéter.`,
+    variant: "Variante B, une image vraiment différente pour le test A/B : bloc jaune « 290 PIQUETS », le téléphone affiche la vraie capture d'AreaMap (le terrain vu du ciel et la bulle « T-posts 290 »). Toi à droite, l'air intrigué.",
+    prompt: `Images 1 and 2 are photos of me: use my exact face, head shape, hairline, skin texture and proportions. Do not beautify, stylize or change my face.
+Image 3 is one of my validated thumbnails: copy its background and lighting style.
+
+Layout: 16:9 YouTube thumbnail, 1920x1088.
+Top left: a bright red rectangular block with huge bold white sans-serif text "UNE APP DE FAX", on two lines, perfectly legible, nothing else written.
+Left center, below the red block: an old beige 1990s office fax machine on a dark wood desk, and in front of it an iPhone held in a hand, screen facing camera, showing a clean generic fax app: a document preview and a big blue "Send Fax" button. No real app logo, no brand name. A thick yellow curved arrow goes from the red block to the phone.
+Right side: me, close-up from mid-chest up, head and shoulders filling about 45% of the frame height, amused half smile with one eyebrow raised, looking straight at the camera, dark t-shirt.
+Background: a real blurred office, dark wood desk, warm lamp, plants, soft bokeh, like image 3. No flat or gradient background, no purple.
+Lighting: soft key light on my face, subtle warm rim light, realistic shadows, slight vignette.
+Keep 60 px safe margins. No other text, no logos, no extra numbers.
+Negative: distorted face, changed identity, extra fingers, warped phone, unreadable text, cluttered layout, fake brand logos, cartoon style.`,
+  },
+  gift: {
+    name: "Les 50 niches ennuyeuses qui rapportent : pour chacune, l'app qui domine, son prix, son nombre d'avis, combien d'apps de la niche n'ont presque rien, et ce que ses utilisateurs lui reprochent",
+    url: `https://www.jeremypitault.com/guide/niches-ennuyeuses?${UTM_D}`,
+    note: "Page à créer avant de publier, à partir des classements du 23 nov. (~/Projects/reports/2026-11-23-apps-ennuyeuses/charts) : garder les apps de métier, de passion et de galère, enlever les grandes marques, faire la recherche App Store de chaque niche (nombre d'apps, combien sous 20 avis), relever les prix et les avis à 1 et 2 étoiles de l'app qui domine. Annoncé face caméra après la partie 3 (la première grosse valeur), rappelé à la fin.",
+  },
+  plan: [
+    "Le spectateur a vu, preuves à l'appui, que des apps pour camionneurs, chasseurs, crocheteuses, parents séparés ou gens qui doivent envoyer un fax sont parmi celles qui rapportent le plus aux États-Unis.",
+    "Il sait pourquoi elles rapportent : un métier (l'app fait gagner de l'argent), une passion (on dépense déjà pour elle), une galère (on paie pour qu'elle s'arrête).",
+    "Il a vu des chiffres en dollars qui tiennent debout, avec leur source : plus de 10 millions par an pour TalkingParents, 3 millions pour Trucker Path dès 2019, 2,4 millions par mois pour les apps de fax.",
+    "Il comprend pourquoi personne n'en parle.",
+    "Il sait que la niche ne suffit pas : dans chaque niche, des dizaines d'apps n'ont presque aucun avis.",
+    "Il a vu ce qui fait gagner : répondre à la vraie question (« combien de piquets », pas « mesurer un terrain ») et apporter quelque chose de plus que les copies, pas un plus beau design.",
+    "Il sait trouver sa propre niche en six étapes, et repart avec la liste des 50 niches.",
+  ],
+  sections: sansVisage([
+    {
+      time: "0:00",
+      title: "Intro en montage : la promesse",
+      links: [
+        { label: "Classement Navigation, flux d'Apple (23/11)", url: "https://itunes.apple.com/us/rss/topgrossingapplications/limit=100/genre=6010/json" },
+        { label: "YarnPal sur l'App Store", url: "https://apps.apple.com/us/app/yarnpal-crochet-patterns/id6738537088" },
+        { label: "AreaMap sur l'App Store", url: "https://apps.apple.com/us/app/areamap-measure-land-acres/id6816359797" },
+      ],
+      beats: [
+        {
+          show: `Écran noir. Le classement « Navigation · les apps qui rapportent le plus · États-Unis · 23 nov. 2026 » se remplit de bas en haut, puis les trois premières lignes s'allument une par une avec leur icône : onX Hunt, Trucker Path, LandGlide.`,
+          say: `Voici le classement des apps qui rapportent le plus aux États-Unis, dans la catégorie Navigation. Numéro un : une carte pour les chasseurs. Numéro deux : un GPS pour les camionneurs. Numéro trois : une app qui te montre à qui appartient chaque terrain.`,
+        },
+        {
+          show: `Le classement Lifestyle, lignes 30 à 34. YarnPal (32e) s'allume en vert, Badoo (33e) juste en dessous.`,
+          say: `Dans la catégorie Lifestyle, en 32e position, juste devant Badoo, il y a une app de crochet.`,
+        },
+        {
+          show: `Le classement des utilitaires : Case Tracker (25e) s'allume, puis AreaMap (53e). À côté d'AreaMap, deux étiquettes : « sortie le 29 sept. 2026 » et « publiée par une seule personne ».`,
+          say: `Chez les utilitaires, il y a une app pour suivre son dossier d'immigration. Et une app qui calcule combien de piquets il faut pour une clôture. Elle est sortie il y a huit semaines, et elle est publiée au nom d'une seule personne.`,
+        },
+        {
+          show: `Un mur d'icônes se remplit : une vingtaine d'apps ennuyeuses des classements (camion, cerf, pelote de laine, fax, télécommande, puits de pétrole). Au centre : « PERSONNE N'EN PARLE ».`,
+          say: `Pendant que tout le monde essaie de créer le prochain ChatGPT, ces apps ennuyeuses rapportent des millions, et personne n'en parle. Dans cette vidéo, je vais te montrer lesquelles, pourquoi elles marchent, pourquoi la plupart des apps de la même niche n'ont presque aucun avis, et comment trouver la tienne.`,
+        },
+      ],
+    },
+    {
+      time: "0:55",
+      title: "Face caméra : qui je suis",
+      mode: "visage",
+      beats: [
+        { show: "Coupe nette sur toi, face caméra, plan poitrine, regard dans l'objectif. Bandeau nom « Jeremy Pitault, créateur de Shinobi »." },
+        {
+          say: `Moi, c'est Jeremy. J'ai créé Shinobi, une app pour apprendre le japonais, qui fait autour de 400 000 dollars par an. Vue de l'extérieur, c'est aussi une app ennuyeuse : pas de réseau social, pas d'IA révolutionnaire, juste des gens qui veulent apprendre à lire le japonais.`,
+        },
+        {
+          say: `Une précision honnête avant de commencer. Le classement que je vais te montrer, c'est celui de l'App Store américain, relevé le 23 novembre. Il dit quelles apps rapportent le plus, mais pas combien. Alors les chiffres en dollars, je ne te les donne que quand le créateur les a dits publiquement, ou quand un site sérieux les a estimés, et je te dis à chaque fois d'où ils viennent.`,
+        },
+        {
+          say: `Cette vidéo est pour toi si tu veux créer une app qui rapporte, et que toutes les idées qui te viennent sont déjà prises.`,
+        },
+      ],
+    },
+    {
+      time: "1:50",
+      title: "Le plan",
+      beats: [
+        {
+          show: `Retour au studio. Les 5 parties s'écrivent une par une, puis se rangent en sommaire dans un coin pour toute la vidéo : « Métiers », « Passions », « Galères », « Ce qui floppe », « Trouver la tienne ».`,
+          say: `On va voir trois familles d'apps ennuyeuses : celles des métiers, celles des passions et celles des galères. Ensuite, ce qui fait que dans une même niche, une app rapporte pendant que des dizaines d'autres n'ont rien. Et pour finir, comment trouver ta niche à toi.`,
+        },
+      ],
+    },
+    {
+      time: "2:05",
+      title: "Partie 1 : les apps des métiers",
+      links: [
+        { label: "Trucker Path sur l'App Store", url: "https://apps.apple.com/us/app/trucker-path-truck-gps-fuel/id782746890" },
+        { label: "FreightWaves, oct. 2020 (3 M$ de revenus en 2019)", url: "https://www.freightwaves.com/news/seeking-more-sustainable-business-model-trucker-path-monetizes-community-adds-predictive-analytics" },
+        { label: "Wellsite Navigator sur l'App Store", url: "https://apps.apple.com/us/app/wellsite-navigator/id594298510" },
+        { label: "Construction Master Pro sur l'App Store", url: "https://apps.apple.com/us/app/construction-master-pro-calc/id370406446" },
+        { label: "Calculated Industries (la calculatrice de 1985)", url: "https://en.wikipedia.org/wiki/Calculated_Industries" },
+      ],
+      beats: [
+        partCard("PARTIE 1 · LES MÉTIERS"),
+        { say: `Première famille : les apps faites pour un métier.` },
+        {
+          show: `La fiche App Store de Trucker Path : « 2e · Navigation », « 158 460 avis », 4,8 étoiles. Puis ses écrans : la carte des parkings pour camions, les prix du gazole, les stations de pesée.`,
+          say: `Trucker Path, c'est l'app des camionneurs américains. Plus d'un million de chauffeurs l'utilisent pour trouver une place où garer leur camion pour la nuit, la station la moins chère pour le gazole, et savoir quelles stations de pesée sont ouvertes.`,
+        },
+        {
+          show: `Zoom sur le prix : « Diamond · 29,99 $ par mois ». Puis l'article de FreightWaves, la phrase surlignée « $3 million in revenue ».`,
+          say: `Leur abonnement le plus complet coûte 30 dollars par mois. Et d'après FreightWaves, un média spécialisé dans le transport, l'app faisait déjà 3 millions de dollars de revenus en 2019.`,
+        },
+        {
+          show: `La fiche de Wellsite Navigator : « 18e · Navigation ». Puis le prix : « 199,99 $ par an ».`,
+          say: `Encore plus précis : Wellsite Navigator. C'est un GPS pour trouver des puits de pétrole. Les ouvriers des champs pétroliers doivent rejoindre des puits perdus au milieu de nulle part, sur des chemins qui n'ont pas de nom. L'abonnement coûte 20 dollars par mois, ou 200 dollars par an.`,
+        },
+        {
+          show: `Le compteur d'avis de Wellsite Navigator qui s'arrête à « 459 », à côté de son rang « 18e ».`,
+          say: `Et regarde le nombre d'avis : 459. Pourtant, elle est 18e des apps de navigation qui rapportent le plus aux États-Unis. Tu n'as pas besoin de millions d'utilisateurs quand chacun paie 200 dollars par an. Et l'app vend aussi des comptes pour des équipes entières : là, c'est l'entreprise qui paie.`,
+        },
+        {
+          show: `Construction Master Pro : « 36e · Utilitaires », son clavier de calculatrice, puis une photo de la calculatrice physique Construction Master.`,
+          say: `Et mon préféré : Construction Master Pro, 36e des utilitaires. C'est une calculatrice pour les charpentiers, les couvreurs et les maçons. Elle calcule en pieds, en pouces et en fractions, les escaliers, les toitures, le béton. À l'origine, c'est une calculatrice physique, vendue depuis 1985. L'entreprise l'a simplement mise dans un téléphone.`,
+        },
+        {
+          show: `Retour sur le vrai écran de Trucker Path : la carte des parkings, une place libre qui s'allume, et à côté le prix « 29,99 $ » du Diamond.`,
+          say: `La leçon : quand ton app fait gagner du temps ou de l'argent à quelqu'un dans son travail, le prix ne lui fait pas peur. Un camionneur qui trouve sa place en cinq minutes au lieu de tourner pendant une heure ne se demande pas si 30 dollars par mois, c'est cher.`,
+        },
+      ],
+    },
+    {
+      time: "4:30",
+      title: "Partie 2 : les apps des passions",
+      links: [
+        { label: "DeerCast sur l'App Store", url: "https://apps.apple.com/us/app/deercast-prep-predict-pursue/id1425879996" },
+        { label: "HuntStand sur l'App Store (même éditeur)", url: "https://apps.apple.com/us/app/huntstand-gps-maps-tools/id778772892" },
+        { label: "YarnPal sur l'App Store", url: "https://apps.apple.com/us/app/yarnpal-crochet-patterns/id6738537088" },
+        { label: "Sewpal sur l'App Store (même éditeur)", url: "https://apps.apple.com/us/app/sewpal-sewing-pattern-guide/id6754315885" },
+        { label: "CoinSnap sur l'App Store", url: "https://apps.apple.com/us/app/coinsnap-coin-identifier/id1634551626" },
+        { label: "WoodSense sur l'App Store (même éditeur)", url: "https://apps.apple.com/us/app/woodsense-wood-plans-guides/id6754165620" },
+        { label: "Appfigures, mai 2025 (apps d'identification, 3,5 M$/mois pour les pièces)", url: "https://appfigures.com/resources/this-week-in-apps/20250509" },
+      ],
+      beats: [
+        partCard("PARTIE 2 · LES PASSIONS"),
+        { say: `Deuxième famille : les passions. Et là, ça devient encore plus étonnant.` },
+        {
+          show: `Le classement Météo, lignes 1 à 7 : The Weather Channel, Clime, AccuWeather, Surfline, puis DeerCast (5e) s'allume, devant Windy et MyRadar.`,
+          say: `Voici le classement des apps de météo qui rapportent le plus aux États-Unis. Les géants de la météo, une app de surf, et en cinquième position, devant des apps de météo connues dans le monde entier : DeerCast, la météo des chasseurs de cerfs.`,
+        },
+        {
+          show: `Les écrans de DeerCast : la prévision des déplacements des cerfs, heure par heure. Puis l'icône de HuntStand avec « 5e · Sport ».`,
+          say: `Elle ne te dit pas s'il va pleuvoir. Elle te dit à quelle heure les cerfs vont bouger, d'après la météo de ton coin. Son abonnement le plus cher coûte 75 dollars. Et le même éditeur a une autre app de chasse, HuntStand, qui est 5e des apps de sport.`,
+        },
+        {
+          show: `Le classement Lifestyle, lignes 30 à 40 : YarnPal (32e) en vert, Badoo (33e), Coffee Meets Bagel (39e).`,
+          say: `Maintenant, le crochet. YarnPal est 32e des apps Lifestyle qui rapportent le plus aux États-Unis. Devant Badoo, et devant Coffee Meets Bagel, deux apps de rencontre connues dans le monde entier.`,
+        },
+        {
+          show: `Les écrans de YarnPal : le dinosaure rose en crochet, « 500+ Patterns For All Level », « 10 mins Patterns for Beginners ». Puis l'icône de Sewpal avec « 55e ».`,
+          say: `L'app te donne plus de 500 modèles de crochet, classés par niveau, avec des modèles de dix minutes pour les débutants. Elle est sortie en décembre 2024, et elle a déjà plus de 35 000 avis. Un an plus tard, le même éditeur a sorti la même app pour la couture, Sewpal, qui est déjà 55e de sa catégorie.`,
+        },
+        {
+          show: `Quatre icônes du même éditeur côte à côte, chacune avec son rang : CoinSnap (pièces de monnaie), Rock Identifier (pierres), WoodSense (travail du bois), ToyWorth (jouets). Puis le tableau d'Appfigures sur les apps d'identification.`,
+          say: `D'autres éditeurs font exactement pareil. Un seul éditeur a une app pour reconnaître les pièces de monnaie en photo, une pour les pierres, une pour le travail du bois et une pour estimer la valeur des jouets, et elles sont toutes dans les classements. D'après Appfigures, en mai 2025, les apps qui reconnaissent les pièces de monnaie faisaient à elles seules environ 3,5 millions de dollars par mois.`,
+        },
+        {
+          show: `Les vrais écrans côte à côte, chacun avec son rang : la prévision des cerfs de DeerCast, le dinosaure en crochet de YarnPal, une pièce reconnue par CoinSnap.`,
+          say: `La leçon : une app ennuyeuse, c'est une app qui ne t'intéresse pas, toi. Pour quelqu'un qui chasse tous les week-ends ou qui fait du crochet tous les soirs, elle n'a rien d'ennuyeux. Et quelqu'un qui dépense déjà de l'argent pour sa passion ne trouve pas qu'un abonnement de plus soit cher.`,
+        },
+      ],
+    },
+    {
+      time: "6:50",
+      title: "Partie 3 : les apps des galères",
+      links: [
+        { label: "TalkingParents sur l'App Store", url: "https://apps.apple.com/us/app/talkingparents-co-parent-app/id1092220726" },
+        { label: "Le fondateur de TalkingParents, Practical Founders Podcast (août 2025)", url: "https://practicalfounders.com/podcast/co-parenting-app-reaches-10m-arr-pure-bootstrap-growth-vince-mayfield/" },
+        { label: "Case Tracker sur l'App Store", url: "https://apps.apple.com/us/app/case-tracker-for-uscis-nvc/id921827126" },
+        { label: "FAX from iPhone sur l'App Store", url: "https://apps.apple.com/us/app/fax-from-iphone-send-doc-app/id978931264" },
+        { label: "Appfigures, nov. 2021 (apps de fax, 2,4 M$/mois)", url: "https://appfigures.com/resources/this-week-in-apps/20211126" },
+        { label: "SnoreLab, page presse (15 millions de téléchargements)", url: "https://www.snorelab.com/press-and-media/" },
+        { label: "Appfigures, juin 2025 (télécommandes, 11 M$/mois)", url: "https://appfigures.com/resources/insights/20250613" },
+        { label: "TV Remote sur l'App Store (abonnement à la semaine)", url: "https://apps.apple.com/us/app/tv-remote-universal-control/id1539090879" },
+      ],
+      beats: [
+        partCard("PARTIE 3 · LES GALÈRES"),
+        { say: `Troisième famille, et c'est peut-être la plus puissante : les galères. Des problèmes que personne ne choisit d'avoir.` },
+        {
+          show: `La fiche de TalkingParents : « 25e · Productivité ». Ses écrans : la messagerie, le calendrier de garde, l'export des échanges.`,
+          say: `TalkingParents, c'est une messagerie pour les parents séparés. Tous les messages sont enregistrés, ils ne peuvent être ni modifiés ni supprimés, et on peut les présenter devant un juge. Aux États-Unis, certains juges demandent même aux parents de passer par une app comme celle-là.`,
+        },
+        {
+          show: `La phrase du fondateur à l'écran, avec la source « Practical Founders Podcast, août 2025 » : « plus de 10 millions de dollars par an · 100 000 clients qui paient · aucun investisseur ».`,
+          say: `Son fondateur l'a dit publiquement en 2025 : plus de 10 millions de dollars de revenus par an, 100 000 clients qui paient, et ils n'ont jamais levé d'argent auprès d'investisseurs.`,
+        },
+        {
+          show: `La fiche de Case Tracker for USCIS & NVC : « 25e · Utilitaires », « 322 227 avis ».`,
+          say: `Case Tracker sert à suivre son dossier d'immigration américain : la carte verte, le visa, la nationalité. Quand toute ta vie dépend d'un dossier, tu regardes où il en est tous les jours. L'app dit avoir plus de 2 millions d'utilisateurs.`,
+        },
+        {
+          show: `La fiche de FAX from iPhone : « 8e · Business », « 380 529 avis ». Puis le graphique d'Appfigures sur les apps de fax.`,
+          say: `Et la galère la plus improbable : le fax. Aux États-Unis, des administrations, des cabinets médicaux et des avocats en demandent encore. Personne n'a de fax chez soi, alors on télécharge une app. FAX from iPhone est 8e des apps Business qui rapportent le plus. Et d'après Appfigures, en octobre 2021, les apps de fax faisaient déjà 2,4 millions de dollars par mois, rien qu'aux États-Unis.`,
+        },
+        {
+          show: `SnoreLab : « 4e · Médical », l'enregistrement d'une nuit avec les pics de ronflement.`,
+          say: `SnoreLab, elle, enregistre tes ronflements pendant la nuit et te montre à quels moments tu ronfles. Elle a été créée par un développeur qui avait appris à coder tout seul. Elle est 4e des apps médicales qui rapportent le plus aux États-Unis, et elle a dépassé les 15 millions de téléchargements.`,
+        },
+        {
+          show: `Le classement des utilitaires : TV Remote (3e), puis huit apps de télécommande qui s'allument dans le top 50. Puis le tableau d'Appfigures.`,
+          say: `Et la galère la plus bête de toutes : la télécommande perdue. Une app de télécommande pour la télé est 3e des utilitaires, et il y en a huit dans le top 50. D'après Appfigures, en juin 2025, ces apps faisaient 11 millions de dollars par mois, et 21 d'entre elles avaient dépassé le million sur un an.`,
+        },
+        {
+          show: `Zoom sur le prix de TV Remote : « Weekly Premium · 6,99 $ ».`,
+          say: `Attention quand même : beaucoup de ces apps vivent d'abonnements à la semaine. Celle-là coûte jusqu'à 7 dollars par semaine pour une télécommande. Je ne te conseille pas de copier ça : les gens se sentent piégés, ils annulent et ils laissent une mauvaise note. Copie la galère, pas le piège.`,
+        },
+        {
+          show: `Les quatre fiches des galères empilées, chacune avec son rang : TalkingParents, Case Tracker, FAX from iPhone, SnoreLab.`,
+          say: `La leçon : quand un problème te fait peur, t'empêche de dormir ou bloque ta vie, tu ne compares pas les prix. Tu paies pour qu'il disparaisse.`,
+        },
+      ],
+    },
+    {
+      time: "9:40",
+      title: "Le cadeau",
+      mode: "visage",
+      beats: [
+        {
+          say: `J'ai relevé ces classements catégorie par catégorie, et j'en ai sorti les 50 niches ennuyeuses qui rapportent. Pour chacune : l'app qui domine, ce qu'elle coûte, son nombre d'avis, combien d'apps de la même niche n'ont presque rien, et ce que ses utilisateurs lui reprochent. C'est gratuit, le lien est en premier dans la description.`,
+          show: `À côté de toi, la couverture du guide des 50 niches, et en dessous « lien en description », 4 secondes, sans couper la parole.`,
+        },
+      ],
+    },
+    {
+      time: "10:05",
+      title: "Pourquoi personne n'en parle",
+      beats: [
+        { say: `Tu te demandes peut-être pourquoi personne n'en parle. Il y a trois raisons.` },
+        {
+          show: `Le mur d'icônes de l'intro revient, un chiffre « 1 », « 2 », « 3 » en pastille bleue à chaque raison. Au « trois », le mot « fax » se tape dans la recherche de l'App Store et les apps de fax apparaissent.`,
+          say: `Un : leurs créateurs n'ont aucun intérêt à le dire. Chaque vidéo sur leur app ferait venir des concurrents. Deux : elles ne font pas rêver. Une app de fax, ça ne fait pas de vues sur YouTube. Trois : elles n'ont pas besoin qu'on parle d'elles. Quand tu dois envoyer un fax, tu tapes « fax » dans l'App Store, et tu télécharges la première qui sort.`,
+        },
+      ],
+    },
+    {
+      time: "10:45",
+      title: "Partie 4 : ce qui floppe, la niche ne suffit pas",
+      links: [
+        { label: "AreaMap sur l'App Store (261 avis, 53e)", url: "https://apps.apple.com/us/app/areamap-measure-land-acres/id6816359797" },
+        { label: "GPS Fields Area Measure (13 258 avis, hors classement)", url: "https://apps.apple.com/us/app/id1123033235" },
+        { label: "FieldCalc (10 262 avis, hors classement)", url: "https://apps.apple.com/us/app/id1238984272" },
+        { label: "rackline.ai sur l'App Store", url: "https://apps.apple.com/us/app/rackline-ai-ai-deer-scoring/id6751832231" },
+        { label: "GreenScore (78e)", url: "https://apps.apple.com/us/app/id6790125863" },
+        { label: "Mainbeam (1 avis)", url: "https://apps.apple.com/us/app/id6813911478" },
+      ],
+      beats: [
+        partCard("PARTIE 4 · CE QUI FLOPPE"),
+        { say: `Maintenant, attention. Si tu te dis « parfait, je fais une app de crochet », tu vas probablement te planter.` },
+        {
+          show: `La recherche « crochet » sur l'App Store américain : la liste défile, chaque app avec son nombre d'avis. Compteur « 84 apps », puis « 49 avec moins de 20 avis » en rouge. YarnPal reste en vert en haut : « 35 571 avis ».`,
+          say: `J'ai tapé « crochet » dans l'App Store américain. Il y a 84 apps qui ont « crochet » dans leur nom. YarnPal a plus de 35 000 avis. Et 49 d'entre elles en ont moins de 20.`,
+        },
+        {
+          show: `Même chose, en deux lignes : « fax · 86 apps · 34 sous 20 avis », « mesurer un terrain · 93 apps · 66 sous 20 avis ».`,
+          say: `C'est pareil partout. Pour le fax, 34 apps sur 86 ont moins de 20 avis. Pour mesurer un terrain, 66 sur 93. Dans chaque niche ennuyeuse, il y a une poignée d'apps qui prennent presque tout, et des dizaines qui n'ont presque rien.`,
+        },
+        {
+          show: `Les captures des apps de mesure les plus anciennes, côte à côte : « GPS Field Area », « Measure Routes », « Pro mode: cut hole », « Flexible Export Formats ». Leurs avis : 13 258 et 10 262.`,
+          say: `Ce qui fait la différence se voit très bien sur ces apps pour mesurer un terrain. Les deux plus anciennes ont plus de 10 000 avis chacune. Sur leurs captures d'écran, elles disent toutes la même chose : mesure la surface de ton champ, mesure des distances, exporte tes mesures.`,
+        },
+        {
+          show: `Les quatre captures d'AreaMap, une par une : « How many T-posts? 290 », « How much wire? 11 rolls », « How many tons? 36 tons », « How much mulch? ». La traduction en bas de l'écran.`,
+          say: `Et voici les captures d'AreaMap, l'app sortie il y a huit semaines. « Combien de piquets ? 290. » « Combien de fil ? 11 rouleaux. » « Combien de tonnes de gravier ? 36. » « Combien de paillis ? »`,
+        },
+        {
+          say: `Personne ne veut mesurer un terrain. On mesure un terrain parce qu'on va poser une clôture, et qu'on doit savoir combien de piquets acheter. Les autres apps vendent ce qu'elles font. AreaMap répond à la question que la personne se pose vraiment : elle transforme un terrain en liste de courses. Et elle dit à qui elle s'adresse : les clôturiers, les paysagistes, les entreprises de béton, les agriculteurs.`,
+        },
+        {
+          show: `La fiche d'AreaMap : « 53e · Utilitaires », « sortie le 29 sept. 2026 », « Nathan La Mar Burnett », « 261 avis », « 69,99 $ par an ». À côté, les deux plus anciennes avec « absente des classements » en gris.`,
+          say: `Résultat : avec seulement 261 avis, AreaMap est déjà 53e des utilitaires qui rapportent le plus aux États-Unis. Les deux plus anciennes, avec leurs 10 000 avis, ne sont dans aucun des classements que j'ai relevés. Et AreaMap est publiée au nom d'une seule personne.`,
+        },
+        {
+          show: `Côte à côte : à gauche les captures des anciennes (« Measure Routes », « Flexible Export Formats »), à droite celles d'AreaMap (« How many T-posts? 290 »).`,
+          say: `La leçon : ne vends pas ce que fait ton app. Vends la réponse à la question que ton utilisateur se pose.`,
+        },
+        {
+          show: `Les captures de rackline.ai : « Score any buck in seconds », la photo du cerf et le score. Sa fiche : « 54e · Sport », « sortie en sept. 2025 », « Nathan Jewell ».`,
+          say: `Deuxième exemple, et il montre un autre piège. Aux États-Unis, les chasseurs donnent un score aux bois des cerfs, en les mesurant. rackline.ai le fait avec l'IA, à partir d'une simple photo. Elle est sortie en septembre 2025, publiée au nom d'une seule personne, et elle est 54e des apps de sport qui rapportent le plus aux États-Unis.`,
+        },
+        {
+          show: `Ses deux prix côte à côte : « Chasseurs · 49,99 $ par an », « Guides de chasse · 499,99 $ par an ».`,
+          say: `Elle a même deux sortes de clients : les chasseurs, à 50 dollars par an, et les guides de chasse, qui paient 500 dollars par an pour apparaître dans l'app.`,
+        },
+        {
+          show: `La liste des apps de score de cerf sorties depuis, avec leurs avis : GreenScore 33 (78e, en vert), puis en rouge UrScore 11, Rackscore 8, Mainbeam 1, First Light 0, Bucksign 0.`,
+          say: `Évidemment, les copies sont arrivées. GreenScore est sortie en juillet avec quelque chose en plus, les meilleures heures pour chasser chaque jour, et elle est 78e. Mais regarde les suivantes. UrScore, 11 avis. Rackscore, 8. Mainbeam, 1 seul avis, alors que c'est la plus belle de toutes. First Light, zéro. Et Bucksign, zéro, sortie le 18 novembre.`,
+        },
+        {
+          show: `Les captures de Mainbeam en grand, très soignées, et le compteur « 1 avis ».`,
+          say: `La leçon : une niche qui marche attire des copies, et la plupart ne décollent jamais. Une app plus jolie ne suffit pas. Si quelqu'un est déjà installé dans ta niche, il te faut une meilleure réponse que la sienne, pas la même app avec un plus beau design.`,
+        },
+      ],
+    },
+    {
+      time: "14:05",
+      title: "Partie 5 : trouver ta niche ennuyeuse",
+      beats: [
+        partCard("PARTIE 5 · TROUVER LA TIENNE"),
+        { say: `Dernière partie : comment trouver ta niche ennuyeuse. Voici ce que je ferais, dans l'ordre.` },
+        {
+          show: `Le classement des utilitaires qui défile vers le bas, les grandes marques grisées, les apps étonnantes entourées.`,
+          say: `Un : ouvre le classement des apps qui rapportent le plus, catégorie par catégorie. L'App Store de ton iPhone ne le montre pas, mais des sites comme Appfigures l'affichent. Ne regarde pas le haut du classement, il est plein de grandes marques. Descends, et note toutes les apps qui te font dire « ah bon, ça existe ? ».`,
+        },
+        {
+          say: `Deux : pense aux métiers, aux passions et aux galères autour de toi. Le métier de tes parents, la passion de ton oncle, la galère administrative que tu as vécue l'an dernier.`,
+        },
+        {
+          show: `La recherche « tape measure » sur l'App Store : en haut, des apps à 90 000 avis, en dessous, des dizaines à moins de 20.`,
+          say: `Trois : tape ta niche dans la recherche de l'App Store, et vérifie deux choses. Il faut au moins une app avec des milliers d'avis : ça prouve que des gens la téléchargent. Et regarde les captures de toutes les autres : si elles vendent toutes la même fonction, comme les apps de mesure de terrain, il y a de la place pour la bonne réponse.`,
+        },
+        {
+          say: `Quatre : lis les avis à une et deux étoiles de l'app qui domine. Chaque reproche, c'est une chose que ton app peut faire mieux.`,
+        },
+        {
+          say: `Cinq : trouve la question que ton utilisateur se pose vraiment. Pas « mesurer un terrain », mais « combien de piquets acheter ». C'est cette phrase qui va sur ta première capture d'écran, et dans ton onboarding.`,
+        },
+        {
+          say: `Et six : va là où ces gens passent leur temps. Les chasseurs, les camionneurs, les gens qui font du crochet ont tous leurs comptes préférés sur TikTok et Instagram. Une vidéo qui parle de leur galère à eux, avec leurs mots, peut faire connaître ton app sans payer de pub.`,
+        },
+      ],
+    },
+    {
+      time: "16:15",
+      title: "Récap et fin",
+      mode: "visage",
+      beats: [
+        {
+          say: `Si tu ne retiens qu'une chose : les apps qui rapportent le plus ne sont pas celles dont on parle. Ce sont des apps pour un métier, une passion ou une galère, qui répondent à une question précise, pour des gens qui paient déjà pour leur problème. Et dans chaque niche, celle qui gagne n'est pas la plus belle : c'est celle qui répond le mieux à cette question.`,
+        },
+        {
+          say: `La liste des 50 niches ennuyeuses est en premier dans la description. Et si tu veux qu'on regarde ensemble ton idée d'app, tu peux réserver un appel avec mon équipe, le lien est aussi dans la description.`,
+        },
+        {
+          say: `Dis-moi en commentaire l'app la plus ennuyeuse pour laquelle tu paies. Et si cette vidéo t'a servi, abonne-toi.`,
+        },
+      ],
+    },
+  ]),
+  description: `🎁 GRATUIT : les 50 niches ennuyeuses qui rapportent (l'app qui domine, son prix, son nombre d'avis, et ce que ses utilisateurs lui reprochent) : https://www.jeremypitault.com/guide/niches-ennuyeuses?${UTM_D}
+
+🎯 Mon Plan d'Action gratuit pour créer une app mobile qui génère 30K$/mois : https://www.jeremypitault.com/plan-action?${UTM_D}
+
+📞 BESOIN D'UN ACCOMPAGNEMENT ?
+Réserve ton appel stratégique personnalisé de 30 mins avec un expert APP MASTERY : https://www.jeremypitault.com/rdv?${UTM_D}
+
+Un GPS pour camionneurs, une météo pour chasseurs de cerfs, une app de crochet classée devant Badoo, une messagerie pour parents séparés à plus de 10 millions de dollars par an, et des apps de fax qui rapportent des millions. J'ai relevé le classement des apps qui rapportent le plus aux États-Unis, catégorie par catégorie : les plus ennuyeuses sont parmi celles qui rapportent le plus. Je te montre pourquoi elles marchent, pourquoi la plupart des apps de la même niche n'ont presque aucun avis, et comment trouver la tienne.
+
+👉 Dis-moi en commentaire l'app la plus ennuyeuse pour laquelle tu paies.
+
+0:00 Introduction
+2:05 Les apps des métiers
+4:30 Les apps des passions
+6:50 Les apps des galères
+10:05 Pourquoi personne n'en parle
+10:45 Ce qui floppe
+14:05 Trouver ta niche
+16:15 Récap
+
+Sources : classement des apps qui rapportent le plus sur l'App Store américain, relevé le 23/11/2026 ; TalkingParents (Practical Founders Podcast, août 2025) ; Trucker Path (FreightWaves, oct. 2020) ; apps de fax, de télécommande et de reconnaissance de pièces (estimations Appfigures, 2021 et 2025).
+
+#applicationmobile #idéeapp #créeruneapp #appmobile #appstore #entrepreneur #businessenligne`,
+  shorts: [
+    "« Une app de crochet classée devant Badoo » (partie 2, 30 s).",
+    "« Personne ne veut mesurer un terrain » : les captures d'AreaMap contre les autres (partie 4, 45 s).",
+    "« Les apps de fax rapportent des millions » (partie 3, 30 s).",
+    "« La plus belle des copies : 1 seul avis » (partie 4, 35 s).",
+  ],
+  prepare: [
+    "Tournage, parties face caméra : « qui je suis », « le cadeau » et « récap et fin ». Fais chacune 2 ou 3 fois en entier, en 4K, mise au point et exposition verrouillées.",
+    "Tournage, tout le reste : ta voix seule au micro, à 20 ou 30 cm, en lisant le script. Un fichier par partie, dis le nom de la partie au début et laisse 10 secondes de silence. Si tu te trompes, tais-toi 2 secondes et reprends la phrase depuis son début.",
+    "Rushs dans ~/Movies/Rushs/2026-11-apps-ennuyeuses/ (hors iCloud), fichiers d'origine.",
+    "Matière pour le montage dans ~/Projects/reports/2026-11-23-apps-ennuyeuses/ : les classements du 23/11 (charts/, un JSON par catégorie), les fiches des apps (candidats.json), la recherche des 18 niches (niches.json) et les planches de captures (shots/ : cerf, terrain, crochet). Les classements sont refaits en cartes animées datées « 23 nov. 2026 », pas en captures de site : les rangs bougent chaque jour.",
+    "À vérifier avant de tourner : qu'Appfigures affiche bien gratuitement le classement des apps qui rapportent le plus (partie 5). Sinon, dire « des sites spécialisés ».",
+    "Photo de la calculatrice physique Construction Master (site de Calculated Industries) pour la partie 1.",
+    "Avant de publier : créer le cadeau /guide/niches-ennuyeuses (les 50 niches) et son email de livraison.",
+    "Aucun élève, aucune capture de revenus de Shinobi : c'est une vidéo grand public.",
+    "Recaler les chapitres de la description sur le montage réel (skill youtube-description).",
+  ],
+  checklist: [
+    { point: "Un seul public : app qui rapporte, pas développeurs", state: "OK" },
+    { point: "3 vidéos à plus de 50 000 vues sur le format", state: "OK (984 000, 425 800, 319 100), aucune sur les apps en français" },
+    { point: "Argent dans le titre, format prouvé, psychologie écrite", state: "OK" },
+    { point: "Sujet différent des vidéos A, B et C (quelle app créer, pas comment la vendre)", state: "OK" },
+    { point: "Pure valeur : aucun élève, rien qui ressemble à une page de vente", state: "OK" },
+    { point: "Ce qui marche ET ce qui floppe", state: "OK (AreaMap contre les anciennes, rackline contre ses copies, des niches à moitié vides)" },
+    { point: "Chaque chiffre en dollars a sa source, dite à l'oral", state: "OK (vérifiés le 23/11)" },
+    { point: "Ouverture : promesse, preuve, plan, public, pas d'abonnement avant la valeur", state: "OK" },
+    { point: "RDV en 1 phrase, jamais « la formation »", state: "OK" },
+    { point: "Cadeau lié au sujet, après la première grosse valeur", state: "À créer (les 50 niches)" },
+    { point: "Miniature : 3 ou 4 mots, preuve visible, visage à droite, ne répète pas le titre", state: "OK" },
+    { point: "Ligne dans le tableau de suivi après publication", state: "À faire" },
+  ],
+};
+
+// D en premier : la vidéo de jeudi 26 nov. 2026.
+export const SCRIPTS: VideoScript[] = [SCRIPT_D, SCRIPT_B, SCRIPT_A];
