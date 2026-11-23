@@ -116,3 +116,23 @@ test("nom du fichier déposé dans Odoo", () => {
   assert.equal(nomDepot({ date: "2026-11-21", marchand: "Calendly", montant: 40, devise: "EUR" }, "application/pdf"), "2026-11-21 Calendly 40,00 EUR.pdf");
   assert.equal(nomDepot({ date: "2026-10-18", marchand: "Augustiner/Heumarkt", montant: 62.98, devise: "EUR" }, "image/jpeg"), "2026-10-18 Augustiner Heumarkt 62,98 EUR.jpg");
 });
+
+test("facture dans une autre devise sans montant d'origine : proposée, à confirmer", () => {
+  const d = dep({ marchand: "Elevenlabs", montant: 10.35, date: "2026-11-13" });
+  const [p] = rapprocher([d], [doc({ fournisseur: "ElevenLabs", total: 11, devise: "USD", date_doc: "2026-11-12" })]);
+  assert.equal(p?.sur, false);
+  assert.match(p.raison, /11,00 USD payés 10,35 EUR/);
+  // Trop loin dans le temps, ou un montant sans rapport : rien.
+  assert.equal(rapprocher([d], [doc({ fournisseur: "ElevenLabs", total: 11, devise: "USD", date_doc: "2026-10-12" })]).length, 0);
+  assert.equal(rapprocher([d], [doc({ fournisseur: "ElevenLabs", total: 22, devise: "USD", date_doc: "2026-11-12" })]).length, 0);
+  // Quand Revolut donne le montant d'origine, seul le montant exact compte.
+  assert.equal(rapprocher([{ ...d, montant_facture: 12, devise_facture: "USD" }], [doc({ fournisseur: "ElevenLabs", total: 11, devise: "USD", date_doc: "2026-11-12" })]).length, 0);
+});
+
+test("pièce sans date lisible : la date du mail sert d'indice, à confirmer", () => {
+  const d = dep({ marchand: "Tb Hotels21 W", montant: 131.95, date: "2026-10-09" });
+  const [p] = rapprocher([d], [doc({ fournisseur: "Tb Hotels21 W", total: 131.95, date_doc: null, mail_date: "2026-10-15" })]);
+  assert.equal(p?.sur, false);
+  assert.equal(rapprocher([d], [doc({ fournisseur: "Tb Hotels21 W", total: 131.95, date_doc: null, mail_date: "2026-06-15" })]).length, 0);
+  assert.equal(rapprocher([d], [doc({ fournisseur: "Autre", total: 131.95, date_doc: null, mail_date: "2026-10-15" })]).length, 0);
+});

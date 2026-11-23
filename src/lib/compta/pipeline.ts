@@ -54,7 +54,7 @@ export function db(): SupabaseClient {
   return createClient(process.env.NEXT_PUBLIC_SUPABASE_URL as string, process.env.SUPABASE_SERVICE_ROLE_KEY as string, { auth: { persistSession: false } });
 }
 
-type DocRow = { id: string; source: string; source_ref: string; sha1: string | null; nom_fichier: string | null; mime: string | null; stockage: string | null; mail_de: string | null; mail_objet: string | null; nature: string | null; fournisseur: string | null; date_doc: string | null; total: number | null; devise: string | null; odoo_document_id: number | null; odoo_dossier: string | null; statut: string; essais: number; depense_revolut: string | null };
+type DocRow = { id: string; source: string; source_ref: string; sha1: string | null; nom_fichier: string | null; mime: string | null; stockage: string | null; mail_de: string | null; mail_objet: string | null; nature: string | null; fournisseur: string | null; date_doc: string | null; total: number | null; devise: string | null; odoo_document_id: number | null; odoo_dossier: string | null; statut: string; essais: number; depense_revolut: string | null; mail_date?: string | null };
 type DepRow = { id: string; date: string; montant: number; devise: string; montant_facture: number | null; devise_facture: string | null; marchand: string; categorie: string; statut: string; document_id: string | null; expense_id: string | null; documents_refuses?: string[]; raw?: { merchant?: { category_code?: string } } | null };
 
 export async function passage(opts: { ecrire: boolean; deposer?: boolean; lecturesMax?: number; log?: (m: string) => void }): Promise<Rapport> {
@@ -194,7 +194,7 @@ export async function passage(opts: { ecrire: boolean; deposer?: boolean; lectur
   const ouvertes = check(await base.from("compta_depenses").select("id, date, montant, devise, montant_facture, devise_facture, marchand, categorie, statut, document_id, expense_id, documents_refuses, raw").eq("societe", SOCIETE).eq("statut", "manquant").in("categorie", ["fournisseur", "frais_bancaires"])) as DepRow[];
   const pris = new Set((check(await base.from("compta_depenses").select("document_id").eq("societe", SOCIETE).not("document_id", "is", null)) as { document_id: string }[]).map((r) => r.document_id));
   const libres = (check(await base.from("compta_documents").select("*").eq("societe", SOCIETE).eq("statut", "lu")) as DocRow[]).filter((d) => !pris.has(d.id));
-  const lus: Lu[] = libres.map((d) => ({ id: d.id, nature: (d.nature as Lu["nature"]) ?? "autre", fournisseur: d.fournisseur, date_doc: d.date_doc, total: d.total == null ? null : Number(d.total), devise: d.devise, mail_de: d.mail_de, nom_fichier: d.nom_fichier, depense_imposee: d.depense_revolut, deposee_par_jeremy: d.source === "odoo", mois_dossier: moisDuDossier(d.odoo_dossier) }));
+  const lus: Lu[] = libres.map((d) => ({ id: d.id, nature: (d.nature as Lu["nature"]) ?? "autre", fournisseur: d.fournisseur, date_doc: d.date_doc, total: d.total == null ? null : Number(d.total), devise: d.devise, mail_de: d.mail_de, nom_fichier: d.nom_fichier, depense_imposee: d.depense_revolut, deposee_par_jeremy: d.source === "odoo", mois_dossier: moisDuDossier(d.odoo_dossier), mail_date: d.mail_date ? String(d.mail_date).slice(0, 10) : null }));
   const propositions = rapprocher(
     ouvertes.map((d) => ({ ...d, montant: Number(d.montant), montant_facture: d.montant_facture == null ? null : Number(d.montant_facture), restaurant: MCC_RESTAURANT.has(d.raw?.merchant?.category_code ?? ""), refuses: d.documents_refuses ?? [] })),
     lus,

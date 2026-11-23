@@ -84,6 +84,7 @@ export type Lu = {
   // et le dossier du mois (« Octobre ») sert d'indice quand la date est illisible.
   deposee_par_jeremy?: boolean;
   mois_dossier?: string | null; // AAAA-MM
+  mail_date?: string | null; // AAAA-MM-JJ, date du mail qui portait la pièce
 };
 
 const MOTS_VIDES = new Set(["inc", "llc", "ltd", "limited", "gmbh", "sarl", "sas", "sa", "bv", "the", "com", "www", "io", "co", "corp", "corporation", "company", "europe", "ireland", "international", "payments", "billing", "invoice", "receipt", "noreply", "no", "reply", "mail", "email", "info", "support", "hello", "sub", "subscr", "subscription", "plan", "fee", "to", "de", "la", "le", "et", "and"]);
@@ -155,6 +156,11 @@ function noter(d: DepenseOuverte, doc: Lu): { score: number; sur: boolean; raiso
   if (!doc.date_doc) {
     // Date illisible : seulement pour une pièce rangée par Jeremy dans le dossier du même mois.
     if (montantExact && doc.deposee_par_jeremy && doc.mois_dossier === d.date.slice(0, 7)) return { score: fournisseur ? 60 : 30, sur: fournisseur, raison: fournisseur ? "même montant, même fournisseur, rangée dans le dossier du mois" : "même montant, rangée dans le dossier du mois, date illisible" };
+    // Sinon la date du mail sert d'indice, mais Jeremy confirme.
+    if (montantExact && fournisseur && doc.mail_date) {
+      const e = ecartJours(doc.mail_date, d.date);
+      if (e >= -20 && e <= 40) return { score: 50 - Math.abs(e) / 10, sur: false, raison: `même montant, même fournisseur, date illisible (mail à ${Math.abs(e)} j)` };
+    }
     return null;
   }
   const ecart = ecartJours(doc.date_doc, d.date);
@@ -162,6 +168,16 @@ function noter(d: DepenseOuverte, doc: Lu): { score: number; sur: boolean; raiso
   if (!montantExact && d.restaurant && devise === d.devise && doc.nature === "recu" && d.montant > doc.total && d.montant <= doc.total * 1.25 + 0.01 && ecart >= 0 && ecart <= 2) {
     const pourboire = (d.montant - doc.total).toFixed(2).replace(".", ",");
     return fournisseur ? { score: 70 - ecart, sur: true, raison: `ticket du même restaurant, ${pourboire} € de pourboire` } : { score: 25 - ecart, sur: false, raison: `ticket de restaurant du même jour, ${pourboire} € de pourboire, nom à confirmer` };
+  }
+  // Facture dans une autre devise, sans montant d'origine fourni par Revolut
+  // (ElevenLabs : 11 USD payés 10,35 EUR) : même fournisseur, quelques jours,
+  // montant cohérent avec le change. Jeremy confirme.
+  if (!montantExact && fournisseur && devise && devise !== d.devise && !d.devise_facture && doc.nature !== "autre" && ecart >= -3 && ecart <= 5) {
+    const ratio = d.montant / doc.total;
+    if (ratio >= 0.8 && ratio <= 1.25) {
+      const f = (x: number) => x.toFixed(2).replace(".", ",");
+      return { score: 45 - Math.abs(ecart), sur: false, raison: `même fournisseur, ${f(doc.total)} ${devise} payés ${f(d.montant)} ${d.devise}, change à confirmer` };
+    }
   }
   if (!montantExact) return null;
   // La facture est souvent émise avant le prélèvement (abonnement, facture du mois),
