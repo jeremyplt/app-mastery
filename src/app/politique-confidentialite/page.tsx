@@ -14,7 +14,7 @@ export default function PolitiqueConfidentialitePage() {
       <div className="mx-auto max-w-3xl px-6">
         <nav className="mac-nav mt-5">
           <Link href="/" className="flex items-center gap-2.5 font-bold text-[15px] tracking-tight text-[var(--fg)]">
-            <span className="grid place-items-center w-7 h-7 rounded-lg text-[12px] font-extrabold tracking-tight text-[var(--accent)] border-[0.5px] border-white/10" style={{ background: "linear-gradient(150deg, #2b2b2e, #000)" }}>AM</span>
+            <span className="grid place-items-center w-7 h-7 rounded-lg text-[12px] font-extrabold tracking-tight text-[#f5f5f7] border-[0.5px] border-white/10" style={{ background: "linear-gradient(150deg, #2b2b2e, #000)" }}>AM</span>
             App Mastery
           </Link>
           <ThemeToggle />

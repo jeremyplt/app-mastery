@@ -20,7 +20,7 @@ export default function HomePage() {
         className="fixed inset-0 -z-10 pointer-events-none"
         style={{
           background:
-            "radial-gradient(50% 34% at 50% -4%, var(--accent-glow), transparent 60%), radial-gradient(40% 30% at 88% 10%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 60%)",
+            "radial-gradient(50% 34% at 50% -4%, var(--accent-glow), transparent 60%)",
         }}
       />
 
@@ -32,7 +32,7 @@ export default function HomePage() {
             className="flex items-center gap-2.5 font-bold text-[15px] tracking-tight text-[var(--fg)]"
           >
             <span
-              className="grid place-items-center w-7 h-7 rounded-lg text-[12px] font-extrabold tracking-tight text-[var(--accent)] border-[0.5px] border-white/10"
+              className="grid place-items-center w-7 h-7 rounded-lg text-[12px] font-extrabold tracking-tight text-[#f5f5f7] border-[0.5px] border-white/10"
               style={{ background: "linear-gradient(150deg, #2b2b2e, #000)" }}
             >
               JP
@@ -117,7 +117,7 @@ export default function HomePage() {
               rel="noopener noreferrer"
               className="mac-btn mac-btn-def mac-btn-lg"
             >
-              <svg className="w-[18px] h-[18px] text-[#ff3b30]" fill="currentColor" viewBox="0 0 24 24">
+              <svg className="w-[18px] h-[18px] text-[var(--fg)]" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
               </svg>
               Ma chaîne YouTube
@@ -155,7 +155,7 @@ export default function HomePage() {
               </div>
             </div>
             <div className="mac-tile text-center">
-              <div className="text-[22px] sm:text-[26px] font-bold tracking-[-0.03em] text-[var(--green)]">
+              <div className="text-[22px] sm:text-[26px] font-bold tracking-[-0.03em] text-[var(--fg)]">
                 Récurrent
               </div>
               <div className="text-[12px] sm:text-[13px] font-semibold text-[var(--fg2)] mt-0.5">

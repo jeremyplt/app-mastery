@@ -50,7 +50,7 @@ export default function AccompagnementContent() {
         <nav className="mac-nav mb-8">
           <Link href="/" className="flex items-center gap-2.5 font-bold text-[15px] tracking-tight text-[var(--fg)]">
             <span
-              className="grid place-items-center w-7 h-7 rounded-lg text-[12px] font-extrabold tracking-tight text-[var(--accent)] border-[0.5px] border-white/10"
+              className="grid place-items-center w-7 h-7 rounded-lg text-[12px] font-extrabold tracking-tight text-[#f5f5f7] border-[0.5px] border-white/10"
               style={{ background: "linear-gradient(150deg, #2b2b2e, #000)" }}
             >
               AM
@@ -120,7 +120,7 @@ export default function AccompagnementContent() {
               <ul className="mt-5 space-y-3">
                 {CALL_POINTS.map((c) => (
                   <li key={c} className="flex items-start gap-3 text-[15.5px] font-medium leading-snug text-[var(--fg)]">
-                    <svg className="w-5 h-5 mt-0.5 shrink-0 text-[var(--green)]" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                    <svg className="w-5 h-5 mt-0.5 shrink-0 text-[var(--fg)]" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                     </svg>
                     {c}

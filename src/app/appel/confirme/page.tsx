@@ -78,7 +78,7 @@ function ConfirmeContent() {
         className="fixed inset-0 -z-10 pointer-events-none"
         style={{
           background:
-            "radial-gradient(55% 40% at 50% -6%, color-mix(in srgb, var(--green) 16%, transparent), transparent 62%), radial-gradient(45% 35% at 88% 10%, var(--accent-glow), transparent 60%)",
+            "radial-gradient(55% 40% at 50% -6%, color-mix(in srgb, var(--fg) 6%, transparent), transparent 62%), radial-gradient(45% 35% at 88% 10%, var(--accent-glow), transparent 60%)",
         }}
       />
 
@@ -87,7 +87,7 @@ function ConfirmeContent() {
         <nav className="mac-nav mb-8">
           <Link href="/" className="flex items-center gap-2.5 font-bold text-[15px] tracking-tight text-[var(--fg)]">
             <span
-              className="grid place-items-center w-7 h-7 rounded-lg text-[12px] font-extrabold tracking-tight text-[var(--accent)] border-[0.5px] border-white/10"
+              className="grid place-items-center w-7 h-7 rounded-lg text-[12px] font-extrabold tracking-tight text-[#f5f5f7] border-[0.5px] border-white/10"
               style={{ background: "linear-gradient(150deg, #2b2b2e, #000)" }}
             >
               AM
@@ -276,7 +276,7 @@ function ConfirmeContent() {
                         className={`w-full h-full ${member.imgClass}`}
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#3898ff]/30 to-[#0060df]/30 text-3xl font-bold text-[var(--accent2)]">
+                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#3a3a3d] to-[#1c1c1e] text-3xl font-bold text-[var(--accent2)]">
                         {member.name
                           .split(" ")
                           .map((w) => w[0])

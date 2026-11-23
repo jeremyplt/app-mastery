@@ -367,7 +367,7 @@ function VslPlayer({ onCtaUnlock }: { onCtaUnlock: () => void }) {
         {soundOn && !playing && !ended && (
           <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/30">
             <span className="flex h-20 w-20 items-center justify-center rounded-full bg-[var(--accent)] shadow-lg shadow-[var(--accent-glow)] transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] [@media(hover:hover)]:hover:scale-105 active:scale-95">
-              <svg className="ml-1 h-9 w-9 text-[var(--fg)]" fill="currentColor" viewBox="0 0 24 24">
+              <svg className="ml-1 h-9 w-9 text-[var(--accent-fg)]" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M8 5.14v13.72c0 .8.87 1.3 1.56.88l10.54-6.86a1.05 1.05 0 000-1.76L9.56 4.26A1.04 1.04 0 008 5.14z" />
               </svg>
             </span>

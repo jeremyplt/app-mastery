@@ -78,7 +78,7 @@ export default function BunnyVideo({
             />
             <div className="absolute inset-0 bg-black/35 transition-colors group-hover:bg-black/25" />
             <div className="relative w-20 h-20 rounded-full bg-[var(--accent)] shadow-lg shadow-[var(--accent-glow)] flex items-center justify-center mb-4 transition-transform duration-150 group-hover:scale-105 group-active:scale-95">
-              <svg className="w-8 h-8 text-white ml-1" fill="currentColor" viewBox="0 0 24 24">
+              <svg className="w-8 h-8 text-[var(--accent-fg)] ml-1" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M8 5v14l11-7z" />
               </svg>
             </div>

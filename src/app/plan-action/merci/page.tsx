@@ -14,7 +14,7 @@ export default function MerciPage() {
         className="fixed inset-0 -z-10 pointer-events-none"
         style={{
           background:
-            "radial-gradient(60% 45% at 50% -8%, var(--accent-glow), transparent 62%), radial-gradient(45% 35% at 12% 8%, color-mix(in srgb, var(--green) 12%, transparent), transparent 60%)",
+            "radial-gradient(60% 45% at 50% -8%, var(--accent-glow), transparent 62%), radial-gradient(45% 35% at 12% 8%, color-mix(in srgb, var(--fg) 6%, transparent), transparent 60%)",
         }}
       />
 
@@ -23,7 +23,7 @@ export default function MerciPage() {
         <nav className="mac-nav mb-10">
           <Link href="/" className="flex items-center gap-2.5 font-bold text-[15px] tracking-tight text-[var(--fg)]">
             <span
-              className="grid place-items-center w-7 h-7 rounded-lg text-[12px] font-extrabold tracking-tight text-[var(--accent)] border-[0.5px] border-white/10"
+              className="grid place-items-center w-7 h-7 rounded-lg text-[12px] font-extrabold tracking-tight text-[#f5f5f7] border-[0.5px] border-white/10"
               style={{ background: "linear-gradient(150deg, #2b2b2e, #000)" }}
             >
               AM

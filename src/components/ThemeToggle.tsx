@@ -11,11 +11,11 @@ function applyTheme(theme: Theme) {
 }
 
 export default function ThemeToggle({ className = "" }: { className?: string }) {
-  // Light par défaut ; l'utilisateur peut passer en sombre, choix mémorisé.
-  const [theme, setTheme] = useState<Theme>("light");
+  // Sombre par défaut (mood Graphite) ; l'utilisateur peut passer en clair, choix mémorisé.
+  const [theme, setTheme] = useState<Theme>("dark");
 
   useEffect(() => {
-    const stored = (localStorage.getItem("theme") as Theme | null) ?? "light";
+    const stored = (localStorage.getItem("theme") as Theme | null) ?? "dark";
     setTheme(stored);
     applyTheme(stored);
   }, []);

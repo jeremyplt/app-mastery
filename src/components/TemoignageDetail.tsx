@@ -216,7 +216,7 @@ export default function TemoignageDetail({
               <ul className="mt-5 space-y-3">
                 {changes.map((c) => (
                   <li key={c} className="flex items-start gap-3 text-[15.5px] font-medium leading-snug text-[var(--fg)]">
-                    <svg className="w-5 h-5 mt-0.5 shrink-0 text-[var(--green)]" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                    <svg className="w-5 h-5 mt-0.5 shrink-0 text-[var(--fg)]" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                     </svg>
                     {c}

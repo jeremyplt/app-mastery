@@ -161,7 +161,7 @@ export default function GuidePage() {
         className="fixed inset-0 -z-10 pointer-events-none"
         style={{
           background:
-            "radial-gradient(60% 45% at 78% -5%, var(--accent-glow), transparent 62%), radial-gradient(50% 40% at 8% 6%, color-mix(in srgb, var(--green) 12%, transparent), transparent 60%)",
+            "radial-gradient(60% 45% at 78% -5%, var(--accent-glow), transparent 62%), radial-gradient(50% 40% at 8% 6%, color-mix(in srgb, var(--fg) 6%, transparent), transparent 60%)",
         }}
       />
 
