@@ -2,8 +2,9 @@
 // reçu, pour que le serveur retrouve la pièce de chaque dépense bancaire.
 // LECTURE SEULE (droit gmail.readonly) : ce script ne peut ni envoyer, ni modifier,
 // ni supprimer un mail. Il ne renvoie que les pièces jointes PDF ou image.
+// Passe par le service avancé « Gmail » d'Apps Script : Google l'active tout seul dans
+// le projet caché du script (l'API REST appelée à la main y était désactivée).
 
-var API = 'https://gmail.googleapis.com/gmail/v1/users/me/messages';
 var TYPES = /^(application\/pdf|image\/(jpeg|png|heic|webp))$/i;
 
 function json_(o) {
@@ -19,10 +20,13 @@ function doGet() {
   return json_({ ok: true, secret: s });
 }
 
-function get_(url) {
-  var r = UrlFetchApp.fetch(url, { headers: { Authorization: 'Bearer ' + ScriptApp.getOAuthToken() }, muteHttpExceptions: true });
-  if (r.getResponseCode() !== 200) throw new Error('Gmail ' + r.getResponseCode() + ' : ' + r.getContentText().slice(0, 150));
-  return JSON.parse(r.getContentText());
+function message_(id) {
+  return Gmail.Users.Messages.get('me', id, { format: 'full' });
+}
+
+// Le service avancé rend parfois les octets en tableau : on renvoie toujours du base64url.
+function base64url_(data) {
+  return typeof data === 'string' ? data : Utilities.base64EncodeWebSafe(data);
 }
 
 function header_(msg, name) {
@@ -56,11 +60,11 @@ function doPost(e) {
     if (!secret || b.secret !== secret) return json_({ ok: false, error: 'refusé' });
 
     if (b.action === 'chercher') {
-      var url = API + '?maxResults=' + Math.min(Number(b.max) || 50, 100) + '&q=' + encodeURIComponent(String(b.q || ''));
-      if (b.pageToken) url += '&pageToken=' + encodeURIComponent(b.pageToken);
-      var list = get_(url);
+      var options = { maxResults: Math.min(Number(b.max) || 50, 100), q: String(b.q || '') };
+      if (b.pageToken) options.pageToken = String(b.pageToken);
+      var list = Gmail.Users.Messages.list('me', options);
       var messages = (list.messages || []).map(function (m) {
-        var msg = get_(API + '/' + m.id + '?format=full');
+        var msg = message_(m.id);
         return {
           id: msg.id,
           date: Number(msg.internalDate),
@@ -74,11 +78,11 @@ function doPost(e) {
 
     if (b.action === 'piece') {
       if (!/^[0-9a-f]{8,24}$/i.test(String(b.messageId))) return json_({ ok: false, error: 'mail invalide' });
-      var msg = get_(API + '/' + b.messageId + '?format=full');
+      var msg = message_(String(b.messageId));
       var part = trouver_(msg.payload, String(b.partId));
       if (!part || !part.body || !part.body.attachmentId || !TYPES.test(part.mimeType || '')) return json_({ ok: false, error: 'pièce introuvable' });
-      var att = get_(API + '/' + b.messageId + '/attachments/' + part.body.attachmentId);
-      return json_({ ok: true, filename: part.filename, mimeType: part.mimeType, data: att.data });
+      var att = Gmail.Users.Messages.Attachments.get('me', String(b.messageId), part.body.attachmentId);
+      return json_({ ok: true, filename: part.filename, mimeType: part.mimeType, data: base64url_(att.data) });
     }
 
     return json_({ ok: false, error: 'action inconnue' });
