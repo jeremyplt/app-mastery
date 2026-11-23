@@ -177,7 +177,7 @@ export default function EquipeAdmin() {
           <button
             type="submit"
             disabled={inviting || !inviteEmail.trim()}
-            className="rounded-lg bg-[var(--accent)] px-5 py-2.5 font-semibold text-[var(--fg)] hover:bg-[var(--accent)] disabled:opacity-50"
+            className="rounded-lg bg-[var(--accent)] px-5 py-2.5 font-semibold text-[var(--accent-fg)] hover:bg-[var(--accent)] disabled:opacity-50"
           >
             {inviting ? "Envoi..." : "Inviter"}
           </button>

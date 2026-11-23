@@ -140,7 +140,7 @@ function SortableModuleRow({
           <button
             onClick={onSave}
             disabled={savingModule}
-            className="flex-1 bg-[var(--accent)] hover:bg-[var(--accent)] text-[var(--fg)] text-xs font-medium py-1.5 rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-1"
+            className="flex-1 bg-[var(--accent)] hover:bg-[var(--accent)] text-[var(--accent-fg)] text-xs font-medium py-1.5 rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-1"
           >
             {savingModule ? <Spinner /> : <><Save size={12} /> Enregistrer</>}
           </button>
@@ -692,7 +692,7 @@ export default function AdminCoursPage() {
                 <button
                   onClick={handleAddModule}
                   disabled={savingModule}
-                  className="flex-1 bg-[var(--accent)] hover:bg-[var(--accent)] text-[var(--fg)] text-sm font-medium py-1.5 rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-1"
+                  className="flex-1 bg-[var(--accent)] hover:bg-[var(--accent)] text-[var(--accent-fg)] text-sm font-medium py-1.5 rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-1"
                 >
                   {savingModule ? <Spinner /> : <><Plus size={14} /> Ajouter</>}
                 </button>
@@ -803,7 +803,7 @@ export default function AdminCoursPage() {
                     <button
                       onClick={handleAddLesson}
                       disabled={savingLesson}
-                      className="flex-1 bg-[var(--accent)] hover:bg-[var(--accent)] text-[var(--fg)] text-sm font-medium py-1.5 rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-1"
+                      className="flex-1 bg-[var(--accent)] hover:bg-[var(--accent)] text-[var(--accent-fg)] text-sm font-medium py-1.5 rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center gap-1"
                     >
                       {savingLesson ? (
                         <Spinner />
@@ -933,7 +933,7 @@ export default function AdminCoursPage() {
               <button
                 onClick={handleSaveLesson}
                 disabled={savingLesson}
-                className="bg-[var(--accent)] hover:bg-[var(--accent)] text-[var(--fg)] font-semibold px-6 py-2.5 rounded-lg transition-colors disabled:opacity-50 flex items-center gap-2"
+                className="bg-[var(--accent)] hover:bg-[var(--accent)] text-[var(--accent-fg)] font-semibold px-6 py-2.5 rounded-lg transition-colors disabled:opacity-50 flex items-center gap-2"
               >
                 {savingLesson ? (
                   <Spinner />

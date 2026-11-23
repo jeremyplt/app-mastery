@@ -155,7 +155,7 @@ function Numbered({ items }: { items: string[] }) {
     <ol className="mt-1 space-y-2">
       {items.map((p, i) => (
         <li key={i} className="flex gap-3">
-          <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-[var(--accent)] text-[12px] font-bold text-white">{i + 1}</span>
+          <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full bg-[var(--accent)] text-[12px] font-bold text-[var(--accent-fg)]">{i + 1}</span>
           <span>{p}</span>
         </li>
       ))}
