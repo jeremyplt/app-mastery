@@ -1001,7 +1001,7 @@ const SCRIPT_D: VideoScript = {
   why: `Une piste en plus, pas à la place des autres : les apps dont tout le monde parle peuvent très bien rapporter (c'est le cas de Shinobi et de la plupart des apps que tu accompagnes), mais il y a aussi des niches auxquelles personne ne pense. Le format « ce truc ennuyeux rapporte des millions » fait jusqu'à 984 000 vues pour les sites et les SaaS, et presque personne ne l'a fait pour les apps, encore moins en français. Toutes les preuves viennent du classement d'Apple des apps qui rapportent le plus aux États-Unis, relevé le 23 novembre. La vidéo montre aussi ce qui floppe : dans chaque niche, des dizaines d'apps n'ont presque aucun avis.`,
   facts: [
     { label: "Durée", value: "15 à 17 min (environ 2 400 mots de voix)" },
-    { label: "Montage", value: "Sans visage (direction C), sauf trois moments face caméra : « qui je suis » juste après l'intro, le cadeau suivi de l'appel avec ton équipe, et la fin. Tout le reste en voix seule sur les classements, les pages App Store et les captures des apps" },
+    { label: "Montage", value: "Sans visage (direction C), sauf trois moments face caméra : « qui je suis » juste après l'intro, le cadeau suivi de l'accompagnement, et la fin. Tout le reste en voix seule sur les classements, les pages App Store et les captures des apps" },
     { label: "Style", value: "Voix lue mot à mot. Les classements et les chiffres sont posés à l'écran par le montage, jamais lus en entier" },
     { label: "Format", value: "« Ce [truc] ennuyeux rapporte des millions » : trois familles d'apps (métiers, passions, galères), puis ce qui floppe dans les mêmes niches, puis comment trouver la sienne" },
     { label: "Demande", value: "Jonathan's Jam « This Boring Website Earns $6M/Year » 984 000 vues, Niche Pursuits « How This \"BORING\" Website Makes $35,000/Month! » 425 800, Starter Story « I Make $60K/Month From the Most Boring SaaS on the Internet » 319 100, Kimberly Mitchell 245 100. Le format marche pour les sites et les SaaS, presque rien sur les apps, rien en français" },
@@ -1044,7 +1044,7 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
   gift: {
     name: "Les 50 niches ennuyeuses qui rapportent : pour chacune, l'app qui domine, son prix, son nombre d'avis, combien d'apps de la niche n'ont presque rien, et ce que ses utilisateurs lui reprochent",
     url: `https://www.jeremypitault.com/guide/niches-ennuyeuses?${UTM_D}`,
-    note: "Page à créer avant de publier, à partir des classements du 23 nov. (~/Projects/reports/2026-11-23-apps-ennuyeuses/charts) : garder les apps de métier, de passion et de galère, enlever les grandes marques, faire la recherche App Store de chaque niche (nombre d'apps, combien sous 20 avis), relever les prix et les avis à 1 et 2 étoiles de l'app qui domine. Annoncé face caméra après la partie 3 (la première grosse valeur), juste avant l'appel avec l'équipe, rappelé à la fin.",
+    note: "Page à créer avant de publier, à partir des classements du 23 nov. (~/Projects/reports/2026-11-23-apps-ennuyeuses/charts) : garder les apps de métier, de passion et de galère, enlever les grandes marques, faire la recherche App Store de chaque niche (nombre d'apps, combien sous 20 avis), relever les prix et les avis à 1 et 2 étoiles de l'app qui domine. Annoncé face caméra après la partie 3 (la première grosse valeur), juste avant l'annonce de l'accompagnement, rappelé à la fin.",
   },
   plan: [
     "Le spectateur a vu, preuves à l'appui, que des apps pour camionneurs, chasseurs, crocheteuses, parents séparés ou gens qui attendent leur carte verte sont parmi celles qui rapportent le plus aux États-Unis.",
@@ -1237,7 +1237,7 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
     },
     {
       time: "9:10",
-      title: "Le cadeau, et l'appel avec ton équipe",
+      title: "Le cadeau, et l'accompagnement",
       mode: "visage",
       beats: [
         {
@@ -1245,7 +1245,7 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
           show: `À côté de toi, la couverture du guide des 50 niches, et en dessous « lien en description », 4 secondes, sans couper la parole.`,
         },
         {
-          say: `Et d'ailleurs, avec mon équipe, on accompagne des gens qui créent leur app. Si tu en as déjà une, ou si tu aimerais qu'on t'aide à trouver ton idée, il y a aussi un lien dans la description pour réserver un appel avec nous. On regarde ensemble où tu en es, comment on peut t'aider, et si ton profil correspond aux personnes qu'on accompagne.`,
+          say: `Et d'ailleurs, j'accompagne personnellement des gens qui créent leur app. Si tu en as déjà une, ou si tu aimerais que je t'aide à trouver ton idée, il y a aussi un lien dans la description pour réserver un appel avec mon équipe. On regarde ensemble où tu en es, comment je peux t'aider, et si ton profil correspond aux personnes que j'accompagne.`,
           show: `Dans le même plan, la vraie page de réservation (jeremypitault.com/rdv) glisse à côté de toi, 4 secondes, sans couper la parole.`,
         },
       ],
@@ -1357,7 +1357,7 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
           say: `Si tu ne retiens qu'une chose : les apps dont tout le monde parle peuvent très bien rapporter, la mienne en est une, mais ce ne sont pas les seules. Il y a aussi des apps pour un métier, une passion ou une galère, qui répondent à une question précise, pour des gens qui paient déjà pour leur problème. Et dans chaque niche, celle qui gagne n'est pas la plus belle : c'est celle qui répond le mieux à cette question.`,
         },
         {
-          say: `La liste des 50 niches ennuyeuses est en premier dans la description. Et si tu veux qu'on regarde ensemble ton idée d'app, tu peux réserver un appel avec mon équipe, le lien est aussi dans la description.`,
+          say: `La liste des 50 niches ennuyeuses est en premier dans la description. Et si tu veux que je t'aide avec ton app ou ton idée, tu peux réserver un appel avec mon équipe, le lien est aussi dans la description.`,
         },
         {
           say: `Dis-moi en commentaire l'app la plus ennuyeuse pour laquelle tu paies. Et si cette vidéo t'a servi, abonne-toi.`,
@@ -1414,7 +1414,7 @@ Sources : classement des apps qui rapportent le plus sur l'App Store américain,
     { point: "Ce qui marche ET ce qui floppe", state: "OK (AreaMap contre les anciennes, rackline contre ses copies, des niches à moitié vides)" },
     { point: "Chaque chiffre en dollars a sa source, dite à l'oral", state: "OK (vérifiés le 23/11)" },
     { point: "Ouverture : promesse, preuve, plan, public, pas d'abonnement avant la valeur", state: "OK" },
-    { point: "Appel avec l'équipe au milieu, juste après le cadeau (demandé par Jeremy le 23/11), rappelé en 1 phrase à la fin, jamais « la formation »", state: "OK" },
+    { point: "Ton accompagnement et l'appel au milieu, juste après le cadeau (demandé par Jeremy le 23/11), rappelé en 1 phrase à la fin, jamais « la formation »", state: "OK" },
     { point: "Cadeau lié au sujet, après la première grosse valeur", state: "À créer (les 50 niches)" },
     { point: "Miniature : 3 ou 4 mots, preuve visible, visage à droite, ne répète pas le titre", state: "OK" },
     { point: "Ligne dans le tableau de suivi après publication", state: "À faire" },
