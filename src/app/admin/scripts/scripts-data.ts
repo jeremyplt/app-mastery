@@ -1075,8 +1075,8 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
           say: `Dans la catégorie Lifestyle, en 32e position, juste devant Badoo, il y a une app de crochet.`,
         },
         {
-          show: `Le classement des utilitaires : Case Tracker (25e) s'allume, puis AreaMap (53e). À côté d'AreaMap, deux étiquettes : « sortie le 29 sept. 2026 » et « publiée par une seule personne ».`,
-          say: `Chez les utilitaires, il y a une app pour suivre son dossier d'immigration. Et une app qui calcule combien de piquets il faut pour une clôture. Elle est sortie il y a huit semaines, et elle est publiée au nom d'une seule personne.`,
+          show: `Le classement des utilitaires : Case Tracker (25e) s'allume, puis AreaMap (53e). À côté d'AreaMap, l'étiquette « sortie le 29 sept. 2026 ».`,
+          say: `Chez les utilitaires, il y a une app pour suivre son dossier d'immigration. Et une app qui calcule combien de piquets il faut pour une clôture. Elle est sortie il y a huit semaines.`,
         },
         {
           show: `D'abord les apps auxquelles tout le monde pense, avec leurs vraies icônes, prises dans les mêmes classements : Cal AI (calories), Opal (blocage des réseaux), I Am Sober (addiction), Summary (productivité), I am (affirmations), une app de langues. Elles glissent sur le côté, puis un mur d'icônes se remplit : une vingtaine d'apps ennuyeuses des classements (camion, cerf, pelote de laine, calculatrice de chantier, télécommande, puits de pétrole). Au centre : « PERSONNE N'EN PARLE ».`,
@@ -1295,16 +1295,16 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
           say: `Personne ne veut mesurer un terrain. On mesure un terrain parce qu'on va poser une clôture, et qu'on doit savoir combien de piquets acheter. Les autres apps vendent ce qu'elles font. AreaMap répond à la question que la personne se pose vraiment : elle transforme un terrain en liste de courses. Et elle dit à qui elle s'adresse : les clôturiers, les paysagistes, les entreprises de béton, les agriculteurs.`,
         },
         {
-          show: `La fiche d'AreaMap : « 53e · Utilitaires », « sortie le 29 sept. 2026 », « Nathan La Mar Burnett », « 261 avis », « 69,99 $ par an ». À côté, les deux plus anciennes avec « absente des classements » en gris.`,
-          say: `Résultat : avec seulement 261 avis, AreaMap est déjà 53e des utilitaires qui rapportent le plus aux États-Unis. Les deux plus anciennes, avec leurs 10 000 avis, ne sont dans aucun des classements que j'ai relevés. Et AreaMap est publiée au nom d'une seule personne.`,
+          show: `La fiche d'AreaMap : « 53e · Utilitaires », « sortie le 29 sept. 2026 », « 261 avis », « 69,99 $ par an ». À côté, les deux plus anciennes avec « absente des classements » en gris.`,
+          say: `Résultat : avec seulement 261 avis, AreaMap est déjà 53e des utilitaires qui rapportent le plus aux États-Unis. Les deux plus anciennes, avec leurs 10 000 avis, ne sont dans aucun des classements que j'ai relevés.`,
         },
         {
           show: `Côte à côte : à gauche les captures des anciennes (« Measure Routes », « Flexible Export Formats »), à droite celles d'AreaMap (« How many T-posts? 290 »).`,
           say: `La leçon : ne vends pas ce que fait ton app. Vends la réponse à la question que ton utilisateur se pose.`,
         },
         {
-          show: `Les captures de rackline.ai : « Score any buck in seconds », la photo du cerf et le score. Sa fiche : « 54e · Sport », « sortie en sept. 2025 », « Nathan Jewell ».`,
-          say: `Deuxième exemple, et il montre un autre piège. Aux États-Unis, les chasseurs donnent un score aux bois des cerfs, en les mesurant. rackline.ai le fait avec l'IA, à partir d'une simple photo. Elle est sortie en septembre 2025, publiée au nom d'une seule personne, et elle est 54e des apps de sport qui rapportent le plus aux États-Unis.`,
+          show: `Les captures de rackline.ai : « Score any buck in seconds », la photo du cerf et le score. Sa fiche : « 54e · Sport », « sortie en sept. 2025 ».`,
+          say: `Deuxième exemple, et il montre un autre piège. Aux États-Unis, les chasseurs donnent un score aux bois des cerfs, en les mesurant. rackline.ai le fait avec l'IA, à partir d'une simple photo. Elle est sortie en septembre 2025, et elle est 54e des apps de sport qui rapportent le plus aux États-Unis.`,
         },
         {
           show: `Ses deux prix côte à côte : « Chasseurs · 49,99 $ par an », « Guides de chasse · 499,99 $ par an ».`,
