@@ -1079,8 +1079,8 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
           say: `Chez les utilitaires, il y a une app pour suivre son dossier d'immigration. Et une app qui calcule combien de piquets il faut pour une clôture. Elle est sortie il y a huit semaines, et elle est publiée au nom d'une seule personne.`,
         },
         {
-          show: `Un mur d'icônes se remplit : une vingtaine d'apps ennuyeuses des classements (camion, cerf, pelote de laine, calculatrice de chantier, télécommande, puits de pétrole). Au centre : « PERSONNE N'EN PARLE ».`,
-          say: `On pense tous aux mêmes apps : le sport, les langues, les rencontres. Elles peuvent très bien rapporter, mais elles ne sont pas les seules. Ces apps ennuyeuses rapportent des millions, et personne n'en parle. Dans cette vidéo, je vais te montrer lesquelles, pourquoi elles marchent, pourquoi la plupart des apps de la même niche n'ont presque aucun avis, et comment trouver la tienne.`,
+          show: `D'abord les apps auxquelles tout le monde pense, avec leurs vraies icônes, prises dans les mêmes classements : Cal AI (calories), Opal (blocage des réseaux), I Am Sober (addiction), Summary (productivité), I am (affirmations), une app de langues. Elles glissent sur le côté, puis un mur d'icônes se remplit : une vingtaine d'apps ennuyeuses des classements (camion, cerf, pelote de laine, calculatrice de chantier, télécommande, puits de pétrole). Au centre : « PERSONNE N'EN PARLE ».`,
+          say: `On pense tous aux mêmes apps : les compteurs de calories, les apps qui bloquent les réseaux sociaux, celles pour arrêter une addiction, les apps de productivité, d'affirmations, de sport, de langues ou de rencontres. Elles peuvent très bien rapporter, mais elles ne sont pas les seules. Ces apps ennuyeuses rapportent des millions, et personne n'en parle. Dans cette vidéo, je vais te montrer lesquelles, pourquoi elles marchent, pourquoi la plupart des apps de la même niche n'ont presque aucun avis, et comment trouver la tienne.`,
         },
       ],
     },
