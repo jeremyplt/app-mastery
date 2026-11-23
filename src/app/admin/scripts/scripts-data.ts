@@ -987,7 +987,7 @@ On a passé au crible environ 12 500 vidéos TikTok et Instagram pour en garder 
 // (flux RSS « top grossing », 13 catégories, 100 apps chacune, relevé le 23/11/2026),
 // recherche App Store de 18 niches (nombre d'avis), prix relevés sur les pages
 // App Store le 23/11, chiffres publics : TalkingParents (Practical Founders, août 2025),
-// Trucker Path (FreightWaves, oct. 2020), Appfigures (fax 2021, télécommandes et
+// Trucker Path (FreightWaves, oct. 2020), Appfigures (télécommandes et
 // identification 2025), SnoreLab (son site). Données et planches de captures :
 // ~/Projects/reports/2026-11-23-apps-ennuyeuses/. Pure valeur, aucun élève.
 const UTM_D = "utm_source=youtube&utm_medium=video&utm_campaign=apps-ennuyeuses";
@@ -1000,13 +1000,13 @@ const SCRIPT_D: VideoScript = {
   title: "Ces apps ennuyeuses rapportent des millions (et personne n'en parle)",
   why: `C'est le cœur de ton angle : l'argent n'est pas dans les apps dont tout le monde parle, il est dans les niches oubliées. Le format « ce truc ennuyeux rapporte des millions » fait jusqu'à 984 000 vues pour les sites et les SaaS, et presque personne ne l'a fait pour les apps, encore moins en français. Toutes les preuves viennent du classement d'Apple des apps qui rapportent le plus aux États-Unis, relevé le 23 novembre. La vidéo montre aussi ce qui floppe : dans chaque niche, des dizaines d'apps n'ont presque aucun avis.`,
   facts: [
-    { label: "Durée", value: "15 à 17 min (environ 2 400 mots de voix)" },
+    { label: "Durée", value: "15 à 17 min (environ 2 300 mots de voix)" },
     { label: "Montage", value: "Sans visage (direction C), sauf trois moments face caméra : « qui je suis » juste après l'intro, le cadeau, et la fin. Tout le reste en voix seule sur les classements, les pages App Store et les captures des apps" },
     { label: "Style", value: "Voix lue mot à mot. Les classements et les chiffres sont posés à l'écran par le montage, jamais lus en entier" },
     { label: "Format", value: "« Ce [truc] ennuyeux rapporte des millions » : trois familles d'apps (métiers, passions, galères), puis ce qui floppe dans les mêmes niches, puis comment trouver la sienne" },
     { label: "Demande", value: "Jonathan's Jam « This Boring Website Earns $6M/Year » 984 000 vues, Niche Pursuits « How This \"BORING\" Website Makes $35,000/Month! » 425 800, Starter Story « I Make $60K/Month From the Most Boring SaaS on the Internet » 319 100, Kimberly Mitchell 245 100. Le format marche pour les sites et les SaaS, presque rien sur les apps, rien en français" },
     { label: "Matière", value: "Classement d'Apple des apps qui rapportent le plus aux États-Unis dans 13 catégories, relevé le 23 nov. 2026 (100 apps par catégorie). Recherche App Store de 18 niches avec le nombre d'avis de chaque app. Prix des abonnements relevés sur les pages App Store le 23/11" },
-    { label: "Chiffres", value: "En dollars, uniquement des chiffres publics avec leur source, dite à l'oral : TalkingParents (son fondateur, août 2025), Trucker Path (FreightWaves, 2020), apps de fax, de télécommande et de reconnaissance de pièces (estimations Appfigures). Le reste, ce sont des rangs, des avis et des prix, que tout le monde peut vérifier" },
+    { label: "Chiffres", value: "En dollars, uniquement des chiffres publics avec leur source, dite à l'oral : TalkingParents (son fondateur, août 2025), Trucker Path (FreightWaves, 2020), apps de télécommande et de reconnaissance de pièces (estimations Appfigures). Le reste, ce sont des rangs, des avis et des prix, que tout le monde peut vérifier" },
     { label: "Captures", value: "Aucune capture de revenus" },
     { label: "UTM", value: "apps-ennuyeuses" },
   ],
@@ -1025,17 +1025,18 @@ const SCRIPT_D: VideoScript = {
     },
   ],
   thumbnail: {
-    text: "UNE APP DE FAX",
-    layout: `Bloc rouge en haut à gauche avec « UNE APP DE FAX » en blanc, très gros. En dessous, sur le bureau, un vieux fax beige des années 90, et devant lui un iPhone tenu en main qui affiche une app de fax générique (un document en aperçu et un gros bouton « Send Fax »). Une flèche jaune du bloc vers le téléphone. Toi à droite en gros plan, sourire en coin, un sourcil levé. Bureau sombre flou. La miniature pose la question (une app de fax, en 2026 ?), le titre y répond (les apps ennuyeuses rapportent des millions) sans la répéter.`,
-    variant: "Variante B, une image vraiment différente pour le test A/B : bloc jaune « 290 PIQUETS », le téléphone affiche la vraie capture d'AreaMap (le terrain vu du ciel et la bulle « T-posts 290 »). Toi à droite, l'air intrigué.",
+    text: "290 PIQUETS",
+    layout: `Bloc jaune en haut à gauche avec « 290 PIQUETS » en noir, très gros. En dessous, un iPhone tenu en main qui affiche la vraie capture d'AreaMap : un terrain vu du ciel avec son contour bleu et la bulle « T-posts 290 ». Une flèche rouge du bloc vers la bulle. Toi à droite en gros plan, l'air intrigué, un sourcil levé. Bureau sombre flou. La miniature pose la question (une app qui compte des piquets ?), le titre y répond (les apps ennuyeuses rapportent des millions) sans la répéter.`,
+    variant: "Variante B, une image vraiment différente pour le test A/B : bloc jaune « DEVANT BADOO », le téléphone affiche la vraie capture de YarnPal (le dinosaure rose en crochet). Toi à droite, l'air amusé.",
     prompt: `Images 1 and 2 are photos of me: use my exact face, head shape, hairline, skin texture and proportions. Do not beautify, stylize or change my face.
-Image 3 is one of my validated thumbnails: copy its background and lighting style.
+Image 3 is a real screenshot of the app AreaMap (aerial view of a field with a blue outline and a "T-posts 290" bubble): place its phone screen, unchanged, as the screen of the iPhone.
+Image 4 is one of my validated thumbnails: copy its background and lighting style.
 
 Layout: 16:9 YouTube thumbnail, 1920x1088.
-Top left: a bright red rectangular block with huge bold white sans-serif text "UNE APP DE FAX", on two lines, perfectly legible, nothing else written.
-Left center, below the red block: an old beige 1990s office fax machine on a dark wood desk, and in front of it an iPhone held in a hand, screen facing camera, showing a clean generic fax app: a document preview and a big blue "Send Fax" button. No real app logo, no brand name. A thick yellow curved arrow goes from the red block to the phone.
-Right side: me, close-up from mid-chest up, head and shoulders filling about 45% of the frame height, amused half smile with one eyebrow raised, looking straight at the camera, dark t-shirt.
-Background: a real blurred office, dark wood desk, warm lamp, plants, soft bokeh, like image 3. No flat or gradient background, no purple.
+Top left: a bright yellow rectangular block with huge bold black sans-serif text "290 PIQUETS", perfectly legible, nothing else written.
+Left center, below the yellow block: an iPhone held in a hand, screen facing camera, showing image 3, sharp and readable. A thick red curved arrow goes from the yellow block to the "T-posts 290" bubble on the screen.
+Right side: me, close-up from mid-chest up, head and shoulders filling about 45% of the frame height, intrigued expression with one eyebrow raised, looking straight at the camera, dark t-shirt.
+Background: a real blurred office, dark wood desk, warm lamp, plants, soft bokeh, like image 4. No flat or gradient background, no purple.
 Lighting: soft key light on my face, subtle warm rim light, realistic shadows, slight vignette.
 Keep 60 px safe margins. No other text, no logos, no extra numbers.
 Negative: distorted face, changed identity, extra fingers, warped phone, unreadable text, cluttered layout, fake brand logos, cartoon style.`,
@@ -1046,9 +1047,9 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
     note: "Page à créer avant de publier, à partir des classements du 23 nov. (~/Projects/reports/2026-11-23-apps-ennuyeuses/charts) : garder les apps de métier, de passion et de galère, enlever les grandes marques, faire la recherche App Store de chaque niche (nombre d'apps, combien sous 20 avis), relever les prix et les avis à 1 et 2 étoiles de l'app qui domine. Annoncé face caméra après la partie 3 (la première grosse valeur), rappelé à la fin.",
   },
   plan: [
-    "Le spectateur a vu, preuves à l'appui, que des apps pour camionneurs, chasseurs, crocheteuses, parents séparés ou gens qui doivent envoyer un fax sont parmi celles qui rapportent le plus aux États-Unis.",
+    "Le spectateur a vu, preuves à l'appui, que des apps pour camionneurs, chasseurs, crocheteuses, parents séparés ou gens qui attendent leur carte verte sont parmi celles qui rapportent le plus aux États-Unis.",
     "Il sait pourquoi elles rapportent : un métier (l'app fait gagner de l'argent), une passion (on dépense déjà pour elle), une galère (on paie pour qu'elle s'arrête).",
-    "Il a vu des chiffres en dollars qui tiennent debout, avec leur source : plus de 10 millions par an pour TalkingParents, 3 millions pour Trucker Path dès 2019, 2,4 millions par mois pour les apps de fax.",
+    "Il a vu des chiffres en dollars qui tiennent debout, avec leur source : plus de 10 millions par an pour TalkingParents, 3 millions pour Trucker Path dès 2019, 11 millions par mois pour les apps de télécommande.",
     "Il comprend pourquoi personne n'en parle.",
     "Il sait que la niche ne suffit pas : dans chaque niche, des dizaines d'apps n'ont presque aucun avis.",
     "Il a vu ce qui fait gagner : répondre à la vraie question (« combien de piquets », pas « mesurer un terrain ») et apporter quelque chose de plus que les copies, pas un plus beau design.",
@@ -1077,7 +1078,7 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
           say: `Chez les utilitaires, il y a une app pour suivre son dossier d'immigration. Et une app qui calcule combien de piquets il faut pour une clôture. Elle est sortie il y a huit semaines, et elle est publiée au nom d'une seule personne.`,
         },
         {
-          show: `Un mur d'icônes se remplit : une vingtaine d'apps ennuyeuses des classements (camion, cerf, pelote de laine, fax, télécommande, puits de pétrole). Au centre : « PERSONNE N'EN PARLE ».`,
+          show: `Un mur d'icônes se remplit : une vingtaine d'apps ennuyeuses des classements (camion, cerf, pelote de laine, calculatrice de chantier, télécommande, puits de pétrole). Au centre : « PERSONNE N'EN PARLE ».`,
           say: `Pendant que tout le monde essaie de créer le prochain ChatGPT, ces apps ennuyeuses rapportent des millions, et personne n'en parle. Dans cette vidéo, je vais te montrer lesquelles, pourquoi elles marchent, pourquoi la plupart des apps de la même niche n'ont presque aucun avis, et comment trouver la tienne.`,
         },
       ],
@@ -1196,8 +1197,6 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
         { label: "TalkingParents sur l'App Store", url: "https://apps.apple.com/us/app/talkingparents-co-parent-app/id1092220726" },
         { label: "Le fondateur de TalkingParents, Practical Founders Podcast (août 2025)", url: "https://practicalfounders.com/podcast/co-parenting-app-reaches-10m-arr-pure-bootstrap-growth-vince-mayfield/" },
         { label: "Case Tracker sur l'App Store", url: "https://apps.apple.com/us/app/case-tracker-for-uscis-nvc/id921827126" },
-        { label: "FAX from iPhone sur l'App Store", url: "https://apps.apple.com/us/app/fax-from-iphone-send-doc-app/id978931264" },
-        { label: "Appfigures, nov. 2021 (apps de fax, 2,4 M$/mois)", url: "https://appfigures.com/resources/this-week-in-apps/20211126" },
         { label: "SnoreLab, page presse (15 millions de téléchargements)", url: "https://www.snorelab.com/press-and-media/" },
         { label: "Appfigures, juin 2025 (télécommandes, 11 M$/mois)", url: "https://appfigures.com/resources/insights/20250613" },
         { label: "TV Remote sur l'App Store (abonnement à la semaine)", url: "https://apps.apple.com/us/app/tv-remote-universal-control/id1539090879" },
@@ -1218,10 +1217,6 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
           say: `Case Tracker sert à suivre son dossier d'immigration américain : la carte verte, le visa, la nationalité. Quand toute ta vie dépend d'un dossier, tu regardes où il en est tous les jours. L'app dit avoir plus de 2 millions d'utilisateurs.`,
         },
         {
-          show: `La fiche de FAX from iPhone : « 8e · Business », « 380 529 avis ». Puis le graphique d'Appfigures sur les apps de fax.`,
-          say: `Et la galère la plus improbable : le fax. Aux États-Unis, des administrations, des cabinets médicaux et des avocats en demandent encore. Personne n'a de fax chez soi, alors on télécharge une app. FAX from iPhone est 8e des apps Business qui rapportent le plus. Et d'après Appfigures, en octobre 2021, les apps de fax faisaient déjà 2,4 millions de dollars par mois, rien qu'aux États-Unis.`,
-        },
-        {
           show: `SnoreLab : « 4e · Médical », l'enregistrement d'une nuit avec les pics de ronflement.`,
           say: `SnoreLab, elle, enregistre tes ronflements pendant la nuit et te montre à quels moments tu ronfles. Elle a été créée par un développeur qui avait appris à coder tout seul. Elle est 4e des apps médicales qui rapportent le plus aux États-Unis, et elle a dépassé les 15 millions de téléchargements.`,
         },
@@ -1234,13 +1229,13 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
           say: `Attention quand même : beaucoup de ces apps vivent d'abonnements à la semaine. Celle-là coûte jusqu'à 7 dollars par semaine pour une télécommande. Je ne te conseille pas de copier ça : les gens se sentent piégés, ils annulent et ils laissent une mauvaise note. Copie la galère, pas le piège.`,
         },
         {
-          show: `Les quatre fiches des galères empilées, chacune avec son rang : TalkingParents, Case Tracker, FAX from iPhone, SnoreLab.`,
+          show: `Les quatre fiches des galères empilées, chacune avec son rang : TalkingParents, Case Tracker, SnoreLab, TV Remote.`,
           say: `La leçon : quand un problème te fait peur, t'empêche de dormir ou bloque ta vie, tu ne compares pas les prix. Tu paies pour qu'il disparaisse.`,
         },
       ],
     },
     {
-      time: "9:40",
+      time: "9:10",
       title: "Le cadeau",
       mode: "visage",
       beats: [
@@ -1251,18 +1246,18 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
       ],
     },
     {
-      time: "10:05",
+      time: "9:35",
       title: "Pourquoi personne n'en parle",
       beats: [
         { say: `Tu te demandes peut-être pourquoi personne n'en parle. Il y a trois raisons.` },
         {
-          show: `Le mur d'icônes de l'intro revient, un chiffre « 1 », « 2 », « 3 » en pastille bleue à chaque raison. Au « trois », le mot « fax » se tape dans la recherche de l'App Store et les apps de fax apparaissent.`,
-          say: `Un : leurs créateurs n'ont aucun intérêt à le dire. Chaque vidéo sur leur app ferait venir des concurrents. Deux : elles ne font pas rêver. Une app de fax, ça ne fait pas de vues sur YouTube. Trois : elles n'ont pas besoin qu'on parle d'elles. Quand tu dois envoyer un fax, tu tapes « fax » dans l'App Store, et tu télécharges la première qui sort.`,
+          show: `Le mur d'icônes de l'intro revient, un chiffre « 1 », « 2 », « 3 » en pastille bleue à chaque raison. Au « trois », le mot « snore » se tape dans la recherche de l'App Store et SnoreLab apparaît en tête des résultats.`,
+          say: `Un : leurs créateurs n'ont aucun intérêt à le dire. Chaque vidéo sur leur app ferait venir des concurrents. Deux : elles ne font pas rêver. Une calculatrice pour charpentiers, ça ne fait pas de vues sur YouTube. Trois : elles n'ont pas besoin qu'on parle d'elles. Quand quelqu'un te dit que tu ronfles, tu ne cherches pas une vidéo : tu tapes ton problème dans l'App Store, et tu télécharges une des premières apps qui sortent.`,
         },
       ],
     },
     {
-      time: "10:45",
+      time: "10:15",
       title: "Partie 4 : ce qui floppe, la niche ne suffit pas",
       links: [
         { label: "AreaMap sur l'App Store (261 avis, 53e)", url: "https://apps.apple.com/us/app/areamap-measure-land-acres/id6816359797" },
@@ -1280,8 +1275,8 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
           say: `J'ai tapé « crochet » dans l'App Store américain. Il y a 84 apps qui ont « crochet » dans leur nom. YarnPal a plus de 35 000 avis. Et 49 d'entre elles en ont moins de 20.`,
         },
         {
-          show: `Même chose, en deux lignes : « fax · 86 apps · 34 sous 20 avis », « mesurer un terrain · 93 apps · 66 sous 20 avis ».`,
-          say: `C'est pareil partout. Pour le fax, 34 apps sur 86 ont moins de 20 avis. Pour mesurer un terrain, 66 sur 93. Dans chaque niche ennuyeuse, il y a une poignée d'apps qui prennent presque tout, et des dizaines qui n'ont presque rien.`,
+          show: `Même chose, en deux lignes : « pièces de monnaie · 91 apps · 44 sous 20 avis », « mesurer un terrain · 93 apps · 66 sous 20 avis ».`,
+          say: `C'est pareil partout. Pour reconnaître des pièces de monnaie, 44 apps sur 91 ont moins de 20 avis. Pour mesurer un terrain, 66 sur 93. Dans chaque niche ennuyeuse, il y a une poignée d'apps qui prennent presque tout, et des dizaines qui n'ont presque rien.`,
         },
         {
           show: `Les captures des apps de mesure les plus anciennes, côte à côte : « GPS Field Area », « Measure Routes », « Pro mode: cut hole », « Flexible Export Formats ». Leurs avis : 13 258 et 10 262.`,
@@ -1321,7 +1316,7 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
       ],
     },
     {
-      time: "14:05",
+      time: "13:35",
       title: "Partie 5 : trouver ta niche ennuyeuse",
       beats: [
         partCard("PARTIE 5 · TROUVER LA TIENNE"),
@@ -1349,7 +1344,7 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
       ],
     },
     {
-      time: "16:15",
+      time: "15:45",
       title: "Récap et fin",
       mode: "visage",
       beats: [
@@ -1372,7 +1367,7 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
 📞 BESOIN D'UN ACCOMPAGNEMENT ?
 Réserve ton appel stratégique personnalisé de 30 mins avec un expert APP MASTERY : https://www.jeremypitault.com/rdv?${UTM_D}
 
-Un GPS pour camionneurs, une météo pour chasseurs de cerfs, une app de crochet classée devant Badoo, une messagerie pour parents séparés à plus de 10 millions de dollars par an, et des apps de fax qui rapportent des millions. J'ai relevé le classement des apps qui rapportent le plus aux États-Unis, catégorie par catégorie : les plus ennuyeuses sont parmi celles qui rapportent le plus. Je te montre pourquoi elles marchent, pourquoi la plupart des apps de la même niche n'ont presque aucun avis, et comment trouver la tienne.
+Un GPS pour camionneurs, une météo pour chasseurs de cerfs, une app de crochet classée devant Badoo, une messagerie pour parents séparés à plus de 10 millions de dollars par an, et des apps de télécommande qui font 11 millions de dollars par mois. J'ai relevé le classement des apps qui rapportent le plus aux États-Unis, catégorie par catégorie : les plus ennuyeuses sont parmi celles qui rapportent le plus. Je te montre pourquoi elles marchent, pourquoi la plupart des apps de la même niche n'ont presque aucun avis, et comment trouver la tienne.
 
 👉 Dis-moi en commentaire l'app la plus ennuyeuse pour laquelle tu paies.
 
@@ -1380,18 +1375,18 @@ Un GPS pour camionneurs, une météo pour chasseurs de cerfs, une app de crochet
 2:05 Les apps des métiers
 4:30 Les apps des passions
 6:50 Les apps des galères
-10:05 Pourquoi personne n'en parle
-10:45 Ce qui floppe
-14:05 Trouver ta niche
-16:15 Récap
+9:35 Pourquoi personne n'en parle
+10:15 Ce qui floppe
+13:35 Trouver ta niche
+15:45 Récap
 
-Sources : classement des apps qui rapportent le plus sur l'App Store américain, relevé le 23/11/2026 ; TalkingParents (Practical Founders Podcast, août 2025) ; Trucker Path (FreightWaves, oct. 2020) ; apps de fax, de télécommande et de reconnaissance de pièces (estimations Appfigures, 2021 et 2025).
+Sources : classement des apps qui rapportent le plus sur l'App Store américain, relevé le 23/11/2026 ; TalkingParents (Practical Founders Podcast, août 2025) ; Trucker Path (FreightWaves, oct. 2020) ; apps de télécommande et de reconnaissance de pièces (estimations Appfigures, 2025).
 
 #applicationmobile #idéeapp #créeruneapp #appmobile #appstore #entrepreneur #businessenligne`,
   shorts: [
     "« Une app de crochet classée devant Badoo » (partie 2, 30 s).",
     "« Personne ne veut mesurer un terrain » : les captures d'AreaMap contre les autres (partie 4, 45 s).",
-    "« Les apps de fax rapportent des millions » (partie 3, 30 s).",
+    "« Une messagerie pour parents séparés : plus de 10 millions de dollars par an » (partie 3, 30 s).",
     "« La plus belle des copies : 1 seul avis » (partie 4, 35 s).",
   ],
   prepare: [
