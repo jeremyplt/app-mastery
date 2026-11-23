@@ -2,7 +2,7 @@
 # Comptabilité automatique de SDG STUDIO sur le serveur Harness. Un seul passage à
 # la fois. Les secrets restent dans le coffre et ne sont donnés qu'à ce processus ;
 # l'accès à Claude n'est transmis qu'au programme claude, lancé sans aucun outil.
-#   scripts/compta/run.sh passage | apercu | etat
+#   scripts/compta/run.sh passage | apercu | etat | manquantes | joindre <dépense> <fichier>
 set -euo pipefail
 cd "$(dirname "$0")/../.."
 
