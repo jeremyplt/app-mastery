@@ -7,6 +7,7 @@ Vidéos regardées image par image le 4 nov. 2026. Chiffres relevés dans la rec
 ### Le piège « je te jure » (Cal AI)
 - **Références :** cookie caché dans le sandwich, [10,9 M, 9 s](https://www.instagram.com/p/DM8lXAYJG_O/) ; chocolat caché, [7,3 M, 15 s](https://www.instagram.com/p/DJVVEyhOfpR/) ; chocolat ajouté après le scan, [4,5 M, 15 s](https://www.instagram.com/p/DJ1mr0jIpmD/).
 - **Mécanique :** une phrase blanche au milieu (« Cal AI est précise, je te jure »). Un piège. Puis l'écran coupé, sur fond noir, avec juste deux mots dessous. Une scène, un piège, un résultat. Montre un visage dans l'original, mais se filme aux mains.
+- **Attention (vu le 21 nov. 2026) :** ces trois vidéos se moquent de Cal AI : le scan ne voit pas le cookie, il donne le même résultat avec et sans (« stop kidding yourselves with Cal ai », « Just track it yourself… PLEASE! »). Ce qui fait les vues, c'est la mécanique : quelqu'un jure quelque chose, et l'écran prouve le contraire. Dans une transposition, c'est l'app de l'élève qui apporte la preuve, et le dire tel quel dans le document.
 - **Pour qui :** apps où quelqu'un peut tricher, ou qui vérifient quelque chose.
 - **Exemple :** « Papa, j'ai mis la table, je te jure. » L'écran coupé **en haut et en bas** (Jeremy préfère, on voit mieux) : CE QU'IL DIT / CE QUE JE VOIS, puis À REFAIRE / 10 MIN PLUS TARD. Décliner : dents « brossées » avec la brosse sèche, sac « prêt » sans cahiers.
 
@@ -25,6 +26,7 @@ Vidéos regardées image par image le 4 nov. 2026. Chiffres relevés dans la rec
 - **Référence :** [4,9 M, sans visage, 45 s](https://www.tiktok.com/@kittyweight/video/7567016921816714526).
 - **Mécanique :** fond blanc, titre noir écrit à la main, un mot en rouge, chat détouré. Un mème par phrase, un seul mot à l'écran, voix qui raconte. « ÉTAPE 4 : » sur fond blanc, l'app tenue par des pattes de chat. Aucun tournage. Très bon pour un élève qui a déjà sa voix.
 - **En français (vérifié le 12 nov. 2026) :** [Minou explique](https://www.tiktok.com/@minou.explique), 143 000 vues de médiane sur 60 vidéos, santé comprise (TDAH 1,5 M, caféine 1,1 M, gueule de bois 733 000) ; [Koan](https://www.tiktok.com/@koan_le_lapin/video/7571033582332923158), les règles, 1 M. Fond blanc froissé, petite phrase noire en haut, titre en grosses lettres jaunes bordées de noir, voix off qui raconte une histoire du chat, fin « AIMEZ, PARTAGEZ ». Ces comptes n'ont pas d'app : on garde leur histoire et on finit comme Kitty (l'app tenue par des pattes, puis « Minou ne garde pas le secret » et la bannière App Store).
+- **Ne pas reprendre ce qui vient de la perte de poids (Jeremy, 18 nov. 2026) :** Cédric ouvrait toutes ses vidéos par le petit chat rond de Kitty qui devient maigre. Chaque chat, sa position, ce qu'il dit et le moment où il pleure doivent coller à l'histoire de l'app, et les chats changent d'une vidéo à l'autre.
 - **Validé par Jeremy pour Pharma Stock (12 nov. 2026)**, envoyé à Kevin : « La fièvre à 3 h du matin, expliquée par Minou ». Bon choix quand l'élève ne peut rien montrer (ni produit, ni nom, ni code, ni visage).
 
 ### Plusieurs types de personnes, à la même heure
@@ -32,8 +34,12 @@ Vidéos regardées image par image le 4 nov. 2026. Chiffres relevés dans la rec
 - **Mécanique :** trois lignes, un titre en couleur (vert, jaune, rouge) avec l'heure en blanc dessous. Aucune autre phrase. On se demande lequel on est.
 
 ### On jette l'ancienne méthode (Hearth)
+- **Rejeté pour Family Quest (Jeremy, 18 nov. 2026) :** « notre produit principal c'est pas le tableau ». Le produit est l'app mobile, pas l'écran mural. Ne le proposer qu'à une app dont le produit principal est l'écran ou l'objet qui remplace l'ancienne méthode.
 - **Références :** Hearth, [29,9 M, 269 164 likes, 10 s](https://www.instagram.com/reel/DESc1ZGOzxU/) ; Skylight, [2,1 M, 42 600 likes](https://www.tiktok.com/@myskylight/video/7356736324960816426).
 - **Mécanique :** petit texte blanc « Out with the OLD », on arrache le vieux tableau, « In with the NEW », l'écran arrive, liste en boîtes noires à la fin. Avant et après compris en une seconde. Il faut avoir l'ancienne méthode sous la main : papier, post-it, carnet.
+
+### Compilation « passer de ça… à ça » (idée de Jeremy, 18 nov. 2026)
+Pas de vidéo modèle mesurée : c'est une idée de Jeremy, à présenter comme une variante, pas comme un format viral. « Voici comment j'ai fait pour passer de ça… » sur 2 ou 3 scènes de problème, puis « … à ça » sur 2 ou 3 scènes de résultat, puis comment avec l'app. Se monte avec les prises déjà tournées. Pour une app payée par le parent et utilisée par l'enfant, il faut comprendre que ça parle d'enfants qui ne font pas ce qu'on attend d'eux, pas d'une maison mal rangée : sinon, avant et après, ça ressemble à une vidéo de rangement. Une petite phrase sur chaque scène parle de l'enfant (« asked him 4 times » sur la table vide, « did it on his own » sur la table mise).
 
 ## Formats sans aucun visage, très simples à refaire (Phil'O, 5 nov. 2026)
 Vérifiés sur toute la vidéo (14 images par vidéo). Son non écouté : les transcriptions ne montrent aucune voix off.
@@ -76,6 +82,13 @@ Repérées le 4 nov. 2026 pour Pharma Stock. **Proposées à Jeremy, pas encore 
 | La situation de nuit (POV) | [« midnight munchies », mains seules, 1,1 M, 22 200 likes, 9 s](https://www.tiktok.com/@trymunchies/video/7627709504892701983). Scan non vérifié dans cette app. | POV : il est 3 h du mat, t'as de la fièvre et tu cherches le Doliprane. |
 
 Le piège « je te jure » (plus haut) s'applique aussi : « Ma mère me jure que ce sirop est encore bon ».
+
+## Apps de sport à rangs (Elevate, 21 nov. 2026)
+Chiffres relevés le 21 nov. 2026. Document : https://claude.ai/artifact/Kf3MStEW1J7YDfwax4gnjx.
+- **Le test avec un truc de fou, puis le rang.** @josemtz02 fait du développé couché sans les mains, avec les pecs, monte le poids plan par plan (« 10 lbs each side? Yes ✅ »), puis entre son score dans Liftoff, téléphone en main : [3 M](https://www.tiktok.com/@josemtz02/video/7671344257151536398), [2,7 M](https://www.tiktok.com/@josemtz02/video/7704805438008708366), 16 vidéos du même truc, médiane 144 000 vues. @bjarnson_fitness : « How many pull-ups can I do? », puis « ONLY 6 PULL-UPS 😑 » pendant un drapeau ([52 900](https://www.tiktok.com/@bjarnson_fitness/video/7654599638133001486)). **Le moment qui étonne est obligatoire** (voir `principes.md`, Transposer, point 8). Une personne comme lest (comme les [tractions en couple, 14,9 M, sans app](https://www.tiktok.com/@lukejyates/video/7621675964606500110)) est **rejetée** pour Elevate : « un pote sur son dos sérieux c'est nul, il va jamais vouloir faire ça ». Gardé à la place : son propre compteur, mieux monté, avec en option un truc qui étonne dès la première image, faisable seul (lest farfelu visible, endroit inattendu, tenue décalée ; idées non mesurées, et [KingBach, 73 kg de disques visibles dès le début, 2,5 M](https://www.tiktok.com/@kingbach/video/7501888935606439214)).
+- **« Je te jure », puis la carte des muscles.** Transposition du format Cal AI (plus haut) : « Je rate jamais un legday, je te jure. », puis l'écran coupé CE QUE JE DIS / CE QUE L'APP VOIT, avec la carte des muscles de l'app et les jambes en Bronze. Une autre phrase et un autre muscle chaque jour. Proposé le 21 nov. 2026, pas encore validé.
+- **La check-list, puis le rang (validé par Jeremy).** Un conseil par plan en grosses lettres blanches penchées (« CABLE CRUNCH CHECK LIST ✅ », « TUCK HIPS IN »), puis le rang dans l'app, téléphone en main (« I USE LIFTOFF TO SEE MY RANK ») : [1,8 M, 17 s](https://www.tiktok.com/@bjarnson_fitness/video/7699857886675062030), 12 vidéos Liftoff, médiane 49 450 vues. Le spectateur apprend quelque chose même sans l'app.
+- **Preuve de la répétition :** Push Up Arena, 147 vidéos du même jeu de pompes depuis le 9 mai 2026 ; fin mai, entre 1 286 et 7 870 vues, puis [912 600 et 1,4 M](https://www.tiktok.com/@pushuparena.app) ; 18 vidéos au-dessus du million. L'app filme et compte les pompes elle-même : format non transposable sans cette fonction.
 
 ## Histoire de créateur (compte principal, plus long)
 En voix off sur des rushs du lieu de vie et de l'app, une image toutes les 2 à 3 s, 30 à 40 s. Structure : le problème vécu, le soir où il s'y met, la règle de l'app, le résultat, le nom, « je suis tout seul dessus ». Rappeler à l'élève : une histoire vraie et imparfaite vaut mieux qu'une histoire bien écrite. Il change tout ce qui n'est pas vrai chez lui. Voir aussi le carrousel Juno.

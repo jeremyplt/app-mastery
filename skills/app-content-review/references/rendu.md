@@ -16,7 +16,16 @@ Le document est simple : une idée par paragraphe, beaucoup d'images, pas de jar
 9. **Ton histoire de créateur** : carrousel et voix off, pour le compte principal.
 10. **Bonus facultatif** : ce que l'élève n'a pas forcément envie de faire.
 11. **Ta liste avant de publier une vidéo courte**.
-12. **Ta semaine** : une heure de tournage, 6 vidéos en changeant la première phrase, une par jour, 2 carrousels, puis refaire celle qui amène le plus de téléchargements.
+12. **Ta semaine** : une heure de tournage avec 3 ou 4 prises de chaque plan, 6 vidéos qui changent chacune le premier plan, des plans du milieu et la première phrase (jamais la phrase seule), une par jour, 2 carrousels, puis de nouvelles vidéos proches de celle qui amène le plus de téléchargements, sans jamais la republier.
+
+## Un retour de suivi
+Quand l'élève a déjà reçu un premier document, le deuxième donne **la prochaine directive**, pas un nouvel audit (Jeremy, 18 nov. 2026 : « qu'est-ce qu'on lui donne comme prochaine directive ? »).
+- Avant de relever un manque, vérifier ce que Jeremy lui a demandé (mémoire, WhatsApp) et ce que disait le premier document. Un format pas testé parce que Jeremy a demandé d'en garder un ou deux n'est pas un défaut.
+- Court, sinon il n'est pas lu. Intro de deux phrases, un seul constat chiffré avec ses images, puis **la règle** dans un encadré.
+- Des étapes numérotées, chacune avec son moment (« Aujourd'hui », « Chaque jour », « Dans 7 jours »), et des exemples à recopier. Ne pas répéter ce que l'élève sait déjà, comme refaire ce qui marche ou suivre ses vues (Jeremy : « Pas besoin, il le sait déjà »), et pas de tableau de suivi à remplir.
+- Les accroches en bas, comme liste où piocher. Les fiches de format restent dans le premier document, avec un lien.
+- Quand ses vidéos sonnent encore IA ou génériques (script sans retouches, loin de ce qu'on voit sur les réseaux), finir par un encadré : quand il a du temps libre, regarder la banque de contenu (GIGA BANQUE), dans toutes les niches, pour voir comment les vidéos accrochent, passent d'un plan à l'autre et montrent une app sans faire de pub.
+- Exemple : https://claude.ai/artifact/PuR4p6SFE8vN5nDsjtWURY (Family Quest).
 
 ## Une fiche de format
 1. **La vidéo qui marche** : 3 images de la vraie vidéo, ce qu'elle fait réellement, les liens avec vues et durée.
