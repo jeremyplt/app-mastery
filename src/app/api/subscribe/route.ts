@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { validatePhone } from "@/lib/phone-validation";
 import { sendMetaEvent, getClientInfo } from "@/lib/meta-capi";
 import { getAdminClient } from "@/lib/supabase";
-import { appelDecouverte, guide27Regles, guide32LeconsVideos, guide100ContenusViraux, metabase, planAction, promptContenuViral, vslAccess, type BuiltEmail } from "@/lib/emails/transactional";
+import { appelDecouverte, guide27Regles, guide32LeconsVideos, guide100ContenusViraux, guideNichesEnnuyeuses, metabase, planAction, promptContenuViral, vslAccess, type BuiltEmail } from "@/lib/emails/transactional";
 import { startSequenceC } from "@/lib/sequence-c";
 import { CRM_GUIDE_SLUGS } from "@/lib/guides";
 import { cleanUtm } from "@/lib/utm";
@@ -287,6 +287,8 @@ export async function POST(req: NextRequest) {
       await sendBuilt(BREVO_API_KEY, email, guide32LeconsVideos(firstName));
     } else if (source === "100-contenus-viraux") {
       await sendBuilt(BREVO_API_KEY, email, guide100ContenusViraux(firstName));
+    } else if (source === "niches-ennuyeuses") {
+      await sendBuilt(BREVO_API_KEY, email, guideNichesEnnuyeuses(firstName));
     } else {
       const config = source ? SOURCE_CONFIG[source] : undefined;
       if (config) {

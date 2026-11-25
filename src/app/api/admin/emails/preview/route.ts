@@ -14,6 +14,7 @@ import {
   promptContenuViral,
   guide32LeconsVideos,
   guide100ContenusViraux,
+  guideNichesEnnuyeuses,
   vslAccess,
   type BuiltEmail,
 } from "@/lib/emails/transactional";
@@ -78,6 +79,8 @@ function buildFromCode(tag: string): BuiltEmail | null {
       return guide32LeconsVideos(SAMPLE_FIRST_NAME);
     case "100-contenus-viraux":
       return guide100ContenusViraux(SAMPLE_FIRST_NAME);
+    case "niches-ennuyeuses":
+      return guideNichesEnnuyeuses(SAMPLE_FIRST_NAME);
     case "candidature-qualifie":
       return candidatureProspect(SAMPLE_FIRST_NAME, "thomas@exemple.fr", true);
     case "candidature-non-qualifie":

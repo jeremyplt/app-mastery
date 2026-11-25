@@ -3,7 +3,7 @@ import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { test } from "node:test";
 import { CRM_GUIDE_LABELS, CRM_GUIDE_SLUGS, getGuide, guides } from "../guides";
-import { guide27Regles, guide32LeconsVideos, guide100ContenusViraux, promptContenuViral } from "../emails/transactional";
+import { guide27Regles, guide32LeconsVideos, guide100ContenusViraux, guideNichesEnnuyeuses, promptContenuViral } from "../emails/transactional";
 
 const PUBLIC = join(__dirname, "..", "..", "..", "public");
 
@@ -33,6 +33,7 @@ test("les emails de livraison pointent vers le même PDF que la page du guide", 
     { slug: "prompt-contenu-viral", email: promptContenuViral("Marie") },
     { slug: "32-lecons-videos", email: guide32LeconsVideos("Marie") },
     { slug: "100-contenus-viraux", email: guide100ContenusViraux("Marie") },
+    { slug: "niches-ennuyeuses", email: guideNichesEnnuyeuses("Marie") },
   ];
   for (const { slug, email } of cases) {
     const guide = getGuide(slug)!;
@@ -58,6 +59,20 @@ test("guide 100 contenus viraux : slug de la description YouTube, CRM, email pro
   const email = guide100ContenusViraux("Marie");
   assert.ok(email.html.includes("Marie"));
   assert.ok(email.html.includes("utm_campaign=100-contenus-viraux"));
+  assert.ok(!email.html.includes("—"));
+  assert.ok(!/formation/i.test(email.html));
+  assert.ok(!/€/.test(email.html), "jamais de prix dans les emails du funnel");
+});
+
+test("guide 50 niches ennuyeuses : slug de la description YouTube, CRM, email propre", () => {
+  const guide = getGuide("niches-ennuyeuses");
+  assert.ok(guide, "le guide doit exister (lien de la description de la vidéo D)");
+  assert.equal(guide.crm, true);
+  assert.ok(CRM_GUIDE_SLUGS.includes("niches-ennuyeuses"));
+  assert.equal(guide.brevoListId, 23);
+  const email = guideNichesEnnuyeuses("Marie");
+  assert.ok(email.html.includes("Marie"));
+  assert.ok(email.html.includes("utm_campaign=niches-ennuyeuses"));
   assert.ok(!email.html.includes("—"));
   assert.ok(!/formation/i.test(email.html));
   assert.ok(!/€/.test(email.html), "jamais de prix dans les emails du funnel");

@@ -254,6 +254,33 @@ export function guide100ContenusViraux(firstName?: string): BuiltEmail {
   return { subject: "Tes 100 contenus sont prêts", html, tag: "100-contenus-viraux" };
 }
 
+// Livraison des 50 niches ennuyeuses qui rapportent (cadeau de la vidéo
+// « Ces apps ennuyeuses rapportent des millions (et personne n'en parle) »).
+export function guideNichesEnnuyeuses(firstName?: string): BuiltEmail {
+  const html = `
+<p>${greeting(firstName)}</p>
+
+<p>Merci d'avoir demandé les 50 niches. Voici ton PDF :</p>
+
+<p><a href="https://www.jeremypitault.com/downloads/niches-ennuyeuses-k7d3x9.pdf">Télécharger les 50 niches ennuyeuses</a></p>
+
+<p>Pour chaque niche, tu as l'app qui domine, ce qu'elle coûte, son nombre d'avis, combien d'apps de la même niche n'ont presque rien, et ce que ses utilisateurs lui reprochent. Tout vient du classement des apps qui rapportent le plus aux États-Unis, relevé fin novembre 2026.</p>
+
+<p>Ne cherche pas la niche parfaite dans la liste. Commence par celles que tu connais de l'intérieur, parce que tu y travailles ou parce que c'est ta passion. Puis lis bien ce que les utilisateurs reprochent à l'app qui domine : c'est souvent là qu'il reste de la place pour une nouvelle app.</p>
+
+<p>Si tu veux que je t'aide à choisir ta niche et à construire ton app, le premier pas, c'est un appel de 30 minutes avec mon équipe :</p>
+
+<p><a href="https://www.jeremypitault.com/appel?utm_source=email&utm_medium=email&utm_campaign=niches-ennuyeuses">Réserver mon appel</a></p>
+
+<p>Demain, je te raconte d'où vient Shinobi Japanese, et pourquoi elle a rapporté de l'argent dès le premier mois alors que des centaines d'apps aussi bien codées dorment sur l'App Store.</p>
+
+<p>À demain,<br>Jeremy</p>
+
+<p>P.S. Si une niche de la liste te parle, réponds directement à cet email pour me dire laquelle. Je lis tout.</p>
+`;
+  return { subject: "Tes 50 niches sont prêtes", html, tag: "niches-ennuyeuses" };
+}
+
 // Candidature : réponse au prospect selon la qualification.
 export function candidatureProspect(firstName: string, email: string, qualified: boolean): BuiltEmail {
   const html = qualified

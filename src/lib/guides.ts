@@ -120,6 +120,30 @@ export const guides: Record<string, Guide> = {
     crm: true,
     shortLabel: "100 contenus viraux",
   },
+  "niches-ennuyeuses": {
+    slug: "niches-ennuyeuses",
+    title: "Récupère la liste des",
+    highlight: "50 niches ennuyeuses qui rapportent",
+    subtitle:
+      "Des apps auxquelles personne ne pense, relevées dans le classement des apps qui rapportent le plus aux États-Unis. Pour chaque niche : l'app qui domine, ce qu'elle coûte, son nombre d'avis, combien d'apps de la même niche n'ont presque rien, et ce que ses utilisateurs lui reprochent.",
+    bullets: [
+      "50 niches rangées en trois familles : les métiers, les passions et les galères",
+      "Pour chacune, l'app qui domine : son rang dans le classement, son prix et son nombre d'avis",
+      "Ce que ses utilisateurs lui reprochent, et la place qu'il reste pour une nouvelle app",
+    ],
+    ctaText: "Recevoir les 50 niches en PDF",
+    merciTitle: "Tes 50 niches sont",
+    merciHighlight: "en route.",
+    merciDescription:
+      "Télécharge le PDF, garde les niches que tu connais de l'intérieur, et lis ce que leurs utilisateurs reprochent à l'app qui domine.",
+    downloadLabel: "Télécharger les 50 niches",
+    downloadUrl: "/downloads/niches-ennuyeuses-k7d3x9.pdf",
+    brevoListId: 23,
+    previewImage: "/proof/niches-ennuyeuses-preview.jpg",
+    previewBadge: "PDF · 22 pages",
+    crm: true,
+    shortLabel: "50 niches ennuyeuses",
+  },
   "piscine-epitech": {
     slug: "piscine-epitech",
     title: "Récupère la",
