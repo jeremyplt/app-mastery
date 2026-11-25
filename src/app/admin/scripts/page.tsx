@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { getAdminRole } from "@/lib/admin";
 import { SCRIPTS } from "./scripts-data";
+import { SCRIPT_SKOOL_CHIFFRES } from "./skool-chiffres";
 import ScriptsView from "./ScriptsView";
 
 export const metadata = { title: "Scripts vidéo" };
@@ -18,5 +19,7 @@ export default async function ScriptsPage() {
   if (!role) redirect("/membres");
   if (role !== "owner") redirect("/admin/crm");
 
-  return <ScriptsView scripts={SCRIPTS} />;
+  // Les leçons Skool restent hors de SCRIPTS : l'email de sortie d'une vidéo
+  // YouTube (src/lib/video-email) cherche son script dans SCRIPTS.
+  return <ScriptsView scripts={[SCRIPT_SKOOL_CHIFFRES, ...SCRIPTS]} />;
 }

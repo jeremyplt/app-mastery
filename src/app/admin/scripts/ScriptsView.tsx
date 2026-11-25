@@ -13,6 +13,11 @@ const TABS: { id: Tab; label: string }[] = [
   { id: "prep", label: "Avant le tournage" },
 ];
 
+// Une leçon Skool n'a pas de miniature : l'onglet n'apparaît que s'il y en a une.
+function tabsFor(s: VideoScript) {
+  return TABS.filter((t) => t.id !== "packaging" || s.thumbnail);
+}
+
 function CopyButton({ text, label = "Copier" }: { text: string; label?: string }) {
   const [state, setState] = useState<"idle" | "ok" | "ko">("idle");
   return (
@@ -167,6 +172,7 @@ function ScriptTab({ s }: { s: VideoScript }) {
 }
 
 function PackagingTab({ s }: { s: VideoScript }) {
+  if (!s.thumbnail) return null;
   return (
     <div className="flex flex-col gap-4">
       <Card title="Titres">
@@ -208,23 +214,30 @@ function PackagingTab({ s }: { s: VideoScript }) {
 function DescriptionTab({ s }: { s: VideoScript }) {
   return (
     <div className="flex flex-col gap-4">
-      <Card title="Le cadeau">
-        <p className="font-bold">{s.gift.name}</p>
-        <p className="mt-1 font-medium text-[var(--fg2)]">{s.gift.note}</p>
-        <a href={s.gift.url} target="_blank" rel="noreferrer" className="mt-2 inline-block break-all font-bold text-[var(--accent)] hover:underline">
-          {s.gift.url}
-        </a>
-      </Card>
-      <Card title="Description YouTube" action={<CopyButton text={s.description} label="Copier la description" />}>
+      {s.gift && (
+        <Card title="Le cadeau">
+          <p className="font-bold">{s.gift.name}</p>
+          <p className="mt-1 font-medium text-[var(--fg2)]">{s.gift.note}</p>
+          <a href={s.gift.url} target="_blank" rel="noreferrer" className="mt-2 inline-block break-all font-bold text-[var(--accent)] hover:underline">
+            {s.gift.url}
+          </a>
+        </Card>
+      )}
+      <Card
+        title={s.kind === "skool" ? "Description de la leçon Skool" : "Description YouTube"}
+        action={<CopyButton text={s.description} label="Copier la description" />}
+      >
         <pre className="whitespace-pre-wrap break-words font-sans text-[15px] font-medium leading-relaxed">{s.description}</pre>
       </Card>
-      <Card title="Shorts à tirer de la vidéo">
-        <ol className="flex list-decimal flex-col gap-2 pl-5 font-medium">
-          {s.shorts.map((x) => (
-            <li key={x}>{x}</li>
-          ))}
-        </ol>
-      </Card>
+      {s.shorts && s.shorts.length > 0 && (
+        <Card title="Shorts à tirer de la vidéo">
+          <ol className="flex list-decimal flex-col gap-2 pl-5 font-medium">
+            {s.shorts.map((x) => (
+              <li key={x}>{x}</li>
+            ))}
+          </ol>
+        </Card>
+      )}
     </div>
   );
 }
@@ -273,6 +286,8 @@ export default function ScriptsView({ scripts }: { scripts: VideoScript[] }) {
   );
   const [tab, setTab] = useState<Tab>("script");
   const current = scripts.find((s) => s.slug === hash) ?? scripts[0];
+  const tabs = current ? tabsFor(current) : TABS;
+  const activeTab = tabs.some((t) => t.id === tab) ? tab : "script";
 
   return (
     <div className="min-h-screen bg-[var(--bg)] text-[var(--fg)] antialiased">
@@ -281,7 +296,7 @@ export default function ScriptsView({ scripts }: { scripts: VideoScript[] }) {
         <div>
           <h1 className="text-[28px] font-bold tracking-tight">Scripts vidéo</h1>
           <p className="mt-2 max-w-2xl font-medium text-[var(--fg2)]">
-            Les scripts YouTube prêts à tourner, avec le titre, la miniature, la description et ce qu&apos;il faut préparer.
+            Les scripts prêts à tourner, pour YouTube et pour le Skool, avec la description et ce qu&apos;il faut préparer.
           </p>
         </div>
 
@@ -334,13 +349,13 @@ export default function ScriptsView({ scripts }: { scripts: VideoScript[] }) {
 
             <div className="sticky top-0 z-30 -mx-4 mt-6 bg-[var(--bg)] px-4 py-2 sm:-mx-5 sm:px-5">
               <div className="flex w-full gap-1 overflow-x-auto rounded-xl bg-[var(--field)] p-1 sm:w-fit">
-                {TABS.map((t) => (
+                {tabs.map((t) => (
                   <button
                     key={t.id}
                     type="button"
                     onClick={() => setTab(t.id)}
                     className={`whitespace-nowrap rounded-lg px-4 py-2 text-sm font-bold transition-colors ${
-                      tab === t.id ? "bg-[var(--group)] text-[var(--fg)] shadow-sm" : "text-[var(--fg2)] hover:text-[var(--fg)]"
+                      activeTab === t.id ? "bg-[var(--group)] text-[var(--fg)] shadow-sm" : "text-[var(--fg2)] hover:text-[var(--fg)]"
                     }`}
                   >
                     {t.label}
@@ -350,10 +365,10 @@ export default function ScriptsView({ scripts }: { scripts: VideoScript[] }) {
             </div>
 
             <div className="mt-4 pb-16">
-              {tab === "script" && <ScriptTab s={current} />}
-              {tab === "packaging" && <PackagingTab s={current} />}
-              {tab === "description" && <DescriptionTab s={current} />}
-              {tab === "prep" && <PrepTab s={current} />}
+              {activeTab === "script" && <ScriptTab s={current} />}
+              {activeTab === "packaging" && <PackagingTab s={current} />}
+              {activeTab === "description" && <DescriptionTab s={current} />}
+              {activeTab === "prep" && <PrepTab s={current} />}
             </div>
           </>
         )}

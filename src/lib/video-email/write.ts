@@ -74,7 +74,7 @@ export const WRITE_SCHEMA = {
 };
 
 export function scriptText(s: VideoScript, max = 24_000): string {
-  const lines = [`Titre prévu : ${s.title}`, `Cadeau : ${s.gift.name}`, "Ce que la vidéo doit tenir :", ...s.plan.map((p) => `- ${p}`), "", "Ce que Jeremy dit dans la vidéo :"];
+  const lines = [`Titre prévu : ${s.title}`, ...(s.gift ? [`Cadeau : ${s.gift.name}`] : []), "Ce que la vidéo doit tenir :", ...s.plan.map((p) => `- ${p}`), "", "Ce que Jeremy dit dans la vidéo :"];
   for (const section of s.sections) {
     lines.push(`## ${section.title}`);
     for (const b of section.beats) if (b.say) lines.push(b.say);

@@ -104,7 +104,7 @@ export async function prepareEmail(v: Upload, opts: { write?: typeof writeVideoE
   const campaign = videoCampaign(v.description);
   const script = (campaign && SCRIPTS.find((s) => videoCampaign(s.description) === campaign)) || matchScript(v.title, SCRIPTS);
   const pre = script ? PREWRITTEN[script.slug] : undefined;
-  const gift = findGift(v.description) ?? (script ? { url: script.gift.url.split("?")[0], line: script.gift.name } : null);
+  const gift = findGift(v.description) ?? (script?.gift ? { url: script.gift.url.split("?")[0], line: script.gift.name } : null);
   const tag = pre?.tag ?? videoTag(v);
   const email = pre ? pre.email : await (opts.write ?? writeVideoEmail)(v, gift, script, { localLogin: opts.localLogin, dernierEleve: opts.dernierEleve });
   const problems = checkEmail(email);

@@ -1,4 +1,4 @@
-// Scripts de vidéos YouTube, affichés dans /admin/scripts.
+// Scripts de vidéos YouTube et de leçons Skool, affichés dans /admin/scripts.
 // Les données vivent dans scripts-data.ts, lu côté serveur seulement : elles
 // ne partent au navigateur qu'une fois l'accès propriétaire vérifié.
 
@@ -18,6 +18,9 @@ export type ScriptSection = {
 
 export type VideoScript = {
   slug: string;
+  // « skool » pour une leçon du Skool : ni miniature, ni cadeau, ni Shorts, et la
+  // description est celle de la leçon. Absent pour une vidéo YouTube.
+  kind?: "skool";
   // Repère court affiché dans les onglets (« Vidéo A », « Vidéo B »).
   label: string;
   status: string;
@@ -27,13 +30,13 @@ export type VideoScript = {
   why: string;
   facts: { label: string; value: string }[];
   altTitles: { title: string; why: string }[];
-  thumbnail: { text: string; layout: string; variant: string; prompt: string };
-  gift: { name: string; url: string; note: string };
+  thumbnail?: { text: string; layout: string; variant: string; prompt: string };
+  gift?: { name: string; url: string; note: string };
   // Ce qui doit être vrai à la fin pour que le titre soit vrai.
   plan: string[];
   sections: ScriptSection[];
   description: string;
-  shorts: string[];
+  shorts?: string[];
   prepare: string[];
   checklist: { point: string; state: string }[];
 };
