@@ -9,97 +9,101 @@ import type { ScriptSection, VideoScript } from "./types";
 
 const UTM_A = "utm_source=youtube&utm_medium=video&utm_campaign=premieres-ventes-triche";
 
+// Vidéo A, réécrite le 23 nov. 2026 en pure valeur, comme la vidéo B : aucun élève,
+// aucune capture de revenus. Chiffres : recherche des flops du 18 nov. 2026
+// (~/Projects/reports/2026-11-18-flops/, tiktok.md et instagram-et-pubs.md).
+// La vidéo B dit quoi poster ; celle-ci dit comment passer de zéro à tes premières
+// ventes : qui viser, quoi copier, où mettre le nom, combien publier, quoi mesurer.
 const SCRIPT_A: VideoScript = {
   slug: "premieres-ventes-triche",
   label: "Vidéo A · Triche",
-  status: "À réécrire (construit sur des élèves)",
-  updatedAt: "12 nov. 2026",
+  status: "Prêt à tourner",
+  updatedAt: "23 nov. 2026",
   title: "Comment faire tes premières ventes sur ton app si vite que ça ressemble à de la triche",
-  why: `Le marketing est le blocage n°1 de tes acheteurs et la question n°1 de tes élèves (« combien de comptes, à quel rythme », 26 fois chez 7 élèves). La vidéo garde ce qui a le mieux vendu (la preuve d'élèves qui gagnent de l'argent sans pub) et la construit sur Florian et Elouan, pas sur Wassim.`,
+  why: `Le marketing est le blocage n°1 de ceux qui ont une app, et « combien de comptes, à quel rythme » est la question qu'on te pose le plus. Version du 23 nov. : même esprit que la vidéo B, qui a eu de bons retours. De la pure valeur, aucun élève, aucune capture de revenus. La vidéo B disait quoi poster ; celle-ci donne la méthode complète, de la première vidéo à la première vente, montrée avec de vraies vidéos d'apps.`,
   facts: [
-    { label: "Durée", value: "13 à 15 min" },
-    { label: "Style", value: "Semi-scripté : ouverture et transitions mot à mot, exemples racontés librement" },
-    { label: "Format", value: "« Comment obtenir X si vite que ça ressemble à de la triche » : méthode en 5 étapes, résultat montré à l'écran" },
+    { label: "Durée", value: "13 à 15 min (environ 2 100 mots de voix)" },
+    { label: "Style", value: "Semi-scripté face caméra : ouverture, plan et transitions mot à mot, les exemples peuvent se raconter plus librement. Les vidéos citées passent en plein écran pendant que tu parles" },
+    { label: "Format", value: "« Comment obtenir X si vite que ça ressemble à de la triche » : méthode en 6 étapes, chaque étape montrée avec une vraie vidéo d'app" },
     { label: "Demande", value: "8 vidéos à plus de 50 000 vues sur « faire connaître son app » (plancher 50 à 80 k, plafond environ 300 k), aucune en français. Le format « triche » : de 468 000 à 7,4 M de vues selon les niches, 551 000 en français." },
-    { label: "Captures", value: "3 au maximum : RevenueCat de Florian, d'Elouan, de Shinobi (octobre)" },
+    { label: "Matière", value: "Recherche du 18 nov. : 14 comptes officiels d'apps sur TikTok et 7 sur Instagram, plus de 100 vidéos regardées image par image, plus de 4 500 commentaires lus. Vues relevées le 18/11" },
+    { label: "Captures", value: "Aucune capture de revenus" },
     { label: "UTM", value: "premieres-ventes-triche" },
   ],
   altTitles: [
     {
       title: "Comment faire tes premières ventes sur ton app si vite que ça ressemble à de la triche",
-      why: "Recommandé. Ton public croit qu'une app met six mois à un an à rapporter et qu'il faut un budget pub. « Triche » promet un raccourci légitime, « ventes » met l'argent en premier.",
-    },
-    {
-      title: "1 793 $ en 28 jours sans pub : la méthode pour faire connaître ton app",
-      why: "Plus sobre, format « argent révélé ». Il répète la miniature, donc à garder pour un test A/B.",
+      why: "Recommandé. Ton public croit qu'une app met six mois à un an à rapporter et qu'il faut un budget pub. « Triche » promet un raccourci légitime (copier ce qui a déjà marché), « ventes » met l'argent en premier.",
     },
     {
       title: "Si je devais faire vendre une app en partant de zéro, je ferais exactement ça",
-      why: "Raccourci d'expert. Plus faible sur l'argent, donc en troisième.",
+      why: "Raccourci d'expert, colle bien à une vidéo sans preuve d'élèves. Plus faible sur l'argent, à garder pour un test A/B.",
+    },
+    {
+      title: "Cette app n'était même pas sortie : 9,4 millions de vues. La méthode pour vendre la tienne",
+      why: "Plus intrigant, construit sur l'ouverture Forméa. Il promet surtout des vues, donc en troisième.",
     },
   ],
   thumbnail: {
     text: "0 € DE PUB",
-    layout: `Bloc jaune en haut à gauche avec « 0 € DE PUB » en noir, très gros. En dessous, un iPhone tenu en main qui affiche la vraie tuile RevenueCat « Revenue $1,793 » de Florian (public/emails/florian-revenuecat-1793-v2.jpg, recadrée sur la tuile). Une flèche rouge part du bloc jaune vers le chiffre. Toi en gros plan à droite (40 à 50 % de la hauteur), grand sourire avec les dents, regard caméra. Bureau en bois sombre flou, lampe, bokeh. Jamais de fond uni ni violet.`,
-    variant: "Variante B : même composition avec la tuile « Revenue $1,384 » d'Elouan (public/emails/elouan-dashboard-1384-v1.jpg).",
-    prompt: `Image 1 is a YouTube thumbnail: recreate this thumbnail with the exact same layout and composition.
-Images 2 and 3 are photos of me: use my exact face, head shape, hairline, skin texture and proportions. Do not beautify, stylize or change my face.
-Image 4 is a real RevenueCat dashboard screenshot: place it, unchanged, as the screen of the iPhone.
-Image 5 is one of my validated thumbnails: copy its background and lighting style.
+    layout: `Bloc jaune en haut à gauche avec « 0 € DE PUB » en noir, très gros. En dessous, un iPhone tenu en main qui affiche une vidéo verticale de pilates (un ventre plat, texte « Pilates >>> ») avec un compteur « 9,4 M » et un petit badge « APP PAS SORTIE ». Une flèche rouge du bloc vers le compteur. Toi à droite en gros plan, l'air sincèrement étonné, regard caméra. Bureau en bois sombre flou, lampe, bokeh. La miniature pose la question (comment une app pas encore sortie fait 9,4 millions de vues sans pub), le titre y répond (la méthode, jusqu'aux ventes).`,
+    variant: "Variante B : bloc jaune « MÊME VIDÉO », deux téléphones côte à côte avec la même image, l'un affiche « 963 K », l'autre « 5 400 » en rouge. Toi à droite, l'air perplexe.",
+    prompt: `Images 1 and 2 are photos of me: use my exact face, head shape, hairline, skin texture and proportions. Do not beautify, stylize or change my face.
+Image 3 is one of my validated thumbnails: copy its background and lighting style.
 
 Layout: 16:9 YouTube thumbnail, 1920x1088.
 Top left: a bright yellow rectangular block with huge bold black sans-serif text "0 € DE PUB", perfectly legible, nothing else written.
-Left center, below the yellow block: an iPhone held in a hand, screen facing camera, showing the "Revenue $1,793" tile from image 4, sharp and readable. A thick red curved arrow goes from the yellow block to the revenue number.
-Right side: me, close-up from mid-chest up, head and shoulders filling about 45% of the frame height, big genuine smile showing teeth, looking straight at the camera, dark t-shirt.
-Background: a real blurred office, dark wood desk, warm lamp, plants, soft bokeh, like image 5. No flat or gradient background, no purple.
-Lighting: soft key light on my face, subtle warm rim light on hair and shoulders, realistic shadows, slight vignette.
+Left center, below the yellow block: an iPhone held in a hand, screen facing camera, showing a vertical short video: a woman's toned stomach in workout clothes, filmed in a bright room, with the white on-screen text "Pilates >>>". On the right edge of that video, a view counter "9,4 M" with an eye icon. A small dark rounded badge at the top of the screen reads "APP PAS SORTIE". No real app logo, no brand name. A thick red curved arrow goes from the yellow block to the view counter.
+Right side: me, close-up from mid-chest up, head and shoulders filling about 45% of the frame height, genuinely amazed expression, looking straight at the camera, dark t-shirt.
+Background: a real blurred office, dark wood desk, warm lamp, plants, soft bokeh, like image 3. No flat or gradient background, no purple.
+Lighting: soft key light on my face, subtle warm rim light, realistic shadows, slight vignette.
 Keep 60 px safe margins. No other text, no logos, no extra numbers.
-Negative: distorted face, changed identity, extra fingers, warped phone, unreadable numbers, cluttered layout, fake UI, cartoon style.`,
+Negative: distorted face, changed identity, extra fingers, warped phone, unreadable numbers, cluttered layout, fake brand logos, nudity, cartoon style.`,
   },
   gift: {
     name: "Le prompt contenu viral (existant)",
     url: `https://www.jeremypitault.com/guide/prompt-contenu-viral?${UTM_A}`,
-    note: "Il colle à l'étape 2 (refaire une vidéo qui a déjà marché pour ton app) et a déjà amené un client. Placé juste après l'étape 2, rappelé dans le récap. Le RDV n'arrive qu'à la fin.",
+    note: "Il colle à l'étape 3 (refaire pour ton app une vidéo qui a déjà marché) et a déjà amené 45 leads et un client. Annoncé juste après l'étape 3, rappelé dans le récap. Le RDV n'arrive qu'à la fin, en deux phrases.",
   },
   plan: [
-    "Le spectateur sait quoi montrer pour que ses vidéos vendent au lieu de faire des vues : l'app est la solution de l'histoire.",
-    "Il sait où trouver des vidéos qui ont déjà marché et comment les refaire pour son app en quelques minutes (la partie « triche »).",
-    "Il sait où placer l'appel à l'action et comment donner le nom de l'app.",
-    "Il connaît le volume (comptes, vidéos par jour, plateformes), comment ne pas se faire bloquer, et quand juger un format.",
-    "Il sait vérifier que son audience peut payer (âge, pays, plateforme, langue) et corriger le contenu si ce n'est pas le cas.",
-    "Il voit les résultats à l'écran et la chronologie honnête : sept semaines pour Florian, un mois pour Elouan.",
-    "Il repart avec les quatre chiffres qui disent où ça casse.",
+    "Le spectateur sait qu'une vue ne vaut pas une autre, et il choisit avant de poster un public qui peut payer (âge, pays, langue, plateforme).",
+    "Il sait trouver des vidéos d'apps qui ont déjà marché, et reconnaître les fausses percées achetées.",
+    "Il sait refaire une de ces vidéos pour son app en quelques minutes, en copiant le format et pas la vidéo (la partie « triche »).",
+    "Il sait où mettre le nom de son app, et ce que change le fait de le cacher, de le dire ou de faire commenter un mot.",
+    "Il connaît le volume (comptes, vidéos par jour, plateformes), comment ne pas se faire bloquer, et pourquoi il faut reposter ce qui a marché.",
+    "Il repart avec les quatre chiffres qui disent où ça casse, de la vue à la vente.",
   ],
   sections: [
     {
       time: "0:00",
       title: "Ouverture : promesse, preuve, plan, public",
+      links: [
+        { label: "Forméa, « Pilates >>> » (9,4 M)", url: "https://www.tiktok.com/@formea.pilates/video/7678283526629903638" },
+        { label: "Forméa, « My waist routine >>> » (18 500)", url: "https://www.tiktok.com/@formea.pilates/video/7700640872026623265" },
+      ],
       beats: [
         { show: "Face caméra, plan serré, pas de musique pendant les 10 premières secondes." },
         {
-          say: `Fin mai, Florian, 20 ans, postait deux à trois carrousels par jour pour son app. Ils faisaient entre 700 et 1 000 vues chacun, et son app faisait entre deux et cinq téléchargements par jour.`,
+          say: `Cette vidéo de cinq secondes a fait 9 millions 400 000 vues. Elle a été postée par une app de pilates, Forméa. Et le plus fou, c'est que l'app n'était même pas encore sortie.`,
+          show: `Plein écran : la vidéo Forméa « Pilates >>> », le compteur monte jusqu'à 9,4 M. Petit badge « APP PAS ENCORE SORTIE ».`,
         },
         {
-          say: `Mi-juillet, il était à 1 793 dollars sur les 28 derniers jours. Sans un euro de pub, uniquement avec du contenu posté depuis son téléphone.`,
-          show: `Capture RevenueCat de Florian, zoom lent sur « Revenue $1,793 », 3 secondes.`,
+          say: `Un ventre, deux mots à l'écran, une musique. Pas de pub, pas d'influenceuse payée, pas de budget. Et dans la légende, un lien pour s'inscrire sur la liste d'attente.`,
         },
         {
-          say: `Elouan, lui, était à zéro dollar de revenus fin septembre. Un mois de marketing plus tard, il était à 1 384 dollars sur 28 jours, avec plus de 1 000 dollars de revenus qui reviennent chaque mois. Lui non plus n'a pas mis un euro en pub.`,
-          show: `Capture RevenueCat d'Elouan, nom de l'app flouté, 3 secondes.`,
+          say: `Quand on regarde ce que font les apps qui décollent sans pub, ça ressemble presque à de la triche. Elles n'inventent rien. Elles prennent un format qui a déjà marché, elles le refont pour leur app, et elles le postent encore et encore. Cette méthode, je te la donne dans cette vidéo, étape par étape, jusqu'à tes premières ventes.`,
         },
         {
-          say: `Et quand on regarde ce qu'ils ont fait, ça ressemble presque à de la triche : ils n'ont rien inventé. Ils ont pris des vidéos qui avaient déjà marché pour d'autres apps, et ils les ont refaites pour la leur. Cette méthode, je te la donne dans cette vidéo, étape par étape, pour que tu fasses tes premières ventes beaucoup plus vite que ce qu'on t'a dit.`,
+          say: `Moi, c'est Jeremy. J'ai créé Shinobi, une app pour apprendre le japonais. Pour préparer cette vidéo, on a épluché avec mon équipe les comptes de 21 apps sur TikTok et Instagram, plus de 100 vidéos regardées image par image et plus de 4 500 commentaires lus, pour voir ce qui fait vraiment la différence.`,
+          show: `Bandeau nom « Jeremy Pitault, créateur de Shinobi ».`,
         },
         {
-          say: `Pour que tu saches à qui tu as affaire : je m'appelle Jeremy, mon app de japonais, Shinobi, a fait plus de 40 000 dollars de revenus en octobre, et avec mon équipe, on accompagne des créateurs d'apps comme Florian et Elouan. C'est exactement ce qu'on leur fait appliquer.`,
-          show: `Capture RevenueCat de Shinobi, octobre 2026, 2 secondes.`,
+          say: `On va voir six étapes. Un : choisir qui tu vises, avant même de poster. Deux : trouver des vidéos qui ont déjà marché, et ne pas te faire avoir par les fausses. Trois : les refaire pour ton app, c'est la partie qui ressemble vraiment à de la triche. Quatre : où mettre le nom de ton app. Cinq : combien de comptes et combien de vidéos par jour, sans te faire bloquer. Et six : les quatre chiffres qui te disent où ça casse entre la vue et la vente.`,
+          show: `Texte à l'écran : les 6 étapes, une ligne chacune, qui restent en sommaire dans un coin pendant la vidéo.`,
         },
         {
-          say: `On va voir cinq étapes. La première, c'est ce que tu dois montrer dans tes vidéos pour qu'elles vendent au lieu de juste faire des vues. La deuxième, c'est où trouver des vidéos qui ont déjà marché et comment les refaire pour ton app : c'est la partie qui ressemble vraiment à de la triche. La troisième, c'est où mettre ton appel à l'action et le nom de ton app. La quatrième répond à la question qu'on me pose le plus : combien de comptes et combien de vidéos par jour, sans te faire bloquer. Et la cinquième, c'est comment vérifier que les gens qui te regardent peuvent payer.`,
-          show: `Texte à l'écran : les 5 étapes, une ligne chacune, qui restent en sommaire dans un coin pendant la vidéo.`,
-        },
-        {
-          say: `Je te préviens tout de suite : ce n'est pas magique. Il faut publier tous les jours pendant des semaines, et la plupart de tes vidéos feront peu de vues. Ce qui ressemble à de la triche, c'est que tu n'as plus à deviner ce qui marche.`,
+          say: `Je te préviens tout de suite : ce n'est pas magique. Sur le même compte, deux mois plus tard, Forméa a reposté le même ventre avec un autre texte. 18 500 vues. Il faut publier tous les jours pendant des semaines, et la plupart de tes vidéos feront peu de vues. Ce qui ressemble à de la triche, c'est que tu n'as plus à deviner ce qui marche.`,
+          show: `Les deux vidéos Forméa côte à côte : 9,4 M en vert, 18 500 en rouge.`,
         },
         {
           say: `Cette vidéo est pour toi si tu as une app, ou si tu es en train d'en créer une avec l'IA, et que ton vrai problème, c'est que personne ne la connaît. Tu n'as pas besoin d'être marketeur, et tu n'as même pas besoin de montrer ton visage.`,
@@ -107,165 +111,191 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
       ],
     },
     {
-      time: "1:30",
-      title: "Étape 1 : ton app doit être la solution de l'histoire",
+      time: "1:45",
+      title: "Étape 1 : choisis qui tu vises, avant de poster",
       beats: [
-        { say: `La première erreur, je la vois chez presque tous les créateurs d'apps : faire du contenu pour faire des vues.` },
         {
-          say: `Une vidéo de conseils sur ta niche peut faire beaucoup de vues. Mais si ton app n'y est qu'un détail cité à la fin, presque personne ne la télécharge. Les vues, les likes et les commentaires ne paient pas tes factures. Ce que tu veux, ce sont des ventes.`,
+          say: `La première étape, presque personne ne la fait, et c'est pour ça que beaucoup font des vues sans faire une seule vente : une vue n'est pas égale à une autre vue.`,
         },
         {
-          say: `Ton app doit être la solution de l'histoire. Je galérais avec ce problème, j'ai trouvé cette app, et voilà le résultat. Celui qui regarde doit comprendre en quelques secondes que c'est l'app qui a tout changé.`,
+          say: `Un million de vues d'ados de 15 ans, ça ne paie pas un abonnement. Ils n'ont pas de carte bancaire. Pareil pour les pays où le pouvoir d'achat est faible : tu peux exploser en vues et ne rien vendre. Et sur la plupart des apps, l'iPhone paie mieux qu'Android.`,
+          show: `Animation : deux compteurs de vues identiques, « 1 M ». Sous le premier, « 15 ans », sous le second, « 30 ans, États-Unis ». Seul le second fait tomber des pièces.`,
         },
         {
-          say: `Florian l'a vécu. Ses carrousels faisaient des vues, mais pas assez de téléchargements. Alors il a testé des formats où l'app est la raison d'être de la vidéo. Par exemple, il se filme en train de réagir, choqué, du genre « je savais pas qu'une app pouvait faire ça », et juste après, on voit l'app marcher. Mi-juin, il faisait des journées à plus de 100 téléchargements, presque 200.`,
-          show: `Écran : un exemple de réaction face caméra suivie de la démo d'une app, pris dans la banque de contenus (pas une vidéo d'élève).`,
+          say: `Donc avant ta première vidéo, décide qui tu vises : son âge, son pays, sa langue. Et regarde qui achète vraiment les apps comme la tienne. Dans certaines niches, l'immense majorité des utilisateurs sont des femmes. Si c'est ton cas, tu fais tes vidéos pour elles, pas pour toi.`,
         },
         {
-          say: `Pour montrer ton app, montre la fonctionnalité qui impressionne et ce qu'elle change concrètement, au moment où la musique monte. Filme une main qui utilise l'app avec un deuxième téléphone, accélère les menus, et grossis le texte pour qu'il reste lisible. L'enregistrement d'écran marche aussi très bien sur certains contenus.`,
+          say: `Ensuite, sache comment chaque plateforme choisit à qui montrer tes vidéos. TikTok les montre surtout aux gens du pays de ta carte SIM. Instagram, aux gens qui parlent ta langue. Si tu veux toucher les Américains, qui paient le mieux, ouvre un compte séparé en anglais. Tu verras d'ailleurs que les plus gros chiffres sont presque tous en anglais.`,
+          show: `Écran : « TikTok → pays de ta carte SIM », « Instagram → ta langue », « Américains → compte séparé en anglais ».`,
         },
-        { say: `Et si tu ne veux pas te montrer, c'est très bien. Des mains, l'écran, du texte et une voix off suffisent.` },
         {
-          say: `Retiens ça : 5 000 vues qui font télécharger valent plus qu'une vidéo virale qui ne fait rien. Fais l'exercice ce soir. Reprends tes cinq dernières vidéos et regarde-les comme quelqu'un qui ne te connaît pas. Si on ne comprend pas ce que fait ton app, tu fais des vues, pas des ventes.`,
+          say: `Et une fois que tu postes, vérifie. Pose la question de l'âge dans ton onboarding, par tranches, ou regarde l'âge et le pays de ton audience dans les statistiques de ton compte pro. Si ce n'est pas la bonne audience, ne touche pas à ton app : change ton contenu. D'autres sujets, un autre ton, des personnages plus âgés.`,
         },
       ],
     },
     {
       time: "3:30",
-      title: "Étape 2 : tu n'inventes rien, tu refais ce qui a déjà marché",
+      title: "Étape 2 : trouve des vidéos qui ont déjà marché, pas des fausses",
+      links: [
+        { label: "Quizard, l'amphi (28,5 M)", url: "https://www.tiktok.com/@quizard.ai/video/7411341221949426974" },
+        { label: "Jurney, « The lazy way to lose weight » (5,2 M)", url: "https://www.tiktok.com/@kittyweight/video/7567016921816714526" },
+        { label: "Compte Skylight (vues très probablement payées)", url: "https://www.tiktok.com/@myskylight" },
+      ],
       beats: [
-        { say: `La deuxième étape, c'est celle qui ressemble vraiment à de la triche : tu n'inventes rien.` },
         {
-          say: `Tu fais du marketing, pas de l'influence. Tu n'as pas besoin d'avoir des idées géniales. Tu prends une vidéo qui a déjà marché pour une app de ta niche, ou d'une niche voisine, et tu la refais de A à Z pour la tienne.`,
+          say: `Deuxième étape : tu ne cherches pas une idée, tu cherches des vidéos qui ont déjà marché pour des apps comme la tienne.`,
         },
         {
-          say: `Elouan a trouvé un carrousel en anglais qui avait déjà fait 25 000 likes, et il l'a refait avec ses propres images, pour son app. Un autre, il l'a carrément copié à cent pour cent. Aujourd'hui, sa méthode tient en une phrase : il prend le même texte qu'un compte américain qui fait la promo d'une app du même genre que la sienne, et il change juste les photos.`,
-          show: `Écran : le carrousel d'origine et la version d'Elouan côte à côte, nom de son app flouté.`,
+          say: `Va sur TikTok et sur Instagram, tape le nom des grosses apps de ta niche et des niches voisines, et va sur leurs comptes officiels. Trie par vidéos les plus vues. Tu vas tomber sur des choses comme ça : une app de révisions filmée dans un amphi, 28 millions et demi de vues. Une app pour maigrir qui explique le régime avec des chats, 5 millions 200 000.`,
+          show: `Enregistrement d'écran : un compte d'app trié par popularité, puis la vidéo Quizard dans l'amphi (28,5 M) et la vidéo Jurney avec les chats (5,2 M).`,
         },
         {
-          say: `Le jour où il a commencé à poster sur son nouveau compte, après l'avoir chauffé, ses trois premiers posts ont fait 10 000 vues au total. Fin septembre, il cumulait plus d'un million de vues sur TikTok. Et le plus drôle, c'est que depuis, d'autres ont copié son format à lui. C'est devenu une tendance.`,
+          say: `Garde seulement les vidéos où l'app se voit vraiment, ou au moins où on comprend ce qu'elle fait. Et pour chacune, note quatre choses : la phrase à l'écran sur la première image, la durée, le son, et à quel moment l'app apparaît. C'est ça que tu vas copier.`,
+          show: `Tableau à l'écran qui se remplit : « Phrase 1re image · Durée · Son · Moment où l'app apparaît ».`,
         },
         {
-          say: `Ça marche parce qu'une vidéo qui a déjà fait des centaines de milliers de vues pour une autre app, c'est un format que l'algorithme et le public ont déjà validé. Toi, tu changes juste le produit.`,
+          say: `Mais attention, il y a un piège : toutes les vidéos à des millions de vues ne sont pas des vraies percées. Certaines grosses apps paient pour pousser leurs vidéos. Sur le compte d'une app de calendrier familial, on a trouvé des vidéos à 5 millions de vues pour moins de 3 000 likes.`,
         },
         {
-          say: `Mais attention, tu copies le format, pas la vidéo. Tu gardes la même douleur, la même durée d'accroche, la même musique et les mêmes plans. Ce qu'on voit à l'écran, ce sont tes images et ton app. Et ne reprends jamais des extraits des vidéos d'autres créateurs : tu t'exposes à un signalement.`,
+          say: `Le test est simple : divise les likes par les vues. Une vraie percée organique, c'est en général entre 3 et 14 % de likes. Une vidéo poussée avec de l'argent, c'est souvent moins de 0,1 %. Si tu tombes sur ce genre de chiffre, ne copie pas cette vidéo : ce n'est pas le contenu qui a fait les vues, c'est le budget.`,
+          show: `Calcul à l'écran : « 2 849 likes ÷ 5 000 000 vues = 0,06 % ❌ », puis « 555 700 likes ÷ 5 200 000 vues = 10,7 % ✅ ».`,
         },
         {
-          say: `Pour trouver ces vidéos, cherche sur TikTok les apps de ta niche et des niches voisines. Garde seulement celles où l'app se voit vraiment à l'écran, et qui ont fait au moins 10 000 vues. Avec mon équipe, on en a déjà rangé des centaines par niche pour nos élèves, et je te montrerai ce qu'on en a appris dans une autre vidéo.`,
-        },
-        {
-          say: `Une fois que tu as ta vidéo d'inspiration, tu donnes son texte, son texte à l'écran et sa légende à ton IA, et elle te rend la même chose pour ton app. Tu filmes, tu postes, et c'est fini.`,
+          say: `Ton objectif pour cette étape : une liste de dix vidéos, toutes à au moins 10 000 vues, qui passent le test des likes. Si tu en veux déjà une centaine toutes prêtes, je les ai mises dans le PDF de ma vidéo précédente.`,
         },
       ],
     },
     {
       time: "5:30",
-      title: "Le cadeau",
-      beats: [
-        {
-          say: `Pour cette partie, j'ai écrit un prompt que tu peux utiliser dès ce soir. Tu lui envoies un post qui a déjà cartonné sur TikTok ou Instagram, et ton IA te rend le même pour ton app : le texte à l'écran, le rythme du montage, la légende et le commentaire à épingler. Il est gratuit, et le lien est en premier dans la description.`,
-          show: `Texte à l'écran : « Le prompt contenu viral, lien en description », 4 secondes, sans couper la parole.`,
-        },
+      title: "Étape 3 : refais-les pour ton app, en copiant le format, pas la vidéo",
+      links: [
+        { label: "Jurney, « The easiest way to lose weight » (11 800)", url: "https://www.tiktok.com/@kittyweight/video/7571891209002552607" },
+        { label: "Turbo AI, la percée (6,8 M)", url: "https://www.tiktok.com/@getturboai/video/7550714243683798327" },
+        { label: "Turbo AI, le flop du même jour (6 725)", url: "https://www.tiktok.com/@getturboai/video/7550714786149829902" },
       ],
-    },
-    {
-      time: "6:00",
-      title: "Étape 3 : l'appel à l'action tôt, et le nom de l'app partout",
       beats: [
+        { say: `Troisième étape, celle qui ressemble vraiment à de la triche : tu prends une vidéo de ta liste, et tu la refais de A à Z pour ton app.` },
         {
-          say: `Troisième étape : l'appel à l'action. L'erreur classique, c'est de le mettre à la toute fin. Sauf que la plupart des gens ne vont jamais jusqu'à la fin d'une vidéo, ni jusqu'à la dernière image d'un carrousel.`,
+          say: `Tu fais du marketing, pas de l'influence. Tu n'as pas besoin d'avoir des idées géniales. Une vidéo qui a déjà fait des centaines de milliers de vues, c'est un format que le public a déjà validé. Toi, tu changes juste le produit.`,
         },
         {
-          say: `Mets-le tôt, dans la première moitié de la vidéo, ou vers la troisième ou la quatrième image d'un carrousel. Ensuite, tu continues ton contenu comme si de rien n'était. À la fin, ça ne passe que si la vidéo est très courte.`,
-          show: `Animation : un carrousel de 10 images, l'appel à l'action passe de la 10e à la 4e.`,
+          say: `Mais tu copies le format, pas la vidéo. Tu gardes la même structure de phrase sur la première image, la même durée, le même son et le même genre de plans. Ce qu'on voit à l'écran, ce sont tes images et ton app. Et ne reprends jamais des extraits des vidéos des autres : tu t'exposes à un signalement.`,
         },
         {
-          say: `Et il ne doit pas sonner comme une pub. Parle de ton app comme si tu la recommandais à un repas de famille : si tu veux la même chose pour toi, c'est dans cette app.`,
+          say: `Et la phrase de départ, tu la gardes au mot près, parce qu'un seul mot peut tout changer. Regarde : l'app aux chats a fait « la méthode des paresseux pour maigrir », 5 millions 200 000 vues. Deux semaines plus tard, même script, mêmes chats, même son, mais « la méthode la plus facile pour maigrir ». 11 800 vues. Un mot, 440 fois moins de vues.`,
+          show: `Les deux vidéos Jurney côte à côte, le mot « LAZY » surligné en vert, « EASIEST » en rouge. 5,2 M contre 11 800.`,
         },
         {
-          say: `Donne aussi le nom de ton app, dans la vidéo, dans ta bio ou en commentaire épinglé. Ceux qui le tapent ensuite sur l'App Store font monter ton app dans les recherches. Tu peux aussi demander aux gens de commenter un mot pour recevoir le nom en message privé. Florian a mis une automatisation : chaque personne qui commente reçoit directement le lien de l'app. En plus, ça fait monter l'engagement de la vidéo.`,
+          say: `Autre règle : ta première phrase parle à celui qui regarde, pas de toi. Une app de prise de notes a posté deux vidéos le même jour, avec la même légende. Celle qui dit « si tu passes cette vidéo, tu vas rater tes examens » a fait 6 millions 800 000 vues. Celle qui commence par la créatrice qui raconte sa journée : 6 725.`,
+          show: `Les deux vidéos Turbo AI côte à côte : « if you skip this video you're FAILING your finals » (6,8 M) contre « English is so hard vro » (6 725).`,
+        },
+        {
+          say: `Pour aller vite, tu donnes à ton IA le texte à l'écran, ce qui se dit et la légende de la vidéo d'origine, avec ce que fait ton app, et elle te rend la même chose pour toi. Tu filmes, tu postes. Une vidéo d'inspiration, c'est quinze minutes de travail, pas une journée.`,
         },
       ],
     },
     {
       time: "8:00",
-      title: "Étape 4 : le volume, sans te faire bloquer",
+      title: "Le cadeau",
       beats: [
-        { say: `Quatrième étape, et c'est la question qu'on me pose le plus : combien de comptes et combien de vidéos.` },
         {
-          say: `Commence avec un seul compte par plateforme. Chauffe-le quelques jours : tu likes, tu commentes, tu regardes des vidéos de ta niche. Ensuite, poste une vidéo par jour, puis deux. Deux par jour et par compte, c'est le maximum. Mieux vaut deux vidéos soignées que quinze bâclées.`,
-          show: `Écran : « 1 compte par plateforme, chauffé quelques jours, 1 puis 2 vidéos par jour, 3 comptes au maximum par téléphone, jamais de VPN ».`,
-        },
-        {
-          say: `Quand ça tourne, tu peux monter jusqu'à trois comptes par plateforme et par téléphone, pas plus, et jamais avec un VPN. Florian l'a appris à ses dépens. Quand il était en Asie, il postait avec un VPN et il multipliait les comptes. Début juin, ses vues sont tombées à 10, 11, 30 par vidéo. Il a dû recréer des comptes propres et les chauffer avant de repartir.`,
-        },
-        {
-          say: `Ensuite, poste partout : TikTok, Instagram, YouTube Shorts. Tu ne sais jamais où ça va prendre. Fin septembre, Elouan cumulait plus d'un million de vues sur TikTok, et à peine 500 sur Instagram avec le même genre de contenu. Florian, lui, a fait un million de vues sur Instagram en un mois.`,
-        },
-        {
-          say: `Pour juger un format, poste-le au moins dix fois, parce que l'algorithme peut simplement ne pas l'avoir pris. Après deux semaines de posts tous les jours, si tu es à 10 vues par vidéo, il y a un problème. Si tu es à 300 ou 400 vues avec des pics à 2 000, tu es sur la bonne voie. Il faut souvent des semaines à 200 vues avant qu'un format parte, et ça se débloque souvent d'un coup, parfois grâce à une seule vidéo.`,
-        },
-        {
-          say: `Et quand un format perce, tu le bombardes. Tu le refais avec une autre accroche, un autre personnage, une autre situation. Les gens qui scrollent ne voient pas la répétition. C'est ce qu'a fait Florian : dès qu'un format a marché, il en a sorti un ou deux par jour, et il l'a aussi posté sur YouTube Shorts.`,
-        },
-        {
-          say: `Pour tenir ce rythme, filme des dizaines de plans d'un coup, en une ou deux heures, puis monte tes vidéos à partir de tes vidéos d'inspiration. Et fais ton marketing en premier dans la journée. Sinon, à 22 heures, tu feras un carrousel vite fait en croyant avoir travaillé.`,
+          say: `Pour cette étape, j'ai écrit un prompt que tu peux utiliser dès ce soir. Tu lui envoies un post qui a déjà cartonné sur TikTok ou Instagram, et ton IA te rend le même pour ton app : le texte à l'écran, le rythme du montage, la légende et le commentaire à épingler. Il est gratuit, et le lien est en premier dans la description.`,
+          show: `Texte à l'écran : « Le prompt contenu viral, lien en description », 4 secondes, sans couper la parole.`,
         },
       ],
     },
     {
-      time: "10:30",
-      title: "Étape 5 : vérifie que ceux qui te regardent peuvent payer",
+      time: "8:20",
+      title: "Étape 4 : où mettre le nom de ton app",
+      links: [
+        { label: "Push Up Arena, nom caché (4,2 M, 16 % demandent le nom)", url: "https://www.tiktok.com/@pushuparena.app/video/7680736764771765535" },
+        { label: "Coconote, nom donné (26 M, 46 % taguent un ami)", url: "https://www.instagram.com/reel/C9hepDsMoYQ/" },
+        { label: "Eclipta, « commente Eclipta » (13 M)", url: "https://www.instagram.com/reel/DYfnXHqOo27/" },
+      ],
       beats: [
-        { say: `Cinquième étape, celle que presque personne ne fait : vérifier que les gens qui te regardent peuvent payer.` },
         {
-          say: `Une vue n'est pas égale à une autre vue. Chez un de nos élèves, la moitié des utilisateurs avaient moins de 17 ans. À cet âge-là, environ 2 % prenaient l'essai gratuit, contre à peu près dix fois plus chez les 25-34 ans. Son app n'avait aucun problème. C'est son contenu qui attirait des ados, et un ado de 15 ans ne peut pas payer un abonnement. Il a changé de contenu pour parler à des adultes, et c'est là que ses ventes ont décollé.`,
-          show: `Animation : deux silhouettes, « moins de 17 ans » et « 25-34 ans », avec leurs barres d'essai côte à côte. Aucun nom, aucune capture.`,
+          say: `Quatrième étape : le nom de ton app. Une vidéo peut faire des millions de vues, si personne ne sait comment trouver ton app, tu ne vends rien. On a lu des milliers de commentaires pour voir ce qui se passe selon l'endroit où le nom apparaît.`,
         },
         {
-          say: `Donc pose la question de l'âge dans ton onboarding, par tranches. Si tu ne peux pas, regarde l'âge de ton audience dans les statistiques de ton compte pro TikTok ou Instagram.`,
+          say: `Quand le nom est caché et que l'app se voit en action, les gens le demandent eux-mêmes. Sur une app de pompes en forme de jeu, 16 % des commentaires demandent « c'est quoi le nom ? ». Ça fait monter les commentaires, donc la vidéo.`,
+          show: `Plein écran : Push Up Arena, puis des vrais commentaires qui défilent (« App name », « Name of the game? », « cómo se llama esa app »).`,
         },
         {
-          say: `Regarde aussi le pays et la plateforme. Dans les pays où le pouvoir d'achat est faible, presque personne ne paie, et l'iPhone convertit mieux qu'Android. TikTok montre tes vidéos aux gens du pays de ta carte SIM, Instagram aux gens qui parlent ta langue. Si tu veux toucher les Américains, qui paient mieux, ouvre un compte séparé en anglais.`,
+          say: `Quand le nom est dit ou écrit, presque personne ne le demande. Mais les gens font autre chose : ils taguent un ami. Sur une app de prise de notes qui dit son nom clairement, presque la moitié des commentaires sont des amis tagués. Ce sont des gens qui envoient ton app à quelqu'un d'autre.`,
+          show: `Coconote : « The app is called Coconote 🥥 », puis des commentaires « @… » qui défilent. « 46 % taguent un ami ».`,
         },
         {
-          say: `Et regarde qui achète vraiment les apps comme la tienne. Elouan a vu que 80 à 90 % des utilisateurs des apps de sa niche sont des femmes. Alors il fait ses vidéos pour elles, pas pour lui.`,
+          say: `Et sur Instagram, il y a une troisième option qui est devenue la norme : « commente tel mot et je t'envoie l'app ». Sur une vidéo d'app à 13 millions de vues, la moitié des commentaires sont juste le mot demandé. Avec une automatisation, chaque personne qui commente reçoit le lien en message privé.`,
+          show: `Eclipta : la légende « Comment "Eclipta" », puis le mot « Eclipta » répété dans les commentaires.`,
         },
         {
-          say: `Si ce n'est pas la bonne audience, ne touche pas à ton app : change ton contenu. D'autres sujets, un autre ton, des personnages plus âgés.`,
+          say: `Ce que je ferais : sur TikTok, le nom en légende et en commentaire épinglé, et dans la vidéo si elle est courte. Sur Instagram, le « commente un mot » avec l'automatisation. Et donne toujours le vrai nom tel qu'on le tape sur l'App Store : les gens qui le cherchent font monter ton app dans les recherches.`,
+        },
+        {
+          say: `Dernière chose : ton appel à l'action ne doit pas sonner comme une pub. Même sous une vidéo à 6 millions 800 000 vues, un commentaire à 248 likes disait : « à cause de cette pub, je ne la téléchargerai jamais ». Parle de ton app comme si tu la recommandais à un ami : si tu veux la même chose, c'est cette app.`,
+        },
+      ],
+    },
+    {
+      time: "10:15",
+      title: "Étape 5 : le volume, sans te faire bloquer",
+      links: [
+        { label: "Quizard, « the F students are inventors » (963 300)", url: "https://www.tiktok.com/@quizard.ai/video/7502540387144289567" },
+        { label: "Quizard, la même vidéo 3 jours après (5 400)", url: "https://www.tiktok.com/@quizard.ai/video/7503593343650254111" },
+      ],
+      beats: [
+        { say: `Cinquième étape, et c'est la question qu'on me pose le plus : combien de comptes et combien de vidéos.` },
+        {
+          say: `Commence avec un seul compte par plateforme. Chauffe-le quelques jours : tu likes, tu commentes, tu regardes des vidéos de ta niche, comme un vrai utilisateur. Ensuite, poste une vidéo par jour, puis deux. Deux par jour et par compte, c'est le maximum. Mieux vaut deux vidéos soignées que quinze bâclées.`,
+          show: `Écran : « 1 compte par plateforme, chauffé quelques jours, 1 puis 2 vidéos par jour, 3 comptes au maximum par téléphone, jamais de VPN ».`,
+        },
+        {
+          say: `Quand ça tourne, tu peux monter jusqu'à trois comptes par plateforme et par téléphone, pas plus, et jamais avec un VPN. C'est l'erreur qui fait tomber des comptes à 10 vues par vidéo du jour au lendemain, et là, il faut tout recréer et rechauffer.`,
+        },
+        {
+          say: `Poste partout : TikTok, Instagram, YouTube Shorts. Tu ne sais jamais où ça va prendre. Le même contenu peut faire un million de vues sur une plateforme et 500 sur l'autre.`,
+        },
+        {
+          say: `Et surtout, reposte ce qui a marché. Regarde ces deux vidéos d'une app de révisions. C'est exactement la même vidéo, même image, même son, même texte, republiée trois jours plus tard. La première a fait 963 300 vues, la deuxième 5 400.`,
+          show: `Les deux vidéos Quizard côte à côte, identiques. 963 300 en vert, 5 400 en rouge.`,
+        },
+        {
+          say: `Ça veut dire deux choses. Un : une bonne vidéo n'est pas une garantie, c'est un ticket. Ce compte a posté au moins 25 vidéos avec la même légende, et elles vont de 2 683 vues à 29 millions et demi. Deux : un format se juge sur au moins dix vidéos, jamais sur une. Après deux semaines tous les jours, si tu es à 10 vues par vidéo, il y a un problème de compte. Si tu es à quelques centaines avec des pics à quelques milliers, tu es sur la bonne voie.`,
+        },
+        {
+          say: `Et quand un format perce, tu le bombardes : une autre accroche, une autre situation, un autre plan, tous les jours. Les gens qui scrollent ne voient pas la répétition. Pour tenir le rythme, filme des dizaines de plans d'un coup, en une ou deux heures, et fais ton marketing en premier dans la journée. Sinon, à 22 heures, tu feras une vidéo vite fait en croyant avoir travaillé.`,
         },
       ],
     },
     {
       time: "12:30",
-      title: "Récap : les quatre chiffres qui te disent où ça casse",
+      title: "Étape 6 : les quatre chiffres qui te disent où ça casse",
       beats: [
         {
-          say: `Si je résume : ton app est la solution de l'histoire, tu refais des vidéos qui ont déjà marché, tu mets ton appel à l'action tôt, tu publies tous les jours sur plusieurs plateformes, et tu vérifies que les gens qui te regardent peuvent payer. Le prompt pour refaire une vidéo qui a marché est toujours en premier dans la description.`,
-        },
-        {
-          say: `Pour savoir laquelle de ces étapes travailler, regarde chaque semaine quatre chiffres : tes vues, tes téléchargements, tes essais et tes ventes.`,
+          say: `Dernière étape. Une vue, ce n'est pas une vente. Pour savoir ce qui bloque, regarde chaque semaine quatre chiffres : tes vues, tes téléchargements, tes essais et tes ventes.`,
           show: `Animation : la chaîne vues, téléchargements, essais, ventes ; chaque flèche s'allume quand elle est citée.`,
         },
         {
-          say: `Si tu as peu de vues, c'est le volume et les formats, donc les étapes deux et quatre. Si une vidéo perce mais que tes téléchargements ne font pas de pic, elle ne convertit pas : ton app n'est pas assez au centre ou ton appel à l'action est mal placé, ce sont les étapes un et trois. Et si tu as des téléchargements mais que personne ne lance l'essai, regarde d'abord qui te regarde, c'est l'étape cinq, avant de toucher à ton app.`,
+          say: `Si tu as peu de vues, c'est le volume ou les formats : étapes deux, trois et cinq. Si une vidéo perce mais que tes téléchargements ne font pas de pic, elle ne convertit pas : on ne comprend pas ce que fait ton app, ou on ne sait pas comment la trouver, c'est l'étape quatre. Et si tu as des téléchargements mais que personne ne lance l'essai, regarde d'abord qui te regarde, c'est l'étape un, avant de toucher à ton app.`,
         },
         { say: `Une journée à zéro ne veut rien dire. Juge la tendance sur quatre ou cinq jours.` },
-        {
-          say: `Florian a mis environ sept semaines pour passer de deux à cinq téléchargements par jour à 1 793 dollars sur 28 jours. Elouan, un mois. Ce n'est pas six mois, et ce n'est pas un an. C'est quelques semaines à publier tous les jours, avec la bonne méthode.`,
-        },
       ],
     },
     {
-      time: "14:00",
-      title: "Fin",
+      time: "13:30",
+      title: "Récap et fin",
       beats: [
         {
-          say: `Florian et Elouan ont fait le travail eux-mêmes, mais ils n'étaient pas seuls : chaque fois que quelque chose bloquait, on cherchait ensemble où ça cassait. Si tu veux qu'on fasse la même chose avec ton app, réserve un appel avec mon équipe, le lien est dans la description.`,
+          say: `Si je résume : tu choisis un public qui peut payer, tu trouves des vidéos qui ont déjà marché et qui passent le test des likes, tu les refais pour ton app au mot près, tu donnes le nom au bon endroit, tu publies tous les jours sur plusieurs plateformes en reposant ce qui marche, et tu regardes tes quatre chiffres chaque semaine. Le prompt pour refaire une vidéo qui a marché est en premier dans la description.`,
         },
         {
-          say: `Et dis-moi en commentaire combien de vidéos tu publies par semaine pour ton app en ce moment. Si cette vidéo t'a servi, abonne-toi : je montre tout ce qu'on fait sur nos apps, chiffres compris.`,
+          say: `Ce n'est pas six mois, et ce n'est pas un an. C'est quelques semaines à publier tous les jours, en copiant ce qui a déjà marché au lieu de deviner.`,
+        },
+        {
+          say: `Et si tu veux qu'on regarde ensemble où ça casse pour ton app, tu peux réserver un appel avec mon équipe, le lien est dans la description.`,
+        },
+        {
+          say: `Dis-moi en commentaire combien de vidéos tu publies par semaine pour ton app en ce moment. Et si cette vidéo t'a servi, abonne-toi : je partage tout ce qu'on apprend sur nos apps.`,
         },
       ],
     },
@@ -277,40 +307,40 @@ Negative: distorted face, changed identity, extra fingers, warped phone, unreada
 📞 BESOIN D'UN ACCOMPAGNEMENT ?
 Réserve ton appel stratégique personnalisé de 30 mins avec un expert APP MASTERY : https://www.jeremypitault.com/rdv?${UTM_A}
 
-Florian est passé de 2 à 5 téléchargements par jour à 1 793 $ en 28 jours. Elouan, de 0 $ à 1 384 $ en un mois de marketing. Aucun des deux n'a mis un euro en pub. Je te montre les 5 étapes de leur méthode : quoi montrer, quelles vidéos refaire, où placer l'appel à l'action, combien publier sans te faire bloquer, et comment vérifier que ton audience peut payer.
+Une app de pilates qui n'était même pas sortie a fait 9,4 millions de vues avec une vidéo de 5 secondes, sans un euro de pub. Les apps qui décollent n'inventent rien : elles copient ce qui a déjà marché, et elles le postent encore et encore. Je te donne la méthode en 6 étapes, de la première vidéo à la première vente : qui viser, quelles vidéos copier (et comment repérer les fausses percées), comment les refaire pour ton app, où mettre son nom, combien publier sans te faire bloquer, et les 4 chiffres qui disent où ça casse.
 
 👉 Dis-moi en commentaire combien de vidéos tu publies par semaine pour ton app.
 
 0:00 Introduction
-1:30 Ton app doit être la solution
-3:30 Refaire ce qui a déjà marché
-6:00 L'appel à l'action au bon endroit
-8:00 Combien de comptes et de vidéos
-10:30 L'audience qui peut payer
+1:45 Choisir qui tu vises
+3:30 Trouver des vidéos qui ont déjà marché
+5:30 Les refaire pour ton app
+8:20 Où mettre le nom de ton app
+10:15 Combien de comptes et de vidéos
 12:30 Les 4 chiffres qui disent où ça casse
-14:00 La suite
+13:30 Récap
 
 #applicationmobile #marketingapp #tiktokmarketing #créeruneapp #appmobile #contenuorganique #entrepreneur`,
   shorts: [
-    "« Ton appel à l'action est au mauvais endroit » (étape 3, 40 s).",
-    "« Il copie le texte d'un compte américain et change juste les photos » (étape 2, 45 s).",
-    "« Pourquoi tes vidéos font 10 vues : le VPN et trop de comptes » (étape 4, 40 s).",
+    "« Un mot, 440 fois moins de vues » (Jurney, lazy contre easiest, étape 3, 35 s).",
+    "« Comment repérer une vidéo aux vues achetées » (le test likes ÷ vues, étape 2, 40 s).",
+    "« Même vidéo, 963 300 vues puis 5 400 : reposte » (Quizard, étape 5, 35 s).",
   ],
   prepare: [
-    "Demander à Elouan le carrousel d'origine (25 000 likes) et sa version, pour l'écran de l'étape 2.",
-    "Prévenir Florian et Elouan : leurs prénoms et leurs chiffres sont déjà publics sur /temoignages, leurs apps restent non nommées et floutées.",
-    "L'exemple des moins de 17 ans (étape 5) vient du cas de Wassim, sans nom ni capture. Il se coupe sans rien casser si tu ne veux pas du tout de lui.",
-    "Choisir dans la banque de contenus un exemple « réaction puis démo » pour l'étape 1.",
+    "Télécharger les vidéos citées dans ~/Movies/Rushs/ (la plupart sont déjà dans 2026-11-1633-videos/flops/).",
+    "Faire l'enregistrement d'écran de l'étape 2 : un compte d'app trié par popularité.",
+    "Ajouter une fiche YouTube vers la vidéo B au moment où tu cites « le PDF de ma vidéo précédente » (étape 2).",
+    "Vérifier que la page du prompt contenu viral est en ligne avant de publier.",
     "Recaler les chapitres de la description sur le montage réel (skill youtube-description).",
   ],
   checklist: [
     { point: "Un seul public : app qui rapporte, pas développeurs", state: "OK" },
     { point: "3 vidéos à plus de 50 000 vues sur le sujet", state: "OK (8 relevées, dont 2 de moins de 2 mois)" },
     { point: "Argent dans le titre, format prouvé, psychologie écrite", state: "OK" },
-    { point: "Pas une 2e vidéo construite sur Wassim", state: "OK (Florian et Elouan au centre)" },
+    { point: "Pure valeur : aucun élève, aucune capture de revenus, phrase d'autorité courte", state: "OK" },
     { point: "Ouverture : promesse, preuve, plan, public, pas d'abonnement avant la valeur", state: "OK" },
-    { point: "3 captures au maximum, RDV en 1 ou 2 phrases, jamais « la formation »", state: "OK" },
-    { point: "Cadeau lié au sujet, après la première grosse valeur", state: "OK (prompt contenu viral)" },
+    { point: "RDV en 1 ou 2 phrases, jamais « la formation »", state: "OK" },
+    { point: "Cadeau lié au sujet, après la première grosse valeur", state: "OK (prompt contenu viral, après l'étape 3)" },
     { point: "Miniature : 4 mots, preuve visible, visage à droite", state: "OK" },
     { point: "Ligne dans le tableau de suivi après publication", state: "À faire" },
   ],
@@ -982,6 +1012,364 @@ On a passé au crible environ 12 500 vidéos TikTok et Instagram pour en garder 
 };
 
 // B en premier : c'est la prochaine à tourner, la page s'ouvre dessus.
+// Vidéo C (23 nov. 2026) : l'onboarding et le paywall de Shinobi, écran par écran.
+// Source : le code de Shinobi (~/Projects/shinobiapp, textes dans
+// apps/mobile/src/i18n/locales/fr.json), l'historique des tests dans les commits
+// (13/04, 15/06, 29/09, 06/10/2026) et RevenueCat vérifié le 11/11/2026.
+// Pure valeur, aucun élève : ce qui marche et ce qui a perdu, sur l'app de Jeremy.
+const UTM_C = "utm_source=youtube&utm_medium=video&utm_campaign=onboarding-shinobi";
+
+const SCRIPT_C: VideoScript = {
+  slug: "onboarding-shinobi",
+  label: "Vidéo C · Onboarding",
+  status: "Prêt à tourner",
+  updatedAt: "23 nov. 2026",
+  title: "400 000 $ par an : l'onboarding de mon app, écran par écran (je te montre tout)",
+  why: `Rien à voir avec les deux dernières vidéos, qui parlaient de faire connaître ton app. Celle-ci parle de ce qui se passe après le téléchargement : comment une personne qui vient d'installer l'app finit par payer. Ton public a des téléchargements mais peu de ventes, et personne n'en parle en français. Tu montres ton propre onboarding, écran par écran, avec les tests que tu as gagnés et ceux que tu as perdus.`,
+  facts: [
+    { label: "Durée", value: "15 à 17 min (environ 2 500 mots de voix)" },
+    { label: "Style", value: "Semi-scripté. Toi face caméra pour l'ouverture, la partie « ce qui a perdu » et la fin. Le reste en voix sur l'enregistrement d'écran de l'onboarding, sur un iPhone neuf ou après avoir supprimé l'app" },
+    { label: "Format", value: "« L'onboarding de mon app à X $ (je te montre tout) » : visite écran par écran, avec pour chaque écran ce qu'il fait et pourquoi, puis les tests gagnés et perdus" },
+    { label: "Demande", value: "« I Studied 1,460 Onboarding Flows » (Mobbin) 410 000 vues, « We Studied 2,995 Paywalls » (Mobbin) 205 000, « The Onboarding Behind My $40K/Month App » (Starter Story) 63 000, « How To Build an App Onboarding That PRINTS » 47 000. Aucune vidéo en français sur le sujet. Ton format « Comment j'ai monté une app à 100K ARR » est déjà ta meilleure vidéo dans la cible (31 000)" },
+    { label: "Chiffres", value: "Un seul chiffre en dollars, dans le titre et une fois à la fin : octobre 2026, 42 845 $ de revenus, le meilleur mois des 12 derniers (RevenueCat, vérifié le 11/11). Le reste, ce sont les écrans et les tests" },
+    { label: "Captures", value: "L'onboarding filmé en entier, une capture RevenueCat d'octobre (une seule, à la fin)" },
+    { label: "UTM", value: "onboarding-shinobi" },
+  ],
+  altTitles: [
+    {
+      title: "400 000 $ par an : l'onboarding de mon app, écran par écran (je te montre tout)",
+      why: "Recommandé. Argent d'abord, puis « je te montre tout » : on va voir l'intérieur d'une vraie app qui rapporte. Même promesse que la vidéo Starter Story à 63 000 vues, et c'est la seule en français.",
+    },
+    {
+      title: "Pourquoi ton app a des téléchargements mais personne ne paie",
+      why: "Part de la douleur de ton public. Plus large, moins de preuve dans le titre : à garder pour un test A/B.",
+    },
+    {
+      title: "Les 20 écrans qui font payer mon app à 400 000 $ par an",
+      why: "Plus précis et plus « liste ». Plus faible sur la curiosité.",
+    },
+  ],
+  thumbnail: {
+    text: "CET ÉCRAN PAIE",
+    layout: `Bloc rouge en haut à gauche avec « CET ÉCRAN PAIE » en blanc, très gros. En dessous, un iPhone tenu en main qui affiche le paywall de Shinobi (la timeline « Aujourd'hui · Accès complet / Jour 6 · Rappel / Jour 7 · Fin de l'essai » et le bouton « Commencer mon essai gratuit »). Une flèche jaune du bloc vers le bouton. Toi à droite en gros plan, expression calme et sûre, regard caméra. Bureau en bois sombre flou. La miniature pose la question (quel écran, pourquoi il fait payer), le titre donne la preuve (400 000 $ par an) sans la répéter.`,
+    variant: "Variante B : bloc jaune « 12 QUESTIONS », le téléphone affiche le ninja et la question « Quel âge as-tu ? ». Toi à droite.",
+    prompt: `Images 1 and 2 are photos of me: use my exact face, head shape, hairline, skin texture and proportions. Do not beautify, stylize or change my face.
+Image 3 is a real screenshot of my app's paywall: place it, unchanged, as the screen of the iPhone.
+Image 4 is one of my validated thumbnails: copy its background and lighting style.
+
+Layout: 16:9 YouTube thumbnail, 1920x1088.
+Top left: a bright red rectangular block with huge bold white sans-serif text "CET ÉCRAN PAIE", perfectly legible, nothing else written.
+Left center, below the red block: an iPhone held in a hand, screen facing camera, showing image 3, sharp and readable. A thick yellow curved arrow goes from the red block to the main button on the screen.
+Right side: me, close-up from mid-chest up, head and shoulders filling about 45% of the frame height, calm confident expression with a slight smile, looking straight at the camera, dark t-shirt.
+Background: a real blurred office, dark wood desk, warm lamp, plants, soft bokeh, like image 4. No flat or gradient background, no purple.
+Lighting: soft key light on my face, subtle warm rim light, realistic shadows, slight vignette.
+Keep 60 px safe margins. No other text, no logos, no extra numbers.
+Negative: distorted face, changed identity, extra fingers, warped phone, unreadable text, cluttered layout, fake UI, cartoon style.`,
+  },
+  gift: {
+    name: "Le modèle de l'onboarding de Shinobi : les 12 questions mot à mot, les écrans d'après et le paywall, avec le prompt pour l'adapter à ton app",
+    url: `https://www.jeremypitault.com/guide/onboarding-shinobi?${UTM_C}`,
+    note: "Page à créer avant de publier. Contenu : chaque écran (texte exact, à quoi il sert), le plan personnalisé, le paywall (timeline, prix à la semaine, offre de sortie), les tests perdus, et un prompt qui réécrit tout pour l'app du spectateur. Annoncé juste après la partie « le plan personnalisé » (la première grosse valeur), rappelé à la fin.",
+  },
+  plan: [
+    "Le spectateur a compris que l'onboarding n'est pas un formulaire : c'est là que se fait la vente, avant même le paywall.",
+    "Il a vu chaque écran d'un vrai onboarding qui rapporte, et il sait à quoi sert chacun (récolter, faire dire l'objectif, faire réussir, transformer des minutes en résultat).",
+    "Il sait demander les notifications sans se prendre un refus, et montrer l'app avant de faire payer.",
+    "Il sait construire l'écran « ton plan est prêt » qui donne envie de payer.",
+    "Il connaît les choix du paywall : obligatoire ou pas, essai sur l'annuel seulement, prix à la semaine, timeline, rappel avant la fin de l'essai.",
+    "Il sait ce qui a perdu (abonnement à la semaine, cacher le mensuel, essai de 3 jours), pour ne pas le refaire.",
+    "Il sait quoi faire quand la personne ferme le paywall, et pourquoi l'inscription vient après le paiement.",
+    "Il repart avec le modèle complet pour refaire l'onboarding de son app.",
+  ],
+  sections: [
+    {
+      time: "0:00",
+      title: "Ouverture : promesse, preuve, plan, public",
+      mode: "visage",
+      beats: [
+        { show: "Face caméra, plan serré, pas de musique pendant les 10 premières secondes. Le téléphone en main, écran éteint." },
+        {
+          say: `La plupart des apps perdent leurs ventes au même endroit. Pas dans le marketing, pas dans les fonctionnalités : dans les deux minutes qui suivent le téléchargement. La personne ouvre l'app, elle voit un écran d'inscription, puis un menu, et elle ne revient jamais.`,
+        },
+        {
+          say: `Aujourd'hui, je te montre l'intérieur de mon app, écran par écran : tout ce que voit quelqu'un entre le moment où il l'ouvre pour la première fois et le moment où il paie. Et je te dis pourquoi chaque écran est là.`,
+          show: `Le téléphone s'allume : l'écran d'accueil de Shinobi, « Commencer ».`,
+        },
+        {
+          say: `Moi, c'est Jeremy. J'ai créé Shinobi, une app pour apprendre le japonais, qui fait aujourd'hui autour de 400 000 dollars par an. Cet onboarding, on l'a refait des dizaines de fois, et on a testé beaucoup de choses. Certaines ont gagné, d'autres ont perdu, et je vais te montrer les deux.`,
+          show: `Bandeau nom « Jeremy Pitault, créateur de Shinobi ».`,
+        },
+        {
+          say: `On va voir quatre parties. D'abord les douze questions, et ce que chacune fait vraiment. Ensuite, l'écran le plus important avant le paiement : le plan personnalisé. Puis le paywall, avec chaque choix qu'on a fait. Et enfin, ce qui a perdu dans nos tests, et ce qu'on fait quand quelqu'un ferme le paywall.`,
+          show: `Texte à l'écran : les 4 parties, qui restent en sommaire dans un coin pendant la vidéo.`,
+        },
+        {
+          say: `Une précision honnête : ce qui marche pour une app de japonais ne marchera pas à l'identique pour la tienne. Copie le principe de chaque écran, pas le texte.`,
+        },
+        {
+          say: `Cette vidéo est pour toi si tu as une app, ou si tu es en train d'en créer une avec l'IA, et que tu veux qu'elle rapporte. Surtout si tu as déjà des téléchargements mais presque pas de ventes : le problème est probablement là.`,
+        },
+      ],
+    },
+    {
+      time: "1:45",
+      title: "L'idée de base : l'onboarding, c'est la vente",
+      mode: "sans-visage",
+      beats: [
+        {
+          say: `Avant le premier écran, retiens une idée. Un onboarding, ce n'est pas un formulaire pour remplir ton profil. C'est là que la personne doit se dire : « cette app est faite pour moi, et elle va m'amener là où je veux aller ». Si elle ne se dit pas ça avant le paywall, aucun prix ne sera assez bas.`,
+          show: `Schéma simple : « téléchargement → onboarding → paywall → paiement ». La flèche entre onboarding et paywall s'épaissit.`,
+        },
+        {
+          say: `Chez nous, entre l'ouverture de l'app et le paywall, il y a une vingtaine d'écrans. Ça paraît énorme. Mais aucun n'est là par hasard, et la personne ne s'ennuie pas, parce qu'à chaque écran, c'est d'elle qu'on parle.`,
+        },
+        {
+          say: `Et il y a une chose qu'on ne demande pas au début : de créer un compte. Pas d'email, pas de mot de passe. On y revient à la fin.`,
+          show: `L'écran d'accueil : le carrousel « Lis des histoires », « Du vrai japonais en immersion », « N'oublie jamais », puis le doigt appuie sur « Commencer ».`,
+        },
+      ],
+    },
+    {
+      time: "2:45",
+      title: "Partie 1 : les douze questions",
+      mode: "sans-visage",
+      beats: [
+        { show: "Carte de chapitre : « 1. LES DOUZE QUESTIONS »." },
+        {
+          say: `Premier écran : un personnage. Notre ninja apparaît, il bouge, et il parle dans une bulle : « Salut ! Moi c'est Shinobi ! Comment tu t'appelles ? ». Un personnage, ça transforme un questionnaire en conversation. Et le prénom, on va le réutiliser partout : à partir de là, chaque question commence par ton prénom.`,
+          show: `Enregistrement d'écran : le ninja animé, la bulle qui s'écrit, le prénom tapé.`,
+        },
+        {
+          say: `Deuxième question : l'âge, par tranches. Ce n'est pas de la curiosité. Quelqu'un de moins de 18 ans paie rarement un abonnement. Avec cette réponse, on sait exactement quel contenu nous amène des gens qui peuvent payer, et lequel nous amène des ados.`,
+          show: `L'écran « Enchanté, Jeremy ! Quel âge as-tu ? », les six tranches.`,
+        },
+        {
+          say: `Troisième question : comment tu as connu l'app. Instagram, TikTok, YouTube, une IA, un ami. C'est la meilleure donnée marketing que tu auras, et elle est gratuite. Tu sauras quel réseau t'amène des gens qui paient, pas seulement des téléchargements.`,
+          show: `L'écran « Comment as-tu connu Shinobi ? », avec la case « Une IA (ChatGPT…) ».`,
+        },
+        {
+          say: `Quatrième question, la plus importante : pourquoi tu veux apprendre le japonais. Pour un voyage, pour tes études, pour t'installer au Japon, pour ta carrière. Ici, la personne te dit elle-même ce qu'elle veut acheter. Et le ninja lui répond tout de suite : « Génial ! Je vais te préparer pour ton voyage ! ». Elle se sent comprise, et on garde sa réponse pour plus tard.`,
+          show: `L'écran « Jeremy, pourquoi veux-tu apprendre le japonais ? », le doigt choisit « Préparer un voyage », la réponse du ninja s'écrit.`,
+        },
+        {
+          say: `Cinquième : les sujets qui lui plaisent. Anime, cuisine, voyage, business. Ça sert à personnaliser le contenu, mais surtout, la personne commence à imaginer ce qu'elle va lire.`,
+        },
+        {
+          say: `Sixième, et c'est mon écran préféré : on lui montre des caractères japonais et on lui demande « tu peux lire ça ? ». Si elle répond « pas encore », le ninja la rassure : « Pas de souci ! Je vais t'apprendre pas à pas. », et la prononciation apparaît juste sous les caractères. En une seconde, elle a vu l'app lui apprendre quelque chose. Et on saute la question du niveau, puisqu'on la connaît déjà.`,
+          show: `L'écran « Jeremy, tu peux lire ça ? », appui sur « Pas encore », le romaji apparaît sous les kana.`,
+        },
+        {
+          say: `Retiens le principe : chaque fois que tu peux, remplace une question par une petite expérience. Quelqu'un qui réussit quelque chose dans ton app avant de payer est beaucoup plus près de payer.`,
+        },
+        {
+          say: `Ensuite, on prépare sa routine. On lui demande combien de minutes par jour : 5, 10, 15 ou 20. Et juste après, on transforme ces minutes en résultat : « Ça représente 80 mots par semaine ! », avec une pluie de mots à l'écran. Personne ne veut acheter des minutes. Les gens veulent un résultat. Ton travail, c'est de traduire l'effort en résultat, avec leurs propres réponses.`,
+          show: `L'écran objectif quotidien, puis « Ça représente {count} mots par semaine ! » avec la pluie de mots.`,
+        },
+        {
+          say: `Les deux derniers écrans servent aux notifications. D'abord, on demande à quelle heure elle veut ses rappels. Puis on lui montre une fausse fenêtre de demande d'autorisation, avec le bouton « Autoriser » mis en avant, et seulement après, la vraie demande d'Apple.`,
+          show: `L'écran « Jeremy, quand veux-tu tes encouragements ? », puis « Restons connectés ! » avec la fausse fenêtre, puis la vraie.`,
+        },
+        {
+          say: `Pourquoi ? Parce que la vraie fenêtre d'Apple, tu n'as le droit de l'afficher qu'une fois. Si la personne refuse, c'est fini. Alors on lui explique d'abord pourquoi on va lui écrire, au moment où elle vient de choisir son heure de rappel. Et les notifications, ce sont elles qui la font revenir le lendemain.`,
+        },
+      ],
+    },
+    {
+      time: "7:00",
+      title: "Montrer l'app avant de faire payer",
+      mode: "sans-visage",
+      beats: [
+        {
+          say: `Avant le paywall, on fait encore une chose : on montre l'app. Un court tutoriel où le ninja explique comment ça marche, et surtout, une mini-histoire où la personne touche un vrai caractère japonais et voit comment il se lit.`,
+          show: `Le tutoriel : « On y va ! Laisse-moi te montrer comment ça marche. », puis la mini-histoire « Tu vois ? Le kanji 猫 se lit ねこ. Appuie dessus ! », le doigt appuie.`,
+        },
+        {
+          say: `Beaucoup d'apps demandent de payer pour un produit qu'on n'a jamais vu. Nous, on fait vivre le cœur de l'app pendant trente secondes avant de demander quoi que ce soit. C'est ce moment-là, « ah, c'est comme ça que ça marche », qu'on veut avant le prix.`,
+        },
+      ],
+    },
+    {
+      time: "7:45",
+      title: "Partie 2 : le plan personnalisé",
+      mode: "sans-visage",
+      beats: [
+        { show: "Carte de chapitre : « 2. LE PLAN PERSONNALISÉ »." },
+        {
+          say: `Voici l'écran le plus important avant le paiement. D'abord, un écran d'attente de quelques secondes : « Je crée ton plan personnalisé ! », avec des coches qui apparaissent une par une. « Analyse de ton objectif », « Création d'un cours pour ton niveau », « Préparation de ta routine ».`,
+          show: `L'écran « Je crée ton plan personnalisé ! », les coches qui apparaissent.`,
+        },
+        {
+          say: `Ces quelques secondes ne sont pas une perte de temps. Quand on voit un travail se faire pour soi, on accorde plus de valeur au résultat. Et la personne vient de répondre à douze questions : elle attend son plan.`,
+        },
+        {
+          say: `Puis le plan arrive : « Votre programme personnalisé est prêt ! », avec une date, et son objectif à elle. Si elle a choisi le voyage, c'est « Prêt pour ton voyage », d'ici telle date. En dessous, une courbe de progression, et une liste de ce qu'elle saura faire avec dix minutes par jour : des centaines de mots, des kanji maîtrisés.`,
+          show: `L'écran « Votre programme personnalisé est prêt ! » : la date, « Prêt pour ton voyage », la courbe, la liste. Zoom lent sur l'objectif.`,
+        },
+        {
+          say: `Tu vois ce qui se passe ? Tout ce qui est sur cet écran vient de ses propres réponses. Son objectif, son niveau, son temps par jour. Quand elle appuie sur « Continuer » et qu'elle arrive sur le paywall, elle ne paie pas une app de japonais. Elle paie son plan à elle, celui qui l'amène à son voyage.`,
+        },
+        {
+          say: `Pour ton app, c'est pareil, quelle que soit ta niche. Une app de sport : « ton programme pour perdre 4 kilos d'ici mars ». Une app de budget : « ton plan pour mettre 300 euros de côté par mois ». Reprends leurs réponses, et montre-leur le résultat avec une date.`,
+        },
+      ],
+    },
+    {
+      time: "9:30",
+      title: "Le cadeau",
+      mode: "visage",
+      beats: [
+        {
+          say: `Pour que tu n'aies pas à tout noter, j'ai mis tout cet onboarding dans un document : les douze questions mot à mot, à quoi sert chacune, l'écran du plan, le paywall, et un prompt qui réécrit le tout pour ton app. Tu le donnes à ton IA et tu as la base de ton onboarding. Il est gratuit, le lien est en premier dans la description.`,
+          show: `Texte à l'écran : « Le modèle d'onboarding de Shinobi, lien en description », 4 secondes, sans couper la parole.`,
+        },
+      ],
+    },
+    {
+      time: "10:00",
+      title: "Partie 3 : le paywall",
+      mode: "sans-visage",
+      beats: [
+        { show: "Carte de chapitre : « 3. LE PAYWALL »." },
+        {
+          say: `Le paywall, maintenant. Premier choix, le plus gros : depuis septembre, sur iPhone, il est obligatoire pour les nouveaux utilisateurs. Pas de bouton « continuer gratuitement ». Soit tu commences l'essai, soit tu ne vas pas plus loin.`,
+          show: `Le paywall en plein écran : les trois couvertures d'histoires, « Lis du vrai japonais. Gratuit pendant 7 jours. »`,
+        },
+        {
+          say: `Ça fait peur, et ce n'est pas pour toutes les apps. Ça marche quand l'onboarding a déjà fait son travail et que l'essai est gratuit : la personne n'a rien à payer aujourd'hui. Sur Android, où les gens paient moins, on laisse une porte de sortie gratuite.`,
+        },
+        {
+          say: `Deuxième choix : l'essai gratuit de 7 jours est seulement sur l'abonnement annuel. Le mensuel existe, mais sans essai. Ça pousse doucement vers l'annuel, et l'annuel, c'est un an d'argent d'un coup, plutôt qu'un mois que les gens annulent.`,
+        },
+        {
+          say: `Troisième choix : on affiche le prix par semaine. Le même abonnement, présenté par semaine, paraît beaucoup plus petit qu'un chiffre annuel. Et on affiche la réduction de l'annuel par rapport au mensuel.`,
+          show: `Zoom sur les deux plans : annuel avec « 7 jours gratuits » et le badge de réduction, mensuel en dessous. Prix affichés par semaine.`,
+        },
+        {
+          say: `Quatrième choix, et c'est celui que je te recommande le plus : la timeline. « Aujourd'hui : accès complet. Jour 6 : rappel. Jour 7 : fin de l'essai. » Et sous le bouton : « Aucun paiement aujourd'hui, annulable à tout moment ».`,
+          show: `Zoom sur la timeline, puis sur « Aucun paiement aujourd'hui · Annulable à tout moment ».`,
+        },
+        {
+          say: `La plus grosse peur devant un essai gratuit, c'est d'oublier d'annuler et de se faire prélever. La timeline enlève cette peur. Et on tient la promesse : l'app envoie un rappel 24 heures et 6 heures avant la fin de l'essai. Ça paraît contre-productif, mais quelqu'un qui se sent piégé demande un remboursement et laisse une mauvaise note. Quelqu'un qu'on a prévenu et qui reste, il reste vraiment.`,
+        },
+        {
+          say: `Et autour de tout ça, de la preuve : la note sur l'App Store, le nombre d'apprenants, des avis. Mets uniquement des vrais avis, jamais des avis inventés : Apple peut refuser ton app pour ça, et tes utilisateurs le sentent.`,
+        },
+      ],
+    },
+    {
+      time: "12:30",
+      title: "Partie 4 : ce qui a perdu dans nos tests",
+      mode: "visage",
+      beats: [
+        { show: "Carte de chapitre : « 4. CE QUI A PERDU », puis retour face caméra." },
+        {
+          say: `Maintenant, ce qui n'a pas marché. Parce que tout ce que je viens de te montrer, c'est ce qui reste après avoir perdu beaucoup de tests.`,
+        },
+        {
+          say: `Un : l'abonnement à la semaine. Beaucoup de grosses apps le font, alors on l'a testé à la place du mensuel. Il a perdu, et on est revenus au mensuel.`,
+          show: `Texte à l'écran : « Abonnement à la semaine : ❌ perdu ».`,
+        },
+        {
+          say: `Deux : cacher le mensuel pour ne laisser que l'annuel. On s'est dit que ça forcerait les gens vers l'annuel. Ça a perdu aussi. Les gens ont besoin de voir une option moins chère pour trouver l'annuel intéressant.`,
+          show: `Texte à l'écran : « Cacher le mensuel : ❌ perdu ».`,
+        },
+        {
+          say: `Trois : la durée de l'essai. Quand on est passés au paywall obligatoire, on a commencé avec 3 jours d'essai. On a testé 3 jours contre 7 jours, et aujourd'hui, tout le monde a 7 jours.`,
+          show: `Texte à l'écran : « Essai de 3 jours : remplacé par 7 jours ».`,
+        },
+        {
+          say: `La leçon, ce n'est pas « fais l'inverse de nous ». C'est que ce qui marche chez les grosses apps ne marchera pas forcément chez toi. Teste une seule chose à la fois, garde ce qui gagne, et remets tout le reste comme avant.`,
+        },
+      ],
+    },
+    {
+      time: "14:00",
+      title: "Quand la personne ferme le paywall, et le compte à la fin",
+      mode: "sans-visage",
+      beats: [
+        {
+          say: `Dernière chose : que se passe-t-il quand la personne veut fermer le paywall ? La croix n'apparaît qu'au bout de cinq secondes, le temps de lire. Et quand elle appuie dessus, on lui fait une offre unique : l'annuel environ 40 % moins cher, payé tout de suite, sans essai. Avec ce texte : « Ce prix n'est affiché qu'une seule fois. »`,
+          show: `Le paywall, la croix qui apparaît en fondu, puis l'offre « Offre unique · Attends ! » qui monte du bas.`,
+        },
+        {
+          say: `Et c'est vrai : on ne la remontre jamais. Une offre « unique » qui revient tous les jours, les gens finissent par le comprendre, et plus personne ne paie le prix normal.`,
+        },
+        {
+          say: `Et le compte, alors ? On ne le demande qu'après le paiement : « Bienvenue dans Premium ! Garde ta progression ». Et même là, il y a un bouton « Plus tard ». Chaque écran avant le paywall coûte des gens. Un formulaire d'inscription, c'est l'écran qui en coûte le plus, pour une information dont tu n'as pas besoin pour vendre.`,
+          show: `L'écran « Bienvenue dans Premium ! », le bouton « Plus tard ».`,
+        },
+      ],
+    },
+    {
+      time: "15:00",
+      title: "Récap et fin",
+      mode: "visage",
+      beats: [
+        {
+          say: `On est passés à cet onboarding avec paywall obligatoire en septembre. Octobre a été notre meilleur mois des douze derniers, avec 42 845 dollars de revenus. Je ne vais pas te dire que c'est seulement grâce à ça, mais c'est la plus grosse chose qu'on ait changée.`,
+          show: `Capture RevenueCat d'octobre 2026, « Revenue $42,845 », 3 secondes.`,
+        },
+        {
+          say: `Si tu ne dois faire que trois choses ce soir sur ton app : enlève l'inscription du début, ajoute une question « pourquoi » dont tu réutilises la réponse dans un écran « ton plan est prêt », et mets une timeline avec un rappel sur ton paywall. Le modèle complet est en premier dans la description.`,
+        },
+        {
+          say: `Et si tu veux qu'on regarde ensemble l'onboarding de ton app, tu peux réserver un appel avec mon équipe, le lien est aussi dans la description.`,
+        },
+        {
+          say: `Dis-moi en commentaire combien d'écrans il y a entre l'ouverture de ton app et ton paywall. Et si cette vidéo t'a servi, abonne-toi : je montre tout ce qu'on fait sur nos apps.`,
+        },
+      ],
+    },
+  ],
+  description: `🎁 Le modèle GRATUIT de l'onboarding de Shinobi (les 12 questions, l'écran du plan, le paywall, et le prompt pour l'adapter à ton app) : https://www.jeremypitault.com/guide/onboarding-shinobi?${UTM_C}
+
+🎯 Mon Plan d'Action gratuit pour créer une app mobile qui génère 30K$/mois : https://www.jeremypitault.com/plan-action?${UTM_C}
+
+📞 BESOIN D'UN ACCOMPAGNEMENT ?
+Réserve ton appel stratégique personnalisé de 30 mins avec un expert APP MASTERY : https://www.jeremypitault.com/rdv?${UTM_C}
+
+Je te montre l'intérieur de Shinobi, mon app de japonais à 400 000 $ par an : tout ce que voit un nouvel utilisateur entre l'ouverture de l'app et le paiement. Les 12 questions et ce qu'elles font vraiment, l'écran du plan personnalisé, chaque choix du paywall (obligatoire, essai sur l'annuel, prix à la semaine, timeline), les tests qu'on a perdus, et l'offre quand quelqu'un ferme le paywall.
+
+👉 Dis-moi en commentaire combien d'écrans il y a entre l'ouverture de ton app et ton paywall.
+
+0:00 Introduction
+1:45 L'onboarding, c'est la vente
+2:45 Les 12 questions
+7:00 Montrer l'app avant de faire payer
+7:45 Le plan personnalisé
+10:00 Le paywall
+12:30 Ce qui a perdu dans nos tests
+14:00 Quand on ferme le paywall
+15:00 Récap
+
+#applicationmobile #onboarding #paywall #créeruneapp #appmobile #abonnement #entrepreneur`,
+  shorts: [
+    "« La fausse fenêtre qui fait accepter les notifications » (partie 1, 35 s).",
+    "« Personne n'achète des minutes : ça représente 80 mots par semaine » (partie 1, 30 s).",
+    "« 3 tests qu'on a perdus sur notre paywall » (partie 4, 45 s).",
+  ],
+  prepare: [
+    "Filmer l'onboarding complet sur un iPhone où Shinobi n'est pas installé (ou après suppression), en français, du « Commencer » jusqu'au paywall, puis l'offre de sortie (elle ne s'affiche qu'une fois par compte : filmer d'un trait).",
+    "IMPORTANT : le carrousel d'avis de l'écran « Je crée ton plan » affiche des avis provisoires inventés (Sarah M., Lucas T., Emma K., marqués TODO dans PreparingReviewsCarousel.tsx). Les remplacer par de vrais avis de l'App Store avant de filmer, ou couper ce passage au montage. Ne pas filmer non plus la phrase « 3.6x plus vite » du tutoriel si on ne peut pas la sourcer.",
+    "Vérifier le chiffre « 80 mots par semaine » à l'écran selon l'objectif choisi pendant le tournage, et dire le chiffre affiché.",
+    "Créer la page du cadeau /guide/onboarding-shinobi (modèle + prompt) avant de publier.",
+    "Capture RevenueCat d'octobre 2026 (Revenue 42 845 $) pour la fin.",
+    "Recaler les chapitres de la description sur le montage réel (skill youtube-description).",
+  ],
+  checklist: [
+    { point: "Un seul public : app qui rapporte, pas développeurs (aucun code montré)", state: "OK" },
+    { point: "3 vidéos à plus de 50 000 vues sur le sujet", state: "OK (410 000, 205 000, 63 000), aucune en français" },
+    { point: "Argent dans le titre, format prouvé, psychologie écrite", state: "OK" },
+    { point: "Sujet différent des vidéos A et B (après le téléchargement, pas le contenu)", state: "OK" },
+    { point: "Pure valeur : aucun élève, un seul chiffre en dollars, ce qui a marché et ce qui a perdu", state: "OK" },
+    { point: "Ouverture : promesse, preuve, plan, public, pas d'abonnement avant la valeur", state: "OK" },
+    { point: "RDV en 1 ou 2 phrases, jamais « la formation »", state: "OK" },
+    { point: "Cadeau lié au sujet, après la première grosse valeur", state: "À créer (modèle d'onboarding)" },
+    { point: "Miniature : 3 mots, preuve visible, visage à droite, ne répète pas le titre", state: "OK" },
+    { point: "Ligne dans le tableau de suivi après publication", state: "À faire" },
+  ],
+};
+
 // Vidéo D (23 nov. 2026) : les apps ennuyeuses qui rapportent des millions.
 // Sources : classement d'Apple des apps qui rapportent le plus aux États-Unis
 // (flux RSS « top grossing », 13 catégories, 100 apps chacune, relevé le 23/11/2026),
@@ -1377,13 +1765,13 @@ Un GPS pour camionneurs, une météo pour chasseurs de cerfs, une app de crochet
 👉 Dis-moi en commentaire l'app la plus ennuyeuse pour laquelle tu paies.
 
 0:00 Introduction
-2:05 Les apps des métiers
-4:30 Les apps des passions
-6:50 Les apps des galères
-10:00 Pourquoi personne n'en parle
-10:40 Ce qui floppe
-14:00 Trouver ta niche
-16:10 Récap
+2:40 Les apps des métiers
+4:27 Les apps des passions
+6:46 Les apps des galères
+11:09 Pourquoi personne n'en parle
+12:10 Ce qui floppe
+15:06 Trouver ta niche
+18:30 Récap
 
 Sources : classement des apps qui rapportent le plus sur l'App Store américain, relevé le 23/11/2026 ; TalkingParents (Practical Founders Podcast, août 2025) ; Trucker Path (FreightWaves, oct. 2020) ; apps de télécommande et de reconnaissance de pièces (estimations Appfigures, 2025).
 
@@ -1403,7 +1791,6 @@ Sources : classement des apps qui rapportent le plus sur l'App Store américain,
     "Photo de la calculatrice physique Construction Master (site de Calculated Industries) pour la partie 1.",
     "Avant de publier : créer le cadeau /guide/niches-ennuyeuses (les 50 niches) et son email de livraison.",
     "Aucun élève, aucune capture de revenus de Shinobi : c'est une vidéo grand public.",
-    "Recaler les chapitres de la description sur le montage réel (skill youtube-description).",
   ],
   checklist: [
     { point: "Un seul public : app qui rapporte, pas développeurs", state: "OK" },
@@ -1422,4 +1809,4 @@ Sources : classement des apps qui rapportent le plus sur l'App Store américain,
 };
 
 // D en premier : la vidéo de jeudi 26 nov. 2026.
-export const SCRIPTS: VideoScript[] = [SCRIPT_D, SCRIPT_B, SCRIPT_A];
+export const SCRIPTS: VideoScript[] = [SCRIPT_D, SCRIPT_C, SCRIPT_A, SCRIPT_B];
