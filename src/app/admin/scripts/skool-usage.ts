@@ -12,43 +12,37 @@ import type { VideoScript } from "./types";
 // 2026 et la documentation officielle de Claude Code avec Chrome
 // (code.claude.com/docs/en/chrome et /desktop), lue le 26 nov. 2026.
 
+// Un seul prompt (demande de Jeremy du 26 nov. 2026, à la publication) : avec une étape,
+// il lit cette étape ; sans étape, il parcourt tout le Skool pour une mémoire globale
+// (la « totalité du Skool » qu'il annonce à 9:28 et dans le récap).
 const PROMPT = `Lis le Skool App Mastery dans mon Chrome, où je suis déjà connecté, pour m'aider ensuite avec cette méthode plutôt qu'avec des conseils généraux.
 
-Mon étape actuelle : [ÉCRIS TON ÉTAPE, par exemple « Étape 4 · Créer ton app »]
+Mon étape actuelle : [ÉCRIS TON ÉTAPE, par exemple « Étape 4 · Créer ton app », ou laisse cette ligne comme elle est pour tout le Skool]
 
 1. Ouvre https://www.skool.com/app-secrets-mobile-web-4073/classroom
 2. Dans le cours « 👉🏼 Commence ici », lis « Le parcours en 7 étapes » et « Comment on travaille ensemble ».
-3. Ouvre le cours de mon étape et lis chaque leçon dans l'ordre, puis chaque page du dossier « ❓ FAQ » de ce cours. Pour une leçon vidéo, lis le texte sous la vidéo.
-4. Tu lis seulement : ne publie rien, ne commente rien, ne like rien et ne modifie rien sur le Skool.
-5. Écris un résumé dans docs/methode-app-mastery.md : pour chaque leçon, son titre, les règles, les chiffres et les erreurs à éviter, tels que le Skool les donne, sans ajouter tes propres conseils. Si le fichier existe déjà, complète-le.
-6. Ajoute dans le CLAUDE.md de mon projet cette consigne : avant de me conseiller sur mon idée, mon onboarding, mon paywall, mon contenu ou mes chiffres, relis docs/methode-app-mastery.md et applique cette méthode, même quand elle contredit tes habitudes.
-7. Vérifie que ce projet n'est pas sur un dépôt GitHub public. S'il l'est, préviens-moi avant d'enregistrer quoi que ce soit.
-8. À partir de maintenant, quand tu me conseilles, dis-moi de quelle leçon vient ton conseil. Si le Skool ne dit rien sur ma question, dis-le-moi au lieu d'inventer.`;
-
-// Variante dite dans la vidéo (8:25 et récap) : lire les 7 étapes d'un coup, pour la vue globale.
-const PROMPT_TOUT = `Lis tout le Skool App Mastery dans mon Chrome, où je suis déjà connecté, pour m'aider ensuite avec cette méthode plutôt qu'avec des conseils généraux.
-
-1. Ouvre https://www.skool.com/app-secrets-mobile-web-4073/classroom
-2. Dans le cours « 👉🏼 Commence ici », lis « Le parcours en 7 étapes » et « Comment on travaille ensemble ».
-3. Ouvre les cours « Étape 1 » à « Étape 7 », dans l'ordre. Dans chacun, lis chaque leçon, puis chaque page de son dossier « ❓ FAQ ». Pour une leçon vidéo, lis le texte sous la vidéo.
-4. Tu lis seulement : ne publie rien, ne commente rien, ne like rien et ne modifie rien sur le Skool.
-5. Écris un résumé dans docs/methode-app-mastery.md, une partie par étape : pour chaque leçon, son titre, les règles, les chiffres et les erreurs à éviter, tels que le Skool les donne, sans ajouter tes propres conseils. Si le fichier existe déjà, complète-le.
-6. Ajoute dans le CLAUDE.md de mon projet cette consigne : avant de me conseiller sur mon idée, mon onboarding, mon paywall, mon contenu ou mes chiffres, relis docs/methode-app-mastery.md et applique cette méthode, même quand elle contredit tes habitudes.
-7. Vérifie que ce projet n'est pas sur un dépôt GitHub public. S'il l'est, préviens-moi avant d'enregistrer quoi que ce soit.
-8. À partir de maintenant, quand tu me conseilles, dis-moi de quelle leçon vient ton conseil. Si le Skool ne dit rien sur ma question, dis-le-moi au lieu d'inventer.`;
+3. Si j'ai écrit une étape ci-dessus, ouvre le cours de cette étape et lis chaque leçon dans l'ordre, puis chaque page de son dossier « ❓ FAQ ».
+4. Si aucune étape n'est écrite (la ligne est encore entre crochets), lis tout le Skool : chaque cours du classroom dans l'ordre où il apparaît, les étapes 1 à 7 comme les cours sans numéro (Ressources, les rediffusions des lives, Claude Code en profondeur, Git/GitHub…). Dans chaque cours, ouvre chaque dossier et lis chaque leçon, FAQ comprises.
+5. Pour une leçon vidéo, lis le texte sous la vidéo.
+6. Tu lis seulement : ne publie rien, ne commente rien, ne like rien et ne modifie rien sur le Skool.
+7. Écris un résumé dans docs/methode-app-mastery.md, une partie par cours : pour chaque leçon, son titre, les règles, les chiffres et les erreurs à éviter, tels que le Skool les donne, sans ajouter tes propres conseils. Écris au fur et à mesure, cours par cours, pour ne rien perdre si la lecture est longue. Si tu as lu tout le Skool, commence le fichier par une vue d'ensemble : les 7 étapes, quand chacune commence et quand elle est faite, et le cours où chercher chaque sujet. Si le fichier existe déjà, complète-le.
+8. Ajoute dans le CLAUDE.md de mon projet cette consigne : avant de me conseiller sur mon idée, mon onboarding, mon paywall, mon contenu ou mes chiffres, relis docs/methode-app-mastery.md et applique cette méthode, même quand elle contredit tes habitudes.
+9. Vérifie que ce projet n'est pas sur un dépôt GitHub public. S'il l'est, préviens-moi avant d'enregistrer quoi que ce soit.
+10. À la fin, dis-moi combien de leçons tu as lues et lesquelles tu n'as pas pu ouvrir.
+11. À partir de maintenant, quand tu me conseilles, dis-moi de quelle leçon vient ton conseil. Si le Skool ne dit rien sur ma question, dis-le-moi au lieu d'inventer.`;
 
 export const SCRIPT_SKOOL_USAGE: VideoScript = {
   slug: "skool-usage",
   kind: "skool",
   label: "Skool · Utiliser le Skool",
-  status: "Tourné et monté",
+  status: "Publié",
   updatedAt: "26 nov. 2026",
   title: "Comment utiliser ce Skool, et le faire lire à ton Claude Code",
   why: `Les élèves demandent où retrouver une rediffusion, comment voir les messages de la communauté, ou s'il faut tout recommencer après avoir regardé les vidéos. Et c'est ton idée du 19 nov. : leur Claude Code conseille comme pour n'importe quel projet tant qu'il n'a pas lu le Skool. Cette vidéo montre comment le Skool est rangé, puis comment le brancher à leur Claude Code avec Claude in Chrome, pour qu'il réfléchisse avec ta méthode à chaque session.`,
   facts: [
     { label: "Durée", value: "11 min 10 une fois montée (voix du 26 nov., montage src/skoolusage)" },
     { label: "Style", value: "Tu lis le script avec ta vraie voix, les captures du Skool et du terminal passent à l'écran pendant que tu parles" },
-    { label: "Où la mettre", value: "Dans « 👉🏼 Commence ici », juste après « Le parcours en 7 étapes »" },
+    { label: "En ligne", value: "Publiée le 26 nov. 2026 dans « 👉🏼 Commence ici », juste après « Le parcours en 7 étapes » : https://www.skool.com/app-secrets-mobile-web-4073/classroom/c5b1074b?md=9ee92b9394dc4f019c1957220f108610" },
     { label: "Titre Skool", value: "« Utiliser ce Skool avec ton Claude Code » (39 caractères, Skool en accepte 50)" },
     { label: "Sources", value: "Les pages de « Commence ici », l'arbre réel du Skool (26 nov.), la documentation officielle de Claude Code avec Chrome" },
   ],
@@ -264,22 +258,17 @@ Savoir où trouver ce dont tu as besoin à ton étape, et brancher ton Claude Co
 • Il ne remplace ni mon avis sur ton idée, ni l'audit, ni nos appels
 • Il lit seulement : le prompt lui interdit de publier ou de modifier quoi que ce soit sur le Skool
 
-🤖 Le prompt à copier (ton étape)
-Ouvre Claude Code dans le dossier de ton projet, colle ce prompt et remplace ton étape. Relance-le à chaque nouvelle étape.
+🤖 Le prompt à copier
+Ouvre Claude Code dans le dossier de ton projet et colle ce prompt. Écris ton étape pour qu'il lise seulement celle-là, ou laisse la ligne de l'étape comme elle est : il parcourt alors tout le Skool et en garde une mémoire complète (le mieux si tu as déjà une app ou que tu veux la stratégie complète d'un coup). Quand tu changes d'étape, relance-le avec la nouvelle.
 
 ${PROMPT}
-
-🤖 Le prompt pour tout le Skool (la vue globale)
-Si tu as déjà une app ou que tu veux la stratégie complète d'un coup, donne-lui plutôt celui-ci.
-
-${PROMPT_TOUT}
 
 ✅ À retenir
 • Déjà à l'aise avec l'IA : le marketing, l'onboarding et le paywall en vidéo, le reste par ton Claude Code
 • Tu débutes : une seule étape à la fois, en commençant par Le parcours en 7 étapes
 • La FAQ de ton étape et le sommaire des lives avant de poser une question
 • Claude in Chrome + le prompt : ton Claude Code réfléchit avec la méthode à chaque session
-• Nouvelle étape : relance le prompt, ou donne-lui le prompt pour tout le Skool`,
+• Nouvelle étape : relance le prompt avec ton étape, ou sans étape pour tout le Skool`,
   prepare: [
     "Captures du Skool : les onglets Community, Classroom et Calendar, la liste des cours, l'étape 4 avec ses dossiers",
     "La page « Le parcours en 7 étapes », avec la ligne « C'est fait quand » de l'étape 5",
@@ -297,6 +286,6 @@ ${PROMPT_TOUT}
     { point: "WhatsApp : « 6 jours sur 7 » dans Le parcours et Comment on travaille ensemble, « du lundi au vendredi » dans Comment me joindre. Le script ne donne pas de jours", state: "À trancher" },
     { point: "Leçon « Claude Chrome » citée (Claude Code en profondeur) : c'est bien une vidéo", state: "OK" },
     { point: "Chapitres réels du montage dans la description (26 nov.)", state: "OK" },
-    { point: "Description collée sous la leçon Skool", state: "À faire" },
+    { point: "Description collée sous la leçon Skool, avec le prompt unique (sans étape, il lit tout le Skool)", state: "OK" },
   ],
 };
