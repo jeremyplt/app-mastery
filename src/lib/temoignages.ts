@@ -73,8 +73,12 @@ export const TEMOIGNAGE_VEDETTE = WASSIM;
 // public/emails/<prenom>-message-v2.jpg (nouveau nom à chaque remplacement,
 // pour le cache) et ajouter une entrée ici.
 export type MessageEleve = {
+  // Prénom, ou une courte description quand l'élève reste anonyme.
   firstName: string;
-  photo: string;
+  // Sans photo : pastille avec l'initiale (ou une silhouette si anonyme).
+  photo?: string;
+  // L'élève ne veut ni prénom, ni nom d'application, ni visage : tout est flouté.
+  anonyme?: boolean;
   // Capture WhatsApp : entière pour un tableau de bord (Wassim), recadrée sur
   // la bulle pour un simple message texte (Soraya). Jeremy tranche au cas par cas.
   image: { src: string; width: number; height: number; alt: string };
@@ -163,5 +167,63 @@ export const MESSAGES_ELEVES: MessageEleve[] = [
     },
     context:
       "Il y a un mois, Elouan m'écrivait le soir où son application entrait dans le top 57 des téléchargements Éducation en France. Ses revenus sur 28 jours étaient encore à 0 $. Un mois de marketing plus tard, il est à 1 384 $ sur 28 jours, avec 51 abonnés payants, 20 essais gratuits en cours et 1 015 $ de revenus récurrents par mois. Tout ça en 100 % organique : pas un euro de publicité pour le moment. Le nom de son application est flouté pour ne pas la dévoiler.",
+  },
+  // Captures WhatsApp du 19 et du 24 novembre 2026 (deux captures recollées
+  // pour avoir le message entier).
+  {
+    firstName: "Julien",
+    image: {
+      src: "/emails/julien-message-v1.jpg",
+      width: 840,
+      height: 2911,
+      alt: "Message WhatsApp de Julien le 24 novembre 2026 avec ses graphiques RevenueCat du 27 octobre au 24 novembre : 2 626 € de revenus et 7 565 nouveaux clients, dont 724 le 24 novembre. Il raconte trois jours difficiles, le contenu qu'il n'a pas lâché, l'onboarding qui fonctionne bien et sa deuxième meilleure journée de téléchargements depuis le lancement.",
+    },
+    status: "2 626 € sur 28 jours et 7 565 nouveaux utilisateurs en un mois",
+    earlier: {
+      src: "/emails/julien-message-19nov-v1.jpg",
+      width: 840,
+      height: 1748,
+      alt: "Message WhatsApp de Julien le 19 novembre 2026 : graphique RevenueCat à 2 065 € de revenus du 22 octobre au 19 novembre, « Ce soir normalement je devrais être à 2212€ », et un merci pour le live Skool du soir.",
+      caption: "Cinq jours plus tôt, il était à 2 065 € sur 28 jours.",
+    },
+    context:
+      "Fin octobre, Julien avait encore des journées à 0 €. Je lui ai refait son onboarding, et il a continué à publier du contenu tous les jours, même pendant trois jours sans résultat. Le 24 novembre, il m'a envoyé ce point : 2 626 € sur 28 jours, 7 565 nouveaux utilisateurs sur le mois, et sa deuxième meilleure journée depuis le lancement, avec 724 nouveaux utilisateurs ce jour-là. Il a même ajouté de lui-même une notification qui demande aux gens pourquoi ils arrêtent leur essai gratuit.",
+  },
+  // Capture du groupe WhatsApp du 26 novembre 2026. Ils ne veulent pas être
+  // reconnus : prénoms, numéro, nom de l'application et transactions floutés
+  // ou coupés. Ne jamais les nommer ailleurs.
+  {
+    firstName: "Deux associés",
+    anonyme: true,
+    image: {
+      src: "/emails/anonyme-message-v1.jpg",
+      width: 840,
+      height: 1037,
+      alt: "Message WhatsApp de deux associés accompagnés, avec leur tableau de bord RevenueCat : 100 abonnements actifs, 60 essais en cours, 739 € de revenus récurrents par mois et 2 272 € sur 28 jours. « On a passé les 100 users payants aujourd'hui ». Le nom de l'application et les transactions sont floutés.",
+    },
+    status: "2 272 € sur 28 jours et 100 abonnés payants",
+    result: {
+      src: "/emails/anonyme-dashboard-2272-v1.jpg",
+      width: 1600,
+      height: 576,
+      alt: "Tableau de bord RevenueCat des deux associés : 60 essais en cours, 100 abonnements actifs, 739 € de revenus récurrents par mois, 2 272 € sur 28 jours, 16 869 nouveaux clients et 31 547 clients actifs sur 28 jours. Le nom de l'application est flouté.",
+      caption: "Leur tableau de bord le jour des 100 abonnés payants.",
+    },
+    context:
+      "Ils préfèrent rester anonymes, donc ni prénom ni nom d'application ici. Ils m'ont écrit le jour où ils ont passé les 100 abonnés payants : 2 272 € sur 28 jours, 739 € de revenus récurrents par mois, 60 essais gratuits en cours et 16 869 nouveaux utilisateurs sur les 28 derniers jours.",
+  },
+  // Message Telegram du 24 novembre 2026. Le fond d'écran (sa famille), le nom
+  // et l'icône de l'application sont floutés.
+  {
+    firstName: "Un élève qui vient de commencer",
+    image: {
+      src: "/emails/premier-client-message-v1.jpg",
+      width: 840,
+      height: 1719,
+      alt: "Message d'un élève avec la notification RevenueCat de son premier client : « A customer just converted from a free trial to a subscription of Annuel for $54.51 ». « Ça y est j'ai mon premier client payant alors que l'accompagnement vient juste de commencer. Et sur un annuel en plus. 6 mois que je galérais tout seul. » Le fond d'écran, le nom et l'icône de l'application sont floutés.",
+    },
+    status: "Son premier client payant, sur un abonnement annuel, dès le début de l'accompagnement",
+    context:
+      "Il travaillait seul sur son application depuis six mois. Juste après le début de l'accompagnement, il m'a envoyé la notification de son premier client payant : un essai gratuit transformé en abonnement annuel à 54,51 $.",
   },
 ];

@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { UserRound } from "lucide-react";
 import Link from "next/link";
 import posthog from "posthog-js";
 import AdDisclaimer from "@/components/AdDisclaimer";
@@ -227,7 +228,16 @@ export default function TemoignagesContent() {
                     </div>
                     <div className="mt-4 md:mt-0">
                       <div className="flex items-center gap-3">
-                        <Image src={m.photo} alt={m.firstName} width={48} height={48} className="h-12 w-12 shrink-0 rounded-full object-cover" />
+                        {m.photo ? (
+                          <Image src={m.photo} alt={m.firstName} width={48} height={48} className="h-12 w-12 shrink-0 rounded-full object-cover" />
+                        ) : (
+                          <div
+                            aria-hidden
+                            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[var(--fg)] text-[19px] font-bold text-[var(--bg)]"
+                          >
+                            {m.anonyme ? <UserRound className="h-6 w-6" strokeWidth={2.2} /> : m.firstName.charAt(0)}
+                          </div>
+                        )}
                         <div>
                           <p className="text-[19px] font-bold tracking-[-0.02em] leading-tight">{m.firstName}</p>
                           <p className="text-[14px] font-semibold text-[var(--accent2)] leading-snug">{m.status}</p>
