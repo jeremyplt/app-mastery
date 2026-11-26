@@ -34,7 +34,7 @@ export const SCRIPT_SKOOL_USAGE: VideoScript = {
   title: "Comment utiliser ce Skool, et le faire lire à ton Claude Code",
   why: `Les élèves demandent où retrouver une rediffusion, comment voir les messages de la communauté, ou s'il faut tout recommencer après avoir regardé les vidéos. Et c'est ton idée du 19 nov. : leur Claude Code conseille comme pour n'importe quel projet tant qu'il n'a pas lu le Skool. Cette vidéo montre comment le Skool est rangé, puis comment le brancher à leur Claude Code avec Claude in Chrome, pour qu'il réfléchisse avec ta méthode à chaque session.`,
   facts: [
-    { label: "Durée", value: "Environ 10 min (1 450 mots)" },
+    { label: "Durée", value: "Environ 11 min (1 650 mots)" },
     { label: "Style", value: "Tu lis le script avec ta vraie voix, les captures du Skool et du terminal passent à l'écran pendant que tu parles" },
     { label: "Où la mettre", value: "Dans « 👉🏼 Commence ici », juste après « Le parcours en 7 étapes »" },
     { label: "Titre Skool", value: "« Utiliser ce Skool avec ton Claude Code » (39 caractères, Skool en accepte 50)" },
@@ -48,12 +48,22 @@ export const SCRIPT_SKOOL_USAGE: VideoScript = {
       title: "Intro",
       beats: [
         {
-          say: `Dans cette vidéo, je vais te montrer comment te servir de ce Skool, et comment le faire lire à ton Claude Code. Il y a plus de 170 leçons ici, et tu n'as pas besoin de toutes les regarder. Je vais d'abord te montrer comment tout est rangé, pour que tu trouves toujours ce dont tu as besoin à ton étape. Ensuite, on va brancher ton Claude Code au Skool. Par défaut, Claude te conseille comme il conseillerait n'importe qui, sur n'importe quel projet. Une fois qu'il a lu le Skool, il réfléchit avec la méthode qu'on utilise ensemble, et c'est là que ses conseils changent vraiment.`,
+          say: `Dans cette vidéo, je vais te montrer comment te servir de ce Skool, et comment le faire lire à ton Claude Code. Avant tout, je veux que ce soit clair : tu peux tout à fait regarder les vidéos. Je les ai toutes faites moi-même, et elles sont vraiment intéressantes. Mais il y a deux profils différents ici, et ils ne vont pas se servir du Skool de la même façon.`,
+        },
+        {
+          say: `Le premier profil, c'est la personne qui s'y connaît déjà en IA, qui utilise bien Claude Code, et qui a parfois déjà une application. Si c'est ton cas, je ne te recommande pas forcément de regarder toutes les vidéos. Regarde seulement celles dont tu as besoin, et surtout celles qu'il faut absolument maîtriser : le cours sur le marketing, qui est extrêmement important, la vidéo sur l'onboarding et la vidéo sur le paywall. Pour tout le reste, je te recommande de suivre la suite de cette vidéo et de connecter ton Claude Code au Skool. Il lira les leçons pour toi, et il te conseillera avec la méthode.`,
+          show: `Les deux profils côte à côte. Puis le cours « Étape 6 · Faire connaître ton app », et les leçons « Les clés d'un bon onboarding » et « Les clés d'un bon paywall » (Étape 3 · Branding & outils, dossier Onboarding et paywall).`,
+        },
+        {
+          say: `Le deuxième profil, c'est la personne qui débute avec l'IA et avec Claude Code. Dans ce cas, tu suis le parcours dans l'ordre, étape par étape, en regardant les vidéos de ton étape. Et tu branches quand même ton Claude Code au Skool, pour qu'il t'aide à appliquer chaque leçon.`,
+        },
+        {
+          say: `Je vais d'abord te montrer comment tout est rangé, pour que tu trouves toujours ce dont tu as besoin. Ensuite, on va brancher ton Claude Code au Skool. Par défaut, Claude te conseille comme il conseillerait n'importe qui, sur n'importe quel projet. Une fois qu'il a lu le Skool, il réfléchit avec la méthode qu'on utilise ensemble, et c'est là que ses conseils changent vraiment.`,
         },
       ],
     },
     {
-      time: "0:40",
+      time: "1:30",
       title: "Partie 1 · Comment le Skool est rangé",
       beats: [
         {
@@ -75,11 +85,11 @@ export const SCRIPT_SKOOL_USAGE: VideoScript = {
       ],
     },
     {
-      time: "2:00",
+      time: "2:50",
       title: "Partie 2 · Une étape à la fois",
       beats: [
         {
-          say: `La règle la plus importante, c'est de ne suivre qu'une étape à la fois. Tu regardes les vidéos de ton étape, tu les appliques, et tu passes à la suivante. Le parcours en 7 étapes te dit, pour chaque étape, quand elle commence et à quel moment elle est terminée. Par exemple, l'étape 5 est faite quand ton app est en ligne et que le paiement marche. Tant que ce n'est pas le cas, tu restes sur l'étape 5.`,
+          say: `Si tu débutes, la règle la plus importante, c'est de ne suivre qu'une étape à la fois. Tu regardes les vidéos de ton étape, tu les appliques, et tu passes à la suivante. Le parcours en 7 étapes te dit, pour chaque étape, quand elle commence et à quel moment elle est terminée. Par exemple, l'étape 5 est faite quand ton app est en ligne et que le paiement marche. Tant que ce n'est pas le cas, tu restes sur l'étape 5.`,
           show: `« Le parcours en 7 étapes », avec la ligne « C'est fait quand » de l'étape 5 surlignée.`,
         },
         {
@@ -91,7 +101,7 @@ export const SCRIPT_SKOOL_USAGE: VideoScript = {
       ],
     },
     {
-      time: "3:10",
+      time: "4:00",
       title: "Partie 3 · Les FAQ, les lives et tes questions",
       beats: [
         {
@@ -109,7 +119,7 @@ export const SCRIPT_SKOOL_USAGE: VideoScript = {
       ],
     },
     {
-      time: "4:40",
+      time: "5:30",
       title: "Partie 4 · Pourquoi donner le Skool à ton Claude Code",
       beats: [
         {
@@ -122,7 +132,7 @@ export const SCRIPT_SKOOL_USAGE: VideoScript = {
       ],
     },
     {
-      time: "5:40",
+      time: "6:30",
       title: "Partie 5 · Brancher Claude Code à Chrome",
       beats: [
         {
@@ -143,7 +153,7 @@ export const SCRIPT_SKOOL_USAGE: VideoScript = {
       ],
     },
     {
-      time: "7:10",
+      time: "8:00",
       title: "Partie 6 · Ce qu'il faut lui demander",
       beats: [
         {
@@ -163,11 +173,11 @@ export const SCRIPT_SKOOL_USAGE: VideoScript = {
       ],
     },
     {
-      time: "8:30",
+      time: "9:20",
       title: "Partie 7 · Ses limites",
       beats: [
         {
-          say: `Claude lit le texte des pages, il ne regarde pas les vidéos. Presque toutes les leçons vidéo ont un résumé écrit en dessous, donc il en retient l'essentiel, mais la vidéo en dit toujours plus. Tu continues donc à regarder les vidéos de ton étape.`,
+          say: `Claude lit le texte des pages, il ne regarde pas les vidéos. Presque toutes les leçons vidéo ont un résumé écrit en dessous, donc il en retient l'essentiel, mais la vidéo en dit toujours plus. C'est pour ça que le marketing, l'onboarding et le paywall, tu les regardes en vidéo, quel que soit ton profil.`,
         },
         {
           say: `Il ne remplace pas non plus mon avis. Pour savoir si ton idée tient la route, pour l'audit de ton app ou pour une décision importante, tu m'en parles. Claude t'aide à avancer entre deux échanges, avec la même méthode.`,
@@ -178,11 +188,11 @@ export const SCRIPT_SKOOL_USAGE: VideoScript = {
       ],
     },
     {
-      time: "9:20",
+      time: "10:10",
       title: "Récap",
       beats: [
         {
-          say: `Si je résume : tu suis une seule étape à la fois, en commençant par Le parcours en 7 étapes. Avant de poser une question, tu regardes la FAQ de ton étape et le sommaire des lives. Ensuite, tu branches Claude Code à Chrome avec l'extension Claude in Chrome, tu lui donnes le prompt de la description, et il réfléchit avec la méthode à chaque session. Quand tu passes à l'étape suivante, tu relances le prompt.`,
+          say: `Si je résume : si tu t'y connais déjà en IA, tu regardes le marketing, l'onboarding et le paywall, et tu laisses ton Claude Code lire le reste. Si tu débutes, tu suis une seule étape à la fois, en commençant par Le parcours en 7 étapes. Avant de poser une question, tu regardes la FAQ de ton étape et le sommaire des lives. Ensuite, tu branches Claude Code à Chrome avec l'extension Claude in Chrome, tu lui donnes le prompt de la description, et il réfléchit avec la méthode à chaque session. Quand tu passes à l'étape suivante, tu relances le prompt.`,
         },
       ],
     },
@@ -192,6 +202,10 @@ export const SCRIPT_SKOOL_USAGE: VideoScript = {
 🎯 Objectif de la vidéo
 Savoir où trouver ce dont tu as besoin à ton étape, et brancher ton Claude Code au Skool pour qu'il réfléchisse avec la méthode au lieu de te donner des conseils généraux.
 
+👥 Deux façons de suivre ce Skool
+• Tu t'y connais déjà en IA, tu utilises bien Claude Code ou tu as déjà une app : regarde seulement les vidéos dont tu as besoin, et surtout le cours marketing (Étape 6), la vidéo sur l'onboarding et celle sur le paywall (Étape 3). Pour tout le reste, connecte ton Claude Code au Skool
+• Tu débutes avec l'IA et Claude Code : suis le parcours dans l'ordre, étape par étape, et branche aussi ton Claude Code au Skool
+
 📚 Comment le Skool est rangé
 • Community : les posts, les annonces des nouvelles vidéos et le post épinglé pour te présenter
 • Classroom : les cours. Calendar : les lives
@@ -199,7 +213,7 @@ Savoir où trouver ce dont tu as besoin à ton étape, et brancher ton Claude Co
 • Un cours par étape, de 1 à 7, avec les vidéos rangées dans des dossiers dans l'ordre
 • Les cours sans numéro (Claude Code en profondeur, Git/GitHub, les rediffusions…) servent à toutes les étapes
 
-🪜 Une étape à la fois
+🪜 Si tu débutes : une étape à la fois
 • Regarde les vidéos de ton étape, applique, puis passe à la suivante
 • Le parcours en 7 étapes dit quand chaque étape commence et quand elle est faite
 • Tu as déjà une app : passe directement à l'étape 4, on commence par l'audit
@@ -222,7 +236,7 @@ Savoir où trouver ce dont tu as besoin à ton étape, et brancher ton Claude Co
 📺 L'installation en vidéo : la leçon Claude Chrome du cours Claude Code en profondeur
 
 ⚠️ Ses limites
-• Claude lit le texte des pages, il ne regarde pas les vidéos : continue à regarder celles de ton étape
+• Claude lit le texte des pages, il ne regarde pas les vidéos : le marketing, l'onboarding et le paywall, regarde-les en vidéo
 • Il ne remplace ni mon avis sur ton idée, ni l'audit, ni nos appels
 • Il lit seulement : le prompt lui interdit de publier ou de modifier quoi que ce soit sur le Skool
 
@@ -232,7 +246,8 @@ Ouvre Claude Code dans le dossier de ton projet, colle ce prompt et remplace ton
 ${PROMPT}
 
 ✅ À retenir
-• Une seule étape à la fois, en commençant par Le parcours en 7 étapes
+• Déjà à l'aise avec l'IA : le marketing, l'onboarding et le paywall en vidéo, le reste par ton Claude Code
+• Tu débutes : une seule étape à la fois, en commençant par Le parcours en 7 étapes
 • La FAQ de ton étape et le sommaire des lives avant de poser une question
 • Claude in Chrome + le prompt : ton Claude Code réfléchit avec la méthode à chaque session
 • Nouvelle étape, nouveau prompt`,
