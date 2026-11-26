@@ -25,16 +25,28 @@ Mon étape actuelle : [ÉCRIS TON ÉTAPE, par exemple « Étape 4 · Créer ton 
 7. Vérifie que ce projet n'est pas sur un dépôt GitHub public. S'il l'est, préviens-moi avant d'enregistrer quoi que ce soit.
 8. À partir de maintenant, quand tu me conseilles, dis-moi de quelle leçon vient ton conseil. Si le Skool ne dit rien sur ma question, dis-le-moi au lieu d'inventer.`;
 
+// Variante dite dans la vidéo (8:25 et récap) : lire les 7 étapes d'un coup, pour la vue globale.
+const PROMPT_TOUT = `Lis tout le Skool App Mastery dans mon Chrome, où je suis déjà connecté, pour m'aider ensuite avec cette méthode plutôt qu'avec des conseils généraux.
+
+1. Ouvre https://www.skool.com/app-secrets-mobile-web-4073/classroom
+2. Dans le cours « 👉🏼 Commence ici », lis « Le parcours en 7 étapes » et « Comment on travaille ensemble ».
+3. Ouvre les cours « Étape 1 » à « Étape 7 », dans l'ordre. Dans chacun, lis chaque leçon, puis chaque page de son dossier « ❓ FAQ ». Pour une leçon vidéo, lis le texte sous la vidéo.
+4. Tu lis seulement : ne publie rien, ne commente rien, ne like rien et ne modifie rien sur le Skool.
+5. Écris un résumé dans docs/methode-app-mastery.md, une partie par étape : pour chaque leçon, son titre, les règles, les chiffres et les erreurs à éviter, tels que le Skool les donne, sans ajouter tes propres conseils. Si le fichier existe déjà, complète-le.
+6. Ajoute dans le CLAUDE.md de mon projet cette consigne : avant de me conseiller sur mon idée, mon onboarding, mon paywall, mon contenu ou mes chiffres, relis docs/methode-app-mastery.md et applique cette méthode, même quand elle contredit tes habitudes.
+7. Vérifie que ce projet n'est pas sur un dépôt GitHub public. S'il l'est, préviens-moi avant d'enregistrer quoi que ce soit.
+8. À partir de maintenant, quand tu me conseilles, dis-moi de quelle leçon vient ton conseil. Si le Skool ne dit rien sur ma question, dis-le-moi au lieu d'inventer.`;
+
 export const SCRIPT_SKOOL_USAGE: VideoScript = {
   slug: "skool-usage",
   kind: "skool",
   label: "Skool · Utiliser le Skool",
-  status: "Prêt à tourner",
+  status: "Tourné et monté",
   updatedAt: "26 nov. 2026",
   title: "Comment utiliser ce Skool, et le faire lire à ton Claude Code",
   why: `Les élèves demandent où retrouver une rediffusion, comment voir les messages de la communauté, ou s'il faut tout recommencer après avoir regardé les vidéos. Et c'est ton idée du 19 nov. : leur Claude Code conseille comme pour n'importe quel projet tant qu'il n'a pas lu le Skool. Cette vidéo montre comment le Skool est rangé, puis comment le brancher à leur Claude Code avec Claude in Chrome, pour qu'il réfléchisse avec ta méthode à chaque session.`,
   facts: [
-    { label: "Durée", value: "Environ 11 min (1 650 mots)" },
+    { label: "Durée", value: "11 min 10 une fois montée (voix du 26 nov., montage src/skoolusage)" },
     { label: "Style", value: "Tu lis le script avec ta vraie voix, les captures du Skool et du terminal passent à l'écran pendant que tu parles" },
     { label: "Où la mettre", value: "Dans « 👉🏼 Commence ici », juste après « Le parcours en 7 étapes »" },
     { label: "Titre Skool", value: "« Utiliser ce Skool avec ton Claude Code » (39 caractères, Skool en accepte 50)" },
@@ -202,6 +214,17 @@ export const SCRIPT_SKOOL_USAGE: VideoScript = {
 🎯 Objectif de la vidéo
 Savoir où trouver ce dont tu as besoin à ton étape, et brancher ton Claude Code au Skool pour qu'il réfléchisse avec la méthode au lieu de te donner des conseils généraux.
 
+⏱️ Chapitres
+0:00 Introduction : les deux profils
+1:34 Comment le Skool est rangé
+3:00 Une étape à la fois
+4:04 Les FAQ, les lives et tes questions
+5:31 Pourquoi donner le Skool à ton Claude Code
+6:50 Brancher Claude Code à Chrome
+8:09 Ce qu'il faut lui demander
+9:45 Ses limites
+10:31 Récap
+
 👥 Deux façons de suivre ce Skool
 • Tu t'y connais déjà en IA, tu utilises bien Claude Code ou tu as déjà une app : regarde seulement les vidéos dont tu as besoin, et surtout le cours marketing (Étape 6), la vidéo sur l'onboarding et celle sur le paywall (Étape 3). Pour tout le reste, connecte ton Claude Code au Skool
 • Tu débutes avec l'IA et Claude Code : suis le parcours dans l'ordre, étape par étape, et branche aussi ton Claude Code au Skool
@@ -221,36 +244,42 @@ Savoir où trouver ce dont tu as besoin à ton étape, et brancher ton Claude Co
 
 💬 Les FAQ, les lives et tes questions
 • Chaque étape finit par un dossier ❓ FAQ : regarde-le avant de poser ta question
-• Les lives : le jeudi à 20 h, environ deux fois par mois, dans Calendar
+• Les lives : pour le moment le jeudi à 20 h, environ deux fois par mois, dans Calendar
 • Les rediffusions : dans Rediffusions des Coachings, avec le sommaire des lives par sujet en première page
 • Tes questions : sur WhatsApp, en texte ou en vocal, avec des captures. Les questions utiles à tous : dans la communauté
-• Un appel : le mardi ou le jeudi après-midi, 30 minutes, réservé 48 h à l'avance (lien dans Commence ici > Comment me joindre)
+• Un appel : en général le mardi ou le jeudi après-midi, 30 minutes, réservé au moins 48 h à l'avance (lien dans Commence ici > Comment me joindre)
 
 🔌 Brancher ton Claude Code au Skool
-1. Il te faut Google Chrome (ou Edge, Brave, Arc) et un abonnement Claude Pro ou Max connecté dans Claude Code (une clé d'API ne suffit pas)
+1. Il te faut Google Chrome (les autres navigateurs ne marchent pas au moment du tournage) et un abonnement Claude payant, Pro ou Max (le plan gratuit ne suffit pas ; ça change souvent, vérifie sur le site de Claude)
 2. Installe l'extension Claude in Chrome : https://chromewebstore.google.com/detail/claude/fcoeoabgfenejglbffodgkkbkcdhcgfn
 3. Connecte-la avec le même compte Claude que ton Claude Code
-4. Ouvre le Skool dans ce Chrome et connecte-toi
-5. Dans le terminal : claude --chrome (ou /chrome une fois pour l'activer par défaut). Dans l'application Claude, installe aussi l'extension : son navigateur intégré n'a pas tes connexions
-6. Autorise Claude sur skool.com quand il te le demande
-📺 L'installation en vidéo : la leçon Claude Chrome du cours Claude Code en profondeur
+4. Ouvre le Skool dans ce Chrome et connecte-toi : Claude utilise tes connexions, il ne peut pas se connecter à ta place
+5. Lance Claude Code : dans l'application Claude Code, ou dans le terminal avec claude --chrome (/chrome une fois pour l'activer par défaut)
+6. L'application Claude a un navigateur intégré, mais installe quand même l'extension
+7. Autorise Claude sur skool.com quand il te le demande
+📺 L'installation en vidéo : la leçon Claude Chrome du module bonus Claude Code en profondeur
 
 ⚠️ Ses limites
 • Claude lit le texte des pages, il ne regarde pas les vidéos : le marketing, l'onboarding et le paywall, regarde-les en vidéo
 • Il ne remplace ni mon avis sur ton idée, ni l'audit, ni nos appels
 • Il lit seulement : le prompt lui interdit de publier ou de modifier quoi que ce soit sur le Skool
 
-🤖 Le prompt à copier
+🤖 Le prompt à copier (ton étape)
 Ouvre Claude Code dans le dossier de ton projet, colle ce prompt et remplace ton étape. Relance-le à chaque nouvelle étape.
 
 ${PROMPT}
+
+🤖 Le prompt pour tout le Skool (la vue globale)
+Si tu as déjà une app ou que tu veux la stratégie complète d'un coup, donne-lui plutôt celui-ci.
+
+${PROMPT_TOUT}
 
 ✅ À retenir
 • Déjà à l'aise avec l'IA : le marketing, l'onboarding et le paywall en vidéo, le reste par ton Claude Code
 • Tu débutes : une seule étape à la fois, en commençant par Le parcours en 7 étapes
 • La FAQ de ton étape et le sommaire des lives avant de poser une question
 • Claude in Chrome + le prompt : ton Claude Code réfléchit avec la méthode à chaque session
-• Nouvelle étape, nouveau prompt`,
+• Nouvelle étape : relance le prompt, ou donne-lui le prompt pour tout le Skool`,
   prepare: [
     "Captures du Skool : les onglets Community, Classroom et Calendar, la liste des cours, l'étape 4 avec ses dossiers",
     "La page « Le parcours en 7 étapes », avec la ligne « C'est fait quand » de l'étape 5",
@@ -267,6 +296,7 @@ ${PROMPT}
     { point: "Application Claude (desktop) : vérifier qu'elle passe bien par l'extension pour ouvrir le Skool (la doc dit qu'elle s'en sert quand l'extension est installée)", state: "À vérifier" },
     { point: "WhatsApp : « 6 jours sur 7 » dans Le parcours et Comment on travaille ensemble, « du lundi au vendredi » dans Comment me joindre. Le script ne donne pas de jours", state: "À trancher" },
     { point: "Leçon « Claude Chrome » citée (Claude Code en profondeur) : c'est bien une vidéo", state: "OK" },
-    { point: "Description collée sous la leçon Skool, avec les chapitres réels après le montage", state: "À faire" },
+    { point: "Chapitres réels du montage dans la description (26 nov.)", state: "OK" },
+    { point: "Description collée sous la leçon Skool", state: "À faire" },
   ],
 };
