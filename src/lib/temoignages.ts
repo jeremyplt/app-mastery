@@ -216,6 +216,8 @@ export const MESSAGES_ELEVES: MessageEleve[] = [
   // et l'icône de l'application sont floutés.
   {
     firstName: "Un élève qui vient de commencer",
+    // Silhouette tant que Jeremy n'a pas donné son prénom.
+    anonyme: true,
     image: {
       src: "/emails/premier-client-message-v1.jpg",
       width: 840,
