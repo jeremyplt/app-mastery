@@ -190,6 +190,8 @@ ${footnote(foot(ctx))}
 <p ${P}>La seule vraie difficulté, c'est de trouver le bon contenu pour ton application. Le format, l'angle, la façon de montrer l'app, ce qui fait que les gens s'arrêtent sur ta vidéo au lieu de passer à la suivante. Tant que tu ne l'as pas trouvé, tu publies dans le vide. Le jour où tu le trouves, tout change.</p>
 ${image(`${SITE}/emails/giga-banque-de-contenu-floutee.jpg`, "Six pages floutées de la banque de contenu donnée aux élèves, classée par niche", "Voilà une partie du document qu'on donne aux élèves : des centaines de vidéos qui ont marché, classées par niche, pour trouver le bon contenu sans partir de zéro. Je l'ai flouté, il est réservé à l'accompagnement.")}
 <p ${P}>Et ça, on peut t'aider à le trouver. C'est une grosse partie de ce qu'on fait dans l'accompagnement : on regarde ce qui marche déjà dans ta niche, on définit les formats à tester, et tu publies jusqu'à ce que ça prenne. Pour savoir si c'est fait pour toi, réserve un appel avec mon associé Nolan. Il va te poser des questions sur ton projet, et vous déciderez ensemble.</p>
+<p ${P}>Et ça peut aller vite. Le 24 novembre, un élève m'a envoyé ce message. Il galérait seul sur son application depuis six mois, et son premier client payant est arrivé alors que l'accompagnement venait juste de commencer.</p>
+${image(`${SITE}/emails/premier-client-email-v1.jpg`, "Message d'un élève avec la notification RevenueCat de son premier client, un essai gratuit transformé en abonnement annuel à 54,51 $ : « Ça y est j'ai mon premier client payant alors que l'accompagnement vient juste de commencer. Et sur un annuel en plus. 6 mois que je galérais tout seul. »", "Son premier client payant, sur un abonnement annuel. J'ai flouté son fond d'écran et le nom de son application.", 380)}
 ${button("Réserver mon appel", booking)}
 <p ${P}>Demain, je te présente Wassim, qui était exactement là où tu es il y a deux mois.</p>
 ${signature("À demain")}
@@ -214,6 +216,8 @@ ${image(`${SITE}/wassim.jpg`, "Wassim", "Voilà Wassim. Il raconte toute son his
 ${image(`${SITE}/emails/wassim-revenuecat-7269-v1.jpg`, "Tableau de bord RevenueCat de Wassim : 7 269 $ de revenus, 251 abonnements actifs, 232 essais en cours", "Voilà le tableau de bord que Wassim a montré pendant le podcast.")}
 <p ${P}>Ce que je retiens, c'est sa façon de travailler : chaque conseil que je lui donnais était appliqué le lendemain.</p>
 <p ${P}>Florian et Soraya ont suivi le même chemin, et plusieurs de mes élèves dépassent aujourd'hui 2 000 euros par mois. La différence avec ceux qui restent bloqués, ce n'est ni le talent ni le code. C'est qu'ils ont eu quelqu'un qui regardait leur projet de l'extérieur.</p>
+<p ${P}>Julien, par exemple, avait encore des journées à 0 € début novembre. J'ai refait son onboarding avec lui, et il a publié du contenu tous les jours, même pendant trois jours sans aucun résultat. Le 24 novembre, il m'a envoyé ce point : 2 626 € sur les 28 derniers jours.</p>
+${image(`${SITE}/emails/julien-graphiques-email-v1.jpg`, "Graphiques RevenueCat de Julien du 27 octobre au 24 novembre 2026 : 2 626 € de revenus et 7 565 nouveaux utilisateurs, dont 724 le 24 novembre", "Les graphiques que Julien m'a envoyés : 2 626 € de revenus et 7 565 nouveaux utilisateurs en un mois, dont 724 le jour même.")}
 <p ${P}>Wassim raconte tout ça lui-même dans un podcast, avec ses vrais chiffres à l'écran. Prends dix minutes pour le regarder, c'est la meilleure façon de savoir si tu te reconnais dans son parcours.</p>
 ${button("Voir le témoignage de Wassim", wassimUrl)}
 <p ${P}>Et si tu veux que ce soit ton tour, ça commence par un appel de trente minutes avec nous, pour voir si l'accompagnement est fait pour toi. Tu peux <a href="${booking}" style="color:#0060df">réserver ton appel ici</a>.</p>
@@ -235,6 +239,8 @@ ${footnote(foot(ctx))}
 </ul>
 <p ${P}>Si tu n'en appliques qu'une seule, tu es déjà en avance sur la plupart des gens. Mais je vais être direct : la différence entre ceux qui réussissent et ceux qui restent bloqués, ce n'est pas l'information. C'est quelqu'un qui regarde ton projet de l'extérieur et qui te dit : fais ça, ne fais pas ça, concentre-toi là-dessus.</p>
 <p ${P}>C'est ce qui a débloqué Wassim. Ses vidéos faisaient des vues mais pas de ventes, et c'est en regardant ses statistiques de l'extérieur qu'on a vu pourquoi : la moitié de son public avait moins de 17 ans. Deux semaines après avoir corrigé ça, il avait fait 7 269 dollars.</p>
+<p ${P}>Pareil pour deux associés que j'accompagne. Ils préfèrent rester anonymes, mais ils m'ont écrit le jour où ils ont passé les 100 abonnés payants : 2 272 € sur les 28 derniers jours, et 739 € d'abonnements qui reviennent chaque mois.</p>
+${image(`${SITE}/emails/anonyme-chiffres-email-v1.jpg`, "Tableau de bord RevenueCat de deux associés accompagnés : 60 essais en cours, 100 abonnements actifs, 739 € de revenus récurrents par mois et 2 272 € sur 28 jours", "Leur tableau de bord le jour des 100 abonnés payants.")}
 <p ${P}>C'est ce que je fais dans l'accompagnement, qui a trois parties.</p>
 <ol style="margin:0 0 18px;padding-left:22px">
 <li ${LI}><b>Tu rejoins la communauté et les cours.</b> Tu as accès à vie à plus d'une centaine de vidéos.</li>
